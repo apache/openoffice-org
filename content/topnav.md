@@ -1,4 +1,7 @@
-divid:	topnava
+type=navigator
+status=published
+divid=topnava
+~~~~~~
 
 - [Product][m0]
 - [Download][m1]
