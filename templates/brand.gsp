@@ -1,7 +1,7 @@
-  <div id="{{ headers.divid }}">
+  <div id="${content.divid}">
   <div id="languagesdiv">
-  	{% block language %}{% if headers.language %}{{ headers.language }}{% else %}Language{% endif %}:{% endblock %}
-  	<select id="selectlanguage" onchange="javascript:location.href=location.protocol+'//'+location.host+'/'+this.value;">
+  	${content.language}
+ 	<select id="selectlanguage" onchange="javascript:location.href=location.protocol+'//'+location.host+'/'+this.value;">
   	<!-- Asturian --><option value="ast">Asturianu (ast)</option>
 	<!-- Catalan --><option value="ca">Català (ca)</option>
   	<!-- Czech --><option value="cs">Čeština (cs)</option>
@@ -44,7 +44,7 @@
   	<!-- Korean --><option value="ko">한국어 (ko)</option>
 	</select>
 	<script>
-	  var lang = "{{headers.selectedlang}}";
+	  var lang = "${content.selectedlang}";
 	  var dropdown = document.getElementById('selectlanguage');
 	  var options = dropdown.options;
 	  for( var i = 0; i < dropdown.options.length; i++ ) {
@@ -55,22 +55,22 @@
 	  }
 	</script>
   </div>
-  <div id="bannerleft"><a title="Apache OpenOffice" href="/"><img id="ooo-logo" alt="{{ headers.name }}" src="/images/{{ headers.logo }}"/></a></div>
+  <div id="bannerleft"><a title="Apache OpenOffice" href="/"><img id="ooo-logo" alt="${content.name}" src="/images/${content.logo}"/></a></div>
     <div id="bannerright">        
       <div id="searchdiv">
 	<form id="cse-search-box-header" action="https://www.google.com/search" method="get">
 	  <div>
-	    <input type="hidden" name="domains" value="{{ headers.domain }}"/>
-	    <input type="hidden" name="sitesearch" value="{{ headers.domain }}"/>
+	    <input type="hidden" name="domains" value="${content.domain}"/>
+	    <input type="hidden" name="sitesearch" value="${content.domain}"/>
 	  </div>
 	  <div class="topsrchbox">
 	    <input name="resultsPerPage" value="40" type="hidden"/> 
 	    <input name="q" id="query" type="text" title="search query"/>
-	    <input name="Button" value="{{ headers.search }}" type="submit" class="topsrchbutton"/>
+	    <input name="Button" value="${content.search}" type="submit" class="topsrchbutton"/>
 	  </div>
 	</form>
       </div>
     </div>
-    {% block tagline %}{% if headers.tagline %}<div id="bannercenter"><br/>{{ headers.tagline }}</div>{% endif %}{% endblock %}
+    <div id="bannercenter"><br/>${content.tagline}</div>
   </div>
-  {% block announce %}{% if headers.announce %}<div id="announce"><a href="{{ headers.announceurl }}" title="{{ headers.announcetip }}">{{ headers.announce }}</a></div>{% endif %}{% endblock %}
+  <div id="announce"><a href="${content.announceurl}" title="${content.announcetip}">${content.announce}</a></div>
