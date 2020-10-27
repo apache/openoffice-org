@@ -1,5 +1,4 @@
 type=navigator
-status=published
 divid=topnava
 ~~~~~~
 

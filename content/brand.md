@@ -1,5 +1,4 @@
 type=brand
-status=published
 search=search
 selectedlang=en
 language=Language

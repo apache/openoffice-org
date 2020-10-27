@@ -1,10 +1,7 @@
 <%
-  content.brand='/brand.html';
-  content.topnav='/topnav.html';
-  content.leftnav=null;
-  content.rightnav=null;
-  content.breadcrumbs=null;
   // insert breadcrumbs and ssi logic
+  include "breadcrumbs.gsp"
+  include "ssi_paths.gsp"
 %><!--#include virtual="/doctype.html" -->
 <html>
   <head>
@@ -28,8 +25,7 @@
     <div id="clear"></div>
       <% if (content.leftnav) { %><!--#include virtual="${content.leftnav}" --><% } %>
       <% if (content.rightnav) { %><!--#include virtual="${content.rightnav}" --><% } %>
-    <div id="content">
-      <% if (content.title) {%><h1 class="title">${content.title}</h1><% } %>
+    <div id="content"><% if (content.title) {%><h1 class="title">${content.title}</h1><% } %>
       <% if (content.extracted_body) { %>
       ${content.extracted_body}
       <% } else { %>

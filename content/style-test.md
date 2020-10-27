@@ -1,5 +1,4 @@
 style=md_page
-status=published
 title=This is the title
 notice=http://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
