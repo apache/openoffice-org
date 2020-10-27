@@ -1,3 +1,8 @@
+type=md_page
+status=published
+title=Native Language Sites
+~~~~~~
+
 - [Afar (aa)](/aa)
 - [Albanian (sq)](/sq)
 - [Afrikaans (af)](/af)
