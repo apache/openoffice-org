@@ -19,7 +19,7 @@
     <% } %>
     <link href="/css/ooo.css" rel="stylesheet" type="text/css">
   </head>
-  <body<% if (content.bodytag) { %> ${content_bodytag} <% } %>>
+  <body<% if (content.bodytag) { %>${content.bodytag}<% } %>>
     <!--#include virtual="${content.brand}" -->
     <div id="topbara">
       <% if (content.topnav) { %><!--#include virtual="${content.topnav}" --><% } %>
