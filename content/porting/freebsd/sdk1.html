@@ -1,0 +1,232 @@
+<html>
+<head>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+<title>FreeBSD OpenOffice.org porting status page : How to use SDK (OOo 1.1.x)</title>
+</head>
+<body>
+<h2>FreeBSD OpenOffice.org porting status page : How to use SDK (OOo 1.1.x)</h2>
+
+<p>$Id: </p>
+by <a href="mailto:openoffice@FreeBSD.org">OpenOffice.org porting team</a>,
+<a href="mailto:maho@FreeBSD.org">NAKATA, Maho</a>,
+and <a href="mailto:xxjack12xx@openoffice.org">Jackson Low</a>
+
+<h3>How to use SDK (OOo 1.1.x series)</h3>
+This page explains how to use SDK.
+I intentionally set the version of OOo as 1.1.4, but you can change 1.1.4 to 
+1.1.3, 1.1.5, or whatever you have so that it matches your environment.
+
+<ul>
+<li> Install OpenOffice.org 1.1.4 for FreeBSD
+<blockquote>
+You know what I mean :)
+</blockquote>
+
+<li> Install gmake
+<blockquote>
+If you haven't installed gmake, please install it.
+<pre>
+# cd /usr/ports/devel/gmake ; make install clean
+</pre>
+</blockquote>
+
+<li> Install Java (optional, but recommended for first try)
+<blockquote>
+Ah, you don't like Java :)
+<pre>
+# cd /usr/ports/java/jdk14 ; make install clean
+</pre>
+</blockquote>
+
+<li> Obtain SDK
+<blockquote>
+You can obtain SDK <a href="http://ooomisc.services.openoffice.org/pub/OpenOffice.org/ooomisc/FreeBSD/">here</a>. We have prepared SDK for the 4.x-series and 5.x-series. Please make sure you obtain the SDK for the operating system you are using or make it by yourself. Instructions for builing SDK are described in the <a href="http://porting.openoffice.org/freebsd/#howto">How to build</a> section on the main page.
+</blockquote> 
+<li> Setting up SDK
+<blockquote>
+<pre>
+% mkdir /work/tmp
+% cd /work/tmp
+% tar zxf &lt;somewhere&gt;/OOo_1.1.4_FreeBSD53Intel_sdk.tar.gz
+% cd OpenOffice.org1.1.4_SDK/
+% ./configure
+./configure
+
+*** Configure your SDK environment ***
+
+Enter the Office Software Development Kit directory [/work/tmp/OpenOffice.org1.1.4_SDK]:
+Enter the Office installation directory [/home/maho/OpenOffice.org1.1.4]: /usr/local/OpenOffice.org1.1.4
+Enter GNU make (3.79.1 or higher) tools directory [/usr/local/bin]:
+C++ Compiler where a language binding exist:
+Solaris, Sun WorkShop 6 update 1 C++ 5.2 2000/09/11 or higher
+Linux, GNU C++ compiler, gcc version 3.0.1 or higher
+Enter C++ tools directory (optional) [/usr/bin]:
+Enter Java SDK (1.4.1_01 or higher) installation directory [/usr/local]: /usr/local/jdk1.4.2
+NOTE!!!: If you choose Java 5.0 or higher, you have to ensure that your
+        installed office installation is configured to use Java 5.0 as well.
+Automatic deployment of UNO components (YES/NO) [YES]:
+
+For using your prepared environment, please run the "setsdkenv_unix" script file!
+</pre>
+<hr>
+Just hit enter except two points:<br>
+First,
+<pre>
+Enter the Office installation directory [/home/maho/OpenOffice.org1.1.4]: /usr/local/OpenOffice.org1.1.4
+</pre>
+You must enter (basically from packages or ports, installation directory is /usr/local/OpenOffice.org1.1.4)<br>
+Second,
+<pre>
+Enter Java SDK (1.4.1_01 or higher) installation directory [/usr/local]: /usr/local/jdk1.4.2
+</pre>
+Same as above.
+</blockquote>
+<hr>
+<li> Use of SDK
+<blockquote>
+After you have completed your SDK setup, you need to set environmental variables before it can used. Please type:
+<pre>
+% ./setsdkenv_unix
+Starting shell with SDK environment.
+
+</pre>
+Now you can use your OpenOffice.org SDK. Congratulations!
+</blockquote>
+<li> Make OpenOffice.org listen
+<blockquote>
+OpenOffice.org itself can communicate via the TCP/IP port. Java uses a TCP/IP socket to talk to Openoffice.org. First, the samples are written in Java, so we need to have Java installed. Default settings of OOo do not listen via TCP/IP, so you must invoke OpenOffice.org with "-accept=socket,port=2083;urp;":
+<pre>
+% openoffice.org-1.1.4 "-accept=socket,port=2083;urp;"
+</pre>
+Is OOo really listening? Please check by typing:
+<pre>
+% netstat -a | grep 2083
+tcp4       0      0  localhost.2083         *.*                    LISTEN
+</pre>
+Okay, OOo is really listening to your voice :)<br>
+You can change the port number from 2083 to 8100 or any port number you'd like to use.
+</blockquote>
+
+<li> Sample programs
+<blockquote>
+You might also be interested in the sample programs. Type ./setsdkenv_unix as described above to use them.
+<pre>
+% ./setsdkenv_unix
+Starting shell with SDK environment.
+
+</pre>
+Next, invoke OpenOffice.org with listening support via TCP/IP
+<pre>
+% openoffice.org-1.1.4 "-accept=socket,port=2083;urp;"
+</pre>
+and cd to examples/DevelopersGuide/FirstSteps/
+<pre>
+% cd examples/DevelopersGuide/FirstSteps/
+</pre>
+This directory contains some very basic sample programs.
+<pre>
+% gmake
+--------------------------------------------------------------------------------
+Please use one of the following commands to execute the examples!
+-
+make FirstConnection.run
+make FirstLoadComponent.run
+make HelloTextTableShape.run
+--------------------------------------------------------------------------------
+</pre>
+Type gmake FirstConnection.run, instead of typing make FirstConnection.run, since the name of GNU make is gmake for (usual) FreeBSD.
+<pre>
+% gmake FirstConnection.run
+"/usr/local/jdk1.4.2/bin/java" -classpath "/usr/local/OpenOffice.org1.1.4/prog
+ram/classes/jurt.jar:/usr/local/OpenOffice.org1.1.4/program/classes/unoil.jar:
+/usr/local/OpenOffice.org1.1.4/program/classes/ridl.jar:/usr/local/OpenOffice.
+org1.1.4/program/classes/sandbox.jar:/usr/local/OpenOffice.org1.1.4/program/cl
+asses/juh.jar::../../../FREEBSDexample.out/class/FirstStepsExamples" FirstConnection
+remote ServiceManager is available
+</pre>
+Connection is established and sample program worked! Congratulations!<br>
+Next, FirstLoadComponent. This program opens a calc sheet and insert 21 to the A1 and A2 cells. A sum of A1 and A2 are performed and the result is written to the A3 cell.
+<pre>
+% gmake FirstLoadComponent.run
+"/usr/local/jdk1.4.2/bin/java" -classpath "/usr/local/OpenOffice.org1.1.4/prog
+ram/classes/jurt.jar:/usr/local/OpenOffice.org1.1.4/program/classes/unoil.jar:/
+usr/local/OpenOffice.org1.1.4/program/classes/ridl.jar:/usr/local/OpenOffice.
+org1.1.4/program/classes/sandbox.jar:/usr/local/OpenOffice.org1.1.4/program/cl
+asses/juh.jar::../../../FREEBSDexample.out/class/FirstStepsExamples" FirstLoadComponent
+com.sun.star.sheet.XSpreadsheet
+Formula cell in column 0, row 2 contains =SUM(A1:A2)
+
+</pre>
+HelloTextTableShape is interesting. This automatically creates Writer, Calc, and Draw!
+<pre>
+% gmake HelloTextTableShape.run
+</pre>
+</blockquote>
+
+<li> Listening port by default
+<blockquote>
+For some (maybe security) reason, OOo itself doesn't listen by default. You must invoke it with command line arguments. But if you always talk to OOo with TCP/IP sockets, it becomes tedious. To make OOo listen by default, apply the following patch by *HAND* (sorry) for /usr/local/OpenOffice.org1.1.4/share/registry/data/org/openoffice/Setup.xcu as root,
+<pre>
+--- share/registry/data/org/openoffice/Setup.xcu.orig
++++ share/registry/data/org/openoffice/Setup.xcu
+@@ -1,6 +1,9 @@
+ &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+ &lt;oor:component-data xmlns:oor="http://openoffice.org/2001/registry"
+ xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Setup" oor:package=
+"org.openoffice"&gt;
+  &lt;node oor:name="Office"&gt;
++  &lt;prop oor:name="ooSetupConnectionURL" oor:type="xs:string"&gt;
++  &lt;value&gt;socket,port=2083;urp;&lt;/value&gt;
++  &lt;/prop&gt;
+   &lt;prop oor:name="ooSetupInstCompleted"&gt;
+    &lt;value&gt;false&lt;/value&gt;
+   &lt;/prop&gt;
+
+</pre>
+Again, please check netstat
+<pre>
+% openoffice.org-1.1.4
+% netstat -a | grep 2083
+tcp4       0      0  localhost.2083         *.*                    LISTEN
+</pre>
+</blockquote>
+
+<li> Troubleshooting
+<blockquote>
+If you get messages when trying to run FirstConnection,
+<pre>
+% gmake FirstConnection.run
+mkdir -p ../../../FREEBSDexample.out/class/FirstStepsExamples
+"/usr/local/jdk1.4.2/bin/javac"  -classpath "/usr/local/OpenOffice.org1.1.4/
+program/classes/jurt.jar:/usr/local/OpenOffice.org1.1.4/program/classes/unoil.
+jar:/usr/local/OpenOffice.org1.1.4/program/classes/ridl.jar:/usr/local/OpenOff
+ice.org1.1.4/program/classes/sandbox.jar:/usr/local/OpenOffice.org1.1.4/program
+/classes/juh.jar::../../../FREEBSDexample.out/class/FirstStepsExamples" -d ../
+../../FREEBSDexample.out/class/FirstStepsExamples FirstConnection.java First
+LoadComponent.java HelloTextTableShape.java
+"/usr/local/jdk1.4.2/bin/java" -classpath "/usr/local/OpenOffice.org1.1.4/prog
+ram/classes/jurt.jar:/usr/local/OpenOffice.org1.1.4/program/classes/unoil.jar:
+/usr/local/OpenOffice.org1.1.4/program/classes/ridl.jar:/usr/local/OpenOffice.
+org1.1.4/program/classes/sandbox.jar:/usr/local/OpenOffice.org1.1.4/program/cl
+asses/juh.jar::../../../FREEBSDexample.out/class/FirstStepsExamples"
+FirstConnection
+com.sun.star.connection.NoConnectException: java.net.ConnectException: Connection refused
+        at com.sun.star.lib.connections.socket.socketConnector.connect(socketConnector.java:194)
+        at com.sun.star.comp.connections.Connector.connect(Connector.java:172)
+        at com.sun.star.comp.urlresolver.UrlResolver$_UrlResolver.resolve(UrlResolver.java:159)
+        at FirstConnection.getRemoteServiceManager(FirstConnection.java:97)
+        at FirstConnection.useConnection(FirstConnection.java:68)
+        at FirstConnection.main(FirstConnection.java:56)
+</pre>
+there are two possibilities.
+<ul>
+<li> Is OpenOffice.org is actually running?
+<li> Is the port number correct? Many documents available via the Internet write using the port number 8100. Somehow, FirstConnection.java communicate via #2083. Please check your port number.
+</ul>
+</blockquote>
+</ul>
+
+<hr>
+
+</body>
+</html>

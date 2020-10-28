@@ -1,0 +1,1704 @@
+<html>
+<head>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+<title>FreeBSD OpenOffice.org porting status page : Build timings</title>
+</head>
+<body>
+
+<h3>Build timings</h3>
+Building OOo takes a long time. Some say it takes 2-3 days, while others say only 2 hours. We would like to know how long it takes you to build OOo! <a href="mailto:openoffice@freebsd.org">Please send</a> us your elapsed time! Instructions on timing your build are listed below. Your reports are greatly appreciated.<br>
+<br>
+How to benchmark and make a report:
+<ul>
+<li>Prepare FreeBSD
+<li>Resolve build dependencies for OpenOffice.org, and confirm that you can succesfully build OOo.
+<li>Run the benchmark script.
+Download the <a href="http://people.freebsd.org/~maho/ooo/ooo-build-bench.sh">benchmark script</a> donated by GOTO, daichi. 
+Run this script as root in the openoffice.org port you would like to benchmark.
+<pre>
+# cd /usr/ports/editors/openoffice.org-2 (or you can choose another version)
+# sh &lt;somwhere&gt;/ooo-build-bench.sh
+</pre>
+<ul>
+<li> <a href="http://people.freebsd.org/~maho/ooo/ooo-build-bench.sh">normal script</a>
+<li> <a href="http://people.freebsd.org/~maho/ooo/ooo-ccachememorydisk-build-bench.sh">using memorydisk for ccache (requires 6-8G main memory)</a>
+<li> <a href="http://people.freebsd.org/~maho/ooo/ooo-workmemorydisk-build-bench.sh">using memory disk for work dir (requires 16-24G main memory)</a>
+</ul>
+
+<li>Report submission:
+<blockquote>
+Please report your results via e-mail to <a href="mailto:openoffice@freebsd.org">openoffice@freebsd.org</a>. We thank you very much for your report!
+<ul>
+<li>Output of ooo-buildbench.sh
+<li>Comments
+<li>Date
+</ul>
+</blockquote>
+
+<li>What the script actually does:
+<blockquote>
+The script performs two builds. One without ccache and one with ccache. This benchmark also calculates extraction of archives (1~2G), removal of the work directory (~4G), and time it takes to package.
+</blockquote>
+</ul> 
+
+<li>Discussion
+<blockquote>
+Parallel building for a single processor is effective, but not exceeding 2 processes at the same time.
+<br>
+(I set 4 for dual processors machines).
+</blockquote>
+<hr>
+
+<h3>Results</h3>
+<p>
+<center>
+<blockquote>
+<h3>Results without ccache:</h3>
+<table border="1" width="700">
+  <tbody>
+    <tr>
+      <td align="center">OS</td>
+      <td align="center">System</td>
+      <td align="center">OOo version</td>
+      <td align="center">Time (real)</td>
+      <td align="center">Time (usr)</td>
+      <td align="center">Time (sys)</td>
+      <td align="center">Date</td>
+      <td align="center">Comments</td>
+      <td align="center">Reference</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h54m49.05s</td>
+      <td align="center">4h38m36.41s</td>
+      <td align="center">1h1m40.78s</td>
+      <td align="center">2008/10/29</td>
+      <td align="center">NUMOFPROCESSES=6, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h54m6.94s</td>
+      <td align="center">4h34m29.71s</td>
+      <td align="center">1h49.51s</td>
+      <td align="center">2008/10/29</td>
+      <td align="center">NUMOFPROCESSES=4, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">2h8m19.81s</td>
+      <td align="center">4h27m41.18s</td>
+      <td align="center">57m46.87s</td>
+      <td align="center">2008/10/29</td>
+      <td align="center">NUMOFPROCESSES=2, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">5h6m3.93s</td>
+      <td align="center">4h11m56.84s</td>
+      <td align="center">41m53.81s</td>
+      <td align="center">2008/10/29</td>
+      <td align="center">NUMOFPROCESSES=1, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h35m7.96s</td>
+      <td align="center">4h27m40.67s</td>
+      <td align="center">57m45.21s</td>
+      <td align="center">2008/10/30</td>
+      <td align="center">Memory disk (10G), no ccache save, NUMOFPROCESSES=6, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h40m4.69s</td>
+      <td align="center">4h35m51.38s</td>
+      <td align="center">1h2m10.32s</td>
+      <td align="center">2008/10/30</td>
+      <td align="center">Memory disk (10G), ccache save, NUMOFPROCESSES=6, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h34m33.62s</td>
+      <td align="center">4h24m56.16s</td>
+      <td align="center">57m34.37s</td>
+      <td align="center">2008/10/24</td>
+      <td align="center">Memory disk (10G), no ccache save, NUMOFPROCESSES=4, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h30m37.88s</td>
+      <td align="center">4h26m42.68s</td>
+      <td align="center">59m18.44s</td>
+      <td align="center">2008/10/24</td>
+      <td align="center">Memory disk (10G), ccache save, NUMOFPROCESSES=4, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h48m49.01s</td>
+      <td align="center">4h17m54.98s</td>
+      <td align="center">55m17.84s</td>
+      <td align="center">2008/10/24</td>
+      <td align="center">Memory disk (10G), no ccache save, NUMOFPROCESSES=2, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h53m52.39s</td>
+      <td align="center">4h26m39.79s</td>
+      <td align="center">58m26.60s</td>
+      <td align="center">2008/10/24</td>
+      <td align="center">Memory disk (10G), ccache save, NUMOFPROCESSES=2, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">4h43m20.06s</td>
+      <td align="center">4h6m49.80s</td>
+      <td align="center">40m23.84s</td>
+      <td align="center">2008/10/24</td>
+      <td align="center">Memory disk (10G), no ccache save, NUMOFPROCESSES=1, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">4h54m26.62s</td>
+      <td align="center">4h15m18.41s</td>
+      <td align="center">42m35.10s</td>
+      <td align="center">2008/10/24</td>
+      <td align="center">Memory disk (10G), ccache save, NUMOFPROCESSES=1, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h46m44.59s</td>
+      <td align="center">4h3m56.67s</td>
+      <td align="center">50m44.03s</td>
+      <td align="center">2008/10/23</td>
+      <td align="center">NUMOFPROCESSES=6, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h48m45.81s</td>
+      <td align="center">4h2m1.01s</td>
+      <td align="center">50m18.66s</td>
+      <td align="center">2008/10/23</td>
+      <td align="center">NUMOFPROCESSES=4, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">2h41m45.83s</td>
+      <td align="center">3h55m52.10s</td>
+      <td align="center">43m56.83s</td>
+      <td align="center">2008/10/23</td>
+      <td align="center">NUMOFPROCESSES=2, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">4h39m9.66s</td>
+      <td align="center">59m5.09s</td>
+      <td align="center">22m55.28s</td>
+      <td align="center">2008/10/23</td>
+      <td align="center">NUMOFPROCESSES=1, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h32m8.10s</td>
+      <td align="center">3h58m55.00s</td>
+      <td align="center">46m47.81s</td>
+      <td align="center">2008/10-22</td>
+      <td align="center">Memory disk (10G), no ccache save, NUMOFPROCESSES=6, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h35m29.27s</td>
+      <td align="center">4h4m45.88s</td>
+      <td align="center">50m17.20s</td>
+      <td align="center">2008/10/22</td>
+      <td align="center">Memory disk (10G), ccache save, NUMOFPROCESSES=6, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h32m1.35s</td>
+      <td align="center">3h55m45.01s</td>
+      <td align="center">47m5.95s</td>
+      <td align="center">2008/10/22</td>
+      <td align="center">Memory disk (10G), no ccache save, NUMOFPROCESSES=4, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h36m25.44s</td>
+      <td align="center">4h2m43.20s</td>
+      <td align="center">50m2.69s</td>
+      <td align="center">2008/10/22</td>
+      <td align="center">Memory disk (10G), ccache save, NUMOFPROCESSES=4, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">2h23m7.58s</td>
+      <td align="center">3h48m35.87s</td>
+      <td align="center">40m53.27s</td>
+      <td align="center">2008/10/22</td>
+      <td align="center">Memory disk (10G), no ccache save, NUMOFPROCESSES=2, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">2h28m41.42s</td>
+      <td align="center">3h55m37.52s</td>
+      <td align="center">43m25.67s</td>
+      <td align="center">2008/10/22</td>
+      <td align="center">Memory disk (10G), ccache save, NUMOFPROCESSES=2, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">4h14m28.88s</td>
+      <td align="center">3h44m37.90s</td>
+      <td align="center">34m49.91s</td>
+      <td align="center">2008/10/23</td>
+      <td align="center">Memory disk (10G), no ccache save, NUMOFPROCESSES=1, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">4h24m3.67s</td>
+      <td align="center">3h51m35.87s</td>
+      <td align="center">37m8.78s</td>
+      <td align="center">2008/10/23</td>
+      <td align="center">Memory disk (10G), ccache save, NUMOFPROCESSES=1, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">2h59m40.28s</td>
+      <td align="center">4h50m8.85s</td>
+      <td align="center"> 47m21.99s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">Memory disk (10G), no cache save, NUMOFPROCESSES=4, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">3h6m34.69s</td>
+      <td align="center">5h24.82s</td>
+      <td align="center">50m46.91s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">Memory disk (10G), ccache save, NUMOFPROCESSES=4, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">3h2m23.17s</td>
+      <td align="center">4h47m0.55s</td>
+      <td align="center"> 47m5.23s</td>
+      <td align="center">2008/10/14</td>
+      <td align="center">Memory disk (10G), no cache save, NUMOFPROCESSES=2, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">3h9m58.47s</td>
+      <td align="center">4h57m9.02s</td>
+      <td align="center">50m11.51s</td>
+      <td align="center">2008/10/14</td>
+      <td align="center">Memory disk (10G), ccache save, NUMOFPROCESSES=2, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">5h17m20.97s</td>
+      <td align="center">4h39m6.95s</td>
+      <td align="center"> 40m49.91s</td>
+      <td align="center">2008/10/14</td>
+      <td align="center">Memory disk (10G), no cache save, NUMOFPROCESSES=1, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">5h30m1.98s</td>
+      <td align="center">4h48m9.56s</td>
+      <td align="center">43m1.93s</td>
+      <td align="center">2008/10/14</td>
+      <td align="center">Memory disk (10G), ccache save, NUMOFPROCESSES=1, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">3h19m40.86s</td>
+      <td align="center">5h2m11.05s</td>
+      <td align="center">48m49.00s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">NUMOFPROCESSES=4, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">3h23m12.83s</td>
+      <td align="center">4h57m40.78s</td>
+      <td align="center">47m15.67s</td>
+      <td align="center">2008/10/14</td>
+      <td align="center">NUMOFPROCESSES=2, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">5h37m11.40s</td>
+      <td align="center">4h42m54.31s</td>
+      <td align="center">42m41.16s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">NUMOFPROCESSES=1, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h37m34.13s</td>
+      <td align="center">3h18m29.76s</td>
+      <td align="center">42m28.37s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">NUMOFPROCESSES=4</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h46m3.70s</td>
+      <td align="center">3h12m32.65s</td>
+      <td align="center">39m26.55s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">NUMOFPROCESSES=2</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">3.0.0</td>
+      <td align="center">4h22.07s</td>
+      <td align="center">3h3m8.18s</td>
+      <td align="center">30m18.39s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">NUMOFPROCESSES=1</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h34m3.23s</td>
+      <td align="center">2h57m30.95s</td>
+      <td align="center">33m59.45s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">NUMOFPROCESSES=4</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">2.4.1</td>
+      <td align="center">2h9m20.82s</td>
+      <td align="center">2h51m21.85s</td>
+      <td align="center">29m29.59s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">NUMOFPROCESSES=2</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">2.4.1</td>
+      <td align="center">3h39m30.11s</td>
+      <td align="center">2h48m31.78s</td>
+      <td align="center">26m21.39s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">NUMOFPROCESSES=1</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">4h46m28.57s</td>
+      <td align="center">4h13m34.74s</td>
+      <td align="center">36m29.34s</td>
+      <td align="center">2008/10/12</td>
+      <td align="center">Memory disk (10G), no cache save, NUMOFPROCESSES=1, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">4h56m33.96s</td>
+      <td align="center">4h21m11.04s</td>
+      <td align="center">38m42.46s</td>
+      <td align="center">2008/10/12</td>
+      <td align="center">Memory disk (10G),cache save, NUMOFPROCESSES=1, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">2h49m2.03s</td>
+      <td align="center">4h17m57.05s</td>
+      <td align="center">39m22.43ss</td>
+      <td align="center">2008/10/12</td>
+      <td align="center">Memory disk (10G), no cache save, NUMOFPROCESSES=2, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">2h56m25.74s</td>
+      <td align="center">4h25m51.30s</td>
+      <td align="center">41m40.52s</td>
+      <td align="center">2008/10/12</td>
+      <td align="center">Memory disk (10G),cache save, NUMOFPROCESSES=2, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">2h41m19.52s</td>
+      <td align="center">4h20m57.79s</td>
+      <td align="center">38m36.56s</td>
+      <td align="center">2008/10/11</td>
+      <td align="center">Memory disk (12G), no cache save, NUMOFPROCESSES=4, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">2h47m2.14s</td>
+      <td align="center">4h28m47.76s</td>
+      <td align="center">41m43.83s</td>
+      <td align="center">2008/10/11</td>
+      <td align="center">Memory disk (12G), cache save, NUMOFPROCESSES=4, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">5h11m49.81s</td>
+      <td align="center">4h22m36.05s</td>
+      <td align="center">37m6.09ss</td>
+      <td align="center">2008/10/10</td>
+      <td align="center">NUMOFPROCESSES=1, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">3h9m57.66s</td>
+      <td align="center">4h26m27.03s</td>
+      <td align="center">41m10.69s</td>
+      <td align="center">2008/10/10</td>
+      <td align="center">NUMOFPROCESSES=2, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">2h59m14.30s</td>
+      <td align="center">4h30m35.76s</td>
+      <td align="center">41m11.76s</td>
+      <td align="center">2008/10/10</td>
+      <td align="center">NUMOFPROCESSES=4, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+
+    <tr>
+      <td align="center">7.0-BETA1.5/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">3h16m6.34s</td>
+      <td align="center">2h43m18.56s</td>
+      <td align="center">26m0.59s</td>
+      <td align="center">2007/10/30</td>
+      <td align="center">NUMOFPROCESSES=1, AHCI enabled</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.0-BETA1.5/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">1h57m43.49s</td>
+      <td align="center">2h44m27.52s</td>
+      <td align="center">28m58.16s</td>
+      <td align="center">2007/10/30</td>
+      <td align="center">NUMOFPROCESSES=2, AHCI enabled</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.0-BETA1.5/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">1h14m6.12s</td>
+      <td align="center">2h51m30.36s</td>
+      <td align="center">34m6.44s</td>
+      <td align="center">2007/10/30</td>
+      <td align="center">NUMOFPROCESSES=4, AHCI enabled</td>
+      <td align="center">maho</td>
+    </tr>
+
+
+    <tr>
+      <td align="center">6.3-PRERELEASE(20071026)</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">1h25m13.33s</td>
+      <td align="center">3h15m43.61s</td>
+      <td align="center">31m30.54s</td>
+      <td align="center">2007/10/30</td>
+      <td align="center">NUMOFPROCESSES=4, AHCI enabled</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">6.3-PRERELEASE(20071026)</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">1h26m28.04s</td>
+      <td align="center">3h15m33.47s</td>
+      <td align="center">31m32.93s</td>
+      <td align="center">2007/10/27</td>
+      <td align="center">NUMOFPROCESSES=4</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">6.3-PRERELEASE(20071026)</td>
+      <td align="center">Core2 Quad Q6600 2.4GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">4h38m12.18s</td>
+      <td align="center">3h58m35.77s</td>
+      <td align="center">32m54.46s</td>
+      <td align="center">2007/10/27</td>
+      <td align="center">NUMOFPROCESSES=1</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">6.3-PRERELEASE(20071026)</td>
+      <td align="center">Core2 Quad Q6600 2.4GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">2h41m13.98s</td>
+      <td align="center">3h59m28.03s</td>
+      <td align="center">35m0.38ss</td>
+      <td align="center">2007/10/27</td>
+      <td align="center">NUMOFPROCESSES=2</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">6.3-PRERELEASE(20071026)</td>
+      <td align="center">Core2 Quad Q6600 2.4GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">1h40m43.51s</td>
+      <td align="center">4h2m39.23s</td>
+      <td align="center">37m24.81s</td>
+      <td align="center">2007/10/27</td>
+      <td align="center">NUMOFPROCESSES=4</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">6.3-PRERELEASE(20071026)</td>
+      <td align="center">Core2 Quad Q6600 2.4GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">1h39m30.58s</td>
+      <td align="center">4h4m57.75s</td>
+      <td align="center">40m31.83s</td>
+      <td align="center">2007/10/27</td>
+      <td align="center">NUMOFPROCESSES=8</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">6.2-STABLE(20070909)</td>
+      <td align="center">Pentium 4 2.4GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">10h2m9.58s</td>
+      <td align="center">8h24m58.39s</td>
+      <td align="center">1h2m4.14s</td>
+      <td align="center">2007/10/27</td>
+      <td align="center">NUMOFPROCESSES=1</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">6.2-STABLE(20070909)</td>
+      <td align="center">Pentium 4 2.4GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">9h55m27.72s</td>
+      <td align="center">8h31m31.15s</td>
+      <td align="center">1h5m6.86s</td>
+      <td align="center">2007/10/27</td>
+      <td align="center">NUMOFPROCESSES=2</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">6.2-STABLE(20070909)</td>
+      <td align="center">Pentium 4 2.4GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">9h59m36.57s</td>
+      <td align="center">8h35m13.58s</td>
+      <td align="center">1h6m20.78s</td>
+      <td align="center">2007/10/27</td>
+      <td align="center">NUMOFPROCESSES=4</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 4 2.4GHz</td>
+      <td align="center">1.9m79</td>
+      <td align="center">9h41m2.11s</td>
+      <td align="center">6h59m55.98s</td>
+      <td align="center">1h32m19.11s</td>
+      <td align="center">2005/02/18</td>
+      <td align="center">NUMOFPROCESSES=1</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 4 2.4GHz</td>
+      <td align="center">1.9m79</td>
+      <td align="center">9h19m46.74s</td>
+      <td align="center">7h4m10.03s</td>
+      <td align="center">1h36m39.17s</td>
+      <td align="center">2005/02/19</td>
+      <td align="center">NUMOFPROCESSES=2</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 4 2.4GHz</td>
+      <td align="center">1.9m79</td>
+      <td align="center">9h18m39.45s</td>
+      <td align="center">7h6m5.16s</td>
+      <td align="center">1h38m45.94s</td>
+      <td align="center">2005/02/19</td>
+      <td align="center">NUMOFPROCESSES=4</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 4 2.4GHz</td>
+      <td align="center">1.9m79</td>
+      <td align="center">9h20m5.23s</td>
+      <td align="center">7h7m6.38s</td>
+      <td align="center">1h39m15.00s</td>
+      <td align="center">2005/02/20</td>
+      <td align="center">NUMOFPROCESSES=8</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">5.3-RELEASE-p5</td>
+      <td align="center">Pentium 4 3.0G, 1G</td>
+      <td align="center">1.1.4</td>
+      <td align="center">4h22m48.45s</td>
+      <td align="center">3h38m20.55s</td>
+      <td align="center">31m14.03s</td>
+      <td align="center">2005/02/02</td>
+      <td align="center">without SMP</td>
+      <td align="center">daich</td>
+    </tr>
+
+    <tr>
+      <td align="center">5.3-RELEASE-p5</td>
+      <td align="center">Athlon 3200+, 1G</td>
+      <td align="center">1.1.4</td>
+      <td align="center">3h57m15.36s</td>
+      <td align="center">3h19m23.35s</td>
+      <td align="center">25m42.83s</td>
+      <td align="center">2005/01/28</td>
+      <td align="center">java core dumped frequently</td>
+      <td align="center">daich</td>
+    </tr>
+
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 3 3.06GHz, 1G</td>
+      <td align="center">1.1.4</td>
+      <td align="center">4h44m33.16s</td>
+      <td align="center">3h59m47.74s</td>
+      <td align="center">31m51.72s</td>
+      <td align="center">2005/01/20</td>
+      <td align="center"></td>
+      <td align="center">Steve Joynt</td>
+    </tr>
+
+    <tr>
+      <td align="center">6-CURRENT</td>
+      <td align="center">Pentium 3 1.133GHz</td>
+      <td align="center">1.1.4</td>
+      <td align="center">10h47m52.26s</td>
+      <td align="center">7h15.70s</td>
+      <td align="center">1h4m4.56s</td>
+      <td align="center">2005/01/17</td>
+      <td align="center">kernel:Jan 8 05:29:18 JST 2005</td>
+      <td align="center">nork</td>
+    </tr>
+
+    <tr>
+      <td align="center">6-CURRENT</td>
+      <td align="center">Pentium 3 M 1.0GHz</td>
+      <td align="center">1.1.4</td>
+      <td align="center">9h59m6.11s</td>
+      <td align="center">7h37m27.21s</td>
+      <td align="center">59m23.89s</td>
+      <td align="center">2005/01/16</td>
+      <td align="center">kernel:Jan  8 07:04:41 JST 2005</td>
+      <td align="center">nork</td>
+    </tr>
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 4 2.4GHz</td>
+      <td align="center">1.9m71</td>
+      <td align="center">9h45m41.61s</td>
+      <td align="center">7h34.83s</td>
+      <td align="center">1h31m26.82s</td>
+      <td align="center">2005/01/14</td>
+      <td align="center">-</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 4 3.0GHz</td>
+      <td align="center">1.1.4</td>
+      <td align="center">4h31m20.33s</td>
+      <td align="center">3h42m55.00s</td>
+      <td align="center">41m58.47s</td>
+      <td align="center">2005/01/14</td>
+      <td align="center">clean bench</td>
+      <td align="center">daichi</td>
+    </tr>
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium M 1.6GHz, TP T40</td>
+      <td align="center">1.9.m71</td>
+      <td align="center">18h44m48.74s</td>
+      <td align="center">16h8m59.23s</td>
+      <td align="center">1h42m44.23s</td>
+      <td align="center">2005/01/14</td>
+      <td align="center">-</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 4 3.0GHz, 1G mem</td>
+      <td align="center">1.1.4</td>
+      <td align="center">4h51m5.92s</td>
+      <td align="center">3h53m0.55s</td>
+      <td align="center">48m7.34s</td>
+      <td align="center">2005/01/12</td>
+      <td align="center">running other jobs</td>
+      <td align="center">daichi</td>
+    </tr>
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 4 2.4GHz, FSB 533MHz, 1G mem</td>
+      <td align="center">1.1.4</td>
+      <td align="center">5h49m6.62s</td>
+      <td align="center">4h38m2.60s</td>
+      <td align="center">50m53.69s</td>
+      <td align="center">2005/01/12</td>
+      <td align="center">-</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">ThinkPad T40 Pentium M 1.6GHz, 512M</td>
+      <td align="center">1.1.4</td>
+      <td align="center">12h3.02s</td>
+      <td align="center">10h30m39.24s</td>
+      <td align="center">56m11.48s</td>
+      <td align="center">2005/01/12</td>
+      <td align="center">-</td>
+      <td align="center">maho</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Results with ccache:</h3>
+<table border="1" width="700">
+  <tbody>
+    <tr>
+      <td align="center">OS</td>
+      <td align="center">System</td>
+      <td align="center">OOo version</td>
+      <td align="center">Time (real)</td>
+      <td align="center">Time (usr)</td>
+      <td align="center">Time (sys)</td>
+      <td align="center">Date</td>
+      <td align="center">Comments</td>
+      <td align="center">Reference</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h5m10.08s</td>
+      <td align="center">1h9m1.86s</td>
+      <td align="center">45m32.82s</td>
+      <td align="center">2008/10/29</td>
+      <td align="center">NUMOFPROCESSES=6, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h56.11s</td>
+      <td align="center">1h7m20.25s</td>
+      <td align="center">43m2.04s</td>
+      <td align="center">2008/10/29</td>
+      <td align="center">NUMOFPROCESSES=4, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h3m58.30s</td>
+      <td align="center">1h3m57.44s</td>
+      <td align="center">36m19.76s</td>
+      <td align="center">2008/10-29</td>
+      <td align="center">NUMOFPROCESSES=2, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h45m13.83s</td>
+      <td align="center">1h51.69s</td>
+      <td align="center">25m59.55s</td>
+      <td align="center">2008/10/29</td>
+      <td align="center">NUMOFPROCESSES=1, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">43m54.04s</td>
+      <td align="center">1h10m34.47s</td>
+      <td align="center">45m36.42s</td>
+      <td align="center">2008/10/30</td>
+      <td align="center">Memory disk (10G), NUMOFPROCESSES=6, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">42m19.72s</td>
+      <td align="center">1h8m29.84s</td>
+      <td align="center">43m14.65s</td>
+      <td align="center">2008/10/29</td>
+      <td align="center">Memory disk (10G), NUMOFPROCESSES=4, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">47m51.28s</td>
+      <td align="center">1h4m1.64s</td>
+      <td align="center">36m35.64s</td>
+      <td align="center">2008/10/29</td>
+      <td align="center">Memory disk (10G), NUMOFPROCESSES=2, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h31m16.77s</td>
+      <td align="center">1h1m17.52s</td>
+      <td align="center">26m11.90s</td>
+      <td align="center">2008/10/29</td>
+      <td align="center">Memory disk (10G), NUMOFPROCESSES=1, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">56m28.74s</td>
+      <td align="center">1h2m4.03s</td>
+      <td align="center">32m41.19s</td>
+      <td align="center">2008/10/23</td>
+      <td align="center">NUMOFPROCESSES=6, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">58m36.23s</td>
+      <td align="center">1h1m9.37s</td>
+      <td align="center">30m11.66s</td>
+      <td align="center">2008/10/23</td>
+      <td align="center">NUMOFPROCESSES=4, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h8m5.00s</td>
+      <td align="center">59m57.15s</td>
+      <td align="center">26m1.10s</td>
+      <td align="center">2008/10/23</td>
+      <td align="center">NUMOFPROCESSES=2, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h36m26.43s</td>
+      <td align="center">59m5.09s</td>
+      <td align="center">22m55.28s</td>
+      <td align="center">2008/10/23</td>
+      <td align="center">NUMOFPROCESSES=1, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">40m51.26s</td>
+      <td align="center">1h2m59.92s</td>
+      <td align="center">32m54.45s</td>
+      <td align="center">2008/10/22</td>
+      <td align="center">Memory disk (10G), NUMOFPROCESSES=6, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">41m52.81s</td>
+      <td align="center">1h1m46.82s</td>
+      <td align="center">30m57.34s</td>
+      <td align="center">2008/10/22</td>
+      <td align="center">Memory disk (10G), NUMOFPROCESSES=4, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">53m10.72s</td>
+      <td align="center">59m45.10s</td>
+      <td align="center">25m48.12s</td>
+      <td align="center">2008/10/22</td>
+      <td align="center">Memory disk (10G), NUMOFPROCESSES=2, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 285(2.6GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h21m26.06s</td>
+      <td align="center">58m49.33s</td>
+      <td align="center">22m22.41s</td>
+      <td align="center">2008/10/22</td>
+      <td align="center">Memory disk (10G), NUMOFPROCESSES=1, TYAN S2891, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h2m19.10s</td>
+      <td align="center">1h12m52.08s</td>
+      <td align="center">33m24.00s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">Memory disk (10G), NUMOFPROCESSES=4, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h5m58.40s</td>
+      <td align="center">1h11m39.21s</td>
+      <td align="center">32m43.01s</td>
+      <td align="center">2008/10-14</td>
+      <td align="center">Memory disk (10G), NUMOFPROCESSES=2, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h38m46.82s</td>
+      <td align="center">1h8m5.10s</td>
+      <td align="center">27m13.15s</td>
+      <td align="center">2008/10-14</td>
+      <td align="center">Memory disk (10G), NUMOFPROCESSES=1, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h16m29.04s</td>
+      <td align="center">1h12m52.38s</td>
+      <td align="center">33m0.59s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">NUMOFPROCESSES=4, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h21m1.14s</td>
+      <td align="center">1h11m12.45s</td>
+      <td align="center">31m12.84s</td>
+      <td align="center">2008/10-14</td>
+      <td align="center">NUMOFPROCESSES=2, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h57m23.49s</td>
+      <td align="center">1h8m34.98s</td>
+      <td align="center">28m2.22s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">NUMOFPROCESSES=1, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h6m26.74s</td>
+      <td align="center">49m17.89s</td>
+      <td align="center">29m28.11s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">NUMOFPROCESSES=4</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h4m46.56s</td>
+      <td align="center">46m47.05s</td>
+      <td align="center">24m57.55s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">NUMOFPROCESSES=2</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">3.0.0</td>
+      <td align="center">1h36m17.95s</td>
+      <td align="center">45m7.63s</td>
+      <td align="center">19m37.01s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">NUMOFPROCESSES=1</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">2.4.1</td>
+      <td align="center">59m52.10s</td>
+      <td align="center">46m32.65s</td>
+      <td align="center">20m45.32s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">NUMOFPROCESSES=4</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h4m14.08s</td>
+      <td align="center">45m19.63s</td>
+      <td align="center">18m15.64s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">NUMOFPROCESSES=2</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h26m44.87s</td>
+      <td align="center">44m41.73s</td>
+      <td align="center">16m42.07s</td>
+      <td align="center">2008/10/13</td>
+      <td align="center">NUMOFPROCESSES=1</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h30m23.70s</td>
+      <td align="center">1h5m26.55s</td>
+      <td align="center">23m58.13s</td>
+      <td align="center">2008/10/12</td>
+      <td align="center">Memory disk (10G), NUMOFPROCESSES=1, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h6m41.18s</td>
+      <td align="center">1h7m21.20s</td>
+      <td align="center">26m14.99s</td>
+      <td align="center">2008/10/11</td>
+      <td align="center">Memory disk (10G), NUMOFPROCESSES=2, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">58m49.81s</td>
+      <td align="center">1h7m59.79s</td>
+      <td align="center">26m29.53s</td>
+      <td align="center">2008/10/11</td>
+      <td align="center">Memory disk (12G), NUMOFPROCESSES=4, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h46m8.93s</td>
+      <td align="center">1h5m38.39s</td>
+      <td align="center">23m20.51s</td>
+      <td align="center">2008/10/10</td>
+      <td align="center">NUMOFPROCESSES=1, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h19m4.35s</td>
+      <td align="center">1h6m54.03s</td>
+      <td align="center">25m51.65s</td>
+      <td align="center">2008/10/10</td>
+      <td align="center">NUMOFPROCESSES=2, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.1-PRERELEASE/amd64</td>
+      <td align="center">Opteron 250(2.4GHz)x2</td>
+      <td align="center">2.4.1</td>
+      <td align="center">1h11m50.79s</td>
+      <td align="center">1h8m9.85s</td>
+      <td align="center">26m40.51s</td>
+      <td align="center">2008/10/10</td>
+      <td align="center">NUMOFPROCESSES=4, TYAN S2885, DDR333</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.0-BETA1.5/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">1h12m21.39s</td>
+      <td align="center">44m6.18s</td>
+      <td align="center">16m54.37s</td>
+      <td align="center">2007/10/30</td>
+      <td align="center">NUMOFPROCESSES=1, AHCI enabled</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.0-BETA1.5/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">55m6.35s</td>
+      <td align="center">44m34.48s</td>
+      <td align="center">18m7.80s</td>
+      <td align="center">2007/10/30</td>
+      <td align="center">NUMOFPROCESSES=2, AHCI enabled</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">7.0-BETA1.5/amd64</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">40m32.78s</td>
+      <td align="center">45m17.96s</td>
+      <td align="center">20m56.80s</td>
+      <td align="center">2007/10/30</td>
+      <td align="center">NUMOFPROCESSES=4, AHCI enabled</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">6.3-PRERELEASE(20071026)</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">57m16.97s</td>
+      <td align="center">1h13m26.62s</td>
+      <td align="center">24m7.61s</td>
+      <td align="center">2007/10/30</td>
+      <td align="center">NUMOFPROCESSES=4, AHCI enabled</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">6.3-PRERELEASE(20071026)</td>
+      <td align="center">Core2 Quad Q6600 @3GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">1h12.84s</td>
+      <td align="center">1h13m24.19s</td>
+      <td align="center">24m25.12s</td>
+      <td align="center">2007/10/27</td>
+      <td align="center">NUMOFPROCESSES=4</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">6.3-PRERELEASE(20071026)</td>
+      <td align="center">Core2 Quad Q6600 2.4GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">2h7m28.96s</td>
+      <td align="center">1h30m25.92s</td>
+      <td align="center">25m0.14s</td>
+      <td align="center">2007/10/27</td>
+      <td align="center">NUMOFPROCESSES=1</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">6.3-PRERELEASE(20071026)</td>
+      <td align="center">Core2 Quad Q6600 2.4GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">1h24m56.99s</td>
+      <td align="center">1h30m43.37s</td>
+      <td align="center">26m50.37s</td>
+      <td align="center">2007/10/27</td>
+      <td align="center">NUMOFPROCESSES=2</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">6.3-PRERELEASE(20071026)</td>
+      <td align="center">Core2 Quad Q6600 2.4GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">1h4m6.88s</td>
+      <td align="center">1h31m22.56s</td>
+      <td align="center">29m17.01s</td>
+      <td align="center">2007/10/27</td>
+      <td align="center">NUMOFPROCESSES=4</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">6.3-PRERELEASE(20071026)</td>
+      <td align="center">Core2 Quad Q6600 2.4GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">1h3m34.58s</td>
+      <td align="center">1h32m46.90s</td>
+      <td align="center">31m17.97s</td>
+      <td align="center">2007/10/27</td>
+      <td align="center">NUMOFPROCESSES=8</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">6.2-STABLE(20070909)</td>
+      <td align="center">Pentium 4 2.4GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">4h17m47.34s</td>
+      <td align="center">3h2m7.24s</td>
+      <td align="center">45m56.38s</td>
+      <td align="center">2007/10/27</td>
+      <td align="center">NUMOFPROCESSES=1</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">6.2-STABLE(20070909)</td>
+      <td align="center">Pentium 4 2.4GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">4h11m48.88s</td>
+      <td align="center">3h3m40.64s</td>
+      <td align="center">47m25.50s</td>
+      <td align="center">2007/10/27</td>
+      <td align="center">NUMOFPROCESSES=2</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">6.2-STABLE(20070909)</td>
+      <td align="center">Pentium 4 2.4GHz</td>
+      <td align="center">2.3.0</td>
+      <td align="center">4h11m37.17s</td>
+      <td align="center">3h5m52.22s</td>
+      <td align="center">48m38.47s</td>
+      <td align="center">2007/10/27</td>
+      <td align="center">NUMOFPROCESSES=4</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 4 2.4GHz</td>
+      <td align="center">1.9m79</td>
+      <td align="center">4h28m43.07s</td>
+      <td align="center">2h4m22.00s</td>
+      <td align="center">1h12m35.40s</td>
+      <td align="center">2005/02/18</td>
+      <td align="center">NUMOFPROCESSES=1</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 4 2.4GHz</td>
+      <td align="center">1.9m79</td>
+      <td align="center">4h9m28.87s</td>
+      <td align="center">2h4m56.93s</td>
+      <td align="center">1h15m6.49s</td>
+      <td align="center">2005/02/19</td>
+      <td align="center">NUMOFPROCESSES=2</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 4 2.4GHz</td>
+      <td align="center">1.9m79</td>
+      <td align="center">4h3m9.74s</td>
+      <td align="center">2h8m17.04s</td>
+      <td align="center">1h16m32.19s</td>
+      <td align="center">2005/02/19</td>
+      <td align="center">NUMOFPROCESSES=4</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 4 2.4GHz</td>
+      <td align="center">1.9m79</td>
+      <td align="center">4h51.07s</td>
+      <td align="center">2h6m50.32s</td>
+      <td align="center">1h17m13.55s</td>
+      <td align="center">2005/02/20</td>
+      <td align="center">NUMOFPROCESSES=8</td>
+      <td align="center">maho</td>
+    </tr>
+
+    <tr>
+      <td align="center">5.3-RELEASE-p5</td>
+      <td align="center">Pentium 4 3.0G, 1G</td>
+      <td align="center">1.1.4</td>
+      <td align="center">1h17m28.21s</td>
+      <td align="center">38m31.64s</td>
+      <td align="center">25m5.90s</td>
+      <td align="center">2005/02/02</td>
+      <td align="center">without SMP</td>
+      <td align="center">daich</td>
+    </tr>
+
+    <tr>
+      <td align="center">5.3-RELEASE-p5</td>
+      <td align="center">Athlon 3200+, 1G</td>
+      <td align="center">1.1.4</td>
+      <td align="center">1h13m20.55s</td>
+      <td align="center">38m43.27s</td>
+      <td align="center">20m54.47s</td>
+      <td align="center">2005/01/28</td>
+      <td align="center">java core dumped frequently</td>
+      <td align="center">daich</td>
+    </tr>
+
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 3 3.06GHz, 1G</td>
+      <td align="center">1.1.4</td>
+      <td align="center">1h16m47.75s</td>
+      <td align="center">38m32.47s</td>
+      <td align="center">25m10.42s</td>
+      <td align="center">2005/01/20</td>
+      <td align="center"></td>
+      <td align="center">Steve Joynt</td>
+    </tr>
+
+    <tr>
+      <td align="center">6-CURRENT</td>
+      <td align="center">Pentium 3 1.133GHz</td>
+      <td align="center">1.1.4</td>
+      <td align="center">4h31m18.14s</td>
+      <td align="center">1h26m11.79s</td>
+      <td align="center">51m6.19s</td>
+      <td align="center">2005/01/17</td>
+      <td align="center">kernel:Jan 8 05:29:18 JST 2005</td>
+      <td align="center">nork</td>
+    </tr>
+
+    <tr>
+      <td align="center">6-CURRENT</td>
+      <td align="center">Pentium 3 M 1.0GHz</td>
+      <td align="center">1.1.4</td>
+      <td align="center">3h8m38.69s</td>
+      <td align="center">1h34m58.96s</td>
+      <td align="center">47m1.07s</td>
+      <td align="center">2005/01/16</td>
+      <td align="center">kernel:Jan 8 07:04:41 JST 2005</td>
+      <td align="center">nork</td>
+    </tr>
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 4 2.4GHz</td>
+      <td align="center">1.9m71</td>
+      <td align="center">4h9m52.13s</td>
+      <td align="center">2h2m11.49s</td>
+      <td align="center">1h11m8.81s</td>
+      <td align="center">2005/01/14</td>
+      <td align="center">-</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 4 3.0GHz</td>
+      <td align="center">1.1.4</td>
+      <td align="center">1h25m22.42s</td>
+      <td align="center">40m21.35s</td>
+      <td align="center">35m6.33s</td>
+      <td align="center">2005/01/14</td>
+      <td align="center">clean bench</td>
+      <td align="center">daichi</td>
+    </tr>
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium M 1.6GHz, TP T40</td>
+      <td align="center">1.9.m71</td>
+      <td align="center">3h28m16.20s</td>
+      <td align="center">1h54m43.65s</td>
+      <td align="center">41m12.35s</td>
+      <td align="center">2005/01/14</td>
+      <td align="center">-</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 4 3.0GHz, 1G mem</td>
+      <td align="center">1.1.4</td>
+      <td align="center">1h33m44.50s</td>
+      <td align="center">43m28.44s</td>
+      <td align="center">38m17.01s</td>
+      <td align="center">2005/01/12</td>
+      <td align="center">running other jobs</td>
+      <td align="center">daichi</td>
+    </tr>
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">Pentium 4 2.4GHz, FSB 533MHz, 1G mem</td>
+      <td align="center">1.1.4</td>
+      <td align="center">2h4m24.25s</td>
+      <td align="center">1h2m39.03s</td>
+      <td align="center">42m6.12s</td>
+      <td align="center">2005/01/12</td>
+      <td align="center">-</td>
+      <td align="center">maho</td>
+    </tr>
+    <tr>
+      <td align="center">5.3-RELEASE</td>
+      <td align="center">ThinkPad T40 Pentium M 1.6GHz, 512M</td>
+      <td align="center">1.1.4</td>
+      <td align="center">3h52m17.57s</td>
+      <td align="center">2h37m5.13s</td>
+      <td align="center">46m24.73s</td>
+      <td align="center">2005/01/12</td>
+      <td align="center">-</td>
+      <td align="center">maho</td>
+    </tr>
+  </tbody>
+</table>
+</center>
+
+<hr>
+</body>
+</html>

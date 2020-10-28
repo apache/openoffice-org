@@ -1,0 +1,160 @@
+<html><head>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+
+						<h2>Mac OS X Porting Roadmap</h2>
+						<p><i>Last Modified July 25, 2002 by <a href="mailto:OPENSTEP@openoffice.org">Edward Peterlin</a></i></p>
+						<p>This page contains a rough outline of how the Mac OS X team will approach the work that remains in the porting effort.  By no means is this meant to be binding, however, and all commentary is appreciated.  For discussion, please join the <a href="mailto:dev-subscribe@porting.openoffice.org">dev@porting.openoffice.org</a> mailing list and talk away!</p>
+						<p>Hopefully after each phase of the port a binary could be made available for public consumption.  All of them will be 'bleeding edge' binaries until all of the missing code is implemented.</p>
+						<table border="0" cellpadding="2" cellspacing="2" width="100%">
+							<tr>
+								<td colspan="2" bgcolor="#00315a">
+									<div align="center">
+										<font color="white" face="Arial,Helvetica,Geneva,Swiss,SunSans-Regular" size="2">Phases of the Mac OS X Port</font></div>
+								</td>
+							</tr>
+							<tr>
+								<td width="80%" bgcolor="#99ccff">
+									<div align="center">
+										<font face="Arial,Helvetica,Geneva,Swiss,SunSans-Regular" size="2" color="#00315a">Phase</font></div>
+								</td>
+								<td bgcolor="#99ccff">
+									<div align="center">
+										<font color="#00315a" face="Arial,Helvetica,Geneva,Swiss,SunSans-Regular" size="2">Completed</font></div>
+								</td>
+							</tr>
+							<tr>
+								<td width="80%"><a href="#OO638">Successful build and link of OO638C_MacOSX</a></td>
+								<td bgcolor="#d9e7ff">X11 Complete.  Quartz Complete!</td>
+							</tr>
+							<tr>
+								<td width="80%"><a href="#OO641">Migration to OO641/1.0 Stable</a></td>
+								<td bgcolor="#d9e7ff">X11 Complete!  Quartz pending.</td>
+							</tr>
+							<tr>
+								<td width="80%"><a href="#FinishImpl">Completion of missing implementations</a></td>
+								<td bgcolor="#d9e7ff">No</td>
+							</tr>
+							<tr>
+								<td width="80%"><a href="#BetaTest">Beta testing and runtime error correction</a></td>
+								<td bgcolor="#d9e7ff">No</td>
+							</tr>
+							<tr>
+								<td width="80%"><a href="#AquaLAF">Aqua Look and Feel</a></td>
+								<td bgcolor="#d9e7ff">No</td>
+							</tr>
+						</table>
+						<p><a name="OO638"></a><b>Successful Build and Link of OO638C_MacOSX</b></p>
+						<p>It is with great pleasure that the OS X porting team can announce the first successful build and link of OpenOffice.org on OS X on both the X11 and Quartz platforms!
+							Specifically, we have been able to get a full compilation using the X11 VCL, and have been even able to produce reasonably
+							stable binaries.  The Quartz build is successful, but the Quartz VCL is nowhere near as complete as the X11 VCL.  Further work to finish the Quartz VCL will be postponed until after we've moved to the latest set of source for 1.0.</p>
+						<p><a name="OO641"></a><b>Migration to OOO_STABLE_1</b></p>
+						
+<p>We've finished the inital legwork and have gotten the 1.0.1 sources, also known as OOO_STABLE_1, compiling for our DarwinPPC/X11
+branch.  This means that all you developers who didn't want to wrangle with something that didn't compile no longer have any
+excuses!  We're going to progress onwards to getting 1.0 fully released on DarwinPPC.  Because this version is identical to the
+Quartz version with the exception of the vcl module, a functional DarwinPPC/X11 build will get us most of the way to the finished
+Quartz Mac OS X native build.</p>
+<p>At this time, Quartz does not yet compile for OOO_STABLE_1.  We need people to help migrate the Quartz specific changes from
+OO638C to 1.0.  With as few people as we have on this port, we just don't have the time!<p>
+<p><a name="FinishImpl"></a><b>Completion of Missing Implementations</b></p>
+						<p>Just getting a successful build doesn't mean that all of the porting work is completed.  Several modules have missing implementations or need to be skipped in order to get a successful Mac OS X build.  In order to create a full release, these missing implementations need to be created.</p>
+						<p>Below is the list of work that the needed to be undertaken in the OO638C release tag in order to have a full implementation. This list will still be applicable for the OO641 tag.</p>
+						<table cellpadding="4" cellspacing="1" bgcolor="#ffffff" width="100%">
+							<tr>
+								<td colspan="2" bgcolor="#00315A" align="CENTER"><font color="#FFFFFF" face="Arial, Helvetica" size="2"><b>List of Remaining Mac OS X 10.1.x Porting Tasks</b> </font></td>
+							</tr>
+							<tr>
+								<th bgcolor="#99CCFF" align="CENTER"><font color="#00315A" face="Arial, Helvetica" size="2"><b>Task </b></font></th>
+								<th bgcolor="#99CCFF" align="CENTER"><font color="#00315A" face="Arial, Helvetica" size="2"><b>Description </b></font></th>
+							</tr>
+							<tr>
+								<td bgcolor="#f0f0f0" valign="top">Implement Native  Windowing Code</td>
+								<td bgcolor="#f0f0f0" valign="top">By default, if there is native windowing code, the build will try to build the X11-based windowing code. In such cases, you will need to create a new platform-dependent directory and create the necessary C++ class implementations and C functions to support Mac OS X's windowing APIs. For an example of how to create a new platform-dependent directory, take a look at the dtrans/source/aqua and the dtrans/source/X11 directories in the source code.
+									<ul>
+										
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td bgcolor="#f0f0f0" valign="top">Unicode font support</td>
+								<td bgcolor="#f0f0f0" valign="top">The current code only supports printing of ASCII characters and only supports printing using the default system font. In order to support the Western European languages that OpenOffice.org supports on other platforms, printing of Unicode characters needs to be implemented. Also, in order for OpenOffice.org to have a smooth appearance, support for multiple fonts and font sizes needs to be implemented. The current font support for Mac OS X 10.1.x is implemented in the vcl/aqua/source/gdi source directory.</td>
+							</tr>
+							<tr>
+								<td bgcolor="#f0f0f0" valign="top">Java 1.2 JNI support</td>
+								<td bgcolor="#f0f0f0" valign="top">The Java 1.1 JNI APIs do not work correctly in Mac OS X 10.1.x's native Java Runtime Environment (JRE). So, the current Java support for Mac OS X 10.1.x uses Java 1.2 JNI APIs. This implementation, however, is very minimal, in that the only configuration that has been implemented is setting of the JRE's CLASSPATH. In order for OpenOffice.org to properly interact with the Java 1.2 JNI APIs, the implementation needs to be expanded to include setting of the following items:
+									<ul>
+										<li>JRE command line options (e.g. stack size, debug port, etc.)
+										<li>System properties
+									</ul>
+									The current JNI API support for Mac OS X 10.1.x is implemented in the stoc/source/javavm source directory.</td>
+							</tr>
+							<tr>
+								<td bgcolor="#f0f0f0" valign="top">Dialog modality</td>
+								<td bgcolor="#f0f0f0" valign="top">OpenOffice.org's vcl module does not rely on native code to implement modal windows. Instead, the platform-independent code uses emulated modality by controlling the stacking order of modeless windows. In the current implementation, the code controlling the stacking order is not connected to the Mac OS X 10.1.x native windows. The current Mac OS X native event handling support is implemented in the vcl/aqua/source/app source directory and the platform-independent event processing is in the vcl/source/window source directory.</td>
+							</tr>
+							<tr>
+								<td bgcolor="#f0f0f0" valign="top">Setup program native code</td>
+								<td bgcolor="#f0f0f0" valign="top">The setup program uses some native event handling code to control the installation process. This native code has been implemented. However, it has not been tested. Hence, some debugging should be expected. The current native event handling code for the setup program is in the setup2/aqua/source/loader source directory.</td>
+							</tr>
+							<tr>
+								<td bgcolor="#f0f0f0" valign="top">Printer support</td>
+								<td bgcolor="#f0f0f0" valign="top">No printing support has been implemented. In the OO638C release tag, all of the printing related C++ methods contain empty implementations. Hence, these empty methods need to be implemented to enable the following OpenOffice.org functionality:
+									<ul>
+										<li>Printer identification and selection
+										<li>Rendering to the selected printer
+									</ul>
+									The empty C++ methods for printer support are in the vcl/aqua/source/gdi source directory.</td>
+							</tr>
+							<tr>
+								<td bgcolor="#f0f0f0" valign="top">Full screen graphics support</td>
+								<td bgcolor="#f0f0f0" valign="top">No full screen graphics support has been implemented. In the OO638C release tag, all of C++ methods that route text and graphics rendering to the desktop contain empty implementations. Hence, these empty methods need to be implemented to enable OpenOffice.org's full screen functionality used within OpenOffice.org's presentation code. The empty C++ methods for full screen graphics support are in the vcl/aqua/source/window source directory.</td>
+							</tr>
+							<tr>
+								<td bgcolor="#f0f0f0" valign="top">Sound support</td>
+								<td bgcolor="#f0f0f0" valign="top">No sound support has been implemented. In the OO638C release tag, all of C++ methods that enable loading and playing of sound files contain empty implementations. The empty C++ methods for sound support are in the vcl/aqua/source/gdi source directory.</td>
+							</tr>
+							<tr>
+								<td bgcolor="#f0f0f0" valign="top">Copy and paste support</td>
+								<td bgcolor="#f0f0f0" valign="top">No copy and paste support has been implemented. In the OO638C release tag, all of UNO C++ methods that enable copying and pasting of multiple content types contain empty implementations. The empty C++ methods for copy and paste support are in the dtrans/source/aqua source directory.</td>
+							</tr>
+							<tr>
+								<td bgcolor="#f0f0f0" valign="top">Drag and drop support</td>
+								<td bgcolor="#f0f0f0" valign="top">No drag and drop support has been implemented. In the OO638C release tag, all of UNO C++ methods that enable dragging and dropping of multiple content types contain empty implementations. The empty C++ methods for drag and drop support are in the dtrans/source/aqua source directory.</td>
+							</tr>
+							<tr>
+								<td bgcolor="#f0f0f0" valign="top">OpenGL graphics support</td>
+								<td bgcolor="#f0f0f0" valign="top">OpenOffice.org uses the OpenGL APIs to render 3D graphics. In the OO638C release tag, all of C++ methods that connect the platform-independent code in the vcl module to the native OpenGL functions contain empty implementations. The empty C++ methods for OpenGL support are in the vcl/aqua/source/gdi source directory.</td>
+							</tr>
+							<tr>
+								<td bgcolor="#f0f0f0" valign="top">Encapsulated PostScript (EPS) graphics support</td>
+								<td bgcolor="#f0f0f0" valign="top">OpenOffice.org supports rendering of EPS to windows and printers. In the OO638C release tag, all of C++ methods that support rendering of EPS contain empty implementations. The empty C++ methods for rendering EPS are in the vcl/aqua/source/gdi source directory.</td>
+							</tr>
+							<tr>
+								<td bgcolor="#f0f0f0" valign="top">Mozilla driver completion</td>
+								<td bgcolor="#f0f0f0" valign="top">OpenOffice.org contains code which utilizes Mozilla code, such as the address book component.  As of OO638C, the code for these modules no longer builds with the latest Mozilla distributions.  Once the OpenOffice 1.0 code builds off of Mozilla, the integration of FizillaMach with the OpenOffice.org sources needs to be completed.</td>
+							</tr>
+							<tr>
+								<td bgcolor="#f0f0f0" valign="top">3rd party plugin support</td>
+								<td bgcolor="#f0f0f0" valign="top">OpenOffice.org makes use of third party libraries to perform some functionality on other platforms. These libraries, like Netscape or Internet Explorer plugins, can render graphics within a clip region of an OpenOffice.org window. No third party plugins are known to be required for OpenOffice.org to run on Mac OS X 10.1.x. However, if a third party plugin is needed or desired, the SalObject C++ class will need to be implemented for Mac OS X 10.1.x. In the OO638C release tag, all of SalObject C++ methods contain empty implementations. The empty SalObject C++ methods are in the vcl/aqua/source/window source directory.</td>
+							</tr>
+						</table>
+						
+						<p>Once all of these features, and any other features missing from the list have been completed, hopefully a binary can be produced that matches the full OpenOffice.org 1.0 release feature set.
+						<p><a name="BetaTest"></a><b>Beta Testing</b></p>
+						<p>With a full binary available, Mac OS X installers can be created to allow end users to begin working with the Mac OS X port.  This port will have the same look and feel as OpenOffice.org on other target platforms.  Hopefully with a full feature set enough end users will begin testing the software to allow the Mac OS X porters to fix any runtime errors the port may contain.</p>
+						<p>After all the errors are fixed, perhaps the OS X version can become stable enough to merit a 1.0 release.</p>
+						<p><a name="AquaLAF"></a><b>Aqua Look and Feel</b></p>
+						
+<p>When all of the features are complete and the binaries are stable, we can begin 
+  giving OpenOffice.org a traditional Aqua OS X look and feel. Although the 1.0 
+  release will be full featured, it will not behave like an expected Macintosh 
+  application. The goal of this phase will be to add in platform customization 
+  to make OpenOffice.org into a good Mac citizen while maintaining the abstractions 
+  of the vcl and existing widget set for compatibility with continued OpenOffice.org 
+  cross-platform development.</p>
+						<p>At the current time, it does not appear that the Aqua look and feel will be possible for an X11 windowing OS X build.  This may be the appropriate time, therefore, to either investigate creating a specific Darwin porting team to maintain the X11 OS X VCL code or to split off further Aqua VCL development to another team.</p>
+</body>
+</html>
+
