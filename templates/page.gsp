@@ -1,7 +1,10 @@
 <%
-  // from jbake - content.uri and content.body
+  // from jbake - content.file, content.uri and content.body
   // from page metadata - content.title and content.css
-  // from html_page template - content.header, content.bodytag, and content.extracted_body
+  if ( content.file.endsWith(".html") ) {
+    // using content.body if html get content.header, content.bodytag, and content.extracted_body
+    include "html_extract.gsp"
+  }
   // insert breadcrumbs and ssi logic
   // using content.uri get content.breadcrumbs and content.ssi[]
   include "breadcrumbs.gsp"

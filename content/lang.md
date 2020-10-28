@@ -1,4 +1,3 @@
-type=md_page
 title=Native Language Sites
 ~~~~~~
 

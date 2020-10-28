@@ -1,4 +1,3 @@
-type=md_page
 title=Apache OpenOffice - Privacy (Old)
 notice=http://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
