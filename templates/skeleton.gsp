@@ -1,6 +1,11 @@
 <%
+  // from jbake - content.uri and content.body
+  // from page metadata - content.title and content.css
+  // from html_page template - content.header, content.bodytag, and content.extracted_body
   // insert breadcrumbs and ssi logic
+  // using content.uri get content.breadcrumbs and content.ssi[]
   include "breadcrumbs.gsp"
+  // using content.ssi[] get content.brand, content.topnav, content.leftnav and content.rightnav
   include "ssi_paths.gsp"
 %><!--#include virtual="/doctype.html" -->
 <html>
