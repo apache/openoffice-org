@@ -9,6 +9,7 @@ mkdir -p $WORKDIR
 
 # now bake the site
 ./bake.sh -b . $WORKDIR
+cp assets/.htaccess $WORKDIR
 
 # push all of the results to asf-site
 git checkout asf-staging

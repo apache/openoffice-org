@@ -6,6 +6,7 @@ ME=`basename $0`
 
 rm -rf $WORKDIR
 mkdir -p $WORKDIR
+cp assets/.htaccess $WORKDIR
 
 # now bake the site
 ./bake.sh -b . $WORKDIR
