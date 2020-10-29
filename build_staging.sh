@@ -20,4 +20,4 @@ cp -a $WORKDIR/* content
 cp -a $WORKDIR/.htaccess content
 git add -f content
 git commit -m "git-site-role commit from $ME"
-git push origin asf-staging
+git push -f origin asf-staging
