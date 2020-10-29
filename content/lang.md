@@ -94,3 +94,4 @@ title=Native Language Sites
 - [Uzbek (uz)](/uz)
 - [Vietnamese (vi)](/vi)
 - [Welsh (cy) ](/cy)
+- [Translate [l10n](/l10n)
