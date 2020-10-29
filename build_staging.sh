@@ -18,6 +18,6 @@ rm -rf content
 mkdir content
 cp -a $WORKDIR/* content
 cp -a $WORKDIR/.htaccess content
-git add content
+git add -f content
 git commit -m "git-site-role commit from $ME"
 git push origin asf-staging
