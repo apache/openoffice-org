@@ -1,0 +1,473 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+<title>Apache OpenOffice (formerly OpenOffice.org) FreeBSD porting status page</title>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/porting/">porting</a>&nbsp;&raquo;&nbsp;<a href="/porting/freebsd/">freebsd</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<a name="top"></a>
+<h2 align="center" >Apache OpenOffice FreeBSD porting status page</h2>
+<hr>
+<p align="center" ><img src="images/aoo-freebsd.png" width="648" height="260" alt="" /></p>
+<hr>
+by <a href="mailto:office@FreeBSD.org">OpenOffice porting team</a>
+, <a href="mailto:maho@Apache.org">NAKATA, Maho</a> 
+, and <a href="mailto:xxjack12xx@openoffice.org">Jackson Low</a>
+<ul>
+<li> <a href="#news">News</a>
+<li> <a href="#obtain">Available ports and obtaining packages</a>
+<li> <a href="#supported">Supported platforms</a>
+<li> <a href="#howto">How to build</a>
+<li> <a href="benchmark.html">Build timings (benchmark test)</a>
+<li> <a href="sdk.html">How to use SDK</a>
+<li> <a href="testing.html">Implementation test</a>
+<li> <a href="qa/index.html">Quality Assurance</a>
+<li> <a href="dictionary.html">About dictionary</a>
+<li> <a href="#release">Release process</a>
+<li> <a href="#todo">Todo</a>
+<li> <a href="#tips">Porting tips</a>
+<li> <a href="#pitfalls">Porting pitfalls</a>
+<li> <a href="#links">Links</a>
+<li> <a href="#policy">Policy</a>
+<li> <a href="#contact">Contact</a>
+</ul>
+<hr>
+
+<a name="news"></a>
+<h3>News</h3>
+	<p>2012/Feb/29: The FreeBSD port has been merged in the Apache SVN repository. The <a href="https://blogs.apache.org/OOo/">Apache OpenOffice blog</a> has a new entry from Maho@.
+	<p>Older OpenOffice.org porting news can be found <a href=old.html>here</a>.
+<p>
+<a href="#top">Top of page</a>
+<hr>
+
+<a name="obtain"></a>
+<h3>Available ports (ports in the FreeBSD ports tree)</h3>
+<ul>
+<li> <a href="http://www.freebsd.org/cgi/cvsweb.cgi/ports/editors/openoffice-3-devel/">Apache OpenOffice 3.4 (Development Version; upcoming 3.x)</a>
+<li> <a href="http://www.freebsd.org/cgi/cvsweb.cgi/ports/editors/openoffice.org-3/">OpenOffice.org 3.3.0</a>
+<li> <a href="http://www.freebsd.org/cgi/cvsweb.cgi/ports/editors/openoffice.org-3-RC/">OpenOffice.org 3.4-Beta (DEPRECATED)</a>
+<li> <a href="http://www.freebsd.org/cgi/cvsweb.cgi/ports/editors/openoffice.org-2/">OpenOffice.org 2.4.1(DEPRECATED)</a>
+<li> <a href="http://www.freebsd.org/cgi/cvsweb.cgi/ports/editors/ooo-build/">ooo-build</a>, a minor <a href="http://wiki.services.openoffice.org/wiki/Ooo-build">fork of OpenOffice.org</a> (BROKEN)
+</ul>
+
+<h3>Obtaining older packages, language packs, and build logs (DEPRECATED)</h3>
+<ul>
+<li> <a href="ftp://ooopackages.good-day.net/pub/OpenOffice.org/contrib/freebsdx86-64">Current amd64 packages, language packs, and build logs</a>
+<li> <a href="ftp://ooopackages.good-day.net/pub/OpenOffice.org/contrib/freebsdx86">Current i386 packages, language packs, and build logs</a>
+<li> <a href="ftp://ooopackages.good-day.net/pub/OpenOffice.org/FreeBSD">All packages with language packs, and build logs (3.2.1 and prior)</a>
+<li> <a href="ftp://ooopackages.good-day.net/pub/OpenOffice.org/OpenOffice.org/contrib/freebsdx86/3.3.0">3.3.0 for 8-STABLE (amd64/i386)</a>
+<li> <a href="ftp://ooopackages.good-day.net/pub/OpenOffice.org/FreeBSD/3.2.1">3.2.1 for 8-STABLE (amd64/i386)</a>
+<li> <a href="ftp://ooopackages.good-day.net/pub/OpenOffice.org/FreeBSD/3.2.0">3.2.0 for 8.0-STABLE (amd64/i386)</a>
+<li> <a href="ftp://ooopackages.good-day.net/pub/OpenOffice.org/FreeBSD/3.1.0">3.1.0 for 7.2-STABLE (amd64)</a>
+<li> <a href="ftp://ooopackages.good-day.net/pub/OpenOffice.org/FreeBSD/3.0.1">3.0.1 for 7.1-STABLE (amd64)</a>
+<li> <a href="ftp://ooopackages.good-day.net/pub/OpenOffice.org/FreeBSD/3.0.0">3.0.0 for 7.1-STABLE (amd64 and i386)</a>
+<li> <a href="ftp://ooopackages.good-day.net/pub/OpenOffice.org/FreeBSD/2.4.1">2.4.1 for 7.0-STABLE (amd64 and i386)</a>
+<li> <a href="ftp://ooopackages.good-day.net/pub/OpenOffice.org/FreeBSD/2.3.0">2.3.0 for 6.2-STABLE (amd64 and i386)</a>
+<li> <a href="ftp://ooopackages.good-day.net/pub/OpenOffice.org/FreeBSD/2.2.1">2.2.1 for 6.2-STABLE (amd64 and i386) and 7.0-CURRENT amd64</a>
+<li> <a href="ftp://ooopackages.good-day.net/pub/OpenOffice.org/FreeBSD/2.2">2.2 for 6.2-STABLE (amd64 and i386)</a>
+<li> <a href="ftp://ooopackages.good-day.net/pub/OpenOffice.org/FreeBSD/2.1">2.1 for 6.2-RC1 (amd64 and i386)</a>
+</ul>
+<a href="#top">Top of page</a>
+
+<hr>
+<a name="supported"></a>
+<h3>Supported platforms</h3>
+<ul>
+<li> FreeBSD 5.3 and later, FreeBSD 6, FreeBSD 7, FreeBSD 8, FreeBSD 9: supported
+<blockquote>
+Officially supported by office@freebsd.org. If your build is broken, please <a href="mailto:openoffice@freebsd.org">let us know</a>. Recommendation is FreeBSD 8.1-RELEASE.
+</blockquote>
+
+<li> FreeBSD 5.2.1-RELEASE/i386 : NOT supported
+<blockquote>
+We had serious implementation differences in rtld.c between FreeBSD and NetBSD/Linux/Solaris which had been producing very weird problems and a hard-to-track bug. It was <a href="http://www.freebsd.org/cgi/cvsweb.cgi/src/libexec/rtld-elf/rtld.c.diff?r1=1.91&r2=1.92&f=h">fixed</a> after 5.2.1-RELEASE and 4.11-RELEASE. Please see the <a href="http://docs.freebsd.org/cgi/getmsg.cgi?fetch=1751749+0+archive/2004/cvs-all/20040229.cvs-all">commit log</a> for details. We decided to mark this port as BROKEN for them, however, </a> and <a href="http://people.freebsd.org/~maho/ooo/patch-rtld.c-releng5">a patch for rtld.c for 5-RELENG </a> are available. This patch is totally unsupported so use it at your own risk. Feedback is welcome.
+<a href="http://lists.freebsd.org/pipermail/freebsd-stable/2006-October/029725.html">This has reached to the end of life.</a>
+</blockquote>
+<br>
+If you are 5.3-RELEASE or prior, you will need to do the following:
+<pre>
+% su
+Password:
+# fetch http://people.freebsd.org/~maho/ooo/patch-rtld.c-releng5
+# cd /usr/src/libexec/rtld-elf ; patch < patch-rtld.c-releng5
+# make ; make depend ; make install
+</pre>
+
+<li> FreeBSD 4.11-RELEASE/i386 : NOT supported
+
+</ul>
+<a href="#top">Top of page</a>
+<hr>
+
+<a name="howto"></a>
+<h3>How to build</h3>
+<p>
+Basically, just typing make 'install' will work fine for standard installations.
+It will fetch everything you need from the Internet while you sit back and drink a cup of coffee or take a nap.
+However, compiling jdk is the most tedious part (i.e. fetching the java source code and enabling the linux binary compatibility mode required by the linux version of jdk for bootstrapping).
+I'll assume you have already installed JDK 1.6.0 (/usr/ports/java/jdk16) via ports in this tutorial.
+If you want to build a developer version or other snapshot versions of OOo, just cd to different directory; /usr/ports/editors/openoffice.org-3-devel or /usr/ports/editors/openoffice.org-3-devel.
+<ul>
+<li> Building/installing OpenOffice.org (English version)
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3 ; make
+% su
+Password:
+# make install
+</pre>
+
+<li> Building/installing/packaging a localized language package (Japanese version for example)
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3 ; make LOCALIZED_LANG=ja
+% su
+Password:
+# make LOCALIZED_LANG=ja install package
+</pre>
+For other languages such that French, German, etc, please change LOCALIZED_LANG=XX; replacing XX with your language in <a href="http://wiki.services.openoffice.org/wiki/Languages">ISO-code, etc</a>)
+Please consult <a href="http://www.freebsd.org/cgi/cvsweb.cgi/ports/editors/openoffice.org-3/files/Makefile.localized">files/Makefile.localized</a> for supported languages.
+</blockquote>
+
+</blockquote>
+<li> Building a package
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3 ; make
+% su
+Password:
+# make package
+</pre>
+</blockquote>
+<li> Building sdk
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3 ; make ; make sdk
+</pre>
+</blockquote>
+<li> Building solver
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3 ; make ; make solver
+</pre>
+</blockquote>
+<li> Building the English version with package/sdk/solver
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3
+% su
+Password:
+# make package package-rename solver sdk deinstall clean
+</pre>
+</blockquote>
+
+<li> Building all localized language packages<br>
+The initial make may take 6 hours, however the next make will only take 5 minutes. The trick is TWEAK_L10N touches work/.configure_done* etc. This is due to limitations of ports framework.
+<blockquote>
+<pre>
+# cd /usr/ports/editors/openoffice.org-3 ; make ALL_LOCALIZED_LANGS=yes
+# make TWEAK_L10N=yes LOCALIZED_LANG=ja pre-everything
+# make LOCALIZED_LANG=ja WITH_CCACHE=yes package package-rename deinstall
+# make TWEAK_L10N=yes LOCALIZED_LANG=ar pre-everything
+# make LOCALIZED_LANG=ar WITH_CCACHE=yes package package-rename deinstall
+# make TWEAK_L10N=yes LOCALIZED_LANG=ca pre-everything
+# make LOCALIZED_LANG=ca WITH_CCACHE=yes package package-rename deinstall
+...
+</pre>
+</blockquote>
+
+<li> Renaming your OOo package, OOo_${VERSION}_${PLATFORM}_${ARCH}.t{bz|gz}; for example, renamed to OOo_3.0.0_FreeBSD70Intel_install_ja.tbz.
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3
+% su
+Password:
+# make package package-rename
+</pre>
+</blockquote>
+<li> Building with ccache (useful for 2nd builds and developers as it reduces the amount of time for a full build from 6 hours to 3 hours)
+<blockquote>
+<pre>
+# make WITH_CCACHE=yes
+</pre>
+</blockquote>
+<li> For releasing, do everything described above (build every localized package, sdk, solver, and rename).
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3/files
+% perl generate.pl > ../go.csh
+% su
+Password:
+# cd .. ; csh go.csh
+</pre>
+</blockquote>
+</ul>
+<hr>
+<blockquote>
+Knobs
+</blockquote>
+<ul>
+
+<li> Building with debug symbols support
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3
+% make -DWITH_DEBUG
+</pre>
+</blockquote>
+
+<li> Building without gnome VFS support
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3
+% make -DWITHOUT_GNOMEVFS
+</pre>
+</blockquote>
+
+<li> Building with devel/icu from ports
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3
+% make -DWITH_SYSTEM_ICU
+</pre>
+</blockquote>
+
+<li> Building without CUPS support
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3
+% make -DWITHOUT_CUPS
+</pre>
+</blockquote>
+
+<li> Building with Qt/KDE vclplug
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3
+% make -DWITH_KDE
+</pre>
+</blockquote>
+
+<li> Building with gpc instead of libart
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3
+% make -DWITH_GPC
+</pre>
+</blockquote>
+
+<li> Building with evolution2 support
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3
+% make -DWITH_EVOLUTION2
+</pre>
+</blockquote>
+
+<li> Building with full localized language support
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3
+% make LOCALIZED_LANG=alllangs
+</pre>
+</blockquote>
+
+<li> Building select language support
+<blockquote>
+<pre>
+% cd /usr/ports/editors/openoffice.org-3
+% make LOCALIZED_LANG=xx
+</pre>
+<br>
+while xx can be one of the following:
+<br>
+af ar as-IN be-BY bg br bn bn-BD bn-IN bs ca cs cy da
+de dz el en-GB en-US en-ZA eo es et eu fa fi fr ga gl
+gu-IN he hi-IN hr hu it ja ka km kn ko ku lo lt lv mk
+ms ml-IN mr-IN ne nb nl nn nr ns oc or-IN pa-IN pl pt
+pt-BR ru rw sk sl sh sr ss st sv sw sw-TZ te-IN ti-ER
+ta-IN th tn tr ts tg ur-IN uk uz ve vi xh zh-CN zh-TW
+zu
+<br>
+Current setting: en-US
+</blockquote>
+
+</ul>
+<a href="#top">Top of page</a>
+<hr>
+
+<a name="release"></a>
+<h3>Release process</h3>
+<ul>
+<li> Commit thoroughly tested updates to the FreeBSD ports tree
+<li> Prepare clean installed x.y-RELEASE of FreeBSD
+<li> Install cvsup and perl and rebuild world
+<li> cvsup ports tree
+<li> Generate shell script for full build
+<pre>
+# cd /usr/ports/editors/openoffice.org-3
+# cd files ; perl generate.pl >& ../go.csh
+</pre>
+<li> Remove /usr/local, /var/db/pkg, and /var/db/ports
+<pre>
+# rm -rf /usr/local /var/db/pkg /var/db/ports
+</pre>
+<li>Build Openoffice.org dependencies
+<pre>
+# cd /usr/ports/editors/openoffice.org-3
+# make -DBATCH depends
+</pre>
+<li> Build entire OpenOffice.org (takes a very long time, may take several hours to several days)
+<pre>
+# cd /usr/ports/editors/openoffice.org-3
+# setenv BATCH yes ; csh go.csh
+</pre>
+<li>Upload to http://ooopackages.good-day.net/pub/OpenOffice.org/FreeBSD/, ftp://ftp.stardiv.de/ . Only <a href="mailto:maho@openoffice.org">maho</a> and Jack Low knows how to upload binaries.
+<li>Write an e-mail to ja@openoffice.org, st@openoffice.org or mh@openoffice.org to report packages are uploaded to visible place.
+<li>Announce at releases@openoffice.org and openoffice@freebsd.org to let people know packages are available for FreeBSD.
+<li>(optional) Do <a href="QA.html">QA</a> test for localized packages.
+<li>(optional) Announce if QA has passed.
+</ul>
+<a href="#top">Top of page</a>
+<hr>
+
+<a name="todo"></a>
+<h3>Todo</h3>
+<ul>
+<li> Define QA process. Pass VCLTesttool with recent VCLTestTool environment
+</ul>
+<a href="#top">Top of page</a>
+<hr>
+
+<a name="tips"></a>
+<h3>Porting tips</h3>
+<ul>
+<li> Checking out the source from cvs
+<blockquote>
+<pre> cvs -d:pserver:anoncvs@anoncvs.services.openoffice.org:/cvs checkout -r DEV300_m5 OpenOffice3
+</blockquote>
+checkouts DEV300_m5 source.
+<blockquote>
+<pre> cvs -d:pserver:anoncvs@anoncvs.services.openoffice.org:/cvs checkout -r cws_srx645_mozooo </blockquote>
+checkouts cws_srx645_mozooo.
+<li> How to make a mozilla runtime : see <a href="http://qa.openoffice.org/issues/show_bug.cgi?id=11424">#iz 11424</a> and <a href="http://qa.openoffice.org/issues/show_bug.cgi?id=28398"> #iz 28398</a> and use mozzip.sh for 1.0.
+<li> How to make a patch
+<blockquote>
+<pre>
+% dmake patch
+% dmake create_patch
+</pre>
+</blockquote>
+<li> Using cwstools, esp. for how to take diff of cws and its anchor (please read <a href="http://porting.openoffice.org/servlets/ReadMsg?list=dev&msgNo=15404">PJ's email</a>)
+<blockquote>
+<pre>
+pavel@pavel:~/.ooo/ooo_SRC680_m96_src> cwsquery -m SRC680 -c macosx06 modules
+cwsquery -- version: 1.5
+cwsquery: Master workspace 'SRC680', child workspace 'macosx06':
+cwsquery: Modules:
+jvmfwk
+scp2
+</pre>
+Two modules are in macosx06
+<pre>
+cd scp2; cvs diff -r CWS_SRC680_MACOSX06_ANCHOR -r cws_src680_macosx06
+</pre>
+See the diff.
+</blockquote>
+<li> cws-extract
+<blockquote>
+<a href="http://cvs.gnome.org/viewcvs/*checkout*/ooo-build/bin/cws-extract">cws-extract</a> of ooo-build is very nice, a lot easier to obtain the diff explained above.
+</blockquote>
+<li> cws-commit-patch
+<blockquote>
+<a href="http://cvs.gnome.org/viewcvs/*checkout*/ooo-build/bin/cws-commit-patch">cws-commit-patch</a> make it easier for us to commit patches to ooo cvs. You must have your issue numbers handy!
+</blockquote>
+
+</ul>
+<a href="#top">Top of page</a>
+<hr>
+
+<a name="pitfalls"></a>
+<h3>Porting pitfalls</h3>
+<ul>
+<li> bridges/source/cpp_uno
+<li> solenv/inc/unxfbsdi.mk
+</ul>
+
+<a href="#top">Top of page</a>
+<hr>
+<a name="links"></a>
+<h3>Links</h3>
+<ul>
+<li> <a href="http://www.openoffice.org/servlets/SummarizeList?listName=cws-announce">CWS announce ML archive</a>
+<li> <a href="http://www.openoffice.org/servlets/SummarizeList?listName=releases">Release announce ML archive</a>
+<li> <a href="http://blogs.sun.com/GullFOSS/">GullFOSS OpenOffice.org Engineering at Sun</a>
+<li> <a href="http://ooo.services.openoffice.org/issues/bugs.xml">IssueZilla daily report</a>
+<li> <a href="http://eis.services.openoffice.org/EIS2/servlet/GuestLogon">Environment Information System 2.0</a>
+<li> <a href="http://lists.freebsd.org/pipermail/freebsd-openoffice/">openoffice@FreeBSD.org ML archive</a>
+<li> <a href="http://development.openoffice.org/releases/filenames.html">Filename conventions</a>
+<li> <a href="http://blog.livedoor.jp/maho_nakata/">Maho Nakata's blog</a>, <a href="http://blog.livedoor.jp/maho_nakata/index.rdf">RSS feed</a>
+<li> <a href="http://wiki.services.openoffice.org/wiki/DomainDeveloper">DomainDeveloper Who's who?</a>
+<li> <a href="http://blog.janik.cz/">Pavel Janik's blog</a>
+<li> <a href="http://wiki.services.openoffice.org/wiki/Compiler_versions_used_by_port_maintainers_and_release_engineers">Compiler versions used by port maintainers and release engineers</a>
+<li> <a href="http://wiki.services.openoffice.org/wiki/OOoRelease21">OOo Release 2.1 Wiki</a>
+<li> <a href="http://wiki.services.openoffice.org/wiki/OOoRelease22">OOo Release 2.2 Wiki</a>
+<li> <a href="http://wiki.services.openoffice.org/wiki/OOoRelease23">OOo Release 2.3 Wiki</a>
+<li> <a href="http://wiki.services.openoffice.org/wiki/OOoRelease24">OOo Release 2.4 Wiki</a>
+<li> <a href="http://wiki.services.openoffice.org/wiki/OOoRelease30">OOo Release 3.0 Wiki</a>
+<li> <a href="http://wiki.services.openoffice.org/wiki/OOoRelease31">OOo Release 3.1 Wiki</a>
+<li> <a href="http://wiki.services.openoffice.org/wiki/OOoRelease32">OOo Release 3.2 Wiki</a>
+<li> <a href="http://wiki.services.openoffice.org/wiki/OOoRelease33">OOo Release 3.3 Wiki</a>
+<li> <a href="http://tools.openoffice.org/dev_docs/OOo_cws.html">CWS howto</a>
+<li> <a href="irc://irc.freenode.net/#OpenOffice.org">IRC@Freenode.net, #OpenOffice.org</a>
+<li> <a href="http://wiki.services.openoffice.org/wiki/Languages">Supported langs. lang codes, etc. </a>
+<li> <a href="http://www.catch.jp/openoffice/#clipart">A picture of BSD Daemon</a>
+</ul>
+<a href="#top">Top of page</a>
+<hr>
+
+<a name="policy"></a>
+<h3>Policy</h3>
+<ul>
+<li>We support Java 1.5, 1.6, both diablo, and OpenJDK port versions for all openoffice.org-2 and openoffice.org-3 related ports. 
+<li>Looking for volunteers to support gcj build.
+<li> If you would like to submit significant patches for Apache OpenOffice, please fill out and submit the Apache Individual Contributor License Agreement <a href="http://www.apache.org/licenses/icla.pdf">CLA</a>.
+ If you want to learn more, please check the <a href="http://www.apache.org/licenses/">License FAQ</a>. Here is a list of <a href="http://people.apache.org/committer-index.html#unlistedclas">people who have signed the Apache CLA</a>.
+<li> If you would like to provide enhancements in the Makefile in the ports framework, you *don't* need to fill out an iCLA.
+<li> If you would like to provide bug fix(es) and/or enhancement(s) which won't be integrated into Apache OpenOffice, i.e. Ximian patches, you *don't* need to fill out the iCLA.
+<li> Previous SUN/oracle contributors agreements are not needed anymore.
+</ul>
+<a href="#top">Top of page</a>
+<hr>
+
+<a name="contact"></a>
+<h3>Contact</h3>
+<a href="mailto:openoffice@freebsd.org">FreeBSD Apache OpenOffice porting team</a>
+<p>
+<a href="#top">Top of page</a>
+<hr>
+Thank you very much for your support!
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

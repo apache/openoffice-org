@@ -1,0 +1,126 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>IRIX OpenOffice.org Porting Site</title>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/porting/">porting</a>&nbsp;&raquo;&nbsp;<a href="/porting/irix/">irix</a>&nbsp;&raquo;&nbsp;<a href="/porting/irix/issues/">issues</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<table align=center cellpadding="0" class=navbar>
+  <tr align="center">
+    <td valign="top" align="left" width="2%" height="21">
+    </td>
+    <td width="24%" class=navlink>
+    <a class=bar href="../index.html">HOME</a>
+    </td>
+    <td width="25%" class=navlink>
+    <a class=bar href="../build_inst/index.html">BUILD INSTRUCTIONS</a>
+    </td>
+    <td width="25%" class=navlink>
+    <a class=bar href="../testing/index.html">TESTING STATUS</a>
+    </td>
+    <td width="24%" class=navsel>
+    ISSUES
+    </td>
+  </tr>
+  <tr align="center">
+    <td class=blank colspan=4>
+    &nbsp;
+    </td>
+    <td class=subnavsel>
+    GENERAL
+    </td>
+  </tr>
+  <tr align="center">
+    <td class=blank colspan=4>
+    &nbsp;
+    </td>
+    <td class=subnavlink>
+    <a class=bar href="OOO_101.html">OpenOffice.org 1.0.1</a>
+    </td>
+  </tr>
+  <tr align="center">
+    <td class=blank colspan=4>
+    &nbsp;
+    </td>
+    <td class=subnavlink>
+    <a class=bar href="OOO_103.html">OpenOffice.org 1.0.3</a>
+    </td>
+  </tr>
+</table>
+
+<h1>General Issues</h1>
+<p>This section will be used to list all past and current issues that impose
+problems in building or running openoffice.org.</p>
+<p> Here will be listed all issues that are generic across all openoffice.org
+builds, and every other section will entail issues related to only that build.
+</p>
+<h2>Porting Bridges</h2>
+<p> Bridges is the module within OpenOffice.org that allows bindings between
+languages and object models. This is achieved by creating a proxy object in
+one environment (a specific language and hardware platform) so that the actual
+object represented by the proxy is available in a second environment.</p>
+<p>The way in which OpenOffice.org achieves this is by creating bridges to the
+binary UNO specification (which is very low level to reduce performance
+penalties), this way there is a reduced number of bridges between
+environments. The bridges required for OpenOffice.org to run are:</p>
+<table class=clear>
+  <tr>
+    <td>C++ -&gt; UNO </td>
+    <td>&nbsp;&amp;&nbsp;</td>
+    <td>UNO -&gt; C++</td>
+  </tr>
+  <tr>
+    <td>C -&gt; UNO</td>
+    <td>&nbsp;&amp;&nbsp;</td>
+    <td>UNO -&gt; C</td>
+  </tr>
+  <tr>
+    <td>Java -&gt; UNO</td>
+    <td>&nbsp;&amp;&nbsp;</td>
+    <td>UNO -&gt; Java</td>
+  </tr>
+</table>
+<p> The C and Java bridges are compiler, and platform independent, however the
+C++ bridge is not. Ralph Thomas has finished the gcc2 bridge for Irix, and it
+is clearly working very well! Later on down the track though, we will need
+that bridge re-written for gcc3, and for the MIPSpro compilers.</p>
+<p>Ralph is currently working on (among other things) a MipsPro bridge, as the
+port to MipsPro 7.4 and SGI's STL has started.</p>
+
+<h2>Build Parallelisation</h2>
+<p>OpenOffice.org Builds can take up to 24 hours at times, but the potential
+to dramatically reduce this number is available. OpenOffice.org uses dmake
+to build as it's make system <code>(dmake = distributed make)
+</code> which can spawn processes over a number of processors and even
+machines. We are currently using an 8 CPU O3K to build OpenOffice.org
+and would like to utilise this functionality. The issue here is that the
+dependencies in the makefiles are not exactly correct. They work fine for a
+sequential build that uses no parallelisation, but can cause troubles during
+a parallel build. Almost all of these issues were fixed in 2002, but since
+then, there have been changes to the make system that have introduced more
+problems. Although these issues are not of the highest priority, they will
+eventually be dealt with to allow a faster, seamless build of OpenOffice.org.
+</p>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

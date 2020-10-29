@@ -1,0 +1,197 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+<title>FreeBSD OpenOffice.org porting status page : How to use SDK (OOo 2.x)</title>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/porting/">porting</a>&nbsp;&raquo;&nbsp;<a href="/porting/freebsd/">freebsd</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h2>FreeBSD OpenOffice.org porting status page : How to use SDK (OOo 2.x)</h2>
+
+<p>$Id: sdk2.html,v 1.4 2005/08/22 05:57:57 xxjack12xx Exp $</p>
+by <a href="mailto:openoffice@FreeBSD.org">OpenOffice.org porting team</a>,
+<a href="mailto:maho@FreeBSD.org">NAKATA, Maho</a>,
+and <a href="mailto:xxjack12xx@openoffice.org">Jackson Low</a>
+
+<h3>How to use SDK (OOo 2.x series)</h3>
+This page explains how to use SDK. Since OpenOffice.org 2.0 is not released at the moment, this page is based on 1.9m107 (milestone 107).  
+
+<ul>
+<li> Install OpenOffice.org 2.0 for FreeBSD
+<blockquote>
+You know what I mean :)
+</blockquote>
+
+<li> Install gmake
+<blockquote>
+If you haven't installed gmake, please install it.
+<pre>
+# cd /usr/ports/devel/gmake ; make install clean
+</pre>
+</blockquote>
+
+<li> Install Java (optional, but recommended for first try)
+<blockquote>
+Ah, you don't like Java :)
+<pre>
+# cd /usr/ports/java/jdk14 ; make install clean
+</pre>
+</blockquote>
+
+<li> Obtain SDK
+<blockquote>
+You can obtain SDK <a href="http://ooomisc.services.openoffice.org/pub/OpenOffice.org/ooomisc/FreeBSD/">here</a>. Please make sure you obtain the SDK for the operating system you are using or make it by yourself. Instructions for builing SDK are described in the <a href="http://porting.openoffice.org/freebsd/#howto">How to build</a> section on the main page.
+</blockquote> 
+<li> Setting up SDK
+<blockquote>
+<pre>
+% make /work/tmp
+% cd /work/tmp
+% tar zxf &lt;somewhere&gt;/OOo_1.9m107_FreeBSD54Intel_sdk.tar.gz
+% cd OpenOffice.org2.0_SDK/
+% ./configure
+
+ *** Configure your SDK environment ***
+
+ Enter the Office Software Development Kit directory [/work/tmp/OpenOffice.org2. 0_SDK]:
+ Enter the Office installation directory []: /usr/local/openoffice.org1.9m107/
+ Enter GNU make (3.79.1 or higher) tools directory [/usr/local/bin]:
+ Enter zip (2.3 or higher) tool directory [/usr/local/bin]:
+ C++ compilers where for example a language binding exist:
+  - Solaris, Sun WorkShop 6 update 1 C++ 5.2 2000/09/11 or higher
+  - Linux, GNU C++ compiler, gcc version 3.0.1 or higher
+ Enter the the location of the C++ compiler (optional) [/usr/bin]:
+ Enter the Java SDK (1.4.1_01 or higher) installation directory  (optional) []: /usr /local/jdk1.4.2/
+ Default output directory is the SDK directory itself.
+ Enter an existing directory if you prefer a different output directory (optional) []:
+ Automatic deployment of UNO components (YES/NO) [YES]:
+
+ *********************************************************************
+ * ... your SDK environment has been prepared.
+ * For each time you want to use this configured SDK environment, you
+ * have to run the "setsdkenv_unix" script file!
+ * Alternatively can you source one of the scripts "setsdkenv_unix.sh"
+ * or "setsdkenv_unix.csh" to get an environment without starting
+ * a new shell.
+ *********************************************************************
+
+</pre>
+<hr>
+Just hit enter to accept the defaults, except for two points:<br>
+First,
+<pre>
+ Enter the Openoffice installation directory []: /usr/local/openoffice.org1.9m107/
+</pre>
+You must enter (basically from packages or ports, the installation directory is
+/usr/local/openoffice.org1.9m107/ )<br>
+Second,
+<pre>
+Enter Java SDK (1.4.1_01 or higher) installation directory [/usr/local]: /usr/local/jdk1.4.2
+</pre>
+Same as above; please input `/usr/local/jdk1.4.2'.
+</blockquote>
+<hr>
+<li> Use of SDK
+<blockquote>
+After you have completed your SDK setup, you need to set environmental variables before it can used. Please type:
+<pre>
+% ./setsdkenv_unix
+Starting shell with SDK environment.
+
+</pre>
+You can now use OpenOffice.org SDK. Congratulations!
+</blockquote>
+
+<li> Sample programs
+<blockquote>
+You might also be interested in the sample programs. Type ./setsdkenv_unix as described above to use them.
+<pre>
+% ./setsdkenv_unix
+Starting shell with SDK environment.
+
+</pre>
+Next change dir to examples/DevelopersGuide/FirstSteps/
+<pre>
+% cd examples/DevelopersGuide/FirstSteps/
+</pre>
+This directory contains some very basic sample programs. First, type gmake
+to prepare next steps.
+<pre>
+% gmake
+mkdir -p ../../../FREEBSDexample.out/class/FirstStepsExamples
+mkdir -p ../../../FREEBSDexample.out/class/FirstStepsExamples
+"/usr/local/jdk1.4.2//bin/javac"  -classpath "/usr/local/openoffice.org1.9m107//program/classes/jurt.jar:/usr/local/openoffice.org1.9m107//program/classes/unoil.jar:/usr/local/openoffice.org1.9m107//program/classes/ridl.jar:/usr/local/openoffice.org1.9m107//program/classes/juh.jar:../../../FREEBSDexample.out/class/FirstStepsExamples" -d ../../../FREEBSDexample.out/class/FirstStepsExamples FirstUnoContact.java
+rm -f ../../../FREEBSDexample.out/class/FirstStepsExamples/FirstUnoContact.jar
+mkdir -p ../../../FREEBSDexample.out/class/FirstStepsExamples
+cd ../../../FREEBSDexample.out/class/FirstStepsExamples && "/usr/local/jdk1.4.2//bin/jar" cvfm FirstUnoContact.jar FirstUnoContact.mf FirstUnoContact.class
+....
+....
+--------------------------------------------------------------------------------
+Please use one of the following commands to execute the examples!
+-
+gmake FirstConnection.run
+gmake FirstLoadComponent.run
+gmake HelloTextTableShape.run
+--------------------------------------------------------------------------------
+</pre>
+Type gmake FirstConnection.run instead of typing make FirstConnection.run, since name of GNU make is gmake for (usual) FreeBSD.
+<pre>
+% gmake FirstUnoContact.run
+"/usr/local/jdk1.4.2//bin/java" -Dcom.sun.star.lib.loader.unopath="/usr/local/openoffice.org1.9m107//program" -jar ../../../FREEBSDexample.out/class/FirstStepsExamples/FirstUnoContact.jar
+Connected to a running office ...
+remote ServiceManager is available
+</pre>
+Connection is established and sample program worked! Congratulations!<br>
+Next example is FirstLoadComponent. This program opens a calc sheet and insert 21 to A1, A2 cell. Do sum of them and result is written in A3 cell.
+<pre>
+% gmake FirstLoadComponent.run
+"/usr/local/jdk1.4.2//bin/java" -Dcom.sun.star.lib.loader.unopath="/usr/local/openoffice.org1.9m107//program" -jar ../../../FREEBSDexample.out/class/FirstStepsExamples/FirstLoadComponent.jar
+Connected to a running office ...
+com.sun.star.sheet.XSpreadsheet
+Formula cell in column 0, row 2 contains =SUM(A1:A2)
+</pre>
+HelloTextTableShape is interesting. This automatically creates Writer, Calc, and Draw!
+<pre>
+% gmake HelloTextTableShape.run
+</pre>
+</blockquote>
+
+<li>Tips
+<blockquote>
+please refer <a href="file:///work/tmp/OpenOffice.org2.0_SDK/examples/examples.html">examples.html</a>
+</blockquote>
+
+<li>Changes between 1.1 and 2.0
+<blockquote>
+We can invoke OOo to listen on a TCP/IP port. We don't need to set it up. 
+</blockquote>
+
+<li>Troubleshooting
+<blockquote>
+N/A
+</blockquote>
+</ul>
+
+<hr>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
