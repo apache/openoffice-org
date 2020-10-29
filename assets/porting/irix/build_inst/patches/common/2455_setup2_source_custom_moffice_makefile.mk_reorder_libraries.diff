@@ -1,0 +1,28 @@
+--- /projects/sise/openoffice/devel/workpits/OO641B_STLP45/source/setup2/source/custom/moffice/makefile.mk	Thu Aug 30 02:08:26 2001
++++ setup2/source/custom/moffice/makefile.mk	Thu Dec  6 13:52:48 2001
+@@ -76,7 +76,13 @@
+ 
+ SLOFILES =      $(SLO)$/moffice.obj
+ 
++.IF "$(GUI)"=="UNX"
++SHL1STDLIBS= $(SLO)$/mowos.o
++.ELSE
++SHL1STDLIBS=
++.ENDIF
++
+-SHL1STDLIBS=    $(SALLIB)		\
++SHL1STDLIBS+=   $(SALLIB)		\
+                 $(VCLLIB)		\
+ 		$(SVUNZIPDLL)		\
+                 $(CPPULIB)		\
+@@ -92,10 +98,6 @@
+ 
+ .IF "$(GUI)"=="WNT"
+ SHL1STDLIBS += $(SLO)$/winos.obj shell9x.lib tools32.lib advapi32.lib gdi32.lib shell32.lib ole32.lib uuid.lib version.lib winmm.lib
+-.ENDIF
+-
+-.IF "$(GUI)"=="UNX"
+-SHL1STDLIBS += $(SLO)$/mowos.o
+ .ENDIF
+ 
+ 

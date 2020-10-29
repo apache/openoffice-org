@@ -1,0 +1,205 @@
+<html>
+<head>
+<title>IRIX OpenOffice.org Porting Site</title>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+<table cellpadding="0" align="center" class=navbar>
+  <tr align="center">
+    <td valign="top" align="left" width="2%" height="21">
+    </td>
+    <td width="24%" class=navlink>
+    <a class=bar href="../index.html">HOME</a>
+    </td>
+    <td width="25%" class=navsel>
+    BUILD INSTRUCTIONS
+    </td>
+    <td width="25%" class=navlink>
+    <a class=bar href="../testing/index.html">TESTING STATUS</a>
+    </td>
+    <td width="24%" class=navlink>
+    <a class=bar href="../issues/index.html">ISSUES</a>
+    </td>
+  </tr>
+  <tr align="center">
+    <td class=blank colspan=2>
+    &nbsp;
+    </td>
+    <td class=subnavsel>
+    GENERAL
+    </td>
+    <td class=blank colspan=2>
+    &nbsp;
+    </td>
+  </tr>
+  <tr align="center">
+    <td class=blank colspan=2>
+    &nbsp;
+    </td>
+    <td class=subnavlink>
+    <a class=bar href="OpenOffice_1_0_3.html">OpenOffice.org 1.0.3</a>
+    </td>
+    <td class=blank colspan=2>
+    &nbsp;
+    </td>
+  </tr>
+</table>
+
+<h1> GETTING OO TO BUILD ON IRIX: </h1>
+<h2>Pre-Requisites:</h2>
+<ul>
+  <li>MUST use gnu tcsh, not the system tcsh <b>[ <a href="http://freeware.sgi.com/Dist/fw_tcsh-6.11.tardist">download</a> ]</b></li>
+  <li>MUST use gnu tar (not the system tar) <b>[ <a href="http://freeware.sgi.com/Dist/fw_tar-1.13.25-sgipl1.tardist">download</a> ]</b></li>
+  <li>Need JDK 1.3 <b>[ <a target=new href="http://www.sgi.com/products/evaluation/6.x_java2_1.3/">download page</a> ]</b></li>
+  <li>Build gcc-3.2, install in (say) /usr/local/gcc-3.2 <b>[ <a href="http://ftp.gnu.org/pub/gnu/gcc/gcc-3.2.tar.gz">download sources</a> ]</b></li>
+  <li>Build libtool 1.4.2, install in (say) /usr/local/libtool-1.4.2 <b>[ <a href="http://freeware.sgi.com/Dist/fw_libtool-1.4.2-sgipl1.tardist">download</a> ]</b></li>
+  <li>GNU nm version 2.11.2</li>
+</ul>
+
+<h2>Downloading the source</h2>
+<p>You can easily get the source from CVS following these steps:</p>
+<ul>
+  <li> Set your <code>CVSROOT</code> environment variable
+  <code><pre>
+      % setenv CVSROOT :pserver:anoncvs@anoncvs.services.openoffice.org:/cvs
+  </code></pre>
+
+  <li> Now login to the cvs repository
+  <code><pre>
+      % cvs login
+
+      (Logging in to anoncvs@anoncvs.services.openoffice.org)
+
+      CVS password: anoncvs
+  </code></pre>
+
+  <li> Now checkout the source you require:
+  <code><pre>
+      % cvs co -r &lt;CVS Tag&gt; OpenOffice
+  </code></pre>
+  Where &lt;CVS Tag&gt; is the Tag or Branch of the
+  source you wish to build.<br>
+  <b>Each section will list the Tag / Branch that you should use
+  to build it.</b>
+  <p>
+  <li>An alternative to CVS is downloading a tarball of the sources. See the
+  specific build instructions for links to tarballs of the sources.
+</ul>
+
+<h1>PreBuild</h1>
+<h2>Patches To Apply</h2>
+<p>Each section has a list of patches that are applicable to that tree.
+Simply download the patches and apply them.</p>
+<h3>How To Apply Patches</h3>
+<p>Patches can easily be applied using the command:
+  <code><pre>
+  % patch -N -p0 &lt;  &lt;file.diff&gt;
+  </code></pre>
+  
+<h3>General Polygon Clipper (gpc)</h3>
+<p>Download the gpc source from 
+<a href="ftp://ftp.cs.man.ac.uk/pub/toby/gpc/gpc231.tar.Z">here</a>. Place
+the source files <code>gpc.c &amp; gpc.h</code> in the directory:
+<code>$SRC_ROOT/external/gpc</code>.<br>
+
+<h1>The Build Process</h1>
+<p>Once you have followed the instructions in the
+  <font class=bold>Pre Build</font> section and all patches have been applied,
+  the following procedures need to be followed:</p>
+<ul>
+  <li>Firstly you will need to set your PATH environment variable BEFORE you run configure. Make sure the following appear in your <code>PATH</code> environment variable before you proceed any further:
+     <ul>
+	 <li>Path to gcc
+	 <li>Path to javac
+	 <li>freeware tools
+	 </ul>
+	 <p>
+  So for example, if gcc was installed in
+  <code><pre>
+  /usr/local/gcc-3.2</code></pre>
+  JDK was installed in
+  <code><pre>
+  /usr/local/java</code></pre>
+  And freeware tools were installed in
+  <code><pre>
+  /usr/freeware</code></pre>
+  Then you would need to set your <code>PATH</code> environment variable in the
+  following manner:
+  <code><pre>
+  % setenv PATH /usr/local/gcc-3.2/bin:/usr/local/java_1.3/usr/java/bin:/usr/freeware/bin:$PATH
+  </code></pre>
+  You will also need to set CC and CXX to gcc and g++ respectively:
+  <code><pre>
+  % setenv CC gcc
+  % setenv CXX g++
+  </code></pre>
+  
+  <li>Next you will need to run the configure script.
+  <code><pre>
+      % cd $SRC_ROOT/config_office
+      % configure
+  </code></pre>
+
+  <li>In $SRC_ROOT there should now be a file named
+      % source $SRC_ROOT/IrixMipsEnv.Set
+  </code></pre>
+
+  <p>
+
+  <li>Run the bootstrap process
+  <code><pre>
+      % cd $SRC_ROOT
+      % ./bootstrap</code></pre>
+  This should take a while...
+
+  <p>
+
+  <li>Run <code>rehash</code> to account for dmake
+  that has now been included the one of the directories in the
+  <code>PATH</code> environment variable.
+  <code><pre>
+      % rehash
+  </code></pre>
+
+  <p>
+
+  <li>Now you are finally ready to run dmake
+  <code><pre>
+      % cd $SRC_ROOT
+      % dmake</code></pre>
+  This will take a VERY long time!
+
+</ul>
+
+<h1>Installing OpenOffice.org</h1>
+<p>Once OpenOffice.org is fully built, installing it can be done in the
+following manner:</p>
+<ul>
+  <li>In a new terminal, set your DISPLAY environment variable to the remotehost
+      you wish to display it to. <b><i>NOTE: Do not use <code>"localhost"</code> or <code>":0"</code> as your display as this can cause errors. Make sure it is the full name of the host you want to display to.</i></b>
+  <li>Do NOT source the OO environment setting file "IrixMipsEnv.Set"
+  <li>Now change to the directory where the installation set resides.
+  <code>
+  <pre>  % cd $SRC_ROOT/instsetoo/unxirgm.pro/01/normal</pre>
+  </code>
+  and start the installation,
+  <code>
+  <pre>  % ./setup</pre>
+  </code>
+  
+  <li>Make sure you select a <font class=bold>Standard Installation</font>
+      
+  <li>Once it has been installed, cd to the directory you installed it to, and
+      simply type <code>./soffice</code> to run the binary.
+  <li>If you wish to install OpenOffice for multiple users, then as root,
+      install OpenOffice to <code>/usr/OpenOffice</code> using the
+	  <code><pre>
+	  % setup -net</code></pre> command, then get each user to run setup for
+	  themselves, by running the command:
+	  <code><pre>
+	  % /usr/OpenOffice/program/setup<code></pre>
+	  They will require approx 1.5 Mb of available disk space in their home
+	  directories.
+  </ul>
+</body>
+</html>

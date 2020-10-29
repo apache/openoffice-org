@@ -1,0 +1,281 @@
+<html><head>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+<H2>Implementation of Porting</H2>
+
+<a href="http://wiki.services.openoffice.org/wiki/Porting_Efforts">Porting Efforts</a> in the OpenOffice.org wiki.
+
+<br>
+
+<P>The first task you must complete is to create the bootstrapping
+process, so that the build tools to build the office suite are
+available.</P>
+
+<H3>Building dmake</H3>
+
+<P>For a full description of building <CODE>dmake</CODE>
+on different platforms read the makefile in the <CODE>$SRC_ROOT/dmake</CODE>
+directory. The following is an example of how to build <CODE>dmake</CODE>
+on Linux. Use this example as a guide when attempting to build <CODE>dmake</CODE>
+on another operating system.</P>
+<OL>
+	<LI>Change to the <CODE>$SRC_ROOT/dmake</CODE>
+	directory, and run the <codeconfigure</code> and <CODE>make</CODE> commands, as
+	follows: 
+	
+	<TABLE WIDTH=746 BORDER="1" CELLPADDING=5 CELLSPACING=0>
+		<TR>
+			<TD VALIGN=TOP>
+<PRE>
+
+% <KBD>cd $SRC_ROOT/dmake</KBD>
+% <KBD>configure</KBD>
+% <KBD>make</KBD>
+</PRE>
+			</TD>
+		</TR>
+	</TABLE>
+	
+	<P>If the compile is successful, the system creates the
+	<CODE>$SRC_ROOT/dmake/dmake</CODE> file.</P>
+	<p>If the configure is not successful you may have to relate your platform to
+	a specific setup, take a look at the configure.in, modify and run
+	<code>autoreconf</code>.
+	</LI>
+	
+	<LI>Install <CODE>dmake</CODE>
+	into the build environment by executing the following commands: 
+	
+	<TABLE WIDTH=746 BORDER=1 CELLPADDING=5 CELLSPACING=0>
+
+		<TR>
+			<TD VALIGN=TOP>
+<PRE>
+
+% <KBD>cp $SRC_ROOT/dmake/dmake $SRC_ROOT/solenv/unxlngi3/bin/dmake</KBD>
+% <KBD>chmod -Rf a+rx $SRC_ROOT/solenv/unxlngi3/bin</KBD>
+</PRE>
+			</TD>
+		</TR>
+	</TABLE>
+	<P>For information on the derivation of the directory name <CODE>unxlngi3</CODE>,
+	see the information on OUTPATH in the 
+	<A HREF="http://tools.openoffice.org/build_env.html">Build Environment</A> document. 
+	This name is equivalent to the value of the <CODE>$OUTPATH</CODE>
+	variable.</P>
+	</LI>
+	<LI>Create the specific compiler flags
+	and options in the file, for example, see <CODE>unxlngi3.mk</CODE>
+	in the directory <CODE>$SRC_ROOT/solenv/inc</CODE>. 
+	</LI>
+
+
+
+	<LI>Modify <CODE>unx.mk</CODE>
+	to switch to this file depending on the values, for example: 
+	
+
+	<TABLE WIDTH=746 BORDER="1" CELLPADDING=5 CELLSPACING=0>
+		<TR>
+			<TD VALIGN=TOP>
+<PRE>
+
+.IF
+"$(COM)$(OS)$(CPU)$(GLIBC)" == "GCCLINUXI2REDHAT60"
+.INCLUDE : unxlngi3.mk
+.ENDIF
+</PRE>
+			</TD>
+		</TR>
+	</TABLE>
+</LI>
+</OL>
+
+<H3>Creating the Rest of the Build Tools</H3>
+<P>To create the remaining build tools, you need to build the
+following modules: 
+</P>
+<UL TYPE=DISC>
+	<LI><CODE>sal</CODE> 
+	</LI>
+	<LI><CODE>vos</CODE> 
+	</LI>
+	<LI><CODE>tools</CODE> 
+	</LI>
+	<LI><CODE>rscpp</CODE> 
+	</LI>
+</UL>
+<P>To build these modules, follow these steps:</P>
+<OL>
+	<LI>First you need to create a minimum
+	build environment. The various makefiles require <CODE>csh</CODE>
+	to run properly, so if you are not running the <CODE>csh</CODE>
+	shell, change to it by executing the following command: 
+
+	<TABLE WIDTH=746 BORDER=1 CELLPADDING=5 CELLSPACING=0>
+		<TR>
+			<TD VALIGN=TOP>
+<PRE>				
+% <KBD>csh</KBD>
+</PRE>
+			</TD>
+		</TR>
+	</TABLE>
+</LI>
+
+	<LI>The makefiles need several
+	environment variables to be set to work properly. The <CODE>configure</CODE>
+	process creates a file of the environment variables that need to be
+	set. For example, for Linux on Intel, the <CODE>configure</CODE>
+	process creates a <CODE>LinuxIntelEnv.Set</CODE> file,
+	as follows: 
+	
+	<TABLE WIDTH=746 BORDER="1" CELLPADDING=5 CELLSPACING=0>
+		<TR>
+			<TD VALIGN=TOP>
+<PRE>			
+setenv SRC_ROOT <VAR>OpenOffice-top-level-directory-tree</VAR>
+setenv DMAKEROOT $SRC_ROOT/solenv/inc/startup
+setenv PATH $SRC_ROOT/solenv/$OUTPATH/bin:$SRC_ROOT/solenv/bin:"$PATH"
+setenv OS LINUX
+setenv SOLARENV $SRC_ROOT/solenv
+setenv SOLARVER $SRC_ROOT/solver
+setenv UPD <VAR>build-number</VAR>
+setenv INPATH unxlngi3.pro
+setenv OUTPATH unxlngi3
+setenv PRODUCT full
+setenv GUI UNX
+setenv GUIBASE unx
+setenv COM GCC
+setenv CPU I
+setenv CPUNAME INTEL
+setenv GVER VCL
+setenv CVER C295
+setenv USE_NAMESPACE TRUE
+setenv UPDATER YES
+setenv SOL_TMP $HOME
+setenv SOLARINC "-I. -I$SRC_ROOT/sal/inc -I$SRC_ROOT/vos/inc
+ -I$SRC_ROOT/std2 -I$SRC_ROOT/std2/stl" 
+setenv SOLARLIB "-L$SRC_ROOT/sal/unxlngi3.pro/lib
+ -L$SRC_ROOT/vos/unxlngi3.pro/lib"
+</PRE>
+			</TD>
+		</TR>
+	</TABLE>
+	<P>There is a stub version of the <CODE>_mkout</CODE>
+	and <CODE>makedepn</CODE> tools to build the core tools
+	located in the <CODE>$SRC_ROOT/solenv/bin</CODE>
+	directory. For information on the environment variables in this
+	file, see the <A HREF="http://tools.openoffice.org/build_env.html">Build Environment</A> document.</P>
+	</LI>
+	
+	<LI>Build the <CODE>sal</CODE> project. Change to
+	the <CODE>sal</CODE> directory, then create a directory
+	for the operating system that you are porting to. If you are porting
+	to a POSIX functions-compliant operating system, you can create this
+	directory under the <CODE>unx</CODE> directory. 
+	
+	<P>Compile the code by executing the following commands: 
+	</P>
+	<TABLE WIDTH=746 BORDER="1" CELLPADDING=5 CELLSPACING=0>
+		<TR>
+			<TD VALIGN=TOP>
+
+<PRE>
+
+% <KBD>cd $SRC_ROOT/sal</KBD>
+% <KBD>mkdir</KBD> <VAR>platform-name</VAR>
+% <KBD>dmake</KBD>
+</PRE>
+			</TD>
+		</TR>
+	</TABLE>
+	</LI>
+	<LI>Manually install the files that
+	the next project needs by executing the following commands: 
+	
+	<TABLE WIDTH=746 BORDER="1" CELLPADDING=5 CELLSPACING=0>
+
+		<TR>
+			<TD VALIGN=TOP>
+<PRE>
+
+% <KBD>mkdir -p $SRC_ROOT/solver/$UPD/$OUTPATH.pro/inc/sal</KBD>
+% <KBD>cp $SRC_ROOT/sal/version.mk $SRC_ROOT/$OUTPATH.pro/inc/sal</KBD>
+</PRE>
+	</TD>
+		</TR>
+	</TABLE>
+	</LI>
+	
+	<LI>Build the <CODE>vos</CODE>
+	project by performing the following steps. Compile the code by
+	executing the following commands. 
+	
+	<TABLE WIDTH=746 BORDER="1" CELLPADDING=5 CELLSPACING=0>
+		<TR>
+			<TD VALIGN=TOP>
+<PRE>				
+% <KBD>cd $SRC_ROOT/vos</KBD>
+% <KBD>dmake</KBD>
+</PRE>
+
+			</TD>
+		</TR>
+	</TABLE>
+	</LI>
+	
+	<LI>Manually install the files that
+	the next project needs by executing the following commands: 
+	
+	<TABLE WIDTH=746 BORDER="1" CELLPADDING=5 CELLSPACING=0>
+		<TR>
+			<TD VALIGN=TOP>
+<PRE>	
+
+% <KBD>mkdir -p $SRC_ROOT/solver/$UPD/unxmacxp.pro/inc/vos</KBD>
+% <KBD>cp $SRC_ROOT/vos/version.mk $SRC_ROOT/solver/$UPD/$OUTPATH.pro/inc/vos</KBD>
+</PRE>
+			</TD>
+		</TR>
+	</TABLE>
+	</LI>
+	<LI>Build the <CODE>tools</CODE>
+	project. Run the following commands to compile the code: 
+	
+	<TABLE WIDTH=746 BORDER="1" CELLPADDING=5 CELLSPACING=0>
+		<TR>
+			<TD VALIGN=TOP>
+<PRE>
+
+% <KBD>cd $SRC_ROOT/tools</KBD>
+% <KBD>dmake</KBD>
+</PRE>
+			</TD>
+		</TR>
+	</TABLE>
+	</LI>
+	<LI>Install the build tools that were
+	compiled in the previous steps by executing the following commands: 
+
+	<TABLE WIDTH=746 BORDER="1" CELLPADDING=5 CELLSPACING=0>
+
+		<TR>
+			<TD VALIGN=TOP>
+<PRE>
+
+% <KBD>cp $SRC_ROOT/tools/$OUTPATH.pro/bin/* $SRC_ROOT/solenv/$OUTPATH/bin</KBD>
+% <KBD>cp $SRC_ROOT/rscpp/$OUTPATH.pro/bin/* $HOME/dev/solenv/$OUTPATH/bin</KBD>
+% <KBD>chmod -Rf a+rx $SRC_ROOT/solenv/$OUTPATH/bin</KBD>
+% <KBD>rehash</KBD>
+</PRE>
+			</TD>
+		</TR>
+	</TABLE>
+</LI>
+</OL>
+<P>You can now build the office suite.</P>
+</body>
+</html>
+

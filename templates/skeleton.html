@@ -1,0 +1,29 @@
+<!--#include virtual="{{ ssi.headers.doctype }}" -->
+<html>
+<head>
+<link href="/css/ooo.css" rel="stylesheet" type="text/css">
+{% if head %}{{ head|safe }}{% else %}
+<title>{% block title %}{{ headers.title }}{% endblock %}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+{% if headers.css %}<link href="{{ headers.css }}" rel="stylesheet" type="text/css">{% endif %}
+{% endif %}
+<!--#include virtual="/scripts/google-analytics.js" --> 
+<!--#include virtual="/scripts/entourage.js" -->
+</head>
+<body{% if bodytag %} {{ bodytag|safe }}{% endif %}>
+<!--#include virtual="{{ ssi.headers.brand }}" -->
+  <div id="topbara">
+    {% if ssi.headers.topnav %}<!--#include virtual="{{ ssi.headers.topnav }}" -->{% endif %}
+    <div id="breadcrumbsa">{% block breaddcrumbs %}{{ breadcrumbs|safe }}{% endblock %}</div>
+  </div>
+  <div id="clear"></div>
+  {% if ssi.headers.leftnav %}<!--#include virtual="{{ ssi.headers.leftnav }}" -->{% endif %}
+  {% if ssi.headers.rightnav %}<!--#include virtual="{{ ssi.headers.rightnav }}" -->{% endif %}
+  <div id="content">
+    {% block legacy %}{% if ssi.headers.legacy %}<div class="legacy">{{ ssi.headers.legacy }}</div>{% endif %}{% endblock %}
+    {% block title %}{% if headers.title %}<h1 class="title">{{ headers.title }}</h1>{% endif %}{% endblock %}
+    {% block content %}{{ content|markdown }}{% endblock %}
+  </div>
+<!--#include virtual="{{ ssi.headers.footer }}" -->
+</body>
+</html>

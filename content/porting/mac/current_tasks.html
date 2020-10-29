@@ -1,0 +1,659 @@
+<html><head>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+		<FONT SIZE="5"><STRONG>OpenOffice.org Mac OS X Port Task List</STRONG></FONT><BR>
+
+	10.14.2002; Version 0008 <i>Updated 8-19-03</i><BR>
+
+
+
+	
+
+		by Dan Williams and Ed Peterlin<BR>
+
+		<p>This document lists some of the active tasks that are being worked on, investigated, or need to be started in the near future.</p>
+
+		
+
+		<TABLE CELLSPACING="1" CELLPADDING="4" BORDER="0" WIDTH="94%" BGCOLOR="#aaaaaa">
+
+<!-------------------- General Tasks ------------------------>
+
+			<TR>
+
+		<TD ALIGN="CENTER" COLSPAN="3" BGCOLOR="#00315a"><font color="white" face="Arial,Helvetica,Geneva,Swiss,SunSans-Regular" size="2"><strong>General Port Tasks (Both X11 and Aqua)</strong></FONT><BR></TD>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="#99ccff"><FONT SIZE="2"><STRONG>Task</STRONG></TD>
+
+		<TD WIDTH="60%" BGCOLOR="#99CCFF"><FONT SIZE="2"><STRONG>Description</STRONG></TD>
+
+		<td width="10%" bgcolor="#99CCFF"><font size="2"><b>Status</b></font></td>
+
+	</TR>
+
+	<tr>
+
+		<td width="30%" bgcolor="F0F0F0" valign="TOP"><font size="2">Compilation of 1.1</font></td>
+
+		<td width="60%" bgcolor="F0F0F0"><font size="2">Move the MacOS X support patches into 1.1 so we can more easily keep up with future OpenOffice.org releases.  Get 1.1 compiling on MacOS X and see how stable it is.</font></td>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Done</font></td>
+
+	</tr>
+
+	<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Save/Print Lockups</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						OpenOffice.org currently exhibits random lockups after multiple saves and prints.  This occurs on both dual and single processor machines.<BR><BR>
+
+						<b>Programmers</b>: Analyze backtraces from testers, isolate freezes, and fix them<BR>
+
+						<b>Testers</b>: generate backtraces, explain lockup situations and machine configurations
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Fixed</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Random Aborts</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						The program also randomly "Aborts" in certain situations, for example during the "Creating Local Settings" stage of the Setup program, as well as during operation.<BR><BR>
+
+						<b>Programmers</b>:  isolate abort situations and modules, look at optimization issues with compiler<BR>
+
+						<b>Testers</b>: generate backtraces and machine configurations, test fixes, isolate abort situations
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Under Investigation</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Apple gcc3.x Compatibility</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						Support for Apple's gcc3.1 compiler is not implemented at this time.  The 1.0.x code still uses the Apple gcc2.95.2 compiler, which requires many workarounds due to compiler bugs and significantly increases build time.  Such workarounds should not be required with gcc3.  Once gcc3 becomes available, support for it must be added and gcc3 must coexist with the current build process.<BR><BR>
+
+						<b>Programmers</b>:  investigate and add gcc3 support to the project
+
+							<TABLE CELLSPACING="0" CELLPADDING="0" BORDER="0" WIDTH="100%">
+
+								<TR><TD WIDTH="10%">&nbsp;</TD><TD WIDTH="90%"><FONT SIZE="2"><LI>Analyze what will be needed for gcc3 support</FONT></TD></TR>
+
+								<TR><TD WIDTH="10%">&nbsp;</TD><TD WIDTH="90%"><FONT SIZE="2"><LI>Devise a way to support gcc3 without breaking the gcc2 build process<BR></FONT></TD></TR>
+
+								<TR><TD WIDTH="10%">&nbsp;</TD><TD WIDTH="90%"><FONT SIZE="2"><LI>Begin adding in gcc3 support into CVS</FONT></TD></TR>
+
+								<TR><TD WIDTH="10%">&nbsp;</TD><TD WIDTH="90%"><FONT SIZE="2"><LI>Test and fix gcc3 bridge code</FONT></TD></TR>
+
+								<TR><TD WIDTH="10%">&nbsp;</TD><TD WIDTH="90%"><FONT SIZE="2"><LI>STLport 4.5 support with gcc3 (did not work well with gcc2)</FONT></TD></TR>
+
+							</TABLE>
+
+						<b>Testers</b>:  not required at this time
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Fixed (gcc3.3)</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Mozilla 1.0 Integration</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						Mozilla integration (Address book, etc) is currently not supported.  When building the previous OO638C_MacOSX and early OOO_STABLE_1 branches, OpenOffice.org did not support any Mozilla version above 0.95.  The Fizilla project, which produces the Mach-O build of Mozilla which is compatible with the Mac OS X/Darwin port, had not started until version 0.97.  Now that OpenOffice.org uses Mozilla 1.0, support for it must be added back into the Mac OS X/Darwin port.<BR><BR>
+
+						<b>Programmers</b>:  Build Mozilla 1.0 Mach-O libraries and package them up for OpenOffice.org 1.0<BR>
+
+						<B>Testers</B>:  when support is added, test integration with a Mozilla address book
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Fixed</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Project Builder/GUI build system and debugger</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						The entire build process is performed using the command line interface (CLI), or the Terminal.  With newer Apple developer tools, it is possible to migrate some of the build process to a GUI environment using Project Builder.  GUI debugging is also possible with this approach.<BR><BR>
+
+						<b>Programmers</b>:  work towards integrating Project Builder into the build environment to make the project more accessible to Mac developers not familiar or comfortable with command line systems<BR>
+
+						<b>Testers</b>:  verify GUI build system build instructions when they become available
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">In Progress, see <a href="http://porting.openoffice.org/servlets/ReadMsg?msgId=401226&listName=dev">here</a> for using ddd to debug OOo</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Launch Performance Enhancements</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						Launch speed of OpenOffice.org is slow due to the number of shared/dynamic libraries that must be loaded during startup.  To make the program more appealing to the general user, launch time must be cut significantly.<BR><BR>
+
+						<b>Programmers</b>:  investigate the possibility of using prebinding to decrease shared library loading times, investigate creation of a Quickstarter Menu Extra or Dockling for this functionality as well (a la Win32).
+
+						<b>Testers</b>:  if, and when, available, verify product is still functional with new loading code.
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Awaiting Test (oooqstart)</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Java support</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						The extent of Java support (any version) is unknown at this time.  It must be investigated and the missing pieces implemented.<BR><BR>
+
+						<b>Programmers</b>:  investigate and implement missing Java JNI support<BR>
+
+						<b>Testers</b>:  test support once it becomes available
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Fixed</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Third-Party Plugin support</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						There is preliminary support for plugins in CVS, but the extent of support and its stability has not been investigated.<BR><BR>
+
+						<b>Programmers</b>:  investigate and fix plug-in support once data becomes available<BR>
+
+						<b>Testers</b>:  test current and future support and submit bug reports and backtraces
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Not Started</font></td>
+
+	</TR>
+
+
+
+<!-------------------- X11 Tasks ------------------------>
+
+			<TR>
+
+		<TD ALIGN="CENTER" COLSPAN="3" BGCOLOR="#00315a"><font color="white" face="Arial,Helvetica,Geneva,Swiss,SunSans-Regular" size="2"><strong>X11 Specific Tasks</strong></FONT><BR></TD>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="#99ccff"><FONT SIZE="2"><STRONG>Task</STRONG></TD>
+
+		<TD WIDTH="60%" BGCOLOR="#99CCFF"><FONT SIZE="2"><STRONG>Description</STRONG></TD>
+
+		<td width="10%" bgcolor="#99CCFF"></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Printing support for X11</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						While preliminary printing support under X11 has been added to CVS, it is currently under heavy development.  Much more testing and debugging of printing support is required at this time, as there are still many unknowns.<BR><BR>
+
+						<b>Programmers</b>:  investigate extent of printing support and improve robustness
+
+							<TABLE CELLSPACING="0" CELLPADDING="0" BORDER="0" WIDTH="100%">
+
+								<TR><TD WIDTH="10%">&nbsp;</TD><TD WIDTH="90%"><FONT SIZE="2"><LI>Extent of TrueType and regular font support is uninvestigated</FONT></TD></TR>
+
+								<TR><TD WIDTH="10%">&nbsp;</TD><TD WIDTH="90%"><FONT SIZE="2"><LI>Extent of support for 'lpr' (Darwin 5) and CUPS (Darwin 6) is uninvestigated; attempt to support both</FONT></TD></TR>
+
+								<TR><TD WIDTH="10%">&nbsp;</TD><TD WIDTH="90%"><FONT SIZE="2"><LI>Investigate effort required to support USB local printers on Darwin 5/Mac OS X 10.1</FONT></TD></TR>
+
+								<TR><TD WIDTH="10%">&nbsp;</TD><TD WIDTH="90%"><FONT SIZE="2"><LI>Attempt to make printer configuratin easier</FONT></TD></TR>
+
+							</TABLE>
+
+						<BR>
+
+						<b>Testers</b>: test with multiple machine configurations, multiple printers, OS versions, etc.
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Fixed</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">General Font support for X11</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						Somewhat related to printing support, the state of Font support in all OpenOffice.org applications is uninvestigated.  It is unknown which fonts work and how extensive support for different font types and faces is.<BR><BR>
+
+						<b>Programmers</b>:  investigate extent and state of font support, fix support so more fonts can be added and/or recognized by the application<BR>
+
+						<b>Testers</b>:  extensively test fonts when more support is added
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Fixed</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Window Manager support &amp; Desktop Integration for X11</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						OpenOffice.org includes support for Desktop Integration with popular environments such as KDE and Gnome.  This support is implemented but not functional for the Mac OS X/Darwin port.  Also, it is unknown which window managers (other than WindowMaker) are fully supported under Mac OS X and Darwin.<BR><BR>
+
+						<b>Programmers</b>:  investigate and implement support for further window managers, fix Gnome and KDE integration<BR>
+
+						<b>Testers</b>:  test a variety of window managers
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Awaiting Test</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Audio support for X11</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						The NAS (Network Audio System) module is not supported on Mac OS X/Darwin and has been removed from the build process.  NAS has no support for Mac OS X/Darwin specific system calls and its dynamic linker (including two level namespaces).<BR><BR>
+
+						<b>Programmers</b>: port the NAS module to Darwin and Mac OS X<BR>
+
+						<b>Testers</b>:  verify audio support once implemented in all applications
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Fixed</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Fix Xrender and Antialiasing support in X11</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						Antialiasing is not currently supported on X11.  Though the Xrender library is present, it cannot be loaded for some reason.<BR><BR>
+
+						<b>Programmers</b>:  complete libXrender integration and entry point location through osl, investigate why antialiasing is broken<BR>
+
+						<b>Testers</b>:  verify libXrender against various X servers and investigate antialiasing when new font support is added.
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Fixed</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">X11 Copy &amp; Paste, Drag &amp; Drop support</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						There is currently no X11 support for Copy and Paste, and Drag and Drop.<BR><BR>
+
+						<b>Programmers</b>:  implement Copy &amp; Paste and Drag &amp; Drop support<BR>
+
+						<b>Testers</b>:  test CP/DD support with multiple media types in all applications and configurations
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Fixed </font>
+
+			<p><font size="2">(Apple X11, XFree86 4.3)</font></p>
+
+		</td>
+
+	</TR>
+
+<!-------------------- Aqua Tasks ------------------------>
+
+			<TR>
+
+				<TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="#00315a"><font color="white" face="Arial,Helvetica,Geneva,Swiss,SunSans-Regular" size="2"><strong>Quartz/Aqua Specific Tasks</strong></FONT><BR></TD>
+
+		<td align="CENTER" bgcolor="#00315a" width="10%"></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="#99ccff"><FONT SIZE="2"><STRONG>Task</STRONG></TD>
+
+		<TD WIDTH="60%" BGCOLOR="#99CCFF"><FONT SIZE="2"><STRONG>Description</STRONG></TD>
+
+		<td width="10%" bgcolor="#99CCFF"></td>
+
+	</TR>
+
+	<tr>
+
+		<td width="30%" bgcolor="F0F0F0" valign="TOP"><font size="2">Fix broken builds</font></td>
+
+		<td width="60%" bgcolor="F0F0F0"><font size="2">Since much time has passed since the last compile of the Quartz code, we need to run back and make sure PORTS can build again.  We may just abandon PORTS and jump straight into 1.1 for this.</font></td>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Fixed (X11 builds)</font></td>
+
+	</tr>
+
+	<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Finish native windowing and application support</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						Current Mac OS X native window support is present, but still buggy and incomplete.<BR><BR>
+
+						OpenOffice.org's vcl module also does not rely on native code to implement modal windows. Instead, the platform-independent code uses emulated modality by controlling the stacking order of modeless windows. In the current implementation, the code controlling the stacking order is not connected to the Mac OS X 10.1.x native windows. Event handling suppport is also incomplete.<BR><BR>
+
+						<b>Programmers</b>:  fix windowing model support and Mac OS X <-> OpenOffice.org GUI integration, complete event handling support and dialog modality<BR>
+
+						<b>Testers</b>:  test support and report GUI bugs and inconsistencies
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">In Design in conjunction with <a href="http://gsl.openoffice.org">gsl</a> project.</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Native font support</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						There is currently no support for fonts in the Aqua build, therefore only one font and one size may be used.  There are also known font spacing issues because of this.  Unicode font support is also not present in any form.<BR><BR>
+
+						<b>Programmers</b>:  implement Mac OS X native font and Unicode support<BR>
+
+						<b>Testers</b>:  test support with multiple fonts and font sizes
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Not Started</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Java support</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						The extent of Java support (any version) is unknown at this time.  It must be investigated and the missing pieces implemented.<BR><BR>
+
+						<b>Programmers</b>:  intvestigate and implement missing Java JNI support<BR>
+
+						<b>Testers</b>:  test support once it becomes available
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Not Started</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Setup program</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						While the setup program does run, its Loader component is not Mac OS X native.  The Loader is required for OpenOffice.org installs that do not use third-party installer applications, like previous Mac OS X releases.<BR><BR>
+
+						<b>Programmers</b>:  implement missing Mac OS X native functionality in the Loader component<BR>
+
+						<b>Testers</b>:  test standalone installation when the Loader is native
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">In progress</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Native Printing support</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						There is currently no printing support for the Quartz/Aqua build.  Printing and printer font support must be implemented and tied into Mac OS X native printing APIs.  This includes:
+
+							<TABLE CELLSPACING="0" CELLPADDING="0" BORDER="0" WIDTH="100%">
+
+								<TR><TD WIDTH="10%">&nbsp;</TD><TD WIDTH="90%"><FONT SIZE="2"><LI>Printer enumeration and selection</FONT></TD></TR>
+
+								<TR><TD WIDTH="10%">&nbsp;</TD><TD WIDTH="90%"><FONT SIZE="2"><LI>Rendering to the selected printer<BR></FONT></TD></TR>
+
+								<TR><TD WIDTH="10%">&nbsp;</TD><TD WIDTH="90%"><FONT SIZE="2"><LI>Support for both network and local USB printers<BR></FONT></TD></TR>
+
+								<TR><TD WIDTH="10%">&nbsp;</TD><TD WIDTH="90%"><FONT SIZE="2"><LI>"Print to File" support with PostScript<BR></FONT></TD></TR>
+
+							</TABLE>
+
+						<BR><BR>
+
+						<b>Programmers</b>:  implement complete Mac OS X native printing suppport for both Mac OS X 10.1.x and 10.2<BR>
+
+						<b>Testers</b>:  test support with multiple printers, OS versions, and machines
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Not Started</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Full screen graphics support</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						Presentations in Impress require full screen display, without display of the desktop or menu bar.  There is currently no full-screen display support implemented.<BR><BR>
+
+						<b>Programmers</b>:  implement full-screen display support<BR>
+
+						<b>Testers</b>:  test Impress and other applications for full-screen display when it becomes available
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Not Started</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Native sound and movie support</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						Presentations and other applications require sound support, which is not implemented for the Quartz/Aqua port.  QuickTime movie support would also be nice.<BR><BR>
+
+						<b>Programmers</b>:  implement sound and movie support<BR>
+
+						<b>Testers</b>:  test sound and movie support when it becomes available on a variety of configurations
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Not Started</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Native OpenGL Graphics support</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						Those parts of OpenOffice.org which require OpenGL for 3D graphics currently cannot do so.  OpenGL support must be implemented for the Quartz/Aqua port.<BR><BR>
+
+						<b>Programmers</b>:  implement OpenGL support<BR>
+
+						<b>Testers</b>:  test OpenGL support when it becomes available on a variety of configurations
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Not Started</font></td>
+
+	</TR>
+
+			<TR>
+
+		<TD WIDTH="30%" BGCOLOR="F0F0F0" VALIGN="TOP"><FONT SIZE="2">Native Copy &amp; Paste, Drag &amp; Drop support</FONT></TD>
+
+		<TD WIDTH="60%" BGCOLOR="F0F0F0">
+
+					<FONT SIZE="2">
+
+						There is currently no native support for Copy and Paste, and Drag and Drop.<BR><BR>
+
+						<b>Programmers</b>:  implement Copy &amp; Paste and Drag &amp; Drop support<BR>
+
+						<b>Testers</b>:  test CP/DD support with multiple media types in all applications and configurations
+
+					</FONT>
+
+				</TD>
+
+		<td width="10%" bgcolor="F0F0F0"><font size="2">Not Started</font></td>
+
+	</TR>
+
+
+
+		</TABLE>
+
+</body>
+</html>
+
