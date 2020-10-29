@@ -23,6 +23,8 @@
     <% } %>
     <% } %>
     <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
   </head>
   <body<% if (content.bodytag) { %>${content.bodytag}<% } %>>
     <!--#include virtual="${content.brand}" -->

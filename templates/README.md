@@ -4,14 +4,50 @@ This describes the Simple Groovy templates (GSP) that are used to build the site
 
 ## Templates that Generate HTML
 
-1. page.gsp
+1. `page.gsp`
    This template is used to generate html pages from both html and md files. It uses the following steps.
-   * If an html file then html_extract.gsp is included to parse the html into the header, bodytag, and body.
-   * breadcrumbs.gsp is included to generate the breadcrumbs and save the uri path to each directory on that content's path.
-   * ssi_paths.gsp is included to determine which brand, topnav, leftnav, and rightnav SSIs to include. leftnav and rightnav are optional.
-   * the html skeleton is then filled in with the data model.
 
-1. brand.gsp
+```
+<%
+  // from jbake - content.file, content.uri and content.body
+  // from page metadata - content.title and content.css
+  if ( content.file.endsWith(".html") ) {
+    // using content.body if html get content.header, content.bodytag, and content.extracted_body
+    include "html_extract.gsp"
+  }
+  // insert breadcrumbs and ssi logic
+  // using content.uri get content.breadcrumbs and content.ssi[]
+  include "breadcrumbs.gsp"
+  // using content.ssi[] get content.brand, content.topnav, content.leftnav and content.rightnav
+  include "ssi_paths.gsp"
+%>
+```
+   The html skeleton may use any of the following content model properties
+   - content.header (optional)
+   - content.title (optional)
+   - content.css (optional)
+   - content.bodytag
+   - content.brand
+   - content.topnav
+   - content.breadcrumbs
+   - content.leftnav (optional)
+   - content.rightnav (optional)
+   - content.extracted_body (html)
+   - content.body (md)
+
+   The following SSI files may be used.
+   - `/doctype.html`
+   - `/scripts/google-analytics.js`
+   - `/scripts/entourage.js`
+   - content.brand
+   - content.topnav
+   - content.leftnav (optional)
+   - content.rightnav (optional)
+   - `/footer.html`
+
+   The CSS file that is used for these pages is `/css/ooo.css`
+   
+1. `brand.gsp`
    This template is used to generate the top / branding portion of each page included with SSI.
    These files are used to provide translated versions of the brand.
    brand.md files cause the creation of these html SSIs using metadata to be filled into the template.
@@ -32,11 +68,11 @@ announcetip=Apache OpenOffice 4.1.7 released
 ~~~~~~
 ```
 
-1. navigator.gsp
+1. `navigator.gsp`
    This template is used to generate navigator SSI. These come in three flavors:
-   * topnav.md
-   * leftnav.md
-   * rightnav.md
+   * `topnav.md`
+   * `leftnav.md`
+   * `rightnav.md`
 
 ```
 type=navigator
