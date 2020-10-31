@@ -68,6 +68,7 @@ You could compare with the git targets with:
 cd ${GITPATH}/assets
 find . -type d -depth 1 -print | sed -e 's!./!!' | sort
 cd ${GITPATH}/content
+find . -type d -depth 1 -print | sed -e 's!./!!' | sort
 ```
 
 3. Migration of a Folder.
