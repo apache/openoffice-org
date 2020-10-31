@@ -1,7 +1,7 @@
 <%
   // from jbake - content.file, content.uri and content.body
   // from page metadata - content.title and content.css
-  if ( content.file.endsWith(".html") ) {
+  if ( content.file.endsWith(".html") || content.file.endsWith(".htm") ) {
     // using content.body if html get content.header, content.bodytag, and content.extracted_body
     include "html_extract.gsp"
   }
