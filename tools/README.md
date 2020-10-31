@@ -1,4 +1,4 @@
-== Editing the Git Site
+## Editing the Git Site
 
 1. Clone the Git Repository
 
@@ -33,9 +33,9 @@ cd ~/Development/openoffice/ooo-sit.git/content/
 cd ~/Development/openoffice/ooo-sit.git/assets/
 ```
 
-* These are copied to the site unmodified.
+- These are copied to the site unmodified.
 
-== Migration Instructions
+## Migration Instructions
 
 1. Checkout Old SVN CMS version of site.
 
@@ -68,6 +68,7 @@ You could compare with the git targets with:
 cd ${GITPATH}/assets
 find . -type d -depth 1 -print | sed -e 's!./!!' | sort
 cd ${GITPATH}/content
+```
 
 3. Migration of a Folder.
 
@@ -76,7 +77,7 @@ cd ${SVNPATH}
 ${GITPATH}/tools/migration2git.sh downloads
 ```
 
-== Tool Scripts
+## Tool Scripts
 
 1. tools/push2git.sh ${1} ${2} ${3}
 
@@ -91,6 +92,7 @@ git push
 ```
 
 2. tools/convert2md.sh ${1} ${2}
+
 ```
 # ${1} Template type 'brand','navigator','page'
 # ${2} Path of mdtext file to convert to md file
