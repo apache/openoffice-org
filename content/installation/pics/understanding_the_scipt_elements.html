@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 8  (Solaris Sparc)">
+	<META NAME="AUTHOR" CONTENT="Ingo Schmidt">
+	<META NAME="CREATED" CONTENT="20020419;13085671">
+	<META NAME="CHANGED" CONTENT="20070730;16330200">
+</head>
+<body LANG="de-DE" DIR="LTR">
+<P ALIGN=LEFT STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><FONT SIZE=6>Understanding
+the script elements</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Verdana, sans-serif">The setup scripts is readable
+with a text editor. It contains blocks for different items, which can
+be read by the setup. If you open a setup script file, like setup.inf
+or setup.ins, you find blocks like</FONT></P>
+<P STYLE="line-height: 100%"><FONT FACE="Verdana, sans-serif">File
+gid_File_Lib_Db31<BR>Name = &quot;libdb32.dll&quot;;<BR>PackedName =
+&quot;f_0320&quot;;<BR>Size = 430080;<BR>Dir =
+gid_Dir_Program;<BR>Carrier = gid_DataCarrier;<BR>UnixRights =
+755;<BR>Date = &quot;23012002&quot;;<BR>Time = &quot;0600&quot;;<BR>Styles
+= (PACKED);<BR>End</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">Each block begins with a special
+keyword and ends with an &bdquo;End&ldquo;. In this case the keyword
+is &bdquo;File&ldquo;, showing that the following definition block
+describes a file. As already shown in the document <A HREF="understanding_the_scipt_language.html">Understanding
+the script language</A> the block definition contains the name of the
+file, the packed name in the installation set, the size of the
+unpacked file, the directory in which the file shall be installed,
+the data carrier, the unix rights, the installation date and time and
+some special styles. Each definition block has to have a unique name,
+this is the so called global ID, GID. In the example above, the
+defintion block is named gid_File_Lib_Db31 </FONT>
+</P>
+<P><FONT FACE="Verdana, sans-serif">There are keywords for many
+actions the setup can make. Each keyword shows the beginning of a
+definition block. An installation set only contains definition
+blocks. You can define the following items:</FONT></P>
+<P><FONT FACE="Verdana, sans-serif"><A HREF="scpitem_file.html">File</A>:
+Describing a file in the installation set </FONT>
+</P>
+<P><FONT FACE="Verdana, sans-serif"><A HREF="scpitem_directory.html">Directory</A>:
+Describes a directory the setup has to create </FONT>
+</P>
+<P><FONT FACE="Verdana, sans-serif"><A HREF="scpitem_profile.html">Profile</A>:
+Describing an ini- or rc-file, the setup creates and fills during
+setup </FONT>
+</P>
+<P><FONT FACE="Verdana, sans-serif"><A HREF="scpitem_profileitem.html">ProfileItem</A>:
+One line in the form Key = Value in a Profile, written by the setup</FONT></P>
+<P><FONT FACE="Verdana, sans-serif"><A HREF="scpitem_registryitem.html">RegistryItem</A>:
+One line in the form Key = Value in the setup registry, written by
+the setup  </FONT>
+</P>
+<P><FONT FACE="Verdana, sans-serif"><A HREF="scpitem_folder.html">Folder</A>:
+Creates a directory in the Windows system, for example in the start
+menu directory</FONT></P>
+<P><FONT FACE="Verdana, sans-serif"><A HREF="scpitem_folderitem.html">FolderItem</A>:
+Creates the links to files in the created folder, for example in the
+start menu folder </FONT>
+</P>
+<P><FONT FACE="Verdana, sans-serif"><A HREF="scpitem_shortcut.html">Shortcut</A>:
+Defines a link, which has to be created by the setup </FONT>
+</P>
+<P><FONT FACE="Verdana, sans-serif"><A HREF="scpitem_unixlink.html">Unixlink</A>:
+Definition of a link in a Unix system, created by the setup</FONT></P>
+<P><FONT FACE="Verdana, sans-serif"><A HREF="scpitem_windowscustomaction.html">WindowsCustomAction</A>:
+A custom action that is executed by the Windows Installer service</FONT></P>
+<P><FONT FACE="Verdana, sans-serif"><A HREF="scpitem_mergemodule.html">MergeModule</A>:
+A merge module defines a Microsoft Merge Module, that is merged into the msi database during
+packaging process</FONT></P>
+<P><FONT FACE="Verdana, sans-serif"><A HREF="scpitem_module.html">Module</A>:
+Defines modules, which can be selected or deselected in a user
+defined installation. This item is also used to structure the setup
+script and all scp projects. A module contains lists of Files, Dirs,
+... etc. Each product can be defined as a group of modules. There is a special
+process for modules with language specific files: 
+<A HREF="scpitem_templatemodule.html">Language Specific Module</A>.</FONT></P>
+<P><FONT FACE="Verdana, sans-serif"><A HREF="scpitem_installation.html">Installation</A>:
+This is the start definition in each setup script. It contains some
+global settings</FONT></P>
+<P><FONT FACE="Verdana, sans-serif"><A HREF="scpitem_scpaction.html">ScpAction</A>:
+This will not appear in the setup script in an installation set. It
+is only important for the packing process.</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">There are two groups of items.
+The one group describes GIDs, which have to be connected to modules.
+The other group describes global definitions. As you can see, the
+modules have a special position in the setup script.</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">A module looks like:</FONT></P>
+<P STYLE="line-height: 100%"><FONT FACE="Verdana, sans-serif"><FONT FACE="Verdana, sans-serif">Module
+gid_Module_Prg_Math_Bin<BR>MOD_NAME_DESC ( MODULE_PRG_MATH_BIN
+);<BR>ParentID = gid_Module_Prg_Math;<BR>Default = YES;<BR>Minimal =
+YES;<BR>Files =
+(gid_File_Dtd_Math,gid_File_Exe_Smath,gid_File_Html_W3c_Ipr,gid_File_Lib_Sm,gid_File_Res_Sm);<BR>Unixlinks=(gid_Unixlink_Mylink);<BR>Dirs
+= (gid_Dir_Mydir);</FONT><BR>End</FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Verdana, sans-serif"><U>Module dependent items:</U></FONT></P>
+<P><FONT FACE="Verdana, sans-serif">This module block defines the
+module gid_Module_Prg_Math_Bin, which describes the math module, that
+can be selected or deselected in a userdefined installation. As you
+can see, the module definition, contains lists of other GIDs. The
+lists <B>Dirs</B> (item <B>Directory</B>), <B>Files</B> (item: <B>File</B>),
+<B>Unixlinks</B> (item: <B>Unixlink</B>), contain all GIDs, which
+describe definitions, that are installed by the setup, if the module
+is selected. Other items, like Profiles, ConfigurationItems, etc. are
+not assigned to a module, but have to contain the ModuleID in their
+definition!</FONT></P>
+<P><FONT FACE="Verdana, sans-serif"><U>Items without module
+assignment:</U></FONT></P>
+<P><FONT FACE="Verdana, sans-serif">The items <B>Installation </B><SPAN STYLE="font-weight: medium">and</SPAN>
+<B>ScpAction</B> are <SPAN STYLE="text-decoration: none">global</SPAN>,
+they do not belong to a module. The item <B>WindowsCustomAction</B>
+knows the file, that contains the code of the custom action.
+Therefore this is assigned to a file, not to a module. The item
+<B>ShortCut</B> is assigned to a File or to another ShortCut.</FONT></P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+</body>
+</HTML>

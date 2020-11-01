@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 7  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Ingo Schmidt">
+	<META NAME="CREATED" CONTENT="20020419;13085671">
+	<META NAME="CHANGED" CONTENT="20040205;16560327">
+</head>
+<body LANG="de-DE" DIR="LTR">
+<P ALIGN=LEFT><SPAN STYLE="font-weight: medium"><FONT SIZE=6><FONT FACE="Verdana, sans-serif">Automatical
+assignments of global IDs to modules</FONT></FONT></SPAN></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Verdana, sans-serif">The scp linker automatically
+optimizes the setup script to reduce the efforts needed in scp files:</FONT></P>
+<UL>
+	<LI><P><FONT FACE="Verdana, sans-serif"><B>Global IDs that are not
+	assigned to a module, are automatically assigned to the root module.</B>
+	</FONT>
+	</P>
+	<LI><P><FONT FACE="Verdana, sans-serif"><B>Global IDs that are
+	assigned to modules, but are not defined, are automatically removed
+	from modules.</B></FONT></P>
+</UL>
+<P><FONT FACE="Verdana, sans-serif">This is only relevant for
+Directories, Files, Customs and Procedures, because all other items
+do not belong to modules (Installation, HelpText, ...) or have to
+contain a ModuleID in their definition block (ProfileItem,
+RegistryItem, ...) .</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">Example: </FONT>
+</P>
+<P><FONT FACE="Verdana, sans-serif">If you only define a file and do
+not include it into the list ( Files = ( ... ); ) of a module, the
+file is automatically added to the root module. Therefore you only
+have to edit one scp file. </FONT>
+</P>
+<P><FONT FACE="Verdana, sans-serif">The second case is not less
+important. If you define in a module definition a file list like</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">Files = (gid_File_Only_Windows,
+gid_File_Only_Linux, gid_File_Only_Solaris);</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">you do not need to write any
+platform dependencies inside this definition (take care of the
+filenames ;-) )</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">If you build a Windows script, in
+which the definitions of gid_File_Only_Linux and
+gid_File_Only_Solaris do not occur, you do not have to take care of
+the module assignments. The scplinker automatically removes these two
+assignments and writes</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">Files = (gid_File_Only_Windows);</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">into the setup script in the
+installation set. </FONT>
+</P>
+</body>
+</HTML>

@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 7  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Ingo Schmidt">
+	<META NAME="CREATED" CONTENT="20020419;13085671">
+	<META NAME="CHANGED" CONTENT="20040205;15293305">
+</head>
+<body LANG="de-DE" DIR="LTR">
+<P ALIGN=LEFT STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><FONT SIZE=6>Definition
+of a ScpAction </FONT></FONT>
+</P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Verdana, sans-serif">The keyword for the ScpAction
+definition is <B>ScpAction</B>. A global ID of a ScpAction should
+begin with <B>gid_Scpaction</B>. ScpAction definitions cannot be
+assigned to modules, they are global. They even do not appear in the
+final setup script, which is placed into the installation set next to
+the setup executable. They are useful for scpzip to copy files from
+the output tree into the installation set. A restriction for these
+files is, that they cannot be packed. The classical exercise for
+ScpActions is the copying of the loader from the language dependent
+output tree directory. The loader is created in the setup project and
+has the name loader.bin respectively loader.exe. In the installation
+set you find this file as setup respectively setup.exe. A typical
+definition of a ScpAction in the scp projects looks therefore like:</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">ScpAction
+gid_Scpaction_Copy_loader<BR>#ifdef UNX<BR>Copy =
+&quot;loader.bin&quot;;<BR>#else<BR>Copy =
+EXENAME(loader);<BR>#endif<BR>Name = EXENAME(setup);<BR>End</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">The
+ScpAction definition needs only two assignment. The source name and
+the destination name. Copy describes the source name, in this case
+loader.bin for Unix and EXENAME(loader) for all other platforms. The
+macro EXENAME is defined in the included file macros.inc. The Name
+describes the destination name, in this case EXENAME(setup). For
+Windows does this mean: Copy the file loader.exe from the output tree
+into the installation set as setup.exe. And for Unix: Copy the file
+loader.bin from the output tree into the installation set as file
+setup. A packing or other feature are not available for ScpActions.</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">ScpAction
+gid_Scpaction_Flatloader<BR>FlatLoaderZip = &quot;setup_services.rdb&quot;;<BR>End</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">Another
+ScpAction needs only one assignment. This is the FlatLoaderZip. The
+assigned file setup_services.rdb is needed as internal registry for
+the setup. This file is not copied into the installation during the
+setup. But the file is packed into the setup zip and therefore
+available during the setup process.</FONT></P>
+<P><BR><BR>
+</P>
+</body>
+</HTML>

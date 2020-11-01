@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 7  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Ingo Schmidt">
+	<META NAME="CREATED" CONTENT="20020419;13085671">
+	<META NAME="CHANGED" CONTENT="20040204;19305088">
+</head>
+<body LANG="de-DE" DIR="LTR">
+<P ALIGN=LEFT STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><FONT SIZE=6>Understanding
+the lng files</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Verdana, sans-serif">Some content of the scp projects
+has to be translated in the supported languages. This is important
+for localized directory names, or text output of some basic scripts.
+This translation happens with the help of the so called lng files,
+which are automatically included into the translation process. These
+files must have the same names as the scp files, in which the
+translated string is needed, but its extensions are .lng. One example
+shows this simple behaviour:</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">Module
+gid_Module_Prg_Calc_Bin<BR>MOD_NAME_DESC ( MODULE_PRG_CALC_BIN
+);<BR>ParentID = gid_Module_Prg_Calc;<BR>Default = YES;<BR>Minimal =
+YES;<BR>Files =
+(gid_File_Exe_Scalc,gid_File_Lib_Calc,gid_File_Lib_Sc,gid_File_Res_Sc);<BR>End</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">As you can see, this is the
+definition of a module block. In the user defined installation, there
+is a user interface for selecting the modules. This cotains a name
+and a description of each module. And of course these have to be
+localized. In the module definition you see the line:</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">MOD_NAME_DESC (
+MODULE_PRG_CALC_BIN );</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">MOD_NAME_DESC is a macro defined
+in macros.inc. There you find:</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">#define MOD_NAME_DESC(id)
+\<BR>ALL_LANG(Name,STR_NAME_##id);
+\<BR>ALL_LANG(Description,STR_DESC_##id)</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">Therefore this can be resolved to
+the two macros: </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Verdana, sans-serif">ALL_LANG(Name,STR_NAME_
+MODULE_PRG_CALC_BIN )<BR>ALL_LANG(Description,STR_DESC_
+MODULE_PRG_CALC_BIN )</FONT></P>
+<P><FONT FACE="Verdana, sans-serif"><BR>And ALL_LANG is also defined
+in macros.inc, but this is not important yet. Important are the two
+strings STR_NAME_ MODULE_PRG_CALC_BIN and STR_DESC_
+MODULE_PRG_CALC_BIN, which exist in the scp file, in which the module
+gid_Module_Prg_Calc_Bin is defined. For this file xyz.scp there has
+to be also a files xyz.lng. The filenames have to be identical,
+without the extensions. Therefore in the lng file, we find the
+following two entries:</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">[STR_NAME_MODULE_PRG_CALC_BIN]<BR>49
+= &quot;Programmodul&quot;<BR>01 = &quot;Program Module&quot;<BR>07 =
+&quot;&Iuml;&eth;&icirc;&atilde;&eth;&agrave;&igrave;&igrave;&iacute;&ucirc;&eacute;
+&igrave;&icirc;&auml;&oacute;&euml;&uuml;&quot;<BR>55 =
+&quot;Programmodul&quot;<BR>37 = &quot;M&oacute;dulo del programa&quot;<BR>03
+= &quot;M&oacute;dulo do programa&quot;<BR>30 = &quot;&Euml;&aring;&eacute;&ocirc;&iuml;&otilde;&ntilde;&atilde;&eacute;&ecirc;&THORN;
+&igrave;&iuml;&iacute;&Uuml;&auml;&aacute; &eth;&ntilde;&iuml;&atilde;&ntilde;&Uuml;&igrave;&igrave;&aacute;&ocirc;&iuml;&ograve;&quot;<BR>31
+= &quot;Programma module&quot;<BR>33 = &quot;Module&quot;<BR>34 =
+&quot;M&oacute;dulo del programa&quot;<BR>35 = &quot;Ohjelmamoduuli&quot;<BR>39
+= &quot;Modulo programma&quot;<BR>45 = &quot;Programmodul&quot;<BR>46
+= &quot;Programmodul&quot;<BR>48 = &quot;Modu&sup3; programu&quot;<BR>81
+= &quot;&Igrave;&szlig;&Ucirc;&cedil;&THORN;&times;&Ntilde;&Oacute;&frac14;&THORN;&shy;&deg;&Ugrave;&quot;<BR>82
+= &quot;&Ccedil;&Aacute;&middot;&Icirc;&plusmn;&times;&middot;&yen;
+&cedil;&eth;&micro;&acirc;&quot;<BR>86 = &quot;&sup3;&Igrave;&ETH;&ograve;&Auml;&pound;&iquest;&eacute;&quot;<BR>88
+= &quot;&micro;{&brvbar;&iexcl;&frac14;&Ograve;&para;&ocirc;&quot;<BR>90
+= &quot;Program mod&uuml;l&uuml;&quot;<BR>96 = &quot;&aelig;&Iacute;&Iuml;&Eacute;
+&Egrave;&Ntilde;&auml;&Ccedil;&atilde;&Igrave; &auml;&atilde;&Oslash;&iacute;&Eacute;&quot;</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">[STR_DESC_MODULE_PRG_CALC_BIN]<BR>49
+= &quot;Die Anwendung %PRODUCTNAME Calc&quot;<BR>01 = &quot;The
+application %PRODUCTNAME Calc&quot;<BR>07 = &quot;&Iuml;&eth;&egrave;&euml;&icirc;&aelig;&aring;&iacute;&egrave;&aring;
+%PRODUCTNAME Calc&quot;<BR>55 = &quot;Die Anwendung %PRODUCTNAME
+Calc&quot;<BR>37 = &quot;La aplicaci&oacute;n %PRODUCTNAME Calc&quot;<BR>03
+= &quot;A aplica&ccedil;&atilde;o %PRODUCTNAME Calc&quot;<BR>30 = &quot;&Ccedil;
+&aring;&ouml;&aacute;&ntilde;&igrave;&iuml;&atilde;&THORN;
+%PRODUCTNAME Calc&quot;<BR>31 = &quot;De applicatie %PRODUCTNAME
+Calc&quot;<BR>33 = &quot;L'application %PRODUCTNAME Calc&quot;<BR>34
+= &quot;La aplicaci&oacute;n %PRODUCTNAME Calc&quot;<BR>35 =
+&quot;Sovellus %PRODUCTNAME Calc&quot;<BR>39 = &quot;L'applicazione
+%PRODUCTNAME Calc&quot;<BR>45 = &quot;Applikationen %PRODUCTNAME
+Calc&quot;<BR>46 = &quot;Till&auml;mpningen %PRODUCTNAME Calc&quot;<BR>48
+= &quot;Zastosowanie %PRODUCTNAME Calc&quot;<BR>81 = &quot;%PRODUCTNAME
+Calc &plusmn;&Igrave;&szlig;&Oslash;&sup1;&deg;&frac14;&reg;&Yacute;&quot;<BR>82
+= &quot;%PRODUCTNAME Calc &Agrave;&Agrave;&iquest;&euml;&Ccedil;&Aacute;&middot;&Icirc;&plusmn;&times;&middot;&yen;&quot;<BR>86
+= &quot;%PRODUCTNAME Calc &Oacute;&brvbar;&Oacute;&Atilde;&sup3;&Igrave;&ETH;&ograve;&quot;<BR>88
+= &quot;&Agrave;&sup3;&yen;&Icirc;&micro;{&brvbar;&iexcl;
+%PRODUCTNAME Calc&quot;<BR>90 = &quot;%PRODUCTNAME Calc
+uygulamas&yacute;&quot;<BR>96 = &quot;&Ccedil;&aacute;&Ecirc;&Oslash;&Egrave;&iacute;&THORN;
+%PRODUCTNAME Calc&quot;</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">The names and descriptions are
+translated in any supported language. Therefore the scp linker will
+create a module definition, which looks like:</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">Module
+gid_Module_Prg_Calc_Bin<BR>ParentID = gid_Module_Prg_Calc;<BR>Minimal
+= YES;<BR>Default = YES;<BR>Files = (gid_File_Exe_Scalc,
+gid_File_Lib_Calc, gid_File_Lib_Sc,
+gid_File_Res_Sc);<BR>ConfigurationItems = (
+gid_Configurationitem_Soffice_Apps_Scalc5);<BR>FolderItems =
+(gid_Folderitem_Scalc);<BR>Name (03) = &quot;M&oacute;dulo do
+programa&quot;;<BR>Description (03) = &quot;A aplica&ccedil;&atilde;o
+%PRODUCTNAME Calc&quot;;<BR>Name (07) = &quot;&Iuml;&eth;&icirc;&atilde;&eth;&agrave;&igrave;&igrave;&iacute;&ucirc;&eacute;
+&igrave;&icirc;&auml;&oacute;&euml;&uuml;&quot;;<BR>Description (07)
+= &quot;&Iuml;&eth;&egrave;&euml;&icirc;&aelig;&aring;&iacute;&egrave;&aring;
+%PRODUCTNAME Calc&quot;;<BR>Name (30) = &quot;&Euml;&aring;&eacute;&ocirc;&iuml;&otilde;&ntilde;&atilde;&eacute;&ecirc;&THORN;
+&igrave;&iuml;&iacute;&Uuml;&auml;&aacute; &eth;&ntilde;&iuml;&atilde;&ntilde;&Uuml;&igrave;&igrave;&aacute;&ocirc;&iuml;&ograve;&quot;;<BR>Description
+(30) = &quot;&Ccedil; &aring;&ouml;&aacute;&ntilde;&igrave;&iuml;&atilde;&THORN;
+%PRODUCTNAME Calc&quot;;<BR>Name (31) = &quot;Programma
+module&quot;;<BR>Description (31) = &quot;De applicatie %PRODUCTNAME
+Calc&quot;;<BR>Name (33) = &quot;Module&quot;;<BR>Description (33) =
+&quot;L'application %PRODUCTNAME Calc&quot;;<BR>Name (34) = &quot;M&oacute;dulo
+del programa&quot;;<BR>Description (34) = &quot;La aplicaci&oacute;n
+%PRODUCTNAME Calc&quot;;<BR>Name (35) = &quot;Ohjelmamoduuli&quot;;<BR>Description
+(35) = &quot;Sovellus %PRODUCTNAME Calc&quot;;<BR>Name (37) = &quot;M&oacute;dulo
+del programa&quot;;<BR>Description (37) = &quot;La aplicaci&oacute;n
+%PRODUCTNAME Calc&quot;;<BR>Name (39) = &quot;Modulo
+programma&quot;;<BR>Description (39) = &quot;L'applicazione
+%PRODUCTNAME Calc&quot;;<BR>Name (45) = &quot;Programmodul&quot;;<BR>Description
+(45) = &quot;Applikationen %PRODUCTNAME Calc&quot;;<BR>Name (46) =
+&quot;Programmodul&quot;;<BR>Description (46) = &quot;Till&auml;mpningen
+%PRODUCTNAME Calc&quot;;<BR>Name (48) = &quot;Modu&sup3;
+programu&quot;;<BR>Description (48) = &quot;Zastosowanie %PRODUCTNAME
+Calc&quot;;<BR>Name (49) = &quot;Programmodul&quot;;<BR>Description
+(49) = &quot;Die Anwendung %PRODUCTNAME Calc&quot;;<BR>Name (81) =
+&quot;&Igrave;&szlig;&Ucirc;&cedil;&THORN;&times;&Ntilde;&Oacute;&frac14;&THORN;&shy;&deg;&Ugrave;&quot;;<BR>Description
+(81) = &quot;%PRODUCTNAME Calc &plusmn;&Igrave;&szlig;&Oslash;&sup1;&deg;&frac14;&reg;&Yacute;&quot;;<BR>Name
+(82) = &quot;&Ccedil;&Aacute;&middot;&Icirc;&plusmn;&times;&middot;&yen;
+&cedil;&eth;&micro;&acirc;&quot;;<BR>Description (82) = &quot;%PRODUCTNAME
+Calc &Agrave;&Agrave;&iquest;&euml;&Ccedil;&Aacute;&middot;&Icirc;&plusmn;&times;&middot;&yen;&quot;;<BR>Name
+(86) = &quot;&sup3;&Igrave;&ETH;&ograve;&Auml;&pound;&iquest;&eacute;&quot;;<BR>Description
+(86) = &quot;%PRODUCTNAME Calc &Oacute;&brvbar;&Oacute;&Atilde;&sup3;&Igrave;&ETH;&ograve;&quot;;<BR>Name
+(88) = &quot;&micro;{&brvbar;&iexcl;&frac14;&Ograve;&para;&ocirc;&quot;;<BR>Description
+(88) = &quot;&Agrave;&sup3;&yen;&Icirc;&micro;{&brvbar;&iexcl;
+%PRODUCTNAME Calc&quot;;<BR>Name (90) = &quot;Program
+mod&uuml;l&uuml;&quot;;<BR>Description (90) = &quot;%PRODUCTNAME Calc
+uygulamas&yacute;&quot;;<BR>Name (96) = &quot;&aelig;&Iacute;&Iuml;&Eacute;
+&Egrave;&Ntilde;&auml;&Ccedil;&atilde;&Igrave; &auml;&atilde;&Oslash;&iacute;&Eacute;&quot;;<BR>Description
+(96) = &quot;&Ccedil;&aacute;&Ecirc;&Oslash;&Egrave;&iacute;&THORN;
+%PRODUCTNAME Calc&quot;;<BR>Name (99) =
+&quot;STR_NAME_MODULE_PRG_CALC_BIN&quot;;<BR>Description (99) =
+&quot;STR_DESC_MODULE_PRG_CALC_BIN&quot;;<BR>Name (01) = &quot;Program
+Module&quot;;<BR>Description (01) = &quot;The application
+%PRODUCTNAME Calc&quot;;<BR>End</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">You see, that most of the module
+definition is translation stuff. Finally it is the scpzip that
+creates installation sets for special languages. Therefore the final
+result for an english installation set looks like:</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">Module
+gid_Module_Prg_Calc_Bin<BR>ParentID = gid_Module_Prg_Calc;<BR>Name =
+&quot;Program Module&quot;;<BR>Description = &quot;The application
+%PRODUCTNAME Calc&quot;;<BR>Minimal = YES;<BR>Default = YES;<BR>Files
+= (gid_File_Exe_Scalc, gid_File_Lib_Calc, gid_File_Lib_Sc,
+gid_File_Res_Sc);<BR>End</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">This module definition you can
+finally find in the setup script in the installation set next to the
+setup.</FONT></P>
+<P><BR><BR>
+</P>
+</body>
+</HTML>

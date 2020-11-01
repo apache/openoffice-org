@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+  	   
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=iso-8859-1">
+  <title></title>
+     	 	   
+  <meta name="GENERATOR" content="StarOffice/5.2 (Win32)">
+  	   
+  <meta name="AUTHOR" content="Oliver Bolte">
+  	   
+  <meta name="CREATED" content="20001218;17461754">
+  	   
+  <meta name="CHANGEDBY" content="Ingo Schmidt">
+  	   
+  <meta name="CHANGED" content="20010205;15392152">
+  	   
+  <style>
+	<!--
+		@page { margin: 2cm }
+	-->
+	</style>
+</head>
+  <body>
+   
+<p align="Center" style="margin-bottom: 0cm;"><b><font size="5">HowTo repackage 
+an OpenOffice.org installation set<br>
+ </font></b><font size="5"><small><small>by </small></small></font><b><font size="5"><small><small><a href="mailto:Oliver.Braun@sun.com">
+ Oliver Braun</a></small></small><br>
+ </font></b></p>
+ 
+<p align="Center" style="margin-bottom: 0cm;"></p>
+ 
+<p style="margin-bottom: 0cm;"><font size="4"><br>
+ Introduction:</font></p>
+   
+<p style="margin-bottom: 0cm;"><span style="font-weight: medium"></span></p>
+   
+<p style="margin-bottom: 0cm;"> </p>
+   
+<p style="margin-bottom: 0cm;">This HowTo describes the necessary steps to 
+take to be able to make standard unix packages (rpm, pkg, ..) out of an OpenOffice.org 
+installation set. It does not deal with any specific package manager. If you
+have created a script for your favourite package manager and want to share
+it with others, please drop me a <a href="mailto:Oliver.Braun@sun.com?subject=package%20manager%20script">
+ note</a>.</p>
+ 
+<p style="margin-bottom: 0cm;">The&nbsp;OpenOffice.org     641 B/C installation
+on a unix system differs slightly from an&nbsp;StarOffice<small><sup>TM</sup></small>
+         6.0 installation, so if you are looking for instructions for the
+last     one, you should look <a href="how_to_repackage_so.html">here</a>
+. The most obvious difference between OpenOffice and StarOffice<small><sup>
+TM</sup></small>         6.0&nbsp;is the missing menu integration for KDE
+and GNOME. Before copying the this integration to the OpenOffice.org installation
+sets it should be made clear if the OpenOffice.org community likes the document
+centric approach of the panel menus and if it wants to create an own set
+of icons or to stick with that ones provided for StarOffice<small><sup>TM</sup></small>
+.&nbsp;</p>
+<p style="margin-bottom: 0cm;"><font size="4"><br>
+        A. Install OpenOffice on your machine</font></p>
+<ol>
+  <li>
+    <p style="margin-bottom: 0cm;">Log into your machine as <b>root</b>.&nbsp;</p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;">Start the setup application with the "-net"
+    option: <b>&lt;path-to-office-installation-set&gt;/setup -net &amp;</b><br>
+    </p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;">On the "Select Installation Type" page,
+   select "<b>Custom Installation</b>".</p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;">On the "Select OpenOffice641 Modules" 
+ page open the node "<b>Optional Components</b>" and&nbsp;<br>
+a) de-select "Java Environment Installation" if you want to detect/select 
+  the java version yourself.<br>
+     </p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;">Choose the directory to install to, e.g.
+      <b>/opt/OpenOffice641</b>, and install.<br>
+    <br>
+    </p>
+  </li>
+</ol>
+<p style="margin-bottom: 0cm;"><font size="4">B. Create the package file
+list(s)</font></p>
+<p style="margin-bottom: 0cm;">Before you start to scan the directory tree
+  you should decide if you want to create one single package containing all
+  files or if you prefer two packages, a binary and a language one. The second
+  way has the advantage of saving a log of disk space if you are going to
+provide  packages for different languages on the same disc.</p>
+<p style="margin-bottom: 0cm;">To split the file list into two, you should
+  include all files in <b>&lt;path-to-openoffice-root&gt;/program/resource</b>
+     and the <b>&lt;path-to-openoffice-root&gt;/share</b> tree into &nbsp;the
+  language package list and the rest into the binary package list.</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><font size="4">C. GNOME 1.4 integration</font></p>
+<p style="margin-bottom: 0cm;">StarOffice<small><sup>TM</sup></small><font size="3">
+ 6.0 comes with a user space GNOME 1.4 integration that consists of  a set
+of zip files containing the menu integration files and a small binary   that
+does the user space filetype registration. As you may want the GNOME   integration
+to be system wide, you can only take the corresponding files  as templates,
+but have to provide your own set of files.</font></p>
+<p style="margin-bottom: 0cm;"><font size="3">To find the files provided
+by </font>StarOffice<small><sup>TM</sup></small><font size="3"> you will
+have an OpenOffice.org build tree available. You should find the following
+two sets of zip files in the output tree of a successful OpenOffice build:&nbsp;
+ group_pngs.zip, writer_pngs.zip, calc_pngs.zip, draw_pngs.zip, impress_pngs.zip
+ (containing the icons) and gnomeappgroup.zip, gnomeappwriter.zip, gnomeappcalc.zip,
+ gnomeappdraw.zip, gnomeappimpress.zip (cntaining the .desktop templates).&nbsp;</font></p>
+<p style="margin-bottom: 0cm;"><font size="3">If you want to register </font>
+   the OpenOffice<font size="3"> file types, you  may will find a list of
+them <a href="http://framework.openoffice.org/documentation/mimetypes/mimetypes.html">
+   here</a>.&nbsp; Note that there is currently a problem with Nautilus 1.x 
+ with the XML file formats: Nautilus recognizes them as zip files (which is
+ correct), but does not offer a way to override this detection result for
+specific extensions.</font></p>
+<p style="margin-bottom: 0cm;"><font size="4"><br>
+   D. GNOME 2 integration</font></p>
+<p style="margin-bottom: 0cm;"><font size="3">In the upcoming 2.0 release 
+ </font>GNOME will probably switch to UTF-8 encoding for the NLS strings in
+ the .desktop file, so you may use the KDE integration files as templates.<br>
+</p>
+<p style="margin-bottom: 0cm;"><font size="4"><br>
+   E. KDE integration<br>
+</font><font size="3"><br>
+</font><font size="3">StarOffice<small><sup>TM</sup></small></font><font size="3">
+ 6.0 comes with a user space KDE 2.x integration that consists  of two sets
+of zip files containing the menu integration files and the mime  registration
+files. These files contain a bunch of placeholders you will have to replace
+before using the files. You may also think about changing the menu structure
+from being document based to be apllication based for the document based
+structure has the following drawbacks: One sees a document  (e.g. Textdocument)
+in the "Open with" list of the context menu of a</font>   StarOffice<small><sup>
+TM</sup></small> file and the application launch feedback also names the
+document instead of the application.</p>
+<p style="margin-bottom: 0cm;"><font size="3">To find the files provided
+by </font>StarOffice<small><sup>TM</sup></small><font size="3"> </font><font size="3">
+you will have an OpenOffice.org build tree available. You should find the
+following two sets of zip files in the output tree of a successful OpenOffice
+build:</font><font size="3"> kdeappgroup.zip, kdeappwrite.zip, kdeappcalc.zip,
+kdeappdraw.zip,  kdeappimpress.zip (containing the menu .desktop templates)
+and kdeappgroup.zip, kdeappwriter.zip,  kdeappcalc.zip, kdeappdraw.zip, kdeappimpress.zip
+(containing the icons and the file  type registration files).&nbsp;</font></p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><font size="4">F. Java setup</font></p>
+<p style="margin-bottom: 0cm;">coming soon ..<br>
+</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm; text-decoration: none;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><br>
+ </p>
+ 
+<p style="margin-bottom: 0cm; text-decoration: none;"><br>
+  </p>
+   
+</body>
+</html>

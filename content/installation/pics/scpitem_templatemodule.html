@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 8  (Solaris Sparc)">
+	<META NAME="AUTHOR" CONTENT="Ingo Schmidt">
+	<META NAME="CREATED" CONTENT="20020419;13085671">
+	<META NAME="CHANGED" CONTENT="20070730;16465100">
+</head>
+<body LANG="de-DE" DIR="LTR">
+<P ALIGN=LEFT STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><FONT SIZE=6>
+Defining Modules With Language Specific Files</FONT></FONT></P>
+<P><BR>
+</P>
+<P><FONT FACE="Verdana, sans-serif">
+Before understanding this section, you have to know the scp item 
+<B>Module</B>. Documentation about this item can be found 
+<A HREF="scpitem_module.html">here</A>.</P>
+<P><FONT FACE="Verdana, sans-serif">
+The strict separation of language dependent and language independent files
+that is required for the new package structure of an OpenOffice.org 3.0 and the
+huge number of supported languages, made is necessary to introduce a new process
+of module creation in scp tooling.
+</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">
+This new process supports automatic module generation for all languages supported
+by OpenOffice.org. Therefore it was necessary to add to the existing script particle
+files (scp) the new script template files (sct). sct files contain abstract module
+definitions, without assignments of scp items like "Files", "Dirs", ... and with
+placeholders for language settings. This sct files are evaluated during 
+scp2 build by Perl programs, that resolve the language settings in the 
+abstract module definitions. In this process the sct file is expanded to an inc file,
+which is again included into a scp file. The result is a scp file that can be very big.
+Because of the huge number of languages it can contain thousand of module definitions.
+</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">
+The assignments of scp items like "Files", "Dirs", ... should not be done inside 
+the sct file, but as you are used to, inside a scp file. Therefore template modules
+were introduced, that are not a visible module during product installation, but are 
+only used for assignments. This modules must have the flag TEMPLATEMODULE and are 
+defined in scp files. Especially language specific files should be assigned to modules
+with flag TEMPLATEMODULE in the future. The abstract modules that are defined in the
+sct files can reference this modules using the new key "Assigns=...". If the module
+shall also be used for package creation (RPM, Solaris Package, ...), it is additionally
+necessary to define a file, containing the package information for this module. This
+happens with the key "PackageInfo=..." in the Module definition.
+</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">
+In the following there is a step-by-step explanation of this new process for 
+language dependent modules with language specific files:
+</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">
+Step 1:<BR> 
+All sct files are currently located in the folder scp2/source/templates,
+where they are found by the Perl program, that resolves the languages. 
+The Perl program expands the abstract modules for each available
+language to an inc file. The inc files are created at scp2/&#60;platform&#62;/inc/&#60;incfilename&#62;.
+From there they can be included into scp files.
+<BR>
+Example for an abstract module definition:
+<BR><BR>
+Module gid_Module_Langpack_Calc_&#60;LANGUAGE_&#62;<BR>
+    ParentID = gid_Module_Prg_Calc_Bin;<BR>
+    Sortkey = "450";<BR>
+    Language = "&#60;LANGUAGE&#62;";<BR>
+    Assigns = gid_Module_Langpack_Calc_Template;<BR>
+    Name = "gid_Module_Langpack_Calc_&#60;LANGUAGE_&#62;";<BR>
+    Description = "gid_Module_Langpack_Calc_&#60;LANGUAGE_&#62;";<BR>
+    PackageInfo = "packinfo_office_lang.txt";<BR>
+    Styles =(HIDDEN_ROOT, LANGUAGEMODULE);<BR>
+End<BR>
+<BR>
+The occurences of "&#60;LANGUAGE&#62;" and "&#60;LANGUAGE_&#62;" are resolved for all supported languages 
+(taking care of underlines, like "en-US" or "en_US"). In this example the file can
+be named "alllangmodules_calc.inc".
+</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">
+Step 2:<BR>
+The created inc file is included into a real scp file,
+for example in scp2/source/calc/module_calc.scp: <BR><BR>
+#include "alllangmodules_calc.inc"
+</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">
+Step 3:<BR>
+The assignments of files and directories to modules with
+language dependent files must be done at modules that have the
+flag TEMPLATEMODULE. This modules can be defined in scp files.
+From this modules no packages can be created. They are only
+used as "assignment-container" for other modules, that reference
+this module.<BR>
+Example for a template module:<BR><BR>
+Module gid_Module_Langpack_Calc_Template<BR>
+    ParentID = gid_Module_Prg_Calc_Bin;<BR>
+    Name = "gid_Module_Langpack_Calc_Template";<BR>
+    Description = "gid_Module_Langpack_Calc_Template";<BR>
+    Styles = (TEMPLATEMODULE);<BR>
+    Files = (gid_File_Help_Scalc_Zip,<BR>
+             gid_File_Res_Analysis,<BR>
+             gid_File_Res_Bf_Sc,<BR>
+             gid_File_Res_Date,<BR>
+             gid_File_Res_Sc);<BR>
+End<BR>
+</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">
+Step 4:<BR>
+Modules can reference another module, that has style
+TEMPLATEMODULE. This happens with the key "Assigns" in the
+module definition (see example in step 1).<BR>
+Example:<BR>
+Assigns = gid_Module_Langpack_Calc_Template;<BR>
+<BR>
+The standard case is the following:<BR> 
+The module definition in the sct file is language dependent.
+But all languages use the same assignments. Therefore this module
+definition uses the "Assigns"-key. The referenced module must
+have the style TEMPLATEMODULE. The files and directories, that 
+are assigned to the module with flag TEMPLATEMODULE are
+assigned to the referencing module during packaging process.
+</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">
+Step 5:<BR>
+Package creation cannot be done for abstract template modules,
+but only for specific modules. The modules defined in sct files
+normally are used for package creation. Therefore this modules
+have to know file containing the package info. This file has to be found
+in the solver. It can be referenced with the key "PackageInfo"
+(see example in step 1).<BR>
+PackageInfo = “packinfo_office_lang.txt”;
+</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">
+Step 6:<BR>
+Modules with language dependent files must have the flag "LANGUAGEMODULE"
+(see example in step 1). This is necessary, because not all language
+modules are required during packaging of one specific installation set.
+</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">
+Because of this changes in the SRC680 m242 it is strictly recommended,
+that all language specific files are assigned to modules with flag TEMPLATEMODULE.
+If there are wrong assignments, so that language specific files and not language
+specific files are assigned to one module, the packaging process can find this
+errors and stops the creation of the installation set.
+</FONT></P>
+<BR><BR>
+</body>
+</HTML>

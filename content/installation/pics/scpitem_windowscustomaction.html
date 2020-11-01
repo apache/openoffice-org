@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 8  (Solaris Sparc)">
+	<META NAME="AUTHOR" CONTENT="Ingo Schmidt">
+	<META NAME="CREATED" CONTENT="20020419;13085671">
+	<META NAME="CHANGED" CONTENT="20070730;16591800">
+</head>
+<body LANG="de-DE" DIR="LTR">
+<P ALIGN=LEFT STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><FONT SIZE=6>Definition
+of a WindowsCustomAction</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Verdana, sans-serif">The keyword for a definition of a
+custom action for the Windows Installer service is
+</FONT><FONT FACE="Verdana, sans-serif"><B>WindowsCustomAction</B></FONT><FONT FACE="Verdana, sans-serif">.
+A global ID of a WindowsCustomAction should begin with
+</FONT><FONT FACE="Verdana, sans-serif"><B>gid_Customaction</B></FONT><FONT FACE="Verdana, sans-serif">.
+WindowsCustomActions are not assigned to modules. They know their
+file, that contains the code of the Custom Action.  A typical
+definition of a WindowsCustomAction in the scp projects looks like:</FONT></P>
+<P><FONT FACE="Verdana, sans-serif"><SPAN STYLE="font-weight: medium">WindowsCustomAction
+gid_Customaction_Shellextensionsdll3<BR>Name =
+&quot;Shellextensionsdll3&quot;;<BR>Typ = &quot;65&quot;;<BR>Source =
+&quot;shlxtmsi.dll&quot;;<BR>Target =
+&quot;InstallStartmenuFolderIcon&quot;;<BR>Inbinarytable =
+1;<BR>Assignment1 = (&quot;InstallExecuteSequence&quot;, &quot;Not
+REMOVE=\&quot;ALL\&quot; And Not PATCH&quot;, &quot;end&quot;);<BR>End</SPAN></FONT></P>
+<P><FONT FACE="Verdana, sans-serif"><SPAN STYLE="font-weight: medium">The
+WindowsCustomAction has a name, that is the unique identifier in the
+table &bdquo;CustomAction&ldquo; in the Windows Installer database.
+The type is included into the &bdquo;Type&ldquo; column of the table
+&bdquo;CustomAction&ldquo;. The same with the source, which is in
+this case a library, that is included into the table &bdquo;Binary&ldquo;
+of the msi database. Therefore the key &bdquo;Inbinarytable&ldquo; is
+set to &bdquo;1&ldquo;. The target is the name of the procedure, that
+is started by the Windows Installer service. And finally the
+Assignment1 (many more assignments are possible with increasing
+numbers) defines the table, in which the CustomAction is included
+into the action order. Possible values are InstallExecuteSequence,
+InstallAdminSequence, InstallUISequence, ... . In this case als a
+condition for the execution can be defined and the position in the
+execute sequence.</SPAN></FONT></P>
+<P><BR><BR>
+</P>
+</body>
+</HTML>

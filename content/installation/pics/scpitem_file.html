@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 7  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Ingo Schmidt">
+	<META NAME="CREATED" CONTENT="20020419;13085671">
+	<META NAME="CHANGED" CONTENT="20040205;14595847">
+</head>
+<body LANG="de-DE" DIR="LTR">
+<P ALIGN=LEFT STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><FONT SIZE=6>Definition
+of a File </FONT></FONT>
+</P>
+<P><BR><BR>
+</P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">The
+keyword for a file definition is <B>File</B>. A global ID of a file
+should begin with <B>gid_File_ </B>. Files have to be assigned to
+modules in the definition block of the module. If a file is not
+assigned to any module, it is automatically assigned to the root
+module by the scplinker. A typical definition of a file in the scp
+projects looks like:</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">File
+gid_File_Lib_Dbp<BR>BIN_FILE_BODY;<BR>Name = LIBNAME(dbp);<BR>Dir =
+gid_Dir_Program;<BR>Styles = (PACKED, UNO_COMPONENT);<BR>RegistryID =
+gid_Starregistry_Applicat_Rdb;<BR>End</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">This
+definition describes the library dbp. The macro LIBNAME is defined in
+the included file macros.inc. You find there some very important
+macro definitions:</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">#ifdef
+UNX<BR>#define LIBNAME(name)
+STRING(CONCAT5(lib,name,OFFICEUPD,DLLSUFFIX,.so))<BR>#define
+LIBSHORTNAME(name) STRING(CONCAT4(lib,name,DLLSUFFIX,.so))<BR>#define
+LIBVERYSHORTNAME(name) STRING(CONCAT3(lib,name,.so))<BR>#define
+FILTER_LIBNAME(name) LIBNAME(name)<BR>#define EXENAME(name)
+STRING(name)<BR>#define PROFILENAME(name)
+STRING(CONCAT2(name,rc))<BR>#else<BR>#define LIBNAME(name)
+STRING(CONCAT4(name,OFFICEUPD,DLLSUFFIX,.dll))<BR>#define
+LIBSHORTNAME(name) STRING(CONCAT3(name,DLLSUFFIX,.dll))<BR>#define
+LIBVERYSHORTNAME(name) STRING(CONCAT2(name,.dll))<BR>#define
+FILTER_LIBNAME(name) LIBNAME(name)<BR>#define EXENAME(name)
+STRING(CONCAT2(name,.exe))<BR>#define PROFILENAME(name)
+STRING(CONCAT2(name,.ini))<BR>#endif</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">You
+can see, that for many different kinds of names exist different
+macros. <B>LIBNAME(dbp)</B> will be expanded for Solaris-Sparc in a
+src641 to <B>libdbp641ss.so</B>, but for Windows to <B>dbp641mi.dll</B>.
+If there is a language dependent name, like for resource files, there
+are other macro definitions: </FONT>
+</P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">File
+gid_File_Res_Dba<BR>TXT_FILE_BODY;<BR>RESFILE_ALL_LANG(dba);<BR>Dir =
+gid_Dir_Resource;<BR>Styles = (PACKED);</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">End</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">RESFILE_ALL_LANG
+is also defined in macros.inc. You find there:</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">#define
+RESFILE_ALL_LANG(name) \<BR>Name (01) = RESFILENAME(name,01); \<BR>Name
+(03) = RESFILENAME(name,03); \<BR>Name (07) = RESFILENAME(name,07);
+\<BR>Name (30) = RESFILENAME(name,30); \<BR>Name (31) =
+RESFILENAME(name,31); \<BR>Name (33) = RESFILENAME(name,33); \<BR>Name
+(34) = RESFILENAME(name,34); \<BR>Name (35) = RESFILENAME(name,35);
+\<BR>Name (37) = RESFILENAME(name,37); \<BR>Name (39) =
+RESFILENAME(name,39); \<BR>Name (45) = RESFILENAME(name,45); \<BR>Name
+(46) = RESFILENAME(name,46); \<BR>Name (48) = RESFILENAME(name,48);
+\<BR>Name (49) = RESFILENAME(name,49); \<BR>Name (81) =
+RESFILENAME(name,81); \<BR>Name (82) = RESFILENAME(name,82); \<BR>Name
+(86) = RESFILENAME(name,86); \<BR>Name (88) = RESFILENAME(name,88);
+\<BR>Name (90) = RESFILENAME(name,90); \<BR>Name (96) =
+RESFILENAME(name,96); \<BR>Name (99) = RESFILENAME(name,99)</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">and
+also RESFILENAME is a macro defined in macros.inc:</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">#define
+RESFILENAME(name,lang) STRING(CONCAT4(name,OFFICEUPD,lang,.res))</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">At
+the moment there are many macros for different file names, that is
+would be too much, to desribe here. Take a look into the macros.inc
+file, and you will find the macro you need. </FONT>
+</P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">Back
+to the definition of File gid_File_Lib_Dbp. Another entry in the
+definition block defines the directory. In this case the library
+shall be intalled into gid_Dir_Program. As you can see, this is also
+a global ID, which has to be defined in the script before the
+definition of this file. You see, everything in the setup script is
+defined in these definition blocks. </FONT>
+</P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">The
+next two lines in the definition of gid_File_Lib_Dbp are important
+for registering the services inside this library to the internal
+registry:</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">Styles
+= (PACKED, UNO_COMPONENT);<BR>RegistryID =
+gid_Starregistry_Applicat_Rdb;<BR></FONT><BR><BR>
+</P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">The
+second line describes, in which internal registry file, the service
+shall be registered. This is the global ID
+gid_Starregistry_Applicat_Rdb, which again has to be defined in this
+setup script, before the definition of this file. That there is a
+service to register, shows the style UNO_COMPONENT. All libraries,
+that want to register a service need this flag. </FONT>
+</P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">At
+the moment there are many flags for files and very often new flags
+are created or some that are no longer needed are deleted. Here a
+short description of the available flags:</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><B>PACKED</B>:
+This is the mostly used flag. It says, that the file is zipped into
+the file f_xyz in the installation set.</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><B>ARCHIVE</B>:
+This is important for files, that are already zipped in the output
+tree. In the packing process, these files must not be zipped once
+more, therefore they have to get the flag ARCHIVE.</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><B>UNO_COMPONENT</B>:
+This flag is important for all libraries, that want to register a
+service. If this flag is set, you also have to define the RegistryID,
+as shown in the example above.</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><B>FONT</B>:
+This flag marks all font files.</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><B>DONT_DELETE</B>:
+This flag shows, that the file is not deleted, if the Office
+installation is removed. This is for example important for all fonts.
+</FONT>
+</P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><B>FONT_WARN_IF_EXISTS</B>:
+Also a typical font flag. If there is already a font defined with the
+same name, a dialog box must appear during setup, to ask the user,
+whether he wants to overwrite the existing font. </FONT>
+</P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><B>OVERWRITE</B>:
+Overwrite the file, if it already exists, without warning. For
+example the Shellnew files have this flag.</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><B>DONT_OVERWRITE</B>:
+Do not overwrite the file, if it already exists, for example in one
+of the Windows system directories.</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><B>DELETE_ONLY</B>:
+This is important for a deinstallation of the Office. This file
+definition block describes a file, that does not exist during setup,
+but is created by the Office. This flag shows, that this new created
+file, shall also be deleted during the deinstallation. </FONT>
+</P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><B>CHECK_TIMESTAMP</B>:
+This flag is also only important for the deinstallation and the
+DELETE_ONLY flag. If this flag is set, the installation date is also
+controlled before deleting the file.</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><B>PATCH</B>:
+Files containing this flag are included into a patch product. For more information please look at
+<A HREF="understanding_the_patch_flag.html">Understanding the PATCH flag</A>.
+</P>
+<P STYLE="font-weight: medium"><BR><BR>
+</P>
+</body>
+</HTML>

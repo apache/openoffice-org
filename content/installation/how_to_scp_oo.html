@@ -1,0 +1,576 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="AUTHOR" CONTENT="Oliver Bolte">
+	<META NAME="CREATED" CONTENT="20001218;17461754">
+	<META NAME="CHANGEDBY" CONTENT="Ingo Schmidt">
+	<META NAME="CHANGED" CONTENT="20010205;15392152">
+	<STYLE>
+	<!--
+		@page { margin: 2cm }
+	-->
+	</STYLE>
+</head>
+<body>
+<P ALIGN=CENTER STYLE="margin-bottom: 0cm"><B><FONT SIZE=5>The
+scp-project in OpenOffice.org<BR></FONT></B><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=4>Introduction:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><SPAN STYLE="font-weight: medium"><FONT SIZE=3>The
+scp project contains the script-particles (scp) for OpenOffice.org.
+This project</FONT></SPAN> produces *.inf (Win) and *.ins (Unx) files
+which are used to direct the setup and the production of installation
+sets with lzip.</P>
+<P STYLE="margin-bottom: 0cm">The scp project directs the whole
+installation process for the OpenOffice.org. Following components are
+supported: Directorys, files, configuration items (for *.xml files),
+registry items (for windows registry), profile items (entries for the
+ini-files), folders, default installation path, help texts for setup,
+cinema text, modules and basic scripts.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>A. How to put a new file
+in the installation set:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<OL>
+	<LI><P STYLE="margin-bottom: 0cm">Add a Gid item (e.g. like
+	GID_FILE_LIB_SFX ) <BR>into the scp/inc/gid.inc file.</P>
+	<P STYLE="margin-bottom: 0cm"></P>
+	<LI><P STYLE="margin-bottom: 0cm">For which project and which
+	setup-module is the new file relevant?</P>
+	<P STYLE="margin-bottom: 0cm">Setup: scp/source/global/setupzip.scp
+	this is for files needed by the setup.</P>
+	<P STYLE="margin-bottom: 0cm">Office: scp/source/office/files.scp
+	</P>
+	<P STYLE="margin-bottom: 0cm">and so on for calc, chart , ...<BR><BR>
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">a ) Standard filenames like
+	sfx615mi.dll or libsfx615ss.so can be integrated into<BR>the
+	files.scp (for OfficeFAT) with the macros</P>
+	<P STYLE="margin-bottom: 0cm"><BR>STD_LIB_FILE( GID_FILE_LIB_SFX ,
+	sfx )<BR><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm">or, if the dll needs to be registered
+	in the applicat.rdb:<BR><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm">STD_UNO_LIB_FILE( GID_FILE_LIB_DLL ,
+	dll)</P>
+	<P STYLE="margin-bottom: 0cm"><BR>Resource files are added
+	with<BR>STD_RES_FILE( GID_FILE_RES_SFX , sfx )</P>
+	<P STYLE="margin-bottom: 0cm"></P>
+	<P STYLE="margin-bottom: 0cm">This macro STD_RES_FILE expands the
+	file name to sfx61501.res for english or sfx61549.res for german.</P>
+	<P STYLE="margin-bottom: 0cm"><BR>b) Filenames whithout SUPD (this
+	is the version number, for example the 615) can be realised by
+	using:</P>
+  <i>
+  <BR>File GID_FILE_LIB_EXAMPLE
+  <P STYLE="margin-bottom: 0cm">        BIN_FILE_BODY;</P>
+  <P STYLE="margin-bottom: 0cm">        Styles          = (PACKED);</P>
+  <P STYLE="margin-bottom: 0cm">        Dir             = GID_DIR_PROGRAM;</P>
+  <P STYLE="margin-bottom: 0cm">        #ifdef UNX</P>
+  <P STYLE="margin-bottom: 0cm">        Name            =
+  &quot;libexample.so&quot;;</P>
+  <P STYLE="margin-bottom: 0cm">        #else</P>
+  <P STYLE="margin-bottom: 0cm">        Name            =
+  &quot;example.dll&quot;;</P>
+  <P STYLE="margin-bottom: 0cm">        #endif</P>
+  <P STYLE="margin-bottom: 0cm">    End<BR><BR> </i>    or, if the dll
+  needs to be registered in the applicat.rdb:<BR><BR><i>
+  </P>
+  <P STYLE="margin-bottom: 0cm">File GID_FILE_LIB_EXAMPLE_UNO</P>
+  <P STYLE="margin-bottom: 0cm">        BIN_FILE_BODY;</P>
+  <P STYLE="margin-bottom: 0cm">        Styles          =
+  (PACKED,UNO_COMPONENT);</P>
+  <P STYLE="margin-bottom: 0cm">        RegistryID      =
+  GID_STARREGISTRY_APPLICAT_RDB;</P>
+  <P STYLE="margin-bottom: 0cm">        Dir             =
+  GID_DIR_PROGRAM;</P>
+  <P STYLE="margin-bottom: 0cm">        #ifdef UNX</P>
+  <P STYLE="margin-bottom: 0cm">        Name            =
+  &quot;libexample_uno.so&quot;;</P>
+  <P STYLE="margin-bottom: 0cm">        #else</P>
+  <P STYLE="margin-bottom: 0cm">        Name            =
+  &quot;example_uno.dll&quot;;</P>
+  <P STYLE="margin-bottom: 0cm">        #endif</P>
+  <P STYLE="margin-bottom: 0cm">    End <BR><BR><BR>
+  </P>
+  </i>
+  <P STYLE="margin-bottom: 0cm">  c) Archive files as they come from the
+  extras project or any other zip-compressed file<BR>   can be included
+  by using following construct:<BR><BR>
+  <i>   File GID_FILE_EXTRA_EXAMPLE</P>
+  <P STYLE="margin-bottom: 0cm">             Dir             =
+  GID_DIR_EXAMPLE;</P>
+  <P STYLE="margin-bottom: 0cm">         ARCHIVE_TXT_FILE_BODY;</P>
+  <P STYLE="margin-bottom: 0cm">         Name            = &quot;example.zip&quot;;</P>
+  <P STYLE="margin-bottom: 0cm">    End</P>
+  <P STYLE="margin-bottom: 0cm"><BR>
+  </P></i>
+  <P STYLE="margin-bottom: 0cm">  d) Archive files with countrycode
+  (e.g. 01, 03, 07, ..., 96)</P>
+  <P STYLE="margin-bottom: 0cm">    in the filename (extras project) can
+  be included by using following construct:<BR><BR><i>   File
+  GID_FILE_EXTRA_EXAMPLE</P>
+  <P STYLE="margin-bottom: 0cm">             Dir             =
+  GID_DIR_EXAMPLE;</P>
+  <P STYLE="margin-bottom: 0cm">         ARCHIVE_TXT_FILE_BODY;</P>
+  <P STYLE="margin-bottom: 0cm">         EXTRA_ALL_LANG(example);</P>
+  <P STYLE="margin-bottom: 0cm">    End</P></i>
+  <P STYLE="margin-bottom: 0cm">    <BR>    Please notice, that the macro
+  EXTRA_ALL_LANG(example) expands to</P>
+  <P STYLE="margin-bottom: 0cm"><BR>
+  </P>
+  <P STYLE="margin-bottom: 0cm">    Name (01)  = &quot;example01.zip&quot;;</P>
+  <P STYLE="margin-bottom: 0cm">    Name (03)  = &quot;example03.zip&quot;;</P>
+  <P STYLE="margin-bottom: 0cm">    Name (30)  = &quot;example30.zip&quot;;</P>
+  <P STYLE="margin-bottom: 0cm">          o</P>
+  <P STYLE="margin-bottom: 0cm">          o</P>
+  <P STYLE="margin-bottom: 0cm">    Name (96)  = &quot;example96.zip&quot;;</P>
+  <P STYLE="margin-bottom: 0cm"></P>
+  <LI><P STYLE="margin-bottom: 0cm">The new file has to be linked to a
+  setup-module. Default is the root-module, meaning that this file
+  will be installed always and cannot be deselected during setup. If
+  the file belongs for example to the Calc-project, add its Gid to the
+  files section of the module in the file
+  scp/source/calc/module_calc.scp.</P>
+  <P STYLE="margin-bottom: 0cm"></P>
+  <LI><P STYLE="margin-bottom: 0cm">Conclusion:</P>
+  <P STYLE="margin-bottom: 0cm">If a new standard file is added to the
+  OpenOffice.org, two scp-files have to be updated:</P>
+  <P STYLE="margin-bottom: 0cm">scp/inc/gid.inc   (for the addition of
+  the new GID)</P>
+  <P STYLE="margin-bottom: 0cm">scp/source/files.scp  (for the
+  description of the file)</P>
+  <P STYLE="margin-bottom: 0cm"></P>
+</OL>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>B. Configurationitems</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Configurationitems are used to add or
+change configuration entries in xml files.</P>
+<P STYLE="margin-bottom: 0cm">There are several important subentries
+like Path, Key, Value, Styles and ModuleID.</P>
+<P STYLE="margin-bottom: 0cm">A typical item looks like following
+example:</P>
+<P STYLE="margin-bottom: 0cm">
+</P><i>
+<P STYLE="margin-bottom: 0cm">ConfigurationItem
+GID_CONFIGURATIONITEM_EXAMPLE</P>
+<P STYLE="margin-bottom: 0cm">	ModuleID = GID_MODULE_SO_ROOT;</P>
+<P STYLE="margin-bottom: 0cm">	Path =
+&quot;org.openoffice.Office.ExampleFile/Filters/draw_SGV_StarDraw_20&quot;;</P>
+<P STYLE="margin-bottom: 0cm">	Key = &quot;UIName&quot;;</P>
+<P STYLE="margin-bottom: 0cm">	Value = &quot;SGV - StarDraw 2.0&quot;;</P>
+<P STYLE="margin-bottom: 0cm">	Styles = (CFG_STRING, CREATE);</P>
+<P STYLE="margin-bottom: 0cm">End</P></i>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Path:</P>
+<P STYLE="margin-bottom: 0cm">The first part of this entry declares
+the filename without extension in this example</P>
+<P STYLE="margin-bottom: 0cm">org.openoffice.Office.ExampleFile.xml
+is the target file. The following part of the entry describes the
+path in the xml file.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Key and Value:</P>
+<P STYLE="margin-bottom: 0cm">Contain the entries in the xml file.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Styles:</P>
+<P STYLE="margin-bottom: 0cm">Defines the type of value:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">CFG_STRING:	Value = &quot;A string&quot;</P>
+<P STYLE="margin-bottom: 0cm">CFG_STRINGLIST:  Value = a list of
+strings</P>
+<P STYLE="margin-bottom: 0cm">CFG_BOOLEAN: 	Value = &quot;TRUE&quot;
+or &quot;FALSE&quot;</P>
+<P STYLE="margin-bottom: 0cm">CFG_NUMERIC:	Value = 1031</P>
+<P STYLE="margin-bottom: 0cm">CFG_BINARY:	Value is binary.</P>
+<P STYLE="margin-bottom: 0cm">CREATE:		Creates  a new entry in the
+xml file. If this entry exsists in the xml file no 			action takes
+place.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>C. Profile and
+ProfileItems</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">This part of setup is localized in the
+profile.scp and profile_xxx.scp files (where &#132;xxx&#147; means
+for example &#132;calc&#147; for different setup-modules).</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Profile declares the name and directory
+of an ini file. The gid name is needed in the ProfileItem declaration
+as ProfileID parameter. The ProfileItems are the entries in the form
+&#132;Key = Value&#147; of the ini-files.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P><i>
+<P STYLE="margin-bottom: 0cm">Profile GID_PROFILE__EXAMPLE_INI</P>
+<P STYLE="margin-bottom: 0cm">    ModuleID = GID_MODULE_EXAMPLE;</P>
+<P STYLE="margin-bottom: 0cm">    Name = &quot;example.ini&quot;;</P>
+<P STYLE="margin-bottom: 0cm">    Dir = GID_DIR_EXAMPLE;</P>
+<P STYLE="margin-bottom: 0cm">    Styles		 = (NETWORK);</P>
+<P STYLE="margin-bottom: 0cm">End</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P></i>
+<P STYLE="margin-bottom: 0cm">Styles:</P>
+<P STYLE="margin-bottom: 0cm">NETWORK :  <SPAN STYLE="font-weight: medium">Network
+installation</SPAN></P>
+<P STYLE="margin-bottom: 0cm">WORKSTATION : Workstation installation</P>
+<P STYLE="margin-bottom: 0cm">INSTALL_INFO :  Only necessary for the
+install.ini</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P><i>
+<P STYLE="margin-bottom: 0cm"> ProfileItem GID_PROFILEITEM_EXAMPLE_INI_TEST</P>
+<P STYLE="margin-bottom: 0cm">    ProfileID = GID_PROFILE_EXAMPLE_INI;</P>
+<P STYLE="margin-bottom: 0cm">    ModuleID = GID_MODULE_EXAMPLE;</P>
+<P STYLE="margin-bottom: 0cm">    Order = 2;</P>
+<P STYLE="margin-bottom: 0cm">    Section  = &quot;Example&quot;;</P>
+<P STYLE="margin-bottom: 0cm">    Key = &quot;test&quot;;</P>
+<P STYLE="margin-bottom: 0cm">    Value = &quot;testValue&quot;;</P>
+<P STYLE="margin-bottom: 0cm">End</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P></i>
+<P STYLE="margin-bottom: 0cm">ProfileID : GID of the ini file defined
+by Profile</P>
+<P STYLE="margin-bottom: 0cm">ModuleID :   Setup-module GID</P>
+<P STYLE="margin-bottom: 0cm">Section :  Declaration of the sectioname</P>
+<P STYLE="margin-bottom: 0cm">Order :    Numerical order of the entry</P>
+<P STYLE="margin-bottom: 0cm">Key and Value : Contain the content of
+the ini-file entry</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Language dependent Value entries are in
+the correspondent lng files.</P>
+<P STYLE="margin-bottom: 0cm">Several macros are used to handle these
+entries (xx = 01,03,...,96):</P>
+<P STYLE="margin-bottom: 0cm">ALL_LANG_STR_SECTION(str) expands to
+Section(xx) = &quot;str-xx&quot;</P>
+<P STYLE="margin-bottom: 0cm">ALL_LANG_STR_KEY(str) expands to Key
+(xx) = &quot;str&quot;</P>
+<P STYLE="margin-bottom: 0cm">ALL_LANG_STR_VALUE_LNG(ID) expands to</P>
+<P STYLE="margin-bottom: 0cm">Value (01) = &quot;Value text 01&quot;;</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>	&deg;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>	&deg;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>Value (96) = &quot;...&quot;;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>when the content of the
+lng file is</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">[STR_VALUE_ID]</P>
+<P STYLE="margin-bottom: 0cm">01 = &quot;Value text 01&quot;</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>	&deg;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>	&deg;</FONT></P>
+<P STYLE="margin-bottom: 0cm">96 = &quot;...&quot;</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">You can use the macros as follows:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P><i>
+<P STYLE="margin-bottom: 0cm">ProfileItem GID_PROFILEITEM_EXAMPLE_INI_TEST</P>
+<P STYLE="margin-bottom: 0cm">	ProfileID = GID_PROFILE_INSTALL_INI;</P>
+<P STYLE="margin-bottom: 0cm">	ModuleID = GID_MODULE_PRG_IMPRESS_BIN;</P>
+<P STYLE="margin-bottom: 0cm">	Order = 2;</P>
+<P STYLE="margin-bottom: 0cm">	ALL_LANG_STR_SECTION(simpress-Filters);</P>
+<P STYLE="margin-bottom: 0cm">	ALL_LANG_STR_KEY(&quot;StarImpress 4.0
+Vorlage&quot;);</P>
+<P STYLE="margin-bottom: 0cm">	ALL_LANG_STR_VALUE_LNG(TEMPLATE_STAR_IMPRESS40);</P>
+<P STYLE="margin-bottom: 0cm">End</P></i>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>D. Directories</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>This part of setup is
+localized in the dir.scp and dir_xxx.scp files (where again &#132;xxx&#147;
+means for example &#132;calc&#147; for different setup-modules).</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P><i>
+<P STYLE="margin-bottom: 0cm">Directory GID_DIR_EXAMPLE</P>
+<P STYLE="margin-bottom: 0cm">	ParentID		= PD_PROGDIR;</P>
+<P STYLE="margin-bottom: 0cm">	DosName         = &quot;example&quot;;</P>
+<P STYLE="margin-bottom: 0cm">	Styles          = (WORKSTATION,
+DELETE_ONLY, CHECK_TIMESTAMP,CREATE);</P>
+<P STYLE="margin-bottom: 0cm">End</P></i>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Styles:</P>
+<P STYLE="margin-bottom: 0cm">WORKSTATION :   Create directory on client
+side (Network installation only)</P>
+<P STYLE="margin-bottom: 0cm">CREATE :     Create empty directory. If
+setup copies a file into a directory the 					directory will be
+created automatically.</P>
+<P STYLE="margin-bottom: 0cm">DELETE_ONLY :   Setup removes this
+directory during deinstallation
+</P>
+<P STYLE="margin-bottom: 0cm">CHECK_TIMESTAMP : Will be only deleted
+when 'delete all' flag during deinstallation<BR>				was set. Usage
+with DELETE_ONLY flag only.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">PD_PROGDIR is predefined as the
+installation path.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>E. Modules</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>This part of setup is
+localized in the module.scp and module_xxx.scp files (and again &#132;xxx&#147;
+means for example &#132;calc&#147; for different setup-modules).</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>Modules are used to
+declare installation components which are composited from files,
+directorys, basic procedures, profileitems, configurationitems. They
+are usally selectable or deselectable in the setup dialog box for
+custom installation.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P><i>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>Module GID_MODULE_EXAMPLE</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>        Name           =
+&quot;Example name&quot;;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>        Description  =
+&quot;Example description&quot;;       </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>        ParentID =
+GID_MODULE_PARENT;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>        Files =
+(GID_FILE_EXAMPLE1,GID_FILE_EXAMPLE2);</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>        Procedures   =
+(GID_PROCEDURE_EXAMPLE);</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>        Minimal = YES;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>        Default   = YES;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>        Styles =
+(HIDDEN_ROOT);</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>End</FONT></P></i>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>Name: Name of the module.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>Description: Description
+of the module.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>Minimal: If set to YES,
+this component is part of a minimal installation.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>Default:   If set to YES,
+this component is part of a standard installation.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>Styles:	HIDDEN_ROOT: Hide
+the module in the dialog box for custom installation.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>	DONT_SELECT_BY_USER: The
+user can't change the selection status of the module.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3><U>Important:</U></FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>To
+switch Profiles, ProfileItems and ConfigurationItems with modules,
+the gid of the module is specified in the
+Profile/ProfileItem/ConfigurationItem ModuleID parameter.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><SPAN STYLE="text-decoration: none"><FONT SIZE=3>To
+switch customs, procedures, files and directories</FONT></SPAN>, the
+gid of these items are specified in</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>the similar Files,Customs,
+Dirs, Procedures parameters of the Module declaration.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>MOD_NAME_DESC(id):</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>The macro  MOD_NAME_DESC
+is very usefull, because of the language dependencies of the name and
+description entries. It is using the corresponding module.lng and
+module_xxx.lng files which contain the language dependent strings.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>Usage:  </FONT>
+</P><i>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>Module GID_MODULE_EXAMPLE</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>
+MOD_NAME_DESC(MODULE_EXAMPLE);</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>        ParentID =
+GID_MODULE_OPTIONAL;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>        Files =
+(GID_FILE_ZIP_ADDIN,GID_FILE_LIB_ROT,GID_FILE_LIB_DFA);</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>        Procedures   =
+(GID_PROCEDURE_EXAMPLE);</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>        Minimal = YES;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>        Default   = YES;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>        Styles =
+(HIDDEN_ROOT);</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>End</FONT></P></i>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>In this example the id
+MODULE_EXAMPLE expands to the appropriate</FONT> sections<BR>in the
+lng file:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>[STR_NAME_ MODULE_EXAMPLE]</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>01 = &quot;Example&quot;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>	&deg;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>	&deg;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>96 = &quot;....&quot;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>[STR_DESC_ MODULE_EXAMPLE]</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>01 = &quot;Example
+description&quot;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>	&deg;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>	&deg;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>96 = &quot;....&quot;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3>The country codes have the
+following meaning:</FONT></P><BR>
+01: English<BR>
+03: Portuguese<BR>
+07: Russian<BR>
+30: Greek<BR>
+31: Dutch<BR>
+33: French<BR>
+34: Spanish<BR>
+39: Italian<BR>
+45: Danish<BR>
+46: Swedish<BR>
+48: Polish<BR>
+49: German<BR>
+55: Spanish (Brasil)<BR>
+81: Japanese<BR>
+82: Korean<BR>
+86: Chinese (simple)<BR>
+88: Chinese (traditional)<BR>
+90: Turkish<BR>
+96: Arabian<BR>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=4>F.
+Procedures</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><SPAN STYLE="text-decoration: none"><FONT SIZE=3>This
+part of setup is localized in the basic.scp and basic_xxx.scp files
+for Windows.</FONT></SPAN></P>
+<P STYLE="margin-bottom: 0cm">For UNIX the appropriate files are
+unxbasic.scp and unxbasic_xxx.scp <FONT SIZE=3> (and of course &#132;xxx&#147;
+means for example &#132;calc&#147; for different setup-modules).</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><BR>
+</P><i>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>Procedure
+gid_Procedure_Example</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>	ProcName	=
+&quot;ExampleProcedure&quot;;</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>
+	Styles       	= (STANDALONE, WORKSTATION, INSTALL, BEFORE_INST);</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>	Code		=
+{Sub  ExampleProcedure</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>					&deg;</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>					&deg;</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>				Basic
+program</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>					&deg;</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>					&deg;</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>				End
+Sub</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>
+    };</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>End</FONT></P></i>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>Styles:	STANDALONE			Execute
+during standalone installation/deinstallation</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>  NETWORK :     Execute
+during network installation/deinstallation</FONT></P>
+<P STYLE="margin-bottom: 0cm"><SPAN STYLE="text-decoration: none"><FONT SIZE=3> WORKSTATION :  Execute
+during workstation installation/deinstallation</FONT></SPAN></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>  INSTALL :    Execute
+during installation</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>  UNINSTALL :   Execute
+during deinstallation</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>  BEFORE_INST :  Execute
+before creating directories/files.</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>  AFTER_INST :  Execute
+at the end of installation.</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>  PRE_SELECT_MODULE :  Execute
+before custom select dialog</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>						Only
+for one procedure allowed.</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>  LANGUAGE_SELECT_MODULE :
+Only important for checking the setup module selection</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=3><U>Important:</U></FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>The
+value of ProcName must be the name of the subroutine given in the
+first line of  the code parameter. In this example:
+'ExampleProcedure'.</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>The
+procedure GID must be added to a module by using the Procedures
+parameter in the module declaration (look above).</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium; text-decoration: none">
+<FONT SIZE=4>G. Setup specifications</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Some setup-variables are available,
+which are replaced by the scp-linker or the setup itself.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Linker-Variables:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">%PRODUCTNAME		w<SPAN STYLE="font-weight: medium">ill
+be substituted by the name of the product, here &#132;OpenOffice.org&#147;</SPAN></P>
+<P STYLE="margin-bottom: 0cm">%PRODUCTVERSION	w<SPAN STYLE="font-weight: medium">ill
+be substituted by the version of the product, here &#132;6.0&#147;</SPAN></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Setup-Variables:</P>
+<P STYLE="margin-bottom: 0cm">&lt;workpath&gt;, <SPAN STYLE="text-decoration: none"><FONT SIZE=3>&lt;progpath&gt;
+</FONT></SPAN> : Office-installation path</P>
+<P STYLE="margin-bottom: 0cm">&lt;productkey&gt; : only for the
+sversion-ini</P>
+<P STYLE="margin-bottom: 0cm"><SPAN STYLE="text-decoration: none"><FONT SIZE=3>Userdata:
+&lt;title&gt;, &lt;email&gt;, &lt;customernr&gt;, &lt;position&gt;</FONT></SPAN>,
+<SPAN STYLE="text-decoration: none"><FONT SIZE=3>&lt;city&gt;, &lt;fax&gt;,
+&lt;telefonwork&gt;</FONT></SPAN>, <SPAN STYLE="text-decoration: none"><FONT SIZE=3>&lt;telefonhome&gt;,
+&lt;street&gt;, &lt;company&gt;, &lt;country&gt;, &lt;state&gt;,
+&lt;zip&gt;, &lt;userfirstname&gt;</FONT></SPAN>, <SPAN STYLE="text-decoration: none"><FONT SIZE=3>&lt;username&gt;,
+&lt;userid&gt;, &lt;sequence_languages&gt;</FONT></SPAN></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>The
+following preprocessor directive is available for OpenOffice.org:
+OSL_PRODUCT</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>Tip:
+If you make changes in one of the scp-files, please use the SUPD, for
+example if you include a new file in the files.scp use:</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>#if
+SUPD &gt; 622</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>...
+Here is the file-definition</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><FONT SIZE=3>#endif</FONT></P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><BR>
+</P>
+</body>
+</HTML>
