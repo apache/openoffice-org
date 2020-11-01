@@ -1,0 +1,1053 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+<title>BiB-TEXing</title>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body lang="">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/bibliographic/">bibliographic</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h1 align="center">BiB-T<sub>E</sub>Xing</h1>
+<h3 align="center">Oren Patashnik</h3>
+<h3 align="center">February 8, 1988</h3>
+<p align="justify"><b>1. Overview</b></p>
+<p align="justify">[This document will be expanded when BibTeX
+version 1.00 comes out. Please report typos, omissions,
+inaccuracies, and especially unclear explanations to me
+(patashnik@SCORE.STANFORD.EDU). Suggestions for improvements are
+wanted and welcome.]</p>
+<p align="justify">This documentation, for BibTeX version 0.99b, is
+meant for general BibTeX users; bibliography-style designers should
+read this document and then read &ldquo;Designing BibTeX
+Styles&rdquo;&nbsp;[3], which is meant for just them.</p>
+<p align="justify">This document has three parts: Section&nbsp;2
+describes the differences between versions 0.98i and 0.99b of
+BibTeX and between the corresponding versions of the standard
+styles; Section&nbsp;3 updates Appendix&nbsp;B.2 of the L
+"1"&gt;<sup>A</sup>T<sub>E</sub>X book&nbsp;[2]; and Section&nbsp;4
+gives some general and specific tips that aren&rsquo;t documented
+elsewhere. It&rsquo;s assumed throughout that you&rsquo;re familiar
+with the relevant sections of the L"1"&gt;<sup>A</sup>
+T<sub>E</sub>X book.</p>
+<p align="justify">This documentation also serves as sample input
+to help BibTeX implementors get it running. For most documents,
+this one included, you produce the reference list by: running L
+"1"&gt;<sup>A</sup>T<sub>E</sub>X on the document (to produce the
+aux file(s)), then running BibTeX (to produce the bbl file), then L
+"1"&gt;<sup>A</sup>T<sub>E</sub>X twice more (first to find the
+information in the <font face="Courier">bbl file and then to get
+the forward references correct). In very rare circumstances you may
+need an extra BibTeX/L "1"&gt;<sup>A</sup>T<sub>E</sub>X
+run.</font></p>
+<p align="justify">BibTeX version 0.99b should be used with L
+"1"&gt;<sup>A</sup>T<sub>E</sub>X version 2.09, for which the
+closed bibliography format is the default; to get the open format,
+use the optional document style openbib (in an open format
+there&rsquo;s a line break between major blocks of a reference-list
+entry; in a closed format the blocks run together).]</p>
+<p align="justify">Note: BibTeX 0.99b is not compatible with the
+old style files; nor is BibTeX 0.98i compatible with the new ones
+(the new BibTeX, however, is compatible with old database
+files).</p>
+<p align="justify">Note for implementors: BibTeX provides
+logical-area names TEXINPUTS: for bibliography-style files and
+<font face="Courier">TEXBIB: for database files it can&rsquo;t
+otherwise find.</font></p>
+<p align="justify"><b>2. Changes</b></p>
+<p align="justify">This section describes the differences between
+BibTeX versions 0.98i and 0.99b, and also between the corresponding
+standard styles. There were a lot of differences; there will be a
+lot fewer between 0.99 and 1.00.</p>
+<p align="justify"><b>2.1 New BibTeX features</b></p>
+<p align="justify">The following list explains BibTeX&rsquo;s new
+features and how to use them.</p>
+<dl>
+<dd>
+<p align="justify">1. With the single command
+&lsquo;\nocite{*}&rsquo; you can now include in the reference list
+every entry in the database files, without having to explicitly
+\cite or \nocite each entry. Giving this command, in essence,
+\nocites all the enties in the database, in database order, at the
+very spot in your document where you give the command.</p></dd>
+<dd>
+<p align="justify">2. You can now have as a field value (or an
+@STRING definition) the concatenation of several strings. For
+example if you&rsquo;ve defined</p></dd>
+<dd>
+<p align="justify">@STRING( WGA = " World Gnus Almanac" )</p></dd>
+<dd>
+<p align="justify">then it&rsquo;s easy to produce nearly-identical
+title fields for different entries:</p></dd>
+<dd>
+<p align="justify">"2"&gt;@BOOK(almanac-66,</p></dd>
+<dd>
+<p align="justify">title = 1966 # WGA,</p></dd>
+<dd>
+<p align="justify">. . .</p></dd>
+<dd>
+<p align="justify">"2"&gt;@BOOK(almanac-67,</p></dd>
+<dd>
+<p align="justify">title = 1967 # WGA,</p></dd>
+<dd>
+<p align="justify">and so on. Or, you could have a field
+like</p></dd>
+<dd>
+<p align="justify">month = "1~" # jan,</p></dd>
+<dd>
+<p align="justify">which would come out something like
+&lsquo;1~January&rsquo; or &lsquo;1~Jan.&rsquo; in the bbl file,
+depending on how your bibliography style defines the
+      <font face="Courier">jan abbreviation. You may concatenate as
+      many strings as you like (except that there&rsquo;s a limit
+      to the overall length of the resulting field); just be sure
+      to put the concatenation character &lsquo;<font face=
+      "Courier">#&rsquo;, surrounded by optional spaces or
+      newlines, between each successive pair of
+      strings.</font></font></p></dd>
+<dd>
+<p align="justify">3. BibTeX has a new cross-referencing feature,
+explained by an example. Suppose you say \cite{no-gnats} in your
+document, and suppose you have these two entries in your database
+file:</p></dd>
+<dd>
+<p align="justify">"2"&gt;@INPROCEEDINGS(no-gnats,</p></dd>
+<dd>
+<p align="justify">crossref = "gg-proceedings",</p></dd>
+<dd>
+<p align="justify">author = "Rocky Gneisser",</p></dd>
+<dd>
+<p align="justify">title = "No Gnats Are Taken for
+Granite",</p></dd>
+<dd>
+<p align="justify">pages = "133-139")</p></dd>
+<dd>
+<p align="justify">. . .</p></dd>
+<dd>
+<p align="justify">"2"&gt;@PROCEEDINGS(gg-proceedings,</p></dd>
+<dd>
+<p align="justify">editor = "Gerald Ford and Jimmy
+Carter",</p></dd>
+<dd>
+<p align="justify">title = "The Gnats and Gnus 1988
+Proceedings",</p></dd>
+<dd>
+<p align="justify">booktitle = "The Gnats and Gnus 1988
+Proceedings")</p></dd>
+<dd>
+<p align="justify">Two things happen. First, the special crossref
+field tells BibTeXthat the no-gnats entry should inherit any fields
+it&rsquo;s missing from the entry it cross references,
+gg-proceedings. In this case it in inherits the two fields editor
+and booktitle. Note that, in the standard styles at least, the
+booktitle field is irrelevant for the PROCEEDINGS entry type. The
+booktitle field appears here in the gg-proceedings entry only so
+that the entries that cross reference it may inherit the field. No
+matter how many papers from this meeting exist in the database,
+this booktitle field need only appear once.</p></dd>
+<dd>
+<p align="justify">The second thing that happens: BibTeX
+automatically puts the entry <font face="Courier">gg-proceedings
+into the reference list if it&rsquo;s cross referenced by two or
+more entries that you \cite or <font face="Courier">\nocite, even
+if you don&rsquo;t <font face="Courier">\cite or \nocite the
+gg-proceedings entry itself. So gg-proceedings will automatically
+appear on the reference list if one other entry besides no-gnats
+cross references it.</font></font></font></p></dd>
+<dd>
+<p align="justify">To guarantee that this scheme works, however, a
+cross-referenced entry must occur later in the database files than
+every entry that cross-references it. Thus, putting all
+cross-referenced entries at the end makes sense. (Moreover, you may
+not reliably nest cross references; that is, a cross-referenced
+entry may not itself reliably cross reference an entry. This is
+almost certainly not something you&rsquo;d want to do,
+though.)</p></dd>
+<dd>
+<p align="justify">One final note: This cross-referencing feature
+is completely unrelated to the old BibTeX&rsquo;s cross
+referencing, which is still allowed. Thus, having a field
+like</p></dd>
+<dd>
+<p align="justify">note = "Jones \cite{jones-proof} improves the
+result"</p></dd>
+<dd>
+<p align="justify">is not affected by the new feature.</p></dd>
+<dd>
+<p align="justify">4. BibTeX now handles accented characters. For
+example if you have an entry with the two fields</p></dd>
+<dd>
+<p align="justify">author = "Kurt G{\"o}del",</p></dd>
+<dd>
+<p align="justify">year = 1931,</p></dd>
+<dd>
+<p align="justify">and if you&rsquo;re using the alpha bibliography
+style, then BibTeX will construct the label [G&ouml;d31] for this
+entry, which is what you&rsquo;d want. To get this feature to work
+you must place the entire accented character in braces; in this
+case either {\"o} or <font face="Courier">{\"{o}} will do.
+Furthermore these braces must not themselves be enclosed in braces
+(other than the ones that might delimit the entire field or the
+entire entry); and there must be a backslash as the very first
+character inside the braces. Thus neither <font face=
+"Courier">{G{\"{o}}del} nor <font face="Courier">{G\"{o}del} will
+work for this example.</font></font></font></p></dd>
+<dd>
+<p align="justify">This feature handles all the accented characters
+and all but the nonbackslashed foreign symbols found in Tables 3.1
+and&nbsp;3.2 of the "3"&gt;L"1"&gt;<sup>A</sup>
+"3"&gt;T<sub>E</sub>X book. This feature behaves similarly for
+&ldquo;accents&rdquo; you might define; we&rsquo;ll see an example
+shortly. For the purposes of counting letters in labels, BibTeX
+considers everything contained inside the braces as a single
+letter.</p></dd>
+<dd>
+<p align="justify">5. BibTeX also handles hyphenated names. For
+example if you have an entry with</p></dd>
+<dd>
+<p align="justify">author = "Jean-Paul Sartre",</p></dd>
+<dd>
+<p align="justify">and if you&rsquo;re using the abbrv style, then
+the result is &lsquo;J.-P. Sartre&rsquo;.</p></dd>
+<dd>
+<p align="justify">6. There&rsquo;s now an @PREAMBLE command for
+the database files. This command&rsquo;s syntax is just like
+<font face="Courier">@STRING&rsquo;s, except that there is no name
+or equals-sign, just the string. Here&rsquo;s an
+example:</font></p></dd>
+<dd>
+<p align="justify">@PREAMBLE{ "\newcommand{\noopsort}[1]{}
+"</p></dd>
+<dd>
+<p align="justify"># "\newcommand{\singleletter}[1]{#1} "
+}</p></dd>
+<dd>
+<p align="justify">(note the use of concatenation here, too). The
+standard styles output whatever information you give this command
+(L "1"&gt;<sup>A</sup>T<sub>E</sub>X macros most likely) directly
+to the bbl file. We&rsquo;ll look at one possible use of this
+command, based on the \noopsort command just defined.</p></dd>
+<dd>
+<p align="justify">The issue here is sorting (alphabetizing).
+BibTeX does a pretty good job, but occasionally weird circumstances
+conspire to confuse BibTeX: Suppose that you have entries in your
+database for the two books in a two-volume set by the same author,
+and that you&rsquo;d like volume&nbsp;1 to appear just before
+volume&nbsp;2 in your reference list. Further suppose that
+there&rsquo;s now a second edition of volume&nbsp;1, which came out
+in 1973, say, but that there&rsquo;s still just one edition of
+volume&nbsp;2, which came out in 1971. Since the plain standard
+style sorts by author and then year, it will place volume&nbsp;2
+first (because its edition came out two years earlier) unless you
+help BibTeX. You can do this by using the year fields below for the
+two volumes:</p></dd>
+<dd>
+<p align="justify">year = "{\noopsort{a}}1973"</p></dd>
+<dd>
+<p align="justify">. . .</p></dd>
+<dd>
+<p align="justify">year = "{\noopsort{b}}1971"</p></dd>
+<dd>
+<p align="justify">According to the definition of \noopsort,
+"3"&gt;L"1"&gt;<sup>A</sup> "3"&gt;T<sub>E</sub>X will print
+nothing but the true year for these fields. But BibTeX will be
+perfectly happy pretending that \noopsort specifies some fancy
+accent that&rsquo;s supposed to adorn the &lsquo;a&rsquo; and
+the&nbsp;&lsquo;b&rsquo;; thus when BibTeX sorts it will pretend
+that &lsquo;a1973&rsquo; and &lsquo;b1971&rsquo; are the real
+years, and since &lsquo;a&rsquo; comes before&nbsp;&lsquo;b&rsquo;,
+it will place volume&nbsp;1 before volume&nbsp;2, just what you
+wanted. By the way, if this author has any other works included in
+your database, you&rsquo;d probably want to use instead something
+like {\noopsort{1968a}}1973 and {\noopsort{1968b}}1971, so that
+these two books would come out in a reasonable spot relative to the
+author&rsquo;s other works (this assumes that 1968 results in a
+reasonable spot, say because that&rsquo;s when the first edition of
+volume&nbsp;1 appeared).</p></dd>
+<dd>
+<p align="justify">There is a limit to the number of @PREAMBLE
+commands you may use, but you&rsquo;ll never exceed this limit if
+you restrict yourself to one per database file; this is not a
+serious restriction, given the concatenation feature
+(item&nbsp;2).</p></dd>
+<dd>
+<p align="justify">7. BibTeX&rsquo;s sorting algorithm is now
+stable. This means that if two entries have identical sort keys,
+those two entries will appear in citation order. (The bibliography
+styles construct these sort keys&mdash;usually the author
+information followed by the year and the title.)</p></dd>
+<dd>
+<p align="justify">8. BibTeX no longer does case conversion for
+file names; this will make BibTeX easier to install on Unix
+systems, for example.</p></dd>
+<dd>
+<p align="justify">9. It&rsquo;s now easier to add code for
+processing a command-line <font face="Courier">aux-file
+name.</font></p></dd></dl>
+<p align="justify"><b>2.2 Changes to the standard styles</b></p>
+<p align="justify">This section describes changes to the standard
+styles (plain, unsrt, <font face="Courier">alpha, abbrv) that
+affect ordinary users. Changes that affect style designers appear
+in the document &ldquo;Designing BibTeX
+Styles&rdquo;&nbsp;[3].</font></p>
+<dl>
+<dd>
+<p align="justify">1. In general, sorting is now by
+&ldquo;author&rdquo;, then year, then title&mdash;the old versions
+didn&rsquo;t use the year field. (The <font face="Courier">alpha
+style, however, sorts first by label, then &ldquo;author&rdquo;,
+year, and title.) The quotes around author mean that some entry
+types might use something besides the author, like the editor or
+organization.</font></p></dd>
+<dd>
+<p align="justify">2. Many unnecessary ties (~) have been removed.
+L "1"&gt;<sup>A</sup>T<sub>E</sub>X thus will produce slightly
+fewer &lsquo;<font face="Courier">Underfull <font face=
+"Courier">\hbox&rsquo; messages when it&rsquo;s formatting the
+reference list.</font></font></p></dd>
+<dd>
+<p align="justify">3. Emphasizing (<font face="Courier">{\em ...})
+has replaced italicizing ({\it ...}). This will almost never result
+in a difference between the old output and the new.</font></p></dd>
+<dd>
+<p align="justify">4. The <font face="Courier">alpha style now uses
+a superscripted&nbsp;&lsquo;<sub><img src=
+"btxdoc_html_4f4e0c11.png" name="Graphic1" align="bottom" width="9"
+     height="14" border="0"></sub>&rsquo; instead of
+     a&nbsp;&lsquo;*&rsquo; to represent names omitted in
+     constructing the label. If you really liked it the way it was,
+     however, or if you want to omit the character entirely, you
+     don&rsquo;t have to modify the style file&mdash;you can
+     override the&nbsp;&lsquo;<sub><img src=
+     "btxdoc_html_4f4e0c11.png" name="Graphic2" align="bottom"
+     width="9" height="14" border="0"></sub>&rsquo; by redefining
+     the <font face="Courier">\etalchar command that the
+      <font face="Courier">alpha style writes onto the <font face=
+      "Courier">bbl file (just preceding the <font face=
+      "Courier">\thebibliography environment); use L
+      "1"&gt;<sup>A</sup> T<sub>E</sub>X&rsquo;s <font face=
+      "Courier">\renewcommand inside a database <font face=
+      "Courier">@PREAMBLE command, described in the previous
+      subsection&rsquo;s
+      item&nbsp;6.</font></font></font></font></font></font></font></p></dd>
+<dd>
+<p align="justify">5. The <font face="Courier">abbrv style now uses
+&lsquo;Mar.&rsquo; and &lsquo;Sept.&rsquo;for those months rather
+than &lsquo;March&rsquo; and &lsquo;Sep.&rsquo;</font></p></dd>
+<dd>
+<p align="justify">6. The standard styles use BibTeX&rsquo;s new
+cross-referencing feature by giving a \cite of the cross-referenced
+entry and by omitting from the cross-referencing entry (most of
+the) information that appears in the cross-referenced entry. These
+styles do this when a titled thing (the cross-referencing entry) is
+part of a larger titled thing (the cross-referenced entry). There
+are five such situations: when (1)&nbsp;an INPROCEEDINGS (or
+CONFERENCE, which is the same) cross references a <font face=
+"Courier">PROCEEDINGS; when (2)&nbsp;a <font face="Courier">BOOK,
+(3)&nbsp;an <font face="Courier">INBOOK, or (4)&nbsp;an
+      <font face="Courier">INCOLLECTION cross references a
+      <font face="Courier">BOOK (in these cases, the
+      cross-referencing entry is a single volume in a multi-volume
+      work); and when (5)&nbsp;an ARTICLE cross references an
+      ARTICLE (in this case, the cross-referenced entry is really a
+      journal, but there&rsquo;s no JOURNAL entry type; this will
+      result in warning messages about an empty author and
+      <font face="Courier">title for the journal&mdash;you should
+      just ignore these
+      warnings).</font></font></font></font></font></font></p></dd>
+<dd>
+<p align="justify">7. The <font face="Courier">MASTERSTHESIS and
+<font face="Courier">PHDTHESIS entry types now take an optional
+type field. For example you can get the standard styles to call
+your reference a &lsquo;Ph.D. dissertation&rsquo; instead of the
+default &lsquo;PhD thesis&rsquo; by including
+a</font></font></p></dd>
+<dd>
+<p align="justify">type = "{Ph.D.} dissertation"</p></dd>
+<dd>
+<p align="justify">in your database entry.</p></dd>
+<dd>
+<p align="justify">8. Similarly, the INBOOK and <font face=
+"Courier">INCOLLECTION entry types now take an optional type field,
+allowing &lsquo;section&nbsp;1.2&rsquo; instead of the default
+&lsquo;chapter&nbsp;1.2&rsquo;. You get this by
+putting</font></p></dd>
+<dd>
+<p align="justify">chapter = "1.2",</p></dd>
+<dd>
+<p align="justify">type = "Section"</p></dd>
+<dd>
+<p align="justify">in your database entry.</p></dd>
+<dd>
+<p align="justify">9. The <font face="Courier">BOOKLET,
+      <font face="Courier">MASTERSTHESIS, and <font face=
+      "Courier">TECHREPORT entry types now format their title
+      fields as if they were ARTICLE <font face="Courier">titles
+      rather than <font face="Courier">BOOK <font face=
+      "Courier">titles.</font></font></font></font></font></font></p></dd>
+<dd>
+<p align="justify">10. The <font face="Courier">PROCEEDINGS and
+<font face="Courier">INPROCEEDINGS entry types now use the address
+field to tell where a conference was held, rather than to give the
+address of the publisher or organization. If you want to include
+the publisher&rsquo;s or organization&rsquo;s address, put it in
+the publisher or <font face="Courier">organization
+field.</font></font></font></p></dd>
+<dd>
+<p align="justify">11. The <font face="Courier">BOOK, INBOOK,
+INCOLLECTION, and <font face="Courier">PROCEEDINGS entry types now
+allow either volume or <font face="Courier">number (but not both),
+rather than just volume.</font></font></font></p></dd>
+<dd>
+<p align="justify">12. The <font face="Courier">INCOLLECTION entry
+type now allows a series and an <font face="Courier">edition
+field.</font></font></p></dd>
+<dd>
+<p align="justify">13. The <font face="Courier">INPROCEEDINGS and
+<font face="Courier">PROCEEDINGS entry types now allow either a
+volume or <font face="Courier">number, and also a <font face=
+"Courier">series field.</font></font></font></font></p></dd>
+<dd>
+<p align="justify">14. The <font face="Courier">UNPUBLISHED entry
+type now outputs, in one block, the note field followed by the date
+information.</font></p></dd>
+<dd>
+<p align="justify">15. The <font face="Courier">MANUAL entry type
+now prints out the organization in the first block if the author
+field is empty.</font></p></dd>
+<dd>
+<p align="justify">16. The <font face="Courier">MISC entry type now
+issues a warning if all the optional fields are empty (that is, if
+the entire entry is empty).</font></p></dd></dl>
+<p align="justify"><b>3. The Entries</b></p>
+<p align="justify">This section is simply a corrected version of
+Appendix&nbsp;B.2 of the "3"&gt;L"1"&gt;<sup>A</sup>
+"3"&gt;T<sub>E</sub>X book&nbsp;[2], <font face=
+"Symbol">&Oacute;&nbsp;1986, by Addison-Wesley. The basic scheme is
+the same, only a few details have changed.</font></p>
+<p align="justify"><b>3.1 Entry Types</b></p>
+<p align="justify">When entering a reference in the database, the
+first thing to decide is what type of entry it is. No fixed
+classification scheme can be complete, but BibTeX provides enough
+entry types to handle almost any reference reasonably well.</p>
+<p align="justify">References to different types of publications
+contain different information; a reference to a journal article
+might include the volume and number of the journal, which is
+usually not meaningful for a book. Therefore, database entries of
+different types have different fields. For each entry type, the
+fields are divided into three classes:</p>
+<dl>
+<dd>
+<p align="justify"><b>required</b> Omitting the field will produce
+a warning message and, rarely, a badly formatted bibliography
+entry. If the required information is not meaningful, you are using
+the wrong entry type. However, if the required information is
+meaningful but, say, already included is some other field, simply
+ignore the warning.</p></dd>
+<dd>
+<p align="justify"><b>optional</b> The field&rsquo;s information
+will be used if present, but can be omitted without causing any
+formatting problems. You should include the optional field if it
+will help the reader.</p></dd>
+<dd>
+<p align="justify"><b>ignored</b> The field is ignored. BibTeX
+ignores any field that is not required or optional, so you can
+include any fields you want in a <font face="Courier">bib file
+entry. It&rsquo;s a good idea to put all relevant information about
+a reference in its <font face="Courier">bib file entry&mdash;even
+information that may never appear in the bibliography. For example,
+if you want to keep an abstract of a paper in a computer file, put
+it in an abstract field in the paper&rsquo;s bib file entry. The
+bib file is likely to be as good a place as any for the abstract,
+and it is possible to design a bibliography style for printing
+selected abstracts. Note: Misspelling a field name will result in
+its being ignored, so watch out for typos (especially for optional
+fields, since BibTeX won&rsquo;t warn you when those are
+missing).</font></font></p></dd></dl>
+<p align="justify">The following are the standard entry types,
+along with their required and optional fields, that are used by the
+standard bibliography styles. The fields within each class
+(required or optional) are listed in order of occurrence in the
+output, except that a few entry types may perturb the order
+slightly, depending on what fields are missing. These entry types
+are similar to those adapted by Brian Reid from the classification
+scheme of van&nbsp;Leunen&nbsp;[4] for use in the <i>Scribe</i>
+system. The meanings of the individual fields are explained in the
+next section. Some nonstandard bibliography styles may ignore some
+optional fields in creating the reference. Remember that, when used
+in the bib file, the entry-type name is preceded by an @
+character.</p>
+<dl>
+<dd>
+<p align="justify"><b>article</b> An article from a journal or
+magazine. Required fields: <font face="Courier">author, title,
+journal, <font face="Courier">year. Optional fields:
+      <font face="Courier">volume, number, pages, <font face=
+      "Courier">month, <font face=
+      "Courier">note.</font></font></font></font></font></p></dd>
+<dd>
+<p align="justify"><b>book</b> A book with an explicit publisher.
+Required fields: <font face="Courier">author or editor, title,
+<font face="Courier">publisher, year. Optional fields: volume or
+number, <font face="Courier">series, address, edition,
+      <font face="Courier">month, <font face=
+      "Courier">note.</font></font></font></font></font></p></dd>
+<dd>
+<p align="justify"><b>booklet</b> A work that is printed and bound,
+but without a named publisher or sponsoring institution. Required
+field: title. Optional fields: author, howpublished,
+      <font face="Courier">address, month, year, <font face=
+      "Courier">note.</font></font></p></dd>
+<dd>
+<p align="justify"><b>conference</b> The same as INPROCEEDINGS,
+included for <i>Scribe</i> compatibility.</p></dd>
+<dd>
+<p align="justify"><b>inbook</b> A part of a book, which may be a
+chapter (or section or whatever) and/or a range of pages. Required
+fields: author or editor, <font face="Courier">title, chapter
+and/or pages, <font face="Courier">publisher, year. Optional
+fields: volume or number, <font face="Courier">series, type,
+address, <font face="Courier">edition, month,
+note.</font></font></font></font></p></dd>
+<dd>
+<p align="justify"><b>incollection</b> A part of a book having its
+own title. Required fields: <font face="Courier">author, title,
+booktitle, <font face="Courier">publisher, year. Optional fields:
+editor, volume or <font face="Courier">number, series, type,
+<font face="Courier">chapter, pages, address, <font face=
+"Courier">edition, month,
+note.</font></font></font></font></font></p></dd>
+<dd>
+<p align="justify"><b>inproceedings</b> An article in a conference
+proceedings. Required fields: <font face="Courier">author, title,
+booktitle, <font face="Courier">year. Optional fields:
+      <font face="Courier">editor, volume or number, <font face=
+      "Courier">series, pages, address, <font face="Courier">month,
+      organization, publisher, <font face=
+      "Courier">note.</font></font></font></font></font></font></p></dd>
+<dd>
+<p align="justify"><b>manual</b> Technical documentation. Required
+field: title. Optional fields: author, organization,
+      <font face="Courier">address, <font face="Courier">edition,
+      month, year, <font face=
+      "Courier">note.</font></font></font></p></dd>
+<dd>
+<p align="justify"><b>mastersthesis</b> A Master&rsquo;s thesis.
+Required fields: <font face="Courier">author, title, school,
+<font face="Courier">year. Optional fields: <font face=
+"Courier">type, address, month, <font face=
+"Courier">note.</font></font></font></font></p></dd>
+<dd>
+<p align="justify"><b>misc</b> Use this type when nothing else
+fits. Required fields: none. Optional fields: author,
+      <font face="Courier">title, howpublished, month, <font face=
+      "Courier">year, <font face=
+      "Courier">note.</font></font></font></p></dd>
+<dd>
+<p align="justify"><b>phdthesis</b> A PhD thesis. Required fields:
+author, title, <font face="Courier">school, year. Optional fields:
+type, address, <font face="Courier">month, <font face=
+"Courier">note.</font></font></font></p></dd>
+<dd>
+<p align="justify"><b>proceedings</b> The proceedings of a
+conference. Required fields: <font face="Courier">title, year.
+Optional fields: editor, <font face="Courier">volume or number,
+series, <font face="Courier">address, month, organization,
+<font face="Courier">publisher, <font face=
+"Courier">note.</font></font></font></font></font></p></dd>
+<dd>
+<p align="justify"><b>techreport</b> A report published by a school
+or other institution, usually numbered within a series. Required
+fields: author, title, <font face="Courier">institution, year.
+Optional fields: type, number, <font face="Courier">address, month,
+note.</font></font></p></dd>
+<dd>
+<p align="justify"><b>unpublished</b> A document having an author
+and title, but not formally published. Required fields: author,
+<font face="Courier">title, note. Optional fields: month,
+<font face="Courier">year.</font></font></p></dd></dl>
+<p align="justify">In addition to the fields listed above, each
+entry type also has an optional <font face="Courier">key field,
+used in some styles for alphabetizing, for cross referencing, or
+for forming a <font face="Courier">\bibitem label. You should
+include a key field for any entry whose &ldquo;author&rdquo;
+information is missing; the &ldquo;author&rdquo; information is
+usually the <font face="Courier">author field, but for some entry
+types it can be the editor or even the organization field
+(Section&nbsp;4 describes this in more detail). Do not confuse the
+key field with the key that appears in the \cite command and at the
+beginning of the database entry; this field is named
+&ldquo;key&rdquo; only for compatibility with
+<i>Scribe</i>.</font></font></font></p>
+<p align="justify"><b>3.2 Fields</b></p>
+<p align="justify">Below is a description of all fields recognized
+by the standard bibliography styles. An entry can also contain
+other fields, which are ignored by those styles.</p>
+<dl>
+<dd>
+<p align="justify"><b>address</b> Usually the address of the
+publisher or other type of institution. For major publishing
+houses, van&nbsp;Leunen recommends omitting the information
+entirely. For small publishers, on the other hand, you can help the
+reader by giving the complete address.</p></dd>
+<dd>
+<p align="justify"><b>annote</b> An annotation. It is not used by
+the standard bibliography styles, but may be used by others that
+produce an annotated bibliography.</p></dd>
+<dd>
+<p align="justify"><b>author</b> The name(s) of the author(s), in
+the format described in the "3"&gt;L"1"&gt;<sup>A</sup>
+"3"&gt;T<sub>E</sub>X book.</p></dd>
+<dd>
+<p align="justify"><b>booktitle</b> Title of a book, part of which
+is being cited. See the "3"&gt;L"1"&gt;<sup>A</sup>
+"3"&gt;T<sub>E</sub>X book for how to type titles. For book
+entries, use the title field instead.</p></dd>
+<dd>
+<p align="justify"><b>chapter</b> A chapter (or section or
+whatever) number.</p></dd>
+<dd>
+<p align="justify"><b>crossref</b> The database key of the entry
+being cross referenced.</p></dd>
+<dd>
+<p align="justify"><b>edition</b> The edition of a book&mdash;for
+example, &ldquo;Second&rdquo;. This should be an ordinal, and
+should have the first letter capitalized, as shown here; the
+standard styles convert to lower case when necessary.</p></dd>
+<dd>
+<p align="justify"><b>editor</b> Name(s) of editor(s), typed as
+indicated in the "3"&gt;L"1"&gt;<sup>A</sup> "3"&gt;T<sub>E</sub>X
+book. If there is also an author field, then the editor field gives
+the editor of the book or collection in which the reference
+appears.</p></dd>
+<dd>
+<p align="justify"><b>howpublished</b> How something strange has
+been published. The first word should be capitalized.</p></dd>
+<dd>
+<p align="justify"><b>institution</b> The sponsoring institution of
+a technical report.</p></dd>
+<dd>
+<p align="justify"><b>journal</b> A journal name. Abbreviations are
+provided for many journals; see the <i>Local Guide</i>.</p></dd>
+<dd>
+<p align="justify"><b>key</b> Used for alphabetizing, cross
+referencing, and creating a label when the &ldquo;author&rdquo;
+information (described in Section&nbsp;4) is missing. This field
+should not be confused with the key that appears in the \cite
+command and at the beginning of the database entry.</p></dd>
+<dd>
+<p align="justify"><b>month</b> The month in which the work was
+published or, for an unpublished work, in which it was written. You
+should use the standard three-letter abbreviation, as described in
+Appendix B.1.3 of the "3"&gt;L"1"&gt;<sup>A</sup>
+"3"&gt;T<sub>E</sub>X book.</p></dd>
+<dd>
+<p align="justify"><b>note</b> Any additional information that can
+help the reader. The first word should be capitalized.</p></dd>
+<dd>
+<p align="justify"><b>number</b> The number of a journal, magazine,
+technical report, or of a work in a series. An issue of a journal
+or magazine is usually identified by its volume and number; the
+organization that issues a technical report usually gives it a
+number; and sometimes books are given numbers in a named
+series.</p></dd>
+<dd>
+<p align="justify"><b>organization</b> The organization that
+sponsors a conference or that publishes a manual.</p></dd>
+<dd>
+<p align="justify"><b>pages</b> One or more page numbers or range
+of numbers, such as <font face="Courier">42&ndash;111 or
+      <font face="Courier">7,41,73&ndash;97 or <font face=
+      "Courier">43+ (the &lsquo;<font face="Courier">+&rsquo; in
+      this last example indicates pages following that don&rsquo;t
+      form a simple range). To make it easier to maintain
+      <i>Scribe</i>-compatible databases, the standard styles
+      convert a single dash (as in 7-33) to the double dash used in
+      T<sub>E</sub>X to denote number ranges (as in <font face=
+      "Courier">7&ndash;33).</font></font></font></font></font></p></dd>
+<dd>
+<p align="justify"><b>publisher</b> The publisher&rsquo;s
+name.</p></dd>
+<dd>
+<p align="justify"><b>school</b> The name of the school where a
+thesis was written.</p></dd>
+<dd>
+<p align="justify"><b>series</b> The name of a series or set of
+books. When citing an entire book, the the title field gives its
+title and an optional series field gives the name of a series or
+multi-volume set in which the book is published.</p></dd>
+<dd>
+<p align="justify"><b>title</b> The work&rsquo;s title, typed as
+explained in the L"1"&gt;<sup>A</sup> T<sub>E</sub>X book.</p></dd>
+<dd>
+<p align="justify"><b>type</b> The type of a technical
+report&mdash;for example, &ldquo;Research Note&rdquo;.</p></dd>
+<dd>
+<p align="justify"><b>volume</b> The volume of a journal or
+multivolume book.</p></dd>
+<dd>
+<p align="justify"><b>year</b> The year of publication or, for an
+unpublished work, the year it was written. Generally it should
+consist of four numerals, such as 1984, although the standard
+styles can handle any year whose last four nonpunctuation
+characters are numerals, such as &lsquo;(about
+1984)&rsquo;.</p></dd></dl>
+<p align="justify"><b>4. Helpful Hints</b></p>
+<p align="justify">This section gives some random tips that
+aren&rsquo;t documented elsewhere, at least not in this detail.
+They are, roughly, in order of least esoteric to most. First,
+however, a brief spiel.</p>
+<p align="justify">I understand that there&rsquo;s often little
+choice in choosing a bibliography
+style&mdash;journal&nbsp;<sub><img src="btxdoc_html_m6b4cff24.png"
+name="Graphic3" align="bottom" width="33" height="12" border=
+"0"></sub> says you must use style&nbsp;<sub><img src=
+"btxdoc_html_7359fea5.png" name="Graphic4" align="bottom"
+     width="32" height="12" border="0"></sub> and that&rsquo;s
+     that. If you have a choice, however, I strongly recommend that
+     you choose something like the <font face="Courier">plain
+     standard style. Such a style, van&nbsp;Leunen&nbsp;[4] argues
+     convincingly, encourages better writing than the
+     alternatives&mdash;more concrete, more vivid.</font></p>
+<p align="justify"><i>The Chicago Manual of Style</i>&nbsp;[1], on
+the other hand, espouse the author-date system, in which the
+citation might appear in the text as &lsquo;(Jones, 1986)&rsquo;. I
+argue that this system, besides cluttering up the text with
+information that may or may not be relevant, encourages the passive
+voice and vague writing. Furthermore the strongest arguments for
+using the author-date system&mdash;like &ldquo;it&rsquo;s the most
+practical&rdquo;&mdash;fall flat on their face with the advent of
+computer-typesetting technology. For instance the <i>Chicago
+Manual</i> contains, right in the middle of page&nbsp;401, this
+anachronism: &ldquo;The chief disadvantage of [a style like plain]
+is that additions or deletions cannot be made after the manuscript
+is typed without changing numbers in both text references and
+list.&rdquo; "3"&gt;L"1"&gt;<sup>A</sup> "3"&gt;T<sub>E</sub>X,
+obviously, sidesteps the disadvantage.</p>
+<p align="justify">Finally, the logical deficiencies of the
+author-date style are quite evident once you&rsquo;ve written a
+program to implement it. For example, in a large bibliography,
+using the standard alphabetizing scheme, the entry for &lsquo;(Aho
+et&nbsp;al., 1983b)&rsquo; might be half a page later than the one
+for &lsquo;(Aho et&nbsp;al., 1983a)&rsquo;. Fixing this problem
+results in even worse ones. What a mess. (I have, unfortunately,
+programmed such a style, and if you&rsquo;re saddled with an
+unenlightened publisher or if you don&rsquo;t buy my propaganda,
+it&rsquo;s available from the Rochester style collection.)</p>
+<p align="justify">Ok, so the spiel wasn&rsquo;t very brief; but it
+made me feel better, and now my blood pressure is back to normal.
+Here are the tips for using BibTeXwith the standard styles
+(although many of them hold for nonstandard styles, too).</p>
+<dl>
+<dd>
+<p align="justify">1. With BibTeX&rsquo;s style-designing language
+you can program general database manipulations, in addition to
+bibliography styles. For example it&rsquo;s a fairly easy task for
+someone familiar with the language to produce a database-key/author
+index of all the entries in a database. Consult the <i>Local
+Guide</i> to see what tools are available on your system.</p></dd>
+<dd>
+<p align="justify">2. The standard style&rsquo;s thirteen entry
+types do reasonably well at formatting most entries, but no scheme
+with just thirteen formats can do everything perfectly. Thus, you
+should feel free to be creative in how you use these entry types
+(but if you have to be too creative, there&rsquo;s a good chance
+you&rsquo;re using the wrong entry type).</p></dd>
+<dd>
+<p align="justify">3. Don&rsquo;t take the field names too
+seriously. Sometimes, for instance, you might have to include the
+publisher&rsquo;s address along with the publisher&rsquo;s name in
+the publisher field, rather than putting it in the
+      <font face="Courier">address field. Or sometimes, difficult
+      entries work best when you make judicious use of the
+      <font face="Courier">note field.</font></font></p></dd>
+<dd>
+<p align="justify">4. Don&rsquo;t take the warning messages too
+seriously. Sometimes, for instance, the year appears in the title,
+as in <i>The 1966 World Gnus Almanac</i>. In this case it&rsquo;s
+best to omit the year field and to ignore BibTeX&rsquo;s warning
+message.</p></dd>
+<dd>
+<p align="justify">5. If you have too many names to list in an
+author or <font face="Courier">editor field, you can end the list
+with &ldquo;and others&rdquo;; the standard styles appropriately
+append an &ldquo;et&nbsp;al.&rdquo;</font></p></dd>
+<dd>
+<p align="justify">6. In general, if you want to keep BibTeX from
+changing something to lower case, you enclose it in braces. You
+might not get the effect you want, however, if the very first
+character after the left brace is a backslash. The &ldquo;special
+characters&rdquo; item later in this section explains.</p></dd>
+<dd>
+<p align="justify">7. For <i>Scribe</i> compatibility, the database
+files allow an <font face="Courier">@COMMENT command; it&rsquo;s
+not really needed because BibTeX allows in the database files any
+comment that&rsquo;s not within an entry. If you want to comment
+out an entry, simply remove the &lsquo;<font face=
+"Courier">@&rsquo; character preceding the entry
+type.</font></font></p></dd>
+<dd>
+<p align="justify">8. The standard styles have journal
+abbreviations that are computer-science oriented; these are in the
+style files primarily for the example. If you have a different set
+of journal abbreviations, it&rsquo;s sensible to put them in
+@STRING commands in their own database file and to list this
+database file as an argument to L
+"1"&gt;<sup>A</sup>T<sub>E</sub>X&rsquo;s \bibliography command
+(but you should list this argument before the ones that specify
+real database entries).</p></dd>
+<dd>
+<p align="justify">9. It&rsquo;s best to use the three-letter
+abbreviations for the month, rather than spelling out the month
+yourself. This lets the bibliography style be consistent. And if
+you want to include information for the day of the month, the month
+field is usually the best place. For example</p></dd>
+<dd>
+<p align="justify">month = jul # "~4,"</p></dd>
+<dd>
+<p align="justify">will probably produce just what you
+want.</p></dd>
+<dd>
+<p align="justify">10. If you&rsquo;re using the unsrt style
+(references are listed in order of citation) along with the
+<font face="Courier">\nocite{*} feature (all entries in the
+database are included), the placement of the <font face=
+"Courier">\nocite{*} command within your document file will
+determine the reference order. According to the rule given in
+Section&nbsp;2.1: If the command is placed at the beginning of the
+document, the entries will be listed in exactly the order they
+occur in the database; if it&rsquo;s placed at the end, the entries
+that you explicitly \cite or \nocite will occur in citation order,
+and the remaining database entries will be in database
+order.</font></font></p></dd>
+<dd>
+<p align="justify">11. For theses, van Leunen recommends not giving
+the school&rsquo;s department after the name of the degree, since
+schools, not departments, issue degrees. If you really think that
+giving the department information will help the reader find the
+thesis, put that information in the address field.</p></dd>
+<dd>
+<p align="justify">12. The <font face="Courier">MASTERSTHESIS and
+<font face="Courier">PHDTHESIS entry types are so named for
+<i>Scribe</i> compatibility; <font face="Courier">MINORTHESIS and
+<font face="Courier">MAJORTHESIS probably would have been better
+names. Keep this in mind when trying to classify a non-U.S.
+thesis.</font></font></font></font></p></dd>
+<dd>
+<p align="justify">13. Here&rsquo;s yet another suggestion for what
+to do when an author&rsquo;s name appears slightly differently in
+two publications. Suppose, for example, two journals articles use
+these fields.</p></dd>
+<dd>
+<p align="justify">author = "Donald E. Knuth"</p></dd>
+<dd>
+<p align="justify">. . .</p></dd>
+<dd>
+<p align="justify">author = "D. E. Knuth"</p></dd>
+<dd>
+<p align="justify">There are two possibilities. You could
+(1)&nbsp;simply leave them as is, or (2)&nbsp;assuming you know for
+sure that these authors are one and the same person, you could list
+both in the form that the author prefers (say,
+&lsquo;Donald&nbsp;E. Knuth&rsquo;). In the first case, the entries
+might be alphabetized incorrectly, and in the second, the slightly
+altered name might foul up somebody&rsquo;s electronic library
+search. But there&rsquo;s a third possibility, which is the one I
+prefer. You could convert the second journal&rsquo;s field
+to</p></dd>
+<dd>
+<p align="justify">author = "D[onald] E. Knuth"</p></dd>
+<dd>
+<p align="justify">This avoids the pitfalls of the previous two
+solutions, since BibTeX alphabetizes this as if the brackets
+weren&rsquo;t there, and since the brackets clue the reader in that
+a full first name was missing from the original. Of course it
+introduces another pitfall&mdash;&lsquo;D[onald]&nbsp;E.
+Knuth&rsquo; looks ugly&mdash;but in this case I think the increase
+in accuracy outweighs the loss in aesthetics.</p></dd>
+<dd>
+<p align="justify">14. "3"&gt;L"1"&gt;<sup>A</sup>
+"3"&gt;T<sub>E</sub>X&rsquo;s comment character &lsquo;%&rsquo; is
+not a comment character in the database files.</p></dd>
+<dd>
+<p align="justify">15. Here&rsquo;s a more complete description of
+the &ldquo;author&rdquo; information referred to in previous
+sections. For most entry types the &ldquo;author&rdquo; information
+is simply the author field. However: For the BOOK and INBOOK entry
+types it&rsquo;s the author field, but if there&rsquo;s no author
+then it&rsquo;s the <font face="Courier">editor field; for the
+<font face="Courier">MANUAL entry type it&rsquo;s the
+      <font face="Courier">author field, but if there&rsquo;s no
+      author then it&rsquo;s the organization field; and for the
+      PROCEEDINGS entry type it&rsquo;s the editor field, but if
+      there&rsquo;s no editor then it&rsquo;s the organization
+      field.</font></font></font></p></dd>
+<dd>
+<p align="justify">16. When creating a label, the alpha style uses
+the &ldquo;author&rdquo; information described above, but with a
+slight change&mdash;for the MANUAL and PROCEEDINGS entry types, the
+key field takes precedence over the organization field.
+Here&rsquo;s a situation where this is useful.</p></dd>
+<dd>
+<p align="justify">organization = "The Association for Computing
+Machinery",</p></dd>
+<dd>
+<p align="justify">key = "ACM"</p></dd>
+<dd>
+<p align="justify">Without the <font face="Courier">key field, the
+alpha style would make a label from the first three letters of
+information in the organization field; alpha knows to strip off the
+&lsquo;The &rsquo;, but it would still form a label like
+&lsquo;[Ass86]&rsquo;, which, however intriguing, is uninformative.
+Including the key field, as above, would yield the better label
+&lsquo;[ACM86]&rsquo;.</font></p></dd>
+<dd>
+<p align="justify">You won&rsquo;t always need the key field to
+override the organization, though: With</p></dd>
+<dd>
+<p align="justify">organization = "Unilogic, Ltd.",</p></dd>
+<dd>
+<p align="justify">for instance, the alpha style would form the
+perfectly reasonable label &lsquo;[Uni86]&rsquo;.</p></dd>
+<dd>
+<p align="justify">17. Section&nbsp;2.1 discusses accented
+characters. To BibTeX, an accented character is really a special
+case of a &ldquo;special character&rdquo;, which consists of
+everything from a left brace at the top-most level, immediately
+followed by a backslash, up through the matching right brace. For
+example in the field</p></dd>
+<dd>
+<p align="justify">author = "\AA{ke} {Jos{\'{e}} {\'{E}douard}
+G{\"o}del"</p></dd>
+<dd>
+<p align="justify">there are just two special characters,
+&lsquo;{\'{E}douard}&rsquo; and &lsquo;{\"o}&rsquo; (the same would
+be true if the pair of double quotes delimiting the field were
+braces instead). In general, BibTeX will not do any processing of a
+T<sub>E</sub>X or "3"&gt;L"1"&gt;<sup>A</sup> "3"&gt;T<sub>E</sub>X
+control sequence inside a special character, but it <i>will</i>
+process other characters. Thus a style that converts all titles to
+lower case would convert</p></dd>
+<dd>
+<p align="justify">The {\TeX BOOK\NOOP} Experience</p></dd>
+<dd>
+<p align="justify">to</p></dd>
+<dd>
+<p align="justify">The {\TeX book\NOOP} experience</p></dd>
+<dd>
+<p align="justify">(the &lsquo;<font face="Courier">The&rsquo; is
+still capitalized because it&rsquo;s the first word of the
+title).</font></p></dd>
+<dd>
+<p align="justify">This special-character scheme is useful for
+handling accented characters, for getting BibTeX&rsquo;s
+alphabetizing to do what you want, and, since BibTeX counts an
+entire special character as just one letter, for stuffing extra
+characters inside labels. The file <font face="Courier">XAMPL.BIB
+distributed with BibTeXgives examples of all three
+uses.</font></p></dd>
+<dd>
+<p align="justify">18. This final item of the section describes
+BibTeX&rsquo;s names (which appear in the author or
+      <font face="Courier">editor field) in slightly more detail
+      than what appears in Appendix&nbsp;B of the
+      L"1"&gt;<sup>A</sup> T<sub>E</sub>X book. In what follows, a
+      &ldquo;name&rdquo; corresponds to a person. (Recall that you
+      separate multiple names in a single field with the word
+      &ldquo;and&rdquo;, surrounded by spaces, and not enclosed in
+      braces. This item concerns itself with the structure of a
+      single name.)</font></p></dd>
+<dd>
+<p align="justify">Each name consists of four parts: First, von,
+Last, and&nbsp;Jr; each part consists of a (possibly empty) list of
+name-tokens. The Last part will be nonempty if any part is, so if
+there&rsquo;s just one token, it&rsquo;s always a Last
+token.</p></dd>
+<dd>
+<p align="justify">Recall that Per Brinch&nbsp;Hansen&rsquo;s name
+should be typed</p></dd>
+<dd>
+<p align="justify">"Brinch Hansen, Per"</p></dd>
+<dd>
+<p align="justify">The First part of his name has the single token
+&ldquo;Per&rdquo;; the Last part has two tokens,
+&ldquo;Brinch&rdquo; and &ldquo;Hansen&rdquo;; and the von and Jr
+parts are empty. If you had typed</p></dd>
+<dd>
+<p align="justify">"Per Brinch Hansen"</p></dd>
+<dd>
+<p align="justify">instead, BibTeX would (erroneously) think
+&ldquo;Brinch&rdquo; were a First-part token, just as
+&ldquo;Paul&rdquo; is a First-part token in &ldquo;John&nbsp;Paul
+Jones&rdquo;, so this erroneous form would have two First tokens
+and one Last token.</p></dd>
+<dd>
+<p align="justify">Here&rsquo;s another example:</p></dd>
+<dd>
+<p align="justify">"Charles Louis Xavier Joseph de la Vall{\'e}e
+Poussin"</p></dd>
+<dd>
+<p align="justify">This name has four tokens in the First part, two
+in the von, and two in the Last. Here BibTeX knows where one part
+ends and the other begins because the tokens in the von part begin
+with lower-case letters.</p></dd>
+<dd>
+<p align="justify">In general, it&rsquo;s a von token if the first
+letter at brace-level&nbsp;0 is in lower case. Since technically
+everything in a &ldquo;special character&rdquo; is at
+brace-level&nbsp;0, you can trick BibTeX into thinking that a token
+is or is not a von token by prepending a dummy special character
+whose first letter past the "3"&gt;T<sub>E</sub>X control sequence
+is in the desired case, upper or lower.</p></dd>
+<dd>
+<p align="justify">To summarize, BibTeX allows three possible forms
+for the name:</p></dd>
+<dd>
+<p align="justify">"First von Last"</p></dd>
+<dd>
+<p align="justify">"von Last, First"</p></dd>
+<dd>
+<p align="justify">"von Last, Jr, First"</p></dd>
+<dd>
+<p align="justify">You may almost always use the first form; you
+shouldn&rsquo;t if either there&rsquo;s a Jr part, or the Last part
+has multiple tokens but there&rsquo;s no von part.</p></dd></dl>
+<p align="justify"><b>References</b></p>
+<dl>
+<dd>
+<p align="justify">[1] <i>The Chicago Manual of Style</i>, pages
+400&ndash;401. University of Chicago Press, thirteenth edition,
+1982.</p></dd>
+<dd>
+<p align="justify">[2] Leslie Lamport. <i>L
+"1"&gt;<sup>A</sup>T<sub>E</sub>X: A Document Preparation
+System</i>. Addison-Wesley, 1986.</p></dd>
+<dd>
+<p align="justify">[3] Oren Patashnik. Designing BibTeX styles. The
+part of BibTeX&rsquo;s documentation that&rsquo;s not meant for
+general users, 8&nbsp;February 1988.</p></dd>
+<dd>
+<p align="justify">[4] Mary-Claire van Leunen. <i>A Handbook for
+Scholars</i>. Knopf, 1979.</p></dd></dl>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
