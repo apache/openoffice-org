@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+<style type="text/css">
+/* <![CDATA[ */ @import "/branding/css/tigris.css"; /* ]]> */
+</style>
+  <script src="/branding/scripts/sc.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="/branding/css/print.css" media="print" />
+
+  <title>Issue lifecycle</title>
+ </head>
+
+ <body class="docs" onload="self.focus()">
+  <div class="docs" id="issuelifecycle">
+   <!--
+                The contents of this file are subject to the Mozilla Public
+                License Version 1.1 (the "License"); you may not use this file
+                except in compliance with the License. You may obtain a copy of
+                the License at http://www.mozilla.org/MPL/
+               
+                Software distributed under the License is distributed on an "AS
+                IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+                implied. See the License for the specific language governing
+                rights and limitations under the License.
+               
+                The Original Code is the Issuezilla Issue Tracking System.
+               
+                The Initial Developer of the Original Code is Netscape Communications
+                Corporation. Portions created by Netscape are
+                Copyright (C) 1998 Netscape Communications Corporation. All
+                Rights Reserved.
+               
+                Contributor(s): 
+                Contributor(s): Terry Weissman <terry@mozilla.org>
+           -->
+
+   <h2>An Issue's Life Cycle</h2>
+
+   <div id="toc">
+    <ul>
+     <li><strong><a href="/nonav/servlets/HelpTOC">Help index</a></strong></li>
+    </ul>
+
+    <ul>
+     <li>
+      <a href="/nonav/docs/ProjectIssues.html">Project Issues help</a> 
+
+      <ul>
+       <li>The issue life cycle</li>
+
+       <li><a href="/nonav/docs/issuewritinghelp.html">Issue writing guidelines</a></li>
+
+       <li><a href="/nonav/docs/issuezilla_tipsandtricks.html">IssueZilla tips and tricks</a></li>
+
+       <li><a href="/nonav/docs/contributing_patches.html">Contributing patches</a></li>
+      </ul>
+     </li>
+    </ul>
+   </div>
+
+   <h3><a id="lifecycle_table" name="lifecycle_table">Status</a></h3>
+   The <b>status</b> field indicates the general health of an issue. Only certain status transitions are allowed. The <b>resolution</b> field indicates what happened to this issue. 
+
+   <p><b>Open State issues</b>: The following status values are in an "open" state; they have no resolution.</p>
+
+   <ul>
+    <li><a href="/nonav/docs/issues_unconfirmedhelp.html">UNCONFIRMED</a>: This issue has recently been added to the database. Nobody has validated that this issue is true. Users who have the "canconfirm" permission set may confirm this issue, changing its state to <b>NEW</b>. Or, it may be directly resolved and marked <b>RESOLVED</b>.</li>
+
+    <li>NEW: This issue has recently been added to the assignee's list of issues and must be processed. Issues in this state may be accepted, and become <b>STARTED</b>, passed on to someone else, and remain <b>NEW</b>, or resolved and marked <b>RESOLVED</b>.</li>
+
+    <li>STARTED: This issue is not yet resolved, but is assigned to the proper person. From here issues can be given to another person and become <b>NEW</b>, or resolved and become <b>RESOLVED</b>.</li>
+
+    <li>REOPENED: This issue was once resolved, but the resolution was deemed incorrect. For example, a <b>WORKSFORME</b> issue is <b>REOPENED</b> when more information shows up and the issue is now reproducible. From here issues are either marked <b>STARTED</b> or <b>RESOLVED</b>.</li>
+   </ul>
+
+   <p><b>Resolved State issues</b>: The following status values are in an "resolved" state; they have no resolution.</p>
+
+   <ul>
+    <li>RESOLVED: A resolution has been taken, and it is awaiting verification by QA. From here issues are either re-opened and become <b>REOPENED</b>, are marked <b>VERIFIED</b>, or are closed for good and marked <b>CLOSED</b>.</li>
+
+    <li>VERIFIED: QA has looked at the issue and the resolution and agrees that the appropriate resolution has been taken. Issues remain in this state until the product they were reported against is actually released, at which point they become <b>CLOSED</b>.</li>
+
+    <li>CLOSED: The issue is considered dead, the resolution is correct. Any zombie issues who choose to walk the earth again must do so by becoming <b>REOPENED</b>.</li>
+   </ul>
+
+   <p>NOTE: Resolved state issues can have the following resolution values:</p>
+
+   <ul>
+    <li>FIXED: A fix for this issue is checked into the source code repository and tested.</li>
+
+    <li>INVALID: The problem described is not an issue</li>
+
+    <li>WONTFIX: The problem described is an issue which will never be fixed.</li>
+
+    <li>LATER: The problem described is an issue which will not be fixed in this version of the product.</li>
+
+    <li>REMIND: The problem described is an issue which will probably not be fixed in this version of the product, but might still be.</li>
+
+    <li>DUPLICATE: The problem is a duplicate of an existing issue. Marking an issue duplicate requires the issue number of the duplicating issue and will at least put that issue number in the description field.</li>
+
+    <li>WORKSFORME: All attempts at reproducing this issue were futile, reading the code produces no clues as to why this behavior would occur. If more information appears later, please re-assign the issue, for now, file it.</li>
+   </ul>
+
+   <h3><a id="issuesequence" name="issuesequence">More about the sequence of an issue's status</a></h3>
+
+   <p>What happens to an issue when it is first reported depends on who reported it. By default, issues reported (that is, entered) into IssueZilla are assigned a status of <code>UNCONFIRMED</code>. This means that a QA (Quality Assurance) person -- or whoever has the appropriate permissions on your project -- needs to confirm that this issue is legitimate before changing its status to <code>NEW</code>. By sending mail to <!-- is
+                    this the right alias?
+                    -->issues-subscribe@&lt;projectname&gt;.domain.com, you can be notified of all changes to an issue. You then use issue tracking to view and further "workflow" the issue.</p>
+
+   <p>If you are a project member who is a developer/user/tester, you can create <code>NEW</code> issues and assign them to other developers. When an issue's status becomes <code>NEW</code>, the developer assigned the issue either accepts it or reassigns it to someone else. If the issue remains new and inactive for more than a week, IssueZilla nags the issue's owner with email until action is taken. Whenever a issue is reassigned or has its component changed, its status is set back to <code>NEW</code>. The <code>NEW</code> status means that the issue is newly added to a particular developer's plate, not that the issue is newly reported. Think of <code>NEW</code> as an important e-mail you need to answer, except you respond through IssueZilla, and you can use this tool to track the issue's progress more efficiently than e-mail.</p>
+
+   <p>Some project members with additional permissions have the ability to change all the fields of a issue. (Default permissions only allow limited fields to be changed. (<a href="/nonav/docs/ProjectIssues.html#permissions">Read more about IssueZilla permissions</a>). Whenever you change a field in a issue it's a good idea to add additional comments to explain what you are doing and why. Make a note in the comments field whenever you:</p>
+
+   <ul>
+    <li>change the component</li>
+
+    <li>reassign the issue</li>
+
+    <li>create an attachment</li>
+
+    <li>add a dependency, or</li>
+
+    <li>add someone to the CC list.</li>
+   </ul>
+
+   <p>Whenever someone else makes a change to an issue or adds a comment, they are added to the CC list and the owner, reporter, and CC list receive an email announcing changes to the issue. This email reports the change using a "diff" format, marking which lines have changed and including any new comments.</p>
+
+   <h3><a id="verifyissues" name="verifyissues">Verifying issues</a></h3>
+
+   <p>When issues are marked resolved, project/component owners look at these to make sure the appropriate action has been taken. If they agree, the issue is marked <code>VERIFIED</code>. Issues remain in this state until the product or version is released, then the issue is marked <code>CLOSED</code>. Issues may come back to life by becoming <code>REOPENED</code>.</p>
+
+   <p>Be careful about changing the status of someone else's issues. Instead of making the change yourself, it's usually best to make a note of your proposed change as a comment <i>first</i> and to let the issue's owner review this and make the change themselves. For example, if you think one issue is a duplicate of another, make a note of it in the "Additional Comments" section of the issue.</p>
+
+   <p>If you make a lot of useful comments to others' issues, you gain their trust in your judgement and you may be given permissions to go ahead and make the changes yourself. Unless and until this happens, exercise discretion by using the "Additional Comments" section.</p>
+
+   <div class="courtesylinks">
+    <p><a href="#toc">Top</a> | <a href="/nonav/servlets/HelpTOC">Help index</a></p>
+   </div>
+  </div>
+ </body>
+</html>
+
+

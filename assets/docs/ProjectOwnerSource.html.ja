@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+<style type="text/css">
+/* <![CDATA[ */ @import "/branding/css/tigris.css"; /* ]]> */
+</style>
+  <script src="/branding/scripts/sc.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="/branding/css/print.css" media="print" />
+
+  <title>プロジェクト・ソースコードの管理</title>
+ </head>
+
+ <body class="docs" onload="self.focus()">
+  <div class="docs" id="projectownersource">
+   <h2>プロジェクト・ソースコードの管理</h2>
+
+   <div id="toc">
+    <ul>
+     <li><strong><a href="/nonav/servlets/HelpTOC">ヘルプ索引</a></strong></li>
+    </ul>
+
+    <ul>
+     <li>
+      <a href="/nonav/docs/ProjectOwnerAdmin.html">プロジェクトオーナによる管理</a> 
+
+      <ul>
+       <li><a href="/nonav/docs/ProjectOwnerEdit.html">プロジェクト・ホームページの編集と管理</a></li>
+
+       <li><a href="/nonav/docs/ProjectOwnerNews.html">プロジェクト・サイト・ニュースの管理</a></li>
+
+       <li><a href="/nonav/docs/ProjectOwnerMembers.html">プロジェクト・メンバーの追加およびロールの承認</a></li>
+
+       <li><a href="/nonav/docs/ProjectOwnerMailingLists.html">プロジェクト・メーリングリストの設定と管理</a></li>
+
+       <li><a href="/nonav/docs/ProjectOwnerDocuments.html">プロジェクト・ドキュメンテーションの管理</a></li>
+
+       <li>
+        プロジェクト・ソースコードの管理
+
+        <ul>
+         <li><a href="#gettingstarted">はじめに</a></li>
+
+         <li><a href="#siteadmincvs">CVS リポジトリのタスクについて</a></li>
+
+         <li><a href="#considerations">プロジェクト・オーナとして最初に考慮すべきいくつかの点</a></li>
+
+         <li><a href="#cvspermissions">CVS 権限の管理</a></li>
+        </ul>
+       </li>
+
+       <li><a href="/nonav/docs/ProjectOwnerIssues.html">プロジェクト課題の管理およびレポートの作成</a></li>
+       <li><a href="/nonav/docs/ProjectOwnerCustomStyle.html">Managing custom HTML styling</a></li>
+      </ul>
+     </li>
+    </ul>
+   </div>
+
+   <h3><a name="gettingstarted" id="gettingstarted">はじめに</a></h3>
+
+   <p>このヘルプ・ガイドには、CVS を初めて使用するユーザ向けに、このサイトでホストされているプロジェクトに関連する CVS の管理タスクについてのクイック・リファレンス情報が記載されています。 このガイドは、CVS の詳細なドキュメンテーションや、バージョン管理によって発生する広範囲なプロジェクト管理問題を記載した文書ではありません。CVS の豊富な公開ドキュメンテーションは、オンラインや印刷文書で入手できます。 次のリンクは、このサイトの他のページにある CVS ツールの一般的なドキュメンテーションへのリンクです。これには、多くの信頼できる CVS の外部リソースが含まれています。</p>
+
+   <h4>CVS ツール・マニュアル</h4>
+
+   <ul>
+    <li><a href="/nonav/docs/ddCVS.html">CVS バージョン管理について</a></li>
+
+    <li><a href="/nonav/docs/ddCVS_cvsglossary.html">バージョン管理グロッサリ</a></li>
+
+    <li><a href="/nonav/docs/ddUsingCVS_command-line.html">コマンドライン CVS の利用</a></li>
+
+    <li><a href="/nonav/docs/ddUsingWinCvs.html">WinCVS   の利用</a></li>
+   </ul>
+
+   <h3><a id="siteadmincvs" name="siteadmincvs">CVS リポジトリのタスクについて</a></h3>
+
+   <p>プロジェクトのソース・リポジトリをセットアップするために実行される管理作業は、プロジェクトが承認された時点で自動的に行われます。 CVS 
+を使用した事がなくても、御自身でプロジェクトの CVS リポジトリをセットアップするために、1 から始める必要はありません。</p>
+
+   <p>次のタスクが自動的に行われます。</p>
+
+   <ul>
+    <li>プロジェクトの基本的なリポジトリ構造が、トップレベルのディレクトリとともに作成されます。トップレベルのディレクトリは、プロジェクトが進化していくに従って、サブディレクトリを追加して拡張できます。プロジェクトの Web ・コンテンツ用の「/www」ディレクトリも作成されます。</li>
+
+    <li>
+     プロジェクトの CVSROOT (CVS リポジトリが保存されるサーバの) は、このサイトのホスト・サーバに自動的に設定されて構成されます。プロジェクトの<b>ソースコード</b>ページにある指示には、プロジェクトのソース・リポジトリにログインするために必要な正しい CVSROOT が表示されます。このサイトのほどんとのプロジェクトは、CVSROOT が次のようになります。 
+
+     <p><code>:pserver:username@cvs.projectname.thisdomain:/cvs</code></p>
+    </li>
+   </ul>
+
+   <p>CVS を使い慣れているユーザにとっては、この自動化は、CVS モジュールがこのサイトでホストされているプロジェクト用に事前に構成されることを意味します。これには、次のファイルが含まれます。/p>
+
+   <ul>
+    <li>モジュール・ファイル</li>
+
+    <li>Cvswrappers ファイル</li>
+
+    <li>コミット・サポート・ファイル</li>
+
+    <li>Commitinfo</li>
+
+    <li>ログメッセージの検証</li>
+
+    <li>Editinfo</li>
+
+    <li>Loginfo</li>
+
+    <li>Rcsinfo</li>
+
+    <li>cvsignore によるファイルの無視</li>
+
+    <li>Checkoutlist ファイル</li>
+
+    <li>履歴ファイル</li>
+
+    <li>管理ファイルの拡張</li>
+   </ul>
+
+   <p>バックアップ、復元、移動、リモート・リポジトリ・アクセスの設定などのすべての CVS リポジトリ・タスクは、サイトの管理者によっても扱われます。 CVS 管理ファイルの編集やその他のリポジトリレベルの操作が必要な場合は、サイトの管理者にお問い合わせください。</p>
+
+   <h3><a id="considerations" name="considerations">プロジェクト・オーナとして最初に考慮すべきいくつかの点</a></h3>
+
+   <h4><a id="definestructure" name="definestructure">1 から開始する場合</a></h4>
+
+   <p>プロジェクトが完全に新しくまだ何も設定されていない場合は、プロジェクトの進化を考えて全体的なディレクトリ構造を計画します。 トップレベルの CVS モジュール構造は事前に設定されていますが、一般的にどのようにソースファイルを整理するかを決定します。これを既存および将来のプロジェクト・メンバーに伝えます。早期にソースの構造を考えておくことにより、プロジェクトが拡大してく場合にも一定性を維持し、新しいメンバーがプロジェクトを素早く理解することが可能となります。</p>
+
+   <p>プロジェクトのソース構造全体を伝達する良い例として、グラフィックスによる解説をする<a href="http://scarab.tigris.org/scarab-design.html#directory">Scarab 
+オープンソース・プロジェクトの設計書</a>があります。 このサイトでホストされている全プロジェクトに提供されている CVSWeb によるソースコードの閲覧により、ユーザがプロジェクトのソース構造を見て回ることができます。</p>
+
+   <p><a id="postrcsissues" name="postrcsissues"></a><b>プロジェクトのバージョン管理問題</b></p>
+
+   <p>プロジェクトのオーナは、異なる RCS や CVS を使用している開発者と作業を行う場合が多くなることが予想されます。ここで、明確にしておくべき主な違いについて説明します。</p>
+
+   <ul>
+    <li>まず、RCS 
+  の主要な概念はファイルのロックです。この方法では、ファイルがチェックアウトされているときは、ほかの開発者がファイルをチェックアウトしたり、変更することができなくなります。ファイルをロックすることによる利点は、開発者がファイル内の競合した変更について作業を行う必要がないことです。 RCS は、ファイルを一度に 1 人のユーザしか変更できないようにすることによりバージョンを管理します。 このため、RCS の欠点は、ほかの開発者がファイルをチェックアウトしている間は、ファイルへの変更をコミットできないということです。</li>
+
+    <li>CVS 
+  の主要なチェックアウト概念では、複数の開発者がファイルのチェックアウト、変更、コミットを同時に実行することができるため、リモートで地域的に離れた開発者がいるプロジェクトにとって大変役立ちます。CVS は、全ユーザの変更を中央のリポジトリにマージしますが、開発者やその他のプロジェクト・メンバーがファイルにある競合をマージすることが不可欠となります。このような競合を解決するには、ファイルを編集するしかありません。これは、ファイルをコミットする前に、どの変更を維持してどの変更を削除するかを選択します。 </li>
+   </ul>
+
+   <h3><a id="cvspermissions" name="cvspermissions">CVS 権限の管理</a></h3>
+
+   <p>サイトのユーザがプロジェクトのソースコードに対する CVS の読み取りアクセス権を持つかどうかは、プロジェクトがオープンソースまたは著作権保護されたライセンスのどちらを持っているかによって異なります。オープンソースのプロジェクトでは、既定でプロジェクト・メンバーであるかどうかに関わらずサイトの全ユーザにソースファイルへの読み取りアクセス権が許可されます。著作権保護されたプロジェクトのページは公開されず、ソースコードへのアクセスは、プロジェクトのメンバーに制限されます。</p>
+
+   <p>しかし、オープンソースおよび著作権保護されているプロジェクトの両方で、プロジェクトのオーナが付与するロールを使って、CVS の書き込みアクセス権を与えるユーザを決定します。</p>
+
+   <p>プロジェクトのメンバーシップを承認されたオブザーバは、実際にプロジェクトにソースコードを寄稿しません。このため、このユーザは読み取り権を持ちますが、プロジェクトのソース・リポジトリへの書き込み権は<i>持っていません</i>。 オブザーバは、ソースファイルをチェックアウト、表示、リビジョンの比較、更新を行うことができますが、変更したファイルや新しいファイルをソース・リポジトリに寄稿することはできません。</p>
+
+   <p>その他のプロジェクト・メンバーシップのロールはすべて、プロジェクト・メンバーに CVS の書き込みアクセス権を自動的に与えます。これにより、次のことを実行することができます。</p>
+
+   <ul>
+    <li>変更やパッチのコミット</li>
+
+    <li>新しいファイルの追加</li>
+
+    <li>ファイルのインポート</li>
+
+    <li>ファイルの削除</li>
+
+    <li>ファイル・ステータスのチェック</li>
+
+    <li>ファイルのタグおよびブランチ</li>
+   </ul>
+
+   <p>個々のファイルに関連付けられている読み取り/書き込みの権限は、CVS からは独立して管理されています。 ファイルがプロジェクトの CVS リポジトリにチェックインされると、ファイルのこれらの権限を変更できないことに注意してください。</p>
+
+   <div class="courtesylinks">
+    <p><a href="#toc">トップ</a> | <a href="/nonav/servlets/HelpTOC">ヘルプ索引</a></p>
+   </div>
+  </div>
+ </body>
+</html>
+
+

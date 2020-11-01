@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+<style type="text/css">
+/* <![CDATA[ */ @import "/branding/css/tigris.css"; /* ]]> */
+</style>
+  <script src="/branding/scripts/sc.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="/branding/css/print.css" media="print" />
+
+  <title>Managing project files and directories</title>
+ </head>
+
+ <body class="docs" onload="self.focus()">
+  <div class="docs" id="ddcvscvsmanaging">
+   <h2>Managing project files and directories with command line CVS</h2>
+
+   <div id="toc">
+    <ul>
+     <li><strong><a href="/nonav/servlets/HelpTOC">Help index</a></strong></li>
+    </ul>
+
+    <ul>
+     <li>
+      <a href="/nonav/docs/ddCVS.html">About source code version control with CVS</a> 
+
+      <ul>
+       <li><a href="/nonav/docs/ddCVS_cvsglossary.html">A version control glossary</a></li>
+
+       <li><a href="/nonav/docs/ddUsingCVS_command-line.html">Using command-line CVS to access project source files</a></li>
+
+       <li><a href="/nonav/docs/ddCVS_cvscontributing.html">Contributing source code changes with CVS</a></li>
+
+       <li>
+        Managing project files and directories with CVS 
+
+        <ul>
+         <li><a href="#cvsrelease">Releasing files</a></li>
+
+         <li><a href="#cvsremove">Removing files</a></li>
+
+         <li><a href="#cvsrenameandmove">Renaming and moving files</a></li>
+
+         <li><a href="#cvsimport">Importing existing source files</a></li>
+
+         <li><a href="#cvsandrcs">CVS and RCS</a></li>
+
+         <li><a href="#keywords">Using keywords</a></li>
+
+         <li><a href="#aboutbranching">Tagging and branching</a></li>
+        </ul>
+       </li>
+      </ul>
+     </li>
+    </ul>
+   </div>
+
+   <h3><a id="cvsrelease" name="cvsrelease">Releasing files and directories</a></h3>
+
+   <p>At certain point in a project's development cycle, managing your project's source repository invariably involves dealing with files and directories that have become deprecated or obsolete. The decision is made to abandon a certain piece of functionality within a module, for example. Or perhaps an change in infrastructure demands getting rid of some files and moving others. This section deals with several methods for dealing with such file management issues in CVS.</p>
+
+   <p><i>Releasing</i> refers to a way of designating certain directories or modules that will no longer to be used in the project. The command to release is invoked within a working copy and effectively cancels cvs checkouts for the designated directories and their files. Unless these are expressly deleted, the files and directories actually remain intact within the repository, including all file revision history, but are no longer included in when working copies are checked out.</p>
+
+   <p>The command to release a file or directory is:</p>
+
+   <p><code>cvs rel filename</code> (or <code>/directory_name</code>)</p>
+
+   <p><a href="http://www.gnu.org/manual/cvs/html_chapter/cvs_20.html#SEC122">More about releasing</a></p>
+
+   <h3><a id="cvsremove" name="cvsremove">Removing files</a></h3>
+
+   <p><i>Removing</i> is another way to get rid of files when you no longer want or need them to be part of the project's source repository. To do this, you must first delete the file from the working copy you have checked out on your local system.</p>
+
+   <p>Then, to remove a file from the shared repository, type:</p>
+
+   <p><code>cvs remove filename</code></p>
+
+   <p>After you have removed one or more files, you must commit your changes.</p>
+
+   <p>With "<b>cvs remove</b>" (or "<b>cvs rm</b>"), the old file is not completely eradicated but rather stored in CVS' so-called "attic" along with its complete revision history.</p>
+
+   <ul>
+    <li><a href="http://www.gnu.org/manual/cvs/html_chapter/cvs_12.html#SEC62">More about removing files</a></li>
+
+    <li><a href="http://cvsbook.red-bean.com/cvsbook.html#What_Happens_When_You_Remove_A_File">What happens when you remove a file</a></li>
+   </ul>
+
+   <h3><a id="cvsrenameandmove" name="cvsrenameandmove">Renaming and moving files and directories</a></h3>
+
+   <p>If you have imported some existing source code into your repository, you may have files and directories you want to rename or or move.</p>
+
+   <p>The best way to rename a file in your working copy involves a series of steps. Use:</p>
+
+   <p><code>cvs rm old_filename</code></p>
+
+   <p>to remove the old name, then</p>
+
+   <p><code>cvs add new_filename</code></p>
+
+   <p>and finally,</p>
+
+   <p><code>cvs commit new_filename</code></p>
+
+   <p>There really is no specific way in CVS to remove or rename directories. However, you can produce that effect by creating a new directory, moving the files you need into it, removing unwanted files from the old directory, and then simply no longer using it. Later, you can "prune" these empty directories the next time you a check out a working copy by using:</p>
+
+   <p><code>cvs checkout -P</code></p>
+
+   <p>Another way to prune directories with no more files is to update with:</p>
+
+   <p><code>cvs update -dP</code></p>
+
+   <ul>
+    <li><a href="http://www.gnu.org/manual/cvs/html_chapter/cvs_14.html#SEC67">More about moving and renaming files</a></li>
+
+    <li><a href="http://www.gnu.org/manual/cvs/html_chapter/cvs_15.html#SEC71">More about moving and renaming directories</a></li>
+   </ul>
+
+   <h3><a id="cvsimport" name="cvsimport">Importing existing code?</a></h3>
+
+   <p>If you have existing files to add to the project, you can import these into CVS using the following command:</p>
+
+   <p><code>cvs import filename</code></p>
+
+   <p>Importing allows you to add a lot of files at once, something like a super "cvs add." To import <i>all</i> existing directories and files, in your top level directory type:</p>
+
+   <p><code>cvs import -m "log message" projectname</code></p>
+
+   <p>This creates the files and directories in the CVS repository for your project on this site. If you want to preserve these files and directories in their original state, you may want to tag or archive this set of original files before you or any other developers begin checking out working copies of project files.</p>
+
+   <p>If your existing files are already under versioning control -- either in another CVS repository or in a versioning different system such as RCS -- there is no automated method for importing existing files that retains file histories. Using the cvs import command, copying files over, or creating them as new files does not retain these histories.</p>
+
+   <h3><a id="cvsandrcs" name="cvsandrcs">CVS and RCS</a></h3>
+
+   <p>If you're already familiar with RCS, both RCS and CVS use a similar format for storing the version control histories of individual files. But you should be aware of at least two critical differences in adapting CVS:</p>
+
+   <ul>
+    <li>One of the central principals in RCS is file locking, which prevents other developers from checking out or modifying a file when you have checked it out. The benefit to file locking is that developers never have to deal with conflicting modifications within files. RCS protects files by only allowing them to be modified by one person at a time. Therefore, the drawback to RCS is: you can't commit your changes to a file while another developer has it checked out.</li>
+
+    <li>The central tenant of CVS is to allow developers to check out, modify, and commit files concurrently, truly a benefit to projects with remote, geographically dispersed developers. The tradeoff is that on a CVS version controlled project, you can count on dealing with merge conflicts in files. The only method for resolving such conflicts is by hand-editing the file. Thus, project workflow with CVS ends up being a little different.</li>
+   </ul>
+
+   <p><a href="http://www.cvshome.org/cyclic/cyclic-pages/rcs.html">More about RCS and CVS</a></p>
+
+   <h3><a id="keywords" name="keywords">Keyword substitution</a></h3>
+
+   <p>Keyword substitution (a.k.a keyword expansion) is an RCS holdover that may be useful to you as a developer. Keywords essentially let you embed version information permanently in source files. A string containing the full version information associated with a particular keyword is substituted whenever the file is subsequently revised.</p>
+
+   <p>As an example, including:</p>
+
+   <p><code>$Author: tigrisc $</code></p>
+
+   <p>within the files permanently retains the login name of the user who checked in that revision.</p>
+
+   <p>Keyword substitution is a method for tracking file versions once the files are no longer part of a CVS repository. Keyword substitution can also be configured and suppressed.</p>
+
+   <p><a href="http://cvshome.org/docs/manual/cvs_12.html#SEC98">More about keywords (including a list of common keywords)</a></p>
+
+   <h3><a id="aboutbranching" name="aboutbranching">Tagging and branching</a></h3>
+
+   <p>The CVS repository for your project hosted on this site supports branching and tagging your source files. At certain points in your project, you may want to enable development work in your project to progress in more than one direction simultaneously. Instead of maintaining a singular, linear path of development, CVS branching provides a way to divert or split the source tree for ancillary development activities without impacting progress of the project's primary effort. Examples of reasons to branch include:</p>
+
+   <ul>
+    <li>to distinguish a clearly defined set of functionality in project source files for QA and testing, or</li>
+
+    <li>when you want to try an experiment such as added features or functionality without affecting the project's progress.</li>
+   </ul>
+
+   <p>Tagging is included in the discussion about branching because the two operations are used in conjunction. Tagging allows you to "take a snapshot" of the overall project's state at a certain point in time, for example, to preserve a build with some particular characteristic. Because CVS manages individual file revisions, tagging is an important option for benchmarking the overall state of project source code. Files included in a tag will most likely be at different points in their respective revision numbering.</p>
+
+   <p>The critical difference between branching and tagging is the reason they are complimentary operations:</p>
+
+   <p>Branching affects <i>individual files'</i> revision numbering, whereas tagging assigns a common identifying marker <i>across all project files</i> at a fixed point in time.</p>
+
+   <p>So, for example, project files are often tagged at the point where branches are created.</p>
+
+   <p>Ultimately, branches in your project with successful outcomes get incorporated or merged back in to the main development trunk. When that happens -- and it may occur repeatedly on large or long-term projects -- identifying the point where this merge occurs is another reason to create a tag.</p>
+
+   <p><a id="cvstag" name="cvstag">To tag project files, type:</a></p>
+
+   <p><code>cvs tag unique_tag_name</code></p>
+
+   <p>Your tag name can be a release name or date, a product version identifier, or whatever you choose.</p>
+
+   <p><a id="cvsbranch" name="cvsbranch">To create a branch, type:</a></p>
+
+   <p><code>cvs tag -b unique_tag_name</code></p>
+
+   <p>Branching and tagging are complex topics with many considerations and options. You can find more comprehensive information and instructions in the following resources:</p>
+
+   <ul>
+    <li>cvshome.org: <a href="http://www.cvshome.org/docs/manual/cvs_4.html#SEC48">"More about branching and tagging"</a></li>
+
+    <li>The Cederqvist Manual: <a href="http://www.gnu.org/manual/cvs/html_chapter/cvs_8.html#SEC50">"Branches"</a></li>
+
+    <li>
+     Open Source Development with CVS: 
+
+     <ul>
+      <li><a href="http://cvsbook.red-bean.com/cvsbook.html#Marking_A_Moment_In_Time__Tags_">"Marking A Moment In Time (Tags)"</a></li>
+
+      <li><a href="http://cvsbook.red-bean.com/cvsbook.html#Branches">"Branches"</a></li>
+     </ul>
+    </li>
+   </ul>
+
+   <div class="courtesylinks">
+    <p><a href="#toc">Top</a> | <a href="/nonav/servlets/HelpTOC">Help index</a></p>
+   </div>
+  </div>
+ </body>
+</html>
+
+
