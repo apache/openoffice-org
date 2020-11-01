@@ -1,0 +1,87 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Apache OpenOffice Committers</title>
+    <script src="/scripts/api.simile-widgets.org/timeplot/1.1/timeplot-api.js"  type="text/javascript">
+    </script>
+    <script type="text/javascript">
+    var resizeTimerID = null;
+    var timeplot;
+    function onResize() {
+        if (resizeTimerID == null)
+        {
+            resizeTimerID = window.setTimeout(function(){
+                                                    resizeTimerID = null;
+                                                   timeplot.repaint();
+                                                   }, 100);
+        }
+    }
+    function onLoad() {
+        var eventSource = new Timeplot.DefaultEventSource();
+        var plotInfo = [
+                             Timeplot.createPlotInfo({
+                                                     id: "committers",
+                                                     dataSource: new Timeplot.ColumnSource(eventSource,1),
+                                                     valueGeometry: new Timeplot.DefaultValueGeometry({
+                                                                                                      gridColor: "#000000",
+                                                                                                      axisLabelsPlacement: "left",
+                                                                                                      }),
+                                                     timeGeometry: new Timeplot.DefaultTimeGeometry({
+                                                                                                    gridColor: new Timeplot.Color("#000000"),
+                                                                                                    axisLabelsPlacement: "top"
+                                                                                                    }),
+                                                     lineColor: "#007DCD",
+                                                     fillColor: "#BBC8D0",
+                                                     showValues: true
+                                                     })
+                             ];
+        timeplot = Timeplot.create(document.getElementById("committers"), plotInfo);
+        timeplot.loadText("committers.txt", ",", eventSource);
+    }
+    </script>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body onload="onLoad();" onresize="onResize();">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/stats/">stats</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h2>Growth in Project Committers</h2>
+
+<div class="label">
+    Project Committers
+</div>
+<div id="committers" style="height: 300px;">
+</div>
+
+<p>A Committer is an Apache term for a project contributor who has direct
+  access to check in code to the project's version control system. Volunteers
+  are voted in as Committers by the Project Management Committee based on
+  their sustained, high-quality contributions. A current list of Apache OpenOffice Committers
+  is <a href="https://people.apache.org/committers-by-project.html#openoffice">in this table</a>.
+</p>
+<p>
+This chart is updated per month by counting the number of rows in the above people.apache.org committers table.
+</p>
+	
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
