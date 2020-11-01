@@ -36,7 +36,7 @@ find ${1} -type d ! -empty -exec mkdir -p ${GITPATH}/assets/{} \; -exec mkdir -p
 echo
 # 2 - Large Assets
 echo 'copy assets larger than 3M as separate commits'
-find ${1} -type f -size +3M -exec cp {} ${GITPATH}/assets/{} \; -exec ${GITPATH}/tools/push2git.sh assets {} 'large asset'\; 	
+find ${1} -type f -size +3M -exec cp {} ${GITPATH}/assets/{} \; -exec ${GITPATH}/tools/push2git.sh assets {} 'large asset' \; 	
 echo
 # 3 - Assets
 echo 'copy assets not (html and mdtext) to assets tree'
@@ -52,11 +52,11 @@ ${GITPATH}/tools/push2git.sh content ${1} 'html content'
 echo
 # 5 - Brand
 echo 'Convert brand'
-find ${1} -name "brand.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh brand {} \; -exec ${GITPATH}/tools/push2git.sh content {} 'brand'\;
+find ${1} -name "brand.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh brand {} \; -exec ${GITPATH}/tools/push2git.sh content {} 'brand' \;
 echo
 # 6 - Navigators
 echo 'Convert navigators'
-find ${1} -name "*nav.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh navigator {} \; -exec ${GITPATH}/tools/push2git.sh content {} 'navigator'\;
+find ${1} -name "*nav.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh navigator {} \; -exec ${GITPATH}/tools/push2git.sh content {} 'navigator' \;
 echo
 # 7 - Markdown
 echo 'Convert markdown pages'
