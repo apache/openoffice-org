@@ -1,0 +1,129 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 7  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Ingo Schmidt">
+	<META NAME="CREATED" CONTENT="20020419;13085671">
+	<META NAME="CHANGED" CONTENT="20040204;19025249">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="de-DE" DIR="LTR">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/installation/">installation</a>&nbsp;&raquo;&nbsp;<a href="/installation/pics/">pics</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<P ALIGN=LEFT STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><FONT SIZE=6>Understanding
+the script language</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Verdana, sans-serif">The setup scripts is a file you
+can read with a normal text editor. In an installation set it is
+placed next to setup. The script contains only blocks, beginning with
+a special keyword and ending with an &bdquo;End&ldquo;. </FONT>
+</P>
+<P><FONT FACE="Verdana, sans-serif">A typical block looks like: </FONT>
+</P>
+<P STYLE="line-height: 100%"><FONT FACE="Verdana, sans-serif">File
+gid_File_Lib_Db31<BR>Name = &quot;libdb32.dll&quot;;<BR>PackedName =
+&quot;f_0320&quot;;<BR>Size = 430080;<BR>Dir =
+gid_Dir_Program;<BR>Carrier = gid_DataCarrier;<BR>UnixRights =
+755;<BR>Date = &quot;23012002&quot;;<BR>Time = &quot;0600&quot;;<BR>Styles
+= (PACKED);<BR>End</FONT></P>
+<P STYLE="line-height: 100%"><FONT FACE="Verdana, sans-serif">This
+block is the <B><I>definition</I></B> of the global ID
+gid_File_Lib_Db31. Due to the beginning word <B>File</B> it describes
+a file. What information is needed for a file definition? First of
+all we see the name libdb32.dll. This is the physical name of the
+file. This file is packed in the installation set in a file name
+f_0320. The size of the unpacked libdb32.dll is 430.080 bytes. It
+shall be installed into a directory with the global ID
+gid_Dir_Program. This gid has to be definded in this setup script
+before this file definition. The Carrier is the medium, on which this
+file is stored. This is important for example for multi discs
+installations. If we install this product on a Unix platform we can
+give the Unix rights 755 to it. The installation date will be the
+01/23/2002, the installation time is 0600. This file is packed into
+the file f_0320, therefore it has the Style Packed. </FONT>
+</P>
+<P STYLE="line-height: 100%"><FONT FACE="Verdana, sans-serif">This
+block you can find in the setup script of an installation set. The
+original setup script is located in the bin directory of the output
+tree. It was created in one of the scp-projects. The block of this
+file looks in the original setup script:</FONT></P>
+<P STYLE="line-height: 100%"><FONT FACE="Verdana, sans-serif">File
+gid_File_Lib_Db31<BR>Name = &quot;libdb32.dll&quot;;<BR>Dir =
+gid_Dir_Program;<BR>Carrier = gid_Datacarrier;<BR>UnixRights =
+755;<BR>Date = &quot; 23012002 &quot;;<BR>Time = &quot;0600&quot;;<BR>Styles
+= (PACKED);<BR>End</FONT></P>
+<P STYLE="line-height: 100%"><FONT FACE="Verdana, sans-serif">As you
+can see, scpzip adds the lines for the PackedName and the Size to the
+file definition. These are data, you cannot know, when you define a
+new file. </FONT>
+</P>
+<P STYLE="line-height: 100%"><FONT FACE="Verdana, sans-serif">But how
+looks the original file definition. As you have already read, the
+setup script in the output tree is already platform and product
+independent. It was created from scp files, which were checked,
+preprocessed, linked and edited in many ways. The original file
+definition in the scp projects is the following definition block:</FONT></P>
+<P STYLE="line-height: 100%"><FONT FACE="Verdana, sans-serif">File
+gid_File_Lib_Db31<BR>BIN_FILE_BODY;<BR>#ifdef UNX<BR>Name =
+&quot;libdb-3.2.so&quot;;<BR>#else<BR>Name =
+&quot;libdb32.dll&quot;;<BR>#endif<BR>Dir = gid_Dir_Program;<BR>Styles
+= (PACKED);<BR>End</FONT></P>
+<P STYLE="line-height: 100%"><FONT FACE="Verdana, sans-serif">Obviously
+the name of this file is platform dependent. You can also see a macro
+name BIN_FILE_BODY. This is defined in the file macros.inc scp2
+project.</FONT></P>
+<P STYLE="line-height: 100%"><FONT FACE="Verdana, sans-serif">#define
+BIN_FILE_BODY FILE_BODY \<BR>UnixRights = 755</FONT></P>
+<P STYLE="line-height: 100%"><FONT FACE="Verdana, sans-serif">BIN_FILE_BODY
+contains only two lines: The macro FILE_BODY and the UnixRights.</FONT></P>
+<P STYLE="line-height: 100%"><FONT FACE="Verdana, sans-serif">In this
+way one file is defined. If you do not want, that the file belongs to
+the root module and is installed always, you have to assign the file
+to a module. Modules can be deselected by a user in a user defined
+installation process. By the way, modules are also defined in such
+blocks, beginning with the keyword Module. These module definitions
+contain lists of files, of procedures and whatever can be defined in
+a setup script. One module is a root module, showing that it cannot
+be deselected during the setup.  If a module contains the lines:</FONT></P>
+<P STYLE="line-height: 100%"><FONT FACE="Verdana, sans-serif">Default
+= YES;<BR>Minimal = YES;</FONT></P>
+<P STYLE="line-height: 100%"><FONT FACE="Verdana, sans-serif">it is
+selected in a Default and Minimal installation. The directories in
+the scp projects represent the modules. The directory scp2/ooo
+contains all files, registryitems, ... that belong to the root
+module. In the directory scp2/cde you find all the content of the cde
+module.</FONT></P>
+<P STYLE="line-height: 100%"><FONT FACE="Verdana, sans-serif">A
+product like an OpenOffice.org can be understand as the addition of
+all of these modules. All the defined scp files in the scp2 directory
+are bound together by the linker par2script.pl, who gets his
+information from the product definition in scp2/util/makefile.mk.</FONT></P>
+<P STYLE="line-height: 100%"><BR><BR>
+</P>
+<P STYLE="line-height: 100%"><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

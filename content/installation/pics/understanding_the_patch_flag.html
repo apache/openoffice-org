@@ -1,0 +1,136 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 8  (Solaris Sparc)">
+	<META NAME="AUTHOR" CONTENT="Ingo Schmidt">
+	<META NAME="CREATED" CONTENT="20020419;13085671">
+	<META NAME="CHANGED" CONTENT="20070730;16330200">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="de-DE" DIR="LTR">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/installation/">installation</a>&nbsp;&raquo;&nbsp;<a href="/installation/pics/">pics</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<P ALIGN=LEFT STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><FONT SIZE=6>Understanding the PATCH flag</FONT></FONT></P>
+<P><BR>
+</P>
+<P><FONT FACE="Verdana, sans-serif">
+The flat PATCH has to be used, if a file shall be included into a patch product. The flag can be assigned 
+at the moment to scp items "File" and "RegistryItem". So the patch can add or exchange files and write entries
+into the Windows Registry. The PATCH flag has to be assigned to every file, that was changed after the final release
+of a product, if this file shall be included into a following patch for this final release.
+</P>
+<P>
+In the most simple case, you can just assign the PATCH flag directly in the scp project to a file. Example:
+<BR><BR>
+<FONT FACE="Verdana, sans-serif">
+File gid_File_Bin_Open_Url<BR>
+    BIN_FILE_BODY;<BR>
+    Dir = gid_Dir_Program;<BR>
+    Name = "open-url";<BR>
+    Styles = (PACKED,PATCH);<BR>
+End<BR>
+</FONT>
+<BR>
+or to a RegistryItem:<BR><BR>
+<FONT FACE="Verdana, sans-serif">
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Install<BR>
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;<BR>
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";<BR>
+	ModuleID = gid_Module_Root;<BR>
+	Name = "INSTALLLOCATION";<BR>
+	Value = "<progpath>";<BR>
+	Styles = (PATCH);<BR>
+End<BR>
+</FONT>
+</P>
+<P>
+If the file is defined in a macro, there is a "PATCH"-macro available:<br><br>
+STD_RES_FILE( gid_File_Res_Abp, abp)  # <- Not in Patch<br><br>
+STD_RES_FILE_PATCH( gid_File_Res_Abp, abp)  # <- In Patch<br><br>
+The following macros are available, that already contain the PATCH flag:<br><br>
+<FONT FACE="Verdana, sans-serif">
+PACKED_TXT_FILE_BODY_PATCH<br>
+ARCHIVE_TXT_FILE_BODY_PATCH<br>
+ARCHIVE_SUBST_FILE_BODY_PATCH<br>
+PACKED_LIB_FILE_BODY_PATCH<br>
+PACKED_FILTER_FILE_BODY_PATCH<br>
+STD_LIB_FILE_PATCH<br>
+STD_RES_FILE_PATCH<br>
+STD_FILTER_FILE_PATCH<br>
+STD_JAR_FILE_PATCH<br>
+UNO_JAR_FILE_PATCH<br>
+PACKED_UNO_LIB_FILE_BODY_PATCH<br>
+STD_UNO_LIB_FILE_PATCH<br>
+SPECIAL_UNO_LIB_FILE_PATCH<br>
+SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH<br><br>
+</FONT>
+</P>
+<P>
+A little bit more complicated is the case, if only a selection of files shall be integrated into a patch. This is
+relevant for all files, that are defined in scp project with style ARCHIVE. Such files can contain hundreds of files, from
+which only a very small number shall be integrated into the patch. Therefore this file has to get the flag PATCH and
+additionally a "Patchfiles" section, in which all files are listed in a comma separated list, that shall be included into 
+the patch. Example:<br><br>
+<FONT FACE="Verdana, sans-serif">
+File gid_File_Share_Config_Sofficecfg_uiconfig_Zip<br>
+    TXT_FILE_BODY;<br> 
+    Styles = (ARCHIVE,PATCH);<br> 
+    Dir = gid_Dir_Share_Config_Sofficecfg;<br> 
+    Name = "uiconfig.zip";<br> 
+    Patchfiles = ("modules/dbbrowser/menubar/menubar.xml",<br> 
+                  "modules/scalc/menubar/menubar.xml",<br> 
+                  "modules/sglobal/accelerator/de/default.xml",<br> 
+                  "modules/sglobal/accelerator/en-GB/default.xml",<br> 
+                  "modules/sglobal/accelerator/en-US/default.xml",<br> 
+                  "modules/sglobal/accelerator/es/default.xml",<br> 
+                  "modules/sglobal/accelerator/fr/default.xml",<br> 
+                  "modules/sweb/accelerator/de/default.xml",<br> 
+                  "modules/sweb/accelerator/en-GB/default.xml",<br> 
+                  "modules/sweb/accelerator/en-US/default.xml",<br> 
+                  "modules/sweb/accelerator/es/default.xml",<br> 
+                  "modules/sweb/accelerator/fr/default.xml",<br> 
+                  "modules/swriter/accelerator/de/default.xml",<br> 
+                  "modules/swriter/accelerator/en-GB/default.xml",<br> 
+                  "modules/swriter/accelerator/en-US/default.xml",<br> 
+                  "modules/swriter/accelerator/es/default.xml",<br> 
+                  "modules/swriter/accelerator/fr/default.xml",<br> 
+                  "modules/simpress/accelerator/de/default.xml",<br> 
+                  "modules/simpress/accelerator/en-GB/default.xml",<br> 
+                  "modules/simpress/accelerator/en-US/default.xml",<br> 
+                  "modules/simpress/accelerator/es/default.xml",<br> 
+                  "modules/simpress/accelerator/fr/default.xml",<br> 
+                  "modules/simpress/menubar/menubar.xml",<br> 
+                  "modules/sdraw/accelerator/de/default.xml",<br> 
+                  "modules/sdraw/accelerator/en-gb/default.xml",<br>
+                  "modules/sdraw/accelerator/en-us/default.xml",<br> 
+                  "modules/sdraw/accelerator/es/default.xml",<br> 
+                  "modules/sdraw/accelerator/fr/default.xml",<br> 
+                  "modules/sdraw/menubar/menubar.xml");<br> 
+End
+</FONT">
+<br> 
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

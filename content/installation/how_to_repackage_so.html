@@ -1,0 +1,237 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+         	                        
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=iso-8859-1">
+  <title></title>
+                                 	 	                        
+  <meta name="GENERATOR" content="StarOffice/5.2 (Win32)">
+         	                        
+  <meta name="AUTHOR" content="Oliver Bolte">
+         	                        
+  <meta name="CREATED" content="20001218;17461754">
+         	                        
+  <meta name="CHANGEDBY" content="Ingo Schmidt">
+         	                        
+  <meta name="CHANGED" content="20010205;15392152">
+         	                        
+  <style>
+	<!--
+		@page { margin: 2cm }
+	-->
+	</style>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/installation/">installation</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+                 
+<p align="Center" style="margin-bottom: 0cm;"><b><font size="5">HowTo repackage
+    an StarOffice<small><small><sup>TM</sup></small></small> installation
+set<br>
+        </font></b><font size="5"><small><small>by <b><a href="mailto:Oliver.Braun@sun.com">
+        Oliver Braun</a></b></small></small><b><br>
+        </b></font></p>
+                  
+<p style="margin-bottom: 0cm;"><font size="4"><br>
+        Introduction:</font></p>
+                      
+<p style="margin-bottom: 0cm;"> </p>
+                 
+<p style="margin-bottom: 0cm;">This HowTo describes the necessary steps to
+    take to be able to make standard unix packages (rpm, pkg, ..) out of
+an   StarOffice<small><sup>  TM</sup></small> installation set. It does not
+deal   with any specific package manager. If you have created a script for
+your  favourite package manager and want to share it with others, please
+drop me  a <a href="mailto:Oliver.Braun@sun.com?subject=package%20manager%20script">
+        note</a>.</p>
+               
+<p style="margin-bottom: 0cm;">The StarOffice<small><sup>TM</sup></small>
+        6.0 installation on a unix system differs slightly from an OpenOffice.org 
+   641 B/C installation, so if you are looking for instructions for the last 
+   one, you should look <a href="how_to_repackage_oo.html">here</a>.&nbsp;</p>
+             
+<p style="margin-bottom: 0cm;"> </p>
+               
+<p style="margin-bottom: 0cm;"><font size="4"><br>
+       A. Install StarOffice<small><sup>TM</sup></small> &nbsp;on your machine</font></p>
+                    
+<ol>
+         <li>                                        
+    <p style="margin-bottom: 0cm;">Log into your machine as <b>root</b>.&nbsp;</p>
+         </li>
+         <li>                                   
+    <p style="margin-bottom: 0cm;">Start the setup application with the "-net" 
+   option: <b>&lt;path-to-office-installation-set&gt;/setup -net &amp;</b><br>
+           </p>
+         </li>
+         <li>                                        
+    <p style="margin-bottom: 0cm;">On the "Select Installation Type" page, 
+  select "<b>Custom Installation</b>".</p>
+         <i>                 </i></li>
+       <li>                         
+    <p style="margin-bottom: 0cm;">On the "Select StarOffice 6.0 Modules"
+  page open the node "<b>Optional Components</b>" and&nbsp;<br>
+    a) de-select "Adabas Database" for this is not covered by this HowTo
+yet.<br>
+    b) de-select "Java Environment Installation" if you want to detect/select
+  the java version yourself.<br>
+    c) de-select "CDE Integration" (default on Linux) even if you want the
+ integration  to be included in your package.<br>
+    d) de-select "GNOME Integration" (default on Solaris) if you want to
+do  the GNOME 1.4 integration yourself.<br>
+    e) <b>Linux only</b>: de-select "KDE Integration" if you want to do the 
+ KDE 2 integration yourself.<br>
+        </p>
+        </li>
+          <li>                                        
+    <p style="margin-bottom: 0cm;">Choose the directory to install to, e.g. 
+     <b>/opt/staroffice6.0</b>, and install.<br>
+       <br>
+       </p>
+                                    </li>
+     
+</ol>
+                            
+<p style="margin-bottom: 0cm;"><font size="4">B. Create the package file list(s)</font></p>
+                    
+<p style="margin-bottom: 0cm;">      </p>
+                
+<p style="margin-bottom: 0cm;">Before you start to scan the directory tree 
+ you should decide if you want to create one single package containing all 
+ files or if you prefer two packages, a binary and a language one. The second 
+ way has the advantage of saving a lot of disk space if you are going to provide
+ packages for different languages on the same disc.</p>
+     
+<p style="margin-bottom: 0cm;">To split the file list into two, you should 
+ include all files in <b>&lt;path-to-staroffice-root&gt;/program/resource</b>
+    and the <b>&lt;path-to-staroffice-root&gt;/share</b> tree into &nbsp;the 
+ language package list and the rest into the binary package list.</p>
+     
+<p style="margin-bottom: 0cm;">Note: if you don't want a CDE integration at
+all, you can remove the <b>&lt;path-to-staroffice-root&gt;/share/cde</b> 
+ subtree from your installation before creating the file lists.<br>
+   <br>
+   </p>
+                                                                       
+<p style="margin-bottom: 0cm;"><font size="4">C. CDE integration</font></p>
+                 
+<p style="margin-bottom: 0cm;">StarOffice<small><sup>TM</sup></small> supports 
+ two different ways to integrate with your CDE: &nbsp;a system wide panel 
+integration and a user based fallback. In our senario the user based fallback 
+will not work because we have deselected CDE integration during the setup.</p>
+     
+<p style="margin-bottom: 0cm;">To include the system wide CDE integration 
+ in your package, you should call the <b>&lt;path-to-staroffice-root&gt;/share/cde 
+ /dtappintegrate</b> script with the parameters <b>&lt;path-to-staroffice-root&gt; 
+  StarOffice 6.0 en</b> from the post-installation section of your package. 
+ Note: when you install StarOffice in a different language than english, you
+ will have to replace "en" with the ISO language code of the language you
+install for ( e.g. "de" for german ).&nbsp;</p>
+     
+<p style="margin-bottom: 0cm;">For proper deinstallation, you should invoke 
+ <b>/usr/dt/bin/dtappintegrate</b> with the parameters <b>-u -s &lt;path-to-staroffice-root&gt;</b>
+    and <b>rm -rf &lt;path-to-staroffice-root&gt;/dt </b>from the pre-deinstallation 
+ section of your package.<br>
+   <br>
+         </p>
+                 
+<p style="margin-bottom: 0cm;"><font size="4">D. GNOME 1.4 integration</font></p>
+                            
+<p style="margin-bottom: 0cm;"><font size="3">The GNOME 1.4 integration of 
+ </font>StarOffice<small><sup>TM</sup></small><font size="3"> consists of 
+a set of zip files containing the menu integration files and a small binary 
+ that does the user space filetype registration. As you may want the GNOME 
+ integration to be system wide, you can only take the corresponding files 
+as templates, but have to provide your own set of files.</font></p>
+     
+<p style="margin-bottom: 0cm;"><font size="3">To find the files provided by
+</font>StarOffice<small><sup>TM</sup></small><font size="3"> go back to your
+installation set and lookup the following strings in the <b>setup.ins</b>
+    file: group_pngs.zip, writer_pngs.zip, calc_pngs.zip, draw_pngs.zip,
+impress_pngs.zip  for the icons and gnomeappgroup.zip, gnomeappwriter.zip,
+gnomeappcalc.zip,  gnomeappdraw.zip, gnomeappimpress.zip for the .desktop
+templates. The "PackedName"  you will find close to the names stated above
+is the name of the f_xxxx zip  file archieve that includes the content of
+the original zip files. You can  either rename the files (e.g. f_0531 -&gt;
+&nbsp;</font><font size="3">group_pngs.zip)  or try to unzip the f_xxxx files
+directly.</font></p>
+     
+<p style="margin-bottom: 0cm;"><font size="3">If you want to register </font>
+  the StarOffice<small><sup>TM</sup></small><font size="3"> file types, you
+ may will find a list of them <a href="http://framework.openoffice.org/documentation/mimetypes/mimetypes.html">
+  here</a>.&nbsp; Note that there is currently a problem with Nautilus 1.x
+ with the XML file formats: Nautilus recognizes them as zip files (which
+is  correct), but does not offer a way to override this detection result
+for specific extensions.</font></p>
+      
+<p style="margin-bottom: 0cm;">      </p>
+                 
+<p style="margin-bottom: 0cm;"><font size="4"><br>
+  E. GNOME 2 integration</font></p>
+    
+<p style="margin-bottom: 0cm;"><font size="3">In the upcoming 2.0 release
+ </font>GNOME will probably switch to UTF-8 encoding for the NLS strings
+in  the .desktop file, so you may use the KDE integration files as templates.<br>
+  </p>
+     
+<p style="margin-bottom: 0cm;"><font size="4"><br>
+  F. KDE integration<br>
+  </font><font size="3"><br>
+  The KDE 2.x integration of StarOffice<small><sup>TM</sup></small> consists
+ of two sets of zip files containing the menu integration files and the mime
+ registration files. These files contain a bunch of placeholders you will
+have to replace before using them. You may also think about changing the menu
+structure from being document based to be application based for the document
+based structure has the following drawbacks: One sees a document  (e.g. Textdocument)
+in the "Open with" list of the context menu of a</font>  StarOffice<small><sup>
+TM</sup></small> file and the application launch feedback also shows a document
+name instead of an application.</p>
+   
+<p style="margin-bottom: 0cm;"><font size="3">To find the files provided by
+</font>StarOffice<small><sup>TM</sup></small><font size="3"> go back to your
+installation set and lookup the following strings in the <b>setup.ins</b>
+     file: kdeappgroup.zip, kdeappwrite.zip, kdeappcalc.zip, kdeappdraw.zip,
+ kdeappimpress.zip for the menu .desktop templates and kdeappgroup.zip, kdeappwriter.zip, 
+kdeappcalc.zip, kdeappdraw.zip, kdeappimpress.zip for the icons and the file 
+type registration files. The "PackedName" you will find close to the names 
+stated above is the name of the f_xxxx zip file archieve that includes the 
+content of the original zip files.  You can either rename the files (e.g. 
+f_0546 -&gt; kdeappgroup.zip) or try to unzip the f_xxxx files directly.</font></p>
+   
+<p style="margin-bottom: 0cm;"><br>
+  </p>
+     
+<p style="margin-bottom: 0cm;"><font size="4">G. Java setup</font></p>
+     
+<p style="margin-bottom: 0cm;">coming soon ..<br>
+   </p>
+                 
+<p style="margin-bottom: 0cm;"><br>
+         </p>
+                 
+<p style="margin-bottom: 0cm; text-decoration: none;"><br>
+         </p>
+                 
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

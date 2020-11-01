@@ -1,0 +1,147 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 8  (Solaris Sparc)">
+	<META NAME="AUTHOR" CONTENT="Ingo Schmidt">
+	<META NAME="CREATED" CONTENT="20020419;13085671">
+	<META NAME="CHANGED" CONTENT="20070730;16465100">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="de-DE" DIR="LTR">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/installation/">installation</a>&nbsp;&raquo;&nbsp;<a href="/installation/pics/">pics</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<P ALIGN=LEFT STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><FONT SIZE=6>Definition
+of a Module </FONT></FONT>
+</P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Verdana, sans-serif">The keyword for a module
+definition is <B>Module</B>. A global ID of a module should begin
+with <B>gid_Module</B>. Modules are the most important structure
+element inside the setup script and also inside the complete scp
+projects. Modules are used, to make a user defined installation
+possible. During the installation it is possible for the user to
+select or deselect some modules, meaning some functuality, he is not
+interested in. Each product can be understand as a composition of
+modules. Every directory in the scp projects defines a module.
+Modules consist of files, directories and the many other items that
+are explained in this help. And products like StarOffice consist of
+the different modules. There is always one module, the root module,
+that cannot be deselected by the user.</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">A typical definition of a module
+in the scp projects looks like:</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">Module
+gid_Module_Prg_Calc_Bin<BR>MOD_NAME_DESC ( MODULE_PRG_CALC_BIN
+);<BR>ParentID = gid_Module_Prg_Calc;<BR>Default = YES;<BR>Minimal =
+YES;<BR>Files =
+(gid_File_Exe_Scalc,gid_File_Lib_Calc,gid_File_Lib_Sc,gid_File_Res_Sc);<BR>Unixlinks
+= (gid_Unixlink_Zip);<BR>Dirs = (gid_Dir_Program_Calc);<BR>End<BR></FONT><BR><BR>
+</P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">First
+of all, a module needs next to the lists, that assign Directories,
+Files, and Unixlinks to modules, some module specific assignments.
+This are a Name, a Description, a ParentID, values for Default and
+Minimal and optionally some styles. The Name and Description are
+visible during the setup and have therefore to be localized. The
+module gid_Module_Prg_Calc_Bin above is such a module, making the
+functuality of the application Calc available, if the user wants so.
+Therefore the Name and Description is defined in the macro
+MOD_NAME_DESC, which is defined in the included file macros.inc. </FONT>
+</P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">#define
+MOD_NAME_DESC(id) \<BR>ALL_LANG(Name,STR_NAME_##id);
+\<BR>ALL_LANG(Description,STR_DESC_##id)</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">MOD_NAME_DESC uses the macro
+ALL_LANG, which is also defined in macros.inc. In this case the two
+strings STR_NAME_MODULE_PRG_CALC_BIN and STR_DESC_MODULE_PRG_CALC_BIN
+are therefore used in this module, describing the name and the
+description of the module. For the translation process it is
+therefore important that these two strings are defined and translated
+in the corresponding <A HREF="understanding_the_lng_files.html">lng
+files</A>. </FONT>
+</P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">There
+is also a feature, which is used, when the user shall be warned if he
+deselects a module. This is for example important if all fonts are
+deselected. With the help of the macro MOD_NAME_DESC_ON_DESELECT,
+which is also defined in the macros.inc, there can be localized a
+text, which is shown in a textbox, when the module is deselected.</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">#define
+MOD_NAME_DESC_ON_DESELECT(id) \<BR>MOD_NAME_DESC(id);
+\<BR>ALL_LANG(OnDeselect,STR_DESELECT_##id)</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">Very
+important for the module is the ParentID, showing that all modules
+belong to a module tree. The upper module in each setup script is the
+module gid_Module_Root. All other modules have to be in a correlation
+to this module, and every module knows its parent. In this example
+the module gid_Module_Prg_Calc_Bin, which is the program module of
+the Calc application, has the parent Calc. Also below the parent are
+modules for the Calc Samples, the Calc Templates and so on. On the
+other hand, the Calc application module is located below the all
+application module and this again is located below the root module,
+which cannot be selected by the user and is also not visible for the
+user. For a better understanding of this module tree you should start
+a installation and select the user defined installation.</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">The
+two lines:</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">Default
+= YES;<BR>Minimal = YES;<BR><BR>indicate, that the module is selected
+in a Default and in a Minimal installation. If the user does not
+select a user defined installation, he has the choice between default
+or minimal. With the help of these two values, you can define,
+whether the module shall be installed in these installation types or
+not. </FONT>
+</P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif">There
+are also some optional styles, which can be assigned to a module: </FONT>
+</P>
+<P><FONT FACE="Verdana, sans-serif"><B>HIDDEN_ROOT</B></FONT><FONT FACE="Verdana, sans-serif">
+: This flag hides the module for the user and does not show it during
+the installation. A module that has the HIDDEN_ROOT flag is not
+selectable or deselectable by the user in a user defined
+installation.</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><FONT SIZE=3>The
+great part of the modules are the lists for the scp items, that have
+to be assigned to modules. There are lists for:</FONT></FONT></P>
+<P><FONT FACE="Verdana, sans-serif"><A HREF="scpitem_file.html">Files</A><BR><A HREF="scpitem_directory.html">Dirs</A><BR><A HREF="scpitem_unixlink.html">Unixlinks</A><BR></FONT><BR>
+</P>
+<P><FONT FACE="Verdana, sans-serif"><B>Language specific modules</B></FONT><FONT FACE="Verdana, sans-serif">
+: Beginning with src680m242 the new concept of template modules was introduced.
+This includes the new file type <B>sct</B> (script template file)
+which represents files, that contain module definitions
+without assignments. The sct file is expanded during scp2 build and the resulting
+inc-file is included into a scp file. In this way modules for all available languages
+are created automatically.
+</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">
+The assignment of "Files", "Dirs" or other items can be achieved by using 
+template modules, that are not used to define "real" modules, but only
+assignments to modules. This template modules require the flag 
+TEMPLATEMODULE. This modules can be included from every non template
+module using the key "Assigns=...". More information is available here:
+<A HREF="scpitem_templatemodule.html">Language specific modules</A>.
+<BR><BR></FONT></P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
