@@ -1,0 +1,84 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>Interview: Davide Dozza and Riccardo Losselli, Leads, Italian Language Project</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/editorial/">editorial</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h2>Interview: Peter Naulls, Debian ARM Developer</h2>
+<p><a href="../lspintro.html">-Louis Suárez-Potts</a></p>
+<p>2004-11</p>
+<p>&nbsp; </p>
+<p>Over the space of a couple of days last week, I interviewed Peter Naulls of the Debian project about the recently completed port of OpenOffice.org 1.1.x to the ARM processor running Debian.  As most readers probably know,  ARM processors are found in everything from mobile phones to the mini iPod, <a href="http://www.findarticles.com/p/articles/mi_m0FAU/is_2_19/ai_83582663">PDAs (such as the iPAQ)</a>, and more, including desktop systems and servers.  According to <a href="http://en.wikipedia.org/wiki/Acorn_RISC_Machine">Wikipedia</a>, ARM chips account for 75 percent of all 32-bit embedded CPUs though it should be emphasized that the embedded market is by no means the only market for ARM processor systems.   Making OpenOffice.org 1.1.x available to this <i>huge</i> market is thus an achievement of some magnitude.  Mobile phones are cheap; as are PDAs; ARM desktops can also be very inexpensive. The port gives millions the power and capability of OpenOffice.org.</p>
+
+<p>Readers wanting to get the binaries or work on the port are urged to first install <a href="http://www.debian.org/">Debian's Linux</a> (it's free). The binaries can be found in the experimental distribution, <a href="http://packages.debian.org/experimental/editors/">http://packages.debian.org/experimental/editors/</a>. Note: this is really meant (at least for now) for those familiar with Debian.</p>
+
+
+<p> <em>Let's start with the usual question: Tell us about yourself and what you working on with OpenOffice.org (OOo).  Also, what do you do outside of working oinOOo? </em></p>
+
+<p> Well, I don't have that great deal of involvement in OOo, most of my involvement in the project was because I was asked to port it to ARM as part of Linux development by <a href="http://www.psion.com/">Psion</a>.  My background is ARM - in particular, I use a somewhat obscure ARM-based British OS called <a href="http://www.riscos.com/">RISC OS</a> developed by the now defunct Acorn (on which incidentally, OOo is extremely unlikely to ever run), although most of the bill are paid by ARM Linux development. </p>
+
+<p><i>What's Debian's stake in OOo? </i></p>
+
+<p> I'm not sure that's the right question to ask, because Debian embraces so many different programs and technologies without any real favouritism; so Debian's "stake" in OOo is, to me anyway, just one more program that is packaged and can be easily used on Debian.  The final value in that ends up with users and companies that have Debian systems. </p>
+
+<p><i>Okay, let's focus on the subject at hand, the new port to the ARM chip.  Can you explain what a port of OpenOffice.org 1.1.x to ARM means? And why it is important? </i></p>
+
+<p> It demonstrates that ARM processors are not just found in phones/PDAs/washing machines (although the overwhelming number are used in those kinds of applications).  ARM has historically been a processor for desktop machines, and the OOo port shows that this is still possible; albeit not at the super high clock speeds found on PPC and Intel-based platforms. </p>
+
+<p><i> What systems and devices are affected by this? Why would people be interested? What are some potentials? </i></p>
+
+<p> Given the demanding space and processing requirements, the number of ARM platforms (beyond development boards) that OOo could potentially run on is a bit limited - the full list is probably (in order of suitability) <a href="http://www.iyonix.com/">Castle iyonix</a> (which I did the Linux port to), Footbridge platforms (<a href="http://www.netwinder.org/">Rebel/Corel Netwinder</a>, <a href="http://www.simtec.co.uk/">Simtec CATS)</a> and perhaps the <a href="http://www.psionplace.com/hardware/Psion-Netbook-2000-09-05-psion-psion-spec.html">Psion netBook</a>. </p>
+
+<p><i> I am thinking, also, of those many who have wanted a version of OOo that runs on very lightweight (or even older) systems. Does this port address those desires? </i></p>
+
+<p> No, it doesn't - partly for the above reasons.  This is an essentially fully featured port - OOo currently has some facility for turning off features, but nowhere near enough to address these type of targets. </p>
+
+<p><i>What were the key technological challenges that you had to overcome? </i></p>
+
+<p> Doing an ARM version of the C++/UNO bridging code.  The existing code for other platforms used dynamically generated machine code in order to persuade some complex behaviour to occur.  This solution really wasn't the tidiest, and in any case, wasn't that suitable for ARM.  In the end, I was able to write some static assembler that performed the same job, although did rely a bit on specific (but unlikely to change) layout of ARM instructions by the compiler.  I also had to fight with some apparent compiler bugs (and C++ really isn't my favourite language) when dealing with some different and also tricky ARM assembler dispatch code. </p>
+
+<p> The biggest practical challenge is that it took 3 days to do a complete build on my 600Mhz Xscale system - I did look into a variety of cross-compiling solutions, but they were all far from suitable for OOo. </p>
+
+<p><i>What helped you overcome them? What would you have liked to be different? </i></p>
+
+<p> Mostly a combination of dumb determination, combined with some rather specialised knowledge about what the compiler was going to do with ARM code.  The ability to cross compile OOo would have saved a great deal of time. </p>
+
+<p><i>What needs to be done now?  And, where can people help out?  There are numerous readers, I am sure, who would like to know where to go. </i></p>
+
+<p> Well, the ARM port really isn't that fast.  There may be some value to be had out of a recompile with GCC 3.4 (GCC 3.3 was current for ARM Linux at the time).  There is also some locking code that would really benefit from an ARM version: currently it's using the generic and slow version.  This task is quite complex, although there's a SPARC version that it could be based upon. </p>
+
+<p> And not forgetting OOo 2.0, although I suspect most of the ARM specific bits in that have already been addressed by my patches to 1.1: it would be good if ARM was a supported platform for that.  There's also no reason why a NetBSD/ARM port can't be done - it should be the case that very few additional changes are needed. </p>
+
+<p><em>What should wannabe developers do?</em></p>
+<p>I recommend any wannbe developers first try and build the Debian package themselves.  After that (or if they get stuck), pop onto the #openoffice.org IRC channel on freenode.  The people there are very helpful.</p>
+
+
+
+<p>&nbsp; </p>
+<p><a href="index.html">Back to Editorial Index</a></p>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
