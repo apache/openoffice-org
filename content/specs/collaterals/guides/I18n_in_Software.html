@@ -1,0 +1,680 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+
+
+
+  
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+    <title>I18n in Software Design</title>
+  
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/specs/">specs</a>&nbsp;&raquo;&nbsp;<a href="/specs/collaterals/">collaterals</a>&nbsp;&raquo;&nbsp;<a href="/specs/collaterals/guides/">guides</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+    <p>
+      <table style="width: 677px; height: 7912px; text-align: left; margin-left: auto; margin-right: auto;" border="0" cellpadding="2" cellspacing="2" align="center">
+        <tbody>
+          <tr>
+            <td>The  following is excerpted from:
+              <p><a href="http://developers.sun.com/dev/gadc/technicalpublications/articles/archi18n.html">I18n in Software Design, Architecture and Implementation</a><br>
+                Andrea Vine,<br>
+                copyright &copy; Sun Microsystems, Inc&nbsp;</p>
+              <p>and</p>
+            <p><a href="http://developers.sun.com/dev/gadc/des_dev/i18ntaxonomy/guiobjects.html">Sun Software Product Internationalization Taxonomy<br>
+                </a>copyright &copy; Sun Microsystems, Inc&nbsp;<br>
+              </p>
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <h1></h1>
+              <h1>Globalisation in Software Design</h1>
+              <p><big style="font-weight: bold;"><big>Contents</big></big></p>
+              <div style="margin-left: 40px;">
+                <a href="#mozTocId282925"></a><a href="#mozTocId667383">Checklist</a><br>
+                <a href="#mozTocId523401">Guide Lines</a><br>
+                <a href="#mozTocId400101">GUI
+Layout</a><br>
+                <a href="#mozTocId174347">Reading
+Order</a><br>
+                <a href="#mozTocId177719">Word
+Order</a><br>
+                <a href="#mozTocId340716">Interaction
+with other products</a><br>
+                <a href="#mozTocId253229">International
+requirements</a><br>
+                <a href="#mozTocId574537">Graphical
+images</a><br>
+                <a href="#mozTocId306382">Color</a><br>
+                <a href="#mozTocId760688">Text</a><br>
+                <a href="#mozTocId885714">Sound</a><br>
+                <a href="#mozTocId295602">Video</a><br>
+                <a href="#mozTocId344249">Layout</a><br>
+                <a href="#mozTocId342051">Command
+Line Interface (CLI)</a><br>
+                <a href="#mozTocId289001">Sources:</a></div>
+              <div style="margin-left: 40px;">
+                <span style="text-decoration: underline;"></span><a href="I18n_in_Software.html#mozTocId289001"></a><br>
+              </div>
+              <h1><a class="mozTocH1" name="mozTocId667383"></a>Checklist</h1>
+              <ol>
+                <li>If the feature will be translated for a locale with a
+right-to-left
+reading order, its layout should be examined by literally looking at
+the user interface in the mirror.<br>
+                </li>
+                <li>
+
+Word order can change from one language to another. Have I assured that no GUI element embedded within a text string?<br>
+                </li>
+                <li>Did the product group&nbsp;looked&nbsp;carefully at the
+internationalization of a third party technology it is needed to get a
+feature running?<br>
+                </li>
+                <li>Are Human figures, body parts, and especially hands&nbsp;avoided at all costs?&nbsp;The only
+acceptable human figure is a stick figure with no clothes, no hands
+with fingers, and no hair.<br>
+                </li>
+                <li>Hands
+- don't even try. There's not a hand position around which isn't
+offensive somewhere. And there is no hand position with universal
+meaning. Really.<br>
+                </li>
+                <li>Are graphics avoided which&nbsp;contain words, represent
+puns on English words, or doing pictorial representations of English
+words?<br>
+                </li>
+                <li>Did you make sure that a single icon is not used for multiple meanings?<br>
+                </li>
+                <li>Text
+chosen for the UI should reflect an international English product.
+Avoid jargon, slang, Americanisms, cutesy phraseology, and humor.</li>
+              </ol>
+              <h2><a class="mozTocH1" name="mozTocId523401"></a>Guide Lines<br>
+              </h2>
+              <h2><a class="mozTocH2" name="mozTocId400101"></a>GUI
+Layout</h2>
+              When dialogs are translated from English into other languages, the
+length of the components containing text can increase more than 30%.
+The components that are affected by translation include buttons, menus,
+tables, labels, and text fields. If the window is already wide,
+expansion can cause it to exceed the width of the screen. The height of
+textual components can also increase when they are translated into
+Asian languages, since Asian characters can be unreadable at a Latin
+height. In the following example, the components on the original
+version of a dialog were laid out side-by-side. The dialog would have
+become much wider after translation.<br>
+              <p><img area="282750" src="images/horizLayout.gif"></p>
+              <p><i>This dialog had components side-by-side.<br>
+                  
+(AdminSuite 3.0 dialog courtesy of Karen Stanley.)</i></p>
+              <p><img area="282750" src="images/verticalLayout.gif"></p>
+              <p><i>The dialog was redesigned by stacking the components
+vertically.
+Now, there is space to the right of the components for expanded text.<br>
+                  
+(AdminSuite 3.0 dialog courtesy of Karen Stanley.)</i></p>
+              <p>Dialogs should be designed to resize gracefully when text
+expands, so
+the localized user interface is attractive and readable. GUI objects
+should be cushioned amidst ample horizontal and vertical space. This
+way, they can expand into the blank space when translated, hence
+reducing the possibility of the entire dialog box growing. </p>
+              <p>If the total length of a row of GUI objects on a dialog is
+longer than
+60% of the width of the dialog, or if the total height of a column of
+GUI objects is taller than 80% of the dialog, the layout will probably
+need to change. </p>
+              <p>The number of menus on the menu bar should be limited, so that
+the bar does not wrap to a second line when translated.
+      </p>
+              <p>When layout managers are available for the platform, they
+should be
+used in laying out dialog boxes. This way, when the components are
+translated, the whole window can expand automatically if necessary. </p>
+              <p>Layouts should be tested with a text expansion utility. The
+utility
+should test horizontal expansion by appending a certain number of extra
+characters to textual components. If a resulting expanded text string
+is too long for the window, the layout will need to be fixed. The
+utility should also test vertical expansion by increasing the height of
+all textual components by a specific amount. If the results make the
+dialog unreasonably tall, the layout will need to be fixed. </p>
+              <p></p>
+              <h2><a class="mozTocH2" name="mozTocId174347"></a>Reading
+Order</h2>
+              In English, people read from left to right and from top to bottom. Some
+languages have different reading orders, such as Hebrew and Arabic,
+where
+the reading order is right to left. The following guidelines will make
+your GUIs easier to use across locales with varying reading orders.
+              <p>If the application will be translated into a
+language with a right-to-left reading order, the layout of the GUI
+objects will need to be reversed. For instance, vertical scrollbars
+will need to move from the right to the left of the window, and labels
+will need to be placed to the right rather than to the left of their
+associated GUI objects. On some systems, this happens automatically;
+this automatic shift should be verified. Also, the tab traversal order
+should make sense in a right-to-left locale. </p>
+              <p>If the application will be translated for a locale with a
+right-to-left
+reading order, its layout should be examined by literally looking at
+the user interface in the mirror. </p>
+              <p></p>
+              <h2><a class="mozTocH2" name="mozTocId177719"></a>Word
+Order</h2>
+              Word order can change from one language to another. A
+GUI that embeds a component in a text string, such as in the following
+example, will need to be laid out again when translated into French.
+This
+is because in French, most adjectives come after the noun they describe
+instead of before it.
+              <p><img area="32054" src="images/useRedArrow.gif"><br>
+                <i>The French translation has an incorrect word order.</i><br>
+                <i>(graphic courtesy of the Java Look and Feel Design Guidelines)</i></p>
+              <p>To anticipate variations in word order, use a layout like the
+following
+in the original version of the product.
+      </p>
+              <p><img area="31372" src="images/arrowColorRed.gif"><br>
+                <i>Now, the GUI object is not embedded within a text string, and
+the word order is correct in both French and English.</i><br>
+                <i>(graphic courtesy of the Java Look and Feel Design Guidelines)</i></p>
+              <p></p>
+              <h2><a class="mozTocH2" name="mozTocId340716"></a><b>Interaction
+with other products</b></h2>
+              <p>This is an area, which has not been emphasized in the past,
+but is
+becoming important to the success of many products. Software products
+within a
+company can be dependent on each other and on external products. If one
+of the pieces is not internationalized properly, it can prevent the
+internationalization of the entire ensemble.</p>
+              <p>Design requirements should address the needs of dependent
+products.
+If an application server cannot process application data in the
+Simplified
+Chinese charset EUC-CN, then chances are all the applications running
+on the server will not be able to accept EUC-CN data. Core level
+products need to be especially sensitive to this. Products such as
+directories, user management, Web servers, etc., need to be fully
+internationalized with well-defined interfaces and APIs sooner than
+higher-level products, such as trading software.</p>
+              <p><b><i>Be especially careful about choosing a
+third-party component or product to include functionality.</i></b>
+More often than not, third party products are not internationalized,
+and this can block internationalization in the including product. If
+the code rights are purchased, then the product group is often saddled
+with retrofitting i18n into someone else's code. Worse, sometimes the
+design itself is flawed, rendering the product useless to your company.
+Any time a third party product is evaluated for use or purchase, the
+product group should look very carefully at its internationalization.</p>
+              <h2><a class="mozTocH2" name="mozTocId253229"></a><b>International
+requirements</b></h2>
+              <p>Some internationalization does not involve the processing of
+international
+data at all. Different markets have different requirements; this is
+why companies divide their sales areas into separate regions.
+Customers in other parts of the world use products for other purposes
+than those in the US. They approach products differently, and they
+may have requirements that are not included in a US specification. It
+is important when gathering requirements for a product that
+international customers, sales personnel, and marketers are
+consulted.</p>
+              <p>Some clear examples come from the auto industry. In England,
+people
+use
+their headlights to signal other drivers for various courtesies,
+usually letting someone else into traffic or giving someone else
+right-of-way. They need a function to flash their headlights even when
+they aren't switched on. The controls in a car made for the US
+wouldn't work, particularly in cars that have retracting headlights.
+The Acura/Honda Integra, which has retracting headlights, has a
+switch in England models that lifts up the headlights, flashes them
+once, and retracts them again. Another example of international
+requirements for cars comes from India. Cars there are required to
+emit a noise when reversing, much like trucks and electric cars in
+the US. Note that these requirements have nothing to do with the
+local language or data; instead they are to facilitate the local way
+of conducting business.</p>
+              <h2><a class="mozTocH2" name="mozTocId574537"></a><b>Graphical
+images</b></h2>
+              <p>Graphical
+images are expensive to create, and are almost as expensive to
+modify. English product is usually sold all over the world. Taking
+these two premises into account, product graphics should be
+universally acceptable if at all possible. </p>
+              <p>Here
+are some basic guidelines for creating universally acceptable
+graphics:</p>
+              <p><b>Human
+figures, body parts, and especially hands should be avoided at all
+costs!</b></p>
+              <p><br>
+                <br>
+              </p>
+              <p>The
+problem with human figures is manifold: is it female <img area="6200" linkid="IMG-046409-000" src="images/sv649651.jpg" align="bottom" border="0" height="124" width="50">
+or male, <img area="5986" linkid="IMG-046409-001" src="images/sv649653.jpg" align="bottom" border="0" height="82" width="73">
+what is it wearing, what color is its skin and hair, what position is
+the body in, what is the figure doing? Obviously in some cultures,
+certain types of dress are inappropriate, whereas they are standard
+in other cultures. People of one sex may not be allowed to perform
+certain tasks in some cultures, but in others they are the primary
+performers of these tasks. In different parts of the world, people
+identify with different skin and hair color on the figures. The only
+acceptable human figure is a stick figure with no clothes, no hands
+with fingers, and no hair.<img area="7290" linkid="IMG-046409-002" src="images/sv649655.jpg" align="bottom" border="0" height="90" width="81"></p>
+              <p>With
+body parts, the difficulty lies not only in which body part is being
+represented, but what <img area="11147" linkid="IMG-046409-003" src="images/sv649656.jpg" align="bottom" border="0" height="71" width="157">
+      <img area="7676" linkid="IMG-046409-004" src="images/sv649657.jpg" align="bottom" border="0" height="101" width="76">position
+it is in, where it is cut off, and how it is cut off. </p>
+              <p>Hands
+- don't even try. There's not a hand position around which isn't
+offensive somewhere. And there is no hand position with universal
+meaning. Really. Don't forget.<img area="5313" linkid="IMG-046409-005" src="images/sv649658.jpg" align="bottom" border="0" height="77" width="69"></p>
+              <p><b>No
+animals should be used to represent anything other than the actual
+animal.</b></p>
+              <p>Consider
+this graphic:</p>
+              <p><img area="12348" linkid="IMG-046409-006" src="images/sv649659.jpg" align="bottom" border="0" height="84" width="147"></p>
+              <p>OK
+for the USA, maybe, but not ideal for India! </p>
+              <p>And
+this one:</p>
+              <p><img area="6300" linkid="IMG-046409-007" src="images/sv649660.jpg" align="bottom" border="0" height="75" width="84"></p>
+              <p>Is
+this a pet? Is it a farm animal? Is it food? Depends on where you
+are.</p>
+              <p>Animals
+are powerful symbols in many cultures, and there is no universal
+animal symbol template. Bottom line; don't use them unless you're
+representing the actual animal.</p>
+              <p><b>Puns
+on English words, pictorial representations of English words, and
+graphics containing words are not universal.</b></p>
+              <p>Representing
+an English word with a picture of something that shares the same word
+but has a different meaning does not translate. For example, in one
+product there was an icon for representing staging. The icon was a
+picture of a theater stage. While this works in English, it doesn't
+work in other languages.</p>
+              <p><img area="5904" linkid="IMG-046409-008" src="images/sv649661.gif" align="bottom" border="0" height="72" width="82">
+      <img area="8190" linkid="IMG-046409-009" src="images/sv649662.jpg" align="bottom" border="0" height="78" width="105"></p>
+              <p>Is
+this a home? How about this?</p>
+              <p>Is
+either one of them related to a home page on the Web? </p>
+              <p>Another
+more common example is using a picture of a musical note to represent
+a message note. Again, this makes no sense to people who do not speak
+English. </p>
+              <p>Text
+in graphics can be a real nightmare. If the product is to be
+localized, then the graphics have to be altered at great expense.
+Simply use some sort of image, and keep the text separate. Use
+numeric callouts and place the descriptions in text above or below
+the graphic. If there is no way around putting the text in the
+graphic, follow all these guidelines:</p>
+              <ol>
+                <li>
+                  <p>Make
+sure there is plenty of expansion room for the text portion of the
+graphic. Translations into alphabetic languages can more than double
+in width, and ideographic languages tend to expand vertically.</p>
+                </li>
+                <li>
+                  <p>Allow
+the font size to change. If a small font is needed in order to make
+the text fit, then the graphic needs to be redesigned, since it will
+not be translatable.</p>
+                </li>
+                <li>
+                  <p>Separate
+the text from the graphic in layers, at least for sourcing purposes.
+Save the graphic without text as a sort of blank, and provide that
+to the localization team.</p>
+                </li>
+              </ol>
+              <p><b>Some
+objects are culture-specific, so verify that a particular object used
+in a graphic is universally understood.</b></p>
+              <p>Take
+a look at this graphic:</p>
+              <p style="margin-left: 0.5in; text-indent: 0.5in; margin-bottom: 0.2in;"><img area="4424" linkid="IMG-046409-010" src="images/sv649663.jpg" name="G11: ......presentsarchi18narticleimagesMailbox09" align="bottom" border="0" height="79" width="56"></p>
+              <p>What
+is it? Where is it used? Who has one that looks like this? The red
+flag is up - what does that mean? In real life? Online?</p>
+              <p>The
+answers are that this is a US rural mailbox. People who have this
+sort of mailbox do not need to mail their outgoing letters in an
+official post box. Instead, the postal carrier will pick up outgoing
+mail for them, as well as delivering the incoming mail. If someone
+has outgoing mail, they raise the red flag. The postal carrier will
+lower it after picking up the outgoing letters. But online, the
+raised red flag is used to indicate that there is newly delivered
+mail in the mailbox. So not only has a location-specific symbol been
+used, but also it has been used incorrectly.</p>
+              <p>This
+is a perfect example of an assumption that everyone in the world
+would understand that a picture of a US rural/suburban mailbox is a
+mailbox. The difficulty is finding a single object that would
+universally illustrate a mailbox. In this case, the shape of the
+mailbox cannot be meaningful - mailboxes around the world come in all
+shapes and sizes. Instead focus on the purpose of the mailbox, as a
+place to receive mail. Make the box simple, and put an obvious letter
+or stack of letters in it. A basic letter image is universally
+understood, so work from there.</p>
+              <p>Some
+objects would be found offensive to certain cultures - take this
+graphic for example:</p>
+              <p style="margin-left: 0.5in; text-indent: 0.5in; margin-bottom: 0.2in;"><img area="6552" linkid="IMG-046409-011" src="images/sv649664.jpg" name="G12: ......presentsarchi18narticleimagesWine&amp;Glass05" align="bottom" border="0" height="78" width="84"></p>
+              <p>While
+in some cultures alcohol indicates a celebration, in others it is
+against religious beliefs to consume alcohol. People from the
+cultures prohibiting alcohol might view the above image as sinful or
+degenerate, not usually the impression that products mean to portray.
+It's best to find another type of image to portray the meaning
+(unless the product is, in fact, wine!)</p>
+              <p><b>Make
+sure that a single icon is not used for multiple meanings.</b></p>
+              <p>While
+this sounds like an obvious statement, it is violated all the time.
+The most common example is this: <img area="1369" linkid="IMG-046409-012" src="images/sv649665.jpg" align="bottom" border="0" height="37" width="37">.
+In a single product, it is used to indicate a link to help
+information, and a query that requires a response. In fact, it's
+been known to occur in a style guide with those two meanings. And
+while the context makes the icon understood, needing a context to
+understand the icon defeats the purpose of using an icon at all.</p>
+              <h2><a class="mozTocH2" name="mozTocId306382"></a><b>Color</b></h2>
+              <p>Color
+means different things in different cultures. What does <span style="color: rgb(255, 0, 0);">putting
+this text in red mean?</span> Does it mean, <span style="color: rgb(255, 0, 0);">"this statement is
+especially important"</span>? Does it mean that the statement is
+meant as a
+caution or warning? Is it just calling out the statement as being
+special? Maybe it signifies that the statement is especially positive
+and good? The answer is, depends on the person reading it.</p>
+              <p>In some countries, red is a celebratory color, conveying a
+positive
+meaning. In Korea, if a person's name appears in red, it means they
+are deceased. White is usually associated with goodness and purity in
+US culture, but elsewhere means death. In addition, the distinctions
+between colors varies with the culture; the line between what is blue
+and what is green changes quite a bit between the US and Japan.</p>
+              <p>This
+is not to say that colors are not useful; they are. But remember that
+color alone cannot convey meaning; this is not just for i18n, but
+also for accessibility, since colorblind people will not be able to
+see the distinctions. It is best to use a consistent color scheme
+throughout a product, or better yet, throughout a line of products.
+Users will grow accustomed to the color scheme, e.g. <span style="color: rgb(255, 0, 0);">red</span>
+for errors, <span style="color: rgb(255, 255, 102);"><span style="color: rgb(255, 252, 102);">yellow</span>
+      </span>for warnings,
+      <span style="color: rgb(0, 128, 0);">green for success.</span></p>
+              <h2><a class="mozTocH2" name="mozTocId760688"></a><b>Text</b></h2>
+              <p>Text
+chosen for the UI should reflect an international English product.
+Avoid jargon, slang, Americanisms, cutesy phraseology, and humor.
+Humor does not translate well. Truly. Ha ha. Get it?</p>
+              <p>Samples
+and scenarios should be chosen carefully. For example, one product
+used a spy as a character in the tutorial, and Swedish customers
+found this very offensive. The best approach would be to talk to
+people from different cultures. Take advantage of the diversity of
+people in the office, as well as the field marketing and sales
+people.</p>
+              <h2><a class="mozTocH2" name="mozTocId885714"></a><b>Sound</b></h2>
+              <p>Some
+sounds are culture specific. While the game show buzzer sound for
+incorrect answers is well known to people in the US, it is simply an
+unpleasant cacophonous noise with no meaning to those in other
+countries. In Japan, making a mistake on your computer can be
+personally embarrassing; broadcasting that mistake to your coworkers
+via a buzz or beep may cause shame. This does not boost product
+sales.</p>
+              <p>The
+best approach to including non-speech sounds is probably to make a
+variety of sounds and allow the user to select. There should always
+be an option to turn sound off. All sounds should be localizable+</p>
+              <p><br>
+              </p>
+              <h2><a class="mozTocH2" name="mozTocId295602"></a>Video</h2>
+              Video is often used for product demonstrations and marketing purposes.
+Since it is expensive to localize video, the voiceover is often the
+only part that changes for each geographic market. Different cultures
+have different ideas of what is appropriate as far as movement, degree
+of eye contact, and clothing are concerned. The non-textual aspects of
+internationalization that apply to graphical user interfaces are
+present and even intensified in video format. Also, video formats can
+differ from one country to another.
+              <p>A marketing professional with experience marketing products
+internationally should be engaged to review the video before it is
+released outside of the United States. </p>
+              <p>.</p>
+              <h2><a class="mozTocH2" name="mozTocId344249"></a><b>Layout</b></h2>
+              <p>Layout
+design must accommodate not only the fixed elements on the screen,
+but also the variable ones.</p>
+              <p>Fixed
+elements</p>
+              <p>For
+localizability, fixed elements must be arranged such that text can
+expand without requiring a great deal of rework. Alphabetic (e.g.
+Latin, Cyrillic, Hebrew) languages tend to expand horizontally,
+sometimes more than double the size of the English text. Chinese
+character based (e.g. Japanese, Chinese, and in this case, Korean)
+languages often expand vertically, since the characters are taller
+than Latin characters. Font sizes may need to be larger for other
+character sets. Allow for text expansion in all UI elements,
+including: </p>
+              <ul>
+                <li>field labels</li>
+                <li>field separators</li>
+                <li>titles</li>
+                <li>user/error message areas</li>
+                <li>buttons</li>
+                <li>checkboxes</li>
+                <li>radio buttons</li>
+                <li>drop down lists</li>
+                <li>table cells</li>
+                <li>text in images*</li>
+              </ul>
+              <p style="margin-left: 0.5in; margin-bottom: 0.2in;">*of
+course, there should be little to no text in images...</p>
+              <p>All
+elements must be not only translatable, but expandable and movable as
+well. It's not always possible to create a button length that makes
+visual sense in all languages. Consider for example the English word
+      <i>edit</i>, which when translated into German becomes <i>bearbeiten</i>.
+For some screens, having a button large enough to accommodate
+      <i>bearbeiten</i> would not work well for <i>edit</i>.
+Bear in mind,
+too, that other languages do not abbreviate as extensively as
+English, so abbreviation is not always a workaround. Some input
+method editors add an additional status line to the bottom of a
+window, so keep this in mind when choosing a window size.</p>
+              <p>The
+order of elements may need to change, especially in sorted lists. If
+the product has a list of radio button choices in alphabetical order,
+that order will likely change in a translated version. The tab order
+should also change to match the visual order.</p>
+              <p>Order
+should be a consideration in the UI design. If it's not necessary,
+it's easier to avoid forcing a particular order. One of the more
+difficult designs is indexing by letter of the alphabet. This is
+quite a common design, but for products being localized, it is not
+always easy to translate into non-alphabetic languages. If it
+appears after examining other possibilities that the index-by-letter
+design truly makes the most sense, check with the localization team
+before forging ahead with the design implementation.</p>
+              <p><img area="17640" linkid="IMG-046409-013" src="images/sv649666.jpg" align="bottom" border="0" height="36" width="490"></p>
+              <p>Sentence
+order will change with different languages; so do not include a
+particular sentence order as part of the design. Not only does the
+order change, but the phrase breaks change as well, so simply
+allowing reordering may not be enough for a translation to look
+correct. For example, it's tempting to construct a calendar entry
+edit screen to have:</p>
+              <p><img area="17286" linkid="IMG-046409-014" src="images/sv649667.jpg" align="bottom" border="0" height="43" width="402"></p>
+              <p>However,
+most languages would have to rearrange the fields, and some (in this
+case, the am/pm) are superfluous and need to be removed.</p>
+              <p>Keyboard
+shortcuts may also need to be manipulatable. If the reason for choosing
+a particular keyboard sequence is due to the keys' close proximity,
+then this may need to change for different keyboard layouts. For
+shortcuts using a mnemonic letter, these will change with
+translations.</p>
+              <p>Variable
+elements or user input fields</p>
+              <p>Fixed
+elements are not the only portions of the UI that change order or
+expand with use in other languages. User input areas also need more
+space for the data they input. The key difference here is that <b>making
+the elements flexible for localization is not enough!</b> English
+product is often sold all over the world, and the UI included with
+English product must accommodate input data from all over the world.</p>
+              <p>The
+most obvious design area is to make sure input areas are large enough
+to handle longer input text. This is a fairly straightforward
+requirement. Consider the Turkish Lira example, currently over
+TRL&nbsp;1,500,000 to USD&nbsp;1.00 - imagine the expansion
+needed in
+a currency field.</p>
+              <p>Another
+expansion consideration is the rendering of input text - the text
+area needs to be not only long enough for more and/or longer words,
+but also tall enough for larger fonts.</p>
+              <p>More
+complex than expansion is the consideration of universal data input
+field structure. For example, if a product allows the user to enter a
+date in a short format, how should the input area look?</p>
+              <p><img area="18894" linkid="IMG-046409-015" src="images/sv649668.jpg" align="bottom" border="0" height="67" width="282"></p>
+              <p>The
+problem with forcing a date format is that it isn't universal. Even
+dates themselves aren't universal, although it isn't unusual for
+products to limit their capacity to the Gregorian calendar. But the
+mm/dd/yy format so common in the US is not used anywhere else, and is
+very confusing. It is better to allow a user in a known locale to
+enter a date format commonly used in that locale. If there is no way
+to know the locale, then the only acceptable universal date format is
+yyyy-mm-dd. The separator may be changed to a dot, or possibly a
+slash / but the rest of the fields must be in the specified order. So
+the date input field might look like:</p>
+              <p><img area="12560" linkid="IMG-046409-016" src="images/sv649669.jpg" align="bottom" border="0" height="40" width="314"></p>
+              <p>Another
+possible solution to the format issue is to provide users with a
+choice of formats, for example in a preferences area. This way you
+can display the chosen format next to the field, and know exactly how
+to parse the input date format from the user.</p>
+              <p>Of
+course, there is the story of the Japanese emperor date. One product
+allowed for modification of the emperor name in the date field,
+trying to make the product as flexible as possible. The Japanese were
+offended, because that implied that the emperor would die. The moral
+of this story: <b>universal design is a tricky business</b>.</p>
+              <p>Other
+field types that should be considered very carefully are names,
+addresses, company information, currency, measurement, numeric
+values, and any other formatted data. Data formats are usually locale
+and/or culture specific. Once again, English product is sold all over
+the world, so just making the arrangement localizable is not enough.
+If the interface must be customized in order for the product to
+function properly, then create several locale profiles that can be
+loaded based on the user's locale. Or, less optimally, make it easily
+user customizable, and inform the customer that they are expected to
+customize the product for the locale.</p>
+              <p>One
+more very important consideration in layout design is orientation.
+Consider what will happen in your interface layout for a
+right-to-left language. If there are controls, they may need to
+switch sides. Titles, tables, table cells, and similar elements will
+need to be right aligned. Text on one side of an image will need to
+move to the other side. Some of these changes may need to be dynamic,
+basing the orientation of the layout on the locale or data language.
+One trick to help visualize what a design might look like in a
+right-to-left layout is to view that design in a mirror. Orientation
+is often so imbedded in a design that suddenly having to accommodate
+a right-to-left language requires a major code revision. Thinking
+about it ahead of time will allow you to serve more customers with
+less effort.</p>
+              <h2><a class="mozTocH2" name="mozTocId342051"></a><b>Command
+Line Interface (CLI)</b></h2>
+              <p>The
+definition of CLI used here is something that a user can type on a
+shell command line. </p>
+              <ul>
+                <li>
+                  <p>The
+command itself is not usually localizable, nor are fixed parameters.</p>
+                </li>
+                <li>
+                  <p>The
+data provided as arguments to commands and parameters may be in
+another charset, locale format, or other localized structure. Be
+prepared for all argument data.</p>
+                </li>
+                <li>
+                  <p>Output
+of the command must be localizable. For example, even fixed data
+from the UNIX ps
+command has column headings. Output text needs to be transformed
+(converted) into the native charset of the command window.
+Fortunately, this does not usually apply to batch commands.</p>
+                </li>
+              </ul>
+              <p>If
+the command parses output from another command, be aware that this
+output may be localized. Don't rely on English string literals which
+are not fixed names. Or force the locale to be en_US or C for the
+execution of that command, for example:</p>
+              <p style="margin-left: 0.5in; margin-bottom: 0.2in;">&gt;
+env LC_ALL=fr date</p>
+              <p style="margin-left: 0.5in; margin-bottom: 0.2in;"><b>vendredi,
+6 octobre 2000, 18:24:02 PDT</b></p>
+              <p style="margin-left: 0.5in; margin-bottom: 0.2in;">&gt;
+env LC_ALL=de date</p>
+              <p style="margin-left: 0.5in; margin-bottom: 0.2in;"><b>Freitag,
+6. Oktober 2000, 18:26:24 Uhr PDT</b></p>
+              <p style="margin-left: 0.5in; margin-bottom: 0.2in;">&gt;
+env LC_ALL=it date</p>
+              <p style="margin-left: 0.5in; margin-bottom: 0.2in;"><b>venerd?,
+6 ottobre 2000, 18:27:23 PDT</b></p>
+              <p style="margin-left: 0.5in; margin-bottom: 0.2in;">Note:
+This locale change only works for the command that follows it. The
+system and shell environment variables remain unchanged.I18n in Software Design,
+Architecture and Implementation<a linkid="A-046409-003" href="http://developers.sun.com/techtopics/global"><br>
+                </a></p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+    </p>
+  
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
