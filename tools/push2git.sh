@@ -24,11 +24,11 @@
 # ${3} Description for commit message - 'assets','large asset','html content','Markdown pages','brand','navigator'
 
 if test "$#" != 3; then
-  echo "USAGE: $0 Category Path Description
+  echo "USAGE: $0 Category Path Description"
   exit 1
 fi
 
 cd ${GITPATH}
 git add ${1}/${2}
-git commit -m 'Migration of ${2} ${3}'
+git commit -m '"Migration of "${2}" "${3}'
 git push

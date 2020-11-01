@@ -22,12 +22,12 @@
 # ${1} Site folder to migrate
 
 if test "$#" != 1; then
-  echo "USAGE: $0 Folder
+  echo "USAGE: $0 Folder"
   exit 1
 fi
 
 cd ${SVNPATH}
-echo 'Migrating ${SVNPATH}/${1} to ${GITPATH}
+echo 'Migrating ${SVNPATH}/${1} to ${GITPATH}'
 echo
 # 1 - Tree structure
 echo 'copy directory structure to assets and content trees'
@@ -52,11 +52,11 @@ ${GITPATH}/tools/push2git.sh content ${1} 'html content'
 echo
 # 5 - Brand
 echo 'Convert brand'
-find ${1} -name "brand.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh brand {} \; -exec ${GITPATH}/tools/push2git.sh assets {} 'brand'\;
+find ${1} -name "brand.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh brand {} \; -exec ${GITPATH}/tools/push2git.sh content {} 'brand'\;
 echo
 # 6 - Navigators
 echo 'Convert navigators'
-find ${1} -name "*nav.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh navigator {} \; -exec ${GITPATH}/tools/push2git.sh assets {} 'navigator'\;
+find ${1} -name "*nav.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh navigator {} \; -exec ${GITPATH}/tools/push2git.sh content {} 'navigator'\;
 echo
 # 7 - Markdown
 echo 'Convert markdown pages'

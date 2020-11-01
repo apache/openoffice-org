@@ -23,10 +23,12 @@
 # ${2} Path of mdtext file to convert to md file
 
 if test "$#" != 2; then
-  echo "USAGE: $0 Type Path
+  echo "USAGE: $0 Type Path"
   exit 1
 fi
 
-echo 'type=${1}' > ${GITPATH}/content/${2}
-nawk -f ${GITPATH}/tools/convert2md.awk ${2} >> ${GITPATH}/content/${2}
+MDPATH=${2:0:${#2}-4}
+echo "Convert "${2}" to "${MDPATH}
+echo "type="${1} > ${GITPATH}/content/${MDPATH}
+awk -f ${GITPATH}/tools/convert2md.awk ${2} >> ${GITPATH}/content/${MDPATH}
 

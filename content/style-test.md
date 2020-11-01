@@ -1,7 +1,7 @@
-title=This is the title
-notice=http://www.apache.org/licenses/LICENSE-2.0
+type=page
+Title=This is the title
+Notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-
 # This is a level 1 header
 ## This is a level 2 header
 ### This is a level 3 header
