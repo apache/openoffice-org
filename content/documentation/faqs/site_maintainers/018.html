@@ -1,0 +1,103 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    <title>null</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/documentation/">documentation</a>&nbsp;&raquo;&nbsp;<a href="/documentation/faqs/">faqs</a>&nbsp;&raquo;&nbsp;<a href="/documentation/faqs/site_maintainers/">site_maintainers</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      <meta http-equiv="REFRESH" content="10;url=http://wiki.services.openoffice.org/wiki/Documentation/FAQ">
+<h3>This page is outdated. You will be redirected to <a href="http://wiki.services.openoffice.org/wiki/Documentation/FAQ">http://wiki.services.openoffice.org
+/wiki/Documentation/FAQ</a> shortly.</h3>
+<div style="margin-bottom: 10em;"></div>
+<p><a href="../../index.html">Documentation</a> / <a href="../index.html">User FAQ</a> / <a href="index.html">Maintainers' FAQ</a> / <a href="017.html" accesskey="p">Previous</a>-<a href="019.html" accesskey="n">Next</a></p>
+<h3>How do I commit or update pages?</h3>
+<ol>
+  <li>After you establish a tunnel, open a second working terminal. You will not work in the terminal where you established the tunnel. Minimize that first terminal, and use it to close the tunnel when you are done moving files to or from the site.</li>
+  <li>Type <code>pwd</code> in the working terminal to verify that you are in your home directory.</li>
+  <li>Use the <a href="032.html">change directory</a> <code>cd</code> command in the second terminal to move to the directory of the file or folder you wish to commit.</li>
+  <li>There are two ways to use the commit command to format the comments.<br/>
+    <ul>
+      <li>To use one line of comments, type<br/>
+        <code>cvs -d :pserver:username@projectname.domain.net:/cvs commit -m "comment" [projectname]</code>
+        <br/>in the second terminal, where:
+        <ul>
+          <li><code>username</code> is your openoffice.org user login,</li>
+          <li><code>projectname.domain.net</code> is the path to where the file lives</li>
+          <li><code>[projectname]</code> is the name of a file or directory in the CVS file server, and</li>
+          <li><code>comment</code> is a one line description of the change.</li>
+        </ul>
+        </li>
+      <li>To allow a more formatted description of the change, use a modified version of this same command to pull up a CVS template. Type<br/>
+        <code>cvs -d :pserver:username@projectname.domain.net:/cvs commit [projectname]</code>
+        <br/>in the working terminal, where:
+        <ul>
+          <li><code>username</code> is your openoffice.org user login,</li>
+          <li><code>projectname.domain.net</code> is the path to where the file lives, and</li>
+          <li><code>[projectname]</code> is the name of a file or directory in the CVS file server.</li>
+        </ul>
+        <p>After you press enter, a cvs template will pop up in vi, a Unix text editor. Type <code>A</code> to begin the <b>Insert</b> mode at the end of the first line. Notice <b>Insert</b> shows at the bottom of the form during this mode. Add your entry. Use the arrow keys to drive around the template. The lines that begin with CVS are informative, and will not show as part of your commits. When your edits are complete, press the <code>Esc</code> key to leave the Insert mode. Type <code>:wq</code> to write and quit the cvs template. The template closes and the commit process continues in the working terminal window.
+      </li>
+    </ul>
+  <li>The commit is complete when your cursor comes back in the working terminal.</li>
+</ol>
+<p><b>Examples of the commit command</b> for user zzzzzz, (assuming pwd = /home/zzzzzz):</p>
+<ul>
+  <li>Type<br/>
+    <code>cvs -d :pserver:zzzzzz@localhost:/cvs commit documentation</code>
+    <br/>in the second terminal to update the entire documentation directory, which is the entire project, with changes to those files on your system.</li>
+  <li>Type<br/>
+    <code>cd documentation/www</code>
+    <br/>Type<br/>
+    <code>cvs -d :pserver:zzzzzz@localhost:/cvs commit faqs</code>
+    <br/>in the second terminal to update the entire faqs directory.</li>
+  <li>Type<br/>
+    <code>cd documentation/www/faqs</code>
+    <br/>Type<br/>
+    <code>cvs -d :pserver:zzzzzz@localhost:/cvs commit -m "Add comments for the commit inside of the quotation marks." index.html</code>
+    <br/> in the second terminal to update only the index page from faqs directory.</li>
+  <li>Type<br/>
+    <code>cd marketing/www</code>
+    <br/>Type<br/>
+    <code>cvs -d :pserver:zzzzzz@localhost:/cvs commit index.html</code>
+    <br/>in the second terminal to update only the index page from marketing project directory.</li>
+  <li>Type<br/>
+    <code>cd qa/www</code>
+    <br/>Type<br/>
+    <code>cvs -d :pserver:zzzzzz@localhost:/cvs commit index.html</code>
+    <br/>in the second terminal to update only the index page from qa project directory.</li>
+</ul>
+<p><b>Note:</b> The commands <code>commit</code> or <code>ci</code> work to perform commits.</p>
+<p><b>Tip:</b> In a terminal, use the up-arrow key to cycle through the past commands used. You can select and edit commands, instead of typing them each time. The computer will only read what is visible at the command prompt when you hit the Enter key.</p>
+<p><b>For more information:</b></p>
+<ul>
+  <li><a href="http://www.openoffice.org/nonav/scdocs/ddCVS_cvscontributing.html#cvscommit">Contributing source code changes</a></li>
+  <li><a href="http://www.openoffice.org/nonav/scdocs/ddCVS_cvscontributing.html#otherdiff">Comparing versions of files before you commit (diff)</a></li>
+  <li><a href="https://www.cvshome.org/docs/manual/cvs-1.11.18/cvs_16.html#SEC131">A.10 diff--Show differences between revisions</a></li>
+  <li><a href="http://cvsbook.red-bean.com/cvsbook.html#Committing">Committing</a></li>
+  <li><a href="https://www.cvshome.org/docs/ref.html">CVS Quick Reference</a></li>
+  <li><a href="025.html">Is there a place where I can see the CVS directory tree?</a></li>
+</ul>
+<p><a href="../../index.html">Documentation</a> / <a href="../index.html">User FAQ</a> / <a href="index.html">Maintainers' FAQ</a> / <a href="017.html" accesskey="p">Previous</a>-<a href="019.html" accesskey="n">Next</a></p>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
