@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+       "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=us-ascii" />
+  <title>OpenOffice Bibliographic implementation</title>
+  <link />
+</head>
+
+<body xml:lang="en">
+<h2>OpenOffice Bibliographic implementation</h2>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Last Modified 2006-October-14</td>
+      <td style="text-align: right"><em>A printer friendly PDF version of
+        this page is available <a
+        href="implementation.pdf">implementation.pdf (134Kb)</a></em></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Contents</h3>
+<ul>
+  <li>Objective</li>
+  <li><a href="#Save">File Save Format</a></li>
+  <li><a href="#XML">OpenOffice XML schema</a></li>
+  <li><a href="#API">OpenOffice Bibliographic API code functions</a>
+    <ul>
+      <li><a href="#Text">TextField</a></li>
+      <li><a href="#text4">XTextField#getPresentation</a></li>
+      <li><a href="#text">Bibliography</a></li>
+      <li><a href="#text2">Textfield/Bibliography</a></li>
+      <li><a href="#text1">FieldMaster/Bibliography</a></li>
+      <li><a href="#text3">BibliographyDataField</a></li>
+      <li><a href="#TextSectio">TextSection</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h3>Objective</h3>
+
+<p>This page provides some basic information about how Openoffice implements
+its bibliographic functions. It provides links to the detailed documentation
+provided by Openoffice. For related information see the <a
+href="http://wiki.services.openoffice.org/wiki/Bibliographic_Project's_Developer_Page">Developer
+page.</a> For details of our proposals for enhanceing the bibliographic API's
+see the <a
+href="http://wiki.services.openoffice.org/wiki/Bibliographic_API_Enhancements">wiki
+page</a>.</p>
+
+<h3>File <a id="Save">Save</a> format</h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td></td>
+      <td>A simple example of how OpenOffice stores bibliographic information
+        in its XML save file format <a
+        href="xml_contents.html">xml-contents.html</a>
+
+        <p>The OpenOffice XML file format document is available. The
+        bibliographic references are on pages 450-451 &amp; 467-471 at <a
+        href="http://xml.openoffice.org/general.html">http://xml.openoffice.org/general.</a></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>OpenOffice <a id="XML">XML</a> schemas</h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td></td>
+      <td>See the XML project site <a
+        href="http://xml.openoffice.org/">http://xml.openoffice.org</a>
+
+        <p>The OpenOffice file format DTD files are at <a
+        href="http://xml.openoffice.org/source/browse/xml/xmloff/dtd/">http://xml.openoffice.org/source/browse/xml/xmloff/dtd/</a>
+        , it is a large document so we have extracted the bibliographic bits
+        in <a href="bib-dtd-bits.html">bib-dtd-bits.html .</a></p>
+
+        <p>A proposal to improved Openoffice XML support for citations in the
+        OOo document format has been accepted by the <a
+        href="http://www.oasis-open.org/home/index.php">OASIS</a> OpenOffice
+        XML Format Technical Committee (<a
+        href="http://lists.oasis-open.org/archives/office/200409/msg00023.html">meeting
+        minutes)</a>. See our <a href="XML-bibliography-proposal.pdf">XML
+        Citation Proposal.pdf</a> .</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>OpenOffice Bibliographic <a id="API">API</a> code functions</h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td></td>
+      <td>This section contains a brief description of the OpenOffice Writer
+        code functions that implement bibliographic services. Use the link to
+        the full documentation to see more detailed explanations.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3><a id="Text">TextField</a></h3>
+
+<p>http://api.openoffice.org/docs/common/ref/com/sun/star/text/TextField.html</p>
+
+<p style="font-size: 12pt"><strong>Description</strong></p>
+A <a href="../form/component/TextField.html">TextFiel<span></span>d</a> is a
+<a href="TextContent.html">TextContent</a> which fades its textual
+representation into the text range to which it is anchored.
+
+<p style="font-size: 12pt">See the Developers Guide <a
+href="http://api.openoffice.org/docs/DevelopersGuide/Text/Text.htm#1+3+5+Text+Fields">7.3.5
+Text Documents - Working with Text Documents - Text Fields</a></p>
+
+<p><span>"Text fields are text contents that add a second level of
+information to text ranges. Usually their appearance fuses together with the
+surrounding text, but actually the presented text comes from elsewhere. Field
+commands can insert the current date, page number, total page numbers, a
+cross-reference to another area of text, the content of certain database
+fields, and many variables, such as fields with changing values, into the
+document. There are some fields that contain their own data, where others get
+the data from an attached field master."</span></p>
+
+<p></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><p><img alt="Text Fields" src="TextFields.png" width="700" />
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Included Services</p>
+
+<p><em>TextContent</em> is an object which can be anchored in a text, like
+instances of TextFrame or TextFields .</p>
+
+<p><strong>Exported Interfaces</strong></p>
+
+<p>XTextField</p>
+
+<p><strong>Description</strong></p>
+
+<p>This interface is used to access the textual representation of this
+field.</p>
+
+<p>[ OPTIONAL ]</p>
+
+<p><strong>Description</strong></p>
+
+<p>makes it possible to access the properties of the field, if any.</p>
+
+<h5><span style="color: #3B00B2; background-color: #FFFFFF">Comment by David
+Wilson</span></h5>
+
+<p style="background-color: #FFFFFF"><span
+style="color: #007F00; background-color: #FFFFFF">The data fields in the
+bibliography need to support complex formatted text and objects and this is
+not possible with the current text field. For example some scientific
+document titles need to be able to display words in Italics.</span></p>
+
+<p style="background-color: #FFFFFF"><span
+style="color: #007F00; background-color: #FFFFFF">In discussing how to
+achieve this, Oliver Specht, has advised that the best approach was to
+enhance the bookmark object.</span></p>
+
+<p style="background-color: #FFFFFF"><span
+style="color: #007F00; background-color: #FFFFFF">A possible solution is "to
+add a new object that is similar to bookmarks</span><span
+style="color: #007F00; background-color: #FFFFFF">(com.sun.star.text.Bookmark).
+This extended bookmark would also carry a DOM tree property. This 'bookmark'
+can span over formatted text longer than a paragraph. The user can modify the
+text inside of this bookmark easily. An interface to access the new elements
+needs to be implemented (sorted by document position).</span></p>
+
+<p style="background-color: #FFFFFF"><span
+style="color: #007F00; background-color: #FFFFFF">The DOM interfaces are in
+com.sun.star.xml.dom. (e.g. XDocument.idl,XNode.idl,XElement.idl)</span></p>
+
+<p style="background-color: #FFFFFF"><span
+style="color: #007F00; background-color: #FFFFFF">There's also a service
+com.sun.star.xml.dom.DocumentBuilder available that supports the creation of
+DOM trees.</span></p>
+
+<p><span>The bibliography component works on the DOM tree and can manipulate
+it independently. In case of using a field the component has to set the
+resulting string representation of the reference at this field." See issue
+66979</span></p>
+
+<h3><a id="text4">XTextField.html#getPresentation</a></h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td><p><a
+        href="http://api.openoffice.org/docs/common/ref/com/sun/star/text/XTextField.html#getPresentation">http://api.openoffice.org/docs/common/ref/</a></p>
+
+        <p><a
+        href="http://api.openoffice.org/docs/common/ref/com/sun/star/text/XTextField.html#getPresentation">com/sun/star/text/XTextField.html#getPresentation</a></p>
+
+        <p><strong>Description</strong></p>
+
+        <p>is the base interface for all text fields.</p>
+
+        <p>A text field is embedded in text and expands to a sequence of
+        characters.</p>
+
+        <p><strong>See also</strong></p>
+
+        <p><a
+        href="http://api.openoffice.org/docs/common/ref/com/sun/star/text/TextField.html">TextField</a></p>
+
+        <p><strong>Methods' Summary</strong></p>
+
+        <p><em>getPresentation</em></p>
+
+        <p><strong>Methods' Details</strong></p>
+
+        <p><em>getPresentation</em> string</p>
+
+        <p><em>getPresentation</em>( [in] boolean bShowCommand );</p>
+
+        <p><strong>Returns</strong></p>
+
+        <p>the display string of the text field either as the command of the
+        field or as the output string.</p>
+
+        <p><strong>Parameter bShowCommand</strong></p>
+
+        <p>if true the command of the field will be returned</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3><a id="text">Bibliography</a></h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><p><a
+        href="http://api.openoffice.org/docs/common/ref/com/sun/star/text/Bibliography.html#">http://api.openoffice.org/docs/common/ref/com/sun/star/text/Bibliography.html#</a></p>
+
+        <h5>Description</h5>
+
+        <p>specifies service of bibliography table within a text document.
+        See also <a
+        href="http://api.openoffice.org/docs/common/ref/com/sun/star/text/BaseIndex.html">BaseIndex.</a></p>
+
+        <h5><strong>Included Services</strong></h5>
+
+        <p><em>BaseIndex</em> : specifies the basic service of different
+        indexes within a document.</p>
+
+        <h4>Properties' Summary</h4>
+
+        <p><em>Locale</em> : contains the locale of the index.</p>
+
+        <p><em>SortAlgorithm</em> : contains the name of the sort algorithm
+        that is used to sort the entries.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3><a id="text1">textfield/Bibliography</a></h3>
+
+<div>
+
+<table>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><a
+        href="http://api.openoffice.org/docs/common/ref/com/sun/star/text/FieldMaster/Bibliography.html#">http://api.openoffice.org/docs/common/ref/com/sun/star/text/textfield/Bibliography.html#</a>
+
+        <h5>Description</h5>
+
+        <p>specifies service of a bibliography text field.</p>
+
+        <p>Bibliographic entry created by Insert &acirc;&euro;&ldquo; Indexes
+        and Tables &acirc;&euro;&ldquo; Bibliography Entry. The content is
+        the source of the creation of bibliographic indexes. The sequence
+        &lt;PropertyValue&gt; in the property "Fields" contains pairs of the
+        name of the field and its content, such as:</p>
+
+        <p>The names of the fields are defined in <a
+        href="http://api.openoffice.org/docs/common/ref/com/sun/star/text/BibliographyDataField.html">BibliographyDataField</a>.
+        A bibliographic entry depends on <a
+        href="http://api.openoffice.org/docs/common/ref/com/sun/star/text/FieldMaster/Bibliography.html">FieldMaster.Bibliography</a></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3><a id="text2">FieldMaster/Bibliography</a></h3>
+
+<div>
+
+<table>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><a
+        href="http://api.openoffice.org/docs/common/ref/com/sun/star/text/FieldMaster/Bibliography.html">http://api.openoffice.org/docs/common/ref/com/sun/star/text/FieldMaster/Bibliography.html</a>
+
+        <h5><strong>Description</strong></h5>
+
+        <p>specifies service of a Bibliography [table] field master.</p>
+
+        <h5><strong>Included Services</strong></h5>
+
+        <p>A TextFieldMaster field specifies important data for its
+        DependentTextFields.</p>
+
+        <h5><strong>Properties' Summary</strong></h5>
+
+        <p><em>IsNumberEntries</em> : determines whether the bibliography
+        text fields are numbered. If the short name of the bibliography entry
+        is displayed instead.</p>
+
+        <p><em>IsSortByPosition</em> : determines whether the bibliography
+        entries in a bibliography index are sorted by the document position.
+        If the SortKey property determines the sorting of the entries.</p>
+
+        <p><em>BracketBefore</em> : determines the opening bracket used to
+        display the bibliography text fields.</p>
+
+        <p><em>BracketAfter</em> : determines the closing bracket used to
+        display the bibliography text fields.</p>
+
+        <p><em>SortKeys</em> : determines the sorting of the bibliography
+        entries in a bibliography index. This property is used if the
+        property IsSortByPosition is not set. Each contained element of the
+        sequence is a sequence of the following two properties:</p>
+
+        <p><em>Locale</em> : contains the locale of the field master.</p>
+
+        <p><em>SortAlgorithm</em> : contains the name of the sort algorithm
+        that is used to sort the text fields.</p>
+
+        <h5><span style="color: #3B00B2; background-color: #FFFFFF">Comment
+        by David Wilson</span></h5>
+
+        <p style="background-color: #FFFFFF"><span
+        style="color: #007F00; background-color: #FFFFFF">The range of
+        options will need to be enhanced.</span></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3><a id="text3">BibliographyDataField</a></h3>
+
+<div>
+
+<table>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><a
+        href="http://api.openoffice.org/docs/common/ref/com/sun/star/text/BibliographyDataField.html#"
+        id="http">http://api.openoffice.org/docs/common/ref/com/sun/star/text/BibliographyDataField.html#</a>
+
+        <h5><strong>Description</strong></h5>
+
+        <p>These values define parts of bibliographic data. They are used to
+        create a bibliography in a text document. Depending on the type of
+        the data some of the fields will usually be left empty.</p>
+
+        <h5><strong>Constants</strong></h5>
+        <ul>
+          <li>IDENTIFIER : This field contains a unique identifier for the
+            bibliographic data.</li>
+          <li>BIBILIOGRAPHIC_TYPE : This field contains the type of the
+            bibliographic reference. It is of the type
+          bibliographydatafield.</li>
+          <li>ADDRESS : This field contains the address of the publisher.</li>
+          <li>ANNOTE : This field contains an annotation.</li>
+          <li>AUTHOR : This field contains the name(s) of the author(s)</li>
+          <li>BOOKTITLE : This field contains the title of the book.</li>
+          <li>CHAPTER : This field contains the name or number of the
+          chapter.</li>
+          <li>EDITION : This field contains the number or name of the
+          edition.</li>
+          <li>EDITOR : This field contains the name(s) of the editor(s)</li>
+          <li>HOWPUBLISHED : This field contains a description of the type of
+            the publishing.</li>
+          <li>INSTITUTION : This field contains the name of the institution
+            where the publishing was created.</li>
+          <li>JOURNAL : This field contains the name of the journal.</li>
+          <li>MONTH : This field contains number or name of the month of the
+            publishing.</li>
+          <li>NOTE : This field contains a note.</li>
+          <li>NUMBER : This field contains the number of the publishing.</li>
+          <li>ORGANIZATIONS : This field contains the name of the
+            organizations where the publishing was created.</li>
+          <li>PAGES : This field contains the number(s) of the page(s) of the
+            reference into a publishing.</li>
+          <li>PUBLISHER : This field contains the name of the publisher.</li>
+          <li>SCHOOL : This field contains the name of the university or
+            school where the publishing was created.</li>
+          <li>SERIES : This field contains the series of the publishing.</li>
+          <li>TITLE : This field contains the title of the publishing.</li>
+          <li>REPORT_TYPE : This field contains a description of the type of
+            the report.</li>
+          <li>VOLUME : This field contains the volume of the publishing.</li>
+          <li>YEAR : This field contains the year when the publishing was
+            created.</li>
+          <li>URL : This field contains URL of the publishing.</li>
+          <li>CUSTOM1 : This field contains user defined data.</li>
+          <li>CUSTOM2 : This field contains user defined data.</li>
+          <li>CUSTOM3 : This field contains user defined data.</li>
+          <li>CUSTOM4 : This field contains user defined data.</li>
+          <li>CUSTOM5 : This field contains user defined data.</li>
+          <li>
+            <div>
+            ISBN : This field contains the ISBN data of the publishing.</div>
+          </li>
+        </ul>
+
+        <h5><span style="color: #3B00B2; background-color: #FFFFFF">Comment
+        by David Wilson</span></h5>
+
+        <p style="background-color: #FFFFFF"><span
+        style="color: #007F00">This field is currently inserted with every
+        bibliographic citation instance. No link is maintained with the
+        original data source in the bibliographic database. If a mistake is
+        made each separate instance of the field must be re-inserted or
+        corrected manually.</span></p>
+
+        <p style="background-color: #FFFFFF"><span style="color: #007F00">It
+        is proposed that a new field be created a
+        'MasterBibliographyDataField' which would be inserted the first time
+        a citation was used and all BibliographyDataFields would contain a
+        link to their MasterBibliographyDataField. The
+        MasterBibliographyDataField would be linked to its datasource
+        (initially the bibliographic database, but others are possible) and
+        would be updated by the Writer link update function. When the
+        MasterBibliographyDataField was updated all the linked
+        BibliographyDataField instances, and the Bibliographic Table would be
+        updated as well.</span></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3><a id="TextSectio">TextSection</a></h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><a
+        href="http://api.openoffice.org/docs/common/ref/com/sun/star/text/TextSection.html">http://api.openoffice.org/docs/common/ref/com/sun/star/text/TextSection.html</a>
+
+        <p>A <a href="TextSection.html">TextSection</a> is a range of
+        complete paragraphs within a text.</p>
+
+        <p>The content of the section may be the content of a link into
+        another document, a link from the same document, or the result of a
+        DDE operation.</p>
+
+        <p><a href="TextSection.html">TextSection</a> instances can be linked
+        from and to other texts <a id="devmanual"></a></p>
+        <dl>
+          <dt>See Developers Guide <a
+          href="../../../../../DevelopersGuide/Text/Text.htm#1+4+4+Text+Sections">7.4.4
+          Text Documents - Overall Document Features - Text Sections</a></dt>
+        </dl>
+
+        <h5><span style="color: #003A7F; background-color: #FFFFFF">Comment
+        by David Wilson</span></h5>
+
+        <p style="background-color: #FFFFFF"><span style="color: #007F00">It
+        is proposed that the new bibliographic table mechanism <a
+        href="/citeproc/index.html">Citproc</a> be used to insert the
+        bibliographic table into a TextSection.</span></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

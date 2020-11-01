@@ -1,0 +1,468 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=us-ascii">
+  <title></title>
+  <link>
+  <meta http-equiv="content-type" content="text/html; charset=us-ascii">
+</head>
+
+<body lang="en">
+<h2><a name="Bibliograp" id="Bibliograp">Bibliographic</a> <a name="Project"
+id="Project">Project</a>'s Developer Page</h2>
+
+<table width="98%" border="0">
+  <tbody>
+    <tr>
+      <td>Last Modified 2005-December-9</td>
+      <td style="text-align: right"><em>A printer friendly PDF version of
+        this page is available <a href="developer1.pdf">developer1.pdf
+        (36Kb)</a></em></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Contents</h3>
+<ul>
+  <li><a href="#Projects">Project Overview</a></li>
+  <li><a href="#L1071">1st Stage, Bibliographic Facility Redevelopment</a>
+    <ul>
+      <li>Modify the Writer document-read and document-save modules to
+        support the new OpenDocument enhanced citation format.</li>
+      <li>Modify the writer code to insert and display the new format
+        citations.</li>
+      <li>Add support in the OOo save file package for storage of document
+        bibliographic data an the code changes necessary to read and save
+        that bibliographic data.</li>
+      <li>Modify the Writer save-file read and save modules to support the
+        new the bibliographic data file in the document save package.</li>
+    </ul>
+  </li>
+</ul>
+<ul>
+  <li><a href="#L1075">2nd Stage, Bibliographic Facility Redevelopment</a>
+    <ul>
+      <li>Add Backwards and Forwards Compatability Logic to Writer</li>
+      <li>Add Z39.50 and SRU/W support for the Bibliographic modules.</li>
+      <li>Design and Build a basic Graphical User Interface (GUI)</li>
+    </ul>
+  </li>
+</ul>
+<ul>
+  <li><a href="#Further">Further References</a></li>
+  <li><a href="#started">How to get started</a></li>
+  <li><a href="#Sample">Sample code</a></li>
+  <li><a href="#Contacts">Contacts</a></li>
+</ul>
+<hr>
+
+<h3>Project <a name="Overview" id="Overview">Overview</a></h3>
+The Bibliographic Project (OOoBib) plans to enhance the bibliographic
+functions of the OpenOffice.org Writer (wordprocessing) application to
+achieve:
+<ol>
+  <li>Enhance bibliographic formatting to support:
+    <p>a. complex features required of commonly used citation styles like APA
+    and Chicago.</p>
+    <p>b. automatically switching between potentially radically different
+    citation styles (ie. footnote to in-text).</p>
+  </li>
+  <li>Enhance data model to support a broader range of reference types.</li>
+  <li>Add support for connection to remote database.</li>
+</ol>
+
+<p>Our current objective is to design and build OOoBib version 0.1, which
+will contain the most basic functions for an usable bibligraphic facility
+with the above features.</p>
+
+<table border="0" width="100%">
+  <tbody>
+    <tr>
+      <td><h3><a name="L1071" id="L1071">1st Stage</a>, Bibliographic
+        Facility Redevelopment</h3>
+      </td>
+      <td align="right"><p><a href="#Bibliograp">top of page</a></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>Summary</h4>
+
+<p>As our first step, we will implement the most simple changes to the OOo
+core code (the API basic code, and UNO mappings, but not yet the user
+interface code) necessary to implement basic support for:</p>
+<ol>
+  <li>Support saving and reading enhanced citation support in
+  OpenDocument</li>
+  <li>Ability to insert and display citations in OpenOffice Writer using the
+    new format. (Note this task does not include the GUI interface to insert
+    the citation in the new format, only the UNO interface to provide the
+    basic function.</li>
+  <li>Storage of document bibliographic data in the OOo document save package
+    and the code changes necessary to read and save that bibliographic
+  data.</li>
+</ol>
+
+<p>When these basic functions are built into OOo and are made assessable via
+the UNO, we can then use rapid prototyping development methods to design and
+build prototype GUI interfaces and bibliographic formatting engines. We will
+be able to use any of the programming languages which have OpenOffice
+bindings: C++, Java, Python and, of course, OpenOffice Basic. We believe that
+we will find more developers who can work in these languages than by
+insisting on C++ code from the start. Also it is much easier to build
+prototypes using Java, Python and OpenOffice Basic than in C++.</p>
+
+<p><strong>NB</strong>. When we have designed, built and tested the
+prototypes and they have been accepted by the OOo community we intend to
+rebuild them in C++ and to have them made part of the core OpenOffice
+application.</p>
+<hr>
+
+<p><strong>Skills required</strong> - good C++ programming and some XML
+skills with knowledge of, or willingness to learn, the OpenOffice UNO (see
+the <a
+href="http://api.openoffice.org/DevelopersGuide/DevelopersGuide.html">Openoffice
+Developer's Guide</a>)</p>
+<hr>
+
+<h4>1. Modify the Writer document-read and document-save modules to support
+the new OpenDocument enhanced citation format.</h4>
+
+<p>Implement the citation and bibliography changes to the OOo Writer save
+file (in Open Document format) accepted by the <a
+href="http://lists.oasis-open.org/archives/office/200409/msg00023.html">OpenDocument
+Technical Committee</a>. The changes to the document schema are detailed in
+our <a
+href="http://bibliographic.openoffice.org/XML-bibliography-proposal.pdf">OpenDocument
+XML Citation Proposal.pdf</a></p>
+
+<p>Here are two examples of the new citation format. The first is a standard
+author-year style, with additional page number details:</p>
+
+<p><code>&lt;cite:citation
+xmlns:cite="http://purl.org/NET/xbiblio/cite/1.0"</code><br>
+<code>
+xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"&gt;</code><br>
+<code> &lt;cite:citation-source&gt;</code><br>
+<code> &lt;cite:biblioref cite:key="Veer1996a"&gt;</code><br>
+<code> &lt;cite:detail cite:units="pages" cite:begin="23"
+cite:end="24"/&gt;</code><br>
+<code>&lt;/cite:biblioref&gt;</code><br>
+<code>&lt;/cite:citation-source&gt;</code><br>
+<code>&lt;cite:citation-body&gt;</code><br>
+<code> &lt;text:span text:style-name="Citation"&gt;(Veer,
+1996:</code><code>23-24)&lt;/text:span&gt;</code><br>
+<code>&lt;/cite:citation-body&gt;</code><br>
+<code>&lt;/cite:citation&gt;</code></p>
+
+<p>The second is a footnoted example.</p>
+
+<p><code>&lt;cite:citation
+xmlns:cite="http://purl.org/NET/xbiblio/cite/1.0"</code><br>
+<code>
+xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"&gt;</code><br>
+<code> &lt;cite:citation-source&gt;</code><br>
+<code> &lt;cite:biblioref cite:key="Veer1996a"/&gt;</code><br>
+<code> &lt;/cite:citation-source&gt;</code><br>
+<code> &lt;cite:citation-body&gt;</code><br>
+<code> &lt;text:note text:id="ftn0" text:note-class="footnote"&gt;</code><br>
+<code> &lt;text:note-citation&gt;1&lt;/text:note-citation&gt;</code><br>
+<code> &lt;text:note-body&gt;</code><br>
+<code> &lt;text:p text:style-name="Footnote"&gt;Peter van der Veer
+(1996)</code><br>
+<code>Riots and Rituals: The</code><code> Construction of Violence and Public
+Space in HindU</code><code>Nationalism, In Paul Brass Ed., Riots</code><code>
+and Pogroms (New York:NYU Press) 154&#x2013;76.&lt;/text:p&gt;</code><br>
+<code> &lt;/text:note-body&gt;</code><br>
+<code> &lt;/text:note&gt;</code><br>
+<code> &lt;/cite:citation-body&gt;</code><br>
+<code>&lt;/cite:citation&gt;</code></p>
+
+<p>To compare this to the current format see <a
+href="implementation.html">implementation</a>. The changes to the document
+schema need to be supported by the document save and load modules. These are
+detailed into the <a href="#Further">Further References</a> below.</p>
+
+<h4>2. Modify the writer code to insert and display the new format
+citations</h4>
+
+<p>The bibliographic modules in OOo Writer need to modified to support the
+new schema. The modules that need to be modified are</p>
+<ul>
+  <li><a href="implementation.html#text">Bibliography</a></li>
+  <li><a href="implementation.html#text1">textfield/Bibliography</a></li>
+  <li><a href="implementation.html#text2">FieldMaster/Bibliography</a></li>
+  <li><a href="implementation.html#text3">BibliographyDataField</a></li>
+</ul>
+
+<h4>3. Add support in the OOo save file package for storage of document
+bibliographic data.</h4>
+
+<p>Currently the Writer saves a complete copy of the bibliographic data
+associated with a citation, with each ciation. We propose to separate the
+citation and the bibliographic data, by leaving just the citation details in
+the document save file and place the detailed bibliographic data in a
+seperate bibliographic data file the OOo save file package.</p>
+
+<p>The task is to complete the design of the bibliographic data file and add
+support for it in the OOo save file package.</p>
+
+<h4><strong>4. Modify the Writer save-file read and save modules to support
+the new the bibliographic data file in the document save
+package.</strong></h4>
+
+<p>The relevant component is "<a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/frame/XComponentLoader.html">interface
+XComponentLoader</a>" which supports <em>loadComponentFromURL</em> and
+<em>storeAsURL.</em></p>
+
+<h4>5. Refine and Improve the CITEPROC bibliographic formating engine.</h4>
+
+<p>Experience XSLT programers are needed to work on this core component of
+the Bibliographic facility. It is functioning and a book has been published
+which used it to format the bibliographic table and citations.</p>
+
+<p>We propose to build Bibliographic table and citation formating using XSLT
+style-sheets with a process called <a
+href="http://bibliographic.openoffice.org/citeproc/index.html">CiteProc</a>.
+Also see <a href="http://www.silmaril.ie/bibliox/biblioxdoc.html">BiblioX</a>
+for technical discusion of this approach.</p>
+<hr>
+
+<table border="0" width="100%">
+  <tbody>
+    <tr>
+      <td><h3><a name="L1075" id="L1075">2nd Stage</a>, Bibliographic
+        Facility Redevelopment</h3>
+      </td>
+      <td align="right"><p><a href="#Bibliograp">top of page</a></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>1. Add Backwards and Forwards Compatability Logic to Writer</h4>
+
+<p>An important object of Bibliographic Enhancement project is to maintain
+document file backwards compatibility with older versions of OpenOffice. To
+achieve this when Bibliographic Entries are inserted into a Document they are
+stored with the same format as is currently the case. A new bibliographic
+entry tag will be will be added with the enhanced citation functions, each
+citation will contain a key that will point to the bibliographic data which
+will be saved in the document save package. To preserve backwards
+compatability we will need to also maintain the old bibliographic ciation and
+dtat storage in the document. Older version of OpenOffice, without the
+bibliographic enhacments, in the OOo 2.X .ods format, will read the old
+format of the bibliographic citations and ignore the bibliographic data file
+in the save package. A suggested approach is illustrated in this <a
+href="backwards.png">flowchart.</a></p>
+
+<p>When a major revision of the save package format is introduced the support
+of the older bibliographic representations can be dropped form the document
+save file.</p>
+
+<h4>2. Add Z39.50 and SRU/W support for the Bibliographic modules.</h4>
+
+<p>Build <a href="biblio-sw.html#ZING">Z39.50</a> and <a
+href="biblio-sw.html#ZING">SRU/W</a> based internet searching facility using
+the <a href="http://www.indexdata.dk/yaz/">YAZ</a> toolkit. This would enable
+searching for and retrieving bibliographic data from internet sources and
+storing them in a document or bibliographic database.</p>
+
+<p>Also build Z39.50 and SRU/W server capability into OOo to enable users to
+share their bibliographic (and other) databases over the internet. One of the
+<a href="http://www.indexdata.dk/">Indexdata</a> toolkits could probably used
+as a basis.</p>
+
+<p>The modules that may need to be modified are:</p>
+<ul>
+  <li><a href="implementation.html#text">Bibliography</a></li>
+  <li><a href="implementation.html#text1">textfield/Bibliography</a></li>
+  <li><a href="implementation.html#text2">FieldMaster/Bibliography</a></li>
+  <li><a href="implementation.html#text3">BibliographyDataField</a></li>
+</ul>
+
+<p><strong>NB</strong>: We are considering using SWU/W as the standard method
+for OOo retrieving bibliographic data from any source. So that even a local
+Bibliographic database would also be accessed through SWU/W methods. The user
+would just select a local or remote source and the same access mechanism
+would be used.</p>
+
+<h4>3. Design and Build a basic Graphical User Interface (GUI). To provide
+-</h4>
+<ul>
+  <li>Basic citation insertion</li>
+  <li>Basic bibliographic data entry</li>
+  <li>Citation and bibliographic table formating using Citeproc.</li>
+  <li>Basic Bibliographic database access</li>
+  <li>Basic bibliographic internet search and database storage.</li>
+</ul>
+
+<table border="0" width="100%">
+  <tbody>
+    <tr>
+      <td><hr>
+
+        <h3><a name="Further" id="Further">Further</a> References</h3>
+
+        <p>For an overview of the Bibliographic project's major components
+        and a context diagram see <a
+        href="components.html">components.html.</a> There is information
+        about the current OpenOffice Bibliographic <a
+        href="implementation.html">implementation</a>.</p>
+
+        <p>A start has been made to the Specification for this work (see the
+        <a
+        href="http://bibliographic.openoffice.org/servlets/ProjectDocumentList?folderID=266">
+        Projects Specifications folder</a> on the Documents and Files page).
+        Also see a attempt at an <a
+        href="mindmap/content-analysis.html">analysis</a> of the proposed
+        Bibliographic enhancement components and their relationships.</p>
+
+        <p>The best place to start for finding out about development in
+        OpenOffice is the <a
+        href="http://development.openoffice.org/index.html">OpenOffice.org
+        For Developers</a> page. An important resource is the Developer's
+        guide which is part of the SDK (software development kit) or
+        available online on at <a
+        href="http://api.openoffice.org/DevelopersGuide/DevelopersGuide.html">http://api.openoffice.org/DevelopersGuide/DevelopersGuide.html</a></p>
+
+        <p style="margin-bottom: 0cm">The <a
+        href="http://api.openoffice.org">OOo API</a> is based on <a
+        href="http://udk.openoffice.org">UNO (Universal Network Objects)</a>
+        is the interface-based component model of OpenOffice.org. UNO offers
+        interpretability between different programming languages, different
+        object models, different machine architectures and different
+        processes; either in a local network or even via the Internet. UNO
+        components can be implemented in and accessed from any programming
+        language for which a UNO language binding exists. We currently
+        provide several language bindings for UNO which allows to use the API
+        from Java, C++, OpenOffice.org Basic, Python and Common Language
+        Infrastructure (CLI).</p>
+
+        <p>Implementing the new citation element in <em>xmloff</em> (the
+        XmlOffice module) is a routine task. The Sun developers want to do it
+        together with our programmer, so that he/she can learn how
+        <em>xmloff</em> works.</p>
+
+        <p>To modify the Writer save-file read and save modules to support
+        the new the bibliographic data file in the document save package, and
+        to support <a href="backwards.png">backwards and forwards</a>
+        compatability logic to Writer the "<a
+        href="http://api.openoffice.org/docs/common/ref/com/sun/star/frame/XComponentLoader.html">interface
+        XComponentLoader</a>", which supports <em>loadComponentFromURL</em>
+        and storeAsURL, needs to be enhanced. See the Development Guide
+        explanation for - <a
+        href="http://api.openoffice.org/docs/DevelopersGuide/OfficeDev/OfficeDev.xhtml#1_1_5_Handling_Documents">6.1.5
+        Handling Documents</a>.</p>
+
+        <p>There is also a demonstration client program for the <a
+        href="http://www.indexdata.dk/yaz/">YAZ</a> toolkit (C &amp; C++). -
+        <a href="http://www.indexdata.dk/irtcl/">IRTCL</a> that can perform
+        the reference searches. (Requires YAZ and Tcl/Tk libraries be
+        installed). It does everything but save or export the results !
+        However it is good model of how to use the toolkit and could be used
+        as the basis for or model of a prototype internet searching facility.
+        <a href="http://bibliographic.openoffice.org/irclient.jpeg">Screen
+        pic</a>, <a href="irclient-setup.png">screen pic2</a>.</p>
+
+        <p>A demonstration internet searching facility that writes selected
+        bibliographic records back to the OOo bibliographic database has been
+        written in Python - <a
+        href="http://bibliographic.openoffice.org/files/documents/124/1675/PyOOBib-02.zip">PyOOBib</a>,
+        <a
+        href="http://bibliographic.openoffice.org/files/documents/124/2446/file_2446.dat?filename=PyOOBib%20Instructions%2esxw">instructions</a>
+        are available. Various problems with OOo Python have lead to us
+        concluding that YAZ in C++ would be a better foundation than the
+        Python code.</p>
+
+        <p>There is <a
+        href="http://xml.openoffice.org/package.html">description</a> of the
+        OOo save-file XML Package, and is a <a
+        href="http://xml.openoffice.org/faq.html#4">FAQ</a> about it.</p>
+      </td>
+      <td align="right"><a href="#Bibliograp">top of page</a></td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+
+<table border="0" width="100%">
+  <tbody>
+    <tr>
+      <td><h3>How to get <a name="started" id="started">started</a></h3>
+      </td>
+      <td align="right"><p><a href="#Bibliograp">top of page</a></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Access to the source code for this project is available for download via
+CVS. A child work space has been created for us called "metabib" which
+contains a copy of the <a
+href="http://xml.openoffice.org/source/browse/xml/xmloff"><em>xmloff</em></a><em>
+</em>(OpenOffice.org XML File Format Definition) and<em> </em><a
+href="http://sw.openoffice.org/source/browse/sw/">sw</a> (the word processor
+application component and the WYSIWYG HTML editor component) code.</p>
+
+<p>The down load size will be about 1GB(?). And you will need about 2GB of
+disk space to compile the metabib CWS (Child-Work-Space). ( <a
+href="http://eis.services.openoffice.org/EIS2/servlet/cws.ShowCWS?Id=3272&amp;Path=SRC680%2Fmetabib ">Web
+access to CWS</a> ).  If you can not handle that size download then ask us
+about sending it to you on cdroms.</p>
+
+<p>Administration process - you first need to sign the JCA and then obtain
+the ssh key. After that we will show you how you can access the 'CWS'. It's
+basically a CVS branch. The most complicated thing is the setup of your
+tools, such that you can participate in the OOo development --- but, when you
+have got the ssh key we will show you.</p>
+
+<p>See <a href="http://development.openoffice.org/index.html">OpenOffice.org
+For Developers</a> for general development information.</p>
+<hr>
+
+<table border="0" width="100%">
+  <tbody>
+    <tr>
+      <td><h4><a name="Sample" id="Sample">Sample</a> Code</h4>
+      </td>
+      <td align="right"><a href="#Bibliograp">top of page</a></td>
+    </tr>
+  </tbody>
+</table>
+<ul>
+  <li>Sample python code that reads and outputs some of the fields of the
+    records in the bibliographic database. <a
+    href="http://udk.openoffice.org/python/samples/biblioaccess.py">biblioacess.py</a></li>
+  <li>Sample OpenOffice Basic program to write records to the bibliographic
+    database <a href="Bibwrite.html">bibwrite.html</a>
+    <li>A python script that reads RIS format files containing one or more
+    references and inserts them into the default
+    OpenOffice.orgBibliography/'biblio' database. <a
+    href="biblio-sw.html#RISImport.">RISImport.py</a></li>
+  </li>
+  <li>Henrik Just's LaTeX and BibTeX export filter <a
+    href="http://www.hj-gym.dk/~hj/writer2latex/">http://www.hj-gym.dk/~hj/writer2latex/</a></li>
+  <li>Applications which interact with Openoffice- <a
+    href="biblio-sw.html#Bibus">Bibus</a> (WxPython) and <a
+    href="biblio-sw.html#B3">B3</a> (Java).</li>
+  <li>A Perl module <a
+    href="http://search.cpan.org/~jmgdoc/OpenOffice-OODoc/OODoc/Intro.pod">OpenOffice::OODoc</a>
+    provides a simple way to access document elements in the (closed i.e. not
+    interactive with OOo) document save file. An <a
+    href="bibquery.perl">example</a> which retrieves bibliographic details is
+    provided.</li>
+</ul>
+
+<h3><a name="Contacts" id="Contacts">Contacts</a></h3>
+
+<p>Question or comments can be put to the Bibliographic Project development
+list <a
+href="mailto:dev@bibliographic.openoffice.org">dev@bibliographic.openoffice.org</a>
+or to the project co-leader <a href="mailto:dnw@openoffice.org">David
+Wilson.</a></p>
+<hr>
+</body>
+</html>

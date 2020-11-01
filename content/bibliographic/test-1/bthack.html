@@ -1,0 +1,537 @@
+
+<body lang="en-US">
+<h2>5 Bibliography-style hacking</h2>
+
+<p>This document starts (and ends) with Section&nbsp;<a
+href="btxhak.html#style">5</a>, because in reality it is the final section of
+"BibTeXing''&nbsp;[<a href="btxhak.html#btxdoc">4</a>], the general
+documentation for . But that document was meant for all users, while this one
+is just for style designers, so the two are physically separate. Still, you
+should be completely familiar with &#x201c;BibTeXing'', and all references in
+this document to sections and section numbers assume that the two documents
+are one.</p>
+
+<p>This section, along with the standard-style documentation file
+<tt>btxbst.doc</tt>, should explain how to modify existing style files and to
+produce new ones. If you're a serious style hacker you should be familiar
+with van&nbsp;Leunen&nbsp;[<a href="btxhak.html#van-leunen">7</a>] for points
+of style, with Lamport&nbsp;[<a href="btxhak.html#latex">3</a>] and
+Knuth&nbsp;[<a href="btxhak.html#texbook">2</a>] for formatting matters, and
+perhaps with <i>Scribe</i>&nbsp;[<a href="btxhak.html#scribe">6</a>] for
+compatibility details. And while you're at it, if you don't read the great
+little book by Strunk and White&nbsp;[<a
+href="btxhak.html#strunk-and-white">5</a>], you should at least look at its
+entries in the database and the reference list to see how handles multiple
+names.</p>
+
+<p>To create a new style, it's best to start with an existing style that's
+close to yours, and then modify that. This is true even if you're simply
+updating an old style for version 0.99 (I've updated four nonstandard styles,
+so I say this with some experience). If you want to insert into a new style
+some function you'd written for an old (version 0.98i) style, keep in mind
+that the order of the arguments to the assignment (<tt>:=</tt>) function has
+been reversed. When you're finished with your style, you may want to try
+running it on the entire <tt>XAMPL.BIB</tt> database to make sure it handles
+all the standard entry types.</p>
+
+<p>If you find any bugs in the standard styles, or if there are things you'd
+like to do with bibliography-style files but can't, please complain to Oren
+Patashnik.</p>
+
+<h3>5.1 General description</h3>
+
+<p>You write bibliography styles in a postfix stack language. It's not too
+hard to figure out how by looking at the standard-style documentation, but
+this description fills in a few details (it will fill in more details if
+there's a demand for it).</p>
+
+<p>Basically the style file is a program, written in an unnamed language,
+that tells how to format the entries that will go in the reference list
+(henceforth ``the entries'' will be ``the entry list'' or simply ``the
+list'', context permitting). This programming language has ten commands,
+described in the next subsection. These commands manipulate the language's
+objects: constants, variables, functions, the stack, and the entry list.
+(Warning: The terminology in this documentation, chosen for ease of
+explanation, is slightly different from 's. For example, this documentation's
+``variables'' and ``functions'' are both ``functions'' to . Keep this in mind
+when interpreting 's error messages.)</p>
+
+<p>There are two types of functions: <i>built-in</i> ones that provides
+(these are described in Section&nbsp;<a
+href="btxhak.html#built-in-fns">5.3</a>), and ones you define using either
+the <tt>MACRO</tt> or <tt>FUNCTION</tt> command.</p>
+
+<p>Your most time-consuming task, as a style designer, will be creating or
+modifying functions using the <tt>FUNCTION</tt> command (actually, becoming
+familiar with the references listed above will be more time consuming, but
+assume for the moment that that's done).</p>
+
+<p>Let's look at a sample function fragment. Suppose you have a string
+variable named <tt>label</tt> and an integer variable named
+<tt>lab.width</tt>, and suppose you want to append the character `<tt>a</tt>'
+to <tt>label</tt> and to increment <tt>lab.width</tt>:</p>
+<pre>    .  .  .
+    label "a" * 'label :=          % label := label * "a"
+    lab.width #1 + 'lab.width :=   % lab.width := lab.width + 1
+    .  .  .</pre>
+
+<p>In the first line, <tt>label</tt> pushes that variable's value onto the
+stack. Next, the <tt>"a"</tt> pushes the string constant `<tt>a</tt>' onto
+the stack. Then the built-in function <tt>*</tt> pops the top two strings and
+pushes their concatenation. The <tt>'label</tt> pushes that variable's name
+onto the stack. And finally, the built-in function <tt>:=</tt> pops the
+variable name and the concatenation and performs the assignment treats the
+stuff following the <tt>%</tt> as a comment in the style file. The second
+line is similar except that it uses <tt>#1</tt>, with no spaces intervening
+between the `<tt>#</tt>' and the `<tt>1</tt>', to push this integer
+constant.</p>
+
+<p>The nonnull spacing here is arbitrary: multiple spaces, tabs, or newlines
+are equivalent to a single one (except that you're probably better off not
+having blank lines within commands, as explained shortly).</p>
+
+<p>For string constants, absolutely any printing character is legal between
+two consecutive double quotes, but here (and only here) treats upper- and
+lower-case equivalents as different. Furthermore, spacing <i>is</i> relevant
+within a string constant, and you mustn't split a string constant across
+lines (that is, the beginning and ending double quotes must be on the same
+line).</p>
+
+<p>Variable and function names may not begin with a numeral and may not
+contain any of the ten restricted characters on page&nbsp;143 of the 
+L<sup>A</sup>TEX book, but may otherwise
+contain any printing characters. Also, considers upper- and lower-case
+equivalents to be the same.</p>
+
+<p>Integers and strings are the only value types for constants and variables
+(booleans are implemented simply as 0-or-1 integers). There are three kinds
+of variables:</p>
+<dl>
+  <dt><strong>global&nbsp;variables</strong></dt>
+    <dd>These are either integer- or string-valued, declared using an
+      <tt>INTEGERS</tt> or <tt>STRINGS</tt> command.</dd>
+  <dt><strong>entry&nbsp;variables</strong></dt>
+    <dd>These are either integer- or string-valued, declared using the
+      <tt>ENTRY</tt> command. Each has a value for each entry on the list
+      (example: a variable <tt>label</tt> might store the label string you'll
+      use for the entry).</dd>
+  <dt><strong>fields</strong></dt>
+    <dd><p>These are string-valued, read-only variables that store the
+      information from the database file; their values are set by the
+      <tt>READ</tt> command. As with entry variables, each has a value for
+      each entry.</p>
+    </dd>
+</dl>
+
+<h3>5.2 Commands</h3>
+
+<p>There are ten style-file commands: Five (<tt>ENTRY</tt>,
+<tt>FUNCTION</tt>, <tt>INTEGERS</tt>, <tt>MACRO</tt>, and <tt>STRINGS</tt>)
+declare and define variables and functions; one (<tt>READ</tt>) reads in the
+database information; and four (<tt>EXECUTE</tt>, <tt>ITERATE</tt>,
+<tt>REVERSE</tt>, and <tt>SORT</tt>) manipulate the entries and produce
+output. Although the command names appear here in upper case, ignores case
+differences.</p>
+
+<p>Some restrictions: There must be exactly one <tt>ENTRY</tt> and one
+<tt>READ</tt> command; the <tt>ENTRY</tt> command, all <tt>MACRO</tt>
+commands, and certain <tt>FUNCTION</tt> commands (see next subsection's
+description of <tt>call.type$</tt>) must precede the <tt>READ</tt> command;
+and the <tt>READ</tt> command must precede the four that manipulate the
+entries and produce output.</p>
+
+<p>Also it's best (but not essential) to leave at least one blank line
+between commands and to leave no blank lines within a command; this helps
+recover from any syntax errors you make.</p>
+
+<p>You must enclose each argument of every command in braces. Look at the
+standard-style documentation for syntactic issues not described in this
+section. Here are the ten commands:</p>
+<dl>
+  <dt><tt><strong>ENTRY</strong></tt></dt>
+    <dd><p>Declares the fields and entry variables. It has three arguments,
+      each a (possibly empty) list of variable names. The three lists are of:
+      fields, integer entry variables, and string entry variables. There is
+      an additional field that</p>
+    </dd>
+    <dd><p>automatically declares, <tt>crossref</tt>, used for cross
+      referencing. And there is an additional string entry variable
+      automatically declared, <tt>sort.key$</tt>, used by the <tt>SORT</tt>
+      command. Each of these variables has a value for each entry on the
+      list.</p>
+    </dd>
+  <dt><strong><tt>EXECUTE</tt></strong></dt>
+    <dd>Executes a single function. It has one argument, the function
+    name.</dd>
+  <dt><strong><tt>FUNCTION</tt></strong></dt>
+    <dd>Defines a new function. It has two arguments; the first is the
+      function's name and the second is its definition. You must define a
+      function before using it; recursive functions are thus illegal.</dd>
+  <dt><strong><tt>INTEGERS</tt></strong></dt>
+    <dd>Declares global integer variables. It has one argument, a list of
+      variable names. There are two such automatically-declared variables,
+      <tt>entry.max$</tt> and <tt>global.max$</tt>, used for limiting the
+      lengths of string variables. You may have any number of these commands,
+      but a variable's declaration must precede its use.</dd>
+  <dt><tt><strong>ITERATE</strong></tt></dt>
+    <dd>Executes a single function, once for each entry in the list, in the
+      list's current order (initially the list is in citation order, but the
+      <tt>SORT</tt> command may change this). It has one argument, the
+      function name.</dd>
+  <dt><strong><tt>MACRO</tt></strong></dt>
+    <dd>Defines a string macro. It has two arguments; the first is the
+      macro's name, which is treated like any other variable or function
+      name, and the second is its definition, which must be
+      double-quote-delimited. You must have one for each three-letter month
+      abbreviation; in addition, you should have one for common journal
+      names. The user's database may override any definition you define using
+      this command. If you want to define a string the user can't touch, use
+      the <tt>FUNCTION</tt> command, which has a compatible syntax.</dd>
+  <dt><strong><tt>READ</tt></strong></dt>
+    <dd>Dredges up from the database file the field values for each entry in
+      the list. It has no arguments. If a database entry doesn't have a value
+      for a field (and probably no database entry will have a value for every
+      field), that field variable is marked as missing for the entry.</dd>
+  <dt><tt><strong>REVERSE</strong></tt></dt>
+    <dd>Exactly the same as the <tt>ITERATE</tt> command except that it
+      executes the function on the entry list in reverse order.</dd>
+  <dt><tt><strong>SORT</strong></tt></dt>
+    <dd>Sorts the entry list using the values of the string entry variable
+      <tt>sort.key$</tt>. It has no arguments.</dd>
+  <dt><tt><strong>STRINGS</strong></tt></dt>
+    <dd><p>Declares global string variables. It has one argument, a list of
+      variable names. You may have any number of these commands, but a
+      variable's declaration must precede its use.</p>
+    </dd>
+</dl>
+
+<h3>5.3 The built-in functions</h3>
+
+<p>Before we get to the built-in functions, a few words about some other
+built-in objects. There is one built-in string entry variable,
+<tt>sort.key$</tt>, which the style program must set if the style is to do
+sorting. There is one built-in field, <tt>crossref</tt>, used for the cross
+referencing feature described in Section&nbsp;4. And there are two built-in
+integer global variables, <tt>entry.max$</tt> and <tt>global.max$</tt>, which
+are set by default to some internal constants; you should truncate strings to
+these lengths before you assign to string variables, so as to not generate
+any warning messages.</p>
+
+<p>There are currently 37 built-in functions. Every built-in function with a
+letter in its name ends with a `<tt>$</tt>'. In what follows, ``first'',
+``second'', and so on refer to the order popped. A ``literal'' is an element
+on the stack, and it will be either an integer value, a string value, a
+variable or function name, or a special value denoting a missing field. If
+any popped literal has an incorrect type,</p>
+
+<p>complains and pushes the integer 0 or the null string, depending on
+whether the function was supposed to push an integer or string.</p>
+<dl>
+  <dt><strong><tt>&gt;</tt></strong></dt>
+    <dd>Pops the top two (integer) literals, compares them, and pushes the
+      integer 1 if the second is greater than the first, 0 otherwise.</dd>
+  <dt><strong><tt>&lt;</tt></strong></dt>
+    <dd>Analogous.</dd>
+  <dt><tt><strong>=</strong></tt></dt>
+    <dd>Pops the top two (both integer or both string) literals, compares
+      them, and pushes the integer 1 if they're equal, 0 otherwise.</dd>
+  <dt><strong><tt>+</tt></strong></dt>
+    <dd>Pops the top two (integer) literals and pushes their sum.</dd>
+  <dt><tt><strong>-</strong></tt></dt>
+    <dd>Pops the top two (integer) literals and pushes their difference (the
+      first subtracted from the second).</dd>
+  <dt><strong><tt>*</tt></strong></dt>
+    <dd>Pops the top two (string) literals, concatenates them (in reverse
+      order, that is, the order in which pushed), and pushes the resulting
+      string.</dd>
+  <dt><strong><tt>:=</tt></strong></dt>
+    <dd>Pops the top two literals and assigns to the first (which must be a
+      global or entry variable) the value of the second.</dd>
+  <dt><tt><strong>add.period$</strong></tt></dt>
+    <dd>Pops the top (string) literal, adds a `<tt>.</tt>' to it if the last
+      non`<tt>}</tt>' character isn't a `<tt>.</tt>', `<tt>?</tt>', or
+      `<tt>!</tt>', and pushes this resulting string.</dd>
+  <dt><strong><tt>call.type$</tt></strong></dt>
+    <dd>Executes the function whose name is the entry type of an entry. For
+      example if an entry is of type <tt>book</tt>, this function executes
+      the <tt>book</tt> function. When given as an argument to the
+      <tt>ITERATE</tt> command, <tt>call.type$</tt> actually produces the
+      output for the entries. For an entry with an unknown type, it executes
+      the function <tt>default.type</tt>. Thus you should define (before the
+      <tt>READ</tt> command) one function for each standard entry type as
+      well as a <tt>default.type</tt> function.</dd>
+  <dt><tt><strong>change.case$</strong></tt></dt>
+    <dd>Pops the top two (string) literals; it changes the case of the second
+      according to the specifications of the first, as follows. (Note: The
+      word `letters' in the next sentence refers only to those at
+      brace-level&nbsp;0, the top-most brace level; no other characters are
+      changed, except perhaps for ``special characters'', described in
+      Section&nbsp;4.) If the first literal is the string&nbsp;`<tt>t</tt>',
+      it converts to lower case all letters except the very first character
+      in the string, which it leaves alone, and except the first character
+      following any colon and then nonnull white space, which it also leaves
+      alone; if it's the string&nbsp;`<tt>l</tt>', it converts all letters to
+      lower case; and if it's the string&nbsp;`<tt>u</tt>', it converts all
+      letters to upper case. It then pushes this resulting string. If either
+      type is incorrect, it complains and pushes the null string; however, if
+      both types are correct but the specification string (i.e., the first
+      string) isn't one of the legal ones, it merely pushes the second back
+      onto the stack, after complaining. (Another note: It ignores case
+      differences in the specification string; for example, the strings
+      <tt>t</tt> and <tt>T</tt> are equivalent for the purposes of this
+      built-in function.)</dd>
+  <dt><tt><strong>chr.to.int$</strong></tt></dt>
+    <dd>Pops the top (string) literal, makes sure it's a single character,
+      converts it to the corresponding ASCII integer, and pushes this
+    integer.</dd>
+  <dt><strong><tt>cite$</tt></strong></dt>
+    <dd>Pushes the string that was the <code>\cite</code>-command argument
+      for this entry.</dd>
+  <dt><strong><tt>duplicate$</tt></strong></dt>
+    <dd>Pops the top literal from the stack and pushes two copies of it.</dd>
+  <dt><strong><tt>empty$</tt></strong></dt>
+    <dd>Pops the top literal and pushes the integer 1 if it's a missing field
+      or a string having no non-white-space characters, 0 otherwise.</dd>
+  <dt><strong><tt>format.name$</tt></strong></dt>
+    <dd>Pops the top three literals (they are a string, an integer, and a
+      string literal). The last string literal represents a name list (each
+      name corresponding to a person), the integer literal specifies which
+      name to pick from this list, and the first string literal specifies how
+      to format this name, as explained in the next subsection. Finally, this
+      function pushes the formatted name.</dd>
+  <dt><tt><strong>if$</strong></tt></dt>
+    <dd>Pops the top three literals (they are two function literals and an
+      integer literal, in that order); if the integer is greater than 0, it
+      executes the second literal, else it executes the first.</dd>
+  <dt><tt><strong>int.to.chr$</strong></tt></dt>
+    <dd>Pops the top (integer) literal, interpreted as the ASCII integer
+      value of a single character, converts it to the corresponding
+      single-character string, and pushes this string.</dd>
+  <dt><strong><tt>int.to.str$</tt></strong></dt>
+    <dd>Pops the top (integer) literal, converts it to its (unique) string
+      equivalent, and pushes this string.</dd>
+  <dt><strong><tt>missing$</tt></strong></dt>
+    <dd>Pops the top literal and pushes the integer 1 if it's a missing
+      field, 0&nbsp;otherwise.</dd>
+  <dt><strong><tt>newline$</tt></strong></dt>
+    <dd>Writes onto the <tt>bbl</tt> file what's accumulated in the output
+      buffer. It writes a blank line if and only if the output buffer is
+      empty. Since <tt>write$</tt> does reasonable line breaking, you should
+      use this function only when you want a blank line or an explicit line
+      break.</dd>
+  <dt><tt><strong>num.names$</strong></tt></dt>
+    <dd>Pops the top (string) literal and pushes the number of names the
+      string represents--one plus the number of occurrences of the substring
+      ``and'' (ignoring case differences) surrounded by nonnull white-space
+      at the top brace level.</dd>
+  <dt><strong><tt>pop$</tt></strong></dt>
+    <dd>Pops the top of the stack but doesn't print it; this gets rid of an
+      unwanted stack literal.</dd>
+  <dt><strong><tt>preamble$</tt></strong></dt>
+    <dd>Pushes onto the stack the concatenation of all the <tt>@PREAMBLE</tt>
+      strings read from the database files.</dd>
+  <dt><strong><tt>purify$</tt></strong></dt>
+    <dd>Pops the top (string) literal, removes nonalphanumeric characters
+      except for white-space characters and hyphens and ties (these all get
+      converted to a space), removes certain alphabetic characters contained
+      in the control sequences associated with a ``special character'', and
+      pushes the resulting string.</dd>
+  <dt><strong><tt>quote$</tt></strong></dt>
+    <dd>Pushes the string consisting of the double-quote character.</dd>
+  <dt><tt><strong>skip$</strong></tt></dt>
+    <dd>Is a no-op.</dd>
+  <dt><strong><tt>stack$</tt></strong></dt>
+    <dd>Pops and prints the whole stack; it's meant to be used for style
+      designers while debugging.</dd>
+  <dt><tt><strong>substring$</strong></tt></dt>
+    <dd>Pops the top three literals (they are the two integers literals
+      <i>len</i> and <i>start</i>, and a string literal, in that order). It
+      pushes the substring of the (at most) <i>len</i> consecutive characters
+      starting at the <i>start</i>th character (assuming 1-based indexing) if
+      <i>start</i> is positive, and ending at the<i> start</i>th character
+      from the end if <i>start</i> is negative (where the first character
+      from the end is the last character).</dd>
+  <dt><tt><strong>swap$</strong></tt></dt>
+    <dd>Swaps the top two literals on the stack.</dd>
+  <dt><strong><tt>text.length$</tt></strong></dt>
+    <dd>Pops the top (string) literal, and pushes the number of text
+      characters it contains, where an accented character (more precisely, a
+      ``special character'', defined in Section&nbsp;4) counts as a single
+      text character, even if it's missing its matching right brace, and
+      where braces don't count as text characters.</dd>
+  <dt><strong><tt>text.prefix$</tt></strong></dt>
+    <dd>Pops the top two literals (the integer literal <i>len</i> and a
+      string literal, in that order). It pushes the substring of the (at
+      most) <i>len</i> consecutive text characters starting from the
+      beginning of the string. This function is similar to
+      <tt>substring$</tt>, but this one considers a ``special character'',
+      even if it's missing its matching right brace, to be a single text
+      character (rather than however many ASCII characters it actually
+      comprises), and this function doesn't consider braces to be text
+      characters; furthermore, this function appends any needed matching
+      right braces.</dd>
+  <dt><tt><strong>top$</strong></tt></dt>
+    <dd>Pops and prints the top of the stack on the terminal and log file.
+      It's useful for debugging.</dd>
+  <dt><strong><tt>type$</tt></strong></dt>
+    <dd>Pushes the current entry's type (book, article, etc.), but pushes the
+      null string if the type is either unknown or undefined.</dd>
+  <dt><tt><strong>warning$</strong></tt></dt>
+    <dd>Pops the top (string) literal and prints it following a warning
+      message. This also increments a count of the number of warning messages
+      issued.</dd>
+  <dt><strong><tt>while$</tt></strong></dt>
+    <dd>Pops the top two (function) literals, and keeps executing the second
+      as long as the (integer) literal left on the stack by executing the
+      first is greater than 0.</dd>
+  <dt><strong><tt>width$</tt></strong></dt>
+    <dd>Pops the top (string) literal and pushes the integer that represents
+      its width in some relative units (currently, hundredths of a point, as
+      specified by the June 1987 version of the  font; the only white-space
+      character with nonzero width is the space). This function takes the
+      literal literally; that is, it assumes each character in the string is
+      to be printed as is, regardless of whether the character has a special
+      meaning to TEX, except that ``special
+      characters'' (even without their right braces) are handled specially.
+      This is meant to be used for comparing widths of label strings.</dd>
+  <dt><strong><tt>write$</tt></strong></dt>
+    <dd><p>Pops the top (string) literal and writes it on the output buffer
+      (which will result in stuff being written onto the <tt>bbl</tt> file
+      when the buffer fills up).</p>
+    </dd>
+</dl>
+
+<p>Note that the built-in functions <tt>while$</tt> and <tt>if$</tt> require
+two function literals on the stack. You get them there either by immediately
+preceding the name of a function by a single quote, or, if you don't feel
+like defining a new function with the <tt>FUNCTION</tt> command, by simply
+giving its definition (that is, giving what would be the second argument to
+the <tt>FUNCTION</tt> command, including the surrounding braces). For example
+the following function fragment appends the character `<tt>a</tt>' if the
+string variable named <tt>label</tt> is nonnull:</p>
+<pre>    .  .  .
+    label "" =
+      'skip$
+      { label "a" * 'label := }
+    if$
+    .  .  .</pre>
+
+<p>A function whose name you quote needn't be built in like <tt>skip$</tt>
+above--it may, for example, be a field name or a function you've defined
+earlier.</p>
+
+<h3>5.4 Name formatting</h3>
+
+<p>What's in a name? Section&nbsp;4 pretty much describes this. Each name
+consists of four parts: First, von, Last, and Jr; each consists of a list of
+name-tokens, and any list but Last's may be empty for a nonnull name. This
+subsection describes the format string you must supply to the built-in
+function <tt>format.name$</tt>.</p>
+
+<p>Let's look at an example of a very long name. Suppose a database
+entry&nbsp;[<a href="btxhak.html#prime-number-theorem">1</a>] has the
+field</p>
+<pre>  author = "Charles Louis Xavier Joseph de la Vall{\'e}e Poussin"</pre>
+
+<p>and suppose you want this formatted ``last name comma initials''. If you
+use the format string</p>
+<pre>    "{vv~}{ll}{, jj}{, f}?"</pre>
+
+<p>will produce</p>
+<pre>    de~la Vall{\'e}e~Poussin, C.~L. X.~J?</pre>
+
+<p>as the formatted string.</p>
+
+<p>Let's look at this example in detail. There are four brace-level&nbsp;1
+<i>pieces</i> to this format string, one for each part of a name. If the
+corresponding part of a name isn't present (the Jr part for this name),
+everything in that piece is ignored. Anything at brace-level&nbsp;0 is output
+verbatim (the presumed typo `<tt>?</tt>' for this name is at
+brace-level&nbsp;0), but you probably won't use this feature much.</p>
+
+<p>Within each piece a double letter tells to use whole tokens, and a single
+letter, to abbreviate them (these letters must be at brace-level&nbsp;1);
+everything else within the piece is used verbatim (well, almost
+everything--read on). The tie at the end of the von part (in
+<code>{vv~}</code>) is a discretionary tie-- will output a tie at that point
+if it thinks there's a need for one; otherwise it will output a space. If you
+really, really, want a tie there, regardless of what thinks, use two of them
+(only one will be output); that is, use <code>{vv~~}</code>. A tie is
+discretionary only if it's the last character of the piece; anywhere else
+it's treated as an ordinary character.</p>
+
+<p>puts default strings <i>between</i> tokens of a name part: For whole
+tokens it uses either a space or a tie, depending on which one it thinks is
+best, and for abbreviated tokens it uses a period followed by either a space
+or a tie. However it doesn't use this default string after the last token in
+a list; hence there's no period following the `J' for our example. You should
+have used</p>
+<pre>    "{vv~}{ll}{, jj}{, f.}" to get to produce the same formatted string but with the question mark replaced by a period. Note that the period should go inside the First-name piece, rather than where the question mark was, in case a name has no First part.</pre>
+
+<p>If you want to override 's default between-token strings, you must
+explicitly specify a string. For example suppose you want a label to contain
+the first letter from each token in the von and Last parts, with no spaces;
+you should use the format string</p>
+<pre>    "{v{}}{l{}}"</pre>
+
+<p>so that will produce `<tt>dlVP</tt>' as the formatted string. You must
+give a string for each piece whose default you want overridden (the example
+here uses the null string for both pieces), and this string must immediately
+follow either the single or double letter for the piece. You may not have any
+other letters at brace-level&nbsp;1 in the format string.</p>
+
+<h3>Bibliography</h3>
+<dl>
+  <dt>1</dt>
+    <dd>Charles Louis Xavier&nbsp;Joseph de&nbsp;la Vallée&nbsp;Poussin.<br>
+      A strong form of the prime number theorem, 19th century.</dd>
+  <dt><a name="texbook"></a>2</dt>
+    <dd>Donald&nbsp;E. Knuth.<br>
+      <em>The TEXbook</em>.<br>
+      Addison-Wesley, 1984.</dd>
+  <dt><a name="latex"></a>3</dt>
+    <dd>Leslie Lamport.<br>
+      L<sup>A</sup>TEX: <em>A
+      Document Preparation System</em>.<br>
+      Addison-Wesley, 1986.</dd>
+  <dt><a name="btxdoc"></a>4</dt>
+    <dd>Oren Patashnik.<br>
+      ing.<br>
+      Documentation for general users, 8&nbsp;February 1988.</dd>
+  <dt><a name="strunk-and-white"></a>5</dt>
+    <dd>William Strunk, Jr. and E.&nbsp;B. White.<br>
+      <em>The Elements of Style</em>.<br>
+      Macmillan, third edition, 1979.</dd>
+  <dt><a name="scribe"></a>6</dt>
+    <dd>Unilogic, Ltd., Pittsburgh.<br>
+      <em>Scribe Document Production System User Manual</em>, April 1984.<br>
+      Chapter twelve and appendices E8 through E10 deal with
+    bibliographies.</dd>
+  <dt><a name="van-leunen"></a>7</dt>
+    <dd><p>Mary-Claire van Leunen.<br>
+      <em>A Handbook for Scholars</em>.<br>
+      Knopf, 1979.</p>
+    </dd>
+</dl>
+
+<h3><a name="SECTION00070000000000000000"></a>About this document ...</h3>
+
+<p>This document was generated using the <a
+href="http://www.latex2html.org/"><strong>LaTeX</strong>2<tt>HTML</tt></a>
+translator Version 2002-1 (1.68)</p>
+
+<p>Copyright © 1993, 1994, 1995, 1996, <a
+href="http://cbl.leeds.ac.uk/nikos/personal.html">Nikos Drakos</a>, Computer
+Based Learning Unit, University of Leeds.<br>
+Copyright © 1997, 1998, 1999, <a
+href="http://www.maths.mq.edu.au/~ross/">Ross Moore</a>, Mathematics
+Department, Macquarie University, Sydney.</p>
+
+<p>The command line arguments were:<br>
+<strong>latex2html</strong> <tt>-no_subdir -split 0 -show_section_numbers
+/tmp/lyx_tmpdir16750g899CL/lyx_tmpbuf1/btxhak.tex</tt></p>
+
+<p>The translation was initiated by root on 2002-12-22</p>
+<hr>
+</body>
+</html>
