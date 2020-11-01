@@ -30,4 +30,4 @@ fi
 
 cd ${GITPATH}
 git add ${1}/${2}
-git commit -m '"Migration of "${2}" "${3}'
+git commit -m "Migration of $2 $3"
