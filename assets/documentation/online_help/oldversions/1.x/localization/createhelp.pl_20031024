@@ -1,0 +1,408 @@
+#!perl
+
+# Syntax: createhelp.pl language target_platform lang_iso country_iso [v]
+# UPDATED 24-Oct-03
+
+# THIS IS FOR OOO 1.1
+
+# (c) Sun Microsystems, Inc.
+
+use Benchmark;
+
+#-----------------------------------------------------------#
+# Get program arguments                                     #
+#-----------------------------------------------------------#
+
+&mydie('Not enough arguments') if $#ARGV<3;
+$lang = shift;
+$sys = shift;
+$lang_iso = shift;
+$country_iso = shift;
+$verbose = ( $ARGV[0] eq "v" );    # append a "v" at the end of the line to get verbose output
+$t0 = new Benchmark;
+
+#-----------------------------------------------------------#
+# Set global variables                                      #
+#-----------------------------------------------------------#
+
+# adjust these:
+
+$root_dir = '';
+$java_dir = '';
+$CLASSPATH = "$java_dir\\lib\\rt.jar;$java_dir\\lib\\tools.jar";
+
+# leave these untouched:
+$input_dir = $root_dir.'input\\';
+$output_dir = $root_dir.'output\\';
+$install_dir = $root_dir.'installset\\';
+$topicdata_dir = $input_dir.$lang.'\etc\\';
+$helpfile_dir = $input_dir.$lang.'\\';
+$LD_LIBRARY_PATH=$root_dir.'program';
+$HELP_PATH = $root_dir.'program\classes';
+$CLASSPATH="$HELP_PATH\\xmlhelp.jar;$HELP_PATH\\xmlsearch.jar;$HELP_PATH\\xt.jar;$HELP_PATH\\parser.jar;$HELP_PATH\\jaxp.jar;$HELP_PATH\\db.jar;$HELP_PATH\\juh.jar;$HELP_PATH\\jurt.jar;$HELP_PATH\\jut.jar;$HELP_PATH\\ridl.jar;$HELP_PATH\\sandbox.jar;$HELP_PATH\\unoil.jar;$HELP_PATH\\classes.jar;$CLASSPATH";
+@application = ('smath','sdraw','simpress','swriter','sbasic','scalc');
+
+$| = 1;                                 # disable buffered output
+$template = "A200A19A20A200";           # this is the column struct of the txt database files
+
+#-----------------------------------------------------------#
+# Do misc preparations                                      #
+#-----------------------------------------------------------#
+
+# create subdir in outputdirectory if not existent
+mkdir ${output_dir}.${lang};
+
+# create a subdirectory for the installset, if not existent
+mkdir ${install_dir}.${lang};
+
+#-----------------------------------------------------------#
+# Step 1: Update the topic databases *.txt and convert them #
+#-----------------------------------------------------------#
+&update_topic_databases;
+$t1= new Benchmark;
+$td1 = timediff($t1, $t0);
+
+#-----------------------------------------------------------#
+# Step 2: Update the treeview files                         #
+#-----------------------------------------------------------#
+&create_treeviews;
+$t2= new Benchmark;
+$td2 = timediff($t2, $t1);
+
+#-----------------------------------------------------------#
+# Step 3: Jar the pictures and make the picture database    #
+#-----------------------------------------------------------#
+&create_picture_jar;
+$t3= new Benchmark;
+$td3 = timediff($t3, $t2);
+
+#-----------------------------------------------------------#
+# Step 4: Create the indexes                                #
+#-----------------------------------------------------------#
+&create_indexes;
+$t4= new Benchmark;
+$td4 = timediff($t4, $t3);
+
+#-----------------------------------------------------------#
+# Step 5: Transform the files                               #
+#-----------------------------------------------------------#
+&transform_xmlfiles;
+$t5= new Benchmark;
+$td5 = timediff($t5, $t4);
+
+#-----------------------------------------------------------#
+# Step 6: Copy the stuff & assemble the install set         #
+#-----------------------------------------------------------#
+&finalize;
+$t6= new Benchmark;
+$td6 = timediff($t6, $t5);
+$tdall = timediff($t6, $t0);
+
+print "#-STATISTICS-------------------------------------------------\n";
+print "# Time spent for updating the databases: ".timestr($td1)."\n";
+print "# Time spent for updating the tree view: ".timestr($td2)."\n";
+print "# Time spent for creating the picture archive: ".timestr($td3)."\n";
+print "# Time spent for creating the index files: ".timestr($td4)."\n";
+print "# Time spent for transforming the xml files: ".timestr($td5)."\n";
+print "# Time spent for finalizing: ".timestr($td6)."\n\n";
+print "# Total time spent for help creation: ".timestr($tdall)."\n\n";
+
+#-----------------------------------------------------------#
+# Subroutines                                               #
+#-----------------------------------------------------------#
+
+sub update_topic_databases
+{
+  print "\n-UPDATING THE TOPIC DATABASES---------------------------------------\n";
+  print "Now we are going update the topic databases (TXT format)\n";
+  print "with the new titles from the localized help files. The TXT databases\n";
+  print "must be in the etc subdir of the language dir.\n";
+  print "--------------------------------------------------------------------\n";
+  
+  
+  $| = 1;                                 # disable buffered output
+  my $target_platform = $sys;             # get the target platform
+  
+  
+  for $appl(@application)                 # process each application
+  {
+    print "Processing $appl...";
+    $topicdata_file = $topicdata_dir.$appl.'_'.$target_platform.'.txt';  
+                                          # make the topic database
+
+    undef @topic;                         # Clear the topics array
+    
+    open TOPIC, $topicdata_file or &mydie("Cannot open $topicdata_file.");
+    binmode TOPIC;
+    while (read(TOPIC, $topic, 440))
+    {
+     push @topic, $topic;
+    }
+    close TOPIC;
+
+    for (@topic)
+    {
+      ($anchor,$hid,$archive,$title) = unpack($template,$_);
+      
+      # update topic titles
+      if ($anchor !~ /#/)
+      {
+        if (open XML, "${helpfile_dir}$anchor")
+        {
+          undef $/;
+          $xml = <XML>;
+          close XML;
+          if ($xml !~ /dc:subject/)
+          {
+            $title = "NO TITLE";
+          }
+          else
+          {
+            ($title = $xml) =~ s/^.*<dc:subject>(.*)<\/dc:subject>.*$/$1/gis;
+          }
+          if ($verbose) { print "\n$anchor: $title"; }
+        }
+        else
+        {
+          print "\n***Error opening $anchor. Omitting file.";
+        }
+      }
+      $_ = pack($template,$anchor,$hid,$archive,$title);
+      $_ = $_."\cJ";
+    }
+
+    $topicdata_file = $topicdata_dir.$appl.'_new_'.$target_platform.'.txt';  
+                                          # make the new topic database
+    
+    open TOPIC, ">$topicdata_file" or &mydie("Cannot open $topicdata_file for writing.");
+    binmode TOPIC;
+    for (@topic)
+    {
+      print TOPIC $_;
+    }
+    close TOPIC;
+
+    system("${root_dir}Program/txt2db.exe $topicdata_file ${helpfile_dir}$appl.db"); 
+  }
+}
+
+#--#
+
+sub create_treeviews
+{
+  print "\n-UPDATING FILES FOR THE CONTENT TABPAGE-----------------------------\n";
+  print "Now we are going update the *.tree files which build the content\n";
+  print "tabpage on the help navigation pane with the new titles from the\n";
+  print "localized help files.\n";
+  print "Note, that some strings in these files have to be localized manually!\n";
+  print "--------------------------------------------------------------------\n";
+
+  # NEW FOR 1.1:
+  # Since common.tree and schart.tree do not have corresponding *.db
+  # files, we read _all_ *.db into the hash.
+
+  # READ file titles from all *.db files
+  print "Reading title databases...";
+  for $appl(@application)
+  {
+    $/ = "\n";  
+    print "Reading $appl... ";
+    open TOPIC, $topicdata_dir.$appl.'_new_'.$sys.'.txt' or &mydie("Cannot open updated topic database ${topicdata_dir}${appl}_new_${sys}.txt");
+    @topic = <TOPIC>;
+    close TOPIC;
+    
+    print "$#topic entries\n";
+    
+                                        # create a title/id hash
+    for $top(@topic)
+    {
+      ($anchor,$hid,$archive,$title) = unpack($template,$top);
+      $title =~ s/\s+$//gi;   $title =~ s/^\s+//gi;
+      $hid =~ s/\s+$//gi;     $hid =~ s/^\s+//gi;
+      $title{$hid} = $title;
+    }
+    undef @topic;
+  }
+  $keys = keys(%title);
+  print "Done. $keys entries read.\n";
+
+  my @tree_application = ('smath','common','simpress','swriter','sbasic','scalc','schart');
+
+  for $appl(@tree_application)
+  {
+    $/="\n";         #<-- This one was missing :-(
+                                          # open the existent files
+    print "\nUpdating $appl.tree";
+    open TREE, "${topicdata_dir}$appl.tree" or &mydie("Cannot open ${topicdata_dir}$appl.tree for updating.");
+    @tree = <TREE>;
+    close TREE;
+  
+    for (@tree)
+    {
+       # replace all topic titles
+       s/(<topic\s*id=\")([^\"]*)(\"[^>]*>)([^<]*)(<\/topic>)/$1.$2.$3.$title{$2}.$5/egi;
+       
+       # replace all nodes which have a numeric id (C## and N## are section headings that have to be localized by hand)
+       s/(<node\s*id=\")([^\"\D]*)(\" title=\")([^\"]*)(\">)/$1.$2.$3.$title{$2}.$5/egi;
+      
+       # replace entities in topic titles (trouble when displayed in the help viewer)
+       s/&apos;/'/gi;
+       s/&quot;/'/gi;
+       s/&amp;/+/gi;
+    }
+    
+    
+    open NEWTREE, ">${output_dir}${lang}\\$appl.tree" or &mydie("Cannot create ${output_dir}${lang}\\$appl.tree.");
+    print NEWTREE @tree;
+    close NEWTREE;
+  }
+}
+
+#--#
+
+sub create_picture_jar
+{
+  print "\n-CREATING PICTURE DATABASE AND ARCHIVE FILES------------------------\n";
+  print "Now we are going to create the database for the images and\n";
+  print "the JAR archive containing all images used\n";
+  print "If something goes wrong here check your Java Installation and the paths\n";
+  print "and check whether JAR.EXE is in the path (needed for archiving)\n";
+  print "--------------------------------------------------------------------\n";
+
+  print "Archiving the images...\n";
+  chdir ${helpfile_dir};
+  system("${root_dir}Program/jar cMf ${output_dir}$lang/picture.jar picture/win/common/language/*.gif");
+  system("${root_dir}Program/jar uMf ${output_dir}$lang/picture.jar picture/win/common/other/*.gif");
+  system("${root_dir}Program/jar uMf ${output_dir}$lang/picture.jar picture/win/common/symbols/*.gif");
+  system("${root_dir}Program/jar uMf ${output_dir}$lang/picture.jar picture/win/sbasic/language/*.gif");
+  system("${root_dir}Program/jar uMf ${output_dir}$lang/picture.jar picture/win/schart/language/*.gif");
+  system("${root_dir}Program/jar uMf ${output_dir}$lang/picture.jar picture/win/schart/symbols/*.gif");
+  system("${root_dir}Program/jar uMf ${output_dir}$lang/picture.jar picture/win/smath/symbols/*.gif");
+  system("${root_dir}Program/jar uMf ${output_dir}$lang/picture.jar picture/win/staruser/*.gif");
+  system("${root_dir}Program/jar uMf ${output_dir}$lang/picture.jar picture/win/swriter/language/*.gif");
+  system("${root_dir}Program/jar uMf ${output_dir}$lang/picture.jar picture/win/swriter/*.gif");
+
+  print "Making the database...\n";
+  system("${root_dir}Program/txt2db.exe ${helpfile_dir}etc/picture.txt ${output_dir}$lang/picture.db"); 
+}
+
+#--#
+
+sub create_indexes
+{
+  print "\n-CREATING FULLTEXT SEARCH INDEXES-----------------------------------\n";
+  print "Now we are going to create the index files for the full text search\n";
+  print "This is going to take a while. Please be patient...\n";
+  print "If something goes wrong here check your Java Installation and the paths\n";
+  print "--------------------------------------------------------------------\n";
+
+
+  for $appl(@application)                 # process each application
+  {
+    print "\nIndexing $appl...\n";
+    if ($verbose)
+    {
+    system("$java_dir\\bin\\java -Diso639=$lang_iso -Diso3166=$country_iso -Djava.library.path=$LD_LIBRARY_PATH -Dcom.sun.star.help.Directory=$input_dir -classpath $CLASSPATH com.sun.star.help.HelpIndexer -language $lang -module $appl -system $sys");
+    }
+    else
+    {
+      `$java_dir\\bin\\java -Diso639=$lang_iso -Diso3166=$country_iso -Djava.library.path=$LD_LIBRARY_PATH -Dcom.sun.star.help.Directory=$input_dir -classpath $CLASSPATH com.sun.star.help.HelpIndexer -language $lang -module $appl -system $sys`;
+    }
+  
+    print "\nMoving the files created for $appl to their proposed location...\n";
+    print("${helpfile_dir}$appl.idx -> ${output_dir}$lang\\$appl.idx");
+    system("move ${helpfile_dir}$appl.idx ${output_dir}$lang\\$appl.idx");
+    
+    print("${helpfile_dir}$appl.key -> ${output_dir}$lang\\$appl.key");
+    system("move ${helpfile_dir}$appl.key ${output_dir}$lang\\$appl.key");
+    
+    print("${helpfile_dir}$appl.ht -> ${output_dir}$lang\\$appl.ht");
+    system("move ${helpfile_dir}$appl.ht ${output_dir}$lang\\$appl.ht");
+    
+    print("${helpfile_dir}$appl.db -> ${output_dir}$lang\\$appl.db");
+    system("move ${helpfile_dir}$appl.db ${output_dir}$lang\\$appl.db");
+    
+  }
+}
+
+#--#
+
+sub transform_xmlfiles
+{
+  print "\n-TRANSFORMING THE HELP FILES TO THEIR FINAL FORMAT------------------\n";
+  print "Now we are going do an xsl transformation of the xml help files\n";
+  print "to their final format. All files are also jared into archives\n";
+  print "If something goes wrong here check your Java Installation and the paths\n";
+  print "--------------------------------------------------------------------\n";
+  
+  push @tmpapplication,@application,"schart","common";    # add these two sections to the list of applications to be processed
+  
+  for $appl(@tmpapplication)                 # process each application PLUS common and schart
+  {
+    print "Transforming $appl...\n";
+    if ($verbose)
+    {
+      system("$java_dir\\bin\\java -Djava.library.path=$LD_LIBRARY_PATH -Dcom.sun.star.help.Directory=$input_dir -classpath $CLASSPATH com.sun.star.help.HelpTransformer ${input_dir}$lang\\text\\$appl ${root_dir}StyleSheets\\PreTransformation\\main_html.xsl ${input_dir}$lang");
+    }
+    else
+    {
+      `$java_dir\\bin\\java -Djava.library.path=$LD_LIBRARY_PATH -Dcom.sun.star.help.Directory=$input_dir -classpath $CLASSPATH com.sun.star.help.HelpTransformer ${input_dir}$lang\\text\\$appl ${root_dir}StyleSheets\\PreTransformation\\main_html.xsl ${input_dir}$lang`;
+    }
+    print "\nMoving the transformed files for $appl to their proposed location...\n";
+    system("move ${helpfile_dir}text\\$appl.jar ${output_dir}$lang\\$appl.jar");
+  }    
+  
+}
+
+#--#
+
+
+sub finalize
+{
+  print "\n-FINALIZING THE HELP FILES (ADDTL COPYING ETC)----------------------\n";
+  print "Now we copy additional files to the directories\n";
+  print "and create all archives needed.\n";
+  print "--------------------------------------------------------------------\n";
+ 
+ 
+                                # copy the cfg files
+  system("copy ${helpfile_dir}etc\\*.cfg ${output_dir}$lang");
+                                 
+                                # copy custom.css
+  system("copy ${helpfile_dir}etc\\custom.css ${output_dir}$lang");
+                                
+                                # copy err.html
+  system("copy ${helpfile_dir}etc\\err.html ${output_dir}$lang");
+
+  # Now we create the zip files to be placed in the source tree
+  # at first the zip for the common files, shared99.zip...
+  
+  chdir "${output_dir}$lang";
+  print "Common files...\n";
+  system("${root_dir}Program/jar cMf ${install_dir}${lang}\\shared99.zip common.jar custom.css err.html picture.db picture.jar");
+  
+  # ...now all the files for the applications
+  
+  push @tmpapplication,@application,"schart";  # add this section to the list of applications to be processed
+  
+  for (@tmpapplication)
+  {
+    print "$_...\n";
+    system("${root_dir}Program/jar cMf ${install_dir}${lang}\\${_}99.zip ${_}*.*");
+  }
+  
+}
+#--#
+
+sub mydie
+{
+  my $msg = shift;
+  my $usage = "Usage: createhelp.pl langdir target_platform lang_iso country_iso\n".
+              "       where langdir         = Language directory\n".
+              "             target_platform = WIN|UNIX\n".
+              "             lang_iso        = ISO language code, e.g. en\n".
+              "             country_iso     = ISO country code, e.g. US\n\n".
+              "Example: createhelp.pl 86 win zh CN\n";
+  die "Error! $!\n$msg\n$usage\n";
+}
+#EOF#
