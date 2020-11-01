@@ -11,12 +11,13 @@ BEGIN {
 	L = index($0,"Notice:");
 	if ( L == 1 ) {
 	    META = 2;
-	    print "Notice=https://www.apache.org/licenses/LICENSE-2.0";
+	    print "notice=https://www.apache.org/licenses/LICENSE-2.0";
 	    next;
 	}
 	N = sub(/\:[ \t]*/,"=",$0);
 	if ( N > 0 ) {
-	    print $0;
+	    split($0,parts,"=");
+	    print tolower(parts[1])"="parts[2];
 	    next;
 	}
 	META = 0;
