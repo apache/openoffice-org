@@ -1,0 +1,47 @@
+<html><head>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+#set($myRoles = $loginUser.getRolesInProject($currentProject))
+#set($myRequestedRoles = $loginUser.getRequestedRolesInProject($currentProject))
+         
+#if($currentProject.isCategory())
+  #set($projectType = "Category" )
+#elseif($currentProject.isGroup())
+  #set($projectType = "Group" )
+#else
+  #set($projectType = "Project")
+#end
+
+Tasks :&nbsp;&nbsp;
+<div class="pipelinks">
+ #set ($displayPipe=false)
+ #if($acl.hasPermission("Project - Invite", $currentProject))
+  #set ($displayPipe=true)
+  <a href="$currentProject.getProjectPageURL("ProjectInvite")">Invite 
+   New Members</a>
+ #end
+
+ #if($displayPipe) | #end
+
+ #if(!project.isCategory())
+  #set ($displayPipe=true)
+  #if($myRoles.isEmpty() && $myRequestedRoles.isEmpty())
+   #set ($joinMessage="Join This $projectType")
+  #else
+   #set ($joinMessage="Request New Role")
+  #end
+  <a href="$currentProject.getProjectPageURL("ProjectMembershipRequest")">$joinMessage</a>
+ #end 
+
+ #if($acl.hasPermission("Role - Grant", $currentProject))
+  #if ($displayPipe) | #end
+  <a href="$currentProject.getProjectPageURL("ProjectMemberAdd")">Add New 
+   Members</a> 
+  #end
+ #end
+</div>
+
+</body>
+</html>
+

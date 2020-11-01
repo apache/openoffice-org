@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html><head>
+<title>Appendix</title>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+<table align="right">
+  <tr>
+    <td><div align="left"><a href="mu_install.html">Previous</a></div></td>
+    <td><div align="center"><a href="toc.html">Contents</a></div></td>
+    </tr>
+</table>
+<br>
+<hr>
+<H2>Appendix</H2>
+<P>The Appendix contains information about automated installation of OpenOffice.org under Unix, the printer administration program under the Solaris operating environment and under Linux, about modifying and repairing the installation as well as deinstalling OpenOffice.org.</P>
+<br><br>
+<H3>Automated Installation under Unix</H2>
+<P>There is a special installation script available to help automate the installation of OpenOffice.org under Unix which can be used to install OpenOffice.org on the command line with or without graphical interface.</P>
+<P>The installation script <code>install</code> defaults to a multi-user installation of OpenOffice.org (standard for Unix / Linux) and takes the following command line arguments:</P>
+<DIV ALIGN=RIGHT>
+	<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+                <TR VALIGN=TOP>
+                        <TD WIDTH=17%>
+                                <p><code>--help</code></p>
+                        </TD>
+                        <TD WIDTH=83%>
+                                <p>prints the help message</p>
+                        </TD>
+                </TR>
+                <TR VALIGN=TOP>
+                        <TD>
+                                <p><code>--version</code></p>
+                        </TD>
+                        <TD>
+                                <P>prints the version of OpenOffice.org to be installed</P>
+                        </TD>
+                </TR>
+                <TR VALIGN=TOP>
+                        <TD>
+                                <P><code>--prefix=PREFIX</code></P>
+                        </TD>
+                        <TD>
+                                <P>installs OpenOffice.org into <code>PREFIX</code> (default is <code>$oo_default_prefix</code>)</P>
+                        </TD>
+                </TR>
+                <TR VALIGN=TOP>
+                        <TD>
+                                <P><code>--single</code></P>
+                        </TD>
+                        <TD>
+                                <P>performs a single user installation of OpenOffice.org (default is a network installation)</P>
+                        </TD>
+                </TR>
+                <TR VALIGN=TOP>
+                        <TD>
+                                <P><code>--interactive</code></P>
+                        </TD>
+                        <TD>
+                                <P>installs OpenOffice.org using the interactive mode</P>
+                        </TD>
+                </TR>
+	</TABLE>
+</DIV>
+<P><B>Example</B></P>
+<P><CODE>./install --prefix=/opt</CODE></P>
+<P>makes a multi-user / network Phase 1 installation of OpenOffice.org into the directory <CODE>/opt</CODE>.</P>
+
+<TABLE WIDTH=100% BORDER=1 CELLPADDING=4 CELLSPACING=0 FRAME=VOID RULES=NONE>
+	<TR VALIGN=TOP>
+		<TD WIDTH=17%>
+			<IMG SRC="img/achtung.png">
+		</TD>
+		<TD WIDTH=83%>
+			<P>Individual users must still do a <B>Workstation Installation</B> before they will be able to use OpenOffice.org. However, the Workstation Installation will be <B>automatically started</B> the first time any user tries to run OpenOffice.org.</P>
+		</TD>
+	</TR>
+</TABLE>
+<br><br>
+<H3>Setting up Printer, Fax and Fonts under Unix</H3>
+
+<P>Under Unix, the printer administration program &quot;spadmin&quot; is provided to help you set up printers, faxes and fonts for use with OpenOffice.org.</P>
+<P>Call the printer administration program &quot;spadmin&quot; as follows:</P>
+<UL>
+	<LI>Go to the <code>OpenOffice.org1.0/program</code> directory.</li>
+	<LI>Enter:<br><br>
+	<P><code>./spadmin</code><br></li>
+</UL>
+<P>After it starts, the window of the printer administration program &quot;spadmin&quot; appears. That is where you can make all important settings.</P>
+<P>During a network installation, the <B>System Administrator</B> first logs on as user root and calls the printer administration program &quot;spadmin&quot;. He or she then creates a general printer configuration file called <code>OpenOffice.org1.0/share/psprint/psprint.conf</code> for all users. All changes are immediately available to all users in OpenOffice.org.</P>
+<P>The system administrator can also add fonts for all users in the network installation. However, these fonts are available only after restarting OpenOffice.org.</P>
+<br>
+<H4>Setting up Printers</H4>
+<P>Under Unix, OpenOffice.org only offers direct support for PostScript printers. Other printers must be set up as described in the section <B>Printer Drivers in OpenOffice.org</B>. OpenOffice.org automatically provides a printer with the default driver for each system queue. You can add additional printers as needed.</P>
+<br>
+<H4>Adding a Printer</H4>
+<OL>
+	<LI>Click the <B>New Printer</B> button.</li>
+	<LI>Select the <B>Create Printer</B> option and click <B>Next</B>.</li>
+	<LI>Select the appropriate driver for your printer. If you are not using a PostScript printer or your model is not listed, use the &quot;Generic Printer&quot; driver or follow the steps below. You can also add new drivers using the <B>Import</B> button or delete unnecessary drivers using the <B>Delete</B> button (see below for details). Click <B>Next</B>.</li>
+	<LI>Choose a command line that you can use to print on your printer (for example, <code>lp -d my_queue</code>). Click <B>Next</B>.</li>
+	<LI>Give the printer a name and determine whether it should become the default printer. Click <B>Finish</B>.</li>
+	<LI>To print a test page, click on <B>Test Page</B>. If the test page fails to print or is incorrectly printed, check all settings as described in <B>Change Printer Settings</B>.</li>
+</OL>
+<P>You now have a new printer in OpenOffice.org.</P>
+<br>
+<H4>Printer Drivers in OpenOffice.org</H4>
+<UL>
+	<LI>When installing a non-PostScript enabled printer, you must set your system so that PostScript can be converted into the language of the printer. We recommend using current PostScript conversion software such as <a href="http://www.cs.wisc.edu/~ghost/" target=_new>Ghostscript</a>. You should set up the &quot;Generic Printer&quot; in that case. Make sure the page margins are set correctly as well. You can find this information in the following sections.</li>
+	<LI>If you are in possession of a PostScript-enabled printer, you must always install a description file that adapts the printer (PostScript Printer Definition - PPD) so that you can utilize the paper tray selection, the duplex print function (if the printer has it) and any built-in fonts. You can also use the generic printer driver since it contains the most important data and is suitable for most printers. In that case, you will have to do without the paper tray selection and correctly set the page margins.<br>
+	Some PPD files are installed as default files. If there is no matching PPD file for your printer, you will find various PPD files at <a href="http://www.adobe.com/products/printerdrivers/" target="_new">http://www.adobe.com/products/printerdrivers/</a>. You can also ask the manufacturer of your printer for PPD files. Unpack a suitable driver and connect it with spadmin to your system.</li>
+</UL>
+<P><B>Drivers can be imported or deleted when creating a new printer.</B></P>
+<UL>
+	<LI>To import new drivers, click <B>Import</B> in the driver selection dialog. Click <B>Browse</B> to select the directory where you unpacked the PPD files. In the <B>Selection of drivers</B> list box, select the printer driver you want to install and then click <B>OK</B>.</li>
+	<LI>To delete a printer driver, select the printer driver and click <B>Delete</B>. Be sure that you do not delete the generic printer driver, and remember that drivers deleted from network installations are no longer available to other users who are using the same network installation.</li>
+	<LI>If the printer has more fonts built in than the usual PostScript fonts, you must also load the AFM files for these additional fonts. Copy the AFM files into the <code>OpenOffice.org1.0/share/psprint/fontmetric</code> directory of the OpenOffice.org installation or into the <code>OpenOffice.org1.0/user/psprint/fontmetric</code> directory of the User Installation. You can find AFM files, for example, at <a href="ftp://ftp.adobe.com/pub/adobe/type/win/all/afmfiles/" target=_new>ftp://ftp.adobe.com/pub/adobe/type/win/all/afmfiles/</a>.</li>
+</UL>
+<br>
+<H4>Changing Printer Settings</H4>
+<P>In the printer administration program &quot;spadmin&quot;, select the printer from the <B>Installed printers</B> list box and click <B>Properties</B>. The <B>Properties</B> dialog appears containing several tab pages. This is where you can make settings that are used according to the PPD file of the selected printer.</li>
+<UL>
+	<LI>Select the command on the <B>Command</B> tab page. You can remove superfluous commands using the <B>Remove</B> button.</li>
+	<LI>On the <B>Paper</B> tab page, you can define the paper format and paper tray to be used as the default settings for this printer.</li>
+	<LI>On the <B>Device</B> tab page, you can activate the special options for your printer. If your printer can only print in black and white, choose &quot;grayscale&quot; under <B>Color</B>, otherwise choose &quot;color&quot;. If switching to grayscale leads to unfavorable results, you can also select &quot;color&quot; under <B>Color</B> and see how the printer or PostScript emulator applies it. Furthermore, on this tab page you can set the precision with which colors are described as well as the PostScript level.</li>
+	<LI>The <B>Font Replacement</B> tab page allows you to select a printer font type available in the printer for each font type installed on your computer. This way you can reduce the data volume sent to the printer. Font replacement can be turned on or off for each printer individually.</li>
+	<LI>You should also set the page margins correctly on the <B>Additional settings</B> tab when using the generic printer drivers so that your printout is not cropped. You can also enter a description in the Comments field, which will also be displayed on the<B> Print</B> dialog.</li>
+</UL>
+
+<P>Some of these settings can also be set per document/printout in the <B>Print</B> dialog or the <B>Printer Settings</B> dialog in OpenOffice.org via the <B>Properties</B> button.</P>
+<br>
+<H4>Renaming or Deleting Printers</H4>
+<UL>
+	<LI>Select a printer from the <B>Installed printers</B> list box.</li>
+	<LI>To rename the selected printer, click <B>Rename</B>. Enter an appropriate name in the dialog that appears and click <B>OK</B>. The name must be unique and should be chosen so that you can recognize the printer and the application. Printer names must be assigned the same for all users because, when documents are exchanged, the selected printer remains unchanged if the recipient has it under the same name.</li>
+	<LI>To delete the selected printer, click <B>Remove</B>. The default printer or a printer that has been created by the system administrator in a network installation cannot be removed using this dialog.</li>
+</UL>
+<br>
+<H4>Selecting a Default Printer</H4>
+<UL>
+	<LI>the <B>Installed printers</B> list box the default printer, double-click its name or click the <B>Default</B> button.</li>
+</UL>
+<br><br>
+<H3>Using Fax Functionality</H3>
+<P>If you have already installed a fax package such as Efax or HylaFax on your computer, you can send faxes with OpenOffice.org.</P>
+<OL>
+	<LI>Click <B>New Printer</B>. This opens the <B>Add Printer</B> dialog.</li>
+	<LI>Select <B>Connect a fax device</B>. Click <B>Next</B>.</li>
+	<LI>Choose whether to use the default driver or another printer driver. Click <B>Next</B>. If you are not using the default driver, select the appropriate driver and click <B>Next</B>.</li>
+	<LI>Enter a command line with which to communicate with the fax in the following dialog. In the command line of each fax sent &quot;<code>(TMP)</code>&quot; is replaced by a temporary file and &quot;<code>(PHONE)</code>&quot; by the telephone number of the recipient fax machine. If &quot;<code>(TMP)</code>&quot; occurs in the command line, the PostScript code is transmitted in a file, otherwise via standard input (i.e., as a pipe). Click <B>Next</B>.</li>
+	<LI>Assign a name to your new fax printer and determine whether the telephone numbers (see below) marked in the text should be removed from the printout, or not. Click <B>Finish</B>.</li>
+</OL>
+<P>You can now send faxes by printing to the printer that has just been created.</P>
+<P>Enter the fax number as text in the document. You can also enter a field that takes the fax number from your active database. In any case, the fax number must start with the characters <code>@@#</code> and end with <code>@@</code>. A valid entry would have the form <code>@@#1234567@@</code>.</li>
+<P>If these characters including the telephone number are not printed, activate the <B>Fax number is removed from the printout</B> option under <B>Properties</B> on the <B>Command</B> tab page. If notelephone number is entered in the document, a dialog prompting you for it will appear after the printout.</li>
+<P>In OpenOffice.org you can also activate a button for sending faxes to a default fax. To do this, right-click the function bar, open the <B>Visible Buttons</B> submenu and click the <B>Send Default Fax</B> button. You can set which fax is used when this button is pressed under <B>Tools - Options - Text Document - Print</B>.</li>
+<P>Remember to create one separate print job for each fax, otherwise, the first recipient would receive all the faxes. In the <B>File - Form Letter</B> dialog select the  <B>Printer</B> option and then the <B>Create Individual Print Jobs</B> field.</P>
+<br><br>
+<H3>Connecting a PostScript for PDF Converter</H3>
+
+<P>If a PostScript for PDF converter such as Ghostscript or Adobe Acrobat Distiller(tm) is installed on your computer, you can quickly create PDF documents in OpenOffice.org.</P>
+<OL>
+	<LI>Click <B>New Printer</B>. This opens the <B>Add Printer</B> dialog.</li>
+	<LI>Select <B>Connect a PDF converter</B>. Click <B>Next</B>.</li>
+	<LI>Choose whether to use the default driver, the Acrobat Distiller driver or another driver. Click <B>Next</B>. If you are not using the default driver or the Acrobat Distiller driver, select the appropriate driver and click <B>Next</B>.</li>
+	<LI>In the next dialog, enter a command line with which to communicate with the PostScript-&gt;PDF Converter. Moreover, enter the directory where the PDF files created should be saved. If you do not provide this directory, the user's home directory will be used. In the command line of each created PDF document &quot;<code>(TMP)</code>&quot; is replaced by a temporary file and &quot;<code>(OUTFILE)</code>&quot; by the target file, the name of which is created from the document name. If &quot;<code>(TMP)</code>&quot; occurs in the command line, the Postscript code is transmitted in a file, otherwise via standard input (i.e., as a pipe). If Ghostscript or Adobe Acrobat Distiller is in the search path, you can use one of the predefined command lines. Click <B>Next</B>.</li>
+	<LI>Assign a name to your new PDF converter. Click <B>Finish</B>.</li>
+</OL>
+<P>You can now create PDF documents by printing to the converter that has just been created.</P>
+<br><br>
+<H3>Installing Fonts</H3>
+<P>When you are working with OpenOffice.org you might notice that a different number of fonts is provided depending on the document type being used. This is because not all of the fonts can be used in every case.</P>
+<UL>
+	<LI>Therefore, only those fonts will be shown in the font selection box when working with a text document which can also be printed, as it is assumed that you will only want to use those fonts that you can actually have printed on paper.</li>
+	<LI>In an HTML document or in online layout, only fonts that are available on screen are offered.</li>
+	<LI>On the other hand, when working with spreadsheets and drawings you will be able to use all of the fonts that can be either printed or shown on the screen.</li>
+</UL>
+<P>OpenOffice.org tries to have the display on screen correspond to the printout (WYSIWYG). Possible problems using the font are shown in the bottom margin of the dialog you open by choosing <B>Format &ndash; Character</B>.</li>
+<br>
+<H4>Adding Fonts</H4>
+<P>You can integrate additional fonts in OpenOffice.org. Fonts which you integrate are available exclusively to OpenOffice.org and can be used with various Xservers without your having to install them there. To make the fonts available to other programs as well, proceed as usual by adding the fonts to your Xserver. OpenOffice.org can display and print out PostScript Type1 fonts as well as TrueType fonts (including TrueType Collections).</P>
+<P>To integrate additional fonts in OpenOffice.org, proceed as follows:</P>
+<OL>
+	<LI>Start spadmin.</li>
+	<LI>Click <B>Fonts</B>.</li>
+	<LI>All fonts added for OpenOffice.org are listed in the dialog that appears. You can remove selected fonts using the <B>Remove</B> button or add new fonts with the <B>Add</B> button.</li>
+	<LI>Click <B>Add</B>. The <B>Add Fonts</B> dialog appears.</li>
+        <LI>Enter the directory from which you want to add the fonts. Press the <B>...</B> button and select the directory from the path selection dialog or enter the directory directly.</li>
+	<LI>Now a list of the fonts from this directory appears. Select the fonts you want to add. To add all the fonts, click <B>Select All</B>.</li>
+	<LI>With the <B>Create soft links only</B> check box you can determine whether the fonts are to be copied into the OpenOffice.org directory or only symbolic links are to be created there. If the fonts to be added are on a data medium that is not always available (such as a CD-ROM), you must copy the fonts.</li>
+	<LI>Click <B>OK</B>. The fonts will now be added.</li>
+</OL>
+<P>In the case of a network installation, the fonts are installed in that installation if possible. If the user has no write access rights, the fonts will be installed in the user installation so that only the user who installed them can access them.</P>
+<br>
+<H4>Deleting Fonts</H4>
+<P>To delete fonts, proceed as follows:</P>
+<OL>
+	<LI>Start spadmin.</li>
+	<LI>Click <B>Fonts</B>.</li>
+	<LI>All fonts added to OpenOffice.org are listed in the dialog that now appears. Select the fonts you want to delete and click <B>Delete</B>.</li>
+</OL>
+<P>You can delete only the fonts that have been added for OpenOffice.org.</p>
+<br>
+<H4>Renaming Fonts</H4>
+<P>You can also rename fonts added for OpenOffice.org. This is especially useful for fonts that contain several localized names (such as an English and a Japanese name). There are also fonts that contain an unreadable name. You can replace this with a suitable name.</P>
+<OL>
+	<LI>Start spadmin.</li>
+	<LI>Click <B>Fonts</B>.</li>
+	<LI>Select the fonts you want to rename and click <B>Rename</B>.</li>
+	<LI>Enter a new name in the dialog that appears. If the font contains several names, these names will serve as suggestions in the combo box where you enter the new name.</li>
+	<LI>Click <B>OK</B>.</li>
+</OL>
+<P>If you select several fonts to rename, one dialog appears for each selected font.</P>
+<P>If you have selected a TrueType Collection (TTC), one dialog appears for each of the fonts contained in it.</P>
+<br><br>
+<H3>Installing a patch under the Solaris&trade; Operating Environment</H3>
+<P>To carry out a correct installation, the system patches described in the chapter System Requirements have to be installed. To install a system patch, proceed as described in the following example for patch #106327-08. In this example, we assume that the patch is compressed in the file <code>106327-08.zip</code>, e.g. after downloading it from <a href="http://sunsolve.sun.com" target=_new>SunSolve</a></P>
+<OL>
+	<LI>Log in to the system with root access rights:<br>
+	<code>su -</code><br></li>
+	<LI>Create a temporary directory for unpacking the compressed patch file, e.g. <B>/tmp/patches</B>.<br>
+	<code>mkdir /tmp/patches</code><br></li>
+	<LI>Copy the compressed patch file to this directory and unpack it there:<br>
+	<code>unzip 106327-08.zip</code><br></li>
+	<LI>Install the patch using the command <B>patchadd</B>:<br>
+	<code>patchadd 106327-08</code><br></li>
+	<LI>After successful installation of the patch, you can remove the temporary directory:<br>
+	<code>rm -rf /tmp/patches</code><br></li>
+</OL>
+<br>
+<TABLE WIDTH=100% BORDER=1 CELLPADDING=4 CELLSPACING=0 FRAME=VOID RULES=NONE>
+	<TR VALIGN=TOP>
+		<TD WIDTH=17%>
+			<IMG SRC="img/hinweis.png">
+		</TD>
+		<TD WIDTH=83%>
+			<p>Use the command <B>showrev -p</B> or <B>patchadd -p</B> to display a list of the patches already installed on your system. To deinstall a patch, enter the command <B>patchrm</B>.</p>
+		</TD>
+	</TR>
+</TABLE>
+<br><br>
+<H3>Modifying the OpenOffice.org Installation</H2>
+<P>Calling the Setup program again after OpenOffice.org is already installed leads you to a dialog that allows you to either modify, repair or remove an existing installation.</P>
+<P>You can also call the setup program from the installation directory. If the setup program recognizes a OpenOffice.org installation, it will offer to repair the version on the hard drive.</P>
+
+<IMG SRC="img/setup_modify.png">
+<br>
+<H4>Modify</H4>
+<P>If you select the <B>Modify</B> option, you will see the same dialog as for the Custom Installation. This dialog enables you to define which OpenOffice.org components you want to add or remove.</P>
+<P>The gray boxes represent the components which have not been installed. When you click a gray box, it will become colored indicating that that component will also be installed.</P>
+<P>The components that have already been installed have a colored box in front of them. When you click such a box, it will be highlighted by a red mark which indicates that that component will be deleted from the installation.</P>
+<P>A plus sign in front of a component indicates that there is a group of components to be found there. To view the whole group, click the plus sign. Now you can select the individual components to install or delete.</P>
+<br>
+<TABLE WIDTH=100% BORDER=1 CELLPADDING=4 CELLSPACING=0 FRAME=VOID RULES=NONE>
+	<TR>
+		<TD WIDTH=17%>
+			<IMG SRC="img/tip.png">
+		</TD>
+		<TD WIDTH=83%>
+			<P>Please note that the graphics filters are listed under the &quot;optional components&quot;.</P>
+		</TD>
+	</TR>
+</TABLE>
+<br>
+<H4>Repair</H4>
+<P>Choose the <B>Repair</B> option in the OpenOffice.org Setup program to repair your OpenOffice.org when entries in the system registry are no longer correct. The repair function will try to restore unintentionally deleted program files.</P>
+<br>
+<H4>Remove</H4>
+<P>Deinstallation deletes OpenOffice.org entries contained in the registry of the corresponding operating system and also the files mentioned in the previous paragraph. Furthermore almost all of the files and folders in the OpenOffice.org directory will be deleted except for those that you have created or altered after having installed the program or those needed by the setup program itself. Therefore, your documents and most of the settings will be kept. When working under <B>Windows</B> you can activate/ deactivate a check box which decides if files created in the OpenOffice.org folder are also to be deleted or kept.</P>
+<br>
+<TABLE WIDTH=100% BORDER=1 CELLPADDING=4 CELLSPACING=0 FRAME=VOID RULES=NONE>
+	<TR VALIGN=TOP>
+		<TD WIDTH=17%>
+			<IMG SRC="img/hinweis.png">
+		</TD>
+		<TD WIDTH=83%>
+			<P>If you cannot immediately delete some of the program files under Windows, delete them directly after restarting your system.</P>
+		</TD>
+	</TR>
+</TABLE>
+<br>
+<P>If you want to remove the server installation on the network, you have to completely delete the entire OpenOffice.org folder on the server. All user installations based thereon will be automatically deactivated.</P>
+<br><br>
+<H3>Setup Parameters</H3>
+<P>The parameter <code><B>-repair</B></code> calls the setup program and repairs OpenOffice.org without any dialogs being displayed.</P>
+<P>The parameter <code><B>-net</B></code> or <code><B>-n</B></code> starts the server part of the network installation.</P>
+<P>In the parameter <code><B>-D:destination_path</B></code> the information you enter in place of <code>&quot;destination_path&quot;</code> specifies the path where OpenOffice.org is to be installed.</P>
+<P>In the parameter <code><B>-F:application_name</B></code> the information you enter in place of <code>&quot;application_name&quot;</code> specifies the name of an application that is to be started immediately after installation.</P>
+<hr>
+<table align="right">
+  <tr>
+    <td><div align="left"><a href="mu_install.html">Previous</a></div></td>
+    <td><div align="center"><a href="toc.html">Contents</a></div></td>
+    </tr>
+</table>
+</body>
+</html>
+
