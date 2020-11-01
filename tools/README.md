@@ -80,7 +80,7 @@ ${GITPATH}/tools/migration2git.sh downloads
 
 ## Tool Scripts
 
-1. tools/push2git.sh ${1} ${2} ${3}
+1. tools/commit2git.sh ${1} ${2} ${3}
 
 ```
 # ${1} Category 'assets','content'
@@ -89,7 +89,6 @@ ${GITPATH}/tools/migration2git.sh downloads
 cd ${GITPATH}
 git add ${1}/${2}
 git commit -m 'Migration of ${2} ${3}'
-git push
 ```
 
 2. tools/convert2md.sh ${1} ${2}
@@ -115,32 +114,43 @@ find ${1} -type d ! -empty -exec mkdir -p ${GITPATH}/assets/{} \; -exec mkdir -p
 echo
 # 2 - Large Assets
 echo 'copy assets larger than 3M as separate commits'
-find ${1} -type f -size +3M -exec cp {} ${GITPATH}/assets/{} \; -exec ${GITPATH}/tools/push2git.sh assets {} 'large asset'\; 	
+find ${1} -type f -size +3M -exec cp {} ${GITPATH}/assets/{} \; -exec ${GITPATH}/tools/commit2git.sh assets {} 'large asset' \;
 echo
 # 3 - Assets
 echo 'copy assets not (html and mdtext) to assets tree'
 find ${1} -type f ! -name "*.html" ! -name "*.htm" ! -name "*.mdtext" ! -size +3M -exec cp -p {} ${GITPATH}/assets/{} \;
 # commit and push
-${GITPATH}/tools/push2git.sh assets ${1} 'assets'
+${GITPATH}/tools/commit2git.sh assets ${1} 'assets'
 echo
 # 4 - HTML
 echo 'copy html to content tree'
 find ${1}  -type f \( -name "*.html" -or -name "*.htm" \) ! -size +3M -exec cp -p {} ${GITPATH}/content/{} \;
 # commit and push
-${GITPATH}/tools/push2git.sh content ${1} 'html content'
+${GITPATH}/tools/commit2git.sh content ${1} 'html content'
 echo
 # 5 - Brand
 echo 'Convert brand'
-find ${1} -name "brand.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh brand {} \; -exec ${GITPATH}/tools/push2git.sh assets {} 'brand'\;
+find ${1} -name "brand.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh brand {} \; -exec ${GITPATH}/tools/commit2git.sh assets {} 'brand' \;
 echo
 # 6 - Navigators
 echo 'Convert navigators'
-find ${1} -name "*nav.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh navigator {} \; -exec ${GITPATH}/tools/push2git.sh assets {} 'navigator'\;
+find ${1} -name "*nav.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh navigator {} \; -exec ${GITPATH}/tools/commit2git.sh assets {} 'navigator' \;
 echo
 # 7 - Markdown
 echo 'Convert markdown pages'
 find ${1} -name "*.mdtext" ! -name "brand.mdtext" ! -name "*nav.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh page {} \;
 # commit and push
-${GITPATH}/tools/push2git.sh content ${1} 'Markdown pages'
+${GITPATH}/tools/commit2git.sh content ${1} 'Markdown pages'
 echo
+# 8 - Push to git
+echo 'Push to Gitbox'
+${GITPATH}/tools/push2git.sh
 ```
+
+4. tools/push2git.sh
+
+```
+cd ${GITPATH}
+git push
+```
+
