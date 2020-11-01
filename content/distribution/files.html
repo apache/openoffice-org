@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>What to Distribute</title>
+</head>
+
+<body>
+
+<h1>Distribution Project: Files To Distribute</h1>
+
+<h2 id="files">What To Distribute</h2>
+
+<p>Our policy on distributing OpenOffice.org software derives from discussions that took place in the Mirrors Project. The issues were:
+<ul>
+  <li>What files to distribute</li>
+  <li>How to collate the files so that they may be efficiently distributed</li>
+</ul>
+</p>
+
+<p>In the case of OpenOffice.org, this was a particularly annoying problem as new files, new localizations, new platforms are constantly being added.</p>
+<br/>
+
+<h3>New mirror structure</h3>
+
+<p>To be prepared with new releases in the future we have created a new structure. If you want to have more information about this then please read on in the
+Wiki for the <a href="http://wiki.services.openoffice.org/wiki/New_OOo_Mirror_Structure" title="Definition of the new mirror structure">
+<br/><strong>Definition of the new mirror structure</strong></a>.</p>
+
+<h2 id="sets">Datasets</h2>
+
+<p>Today we distribute the following datasets:
+<ul>
+  <li><strong>main</strong>: Contains the subdirs /stable, /contrib, /localized + packages/)</li>
+  <li><strong>extended</strong>: Contains the subdir /extended and the main dataset</li>
+</ul>
+</p>
+<br/>
+
+<h3>What the directories refer to</h3>
+
+<table class="datasets" border="0" cellpadding="2" cellspacing="2">
+  <thead>
+    <tr>
+      <td><strong>Directory</strong></td><td><strong>Description</strong></td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>contrib/</strong></td><td>Un-QA'd binaries, dictionaries, and other related files.</td>
+    </tr>
+    <tr>
+      <td><strong>extended/</strong></td><td>Un-QA'd localized binaries and sources, Beta Releases, Release Candidates, Developer Snapshots and other related
+      files.</td>
+    </tr>
+    <tr>
+      <td><strong>localized/</strong></td><td>Binaries for localized files: /de, /fr, /ja, ... These have been tested by the community.</td>
+    </tr>
+    <tr>
+      <td><strong>packages/</strong></td><td>The same like for localized/ + stable/ but sorted into packages that are devided for language regions. Please see
+      the ".../packages/packages.txt" file for more details.</td>
+    </tr>
+    <tr>
+      <td><strong>stable/</strong></td><td>At least the most recent build, e.g., /3.3.0. Each directory includes the binaries and source.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="sizes">Structures and sizes of the datasets</h2>
+
+<h3>Main</h3>
+
+<ul>
+  <li><strong>root dir</strong></li>
+  <ul>
+    <li><strong>contrib/</strong>: ~150 MB</li>
+    <li><strong>stable/</strong>: ~5 GB</li>
+    <li><strong>localized/</strong>: ~100 GB <sup>1)</sup></li>
+    <ul>
+      <li><strong>packages/</strong>: ~100 GB <sup>1)</sup> or a few KB <sup>2)</sup></li>
+    </ul>
+  </ul>
+</ul>
+
+<p><sup>1)</sup> You can choose if you want to distribute the localized/ or packages/ subdirs or both. It's also possible to distribute some of the subdirs
+in packages/ if you are not interested in all languages.</p>
+
+<p><sup>2)</sup> If you distribute localized/ and packages/ together, then the packages/ subdirs should normally contain only hard links and therefor only a
+few KB. If you take hard links into account when sync'ing then you don't distribute real files but their hard links only. This saves disk space and
+bandwith.</p>
+<br/>
+
+<h3>Extended</h3>
+
+<ul>
+  <li><strong>root dir</strong></li>
+  <ul>
+    <li><strong>contrib/</strong>: ~150 MB</li>
+    <li><strong>extended/</strong>: ~100 GB</li>
+    <ul>
+      <li><strong>stable/</strong>: ~5 GB <sup>1)</sup></li>
+      <li><strong>localized/</strong>: a few GB <sup>1)</sup></li>
+      <ul>
+        <li><strong>packages/</strong>: a few KB <sup>2)</sup></li>
+      </ul>
+    </ul>
+  </ul>
+</ul>
+
+<p><sup>1)</sup> It's only a fe GB and not ~100 GB as for the main dataset because it's mostly hard links from the extended/ subdir that represent the latest
+release. The remaining GB comes from files that are older than the latest release.</p>
+
+<p><sup>2)</sup> If you distribute localized/ and packages/ together, then the Packages/ subdirs should normally contain only hard links and therefor only a
+few KB. They refer from the latest Release Candidate in extended/ to the files in localized/ + stable/. And from localized/ + stable/ into packages/. If
+you take hard links into account when sync'ing then you don't distribute real files but their hard links only. This saves disk space and bandwith.
+
+<h2 id="archive">Archive Servers</h2>
+
+<p>We also have archive servers for mirroring legacy and rarely-used content. <a href="mirrors/archive.html">See more details here</a>.</p>
+
+<!--
+<table widdh="100%" border="1" cellpadding="4" cellspacing="0" bordercolor="#ffffff" bgcolor="#f0f0f0">
+  <thead>
+    <tr>
+  <th class="alt4" align="left">Category</th>
+  <th class="alt4">Stable</th>
+  <th class="alt4">Developer</th>
+  <th class="alt4">Contrib</th>
+  <th class="alt4">Localized</th>
+  <th class="alt4"><strong>Total</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <td> <strong>1:</strong> /stable, /developer, /contrib, /localized</td>
+  <td>/stable: 6.4 GB</td>
+  <td>/developer: 6 GB</td>
+  <td>/contrib: 306 MB</td>
+  <td>/localized: 25 GB</td>
+  <td><strong>ca. 35 GB</strong></td>
+    </tr>
+    <tr>
+  <td><strong>2:</strong> /stable, /contrib, /localized </td>
+  <td>/stable: 6.4 GB</td>
+  <td>no</td>
+  <td>/contrib: 306 MB</td>
+  <td>/localized: 19 GB</td>
+  <td><strong>ca. 26 GB</strong></td>
+    </tr>
+    <tr>
+  <td><strong>3:</strong> /stable, /contrib</td>
+  <td>/stable: 6.4 GB</td>
+  <td>no</td>
+  <td>/contrib: 306 MB</td>
+  <td>no</td>
+  <td><strong>ca. 7 GB</strong></td>
+    </tr>
+    <tr>
+  <td><strong>4:</strong> Whatever you can do (please specify)</td>
+  <td>n/a</td>
+  <td>n/a</td>
+  <td>n/a</td>
+  <td>n/a</td>
+  <td><strong>n/a</strong></td>
+    </tr>
+  </tbody>
+</table>
+-->
+
+</body>
+</html>
