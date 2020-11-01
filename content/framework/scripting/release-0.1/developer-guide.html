@@ -1,0 +1,290 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>General Developer Guidelines</title>
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/framework/">framework</a>&nbsp;&raquo;&nbsp;<a href="/framework/scripting/">scripting</a>&nbsp;&raquo;&nbsp;<a href="/framework/scripting/release-0.1/">release-0.1</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+
+<h1>General Developer Guidelines</h1>
+         
+<h2>Writing Office scripts and the XScriptContext type</h2>
+
+All Java script methods must pass in XScriptContext as their first
+parameter. The developer can then use accessor functions on the scripting
+context to get at the document context, desktop and component factory
+as follows:
+
+<ul>
+<li>Current document - access the document context against which
+the script was invoked
+
+<p>
+<font face="Courier, monospace" size="2">
+&lt;XScriptContext Instance&gt;.getDocument()</font>
+<br>returns
+<font face="Courier, monospace" size="2">::com::sun::star::frame::XModel</font>
+
+<li>Office Desktop - access the desktop of the running Office
+
+<p>
+<font face="Courier, monospace" size="2">
+&lt;XScriptContext Instance&gt;.getDesktop()</font>
+<br>returns
+<font face="Courier, monospace" size="2">
+::com::sun::star::frame::XDesktop</font>
+
+<li>Component Factory - access a ComponentContext factory to create
+other UNO components as required
+
+<p>
+<font face="Courier, monospace" size="2">
+&lt;XScriptContext Instance&gt;.getComponentContext()</font>
+<br>returns
+<font face="Courier, monospace" size="2">
+::com::sun::star::uno::XComponentContext</font>
+</ul>
+
+The Script must import the XScriptContext interface, using the following
+import directive:
+
+<font face="Courier, monospace" size="2">     
+<pre>
+    import drafts.com.sun.star.script.framework.XScriptContext;
+</pre>
+</font>
+
+Example usage in a Java script method to access a Writer document and
+insert some text:
+
+<p>
+<font face="Courier, monospace" size="2">     
+<pre>
+    import com.sun.star.frame.XModel;
+    import com.sun.star.text.*;
+    import com.sun.star.uno.UnoRuntime;
+    import drafts.com.sun.star.script.framework.XScriptContext;
+
+    public class MyClass {
+
+        // The script method must be public
+        // It can either be static or non-static
+
+        public void showForm(XScriptContext xSc) {
+
+            // getting the text document object
+            XModel xmodel = xSc.getDocument();
+
+            XTextDocument xtextdoc = (XTextDocument)
+                UnoRuntime.queryInterface(XTextDocument.class, xmodel);
+            XText xtext = xtextdoc.getText();
+            XTextCursor xtextcursor = xtext.createTextCursor();
+
+            xtext.insertString(xtextcursor, "Hello World", false);
+        }
+    }
+</pre>
+</font>
+
+<h2>Tips on writing Office scripts</h2>
+
+<ul>
+<li><p><b>Performance:</b> Currently scripts are being loaded by the
+Scripting Framework each time they are run. As such it is important to
+keep the size of your scripts and any dependent jar files they are using
+reasonably small. In future releases this script loading will be
+optimised by changing the point at which the scripts are loaded
+by OpenOffice.org and using various caching schemes once they are
+loaded. However, the initial load will always be effected by the
+script and it's dependent jar/class file sizes.
+
+<li><p><b>Threading:</b> Scripts are run synchronously by the
+Scripting Framework. If you wish to perform any background task or
+provide some user interaction via a dialog for instance, then it is your
+responsibility to spawn a thread in the running script which can
+manage this process or interaction and let the script return promptly.
+Within this running thread you should follow the normal
+UNO component threading guidelines to ensure that they do not deadlock
+OpenOffice.org through inappropriate use of the UNO API.
+</ul>
+
+<h2>Parcel Descriptor DTD and sample XML</h2>
+Each script must contain a parcel-descriptor.xml file which provides all the necessary metadata for 
+the script. The DTD for the parcel-descriptor.xml follows
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- DTD for Parcel Meta data for use in the OpenOffice.org Scripting Framework Project --&gt;
+&lt;!ELEMENT logicalname EMPTY&gt;
+&lt;!ELEMENT description (#PCDATA)&gt;
+&lt;!ELEMENT displayname EMPTY&gt;
+&lt;!ELEMENT locale (displayname?, description?)&gt;
+&lt;!ELEMENT functionname EMPTY&gt;
+&lt;!ELEMENT prop EMPTY&gt;
+&lt;!ELEMENT languagedepprops (prop+)&gt;
+&lt;!ELEMENT file (prop*)&gt;
+&lt;!ELEMENT fileset (file+)&gt;
+&lt;!ELEMENT script (locale+, functionname, logicalname, languagedepprops*, fileset*)&gt;
+&lt;!ELEMENT parcel (script+)&gt;
+&lt;!ATTLIST logicalname
+	value CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST displayname
+	value CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST locale
+	lang CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST functionname
+	value CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST logicalname
+	value CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST prop
+	name CDATA #REQUIRED
+	value CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST file
+	name CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST fileset
+	name CDATA #IMPLIED
+&gt;
+&lt;!ATTLIST script
+	language CDATA #REQUIRED
+&gt;
+</pre>
+The following is an example of a parcel-descriptor.xml file that defines a script, 
+implemented in Java. The languagedepprops element is used to extend the JVM's classpath.
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!--Sample Meta Data for use with the Scripting Framework Project in OpenOffice.org --&gt;
+&lt;!DOCTYPE parcel SYSTEM "parcel.dtd"&gt;
+&lt;parcel&gt;
+	&lt;script language="java"&gt;
+		&lt;locale lang="english"&gt;
+			&lt;displayname value="Memory.usage"/&gt;
+			&lt;description&gt;
+				Displays the memory current memory usage
+			&lt;/description&gt;
+		&lt;/locale&gt;
+		&lt;functionname value="memoryUtils.memoryUsage"/&gt;
+		&lt;logicalname value="MemoryUtils.MemUsage"/&gt;
+		&lt;languagedepprops&gt;
+			&lt;prop name="classpath" value="/opt/foo.jar:/usr/java/src.jar"/&gt;
+		&lt;/languagedepprops&gt;
+		&lt;fileset&gt;
+			&lt;file name="mems.txt"&gt;
+				&lt;prop name="type" value="resource"/&gt;
+			&lt;/file&gt;
+		&lt;/fileset&gt;
+	&lt;/script&gt;
+&lt;/parcel&gt;
+</pre>
+
+
+<a name="bindscripts"></a>
+<h2>How to Bind Scripts</h2>
+
+<a name="menubind"></a>
+<b>Binding scripts to Menu items</b>
+<ul>
+<li>Start OpenOffice.org and open an existing document or create
+a new one.
+
+<li>Select the menu item Tools/Assign Scripts (Java) To/Menu...
+
+<li>In the &quot;Assign Scripts (Java) To Menu&quot; dialog that pops up
+do the following:
+
+<ul>
+<li><i>Select script function</i>
+  <ul><li>Select the script function that you require from the list.
+  </ul>
+
+<li><i>Choose the menu to insert the script menu after</i>
+  <ul><li>Select the top level menu and submenu under which you want
+          to place your new menu item.
+  </ul>
+
+<li><i>Assign script to new menu</i>
+  <ul><li>In the New Menu text field enter the label you want for your
+          menu item
+      <li>Click New Script Menu to create the new script menu item.
+  </ul>
+</ul>
+
+<li>Finally click on the OK button to save your new script menu item.
+
+<li>Restart OpenOffice.org and open a document
+
+<li>Your new menu item will now be available and clicking on it will
+invoke the Java script.
+</ul>
+
+
+<a name="keybind"></a>
+<b>Binding scripts to Shortcut Keys</b>
+<ul>
+<li>Start OpenOffice.org and open an existing document or create
+a new one.
+
+<li>Select the menu item Tools/Assign Scripts (Java) To/Key...
+
+<li>In the &quot;Assign Scripts (Java) To Key&quot; dialog that pops up
+do the following:
+
+<ul>
+<li><i>Select script function</i>
+  <ul><li>Select the script function that you require from the list.
+  </ul>
+
+<li><i>Choose the Shortcut key to bind the script to</i>
+  <ul><li>Select one of the Key Groups (e.g. SHIFT + CONTROL + digits)
+      <li>Select a key from the Shortcut Keys.
+  </ul>
+
+<li><i>Assign script to shortcut key:</i>
+  <ul<li>Click New Script Key to create the new script Shortcut key.
+  </ul>
+</ul>
+
+<li>Finally click on the OK button to save your new script shortcut key.
+
+<li>Restart OpenOffice.org and open a document
+
+<li>Pressing your new script shortcut key will invoke the Java script.
+</ul>
+
+<b>Note:</b> Menu items and Shortcut keys are not updated on the fly, hence the
+          need to restart, this will be addressed in a future release.
+
+<hr>
+Last Modified: 
+Wed Jan 15 16:25:01 GMT 2003
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

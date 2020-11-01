@@ -1,0 +1,317 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>Writing Scripts in BeanShell and Java</title>
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/framework/">framework</a>&nbsp;&raquo;&nbsp;<a href="/framework/scripting/">scripting</a>&nbsp;&raquo;&nbsp;<a href="/framework/scripting/release-0.2/">release-0.2</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+
+<h1>Writing Scripts in BeanShell and Java</h1>
+         
+<a name="top"></a>
+<h2>Contents</h2>
+
+<ul>
+<li><p><a href="#bsh">Hello World in BeanShell</a>
+<li><p><a href="#bshinvoke">Trying out your BeanShell script</a>
+<li><p><a href="#java">Hello World in Java</a>
+<li><p><a href="#context">Writing Office Scripts and the XScriptContext type</a>
+<li><p><a href="#tips">Tips on writing Office scripts</a>
+<li><p><a href="#dtd">Parcel Descriptor DTD and sample XML</a>
+</ul>
+
+<a name="bsh"></a>
+<h2>Hello World in BeanShell</h2>
+
+Here's a BeanShell script that inserts Hello World at the start of an
+OpenOffice.org Writer document:
+
+<p>
+<pre>
+    import com.sun.star.frame.XModel;
+    import com.sun.star.text.*;
+    import com.sun.star.uno.UnoRuntime;
+    import drafts.com.sun.star.script.framework.XScriptContext;
+
+    model = context.getDocument(); 
+    textdoc = (XTextDocument)
+        UnoRuntime.queryInterface(XTextDocument.class, model);
+
+    oText = textdoc.getText(); 
+    oCursor = oText.createTextCursor(); 
+    oText.insertString(oCursor, "Hello World", false)
+</pre>
+<a href="#top">Top</a>
+
+<a name="bshinvoke"></a>
+<h2>Trying out your BeanShell script</h2>
+
+Trying out your Hello World BeanShell script is easy:
+
+<ul>
+<li>Start OpenOffice.org and open a new Writer document.
+<li>Select the Tools/Scripting Add-on's/Interactive BeanShell Scripting...
+menu item.
+<li>Paste your Hello World code from above into the window that pops up and
+click on the eval button.
+<li>You should see Hello World appear at the start of the Writer document.
+</ul>
+
+<p>
+You can modify the code directly in the evaluation window and click eval again to test it. If you are new to the OpenOffice.org API this is a great way to experiment with it.
+
+<p>
+<b>Note:</b> The Interactive BeanShell window does not report when an error occurs while evaluating your code, so it may fail silently. The best way to trace the execution of your code is to write debug statements into your document from your script, for example:
+
+<pre>
+model = context.getDocument();
+textdoc = (XTextDocument)UnoRuntime.queryInterface(XTextDocument.class, model);
+oText = textdoc.getText();
+oCursor = oText.createTextCursor();
+
+oText.insertString(oCursor, "DEBUG: start", false);
+
+// do something with the API
+
+oText.insertString(oCursor, "DEBUG: did something", false);
+</pre>
+
+<p>
+When you are happy with your BeanShell script, you can create a Script Parcel
+which can be deployed to OpenOffice.org installations or documents for use
+by others. This can be done <a href="netbeans-devguide.html">using NetBeans</a>
+or <a href="commandline-devguide.html">from the command line</a>.
+
+<p>
+<a href="#top">Top</a>
+
+<a name="java"></a>
+<h2>Hello World in Java</h2>
+
+Here's the Hello World script in Java:
+
+<p>
+<font face="Courier, monospace" size="2">     
+<pre>
+    import com.sun.star.frame.XModel;
+    import com.sun.star.text.*;
+    import com.sun.star.uno.UnoRuntime;
+    import drafts.com.sun.star.script.framework.XScriptContext;
+
+    public class MyClass {
+
+        // The script method must be public
+        // It can either be static or non-static
+
+        public void showForm(XScriptContext xSc) {
+
+            // getting the text document object
+            XModel xmodel = xSc.getDocument();
+
+            XTextDocument xtextdoc = (XTextDocument)
+                UnoRuntime.queryInterface(XTextDocument.class, xmodel);
+            XText xtext = xtextdoc.getText();
+            XTextCursor xtextcursor = xtext.createTextCursor();
+
+            xtext.insertString(xtextcursor, "Hello World", false);
+        }
+    }
+</pre>
+</font>
+
+<p>
+Office scripts in Java need to be compiled in order to execute them.
+See the <a href="netbeans-devguide.html">Developing Scripts in NetBeans</a> and
+<a href="commandline-devguide.html">Developing Scripts on the command line</a>
+guides for instructions on how to compile and deploy Office scripts in Java.
+
+<p>
+<a href="#top">Top</a>
+
+<a name="context"></a>
+<h2>Writing Office scripts and the XScriptContext type</h2>
+
+The XScriptContext type is used to obtain the the document context,
+desktop and component factory from an Office script. Any public Java method
+which accepts XScriptContext as it's first parameter can be executed as
+an Office script.  For BeanShell scripts, an instance of XScriptContext is
+available in a global variable called &quot;context&quot; which can be
+used by the script.
+
+<p>
+The following accessor methods are available on the XScriptContext type:
+
+<ul>
+<li>Current document - access the document context against which
+the script was invoked
+
+<p>
+<font face="Courier, monospace" size="2">
+&lt;XScriptContext Instance&gt;.getDocument()</font>
+<br>returns
+<font face="Courier, monospace" size="2">::com::sun::star::frame::XModel</font>
+
+<li>Office Desktop - access the desktop of the running Office
+
+<p>
+<font face="Courier, monospace" size="2">
+&lt;XScriptContext Instance&gt;.getDesktop()</font>
+<br>returns
+<font face="Courier, monospace" size="2">
+::com::sun::star::frame::XDesktop</font>
+
+<li>Component Factory - access a ComponentContext factory to create
+other UNO components as required
+
+<p>
+<font face="Courier, monospace" size="2">
+&lt;XScriptContext Instance&gt;.getComponentContext()</font>
+<br>returns
+<font face="Courier, monospace" size="2">
+::com::sun::star::uno::XComponentContext</font>
+</ul>
+
+The Java or BeanShell script must import the XScriptContext interface,
+using the following import directive:
+
+<font face="Courier, monospace" size="2">     
+<pre>
+    import drafts.com.sun.star.script.framework.XScriptContext;
+</pre>
+</font>
+
+<p>
+<a href="#top">Top</a>
+
+<a name="tips"></a>
+<h2>Tips on writing Office scripts</h2>
+
+<ul>
+<li><p><b>Performance:</b> Currently scripts are being loaded by the
+Scripting Framework each time they are run. As such it is important to
+keep the size of your scripts and any dependent jar files they are using
+reasonably small. In future releases this script loading will be
+optimised by changing the point at which the scripts are loaded
+by OpenOffice.org and using various caching schemes once they are
+loaded. However, the initial load will always be effected by the
+script and it's dependent jar/class file sizes.
+
+<li><p><b>Threading:</b> Scripts are run synchronously by the
+Scripting Framework. If you wish to perform any background task or
+provide some user interaction via a dialog for instance, then it is your
+responsibility to spawn a thread in the running script which can
+manage this process or interaction and let the script return promptly.
+Within this running thread you should follow the normal
+UNO component threading guidelines to ensure that they do not deadlock
+OpenOffice.org through inappropriate use of the UNO API.
+</ul>
+
+<a href="#top">Top</a>
+<a name="dtd"></a>
+
+<h2>Parcel Descriptor DTD and sample XML</h2>
+Each script must contain a parcel-descriptor.xml file which provides all the necessary metadata for 
+the script. The DTD for the parcel-descriptor.xml follows
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- DTD for Parcel Meta data for use in the OpenOffice.org Scripting Framework Project --&gt;
+&lt;!ELEMENT logicalname EMPTY&gt;
+&lt;!ELEMENT description (#PCDATA)&gt;
+&lt;!ELEMENT displayname EMPTY&gt;
+&lt;!ELEMENT locale (displayname?, description?)&gt;
+&lt;!ELEMENT functionname EMPTY&gt;
+&lt;!ELEMENT prop EMPTY&gt;
+&lt;!ELEMENT languagedepprops (prop+)&gt;
+&lt;!ELEMENT file (prop*)&gt;
+&lt;!ELEMENT fileset (file+)&gt;
+&lt;!ELEMENT script (locale+, functionname, logicalname, languagedepprops*, fileset*)&gt;
+&lt;!ELEMENT parcel (script+)&gt;
+&lt;!ATTLIST logicalname
+	value CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST displayname
+	value CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST locale
+	lang CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST functionname
+	value CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST logicalname
+	value CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST prop
+	name CDATA #REQUIRED
+	value CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST file
+	name CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST fileset
+	name CDATA #IMPLIED
+&gt;
+&lt;!ATTLIST script
+	language CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST parcel
+	language CDATA #REQUIRED
+&gt;
+</pre>
+The following is an example of a parcel-descriptor.xml file that defines a script, 
+implemented in Java. The languagedepprops element is used to extend the JVM's classpath.
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!--Sample Meta Data for use with the Scripting Framework Project in OpenOffice.org --&gt;
+&lt;!DOCTYPE parcel SYSTEM "parcel.dtd"&gt;
+&lt;parcel language="Java"&gt;
+	&lt;script language="Java"&gt;
+		&lt;locale lang="english"&gt;
+			&lt;displayname value="Memory.usage"/&gt;
+			&lt;description&gt;
+				Displays the memory current memory usage
+			&lt;/description&gt;
+		&lt;/locale&gt;
+		&lt;functionname value="memoryUtils.memoryUsage"/&gt;
+		&lt;logicalname value="MemoryUtils.MemUsage"/&gt;
+		&lt;languagedepprops&gt;
+			&lt;prop name="classpath" value="/opt/foo.jar:/usr/java/src.jar"/&gt;
+		&lt;/languagedepprops&gt;
+		&lt;fileset&gt;
+			&lt;file name="mems.txt"&gt;
+				&lt;prop name="type" value="resource"/&gt;
+			&lt;/file&gt;
+		&lt;/fileset&gt;
+	&lt;/script&gt;
+&lt;/parcel&gt;
+</pre>
+<a href="#top">Top</a>
+
+<hr>
+Last Modified: Tue Mar 12 11:40:28 GMT 2003
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

@@ -1,0 +1,2004 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.1 Beta 1 (Linux)">
+	<META NAME="AUTHOR" CONTENT="Tom Verbeek">
+	<META NAME="CREATED" CONTENT="20010507;17110400">
+	<META NAME="CHANGEDBY" CONTENT="tom o connor">
+	<META NAME="CHANGED" CONTENT="20030314;15550700">
+	<STYLE>
+	<!--
+		@page { size: 8.5in 11in; margin: 0.79in }
+		H2.cjk { font-family: "HG Mincho Light J" }
+		H2.ctl { font-family: "Arial Unicode MS" }
+		H3.western { font-family: "Albany", sans-serif }
+		H3.cjk { font-family: "HG Mincho Light J" }
+		H3.ctl { font-family: "Arial Unicode MS" }
+		H4.western { font-family: "Albany", sans-serif; font-size: 11pt; font-style: italic }
+		H4.cjk { font-family: "HG Mincho Light J"; font-size: 11pt; font-style: italic }
+		H4.ctl { font-family: "Arial Unicode MS"; font-size: 11pt; font-style: italic }
+		H5.western { font-family: "Albany", sans-serif; font-size: 11pt }
+		H5.cjk { font-family: "HG Mincho Light J"; font-size: 11pt }
+		H5.ctl { font-family: "Arial Unicode MS"; font-size: 11pt }
+		H6.western { font-family: "Albany", sans-serif; font-size: 10pt }
+		H6.cjk { font-family: "HG Mincho Light J"; font-size: 10pt }
+		H6.ctl { font-family: "Arial Unicode MS"; font-size: 10pt }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="en-US" DIR="LTR">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/framework/">framework</a>&nbsp;&raquo;&nbsp;<a href="/framework/scripting/">scripting</a>&nbsp;&raquo;&nbsp;<a href="/framework/scripting/release-0.2/">release-0.2</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1><A NAME="1.How to build a Scripting Runtime?|outline"></A>How to
+build a Scripting Runtime?</H1>
+<P> 
+</P>
+<DIV ID="Table of Contents1" DIR="LTR">
+	<DIV ID="Table of Contents1_Head" DIR="LTR">
+		<P STYLE="margin-top: 0.17in; page-break-after: avoid"><FONT FACE="Albany, sans-serif"><FONT SIZE=4 STYLE="font-size: 16pt"><B>Contents</B></FONT></FONT></P>
+	</DIV>
+	<P STYLE="margin-bottom: 0in"><A HREF="#1.How to build a Scripting Runtime?|outline">How
+	to build a Scripting Runtime?</A></P>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in"><A HREF="#1.1.Reference|outline">Reference</A></P>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in"><A HREF="#1.2.Introduction|outline">Introduction</A></P>
+	<P STYLE="margin-left: 0.59in; margin-bottom: 0in"><A HREF="#1.2.0.1.What the Scripting Framework Provides|outline">What
+	the Scripting Framework Provides</A></P>
+	<P STYLE="margin-left: 0.59in; margin-bottom: 0in"><A HREF="#1.2.0.2.What a new Runtime needs to provide:|outline">What
+	a new Runtime needs to provide:</A></P>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in"><A HREF="#1.4.The Runtime|outline">The
+	Runtime</A></P>
+	<P STYLE="margin-left: 0.79in; margin-bottom: 0in"><A HREF="#1.4.0.0.1.ScriptURI|outline">ScriptURI</A></P>
+	<P STYLE="margin-left: 0.79in; margin-bottom: 0in"><A HREF="#1.4.0.0.2.InvocationCtx|outline">InvocationCtx</A></P>
+	<P STYLE="margin-left: 0.79in; margin-bottom: 0in"><A HREF="#1.4.0.0.3.InvocationCtx Property Set|outline">InvocationCtx
+	Property Set</A></P>
+	<P STYLE="margin-left: 0.79in; margin-bottom: 0in"><A HREF="#1.4.0.0.4.Loading and running the script |outline">Loading
+	and running the script </A>
+	</P>
+	<P STYLE="margin-left: 0.59in; margin-bottom: 0in"><A HREF="#1.4.0.1.Runtime Invocation |outline">Runtime
+	Invocation </A>
+	</P>
+	<P STYLE="margin-left: 0.59in; margin-bottom: 0in"><A HREF="#1.4.0.3.Passing Useful data to the Script |outline">Passing
+	Useful data to the Script </A>
+	</P>
+	<P STYLE="margin-left: 0.59in; margin-bottom: 0in"><A HREF="#1.4.0.4.Loading Scripts |outline">Loading
+	Scripts </A>
+	</P>
+	<P STYLE="margin-left: 0.59in; margin-bottom: 0in"><A HREF="#1.4.0.5.Parameters passed to the Script|outline">Parameters
+	passed to the Script</A></P>
+	<P STYLE="margin-left: 0.79in; margin-bottom: 0in"><A HREF="#1.4.0.5.1.Java Runtime|outline">Java
+	Runtime</A></P>
+	<P STYLE="margin-left: 0.79in; margin-bottom: 0in"><A HREF="#1.4.0.5.2.BeanShell Runtime |outline">BeanShell
+	Runtime </A>
+	</P>
+	<P STYLE="margin-left: 0.79in; margin-bottom: 0in"><A HREF="#1.4.0.5.3.Current Runtimes invocation Parameter support|outline">Current
+	Runtimes invocation Parameter support</A></P>
+	<P STYLE="margin-left: 0.79in; margin-bottom: 0in"><A HREF="#1.4.0.5.4.Framework invocation Parameter support|outline">Framework
+	invocation Parameter support</A></P>
+	<P STYLE="margin-left: 0.98in; margin-bottom: 0in"><A HREF="#1.4.0.5.4.1.Input Params|outline">Input
+	Params</A></P>
+	<P STYLE="margin-left: 0.98in; margin-bottom: 0in"><A HREF="#1.4.0.5.4.2.Output Params|outline">Output
+	Params</A></P>
+	<P STYLE="margin-left: 0.98in; margin-bottom: 0in"><A HREF="#1.4.0.5.4.3.Returns|outline">Returns</A></P>
+	<P STYLE="margin-left: 0.98in; margin-bottom: 0in"><A HREF="#1.4.0.5.4.4.Errors|outline">Errors</A></P>
+	<P STYLE="margin-left: 0.59in; margin-bottom: 0in"><A HREF="#1.4.0.6.Runtime Singleton|outline">Runtime
+	Singleton</A></P>
+	<P STYLE="margin-left: 0.98in; margin-bottom: 0in"><A HREF="#1.4.0.6.0.1.BeanShell Example|outline">BeanShell
+	Example</A></P>
+	<P STYLE="margin-left: 0.59in; margin-bottom: 0in"><A HREF="#1.4.0.7.Packaging|outline">Packaging</A></P>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in"><A HREF="#1.5.Creating Scripts|outline">Creating
+	Scripts</A></P>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in"><A HREF="#1.6.Binding to Scripts|outline">Binding
+	to Scripts</A></P>
+	<P STYLE="margin-bottom: 0in"><A HREF="#3.Appendix I|outline">Appendix
+	I</A></P>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in"><A HREF="#3.1.Scripting Framework Resolution|outline">Scripting
+	Framework Resolution</A></P>
+	<P STYLE="margin-left: 0.59in; margin-bottom: 0in"><A HREF="#3.1.0.1.Runtime Specific Resolution|outline">Runtime
+	Specific Resolution</A></P>
+	<P STYLE="margin-bottom: 0in"><A HREF="#5.Appendix II|outline">Appendix
+	II</A></P>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in"><A HREF="#5.1.Parcel Descriptor DTD and sample XML|outline">Parcel
+	Descriptor DTD and sample XML</A></P>
+</DIV>
+<H2 CLASS="western"><A NAME="1.1.Reference|outline"></A>Reference</H2>
+<P>Developer's Guide: 
+</P>
+<P><FONT SIZE=2><A HREF="http://api.openoffice.org/unbranded-source/browse/~checkout~/api/odk/pack/copying/DevelopersGuide.pdf?rev=1.4.2.4">http://api.openoffice.org/unbranded-source/browse/~checkout~/api/odk/pack/copying/DevelopersGuide.pdf?rev=1.4.2.4</A></FONT></P>
+<P><FONT SIZE=3>Scripting Framework Online API documentation:</FONT></P>
+<P><FONT SIZE=2><A HREF="http://framework.openoffice.org/scripting/EDR-IDLDocs/drafts/com/sun/star/script/framework">http://framework.openoffice.org/scripting/EDR-IDLDocs/drafts/com/sun/star/script/framework</A></FONT></P>
+<P><FONT SIZE=3>Scripting Framework Website:</FONT></P>
+<P><FONT SIZE=2><A HREF="http://framework.openoffice.org/scripting">http://framework.openoffice.org/scripting</A></FONT></P>
+<H2 CLASS="western"><A NAME="1.2.Introduction|outline"></A>Introduction</H2>
+<P>By creating a new Scripting Runtime a developer can add support
+for the scripting language of their choice to OpenOffice.org. The
+Scripting Framework provides all the required plumbing needed to
+facilitate the deployment, binding and invocation of scripts for an
+runtime. The runtime just has to provide the language specific
+execution environment for the script and execute it. The framework
+takes care of the rest.</P>
+<H4 CLASS="western"><A NAME="1.2.0.1.What the Scripting Framework Provides|outline"></A>
+What the Scripting Framework Provides</H4>
+<UL>
+	<LI><P>Package and deployment - standard way to package and deploy
+	scripts in a document or Office installation. The script parcel is
+	just a zip file containing the script, supporting resources and a
+	parcel-descriptor.xml file, which contains the script specific
+	deployment information including name, language,  and other script
+	language specific properties.</P>
+</UL>
+<UL>
+	<UL>
+		<LI><P>This packaging and deployment support for the currently
+		supported Runtimes (Java and BeanShell) is provided through
+		NetBeans IDE integration module shipped with the framework.</P>
+		<LI><P>For other Runtimes not shipped with the framework and with
+		no integrated IDE support, developers can use the command line
+		tools which have been provided [ allows a user to create a script
+		parcel and deploy it, regardless of the language used].</P>
+	</UL>
+	<LI><P>Binding &ndash; allows users to bind a deployed script
+	[installation or document] to a menu, key or event using the
+	supplied Assign dialogs. These are installed as part of the
+	framework under the Tools/ &ldquo;Script add on's&rdquo;/ Assign ...</P>
+	<LI><P>Invocation &ndash; once an action that has an associated
+	script binding occurs,  the framework handles the script invocation.
+	It does the following:</P>
+	<UL>
+		<LI><P>Parse URI - Parses the script URI</P>
+		<LI><P>Check Permissions - Checks to see if the script is stored in
+		a document and if it has appropriate permissions to run [for
+		details refer to the relevent section on Security in the User Guide
+		on the Scripting Framework Website]. 
+		</P>
+		<LI><P>Load Script Info - Locates and loads up the information
+		which describes the script and any language dependencies it might
+		have from the script's parcel-descriptor.xml file stored in the
+		application or document. 
+		</P>
+		<LI><P>Load language Runtime - From this deployment information 
+		the framework can access the appropriate language runtime singleton
+		to run the script.</P>
+		<LI><P>Invoke on Runtime - The framework calls this language
+		runtime's invoke method, passing the original script URI and all of
+		the extracted script deployment information. This includes any
+		language specific information, such as Classpath for Java and
+		BeanShell scripts. 
+		</P>
+		<LI><P>Runtime - Once the execution has been handed over to the
+		language specific Runtime by the invoke( ) function call, it is the
+		runtime's responsibility to provide the appropriate execution
+		environment for the script, load it and run it using the
+		information passed into it by the framework. Once the script has
+		run the Runtime will pass back the return value and any errors  to
+		the framework, which will pass them back to the script caller.</P>
+	</UL>
+</UL>
+<H4 CLASS="western"><A NAME="1.2.0.2.What a new Runtime needs to provide:|outline"></A>
+What a new Runtime needs to provide:</H4>
+<UL>
+	<LI><P>Runtime &ndash; an implementation of a Runtime execution
+	environment for your scripting language, described in detail below.</P>
+</UL>
+<TABLE WIDTH=623 BORDER=1 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0 STYLE="page-break-before: always">
+	<COL WIDTH=62>
+	<COL WIDTH=100>
+	<COL WIDTH=72>
+	<COL WIDTH=183>
+	<COL WIDTH=176>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=62>
+				<P>Category</P>
+			</TH>
+			<TH WIDTH=100>
+				<P>Name 
+				</P>
+			</TH>
+			<TH WIDTH=72>
+				<P>Origin</P>
+			</TH>
+			<TH WIDTH=183>
+				<P>Description</P>
+			</TH>
+			<TH WIDTH=176>
+				<P>Comment</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62>
+				<P><FONT SIZE=2>Interface</FONT></P>
+			</TD>
+			<TD WIDTH=100>
+				<P><A HREF="http://api.openoffice.org/common/ref/com/sun/star/lang/XTypeProvider.html"><FONT SIZE=2>com.sun.star.lang.XTypeProvider</FONT></A></P>
+			</TD>
+			<TD WIDTH=72>
+				<P><FONT SIZE=2>Implemented by Runtime </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=183>
+				<P><FONT SIZE=2>Runtime is an UNO Component</FONT></P>
+			</TD>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>Required by UNO when creating an UNO component.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62>
+				<P><FONT SIZE=2>Interface</FONT></P>
+			</TD>
+			<TD WIDTH=100>
+				<P><A HREF="http://api.openoffice.com/common/ref/com/sun/star/lang/XServiceInfo.html"><FONT SIZE=2>com.sun.star.lang.XServiceInfo</FONT></A></P>
+			</TD>
+			<TD WIDTH=72>
+				<P><FONT SIZE=2>Implemented by Runtime </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=183>
+				<P><FONT SIZE=2>Runtime is an UNO Component</FONT></P>
+			</TD>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>Required by UNO when creating an UNO component.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62>
+				<P><FONT SIZE=2>Singleton </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=100>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=72>
+				<P><FONT SIZE=2>Implemented by Runtime </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=183>
+				<P><FONT SIZE=2>Runtime must be a Singleton </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>Need to modify the _writeRegistryServiceInfo() of
+				the XServiceInfo service to register the Runtime programatically
+				as a Singleton [refer to Singleton Support]</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62>
+				<P><FONT SIZE=2>Interface</FONT></P>
+			</TD>
+			<TD WIDTH=100>
+				<P><FONT SIZE=2><A HREF="http://framework.openoffice.org/scripting/EDR-IDLDocs/drafts/com/sun/star/script/framework/runtime/XScriptInvocation.html">drafts.com.sun.star.script.framework.runtime.XScriptInvocation</A></FONT></P>
+			</TD>
+			<TD WIDTH=72>
+				<P><FONT SIZE=2>Implemented by Runtime </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=183>
+				<P><FONT SIZE=2>XScriptInvocation interface supports the invoke()
+				method that is called when invoking scripts for a language.</FONT></P>
+			</TD>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>Key interface which allows the Scripting
+				Framework to invoke  scripts in a language independent manner</FONT></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=5 WIDTH=615 VALIGN=TOP>
+				<P><FONT SIZE=2><B>Invoke()</B></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62>
+				<P><FONT SIZE=2>Method </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=100>
+				<P><FONT SIZE=2>XscriptInvocation:<BR>Invoke()</FONT></P>
+			</TD>
+			<TD WIDTH=72>
+				<P><FONT SIZE=2>Implemented by Runtime </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=183>
+				<P><FONT SIZE=2>Returns an Any</FONT></P>
+				<P><FONT SIZE=2>Invoke method of the XscriptInvocation interface </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>Runtime implements this method in it's own
+				language. It must setup the script runtime environment, load up
+				the script, pass any required parameters to it and execute the
+				script.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62>
+				<P><FONT SIZE=2>Parameter</FONT></P>
+			</TD>
+			<TD WIDTH=100>
+				<P><FONT SIZE=2>Invoke():<BR>scriptURI</FONT></P>
+			</TD>
+			<TD WIDTH=72>
+				<P><FONT SIZE=2>Provided by Caller &ndash; Used by SF</FONT></P>
+			</TD>
+			<TD WIDTH=183>
+				<P><FONT SIZE=2>Is an OUString<BR><BR>Original script URI passed
+				to the Scripting Framework via a call to Xdispatch or Xfunction:</FONT></P>
+				<P><FONT SIZE=2>Consists of:<BR>script://&lt;logical
+				name&gt;<BR>[?[function=&lt;function name&gt;]&amp;<BR>[language=[Supported
+				language]]&amp;<BR>[location=[user | share | document]]]</FONT></P>
+			</TD>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>Information only &ndash; Runtime does not need to
+				do anything with it. SF will have already resolved the scriptURI
+				to an actual script and loaded up all the relevant script
+				information the Runtime needs to invoke the script in the
+				invocationCtx parameter passed to invoke(). The script URI can be
+				used by the Runtime for logging or as a key to cache script
+				related information.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62>
+				<P><FONT SIZE=2>Parameter</FONT></P>
+			</TD>
+			<TD WIDTH=100>
+				<P><FONT SIZE=2>Invoke():<BR>invocationCtx</FONT></P>
+			</TD>
+			<TD WIDTH=72>
+				<P><FONT SIZE=2>Provided by SF &ndash;  Used by Runtime </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=183>
+				<P><FONT SIZE=2>Is a XPropertySet </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>Provides Runtime with information on the
+				invocation context of the script as a set of property name/value
+				pairs. The key ones are described below.</FONT></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=5 WIDTH=615 VALIGN=TOP>
+				<P><FONT SIZE=2><B>Key InvocationCtx Properties</B></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62>
+				<P><FONT SIZE=2>Property</FONT></P>
+			</TD>
+			<TD WIDTH=100>
+				<P><FONT SIZE=2>InvocationCtx:<BR>DOC_REF</FONT></P>
+			</TD>
+			<TD WIDTH=72>
+				<P><FONT SIZE=2>Provided by SF &ndash;  Used by Runtime </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=183>
+				<P><FONT SIZE=2>Is a XModel</FONT></P>
+			</TD>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>XModel of the current document against which the
+				script was invoked. Must be passed to the Script by the Runtime
+				so the script can interact with the current document.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62>
+				<P><FONT SIZE=2>Property</FONT></P>
+			</TD>
+			<TD WIDTH=100>
+				<P><FONT SIZE=2>InvocationCtx:<BR>SCRIPT_INFO</FONT></P>
+			</TD>
+			<TD WIDTH=72>
+				<P><FONT SIZE=2>Provided by SF &ndash;  Used by Runtime </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=183>
+				<P><FONT SIZE=2>Is a XScriptInfo</FONT></P>
+			</TD>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>Contains all of the information the Runtime needs
+				to setup the script runtime environment and to load the script to
+				execute it.</FONT></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=5 WIDTH=615 VALIGN=TOP>
+				<P><FONT SIZE=2><B><BR><BR></B></FONT><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=5 WIDTH=615 VALIGN=TOP>
+				<P><FONT SIZE=2><B>Key XscriptInfo methods</B></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62>
+				<P><FONT SIZE=2>Method </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=100>
+				<P><FONT SIZE=2>XScriptInfo:<BR>getFunctionName()</FONT></P>
+			</TD>
+			<TD WIDTH=72>
+				<P><FONT SIZE=2>Provided by SF &ndash;  Used by Runtime </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=183>
+				<P><FONT SIZE=2>Returns OUString<BR><BR>[Note: the function name
+				is the actual name of the script function to invoke, the logical
+				name is the name displayed in the Assign dialogs and can be the
+				same as the function name or not &ndash; use the function name
+				when loading a script from it's physical storage].</FONT></P>
+			</TD>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>Provides the function name of the script you are
+				trying to invoke. <BR></FONT><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62>
+				<P><FONT SIZE=2>Method</FONT></P>
+			</TD>
+			<TD WIDTH=100>
+				<P><FONT SIZE=2>XScriptInfo:<BR>getParcelURI()</FONT></P>
+			</TD>
+			<TD WIDTH=72>
+				<P><FONT SIZE=2>Provided by SF &ndash;  Used by Runtime </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=183>
+				<P><FONT SIZE=2>Returns OUString<BR><BR>Requires some processing
+				before a Runtime can use it to load up the script from the file
+				system or a document [ refer to Loading Scripts below]</FONT></P>
+			</TD>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>Provides the Path to the script the Runtime needs
+				to invoke.<BR>The form of this Path is an encoded URI which can
+				point to the file system for application scripts [file:///...] or
+				to a document for document scripts [vnd.sun.star.pkg://file:...]</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62>
+				<P><FONT SIZE=2>Method</FONT></P>
+			</TD>
+			<TD WIDTH=100>
+				<P><FONT SIZE=2>XScriptInfo:<BR>getLanguageProperties()</FONT></P>
+			</TD>
+			<TD WIDTH=72>
+				<P><FONT SIZE=2>Provided by SF &ndash;  Used by Runtime </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=183>
+				<P><FONT SIZE=2>Returns XpropertySet<BR><BR>For example in the
+				Java and BeanShell Runtimes there is  a language property setup
+				for the Classpath:<BR>CLASSPATH=&lt;value&gt;</FONT></P>
+			</TD>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>Use this property set to access language specific
+				name/ value pairs setup for the specific language  Runtime during
+				script deployment.<BR>Supported name/value language properties
+				are published by  the Runtime Developer.</FONT></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=5 WIDTH=615 VALIGN=TOP>
+				<P><FONT SIZE=2><B>Invoke Parameters</B></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62>
+				<P><FONT SIZE=2>Input Parameter</FONT></P>
+			</TD>
+			<TD WIDTH=100>
+				<P><FONT SIZE=2>Invoke():<BR>inputParams</FONT></P>
+			</TD>
+			<TD WIDTH=72>
+				<P><FONT SIZE=2>Provided by Caller - Optional</FONT></P>
+			</TD>
+			<TD WIDTH=183>
+				<P><FONT SIZE=2>Is a Sequence of Any <BR><BR>Supported by Java
+				Runtime.<BR><BR>[Note: input parameters are not supported from
+				the Assign dialogs, must use the XDispatch or XDunction
+				interfaces directly from another script or component to provide a
+				script with input parameters]</FONT></P>
+			</TD>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>Up to the Runtime to pass  the input parameter
+				sequence onto the script if input parameters are supported.<BR></FONT><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62>
+				<P><FONT SIZE=2>Output Parameter</FONT></P>
+			</TD>
+			<TD WIDTH=100>
+				<P><FONT SIZE=2>Invoke():<BR>outputParamIndex</FONT></P>
+			</TD>
+			<TD WIDTH=72>
+				<P><FONT SIZE=2>Provided by Caller - Optional</FONT></P>
+			</TD>
+			<TD WIDTH=183>
+				<P><FONT SIZE=2>Is a Sequence of short <BR><BR>Not supported by
+				Java or BeanShell Runtimes.</FONT></P>
+			</TD>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>Up to the Runtime to pass  this output parameter
+				index information back to the Caller from the script.<BR></FONT><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62>
+				<P><FONT SIZE=2>Output Parameter</FONT></P>
+			</TD>
+			<TD WIDTH=100>
+				<P><FONT SIZE=2>Invoke():<BR>outputParams</FONT></P>
+			</TD>
+			<TD WIDTH=72>
+				<P><FONT SIZE=2>Provided by Caller - Optional</FONT></P>
+			</TD>
+			<TD WIDTH=183>
+				<P><FONT SIZE=2>Is a Sequence of Any </FONT>
+				</P>
+				<P><FONT SIZE=2>Not supported by Java or BeanShell Runtimes.</FONT></P>
+			</TD>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>Up to the Runtime to pass  the  output parameter
+				sequence back to the Caller from the script.<BR></FONT><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62>
+				<P><FONT SIZE=2>Return</FONT></P>
+			</TD>
+			<TD WIDTH=100>
+				<P><FONT SIZE=2>Invoke():<BR>return </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=72>
+				<P><FONT SIZE=2>Provided by Script, passed back by Runtime -
+				Optional</FONT></P>
+			</TD>
+			<TD WIDTH=183>
+				<P><FONT SIZE=2>Is an Any<BR><BR>A Runtime can ignore all script
+				returns and just return an Any containing a void Type if script
+				returns are of no interest to it.<BR><BR>Void Any: <BR>          
+				new Any(new Type(),null);</FONT></P>
+			</TD>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>A script can return whatever it likes to the
+				Runtime, but it is up to the Runtime to package this script
+				return up into a type that is supported by the UNO language
+				bridge that is being used by the Runtime [must be a primitive
+				type or an UNO type]<BR>It is this bridge compatible Any that is
+				then returned to the Caller.</FONT></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<UL>
+	<P> 
+	</P>
+	<H3 CLASS="western">UNO Language Bridge</H3>
+	<P>There must be a supported UNO bridge for the scripting language
+	to allow the framework to make calls against this new scripting
+	runtime. The bridge will take care of all the parameter marshaling
+	that needs to occur as the framework makes the call to the invoke
+	method written in the new language.  
+	</P>
+	<P>The Java and BeanShell Runtimes are supported by the existing
+	Java UNO bridge. Any scripting language with a Java implementation
+	could use the Java UNO bridge, such as Jython [Python], Jacl
+	[Tcl/TK] andRhino [Javascript]. As other bridges become available
+	native support could be added, for instance with the new PyUNO
+	bridge, a Python Runtime could be written in Python.</P>
+</UL>
+<P><BR><BR>
+</P>
+<H2 CLASS="western"><BR><BR>
+</H2>
+<H2 CLASS="western" STYLE="page-break-before: always"><A NAME="1.4.The Runtime|outline"></A>
+The Runtime</H2>
+<H3 CLASS="western">Required Interfaces</H3>
+<P>The Runtime is a normal UNO component, so it needs to support the
+following interfaces [Refer to the Developer's Guide for details on
+creating UNO Components].</P>
+<P>Interface: <A HREF="http://com.sun.star.lang.XTypeProvider/">com.sun.star.lang.XTypeProvider</A></P>
+<P>Interface: <A HREF="http://com.sun.star.lang.XServiceInfo/">com.sun.star.lang.XServiceInfo</A></P>
+<P>In addition to the normal component interfaces above the Runtime
+must support the following interface to allow the framework to invoke
+the scripts in a language independent fashion:</P>
+<P>Interface: <A HREF="http://drafts.com.sun.star.script.framework.XScriptInvocation/">drafts.com.sun.star.script.framework.XScriptInvocation</A></P>
+<P>This interface supports one method, invoke( ), whose parameters
+and types are described below.</P>
+<H3 CLASS="western">Invoke ( )</H3>
+<P>Returns: Any</P>
+<P>Throws: IllegalArgumentException, CannotConvertException,</P>
+<TABLE WIDTH=623 BORDER=1 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=152>
+	<COL WIDTH=175>
+	<COL WIDTH=277>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TD WIDTH=152>
+				<P><B>Parameter Types</B></P>
+			</TD>
+			<TD WIDTH=175>
+				<P><B>Parameters</B></P>
+			</TD>
+			<TD WIDTH=277>
+				<P><B>Description</B></P>
+			</TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>[in] string</FONT></P>
+			</TD>
+			<TD WIDTH=175>
+				<P><FONT SIZE=2>scriptURI</FONT></P>
+			</TD>
+			<TD WIDTH=277>
+				<P><FONT SIZE=2>Original URI passed to the framework</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>[in] any</FONT></P>
+			</TD>
+			<TD WIDTH=175>
+				<P><FONT SIZE=2>invocationCtx</FONT></P>
+			</TD>
+			<TD WIDTH=277>
+				<P><FONT SIZE=2>Information on where the script was run from</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>[in] sequence&lt; any &gt;</FONT></P>
+			</TD>
+			<TD WIDTH=175>
+				<P><FONT SIZE=2>aParams</FONT></P>
+			</TD>
+			<TD WIDTH=277>
+				<P><FONT SIZE=2>Input parameters</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>[out] sequence&lt; short &gt;</FONT></P>
+			</TD>
+			<TD WIDTH=175>
+				<P><FONT SIZE=2>aOutParamIndex</FONT></P>
+			</TD>
+			<TD WIDTH=277>
+				<P><FONT SIZE=2>Output parameter index</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>[out] sequence&lt; any &gt;</FONT></P>
+			</TD>
+			<TD WIDTH=175>
+				<P><FONT SIZE=2>aOutParam </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=277>
+				<P><FONT SIZE=2>Output parameters</FONT></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P> 
+</P>
+<P>The following sections describe the parameters to the invoke ( )
+method call and how they can be used by a Runtime to setup an
+execution environment for a script and then load and run the script.</P>
+<H5 CLASS="western"><A NAME="1.4.0.0.1.ScriptURI|outline"></A>ScriptURI</H5>
+<P STYLE="margin-bottom: 0in">The scriptURI is the original script
+URI that was passed during the invoke. 
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in">This information should not be required
+by a runtime as the framework will have already resolved the script
+to a specific script and loaded up the detailed script information by
+the time the Runtime's invoke method is called  [ refer to Appendix I
+for details on the framework's current resolution strategy]. 
+</P>
+<P STYLE="margin-bottom: 0in">If a runtime needs to parse the script
+URI, to perform  it's own processing the scriptURI is provided to
+allow it to do so. The syntax of the script URI is:</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=2>script://&lt;logical_name&gt;['?'&lt;query_element&gt;('&amp;'&lt;query_element&gt;)*]]</FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=2>		where : query_element =
+&lt;word&gt;'='&lt;name&gt;</FONT></P>
+<TABLE WIDTH=623 BORDER=1 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0 STYLE="page-break-before: always">
+	<COL WIDTH=152>
+	<COL WIDTH=457>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=152>
+				<P>Script URI Parameter</P>
+			</TH>
+			<TH WIDTH=457>
+				<P>Description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>logical_name</FONT></P>
+			</TD>
+			<TD WIDTH=457>
+				<P><FONT SIZE=2>Logical Name of the script &ndash; this is the
+				name displayed to the user in the Assign dialogs. It allows the
+				script writer to specify a more user friendly name for the
+				script, rather than displaying the actual function name to the
+				user.<BR>The script writer does not have to specify a different
+				logical name to the function name, they can both be the
+				same.<BR>[Note: the use of a logical name also enables resolution
+				at invocation, which is not currently exposed in the Assign
+				dialogs. All scripts bound in the Assign dialogs are fully
+				specified with logical_name, function name, language and location
+				&ndash; refer to Scripting Framework Resolution]</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>language</FONT></P>
+			</TD>
+			<TD WIDTH=457>
+				<P><FONT SIZE=2>Language the script is written in, must be a
+				supported runtime. <BR><BR>Currently supported languages: Java
+				and BeanShell</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>function</FONT></P>
+			</TD>
+			<TD WIDTH=457>
+				<P><FONT SIZE=2>Actual language specific function name.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>location</FONT></P>
+			</TD>
+			<TD WIDTH=457>
+				<P><FONT SIZE=2>Location where script is stored &ndash;
+				application area [user or share] or document.<BR>Permitted names:
+				user, share or document </FONT>
+				</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in">Example of Script URI:</P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=2>script:</FONT><FONT SIZE=2>//Tools.Convert.ToEuro</FONT><FONT SIZE=2>?</FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=2>	language=Java&amp;</FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=2>	function=com.sun.star.beans.tools.Standard.Convert.toEuro&amp;</FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=2>	location=user<BR>Maybe
+better above/below if we use an example from the framework
+installation. </FONT>
+</P>
+<P STYLE="margin-bottom: 0in">In the assign dialogs the user will see
+the Tools.Convert.ToEuro
+script name in the list of available scripts  when Java is the
+selected language  and user the selected location. Selecting this
+script will assign the above script URI to the menu, key or event
+binding as appropriate for the assign dialog invoked. It will be
+stored in the matching configuration file for later retrieval when
+the binding is invoked.</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<H5 CLASS="western"><A NAME="1.4.0.0.2.InvocationCtx|outline"></A>InvocationCtx</H5>
+<P STYLE="margin-bottom: 0in">The invocationCtx is an implementation
+of  XPropertySet setup by the framework to give a Runtime access both
+to the context from which the script was invoked (the current
+document) and the detailed information on the script itself which a
+Runtime will need to load and run the script (SCRIPT_INFO).</P>
+<H5 CLASS="western"><A NAME="1.4.0.0.3.InvocationCtx Property Set|outline"></A>
+InvocationCtx Property Set</H5>
+<TABLE WIDTH=623 BORDER=1 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=182>
+	<COL WIDTH=76>
+	<COL WIDTH=345>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=182>
+				<P>Property Key</P>
+			</TH>
+			<TH WIDTH=76>
+				<P>Type</P>
+			</TH>
+			<TH WIDTH=345>
+				<P>Description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=182>
+				<P><FONT SIZE=2>DOC_REF</FONT></P>
+			</TD>
+			<TD WIDTH=76>
+				<P><FONT SIZE=2>XModel</FONT></P>
+			</TD>
+			<TD WIDTH=345>
+				<P><FONT SIZE=2>The XModel of the current document</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=182>
+				<P><FONT SIZE=2>DOC_URI</FONT></P>
+			</TD>
+			<TD WIDTH=76>
+				<P><FONT SIZE=2>OUString</FONT></P>
+			</TD>
+			<TD WIDTH=345>
+				<P><FONT SIZE=2>The document URI of the current document </FONT>
+				</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=182>
+				<P><FONT SIZE=2>SCRIPT_INFO</FONT></P>
+			</TD>
+			<TD WIDTH=76>
+				<P><FONT SIZE=2>XScriptInfo</FONT></P>
+			</TD>
+			<TD WIDTH=345>
+				<P><FONT SIZE=2>XScriptInfo for the resolved script, containing
+				all of the data in the scripts parcel-descriptor.xml and the
+				physical  path of the script directory.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=182>
+				<P><FONT COLOR="#c0c0c0"><FONT SIZE=2>DOC_STORAGE_ID</FONT></FONT></P>
+			</TD>
+			<TD WIDTH=76>
+				<P><FONT COLOR="#c0c0c0"><FONT SIZE=2>sal_Int32</FONT></FONT></P>
+			</TD>
+			<TD WIDTH=345>
+				<P><FONT COLOR="#c0c0c0"><FONT SIZE=2>Used by the framework - The
+				internal storage id of the script storage created for this
+				document </FONT></FONT>
+				</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=182>
+				<P><FONT COLOR="#c0c0c0"><FONT SIZE=2>RESOLVED_STORAGE_ID</FONT></FONT></P>
+			</TD>
+			<TD WIDTH=76>
+				<P><FONT COLOR="#c0c0c0"><FONT SIZE=2>sal_Int32</FONT></FONT></P>
+			</TD>
+			<TD WIDTH=345>
+				<P><FONT COLOR="#c0c0c0"><FONT SIZE=2>Used by the framework - The
+				resolved script storage for this script, will be the same as the
+				DOC_STORAGE_ID if the script is in the document, otherwise it
+				will point to the User or Share storage areas.</FONT></FONT></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in">Accesing properties from the
+invocationCtx property set [examples in Java]:</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in">First get the property set from the
+invocationCtx:</P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=2>	XPropertySet
+invocationCtxPropSet =</FONT></P>
+<P STYLE="margin-bottom: 0in">                    <FONT SIZE=2>		(
+XPropertySet ) UnoRuntime.queryInterface( XPropertySet.class,        
+           			invocationCtx );</FONT></P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in">Then get the required property [use one
+of the property keys above]:</P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=2>	Object propObject =
+invocationCtxPropSet.getPropertyValue( &lt;Property Key&gt; );</FONT></P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in">Query the returned object for the
+required object type:</P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=2>	typedPropObject = (
+&lt;Property Type&gt; ) UnoRuntime.queryInterface( &lt;Property
+Type&gt;.class,</FONT></P>
+<P STYLE="margin-bottom: 0in">                         <FONT SIZE=2>		propObject
+ );</FONT></P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in">For example to access the SCRIPT_INFO
+property:</P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=2>	Object propObject =
+invocationCtxPropSet.getPropertyValue( &ldquo;SCRIPT_INFO&rdquo; );</FONT></P>
+<P STYLE="margin-bottom: 0in">                  <FONT SIZE=2>	scriptInfoPropObject
+= ( XScriptInfo ) UnoRuntime.queryInterface( XScriptInfo.class,	     
+                                                                     
+                                            			propObject  );</FONT></P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<H5 CLASS="western"><A NAME="1.4.0.0.4.Loading and running the script |outline"></A>
+Loading and running the script 
+</H5>
+<P>The framework will resolve the script URI to a specific script and
+load up the script information into a XScriptInfo object. This is
+then set as a property of the invocationCtx which is passed onto the
+Runtime in the Runtime's invoke ( ) method call.</P>
+<P>This contains the key information required by the Runtime to
+execute the script, it gives the Runtime access to all of the
+information about this specific script, including physical location
+and any language specific information that the Runtime requires to
+run the script, such as Classpath in the case of the Java and
+BeanShell runtimes.</P>
+<P>The Runtime can access the SCRIPT_INFO property of the
+invocationCtx as described above. Once it has the XScriptInfo it can
+use methods to get all the information it needs to load and run the
+script.</P>
+<P STYLE="margin-bottom: 0in">Obtain the XScriptInfo as described
+above and use the following XScriptInfo interface methods to access
+the required data:</P>
+<TABLE WIDTH=623 BORDER=1 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=153>
+	<COL WIDTH=129>
+	<COL WIDTH=321>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=153>
+				<P>XscriptInfo Method</P>
+			</TH>
+			<TH WIDTH=129>
+				<P>Return</P>
+			</TH>
+			<TH WIDTH=321>
+				<P>Description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=153>
+				<P><FONT SIZE=2>getLogicalName() </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=129>
+				<P><FONT SIZE=2>OUString</FONT></P>
+			</TD>
+			<TD WIDTH=321>
+				<P><FONT SIZE=2>Logical name &ndash; displayed in the Assign
+				dialogs</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=153>
+				<P><FONT SIZE=2>getDescription() </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=129>
+				<P><FONT SIZE=2>OUString</FONT></P>
+			</TD>
+			<TD WIDTH=321>
+				<P><FONT SIZE=2>Description of the script, provided during
+				deployment of the script  &ndash; not currently displayed in the
+				Assign dialogs.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=153>
+				<P><FONT SIZE=2>getLanguage() </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=129>
+				<P><FONT SIZE=2>OUString</FONT></P>
+			</TD>
+			<TD WIDTH=321>
+				<P><FONT SIZE=2>Language script is written in.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=153>
+				<P><FONT SIZE=2>getFunctionName() </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=129>
+				<P><FONT SIZE=2>OUString</FONT></P>
+			</TD>
+			<TD WIDTH=321>
+				<P><FONT SIZE=2>Function name of the script [only displayed in
+				the Assign dialogs if t the details checkbox is selected].</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=153>
+				<P><FONT SIZE=2>getParcelURI() </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=129>
+				<P><FONT SIZE=2>OUString</FONT></P>
+			</TD>
+			<TD WIDTH=321>
+				<P><FONT SIZE=2>Path to the script parcel &ndash; needed to load
+				in the script source to the runtime.</FONT></P>
+				<P><FONT SIZE=2>Scripts stored in the application are file based
+				URI's [file://]. Document scripts have their own protocol
+				[</FONT><A HREF="http://ucb.openoffice.com/docs/ucp-ref.html#Package"><FONT SIZE=2>vnd.sun.star.pkg]</FONT></A><FONT SIZE=2><BR>Special
+				handling of the parcelURI is required before the Runtime can load
+				scripts [refer to Loading Scripts below]</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=153>
+				<P><FONT SIZE=2>getLanguageProperties()</FONT></P>
+			</TD>
+			<TD WIDTH=129>
+				<P><FONT SIZE=2>XPropertySet</FONT></P>
+			</TD>
+			<TD WIDTH=321>
+				<P><FONT SIZE=2>Language specific properties of the Script:</FONT></P>
+				<P><FONT SIZE=2>Access name value pairs of this property set
+				using the appropriate property keys for the script language
+				[Specified by the Runtime developer and setup during deployment
+				of a script].</FONT></P>
+				<P><FONT SIZE=2>For Java and BeanShell classpath is the only
+				available property key.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=153>
+				<P><FONT SIZE=2>getFileSetNames() </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=129>
+				<P> <FONT SIZE=2>Sequence of OUString</FONT></P>
+			</TD>
+			<TD WIDTH=321>
+				<P><FONT SIZE=2>Get a sequence of file set names from the script
+				parcel. The file set allows the script developer to group a set
+				of related files together which either the Runtime or the script
+				can use. For instance this may be useful in specifying a set of
+				related resources for a script. </FONT>
+				</P>
+				<P><FONT SIZE=2>Currently these methods are not used by the Java
+				or BeanShell runtimes [related files/ resources are generally in
+				jar files that can be specified on the language property -
+				Classpath]</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=153>
+				<P><FONT SIZE=2>getFilesInFileSet( const ::rtl::OUString &amp;
+				fileSetName ) </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=129>
+				<P> <FONT SIZE=2>Sequence of OUString</FONT></P>
+			</TD>
+			<TD WIDTH=321>
+				<P><FONT SIZE=2>Get a list of the files for the given fileset.</FONT></P>
+				<P><BR>
+				</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR><BR>
+</P>
+<P>Typically the information in the invocationCtx and ScriptInfo
+information is used as follows by a Runtime [Note: though specific to
+the Java and BeanShell Runtimes, the general logical flow will be the
+same for most Runtimes]</P>
+<H4 CLASS="western"><A NAME="1.4.0.1.Runtime Invocation |outline"></A>
+Runtime Invocation 
+</H4>
+<UL>
+	<LI><P>Obtain the XScriptInfo from the invocationCtx's  SCRIPT_INFO
+	property</P>
+	<LI><P>Access the language properties using the
+	XScriptInfo-&gt;getLanguageProperties( ) method  and setup what ever
+	language specific features are required for this runtime. For Java
+	and BeanShell this is the Classpath.</P>
+	<UL>
+		<LI><P><FONT SIZE=2>For Java and BeanShell you must also add the
+		location of the script to the Classpath. Obtained from the
+		XScriptInfo getParcelURI( ) method.</FONT></P>
+	</UL>
+	<LI><P>Setup the ScriptContext to pass to the script. In Java and
+	BeanShell the ScriptContext is setup as a convenience for the script
+	developer [refer to &ldquo;Passing useful data to the Script&rdquo;
+	below].</P>
+	<UL>
+		<LI><P><FONT SIZE=2>Get the XComponentContext from the component
+		context passed into the Runtime's constructor by UNO  [refer to
+		Developer's Guide].</FONT></P>
+		<LI><P><FONT SIZE=2>Get the desktop using this component context's
+		service factory to create an instance of the desktop service
+		(&ldquo;</FONT><A HREF="http://api.openoffice.com/common/ref/com/sun/star/frame/desktop/"><FONT SIZE=2>com.sun.star.frame.desktop</FONT></A><FONT SIZE=2>&rdquo;)
+		[ refer to Developer's Guide].</FONT></P>
+		<LI><P><FONT SIZE=2>Get the XModel for the current document from
+		the invocationCtx's DOC_REF property.</FONT></P>
+	</UL>
+	<LI><P>Setup the Input Parameters to pass to the script.</P>
+	<UL>
+		<LI><P><FONT SIZE=2>Currently this is only done in Java, they are
+		ignored in the BeanShell Runtime.</FONT></P>
+	</UL>
+	<LI><P>Load up the script into the Runtime environment. 
+	</P>
+	<UL>
+		<LI><P><FONT SIZE=2>In Java this is done by loading up the
+		appropriate Java Class with a matching method signature from the
+		Classpath setup above using a custom URLClassLoader [this handles
+		loading both from the file system class files, jar files and
+		OpenOffice.org documents using a custom UCB stream handler  &ndash;
+		refer to Accessing Document Scripts below ].</FONT></P>
+		<LI><P><FONT SIZE=2>In BeanShell the script is loaded from the
+		location given by combining the output of the XscriptInfo's
+		getParcelURI()  and the getFunctionName() methods. If the script is
+		in a document then it is loaded using the custom UCBStreamHandler
+		to create a suitable URL input stream for the eval() method of the
+		BeanShell interpreter. Otherwise it is loaded into the BeanShell
+		interpreter from the file system using the source() method.</FONT></P>
+	</UL>
+	<LI><P>Invoke the Script &ndash; having setup the appropriate
+	environment for the script, assembled some useful information for
+	the script and  obtained access to the script source, either on the
+	file system or in a document, the Runtime can now invoke the script
+	in whatever language dependent way appropriate.</P>
+	<UL>
+		<LI><P><FONT SIZE=2>In Java invoke the method setup in the Script
+		Proxy object, generated using the custom Classloader.</FONT></P>
+		<LI><P><FONT SIZE=2>In BeanShell invoke using the interpreter's
+		eval method for a document script or interpreter method if dealing
+		with a script stored on the file system.</FONT></P>
+	</UL>
+</UL>
+<H4 CLASS="western"><BR><BR>
+</H4>
+<H4 CLASS="western" STYLE="page-break-before: always"><A NAME="1.4.0.3.Passing Useful data to the Script |outline"></A>
+Passing Useful data to the Script 
+</H4>
+<P>It is up to the Runtime to decide what information to pass to a
+running script. It makes sense to pass information to the script
+which makes the script writer's job easier, such as a reference to
+the current document (available from the invocationCtx),  reference
+to the service manager (available from the component context passed
+into the Runtime component's constructor by UNO) and a reference to
+the desktop (available from UNO using this service manager).</P>
+<P STYLE="margin-bottom: 0in">In both the Java Runtime and the
+BeanShell runtime this context information is made available to the
+running script in the form of a XScriptContext. This provides
+accessor methods to get the current document, the current  desktop
+and the component context. In the Java Runtime it's passed as the
+first parameter to the script and in the Beanshell Runtime it's setup
+in the runtime environment variable, &ldquo;context&rdquo;.</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in">Interface:
+<A HREF="http://framework.openoffice.org/scripting/EDR-IDLDocs/drafts/com/sun/star/script/framework/runtime/XScriptContext.html">drafts.com.sun.star.script.framework.runtime.XScriptContext</A></P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<TABLE WIDTH=623 BORDER=1 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=180>
+	<COL WIDTH=135>
+	<COL WIDTH=289>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=180>
+				<P>XscriptContext Method 
+				</P>
+			</TH>
+			<TH WIDTH=135>
+				<P>Returns</P>
+			</TH>
+			<TH WIDTH=289>
+				<P>Description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=180>
+				<P><FONT SIZE=2>getDocument</FONT></P>
+			</TD>
+			<TD WIDTH=135>
+				<P><FONT SIZE=2>XModel</FONT></P>
+			</TD>
+			<TD WIDTH=289>
+				<P><FONT SIZE=2>Access to the current document.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=180>
+				<P><FONT SIZE=2>getDesktop</FONT></P>
+			</TD>
+			<TD WIDTH=135>
+				<P><FONT SIZE=2>XDesktop</FONT></P>
+			</TD>
+			<TD WIDTH=289>
+				<P><FONT SIZE=2>Access to the current desktop.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=180>
+				<P><FONT SIZE=2>getComponentContext</FONT></P>
+			</TD>
+			<TD WIDTH=135>
+				<P><FONT SIZE=2>XComponentContext</FONT></P>
+			</TD>
+			<TD WIDTH=289>
+				<P><FONT SIZE=2>Can be used by the script to get the default
+				multi component factory to create other UNO services.</FONT></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR><BR>
+</P>
+<H4 CLASS="western"><A NAME="1.4.0.4.Loading Scripts |outline"></A>Loading
+Scripts 
+</H4>
+<P>Scripts can be loaded from the user or share application
+directories or from a document. The parcelURI which provides the path
+to the script to load is in the form of an encoded URI. When the
+Runtime is using the parcelURI to load a script the Runtime needs to
+take account of this fact and process the parcelURI appropriately
+before it it is used.</P>
+<P>If you use the UNO UCB API, such as the XSimpleFileAccess, then
+you do not need to alter the encoded URI at all. If you want to use
+it to load the script just append a forward slash before appending
+the appropriate script filename and pass it to the appropriate
+XSimpleFileAccess methods.</P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=3>The Java and BeanShell
+Runtimes use XSimpleFileAccess  [openFileRead(), getSize()] and
+XInputStream [readBytes() and closeInput()] to read in the script and
+setup a byte array input stream to the document script. This in turn
+is used to create a custom stream handler that can then be used with
+both the ClassLoader and URL classes, to allow the Runtimes to load
+up classes and scripts from the document. Any Java based Runtime can
+use the helper classes in UCBStreamHandler.java and PathUtils.java.</FONT></P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P>The parcelURI is in an encoded URL format.. The specification for
+URLs, RFC 1738 : <a href="http://www.rfc-editor.org/rfc/rfc1738.txt">http://www.rfc-editor.org/rfc/rfc1738.txt</a>, limits
+the use of allowed characters in URLs to a subset of the US-ASCII
+character set. For a URL to be a well formed URL conformant with the
+URL specification it must encode any characters in the URL which fall
+outside this limited set. URL encoding of a character consists of a
+&quot;%&quot; symbol, followed by the two-digit hexadecimal
+representation (case-insensitive) of the ISO-Latin code point for the
+character. Characters which need to be encoded include; ASCII control
+characters, non ASCII characters,  reserved characters [specific to
+URL syntax including Backslash (%5C) ] and unsafe characters
+[optional but may cause problems in a URL, including Space (%20) and
+Forward slash (%2F)].</P>
+<P>The following table outlines what is passed to the Runtime for a
+given application or document script. It shows the type of processing
+that needs to be carried out before using the parcelURI to create a
+full path to access the application script from the file system or
+the document script from the document [The example uses the BeanShell
+Runtime, but the principal's are the same for any Runtime].</P>
+<TABLE WIDTH=623 BORDER=1 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0 STYLE="page-break-before: always">
+	<COL WIDTH=152>
+	<COL WIDTH=456>
+	<THEAD>
+		<TR>
+			<TD COLSPAN=2 WIDTH=615 VALIGN=TOP>
+				<P><FONT SIZE=3><B>ParcelURI: Application Script</B></FONT></P>
+			</TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>ScriptURI &ndash; processed by the SF</FONT></P>
+			</TD>
+			<TD WIDTH=456>
+				<P><FONT SIZE=2>script://MemoryUsage.BeanShell?language=BeanShell&amp;function=memusage.bsh&amp;location=user</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>ParcelURI &ndash; passed into the Runtime <BR></FONT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=456>
+				<P><FONT SIZE=2>Unix:
+				</FONT><FONT SIZE=2>file:///apps%20and%20utilities/staroffice/user/Scripts/java/MemoryUsage</FONT></P>
+				<P><FONT SIZE=2>Windows:
+				</FONT><FONT SIZE=2>file:///C:/apps%20and%20utilities/staroffice/user/Scripts/java/MemoryUsage</FONT><FONT SIZE=2>The
+				ParcelURI is passed into the Runtime in the invocationCtx's
+				SCRIPT_INFO property set and accessed using the XScriptInfo
+				getParcelURI() method.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>Full path of Script to Load &ndash; using UCB
+				XSimpleFileAccess </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=456>
+				<P><FONT SIZE=2>Unix:
+				</FONT><FONT SIZE=2>file:///apps%20and%20utilities/staroffice/user/Scripts/java/MemoryUsage/</FONT><FONT SIZE=2>memusage.bsh</FONT></P>
+				<P><FONT SIZE=2>Windows:
+				</FONT><FONT SIZE=2>file:///C:/apps%20and%20utilities/staroffice/user/Scripts/java/MemoryUsage/</FONT><FONT SIZE=2>memusage.bsh</FONT></P>
+				<P><FONT SIZE=2>&lt; ParcelURI&gt;/&lt; Function
+				Name&gt;<BR><BR>Constructed by the Runtime from the processed
+				ParcelURI and the function name [Note: the function name is
+				passed into Runtime in the  invocationCtx's SCRIPT_INFO property
+				set and accessed using the XScriptInfo getFunctionName() method.]</FONT></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=2 WIDTH=615 VALIGN=TOP>
+				<P><FONT SIZE=3><B><BR>ParcelURI: Document Script</B></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>ScriptURI</FONT></P>
+			</TD>
+			<TD WIDTH=456>
+				<P><FONT SIZE=2>script://MemoryUsage.BeanShell?language=BeanShell&amp;function=memusage.bsh&amp;location=document</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>ParcelURI &ndash; passed into the Runtime</FONT></P>
+			</TD>
+			<TD WIDTH=456>
+				<P STYLE="margin-bottom: 0in"><FONT SIZE=2>Unix:
+				</FONT><FONT SIZE=2>vnd.sun.star.pkg://file:%2F%2F%2Fscriptdev%2Fjohnr%2Fstaroffice644m5%2F</FONT><FONT SIZE=2>user%2FScripts%2Fjava%2FMemoryUsage%2FExampleSpreadSheet.sxc/Scripts/java/MemoryUsage</FONT></P>
+				<P STYLE="margin-bottom: 0in"><FONT SIZE=2>Windows:
+				</FONT><FONT SIZE=2>vnd.sun.star.pkg://file:%2F%2F%2FC:%2Fscriptdev%2Fjohnr%2Fstaroffice644m5%2F</FONT><FONT SIZE=2><BR>user%2FScripts%2Fjava%2FMemoryUsage%2FExampleSpreadSheet.sxc/Scripts/java/MemoryUsage</FONT></P>
+				<P STYLE="margin-bottom: 0in"><BR>
+				</P>
+				<P><FONT SIZE=2>Document URI protocol is </FONT><FONT SIZE=2>vnd.sun.star.pkg</FONT><FONT SIZE=2>
+				The Runtime should check for this string to see if it should be
+				handled as an embedded document script.<BR><BR>The path to the
+				document script consists of:<BR>&lt;document protocol&gt;:&lt;file
+				protocol&gt;/&lt;encoded document path&gt;/&lt;relative script
+				path&gt;<BR><BR>Note: only Unix/ Windows difference is in the
+				encoded document path, which is not relevant to the processing
+				carried out below to create the UCB Script Path.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>Full UCB path of Script to Load &ndash; created
+				by the Runtime </FONT>
+				</P>
+			</TD>
+			<TD WIDTH=456>
+				<P><FONT SIZE=2><FONT SIZE=2>vnd.sun.star.pkg://file:%2F%2F%2Fscriptdev%2Fjohnr%2Fstaroffice644m5%2F</FONT><FONT SIZE=2>user%2FScripts%2Fjava%2FMemoryUsage%2FExampleSpreadSheet.sxc/Scripts/java/MemoryUsage/memusage.bsh</FONT></FONT></P>
+				<P><FONT SIZE=2>&lt;Processed ParcelURI&gt;/&lt; Function
+				Name&gt;<BR>Can now be used by the Runtime to load the script
+				from the document using the UNO XSimpleFileAccess.</FONT></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR><BR>
+</P>
+<H4 CLASS="western"><A NAME="1.4.0.5.Parameters passed to the Script|outline"></A>
+Parameters passed to the Script</H4>
+<H5 CLASS="western"><A NAME="1.4.0.5.1.Java Runtime|outline"></A>Java
+Runtime</H5>
+<P>To run a Java script in OpenOffice.org, you must create a public
+Java class with at least one public Java method that takes an
+XScriptContext as it's first parameter.  If no such method exists the
+Runtime will throw an exception.</P>
+<H5 CLASS="western"><A NAME="1.4.0.5.2.BeanShell Runtime |outline"></A>
+BeanShell Runtime 
+</H5>
+<P>BeanShell scripts are single .bsh files, there are no parameter
+requirements when running BeanShell scripts. The Runtime does make
+the XScriptContext available in the BeanShell environment, but the
+script can use or ignore it as it sees fit.</P>
+<H5 CLASS="western"><A NAME="1.4.0.5.3.Current Runtimes invocation Parameter support|outline"></A>
+Current Runtimes invocation Parameter support</H5>
+<TABLE WIDTH=623 BORDER=1 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=182>
+	<COL WIDTH=149>
+	<COL WIDTH=152>
+	<COL WIDTH=115>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=182>
+				<P>Runtime</P>
+			</TH>
+			<TH WIDTH=149>
+				<P>Input Parameters</P>
+			</TH>
+			<TH WIDTH=152>
+				<P>Output Parameters</P>
+			</TH>
+			<TH WIDTH=115>
+				<P>Return 
+				</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=182>
+				<P><FONT SIZE=2>Java</FONT></P>
+			</TD>
+			<TD WIDTH=149>
+				<P><FONT SIZE=2>Supported</FONT></P>
+			</TD>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>Ignored</FONT></P>
+			</TD>
+			<TD WIDTH=115>
+				<P><FONT SIZE=2>Supported</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=182>
+				<P><FONT SIZE=2>BeanShell</FONT></P>
+			</TD>
+			<TD WIDTH=149>
+				<P><FONT SIZE=2>Ignored</FONT></P>
+			</TD>
+			<TD WIDTH=152>
+				<P><FONT SIZE=2>Ignored</FONT></P>
+			</TD>
+			<TD WIDTH=115>
+				<P><FONT SIZE=2>Supported</FONT></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR><BR>
+</P>
+<H5 CLASS="western"><A NAME="1.4.0.5.4.Framework invocation Parameter support|outline"></A>
+Framework invocation Parameter support</H5>
+<P>The framework scripts can be invoked either directly using a call
+to XFunction, obtained from a suitably constructed XFunctionProvider
+or indirectly using one of the XFispatch methods.  
+</P>
+<P>Interface: com::sun::star::frame::XDispatch</P>
+<P>Interface:
+drafts::com::sun::star::script::framework::provider::XFunctionProvider</P>
+<P>The appropriate dispatch handler will be invoked for the
+framework, based on the protocol of the scriptURI passed in [The
+Script Framework protocol handler,
+<A HREF="http://api.openoffice.org/common/ref/com/sun/star/comp/ScriptProtocolHandler.html">com.sun.star.comp.ScriptProtocolHandler</A>,
+is registered in the ProtocolHandler.xcu configuration file when the
+framework is installed and handles URI's for the &ldquo;script://&rdquo;
+protocol].</P>
+<TABLE WIDTH=623 BORDER=1 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=176>
+	<COL WIDTH=109>
+	<COL WIDTH=123>
+	<COL WIDTH=190>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=176>
+				<P>Interface / Method 
+				</P>
+			</TH>
+			<TH WIDTH=109>
+				<P>Input Parameters</P>
+			</TH>
+			<TH WIDTH=123>
+				<P>Output Parameters</P>
+			</TH>
+			<TH WIDTH=190>
+				<P>Return 
+				</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=176>
+				<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>XDispatch:</FONT></P>
+				<P><FONT SIZE=2>dispatch( )</FONT></P>
+			</TD>
+			<TD WIDTH=109>
+				<P><FONT SIZE=2>Supported</FONT></P>
+			</TD>
+			<TD WIDTH=123>
+				<P><FONT SIZE=2>Ignored</FONT></P>
+			</TD>
+			<TD WIDTH=190>
+				<P><FONT SIZE=2>Ignored</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=176>
+				<P><FONT SIZE=2>XDispatch: dispatchWithNotification( )</FONT></P>
+			</TD>
+			<TD WIDTH=109>
+				<P><A NAME="DDE_LINK3"></A><FONT SIZE=2>Supported</FONT></P>
+			</TD>
+			<TD WIDTH=123>
+				<P><FONT SIZE=2>Ignored</FONT></P>
+			</TD>
+			<TD WIDTH=190>
+				<P><FONT SIZE=2>Supported via XDispatchResultListener</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=176>
+				<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>XFunction:</FONT></P>
+				<P><FONT SIZE=2>invoke( )</FONT></P>
+			</TD>
+			<TD WIDTH=109>
+				<P><FONT SIZE=2>Supported</FONT></P>
+			</TD>
+			<TD WIDTH=123>
+				<P><FONT SIZE=2>Supported</FONT></P>
+			</TD>
+			<TD WIDTH=190>
+				<P><FONT SIZE=2>Supported</FONT></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR><BR>
+</P>
+<H6 CLASS="western"><A NAME="1.4.0.5.4.1.Input Params|outline"></A>Input
+Params</H6>
+<P>If a script is invoked from a menu, key or event binding setup
+using the Assign dialogs, there is no way to pass an input parameter
+to the script . However, it is possible to pass input parameters to a
+script if you invoke it from another script using either the
+XDispatch [asynchronous] or XFunction [synchronous] interfaces as
+shown below:</P>
+<P>Example using XFunction to Invoke a Script. with several input
+parameters</P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>Sub 
+<I>DisplayEuroConversionRates</I>  ( conversionRatesRile as String,
+numConversions as integer)</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>dim args(0)</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>args(0) = ThisComponent</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><BR><BR>
+</P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>' Create your
+FunctionProvider and obtain a Script Function from it.</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>FuncProvider =
+createUnoService(&ldquo;drafts.com.sun.star.script.framework.provider.FunctionProvider&rdquo;)</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>FuncProvider.initialize(
+args() )</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>Func =
+FuncProvider.getFunction( &ldquo;script:</FONT><FONT SIZE=2>//Tools.Convert.DisplayEuroRates</FONT><FONT SIZE=2>?_</FONT></P>
+<P STYLE="margin-bottom: 0in">                     
+<FONT SIZE=2>language=Java&amp;function=com.sun.star.beans.tools.Standard.Convert.displayEuro&amp;location=user&rdquo;)</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><BR><BR>
+</P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>Dim inArgs(1)</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>Dim outArgs()</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>Dim outIndex()</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><BR><BR>
+</P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>' Setup Input Param
+arguments</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>inArgs(0) = 
+conversionRatesFile </FONT>
+</P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>inArgs(1) = 
+numConversions </FONT>
+</P>
+<P STYLE="margin-bottom: 0.04in"><BR><BR>
+</P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>result = Func.invoke(
+inArgs(), outIndex(), outArgs() ) // Out params not handled by Java
+or BeanShell</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>End Sub</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><BR><BR>
+</P>
+<P STYLE="margin-bottom: 0.04in"><BR><BR>
+</P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=3>Example using XDispatch
+to Invoke a Script with several input parameters</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><BR><BR>
+</P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>sub
+<I>DisplayEuroConversionRates</I>( conversionRatesFile as String,
+numConversions as integer)</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>dim url        as new
+<A HREF="http://api.openoffice.com/common/ref/com/sun/star/util/URL.html">com.sun.star.util.URL</A></FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>document =
+ThisComponent.CurrentController.Frame</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>parser   =
+createUnoService(&ldquo;<A HREF="http://api.openoffice.com/common/ref/com/sun/star/util/URLTransformer.html">com.sun.star.util.URLTransformer</A>&rdquo;)</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>dim args1(1) as new
+com.sun.star.beans.PropertyValue</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><BR><BR>
+</P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>'  Setup Input Param
+arguments</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>'  Note: args1(x).Name
+can be left blank</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>'            Set
+argsl(x).Name to &ldquo;Referrer&rdquo; if you do not want it added
+as an input param</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>args1(0).Value = 
+conversionRatesFile </FONT>
+</P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>args1(1).Value = 
+numConversions </FONT>
+</P>
+<P STYLE="margin-bottom: 0.04in"><BR><BR>
+</P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>url.Complete = 
+&ldquo;script:<FONT SIZE=2>//Tools.Convert.DisplayEuroRates</FONT><FONT SIZE=2>?</FONT>_</FONT></P>
+<P STYLE="margin-bottom: 0.04in">                 
+<FONT SIZE=2>language=Java&amp;function=com.sun.star.beans.tools.Standard.Convert.displayEuro&amp;location=user&rdquo;</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>parser.parseStrict(url)</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>disp =
+document.queryDispatch(url,&ldquo;&rdquo;,0)</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><BR><BR>
+</P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>disp.dispatch(url,
+args1()) 	'No access to Out params</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>End Sub</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><BR><BR>
+</P>
+<H6 CLASS="western"><A NAME="1.4.0.5.4.2.Output Params|outline"></A>Output
+Params</H6>
+<P>Are currently not supported in the Java and BeanShell Runtimes. If
+you do implement them in your Runtime, the XDispatch script protocol
+handler has no way to process them [supports one way call only]. You
+would only be able to process them if you use the XFunction interface
+above in the calling script.</P>
+<H6 CLASS="western"><A NAME="1.4.0.5.4.3.Returns|outline"></A>Returns</H6>
+<P>The script runtime can return the result of the script in an Any
+if it makes sense to do so. The return result must be a type that is
+supported by the UNO language bridge being used by the Runtime
+[generally a primitive type or an UNO type]. If an unsupported type
+is passed back by the script the UNO bridge will cause an assert.
+Both the Java and BeanShell runtimes pass back the return value of
+scripts they invoke, it is the responsibility of the script writers
+to return types supported by the UNO bridge [refer to the Developer's
+Guide].</P>
+<P>If there is no return value or the Runtime chooses not to support
+return values from scripts, it must always return a  void Any
+[created as follows in Java:  new Any(new Type(), null);]</P>
+<H6 CLASS="western"><A NAME="1.4.0.5.4.4.Errors|outline"></A>Errors</H6>
+<P>If any problems arise in the Runtime the following exceptions can
+be thrown by the invoke call. The Runtime should make sure the errors
+raised match the meaning of the the exceptions given below.</P>
+<TABLE WIDTH=623 BORDER=1 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=185>
+	<COL WIDTH=424>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=185>
+				<P>Exception 
+				</P>
+			</TH>
+			<TH WIDTH=424>
+				<P>Description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=185>
+				<P><FONT SIZE=2>IllegalArgumentException</FONT></P>
+			</TD>
+			<TD WIDTH=424>
+				<P><FONT SIZE=2>If there is no matching script name.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=185>
+				<P><FONT SIZE=2>CannotConvertException</FONT></P>
+			</TD>
+			<TD WIDTH=424>
+				<P><FONT SIZE=2>If arguments do not match or cannot be converted
+				the those of the invokee</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=185>
+				<P><FONT SIZE=2>InvocationTargetException</FONT></P>
+			</TD>
+			<TD WIDTH=424>
+				<P><FONT SIZE=2>If the running script throws an exception, this
+				information is captured and re thrown as this exception type.</FONT></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR><BR>
+</P>
+<H4 CLASS="western"><A NAME="1.4.0.6.Runtime Singleton|outline"></A>Runtime
+Singleton</H4>
+<P>The Runtime must be setup as a Singleton. The name of the
+singleton must follow the following scheme:</P>
+<P STYLE="font-weight: medium"><FONT SIZE=2><I>	theScriptRuntimeFor&lt;Runtime
+Language&gt;</I></FONT></P>
+<P STYLE="font-style: normal; font-weight: medium"><FONT SIZE=3>For
+example for Java the singleton is named theScriptRuntimeForJava and
+for BeanShell it is named theScriptRuntimeForBeanShell.</FONT></P>
+<P>This needs to be done programmatically in the
+_writeRegistryServiceInfo( ) method of  the XServiceInfo service. In
+this method you need to create the appropriate singleton registry key
+under the UNO/Singletons key in the Office registration database in
+the [refer to example below for BeanShell]. 
+</P>
+<P>[Note: this is an undocumented feature of 643 builds and above and
+is not covered in the Developer's Guide].</P>
+<P>Singleton Registry Entry:</P>
+<P STYLE="font-weight: medium"><FONT SIZE=2><I>[Implementation Name]+
+&quot;/UNO/SINGLETONS/&rdquo; + [Service Module] +
+&ldquo;.theScriptRuntimeFor&lt;Runtime Language&gt;&rdquo;</I></FONT></P>
+<H6 CLASS="western"><A NAME="1.4.0.6.0.1.BeanShell Example|outline"></A>
+BeanShell Example</H6>
+<P STYLE="margin-bottom: 0.04in">  <FONT SIZE=2>public static boolean
+<B>__writeRegistryServiceInfo</B>( XRegistryKey regKey ) {</FONT></P>
+<P STYLE="margin-bottom: 0.04in">     <FONT SIZE=2>String impl =
+&quot;com.sun.star.scripting.runtime.beanshell.ScriptRuntimeForBeanShell$_ScriptRuntimeForBeanShell&quot;;</FONT></P>
+<P STYLE="margin-bottom: 0.04in">     <FONT SIZE=2>String
+serviceModule = &quot;drafts.com.sun.star.script.framework&quot;;</FONT></P>
+<P STYLE="margin-bottom: 0.04in">     <FONT SIZE=2>String service =
+serviceModule + &quot;<A HREF="../../../tmp/drafts.c.ScriptRuntimeForBeanShell">.ScriptRuntimeForBeanShell</A>&quot;;</FONT></P>
+<P STYLE="margin-bottom: 0.04in"><BR><BR>
+</P>
+<P STYLE="margin-bottom: 0.04in">     <FONT SIZE=2>if
+(FactoryHelper.writeRegistryServiceInfo(impl, service, regKey)) {</FONT></P>
+<P STYLE="margin-bottom: 0.04in">         <FONT SIZE=2>try {</FONT></P>
+<P STYLE="margin-bottom: 0.04in">                <FONT SIZE=2>XRegistryKey
+newKey = regKey.createKey( </FONT>
+</P>
+<P STYLE="margin-bottom: 0.04in"><FONT SIZE=2>	<B>impl +
+&quot;/UNO/SINGLETONS/&rdquo;+ serviceModule +
+&ldquo;.theScriptRuntimeForBeanShell&quot;</B>);</FONT></P>
+<P STYLE="margin-bottom: 0.04in">               
+<FONT SIZE=2>newKey.setStringValue(service);</FONT></P>
+<P STYLE="margin-bottom: 0.04in">                <FONT SIZE=2>return
+true;</FONT></P>
+<P STYLE="margin-bottom: 0.04in">           <FONT SIZE=2>} catch
+(Exception ex) {</FONT></P>
+<P STYLE="margin-bottom: 0.04in">               
+<FONT SIZE=2>System.err.println(&quot;Error registering
+ScriptRuntimeForBeanShell: &quot; + ex);</FONT></P>
+<P STYLE="margin-bottom: 0.04in">           <FONT SIZE=2>}       </FONT>
+</P>
+<P STYLE="margin-bottom: 0.04in">        <FONT SIZE=2>}</FONT></P>
+<P STYLE="margin-bottom: 0.04in">        <FONT SIZE=2>return false;</FONT></P>
+<P STYLE="margin-bottom: 0.04in"> <FONT SIZE=2>}</FONT></P>
+<H4 CLASS="western"><A NAME="1.4.0.7.Packaging|outline"></A>Packaging</H4>
+<P>The new Runtime must be packaged as an UNO Component. Refer to the
+Developer's Guide on instructions on how to use the pkgchk tool to
+package the Runtime and any additional resources it may require.</P>
+<H2 CLASS="western"><A NAME="1.5.Creating Scripts|outline"></A>Creating
+Scripts</H2>
+<P>If you want to allow your users to create script parcels for the
+new language Runtime, you can create a tool to create a script
+parcel, or you can use the existing command line tools to do so.</P>
+<P>The script parcel is just a zip file containing the script and any
+associated resources and a parcel-descriptor.xml file, which gives
+the details of the script, including language specific information
+that may be needed to run the script.</P>
+<P>You could write your own tools to create the parcel-descriptor.xml
+file. Refer to Appendix I for the parcel-descriptor.xml DTD.</P>
+<H2 CLASS="western"><A NAME="1.6.Binding to Scripts|outline"></A>Binding
+to Scripts</H2>
+<P>If a Runtime has been installed the Assign dialogs will
+automatically detect the new language Scripting Runtime singleton.
+The language will then be available as a choice in the language drop
+down combo of all of the assign dialogs. Choosing it the user will be
+presented with a list of any scripts for this language, deployed into
+the specified location [installation &ndash; user/ share; document].</P>
+<P>The Runtime developer has nothing to do other than make sure the
+Runtime is registered as a singleton using the above naming scheme.</P>
+<P><BR><BR>
+</P>
+<H1><BR><BR>
+</H1>
+<H1 STYLE="page-break-before: always"><A NAME="3.Appendix I|outline"></A>
+Appendix I</H1>
+<H2 CLASS="western"><A NAME="3.1.Scripting Framework Resolution|outline"></A>
+Scripting Framework Resolution</H2>
+<P STYLE="margin-bottom: 0in">If a Script URI has all of the key
+fields filled out [logical name, language, function and location]
+then the Script URI will be unambiguously matched to only one
+physically deployed script. If no match is found then a Runtime
+exception is raised by the framework.</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in">What happens if you omit some or all of
+the optional fields? The framework will attempt to resolve the Script
+URI to one of the deployed scripts as follows.</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<TABLE WIDTH=623 BORDER=1 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=156>
+	<COL WIDTH=453>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=156>
+				<P>Omitted Script URI Parameter</P>
+			</TH>
+			<TH WIDTH=453>
+				<P>Resolution Strategy</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=156>
+				<P>function</P>
+			</TD>
+			<TD WIDTH=453>
+				<P>Will search for the first match from the list of all available
+				function implementations for a given logical name by alphabetical
+				order of the functions.</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=156>
+				<P>location</P>
+			</TD>
+			<TD WIDTH=453>
+				<P>Will search for the first matching script from all the
+				available storage locations in the order of document, user and
+				share.</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=156>
+				<P>language</P>
+			</TD>
+			<TD WIDTH=453>
+				<P>Will search for the first match in the available supported
+				language Runtimes by alphabetical order of the Runtimes.</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P><FONT FACE="Times New Roman"><FONT SIZE=3>In the future it may be
+possible to configure the framework's resolution strategies if the
+Script URI is not fully qualified.</FONT></FONT></P>
+<H4 CLASS="western"><A NAME="3.1.0.1.Runtime Specific Resolution|outline"></A>
+Runtime Specific Resolution</H4>
+<P><FONT FACE="Times New Roman"><FONT SIZE=3>In some Runtime's it may
+be necessary to do further resolution checks, based not just on the
+function name, but also on the Parameter list passed down to the
+script.<BR>For instance, the Java Runtime will check that the script
+which the framework has resolved also matches a method with the
+appropriate signature on the available Classpath for this script and
+if it does not will throw an exception. </FONT></FONT>
+</P>
+<P><BR><BR>
+</P>
+<H1><BR><BR>
+</H1>
+<H1 STYLE="page-break-before: always"><A NAME="dtd"></A><A NAME="5.Appendix II|outline"></A>
+Appendix II</H1>
+<H2 CLASS="western"><A NAME="5.1.Parcel Descriptor DTD and sample XML|outline"></A>
+Parcel Descriptor DTD and sample XML</H2>
+<P>Each script must contain a parcel-descriptor.xml file which
+provides all the necessary metadata for the script. The DTD for the
+parcel-descriptor.xml follows 
+</P>
+<PRE>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!-- DTD for Parcel Meta data for use in the OpenOffice.org Scripting Framework Project --&gt;
+&lt;!ELEMENT logicalname EMPTY&gt;
+&lt;!ELEMENT description (#PCDATA)&gt;
+&lt;!ELEMENT displayname EMPTY&gt;
+&lt;!ELEMENT locale (displayname?, description?)&gt;
+&lt;!ELEMENT functionname EMPTY&gt;
+&lt;!ELEMENT prop EMPTY&gt;
+&lt;!ELEMENT languagedepprops (prop+)&gt;
+&lt;!ELEMENT file (prop*)&gt;
+&lt;!ELEMENT fileset (file+)&gt;
+&lt;!ELEMENT script (locale+, functionname, logicalname, languagedepprops*, fileset*)&gt;
+&lt;!ELEMENT parcel (script+)&gt;
+&lt;!ATTLIST logicalname
+        value CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST displayname
+        value CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST locale
+        lang CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST functionname
+        value CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST logicalname
+        value CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST prop
+        name CDATA #REQUIRED
+        value CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST file
+        name CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST fileset
+        name CDATA #IMPLIED
+&gt;
+&lt;!ATTLIST script
+        language CDATA #REQUIRED
+&gt;
+&lt;!ATTLIST parcel
+        language CDATA #REQUIRED
+&gt;</PRE><P>
+The following is an example of a parcel-descriptor.xml file that
+defines a script, implemented in Java. The languagedepprops element
+is used to extend the JVM's classpath. 
+</P>
+<PRE>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!--Sample Meta Data for use with the Scripting Framework Project in OpenOffice.org --&gt;
+&lt;!DOCTYPE parcel SYSTEM &quot;parcel.dtd&quot;&gt;
+&lt;parcel language=&quot;Java&quot;&gt;
+        &lt;script language=&quot;Java&quot;&gt;
+                &lt;locale lang=&quot;english&quot;&gt;
+                        &lt;displayname value=&quot;Memory.usage&quot;/&gt;
+                        &lt;description&gt;
+                                Displays the memory current memory usage
+                        &lt;/description&gt;
+                &lt;/locale&gt;
+                &lt;functionname value=&quot;memoryUtils.memoryUsage&quot;/&gt;
+                &lt;logicalname value=&quot;MemoryUtils.MemUsage&quot;/&gt;
+                &lt;languagedepprops&gt;
+                        &lt;prop name=&quot;classpath&quot; value=&quot;/opt/foo.jar:/usr/java/src.jar&quot;/&gt;
+                &lt;/languagedepprops&gt;
+                &lt;fileset&gt;
+                        &lt;file name=&quot;mems.txt&quot;&gt;
+                                &lt;prop name=&quot;type&quot; value=&quot;resource&quot;/&gt;
+                        &lt;/file&gt;
+                &lt;/fileset&gt;
+        &lt;/script&gt;
+&lt;/parcel&gt;</PRE><P>
+<BR><BR>
+</P>
+<PRE STYLE="margin-bottom: 0.2in"></PRE>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

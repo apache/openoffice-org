@@ -1,0 +1,230 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="CREATED" CONTENT="20020218;17044700">
+	<META NAME="CHANGED" CONTENT="20020219;16054255">
+	<STYLE>
+	<!--
+		@page { margin: 2cm }
+		H1 { margin-bottom: 0.21cm }
+		H1.western { font-family: "Albany", sans-serif; font-size: 16pt }
+		H1.cjk { font-size: 16pt }
+		H1.ctl { font-size: 16pt }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="de-DE">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/framework/">framework</a>&nbsp;&raquo;&nbsp;<a href="/framework/proposals/">proposals</a>&nbsp;&raquo;&nbsp;<a href="/framework/proposals/macro/">macro</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1 CLASS="western">Some thoughts about Macro Recording</H1>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">All StarOffice versions prior to the
+release of OpenOffice.org had a macro recorder. This tool was able to
+record actions of the user and translate them into StarBasic code. It
+was removed before the OO.o source code was released. To understand
+why it was removed and why it is so hard to create a replacement for
+it, it's necessary to learn something about the way it worked and
+about the internal command processing in OO.o applications.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The OO.o applications are based on the
+SFX application framework. This framework is not an UNO based one,
+it's pure C++. It's main operational area is the management of the
+user interface and the processing of commands created by user
+actions. Every functionality (functions, properties) provided by an
+SFX based application component is described by a structure called
+&bdquo;slot&ldquo;. It contains a number identifying the slot (the
+&bdquo;slot id&ldquo;), some additional information for internal
+processing inside SFX (some mostly boolean parameters describing the
+slot), a name (its &bdquo;API name&ldquo;) and the information wether
+this slot represents a function or a property. For functions it also
+contains a list of all parameters and their names and types and the
+type of the return value, for properties it contains the property
+type.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">All the slots and their properties are
+known at compile time to the application module they belong to.
+Inside the application modules the slots are grouped together into
+data structures called &bdquo;(slot) interface&ldquo;. Every module
+knows several interfaces, each of them representing a &bdquo;context&ldquo;
+of the user interface. Examples are the contexts &bdquo;text
+document&ldquo;, &bdquo;impress slide view&ldquo;, &bdquo;table
+selection&ldquo;, each of them is represented by a corresponding slot
+interface (or a group of them). The sum of all currently available
+contextes (slot interfaces) defines the available feature set of an
+SFX based application component.</P>
+<P STYLE="margin-bottom: 0cm"> 
+</P>
+<P STYLE="margin-bottom: 0cm">The SFX application framework learns
+about the slots by being dynamically bound to the modules and slot
+interfaces at runtime. So it is able to browse through the whole
+available feature set of the application component. All currently
+bound slot interfaces are pushed on a stack provided by the SFX
+framework, thus defining an ordering mechanism for them. Pushing
+interfaces on the stack or removing interfaces from there is the way
+context switches in the user interface are reflected in the SFX.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">All user interface elements written for
+the SFX (f.e. toolboxes, menus, keyboard shortcuts) don't call
+directly into the application code, they just call a very generic SFX
+based API to execute a slot. The slot is identified by its slot id
+and the SFX framework is able to find the right code that is able to
+process the slot by browsing through the bound slot interfaces in a
+well defined manner, using the stack of slot interfaces mentioned
+above. Many calls are executed without additional parameters, but
+many others also pass parameters while executing the slot. An example
+for the first case is a simple click on a menu entry. An example for
+the second case is when the user changes some values in a dialog and
+leaves the dialog by clicking its &bdquo;OK&ldquo; button. Here all
+changed values in the dialog are sent as parameters of the slot
+command.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The generic API assures that every
+command goes through the same code in the SFX framework, and so this
+framework is able to translate every slot execution into a single
+StarBasic statement or a group of them, just by finding the slot
+structure belonging to the slot being executed, the slot interface it
+is belonging to, getting the slots' API name and identifying the
+parameters. (In the user interface usually no return values are
+processed.) Here a slot interface or a group of slot interfaces
+represents an object, every slot is a method or a property of such
+object. Both together form a StarBasic statement like &bdquo;Object.Method(
+)&ldquo;.</P>
+<P STYLE="margin-bottom: 0cm">The Basic code generated this way used
+the so called &bdquo;old&ldquo; SO-Basic API, that is not supported
+anymore in OO.o and SO6, and it is not in any way related to the
+&bdquo;real&ldquo; API of the OO.o/SO applications. 
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The slot based API is still used for
+large parts of the internal command execution in OO.o (the
+communication between  the application component and its user
+interface), but it is not possible to translate it into any UNO based
+API. To be honest, only a few slot calls will ever end up in calling
+a UNO based API of the underlying application component.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">It is possible to transform every slot
+command into a call for the generic UNO based &bdquo;dispatch API&ldquo;,
+where every functionality is described by a command string (we call
+them &bdquo;command URLs&ldquo;, because they use the form
+&bdquo;scheme:scheme dependent part&ldquo;).</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">This API uses a chain of objects
+implementing the DispatchProvider service. If the first object in the
+chain is asked for a Dispatch object for an arbitrary command, it
+will check the command if it wants to handle it. If the check turns
+out to be positive, a Dispatch object is returned that is able to
+execute the command, otherwise the query is passed to the next chain
+object etc. If a Dispatch object was found anywhere in the chain, 
+the command is executed by calling the dispatch method of the
+Dispatch object, where all parameters are passed as PropertyValue
+structs.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The result of a transformation from SFX
+slot execution to dispatch call is a call dispatching the command
+&bdquo;<A HREF="slot:xxxx">slot:xxxx</A>&ldquo; (xxxx=slot id),
+passing all necessary parameters as PropertyValues. Newer UI
+components are using this API instead of the slot based SFX API, just
+to have a UNO based interface to the application componnent and not a
+C++ based one. The SFX framework provides some wrapper code to
+translate between the slot based API and the dispatch framework for
+all these newer UI components if they are used for a SFX based
+application component.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">But the dispatch API, though being UNO
+based, is only of limited practical use, because these calls are just
+textual representations of the binary slot data. If you want to write
+a program that uses OO.o API to work on OO.o documents, the dispatch
+API is definitely not the one you want to use (except in some special
+cases, where the functionality is not accessible by other APIs). The
+dispatch API is just thought as the generic programming interface for
+a mostly generic UI code.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">It is possible to record macros just
+for automation purposes using  the SFX or the dispatch API calls:
+take the internal binary representation of the slot commands (or the
+command URL and the parameters of the dispatch call), store it
+anywhere and execute it afterwards by using a &bdquo;slot machine&ldquo;
+(only evil thinking persons will misunderstood this name in this
+context here ;-) ) or a &bdquo;dispatch machine&ldquo;. But usually a
+macro macro recorder is wanted to offer more than only automation:
+most people want to have created source code they can browse and
+modify. And this is exactly what you can't get from the SFX. Many
+(most?) user interactions in the OO.o applications are processed
+without any single UNO call, so there is nothing you can &bdquo;record&ldquo;.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">So what do we need to have the &bdquo;macro
+recording&ldquo; feature back?</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">First, every slot execution (or
+dispatch call) must be mapped to one or several API calls of the
+objects they are working on. This is hard work enough, don't expect
+this to happen in the near future.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">But even if you have got this made, you
+will need something that translates the API calls made into source
+code of any (scripting) language supporting UNO. This can't be a
+built-in UNO feature, because you want only the &bdquo;top level&ldquo;
+UNO calls to be recorded, not the subsequent calls, because you will
+get them called anyway when executing the macro. Perhaps the &bdquo;top
+level&ldquo; calls could marked as recordable by the (AFAIK currently
+not accessible UNO context), but this looks &bdquo;hacky&ldquo; and
+ugly to me.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">I'd prefer an explicit solution, where
+every dispatch provider object that returns a dispatch object will be
+asked to record this call into one or several API statements, but I
+don't have any clever ideas for that. 
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">So I'd appreciate any ideas from
+anybody who wants to contribute to that. May be it turns out that the
+&bdquo;UNO built in&ldquo; solution is not that hacky as it seems,
+may be that there is something completely different that puts a new
+light on the problem. 
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
