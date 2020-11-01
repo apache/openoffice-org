@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet 
+   version="1.0" 
+   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+   xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" 
+   xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" 
+   xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" 
+   xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" 
+   xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="no"/>
+
+  <xsl:template match="/">
+    <office:document office:mimetype="application/x-vnd.oasis.openoffice.spreadsheet" office:version="1.0">
+      <office:body>
+        <office:spreadsheet>
+          <xsl:element name="table:table">
+            <xsl:attribute name="table:name">sites</xsl:attribute>
+            <xsl:call-template name="fill-header"/>
+            <xsl:call-template name="fill-rows"/>
+          </xsl:element>
+        </office:spreadsheet>
+      </office:body>
+    </office:document>
+  </xsl:template>
+
+  <xsl:template name="fill-header">
+    <xsl:element name="table:table-row">
+      <xsl:call-template name="fill-cell">
+        <xsl:with-param name="content" select="'location'"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="fill-cell">
+        <xsl:with-param name="content" select="'code'"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="fill-cell">
+        <xsl:with-param name="content" select="'type'"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="fill-cell">
+        <xsl:with-param name="content" select="'name'"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="fill-cell">
+        <xsl:with-param name="content" select="'set'"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="fill-cell">
+        <xsl:with-param name="content" select="'scheme'"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="fill-cell">
+        <xsl:with-param name="content" select="'mode'"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="fill-cell">
+        <xsl:with-param name="content" select="'uri'"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="fill-cell">
+        <xsl:with-param name="content" select="'contact'"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="fill-cell">
+        <xsl:with-param name="content" select="'bandwidth'"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="fill-cell">
+        <xsl:with-param name="content" select="'notes'"/>
+      </xsl:call-template>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template name="fill-rows">
+    <xsl:apply-templates select="//uri[string-length(.)!=0]"/>
+  </xsl:template>
+
+  <xsl:template match="//uri">
+    <xsl:element name="table:table-row">
+      <xsl:call-template name="fill-columns"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template name="fill-columns">
+    <xsl:call-template name="fill-cell">
+      <xsl:with-param name="content" select="../@location"/>
+    </xsl:call-template>
+
+    <xsl:call-template name="fill-cell">
+      <xsl:with-param name="content" select="../@code"/>
+    </xsl:call-template>
+
+    <xsl:call-template name="fill-cell">
+      <xsl:with-param name="content" select="../@type"/>
+    </xsl:call-template>
+
+    <xsl:call-template name="fill-cell">
+      <xsl:with-param name="content" select="../@name"/>
+    </xsl:call-template>
+
+    <xsl:call-template name="fill-cell">
+      <xsl:with-param name="content" select="@set"/>
+    </xsl:call-template>
+
+    <xsl:call-template name="fill-cell">
+      <xsl:with-param name="content" select="@scheme"/>
+    </xsl:call-template>
+
+    <xsl:call-template name="fill-cell">
+      <xsl:with-param name="content" select="@mode"/>
+    </xsl:call-template>
+
+    <xsl:element name="table:table-cell">
+      <xsl:attribute name="office:value-type">string</xsl:attribute>
+      <xsl:element name="text:p">
+        <text:a>
+          <xsl:attribute name="xlink:href">
+            <xsl:value-of select="."/>
+          </xsl:attribute>
+          <xsl:value-of select="."/>
+        </text:a>
+      </xsl:element>
+    </xsl:element>
+
+    <xsl:call-template name="fill-cell">
+      <xsl:with-param name="content">
+        <xsl:apply-templates select="../contact"/>
+      </xsl:with-param>
+    </xsl:call-template>
+
+    <xsl:call-template name="fill-cell">
+      <xsl:with-param name="content" select="../bandwidth"/>
+    </xsl:call-template>
+
+    <xsl:call-template name="fill-cell">
+      <xsl:with-param name="content" select="../notes"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="fill-cell">
+    <xsl:param name="content"/>
+    <xsl:element name="table:table-cell">
+      <xsl:attribute name="office:value-type">string</xsl:attribute>
+      <text:p><xsl:value-of select="$content"/></text:p>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="contact">
+    <xsl:choose>
+      <xsl:when test="count(email)!=0">
+	<xsl:apply-templates select="email"/>
+      </xsl:when>
+      <xsl:otherwise>
+	<xsl:if test="string-length(@name)!=0">
+	  <xsl:text>"</xsl:text>
+	  <xsl:value-of select="@name"/>
+	  <xsl:text>"</xsl:text>
+	</xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="position() != last()">
+      <xsl:text>, </xsl:text>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="email">
+    <xsl:if test="string-length(../@name)!=0">
+      <xsl:text>"</xsl:text>
+      <xsl:value-of select="../@name"/>
+      <xsl:text>"</xsl:text>
+    </xsl:if>
+    <xsl:if test="string-length(.)!=0">
+      <xsl:choose>
+        <xsl:when test="string-length(../@name)!=0">
+          <xsl:text> &lt;</xsl:text>
+          <xsl:value-of select="."/>
+          <xsl:text>&gt;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="."/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+    <xsl:if test="position() != last()">
+      <xsl:text>, </xsl:text>
+    </xsl:if>
+  </xsl:template>
+
+</xsl:stylesheet>

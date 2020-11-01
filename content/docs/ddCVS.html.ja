@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+<style type="text/css">
+/* <![CDATA[ */ @import "/branding/css/tigris.css"; /* ]]> */
+</style>
+  <script src="/branding/scripts/sc.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="/branding/css/print.css" media="print" />
+
+  <title>CVS を使用したソースコードバージョン管理について</title>
+ </head>
+
+ <body class="docs" onload="self.focus()">
+  <div class="docs" id="ddcvs">
+   <h2>CVS を使用したソースコードバージョン管理について</h2>
+
+   <div id="toc">
+    <ul>
+     <li><strong><a href="/nonav/servlets/HelpTOC">ヘルプ索引</a></strong></li>
+    </ul>
+
+    <ul>
+     <li><a href="/nonav/docs/Learning.html">プロジェクトについて</a></li>
+
+     <li><a href="/nonav/docs/ProjectMemberResources.html">メンバー用のプロジェクトリソース</a></li>
+
+     <li>
+      <a href="/nonav/docs/hostedtools.html">ホステッドツール</a> 
+
+      <ul>
+       <li>
+        CVS を使用したソースコードバージョン管理について 
+
+        <ul>
+         <li><a href="#aboutcvs">CVS について</a></li>
+
+         <li><a href="#commitaccess">オープンソースプロジェクトにおける CVS コミットアクセス権の取得</a></li>
+
+         <li><a href="#morecvsdoc">詳細な CVS ドキュメント</a></li>
+
+         <li><a href="#cvsclients">CVS クライアント</a></li>
+        </ul>
+       </li>
+
+       <li><a href="/nonav/docs/ProjectAdd.html">新規プロジェクトの作成</a></li>
+      </ul>
+     </li>
+
+     <li>
+      CVS のより詳しい説明 
+
+      <ul>
+       <li><a href="/nonav/docs/ddCVS_cvsglossary.html">バージョン管理グロッサリ</a></li>
+
+       <li><a href="/nonav/docs/ddUsingCVS_command-line.html">プロジェクト・ソースファイルへのアクセスするためのコマンドライン CVS の利用</a></li>
+
+       <li><a href="/nonav/docs/ddCVS_cvscontributing.html">CVS によるソースコード変更の寄稿</a></li>
+
+       <li><a href="/nonav/docs/ddCVS_cvsmanaging.html">CVS によるプロジェクト・ファイルおよびディレクトリの管理</a></li>
+      </ul>
+     </li>
+    </ul>
+   </div>
+
+   <h3><a id="aboutcvs" name="aboutcvs">CVS について</a></h3>
+
+   <p>CVS (Concurrent Versions System) 
+は、プロジェクトのソースコード・ファイルに加えられたすべての変更を追跡するオープン・ソースのバージョン管理ツールです。 CVS は、オープン・ソースおよび著作権保護されたソフトウェア開発プロジェクトの両方で広く使用されており、一般的に無料で利用できる最高の完全な機能が付属したバージョン管理ツールとして知られています。インターネットを介した共同開発に CVS が特に理想的である理由には、次の 2 つの機能があるからです。</p>
+
+   <ol>
+    <li>CVS を使うと、複数の開発者が独自の作業用コピーに同時に変更を加えることができます。それから、すべての変更をマージし、変更が競合する場合は開発者に通知することができます。</li>
+
+    <li>ソース・コードのファイル・リポジトリにリモートでアクセスできます。プロジェクトのメンバーである開発者は、どこからでもプロジェクトのファイルを取得して、変更を加えることができます。</li>
+   </ol>
+
+   <p>CVS はクライアント-サーバ・システムです。 CVS のリポジトリは Web サーバ上で管理され、クライアントはユーザのマシン上で実行し、インターネットを介してサーバに接続します。 このサイトでホストしているプロジェクトの CVS サーバにアクセスするには、ローカルマシンに CVS クライアントをインストールしなければなりません。 <a href="#cvsclients">クライアント</a> は、次のプラットフォームを含む、ほぼすべてのプラットフォーム用のものがあります。Unix、Windows、Macintosh、Java ベースのプラットフォーム。 このマニュアルでは、Unix シェルまたは WinCVS の実行方法について説明します。</p>
+
+   <p>プロジェクトのメンバーとして、CVS を使って次のことが実行できます。</p>
+
+   <ul>
+    <li>ソース・ファイルとディレクトリのチェックアウト</li>
+
+    <li>ファイルのバージョン間にある差分の表示</li>
+
+    <li>変更ログ履歴とコメントの変更</li>
+
+    <li>ソース・ファイルのローカル・コピーに加えた変更を、メインのソース・コード・リポジトリにコミット</li>
+
+    <li>ほかのプロジェクト・メンバーによってコミットされた変更と同期を保つためにローカルのプロジェクト・ファイルをアップデート</li>
+   </ul>
+
+   <p>CVS が初めての場合は、まず使い始めてみることをお勧めします。 [プロジェクトリソース] ツールバーにある [ソースコード] リンクをクリックすると、特定のプロジェクト・ソース・ファイルの作業用コピーをチェックアウトするためのインストラクションが表示されます。 このサイトにある 3 
+部門から構成される CVS ツール・マニュアル、<a href="/nonav/docs/ddUsingCVS_command-line.html">コマンドライン 
+CVS の利用</a> 、<a href="/nonav/docs/ddUsingWinCvs.html">WinCVS 
+の利用</a>で、より詳しい情報または特定の情報を探すことができます。</p>
+
+   <p>CVS のステップごとの指示を参照したい場合は、Karl Fogel 氏のオンラインバージョン <b><i>Open Source Development with CVS</i></b> から抜粋した「<a href="http://cvsbook.red-bean.com/cvsbook.html#A_Day_With_CVS">A Day with CVS</a>」を参照してください。 このサイトにある CVS のヘルプ情報は、ほとんどこの信頼できるソースから抽出したものです。
+
+   <h3><a id="commitaccess" name="commitaccess">オープンソースプロジェクトにおける CVS コミットアクセス権の取得</a></h3>
+
+   <p>オープン・ソース・プロジェクトに参加する意思があるが、プロジェクトのオーナやほかのメンバーと面識がないとします。 まず、プロジェクトへの参加を申し込みますが、プロジェクトに寄稿できるメンバーとして自分自身を紹介する基本的なステップが必要です。自分を認めてもらえれば、プロジェクトへの参加が認められる可能性が高くなります。</p>
+
+   <ol>
+    <li>興味のある特定の開発分野で現在何が行われているかを知るために、関連するメーリング・リストを<b>購読し、定期的にメッセージに目を通す</b>ようにしてください。 </li>
+
+    <li>ディスカッション・メーリング・リストに、初めてメッセージを投稿するときには、次の情報を含めた自己紹介を行ってください: </li>
+
+    <li>
+     <ul>
+      <li>名前</li>
+
+      <li>これまでの経験などの簡単な説明</li>
+
+      <li>興味のあるプロジェクト</li>
+
+      <li>プロジェクトにて期待すること</li>
+     </ul>
+    </li>
+
+    <li>既存のソース・コードを閲覧し、何がどのように実行されているかを理解できるようにしておきます。文書化がうまく行われていない、混乱している、何が起こっているのか理解できない場合は、関連のメーリング・リストに要約を送ってもらいます。</li>
+
+    <li>作業するコードがライセンス契約によって規制されていることを理解していること、および寄稿したコード変更は自分のものでライセンス下で統合されることを文書で表明します。</li>
+
+    <li>プロジェクトのメンバーシップをリクエストして、コードベースのエリアにアクセスできる CVS のチェックイン権限を取得し、自分が実現したい内容を説明します。そのコード・エリアをすでに管理しているメンバーと頻繁に連絡を取り合うことが必要となります。これで、メンバーが作業内容に対して同意していることを確認します。</li>
+
+    <li>プロジェクトのオーナによってプロジェクトのメンバーシップが認められたら、CVS のチェックイン・アカウントを取得できます。アカウントは、おそらく一定のエリアにのみアクセスできる権限となっています。どの CVS ブランチで作業を行うべきであるかを理解しておいてください。</li>
+
+    <li>パッチをいくつかサブミットして、、自分の力量を表明します。</li>
+
+    <li>変更や拡張を行った場合は、メーリング・リストにて関連するフィードバックやディスカッションを参照します。</li>
+   </ol>
+
+   <h3><a id="morecvsdoc" name="morecvsdoc">詳細な CVS ドキュメント</a></h3>
+
+   <ul>
+    <li><a href="http://www.gnu.org/manual/cvs/index.html">CVS マニュアル</a></li>
+
+    <li><a href="http://www.cyclic.com/">Cyclic の CVS ホームページ</a></li>
+
+    <li><a href="http://www.loria.fr/~molli/cvs-index.html">Pascal Molli　の CVS ページ</a></li>
+
+    <li><a href="http://dmoz.org/Computers/Software/Configuration_Management/Tools/CVS/">Dmoz の CVS ページ</a></li>
+   </ul>
+
+   <h3>CVS 関連書籍</h3>
+
+   <ul>
+    <li><a href="http://www.amazon.com/exec/obidos/ISBN%3D0132408546/cyclicsoftwareA/">Practical Software Configuration Management</a>（ 日本語訳:実用的なソフトウェアコンフィグレーションのマネジメント）</li>
+
+    <li><a href="http://cvsbook.red-bean.com/">Open Source Development with CVS</a>（日本語訳:CVS を使ったオープンソース開発）（オンライン・バージョン）</li>
+   </ul>
+
+   <h3><a id="cvsclients" name="cvsclients">CVS クライアント</a></h3>
+
+   <ul>
+    <li><a href="http://www.cvshome.org/downloads.html">各種システム対応コマンドラインクライアント</a></li>
+
+    <li><a href="http://www.wincvs.org/download.html">WinCVS: Windows CVS のクライアント</a></li>
+
+    <li><a href="http://www.jcvs.org/">jCVS: Java CVS クライアント</a></li>
+
+    <li><a href="http://cervisia.sourceforge.net">Cervisia: KDE CVS クライアント</a></li>
+   </ul>
+
+   <div class="courtesylinks">
+    <p><a href="#toc">トップ</a> | <a href="/nonav/servlets/HelpTOC">ヘルプ索引</a></p>
+   </div>
+  </div>
+ </body>
+</html>
+
+

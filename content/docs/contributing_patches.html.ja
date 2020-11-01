@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+<style type="text/css">
+/* <![CDATA[ */ @import "/branding/css/tigris.css"; /* ]]> */
+</style>
+  <script src="/branding/scripts/sc.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="/branding/css/print.css" media="print" />
+
+  <title>パッチの寄稿</title>
+ </head>
+
+ <body class="docs" onload="self.focus()">
+  <div class="docs" id="contributingpatches">
+   <h2>パッチの寄稿</h2>
+
+   <div id="toc">
+    <ul>
+     <li><strong><a href="/nonav/servlets/HelpTOC">ヘルプ索引</a></strong></li>
+    </ul>
+
+    <ul>
+     <li>
+      <a href="/nonav/docs/ProjectIssues.html">プロジェクト課題のヘルプ</a> 
+
+      <ul>
+       <li><a href="/nonav/docs/issue_lifecycle.html">課題のライフサイクル</a></li>
+
+       <li><a href="/nonav/docs/issuewritinghelp.html">課題の記入ガイドライン</a></li>
+
+       <li><a href="/nonav/docs/issuezilla_tipsandtricks.html">IssueZillaのヒントとコツ</a></li>
+
+       <li>パッチの寄稿</li>
+      </ul>
+     </li>
+    </ul>
+   </div>
+
+   <p>詳細な解説と簡単に適用できるパッチは、ほかの開発者の作業を著しく向上させ、モジュールやコンポーネントをより安定した強力なものにすることができます。</p>
+
+   <p>このサイトの<strong>オープン・ソース・プロジェクトのメンバーではない</strong>が、メーリング・リストのアクセスを持っている場合は、プロジェクト開発者のメーリング・リストに自分の提案パッチに関するメッセージを掲示することができます。 
+（詳細は、 <a href="/nonav/docs/ProjectMail.html#mailsubscribe">プロジェクトメーリングリストの購読</a>を参照してください。）</p>
+
+   <p><strong>プロジェクトのメンバーである場合</strong>は、寄稿するパッチが報告されているバグにすでに関連付けられているかどうかを判断するために、まずプロジェクトの課題データベースのクエリーを実行します。</p>
+
+   <p>既存の課題に自分のパッチが関連している場合は、課題の編集画面にある [<strong>ファイルを添付</strong>] 
+フィールドを使ってパッチをサブミットし、[<strong>追加コメント</strong>] セクションにパッチに関する説明を掲示します。 （課題に変更を加えると、課題のオーナと CC リストにあるアドレスを持つユーザに E-Mail・メッセージが自動的に送信されることに注意してください。これらのユーザは、掲示したメッセージとパッチへのリンクを受信します。）</p>
+
+   <p>課題が<i>存在しない</i>場合は、パッチを新しい課題としてサブミットします。これには、<b>課題追跡</b>ページにある [課題の入力] にある [<i>パッチ</i>] リンクを使用します。 パッチファイルを新しい課題に添付します。 添付するステップは次のとおりです。</p>
+
+   <ol>
+    <li>
+     <p>まず、最新バージョンのソースファイルに変更を加えているかどうかを確認します。これには、CVS を使って次のコマンドを実行します。</p>
+
+     <p><code>cvs diff -c &gt; mypatch</code></p>
+
+     <p>これは、ソースのコンテキスト形式のパッチを取得します。これにより、パッチを適用しようとしているバージョン、ファイル名、変更の内容についての情報を含めるパッチ・ファイルが作成されます。パッチをこの方法で追跡すると、ほかのメンバーが簡単にパッチを探してテストすることができるようになります。</p>
+    </li>
+
+    <li>
+     <p>パッチを適用するには、適切なディレクトリに移動して次のコマンドを実行します。</p>
+
+     <p><code>patch &lt; issuepatch.diff</code></p>
+    </li>
+
+    <li>
+     <p>パッチには、つねに次の情報を含めるようにしてください。</p>
+
+     <ul>
+      <li>修正しようとしている問題またはバグの説明、可能な場合は再現方法</li>
+
+      <li>パッチを適用した場合の正しい動作に関する説明</li>
+
+      <li>該当する場合は、パッチの動作に関する説明。多量のコードが含まれる場合は、IDE コードの一部として適用されるプロジェクトのライセンスに従ってパッチの使用を許可するメッセージを含めます。 </li>
+     </ul>
+    </li>
+   </ol>
+
+   <p>影響を受けるコードのセクションに責任を持つ開発者は、パッチを適用してバグを修正済みとしてマークするか (バグが登録されている場合）、パッチが安全ではない、問題を解決しない、初めから問題はない場合には、異議を返信します。 CVS 
+のチェックインと同様に、課題データベースへのすべての変更通知は、自動的に正しい課題の担当者と CC リストにあるユーザおよび CVS のメーリング・リストに送信されます。これで、パッチが適用されたかどうかを監視することができます。 少くとも作業しているモジュールの CVS とメーリング・リストは、購読するようにしてください。</p>
+
+   <p>問題を解決する方法がはっきりしないが、問題の原因に思い当たることがある場合は、その考えを開発者のディスカッション・リストに掲示してほかのプロジェクト・メンバーの意見を募集したり、修正方法を知っているユーザを探すことができます。</p>
+
+   <div class="courtesylinks">
+    <p><a href="#toc">トップ</a> | <a href="/nonav/servlets/HelpTOC">ヘルプ索引</a></p>
+   </div>
+  </div>
+ </body>
+</html>
+
+

@@ -1,0 +1,84 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/docs/">docs</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+
+#set( $myRoles = $loginUser.getRolesInProject($currentProject) )
+#set( $myRequestedRoles = $loginUser.getRequestedRolesInProject($currentProject) )
+         
+#if( $currentProject.isCategory() )
+  #set( $projectType = "Category" )
+#elseif( $currentProject.isGroup() )
+  #set( $projectType = "Group" )
+#else
+  #set( $projectType = "Project" )
+#end
+
+Tasks :&nbsp;&nbsp;
+<div class="pipelinks">
+
+#if($acl.hasPermission("Project - Edit", $currentProject))  
+ #if($currentProject.isGroup())
+  #set($editURL="/servlets/ProjectGroupEdit?projectGroupID=$currentProject.getID()")
+ #elseif($currentProject.isCategory())
+  #set($editURL="/servlets/CategoryEdit?projectGroupId=$currentProject.getID()")
+ #else  
+  #set($editURL=$currentProject.getProjectPageURL("ProjectEdit"))
+ #end
+ <a href="$editURL">Edit this $projectType</a>
+#end
+
+#if($currentProject.isCategory() || $currentProject.isGroup())
+ #if($acl.hasPermission("Project - Associate Project", $currentProject))
+  #if($currentProject.isGroup())
+   | <a href="/servlets/ProjectGroupElementAdd?projectGroupID=$currentProject.getID()">Add Projects to Group</a> |
+  #elseif($currentProject.isCategory())
+   | <a href="/servlets/CategoryElementAdd?projectGroupID=$currentProject.getID()">Add Projects to Category</a>
+  #end
+ #end
+#end
+
+#if(!$currentProject.isCategory())
+ #if($loginUser && !$loginUser.isAnonymous())
+  #if($acl.hasPermission("Role - Request", $currentProject))
+   #if($myRoles.isEmpty() && $myRequestedRoles.isEmpty())
+    #set($requestText="Join This $projectType")
+   #else
+    #set($requestText="Request New Project Role")
+   #end
+   <a href="$currentProject.getProjectPageURL("ProjectMembershipRequest")">$requestText</a>
+  #end 
+ #else
+  If you were <a href="$currentDomain.getDomainHomeServletURL("Join")">registered</a> 
+  and <a href="$currentDomain.getDomainHomeServletURL("TLogin")">logged in</a>,
+  you could join this project.
+ #end
+#end 
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
