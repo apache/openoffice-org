@@ -1,0 +1,1535 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.0.1  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Sophie Gautier">
+	<META NAME="CREATED" CONTENT="20021215;18020324">
+	<META NAME="CHANGEDBY" CONTENT="Sophie Gautier">
+	<META NAME="CHANGED" CONTENT="20021215;18144107">
+</head>
+<body LANG="fr-FR">
+<H1>How to Link Tables Using SQL Parameters</H1>
+<H3>Table of Contents</H3>
+<P><A HREF="#2.Introduction|outline">Introduction</A></P>
+<P><A HREF="#3.Creating the Database, Tables, and Data Source|outline">Creating
+the Database, Tables, and Data Source</A></P>
+<P><A HREF="#5.Adding Data to Tables |outline">Adding Data to Tables </A>
+</P>
+<P><A HREF="#6.Enabling Use of Named Parameters for the Data Source|outline">Enabling
+Use of Named Parameters for the Data Source</A></P>
+<P><A HREF="#7.The Macro|outline">The Macro</A></P>
+<P><A HREF="#9.Creating a Form for the Data Source|outline">Creating
+a Form for the Data Source</A></P>
+<P><A HREF="#10.Adding a Subform|outline">Adding a Subform</A></P>
+<P><A HREF="#11.Linking the Subform to the Main Form|outline">Linking
+the Subform to the Main Form</A></P>
+<P><A HREF="#12.Formatting Data Fields|outline">Formatting Data
+Fields</A></P>
+<P><A HREF="#14.More Examples|outline">More Examples</A></P>
+<P><A HREF="#15.Summary|outline">Summary</A></P>
+<P><A HREF="#17.Credits|outline">Credits</A></P>
+<P><A HREF="#21.License|outline">License</A></P>
+<P><BR><BR>
+</P>
+<H1><A NAME="2.Introduction|outline"></A>Introduction</H1>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>This document attempts to
+show how to set up a master form and linked detail form for a MySQL
+database, via ODBC.  You might want to display an author and all the
+books written by that author, or an actor and all the films that
+actor has appeared in, or a customer and all the orders placed by
+that customer.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Two database tables are
+linked together by means of an SQL query containing a named parameter
+(more later).  The example you will construct uses customers in a
+customers table and orders for those customers in an orders table. 
+Each order is linked to the customer who placed it by means of a
+cust_id value in the orders table that matches a customer_id value in
+the customers table.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>It is useful to keep in
+mind the distinction between the underlying MySQL database tables,
+which contain the actual data and which are managed by the MySQL
+server, and the OOo graphical widgets that display the data from the
+tables.  You will be using these widgets, such as Fields and Table
+Grids, to create a linked set of forms.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The goal will be to create
+a form with labeled fields to display the data for a single customer,
+and a subform containing a table grid that will show all the orders
+for that customer.  When the two forms are linked together properly,
+you will be able to browse through the list of customers, one at a
+time, and have the table grid change each time to show orders for the
+current customer.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; page-break-before: always"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>This example was
+constructed using a standalone, single-user installation of OOo 1.0.1
+on Windows98.  The process may generalize to multiuser installations
+and to other OSs, but it has not been tested.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>MySQL is available from 
+<A HREF="http://www.mysql.com/">http://www.mysql.com/</A>.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>We will assume that you
+have installed <SPAN LANG="en-US">MySQL</SPAN>, that you can create
+and populate MySQL databases, that you can set up an ODBC data source
+in <SPAN LANG="en-US">OOo</SPAN> and make the data tables appear in
+OOo, and that you are able to add, delete, and modify records. 
+Remember that OOo can only edit database tables that have a primary
+key or unique indexed column.  Other tables are read-only.  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>If you need help creating
+a data source for this example, see </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>'How to Create a Data
+Source from Scratch'  on the Users How-to page at</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4><A HREF="http://documentation.openoffice.org/HOW_TO/index.html">http://documentation.openoffice.org/HOW_TO/index.html</A></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>For help with ODBC, see
+'<SPAN LANG="en-US">OpenOffice.org</SPAN> 1.0, unixODBC, and <SPAN LANG="en-US">mySQL</SPAN>'
+ at  <A HREF="http://openoffice.homelinux.org/index.php?s=38">http://openoffice.homelinux.org/index.php?s=38</A>
+ </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>There is a lot of
+information in that document; you may want to read it first.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The process should be
+similar for <SPAN LANG="en-US">PostgreSQL</SPAN>, Oracle, Firebird
+(Interbase), MS SQL Server, and other RDBMS's that can use ODBC. 
+Note that <SPAN LANG="en-US">dBase</SPAN> tables can be linked
+together, but results have been uneven.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The process should also
+work if the connection is via JDBC.  See <A HREF="http://dba.openoffice.org/FAQ/specific.html#connectmysql">How Can I connect to MySQL?</A></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H1><A NAME="3.Creating the Database, Tables, and Data Source|outline"></A>
+Creating the Database, Tables, and Data Source</H1>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Create the database.  Here
+we are using MySQL v3.23.49 and myodbc v2.50.37.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>	create
+database customer_orders;</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>	create
+table customers (</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+   		customer_id int unsigned not null primary key,    </FONT></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+   		customer_name char(50) );</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>	create
+table orders (</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+   		order_id int unsigned not null primary key, </FONT></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+   		cust_id int unsigned references customers.customer_id,</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+   		order_item char(50) );</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Create an ODBC datasource.
+ </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>See  'How to Create a Data
+Source from Scratch'  mentioned above.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>In this example, the
+datasource is called  'form_exper_mysql'.  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>(The following several
+pages are an exercise in creating and modifying table structures in
+OOo.  If your tables are already the way you want them, you can skip
+ahead to</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4><A HREF="#Adding_data_to_tables">Adding
+Data to Tables</A> .)</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Or, once you have created
+an ODBC data source, you can create the tables directly in the OOo 
+<FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Data
+Source Explorer</SPAN></FONT></FONT></FONT>,  the left-hand panel in
+the figure  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>(F4 or <FONT COLOR="#800080"><FONT FACE="Arial Black, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">View
+&gt; Data Sources</SPAN></FONT></FONT></FONT>).  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>To the right is the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Beamer</SPAN></FONT></FONT></FONT>
+or data source viewer.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m75b241a7.jpg" NAME="Graphic21" ALIGN=LEFT WIDTH=776 HEIGHT=346 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>You can read more about
+the Data Source Explorer and the Beamer in the OOo Help files</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4><FONT COLOR="#800080"><FONT FACE="Arial Black, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Help
+&gt; Contents &gt; Index tab</SPAN></FONT></FONT></FONT>  and type in
+the search words  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">data
+sources.</SPAN></FONT></FONT></FONT>  Look at the article  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">data
+source; overview</SPAN></FONT></FONT></FONT>  (or <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">data
+sources explorer; overview </SPAN></FONT></FONT></FONT>).</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>To create a new table,
+click on the word  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Tables</SPAN></FONT></FONT></FONT>
+ under your data source in the Data Source Explorer, right-click, and
+choose  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">New
+Table Design</SPAN></FONT></FONT></FONT>.  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Or to modify the structure
+of an existing table, select the table name, right-click, and choose 
+<FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Edit
+Table</SPAN></FONT></FONT></FONT>.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>You can read more about
+creating database tables in the OOo Help files</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4><FONT COLOR="#800080"><FONT FACE="Arial Black, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Help
+&gt; Contents &gt; Index tab</SPAN></FONT></FONT></FONT>  and type in
+the search word  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">table.</SPAN></FONT></FONT></FONT>
+ Look at the article  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">table
+designs; data sources</SPAN></FONT></FONT></FONT>   </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>And see the How-to 
+<FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">'<SPAN LANG="en-US">OpenOffice.org</SPAN>
+1.0, unixODBC, and <SPAN LANG="en-US">mySQL</SPAN>'</SPAN></FONT></FONT></FONT>
+ mentioned above.</FONT></P>
+<P STYLE="margin-bottom: 0cm; page-break-before: always"><FONT SIZE=4>The
+OOo Table Design window seems to allow only certain kinds of changes
+to be made to the structure of a database table once it has been
+created.  For example, you can add and delete fields (columns).  In
+the figure, we have added two new fields (<FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">rating</SPAN></FONT></FONT></FONT>
+and <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">genre</SPAN></FONT></FONT></FONT>)
+to an unrelated database table called films.  (The films table is not
+part of our overall example.  It is used here to avoid excessive
+changes to the customers and orders tables.)</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_357a2461.jpg" NAME="Graphic29" ALIGN=LEFT WIDTH=394 HEIGHT=248 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>But you would not be able
+to use the Table Design window to modify the size of an existing
+column.  The settings for existing columns appear to be grayed-out. 
+This seems to be a missing feature in the ODBC driver and may be
+added in future releases.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>You could accomplish a
+change in column size by going outside OOo and working directly in
+MySQL.  However, there is a way to issue SQL commands directly from
+OOo.  Open the Data Source Administration window by choosing  <FONT COLOR="#800080"><FONT FACE="Arial Black, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Tools
+&gt; Data Sources ...</SPAN></FONT></FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Select your data source,
+select the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Queries</SPAN></FONT></FONT></FONT>
+tab, and click on the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">New
+SQL Command</SPAN></FONT></FONT></FONT> button.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_2a9cea0e.jpg" NAME="Graphic28" ALIGN=LEFT WIDTH=534 HEIGHT=323 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>You will get a Query
+window (next figure) in which you can type an SQL command.  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Let's experiment on the
+films table.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>In the figure we have
+entered a command to change the size of the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">genre</SPAN></FONT></FONT></FONT>
+column in the films table from  char(16) to char(22).  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>	alter
+table films modify column genre char(22);</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Press the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Run
+SQL Command Directly</SPAN></FONT></FONT></FONT>  button (fourth
+button from left) and then press the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Run</SPAN></FONT></FONT></FONT>
+button (the leftmost button) to run the SQL command.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m6fe2b0d5.jpg" NAME="Graphic31" ALIGN=LEFT WIDTH=425 HEIGHT=209 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; page-break-before: always"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>When done, type in another
+command  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>	describe
+films; </FONT></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>and again press the Run
+button.  You should now see a listing of the fields of the films
+table with the genre field having the new column size.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m203f951c.jpg" NAME="Graphic30" ALIGN=LEFT WIDTH=691 HEIGHT=368 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>You can read more about
+direct SQL commands in the OOo Help files</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4><FONT COLOR="#800080"><FONT FACE="Arial Black, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Help
+&gt; Contents &gt; Index tab</SPAN></FONT></FONT></FONT>  and type in
+the search word <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">SQL.</SPAN></FONT></FONT></FONT>
+ Look at the articles <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">SQL:
+executing directly</SPAN></FONT></FONT></FONT>  and  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">SQL
+statements; executing</SPAN></FONT></FONT></FONT>.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H1><A NAME="Adding_data_to_tables"></A><A NAME="5.Adding Data to Tables |outline"></A>
+Adding Data to Tables 
+</H1>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Now back to our <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">customers</SPAN></FONT></FONT></FONT>
+and <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">orders</SPAN></FONT></FONT></FONT>
+tables.  If everything worked, you should be able to see the two
+table names in the Datasource Explorer and two empty grids with<SPAN LANG="en-US">
+labeled </SPAN>columns in the Beamer.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Enter some data in the two
+tables:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>customers table:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m62c958ed.jpg" NAME="Graphic1" ALIGN=LEFT WIDTH=459 HEIGHT=206 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>orders table:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; page-break-before: always"><IMG SRC="link_html_50a31711.jpg" NAME="Graphic2" ALIGN=LEFT WIDTH=485 HEIGHT=308 BORDER=0><BR CLEAR=LEFT><FONT SIZE=4>MySQL
+does not yet enforce referential integrity of foreign keys, so be
+sure that the cust_id values in the orders table match a customer_id
+value in the customers table.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m64f15a92.jpg" NAME="Graphic22" ALIGN=LEFT WIDTH=486 HEIGHT=224 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Just for illustration, we
+have added an order with <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">order_id
+ 3013</SPAN></FONT></FONT></FONT>  for a non-existent customer
+(<FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">cust_id
+= 3</SPAN></FONT></FONT></FONT>),.  If referential integrity
+constraints were being enforced, insertion of this record would have
+been prohibited.  The order is an orphan and would never show up in
+the linked detail table we are going to build, since it is not linked
+to any customer.  Delete the extra order record.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Referential integrity
+constraints, which should be added in a future version of MySQL,
+would also prevent us from deleting a customer record from the
+customers table as long as the orders table contains at least one
+order for that customer.  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>And if we changed the
+value of a customer's customer_id in the customers table, referential
+integrity could also change the corresponding cust_id values in the
+orders table to match the new value.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Many other Relational
+Database Management Systems (RDBMSs) do support and enforce
+referential integrity constraints.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H1 STYLE="page-break-before: always"><A NAME="6.Enabling Use of Named Parameters for the Data Source|outline"></A>
+Enabling Use of Named Parameters for the Data Source</H1>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>In order to display one
+customer and all of that customer's orders, OpenOffice.org uses named
+parameters to link together two database tables:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+  select * from orders where cust_id = :current_customer_id</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>As of OOo 1.0.1, there is
+no user interface (dialog box) for turning on the recognition of
+named parameters.  Until a user interface becomes available, you will
+have to use a <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">macro</SPAN></FONT></FONT></FONT>
+to turn on recognition of named parameters for each datasource that
+needs to use them.  However, this problem is being addressed; so the
+macro may not be needed in the future.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The macro is part of the
+FAQ for the Database Access Project at <A HREF="http://dba.openoffice.org/FAQ/">http://dba.openoffice.org/FAQ/</A>
+  (see question 3 in the FAQ).</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The macro and an
+explanation can be found at</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4><A HREF="http://dba.openoffice.org/howto/param_subst.html">http://dba.openoffice.org/howto/param_subst.html</A>
+ It is included below, with permission.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The macro has three parts:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>	Sub Main,</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>	Sub
+EnableParameterNameSubstitution   and</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>	Function AddInfo</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>From the OOo main menu,
+choose  <FONT COLOR="#800080"><FONT FACE="Arial Black, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Tools
+&gt; Macro</SPAN></FONT></FONT></FONT>.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>In the center panel of the
+Macro dialog box,</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>under <FONT COLOR="#800080"><FONT FACE="Arial Black, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">soffice
+&gt; Standard</SPAN></FONT></FONT></FONT>,   select Module1 and click
+ Edit.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>This will open the BASIC
+IDE, where you can type in macro code.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Copy all three parts of
+the macro code from the yellow section below and paste them into the
+IDE window.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>In the Main subroutine,
+change the name in quotes from &ldquo;Bibliography&rdquo; to the name
+of your datasource.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+  Sub Main</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+      EnableParameterNameSubstitution( &quot;form_exper_mysql&quot; )
+ </FONT></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+  End Sub</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>This is the only editing
+you need to do to the macro, at least for this datasource.</FONT></P>
+<H1 STYLE="page-break-before: always"><A NAME="7.The Macro|outline"></A>
+The Macro</H1>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<DIV ID="Macro_Section" STYLE="background: #ffffcc">
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>REM
+	 *****  BASIC  *****</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>Option
+	Explicit</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>'
+	Enter the name of the data source here:</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>Sub
+	Main</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   EnableParameterNameSubstitution( &quot;Bibliography&quot; )</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>End
+	Sub</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>Sub
+	EnableParameterNameSubstitution( sDataSourceName as String )</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   ' the data source context (ehm - the service name is historical
+	:)</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   Dim aContext as Object</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   aContext = createUnoService( &quot;com.sun.star.sdb.DatabaseContext&quot;
+	)</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   ' the data source</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   Dim aDataSource as Object</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   aDataSource = aContext.getByName( sDataSourceName )</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   ' append the new ParameterNameSubstitution flag</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   Dim bFlag as Boolean</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   bFlag = TRUE</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   Dim aInfo as Variant</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   aInfo = aDataSource.Info</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   aInfo = AddInfo( aInfo, &quot;ParameterNameSubstitution&quot;,
+	bFlag )</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   ' and write back</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   aDataSource.Info = aInfo</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   ' flush (not really necessary, but to be on the safe side :)</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   aDataSource.flush</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>End
+	Sub</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>'
+	more below</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm; page-break-before: always"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>Function
+	AddInfo( aOldInfo() as new com.sun.star.beans.PropertyValue, </FONT></FONT></FONT>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	 sSettingsName as String, aSettingsValue as Variant ) as Variant</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   Dim nLower as Integer</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   Dim nUpper as Integer</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   nLower = LBound( aOldInfo() )</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   nUpper = UBound( aOldInfo )</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   ' look if the setting is already present</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   Dim bNeedAdd as Boolean</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   bNeedAdd = TRUE</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   Dim i As Integer</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   For i = nLower To nUpper</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	       If ( aOldInfo( i ).Name = sSettingsName ) Then</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	           aOldInfo( i ).Value = aSettingsValue</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	           bNeedAdd = FALSE</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	       End If</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   Next i</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   ' allocate the new array</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   Dim nNewSize as Integer</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   nNewSize = ( nUpper - nLower + 1 )</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   If bNeedAdd Then nNewSize = nNewSize + 1</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   Dim aNewInfo( nNewSize ) as new com.sun.star.beans.PropertyValue</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   ' copy the elements (a simply copy does not work in Basic)</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   For i = nLower To nUpper</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	       aNewInfo( i ) = aOldInfo( i )</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   Next i</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   ' append the new setting, if necessary</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   if ( bNeedAdd ) Then</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	       aNewInfo( nUpper + 1 ).Name = sSettingsName</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	       aNewInfo( nUpper + 1 ).Value = aSettingsValue</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   End If</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>
+	   AddInfo = aNewInfo()</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>End
+	Function</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>'
+	 end of macro</FONT></FONT></FONT></P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+	<P STYLE="margin-bottom: 0cm"><BR>
+	</P>
+</DIV>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; page-break-before: always"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Click on the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Run</SPAN></FONT></FONT></FONT>
+icon to run the macro.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m76302253.jpg" NAME="Graphic14" ALIGN=LEFT WIDTH=621 HEIGHT=176 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Close the BASIC IDE.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>To repeat, the need for
+this macro is expected to disappear in the near future.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H1><A NAME="9.Creating a Form for the Data Source|outline"></A>Creating
+a Form for the Data Source</H1>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>In the OOo menu, choose 
+<FONT COLOR="#800080"><FONT FACE="Arial Black, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">File
+&gt; AutoPilot &gt; Form</SPAN></FONT></FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>In the first dialog box,
+select your Data Source and then select the table for the main form
+(here it is the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">customers</SPAN></FONT></FONT></FONT>
+table).</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Click the  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">=&gt;&gt;</SPAN></FONT></FONT></FONT>
+ button to include all the fields (columns) in the form.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m7f84dfa8.jpg" NAME="Graphic3" ALIGN=LEFT WIDTH=700 HEIGHT=524 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Click the  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Next
+&gt;&gt;</SPAN></FONT></FONT></FONT>  button.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>In the second dialog box,
+click one of the five 'Arrangement of DB fields' buttons.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Select a page background
+style from the list at right.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m1e978c0f.jpg" NAME="Graphic4" ALIGN=LEFT WIDTH=700 HEIGHT=524 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Click the  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Create</SPAN></FONT></FONT></FONT>
+ button.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Select an appropriate
+directory for the form; accept the suggested name or make up a
+different name.  Save the form.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>You now have the first
+half of the form done.  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Click on the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Form
+Navigator button</SPAN></FONT></FONT></FONT> (fifth from the left in
+the toolbar above the form).</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The Form Navigator window
+shows that you have one form, called Standard, containing two Labels
+and two TextFields.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The area in the figure
+with green handles is the Standard form.  The rest of the page is
+just a writer text document (.sxw).</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m3c86f3da.jpg" NAME="Graphic5" ALIGN=LEFT WIDTH=441 HEIGHT=413 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H1><A NAME="10.Adding a Subform|outline"></A>Adding a Subform</H1>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>In the Form Navigator,
+select the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Standard</SPAN></FONT></FONT></FONT>
+form, then right-click, and from the context menu choose  <FONT COLOR="#800080"><FONT FACE="Arial Black, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">New
+&gt; Form</SPAN></FONT></FONT></FONT>  as shown:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_mbda46b5.jpg" NAME="Graphic6" ALIGN=LEFT WIDTH=403 HEIGHT=346 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>You now have a main or
+master form and a subform.  We will link the subform to the main form
+in a few minutes, by means of an SQL query with a named parameter.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>You can read more about
+subforms in the OOo Help files</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4><FONT COLOR="#800080"><FONT FACE="Arial Black, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Help
+&gt; Contents &gt; Index tab</SPAN></FONT></FONT></FONT>  and type in
+the search word  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">subform.</SPAN></FONT></FONT></FONT>
+ Look at the articles  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">subforms;
+forms</SPAN></FONT></FONT></FONT>   and   <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">subform;
+creating one with Form Navigator</SPAN></FONT></FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; page-break-before: always"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Now you need to place a
+table grid control on the page to represent the subform.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Check to be sure that the 
+<FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Standard
+subform</SPAN></FONT></FONT></FONT>  is selected in the Form
+Navigator, so that the table grid will belong to the subform rather
+than to the main form.  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Click-and-hold
+(long-click) on the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Form</SPAN></FONT></FONT></FONT>
+ button in the toolbar at the left (a hand with a finger pointing).  
+</FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>(Incidentally,
+long-clicking on buttons with green triangles, such as New, Paste,
+Undo, Insert Fields, and Insert Objects, in the toolbars provides
+valuable extra functionality.)</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Click on the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Table
+Control</SPAN></FONT></FONT></FONT> button.  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m4a987b65.jpg" NAME="Graphic7" ALIGN=LEFT WIDTH=842 HEIGHT=206 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>In the form, drag out a
+rectangular outline for the orders table grid.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; page-break-before: always"><IMG SRC="link_html_m174d2971.jpg" NAME="Graphic17" ALIGN=LEFT WIDTH=436 HEIGHT=310 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>When you release the mouse
+button, a dialog box will appear.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>In this first dialog box,
+select your data source from the Data source list </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>and select <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">orders</SPAN></FONT></FONT></FONT>
+from the Table list.  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_c011c84.jpg" NAME="Graphic15" ALIGN=LEFT WIDTH=674 HEIGHT=515 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Click the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Next
+&gt;&gt;</SPAN></FONT></FONT></FONT>  button.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>In the second dialog box,
+click the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">=&gt;&gt;</SPAN></FONT></FONT></FONT>
+button to add all the fields of the orders table to the grid. 
+Normally you would not need to display the cust_id field in this
+grid, but it is included here for purposes of illustration.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_65a555a2.jpg" NAME="Graphic16" ALIGN=LEFT WIDTH=674 HEIGHT=515 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Click the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Create</SPAN></FONT></FONT></FONT>
+button.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>You can drag the right
+edge of the 'order_item' column header to make a wider column.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The resulting form and
+subform, still in edit mode:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m2b247948.jpg" NAME="Graphic8" ALIGN=LEFT WIDTH=793 HEIGHT=583 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>'Edit mode' might better
+be called 'form-design mode', to distinguish it from 'form alive' or
+'form running' mode, where you can edit the data in the underlying
+tables.  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>In 'form-design mode', no
+data are visible, but you can work on the structure and properties of
+the form.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; page-break-before: always"><BR>
+</P>
+<H1><A NAME="11.Linking the Subform to the Main Form|outline"></A>Linking
+the Subform to the Main Form</H1>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>In the Form Navigator,
+select the main form (the upper Standard).  Right-click and choose
+Properties.  The form's Data tab properties should resemble the
+figure:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m4ef6f859.jpg" NAME="Graphic9" ALIGN=LEFT WIDTH=381 HEIGHT=530 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Close the Form Properties
+dialog.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>In the Form Navigator,
+select the subform (the lower Standard).  Right-click and choose
+Properties.  Set the form's Data tab properties as in the figure and
+in the following description:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_3015394e.jpg" NAME="Graphic10" ALIGN=LEFT WIDTH=379 HEIGHT=538 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Make sure the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Data
+Source</SPAN></FONT></FONT></FONT> is set to the name of your Data
+Source.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Set <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Content
+type</SPAN></FONT></FONT></FONT> to 'SQL command'.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Click the down-arrow of
+the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Content</SPAN></FONT></FONT></FONT>
+property and type in an SQL query with a named parameter:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>	select
+* from orders where cust_id = :cid</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The named parameter 'cid'
+can be any meaningful variable name,<SPAN LANG="en-US"> preceded </SPAN>by
+a ':' .  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Set <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: medium">Link
+master fields</SPAN></SPAN></FONT></FONT></FONT> to the name of the
+primary key in the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">customers</SPAN></FONT></FONT></FONT>
+table:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>	customer_id</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The program will add the
+quotes.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Set the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Link
+slave fields</SPAN></FONT></FONT></FONT> to the name of the variable
+used in the SQL query, minus the colon ( : ):	</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>	cid</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The program will add the
+quotes.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Close the Form Properties
+dialog.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The variable cid will now
+stand for the value of the primary key in the current record of the
+customers table.  The SQL query will return those records from the
+orders table whose cust_id field matches the current value of cid. 
+When you move to the next customer record, cid will take on a new
+value.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Set any other properties
+for the various Labels, TextFields, and Grid, such as font size,
+color, background color, etc.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>When done, exit Edit mode
+by clicking the Form Button  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_68f02b38.jpg" NAME="Graphic12" ALIGN=LEFT WIDTH=33 HEIGHT=35 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Your form should now show
+the first customer and all of that customer's orders.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m16ecf31b.jpg" NAME="Graphic11" ALIGN=LEFT WIDTH=640 HEIGHT=344 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>To move through the other
+customers in the database, click the navigator buttons at the bottom
+of the form:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m4e6f197a.jpg" NAME="Graphic13" ALIGN=LEFT WIDTH=348 HEIGHT=54 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; page-break-before: always"><FONT SIZE=4>If,
+instead of the expected result, you get a cryptic error message like
+the following, it may be that recognition of named parameters was not
+done correctly.  Go back and try running the macro again.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m58520bf3.jpg" NAME="Graphic20" ALIGN=LEFT WIDTH=571 HEIGHT=183 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>You should be able to add
+new order records for the current customer, modify an existing order,
+or delete an order.  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_2824ce5f.jpg" NAME="Graphic27" ALIGN=LEFT WIDTH=549 HEIGHT=331 BORDER=0><BR CLEAR=LEFT><FONT SIZE=4>Here
+we have added two additional orders for customer 20511 by just typing
+them in.  In fact, since we are looking at only this customer at the
+moment, the cust_id value of 20511 is filled in automatically when we
+click in the Insert New Record row, marked by an '*'.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H1 STYLE="page-break-before: always"><A NAME="12.Formatting Data Fields|outline"></A>
+Formatting Data Fields</H1>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>If your integer fields do
+not appear as integers, for example if they display as 3001.00,</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>it may be because OOo
+creates Text Box Fields when it should create Numeric Fields for
+integers.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Click on the Form button
+to put the form into edit mode.  Click on the column-header for the
+order_id field.  Then right-click and choose  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Column...</SPAN></FONT></FONT></FONT>
+ </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>You should see a column
+properties dialog box like this:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_2b29c2fd.jpg" NAME="Graphic23" ALIGN=LEFT WIDTH=501 HEIGHT=488 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Note that there is no
+property for the number of decimal places.  We really should have a
+different kind of field here.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>(Parenthetically, also
+note the Max. text length property.  When it is set to 0, max text
+length, the maximum number of characters that will be displayed, is
+taken from the size of the underlying database field, as is
+desirable.)</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>If you right-click again
+on the order_id column header, you will see that you can insert
+additional columns next to the order_id column, or you can replace
+the Text Box Field with a different kind of field.  Either a <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Numeric
+Field</SPAN></FONT></FONT></FONT> or a <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Formatted
+Field</SPAN></FONT></FONT></FONT> would be a better choice for
+displaying integer data.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_391464ba.jpg" NAME="Graphic26" ALIGN=LEFT WIDTH=498 HEIGHT=335 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>You can also move a column
+to a new location by using Alt-drag.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Just as an experiment, try
+inserting two extra columns.  As in the following two figures, we
+will insert a Numeric Field and a Formatted Field.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; page-break-before: always"><FONT SIZE=4>Click
+on the order_id column header, right-click, and choose <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Insert
+Column</SPAN></FONT></FONT></FONT>.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Insert a <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Numeric
+Field</SPAN></FONT></FONT></FONT>, which may be labeled &ldquo;Col1&rdquo;.
+ Click on it to select it, then right-click and choose  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Column...</SPAN></FONT></FONT></FONT>
+  On the Data tab of the Properties dialog, attach the field to the
+underlying order_id field of the orders table by typing in
+&ldquo;order_id&rdquo;.  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>On the General tab, set
+the Label property to &ldquo;order_id2&rdquo;.  Set the Decimal
+accuracy to 0 (no decimal places).  And since we are using unsigned
+integers, set Value min to 0 as well.  You could also set Alignment
+to &ldquo;Center&rdquo;.  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Close the dialog box.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; page-break-before: always"><IMG SRC="link_html_m110f41d9.jpg" NAME="Graphic24" ALIGN=LEFT WIDTH=511 HEIGHT=626 BORDER=0><BR CLEAR=LEFT><FONT SIZE=4>Insert
+a <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Formatted
+Field</SPAN></FONT></FONT></FONT>, click on it to select it,
+right-click and choose  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Column...</SPAN></FONT></FONT></FONT>
+ </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>On the Data tab of the
+Properties dialog box, attach the field to the order_id field by
+typing in &ldquo;order_id&rdquo;.  On the General tab, set the Label
+property to &ldquo;order_id3&rdquo;.  Click the Formatting button and
+choose the integer value from the list (no decimal places).  You
+could also set Alignment to &ldquo;Center&rdquo;.  Close the dialog
+box.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m46e3be84.jpg" NAME="Graphic25" ALIGN=LEFT WIDTH=486 HEIGHT=560 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Click the <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">Form</SPAN></FONT></FONT></FONT>
+button to exit Edit mode.  You should now see three different types
+of fields all displaying the same order_id data.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>When you have seen the
+results of the experiment, you can delete the two fields you just
+added.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>You might want to replace
+the Text Box Fields for the order_id and cust_id fields with Numeric
+Fields, if your integer values are not displaying correctly.</FONT></P>
+<H1 STYLE="page-break-before: always"><BR><BR>
+</H1>
+<H1><A NAME="14.More Examples|outline"></A>More Examples</H1>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The example also works if
+the keys are alphanumeric instead of integers:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_49272c52.jpg" NAME="Graphic19" ALIGN=LEFT WIDTH=761 HEIGHT=515 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Here are two dBase tables
+linked in the same way:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>	select
+* from car_color where c_car_id = :cid</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>and  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">:cid</SPAN></FONT></FONT></FONT>
+ refers to the primary key  <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">car_id</SPAN></FONT></FONT></FONT>
+ in a <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">cars</SPAN></FONT></FONT></FONT>
+table.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m3f4c4a37.jpg" NAME="Graphic33" ALIGN=LEFT WIDTH=720 HEIGHT=444 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Note that the Add New
+Record * is enabled; it is possible to edit the data in the subform. 
+The c010 record was added by typing it into the subform.  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>However, linking other
+dBase tables has been less successful.  dBase tables produced in OOo
+have not worked as well as tables created in another database program
+and then exported.  The main difference seems to be the ability to
+create a primary key.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4> </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; page-break-before: always"><FONT SIZE=4>Here
+is a slightly more complex example with MySQL tables.  We want to
+display the actors that appeared in a particular film.  We have three
+tables: <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">films</SPAN></FONT></FONT></FONT>,
+<FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">actors</SPAN></FONT></FONT></FONT>,
+and <FONT COLOR="#808000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">acted_in</SPAN></FONT></FONT></FONT>.
+ The acted_in table holds pairs of  film_id / actor_id values plus a
+sequence number called billing and a character name for each part in
+the film.  Most of the keys are alphanumeric.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>	create
+table films ( </FONT></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		film_id
+ char(12)  not null  primary key,</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		film_title
+ char(50),</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		rating
+ char(5),</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		genre
+ char(22) );</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>	create
+table actors (</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		actor_id
+ char(12)   not null  primary key ,</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		actor_first_name
+ char(16),</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		actor_last_name
+ char(20) );</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>	create
+table acted_in (</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		acted_in_id
+ int unsigned  not null primary key,</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		film_id
+  char(12) not null  references films.film_id,</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		actor_id
+ char(12) not null  references actors.actor_id,</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		billing
+ smallint unsigned,</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		character_name
+ char(60) );</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>In the subform, the SQL
+statement that links the tables together is:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>	select
+</FONT></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		acted_in.film_id,
+</FONT></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		acted_in.actor_id,
+</FONT></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		acted_in.billing,
+</FONT></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		actors.actor_first_name,</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		actors.actor_last_name,</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		acted_in.character_name
+</FONT></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>	from
+</FONT></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		acted_in,
+</FONT></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		actors</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>	where</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		acted_in.film_id
+  = :fid   and</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#008000"><FONT FACE="Courier New, monospace"><FONT SIZE=3>		acted_in.actor_id
+ = actors.actor_id;</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>And the named parameter 
+:fid  is linked to the current value of film_id in the films table.</FONT></P>
+<P STYLE="margin-bottom: 0cm; page-break-before: always"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>As these tables get
+larger, you would need to index certain columns to speed up queries.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>For simplicity, we have
+omitted a directors table, a screenwriters table, and perhaps a
+separate table to hold still photos and video clips.  And many
+actors.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The result of linking
+three tables is shown here:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m66704ed5.jpg" NAME="Graphic32" ALIGN=LEFT WIDTH=729 HEIGHT=323 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>These examples were built
+on a writer document, using the AutoPilot.  The same thing can be
+constructed on a spreadsheet, but you will have to put the pieces in
+place by hand.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="link_html_m6da6af5b.jpg" NAME="Graphic18" ALIGN=LEFT WIDTH=729 HEIGHT=610 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H1 STYLE="page-break-before: always"><A NAME="15.Summary|outline"></A>
+Summary</H1>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>You have created a form to
+display individual records of a master table (the customers table)
+and a subform to display the linked order records for the current
+customer from a detail table (the orders table).  You have used an
+SQL query containing a named parameter to link the subform to the
+main form.  You have set the &ldquo;Link master fields&rdquo;
+property of the subform to the name of the primary key field in the
+customers table and the &ldquo;Link slave fields&rdquo; property to
+the named parameter.  You can now browse through the customers and
+see the orders for each customer.  For any one customer, you can add,
+modify, and delete orders.  You can generalize this process to other
+sets of data tables.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>You also understand a bit
+more about working with OOo graphical widgets, including setting
+their various properties.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>This example has been a
+fairly basic one.  Anything more complicated will have to wait for
+another How-to.  </FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Suggestions and
+corrections are welcome.</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H1 STYLE="page-break-before: always"><A NAME="17.Credits|outline"></A><B>Credits</B></H1>
+<P STYLE="margin-bottom: 0cm"><B>Author</B>: <SPAN STYLE="font-weight: medium">Daniel
+Strome</SPAN></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><B>Thanks :</B><SPAN STYLE="font-weight: medium">
+To the contributors to the users@openoffice.apache.org and
+dev@dba.openoffice.org mailing lists</SPAN></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><B>Intgr by :</B><SPAN STYLE="font-weight: medium">
+N/A</SPAN></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><B>Last modifications :</B><SPAN STYLE="font-weight: medium">
+15 October 2002</SPAN></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><B>Contacts</B>:
+<SPAN STYLE="font-weight: medium">OpenOffice.org Documentation 
+</SPAN></FONT><A HREF="http://documentation.openoffice.org/"><SPAN STYLE="font-weight: medium"><SPAN STYLE="text-decoration: none"><FONT FACE="Times New Roman, serif"><FONT COLOR="#000000">http://documentation.openoffice.org</FONT></FONT></SPAN></SPAN></A></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><B>Translation : </B><SPAN STYLE="font-weight: medium">N/A</SPAN></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H1 STYLE="page-break-before: always"><A NAME="21.License|outline"></A>License</H1>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Trebuchet MS"><FONT SIZE=2><FONT FACE="Trebuchet MS"><FONT SIZE=2>This
+document is published under the terms and  conditions of the Public
+Documentation License</FONT></FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Trebuchet MS"><FONT SIZE=2><FONT FACE="Trebuchet MS"><FONT SIZE=2>&copy;
+2002 Daniel Strome</FONT></FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Trebuchet MS"><FONT SIZE=2>Appendix</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Trebuchet MS"><FONT SIZE=2>Public
+Documentation License Notice</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Trebuchet MS"><FONT SIZE=2>The
+contents of this Documentation are subject to the Public
+Documentation License Version 1.0 (the &quot;License&quot;); you may
+only use this Documentation if you comply with the terms of this
+License.  A copy of the License is available at  
+<A HREF="http://www.openoffice.org/licenses/PDL.html">http://www.openoffice.org/licenses/PDL.html</A></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Trebuchet MS"><FONT SIZE=2>The
+Original Documentation is &quot;How to Link Tables Using SQL Named
+Parameters&quot;. </FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Trebuchet MS"><FONT SIZE=2>The
+Initial Writer of the Original Documentation is Daniel Strome,
+Copyright &copy; 2002. All Rights Reserved.  </FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Trebuchet MS"><FONT SIZE=2>(Initial
+Writer contact(s):  <A HREF="mailto:danstrome@openoffice.org">mailto:danstrome@openoffice.org</A>
+).</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Trebuchet MS"><FONT SIZE=2>Contributor(s):
+______________________________________.</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Trebuchet MS"><FONT SIZE=2>Portions
+created by ______ are Copyright (C)_________[Insert year(s)]. All
+Rights Reserved. (Contributor contact(s):________________[Insert
+hyperlink/alias]).</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier, monospace"><FONT FACE="Trebuchet MS"><FONT SIZE=2>NOTE:
+The text of this Appendix may differ slightly from the text of the
+notices in the files of the Original Documentation. You should use
+the text of this Appendix rather than the text found in the Original
+Documentation for Your Modifications.</FONT></FONT></FONT></P>
+</body>
+</HTML>

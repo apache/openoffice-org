@@ -1,0 +1,35 @@
+<meta http-equiv="REFRESH" content="10;url=http://wiki.services.openoffice.org/wiki/Documentation/FAQ">
+<h3>This page is outdated. You will be redirected to <a href="http://wiki.services.openoffice.org/wiki/Documentation/FAQ">http://wiki.services.openoffice.org
+/wiki/Documentation/FAQ</a> shortly.</h3>
+<div style="margin-bottom: 10em;"></div>
+<p><a href="../../index.html">Documentation</a> / <a href="../index.html">User FAQ</a> / <a href="index.html">Installation</a> / <a href="026.html" accesskey="p">Previous</a>-<a href="027.html" accesskey="n">Next</a></p>
+<h3>How to convert files created with SRC680 snapshot builds, prior to m64, to the 2.0beta and later format?</h3>
+<p>
+Documents saved with SRC680 builds, prior to m64, cannot be opened by 2.0Beta or later. This especially applies to Writer documents. To be able to open them, files need to be coverted. Convert each file using the following procedure:
+<br/>
+<ol>
+   <li> Create a backup of the document.
+   <li>Rename the document to a file with the same name but an extensions that has the 2nd "o" replaced with a "d". For instance, test.oot becomes test.odt. For drawing documents, use the extension "odg". For templates,only the extension of drawing templates has to be changed to "otg".
+   <li>Unzip the sub documents "mimetype" and "META-INF/manifest.xml" from the document using an arbitrary zip tool.
+   <li>Within the unzipped "mimetype" and "META-INF/manifest.xml" files, replace all occurencies of "x-vnd.oasis.openoffice" with "vnd.oasis.opendocument".
+   <li>Add the "mimetype" file uncompressed to the document.
+   <li>Add "META-INF/manifest.xml" to the document.
+   <li>Load the document into OpenOffice.org and resave it.
+</ol>
+<p>
+For example, you have a file called 'test.oot' on Unix/Solaris. Use the following commands to convert the file:
+<br/>
+<font face="Courier">$  cp test.oot test.odt</font><br/>
+<font face="Courier">$  unzip test.odt mimetype META-INF/manifest.xml</font><br/>
+<font face="Courier">$  mv mimetype mimetype.bak</font><br/>
+<font face="Courier">$  sed -e"s/x-vnd\.oasis\.openoffice/vnd.oasis.opendocument/"  mimetype.bak >mimetype</font><br/>
+<font face="Courier">$  zip -0 test.odt mimetype</font><br/>
+<font face="Courier">$  mv META-INF/manifest.xml META-INF/manifest.xml.bak</font><br/>
+<font face="Courier">$  sed -e"s/x-vnd\.oasis\.openoffice/vnd.oasis.opendocument/" META-INF/manifest.xml.bak >META-INF/manifest.xml</font><br/>
+<font face="Courier">$  zip test.odt META-INF/manifest.xml</font><br/>
+<font face="Courier">$  [start OpenOffice.org, load file and save it again]</font><br/>
+<br/>
+</p>
+<p>See also: <a href="http://development.openoffice.org/releases/1.9.m65_snapshot.html">1.9 m65 Snapshot Release Notes</a></p>
+<p><a href="../../index.html">Documentation</a> / <a href="../index.html">User FAQ</a> / <a href="index.html">Installation</a> / <a href="026.html" accesskey="p">Previous</a>-<a href="027.html" accesskey="n">Next</a></p>
+
