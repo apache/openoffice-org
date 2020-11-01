@@ -1,0 +1,472 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.1 Beta 1 (Solaris Sparc)">
+	<META NAME="CREATED" CONTENT="20030318;15201604">
+	<META NAME="CHANGED" CONTENT="20030319;14323000">
+	<STYLE>
+	<!--
+		@page { margin-left: 1.25in; margin-right: 1.25in; margin-top: 1in; margin-bottom: 1in }
+	-->
+	</STYLE>
+</head>
+<body LANG="en-US" DIR="LTR">
+<H1><A NAME="Building the Scripting Framework for OpenOffice.org|outline"></A>
+Building the Scripting Framework for OpenOffice.org</H1>
+<H2>Contents</H2>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">Building Scripting Framework 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="#Pre-requisites">Pre-requisites</A>
+				</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="#projects">Projects &amp;
+		Modifications</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="#Building the Scripting Framework for OpenOffice.org|outline">Building
+		</A>
+		</P>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in">Installation 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="#autoinstaller">Building
+		Automated Installer</A></P>
+		<LI><P><A HREF="#install">Manual&nbsp;install</A> 
+		</P>
+	</UL>
+</UL>
+<H2><A NAME="Pre-requisites"></A>Pre-requisites</H2>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">JDK1.3 or greater 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">ANT which is available from
+	<A HREF="http://ant.apache.org/bindownload.cgi">http://ant.apache.org/bindownload.cgi</A>
+		</P>
+	<LI><P STYLE="margin-bottom: 0in">Full OO1.1beta or later solver and
+	installation set 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">OO1.1beta or later OpenOffice
+	build environment</P>
+	<LI><P STYLE="margin-bottom: 0in">bsh-1.2b7.jar available from
+	<A HREF="http://www.beanshell.org/download.html">http://www.beanshell.org/download.html</A></P>
+	<LI><P STYLE="margin-bottom: 0in">NetBeans IDE - this is currently
+	needed for the build (unless you modify one of the makefiles. It is
+	intended to develop a makefile that will detect the presence or
+	absence of the NetBeans IDEand react accordingly) 
+	</P>
+	<UL>
+		<LI><P><A HREF="http://www.netbeans.org/ide/download.html">NetBeans
+		3.4</A></P>
+	</UL>
+</UL>
+<H3>Setting up build environment 
+</H3>
+<P>If you have not configured your environment with Java and Ant,
+please re-run the configure script from the <TT>config_office</TT>
+project&nbsp; including the options <TT>--with-jdk-home=&lt;JAVA_HOME&gt;
+&nbsp;--with-ant-home=&lt;ANT_HOME&gt;</TT> and source or run the
+environment set-up script. See the <A HREF="http://tools.openoffice.org/">Tools</A>
+project homepage for details. 
+</P>
+<P>If configure can not find Ant, after you have sourced or run the
+environment set-up script, &nbsp;you may need to add all jarfiles
+under <TT>&lt;ANT_HOME&gt;/lib</TT> to your <TT>$CLASSPATH</TT>.</P>
+<H2><A NAME="projects"></A>Making Scripting Framework Services and
+Interfaces available</H2>
+<P>If you only have solvers, you will need to checkout the following
+modules on a tag that is appropriate to the release you are building
+for (eg. <TT>OO1.1beta</TT>) 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><TT>unoil</TT> 
+	</P>
+	<LI><P><TT>offapi</TT> 
+	</P>
+</UL>
+<P>The Scripting Framework is work-in-progress. For this reason it is
+not included in the main OpenOffice build &amp; install set. Thus, at
+this moment it is necessary to make several patches to the sources &amp;
+build a separate install set for the Scripting Framework. It is
+intended that at some point in the future the Scripting Framework
+will be integrated into OpenOffice. Since we will be modifying these
+projects, it is a good idea to backup your unoil and offapi modules
+and then checkout the following with the tag <TT>SF-OO644_ED02_1</TT></P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><TT>scripting</TT> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><TT>unoil/drafts/com/sun/star/script/framework
+	(drafts/com/sun/star/script/framework,</TT>needs to be in the <TT>unoil
+	</TT>&nbsp;module) 
+	</P>
+	<LI><P><TT>offapi/drafts/com/sun/star/script/framework&nbsp;(drafts/com/sun/star/script/framework,</TT>needs
+	to be in the <TT>offapi</TT>&nbsp;module) 
+	</P>
+</UL>
+<P>You will need to modify the offapi and unoil modules so that the
+services and interfaces for scripting are available. 
+</P>
+<H3><TT>offapi</TT> module</H3>
+<OL>
+	<LI><P STYLE="margin-bottom: 0in">Ensure that you have the
+	drafts/com/sun/star/script/framework directory under the offapi
+	module, if you don't, you will need to check it out from CVS with
+	the tag <FONT FACE="Cumberland">SF-OO644_ED02_1</FONT></P>
+	<LI><P STYLE="margin-bottom: 0in">Modify the <TT>prj/build.lst</TT>,
+	you will need to add the following lines 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><TT>oa&nbsp;offapi\drafts\com\sun\star\script\framework\runtime&nbsp;nmake&nbsp;-&nbsp;all&nbsp;oa_scriptfruntime_drafts&nbsp;NULL</TT></P>
+		<LI><P STYLE="margin-bottom: 0in"><TT>oa&nbsp;offapi\drafts\com\sun\star\script\framework\security&nbsp;nmake&nbsp;-&nbsp;all&nbsp;oa_sfsecurity_drafts
+		NULL</TT> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><TT>oa&nbsp;offapi\drafts\com\sun\star\script\framework\provider&nbsp;nmake&nbsp;-&nbsp;all&nbsp;oa_sfprovider_drafts&nbsp;NULL</TT>
+				</P>
+		<LI><P STYLE="margin-bottom: 0in"><TT>oa&nbsp;offapi\drafts\com\sun\star\script\framework\storage&nbsp;nmake&nbsp;-&nbsp;all&nbsp;oa_sfstorage_drafts&nbsp;NULL</TT>
+				</P>
+	</UL>
+	<P STYLE="margin-bottom: 0in"><B>and add</B>
+	&quot;<FONT FACE="Cumberland">oa_scriptfruntime_draft</FONT><TT><FONT FACE="Cumberland">s&nbsp;oa_sfsecurity_drafts&nbsp;oa_sfprovider_drafts&nbsp;oa_sfstorage_drafts</FONT></TT>&quot;
+	to the last line before &quot;<TT>NULL</TT>&quot; 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Modify the <TT>prj/d.lst</TT>, you
+	will need to add the following line
+	<BR><TT>..\%__SRC%\ucr\ScriptFramework.rdb&nbsp;%_DEST%\bin%_EXT%\ScriptFramework.rdb</TT>
+	<B>after</B> the line:
+	<BR><TT>..\%__SRC%\ucr\offapi.db&nbsp;%_DEST%\bin%_EXT%\offapi.rdb</TT>
+		</P>
+	<LI><P STYLE="margin-bottom: 0in">Modify the <TT>util/makefile.mk</TT>
+	and add the following to UNOIDLDBFILES list 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><TT>$(UCR)$/dcssscriptfruntime.db&nbsp;\</TT>
+				</P>
+		<LI><P STYLE="margin-bottom: 0in"><TT>$(UCR)$/dcsssfprovider.db&nbsp;\</TT>
+				</P>
+		<LI><P STYLE="margin-bottom: 0in"><TT>$(UCR)$/dcsssfsecurity.db&nbsp;\</TT>
+				</P>
+		<LI><P STYLE="margin-bottom: 0in"><TT>$(UCR)$/dcsssfstorage.db</TT>
+				</P>
+	</UL>
+    <LI>Modify the <TT>util/makefile.mk</TT> and add the following line to the target <TT>$(UCR)$/types.db</TT><BR>
+<TT>+$(REGMERGE) $(UCR)$/ScriptFramework.rdb / $(UCR)$/dcssscriptfruntime.db
+ $(UCR)$/dcsssfprovider.db $(UCR)$/dcsssfsecurity.db  $(UCR)$/dcsssfstorage.db
+</TT>
+    </LI>
+</OL>
+<H3><TT>unoil</TT> module</H3>
+<OL>
+	<LI><P STYLE="margin-bottom: 0in">Modify <TT>prj/build.lst</TT> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in">Add <TT>ul_scriptf_drafts</TT> to
+		the last line before <TT>NULL</TT> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><TT>The line should now look
+		something like this
+		<BR>ul&nbsp;unoil\drafts\com\sun\star\script\framework&nbsp;nmake&nbsp;-&nbsp;all&nbsp;ul_scriptf_drafts&nbsp;ul_ucb&nbsp;ul_frame&nbsp;ul_ucb&nbsp;NULL</TT>
+				</P>
+	</UL>
+</OL>
+<H2>Building the Scripting Framework module 
+</H2>
+<H3><TT>scripting</TT> module</H3>
+<OL>
+	<LI><P>Modify j<FONT FACE="Cumberland">ava/build.env</FONT> to point
+	to the point to <FONT FACE="Thorndale">beanshell </FONT><FONT FACE="Cumberland">bsh-1.2b7.jar</FONT>,
+	( see install.dir entry in build.env ) 
+	</P>
+	<LI><P>Assuming you have NetBeans installed, modify the
+	<TT>java/build.env</TT> to point at the NetBeans installation (see
+	the openide.class.path entry in the build.xml for more details). 
+	</P>
+	<LI><P>Alternatively, if you do not wish to build the add-in, delete
+	the following entries from the depends section of the target &quot;all&quot;
+	in the build.xml 
+	</P>
+	<UL>
+		<LI><P>No NetBeans add-in 
+		</P>
+		<UL>
+			<LI><P>localoffice.jar 
+			</P>
+			<LI><P>netbeans.jar 
+			</P>
+		</UL>
+	</UL>
+</OL>
+<H3>Building</H3>
+<OL>
+	<LI><P>Execute <TT>build</TT> and <FONT FACE="Cumberland">deliver</FONT>
+	in the <TT>offapi</TT> module 
+	</P>
+	<LI><P>Execute <TT>build and <FONT FACE="Cumberland">deliver</FONT>
+	</TT>in the <TT>unoil</TT> module 
+	</P>
+	<LI><P>Execute <TT>build</TT> in the <TT>scripting</TT> module 
+	</P>
+</OL>
+<H2><A NAME="autoinstaller"></A>Automated Installer</H2>
+<P>In <TT>scripting/workben</TT> there is an ANT build.xml file for
+compiling the examples installer, creating the UNO package, and
+creating a Jar file for an automated install. Running <TT>dmake</TT>
+in the <TT>scripting/workben</TT> directory should result in the
+creation of the <TT>SFrameworkInstall.jar</TT> in the <TT></TT> directory under the output directory appriate for your platform (eg. wntmsci9.pro).</P>
+<H2><A NAME="install"></A>Manual Installation of the Scripting
+Framework</H2>
+<P>The use of the automated installer, written in Java, is
+recommended, unless you're on a platform other than Solaris/SPARC,
+Linux/x86, Windows! It is recommended that even on such a platform
+that every effort should be made to get the installer to work. If
+this isn't possible the following is the set of steps needed to
+manually install the framework. The first stage in the manual
+installation is to build the <A HREF="http://api.openoffice.org/DevelopersGuide/DevelopersGuide.html">UNO
+package</A> containing the libraries &amp; Jar files. 
+</P>
+<OL>
+	<LI><P>Create a two directories (<TT>$pkgsf</TT>) for scripting
+	framework and (<TT>$pkgbs</TT>) from beanshell support. 
+	</P>
+	<LI><P>Create directories called <TT>$pkgsf/&lt;PLATFORM&gt;.plt </TT>and
+	<TT><FONT FACE="Cumberland">$pkgsf/skip_registration</FONT></TT>
+	(Where <TT>&lt;PLATFORM&gt;</TT> is like linux_x86)<BR>NOTE: A list
+	of supported directories is available in the source file
+	desktop/source/pkgchk/pkgchk_packages.cxx, you may need to modify
+	this, if your platform is not supported 
+	</P>
+	<LI><P>Copy in the libraries from <TT>scripting/&lt;platform&gt;/lib
+	</TT>to <TT><FONT FACE="Cumberland">$pkgsf/&lt;PLATFORM&gt;.plt</FONT></TT>
+		</P>
+	<LI><P>Copy in <TT>ScriptRuntimeForJava.jar</TT> from
+	<TT>scripting/&lt;platform&gt;/class</TT> into the top level
+	directory, <TT>$pkgsf</TT> 
+	</P>
+	<LI><P>Copy in <TT>unoil.jar </TT>from <TT><FONT FACE="Cumberland">$pkgsf/unoil/&lt;platform&gt;/class</FONT>
+	</TT>to <FONT FACE="Cumberland">$pkgsf/</FONT><TT><FONT FACE="Cumberland">skip_registration</FONT></TT>
+	directory</P>
+	<LI><P>Copy <FONT FACE="Cumberland">ScriptRuntimeForBeanShell.jar</FONT>
+	from <FONT FACE="Cumberland">scripting/&lt;platform&gt;/class</FONT>
+	to <FONT FACE="Cumberland">$pkgbs</FONT></P>
+	<LI><P>Copy <FONT FACE="Cumberland">bsh-1.2b7.jar</FONT>, available
+	from <A HREF="http://www.beanshell.org/download.html">http://www.beanshell.org/download.html<SPAN STYLE="text-decoration: none">
+	</SPAN></A>to <FONT FACE="Cumberland">$pkgbs/skip_registration</FONT>
+	directory.</P>
+	<LI><P>Copy <FONT FACE="Cumberland">ScriptFramework.rdb</FONT> from
+	<FONT FACE="Cumberland">offapi/&lt;platform&gt;/ucr/ScriptFramework.rdb</FONT>
+	to <FONT FACE="Cumberland">$pkgsf</FONT></P>
+	<LI><P>Copy <FONT FACE="Cumberland">ProtocolHandler.xcu</FONT> from
+	<FONT FACE="Cumberland">scripting/workben/installer/</FONT>
+	to <FONT FACE="Cumberland">$pkgsf</FONT></P>
+	<LI><P>Now, zip up all files in directory, <FONT FACE="Cumberland">$pkgsf</FONT>
+	to ooscriptf.zip</P>
+	<LI><P>Now, zip up all file in directory, <FONT FACE="Cumberland">$pkgbs</FONT>
+	to bshruntime.zip</P>
+</OL>
+<P>The next stage is to take the UNO packages and install them in an
+OpenOffice installation. 
+</P>
+<OL>
+	<LI><P>Copy the zips file into your OpenOffice installation under
+	the <TT>user/uno_packages</TT> directory&nbsp; 
+	</P>
+	<LI><P>In the program directory, run pkgchk on each of the zip files 
+	</P>
+</OL>
+<P><FONT FACE="Thorndale">The next stage is to install the
+Starbasic dialogs, configuration files and example scripts.</FONT></P>
+<OL>
+	<OL>
+		<LI><P><FONT FACE="Thorndale">Create a directory
+		</FONT><FONT FACE="Cumberland"><TT>ScriptBindingLibrary</TT></FONT><FONT FACE="Thorndale, serif">,
+		from the directory <FONT FACE="Cumberland"><TT>scripting/workben/binding</TT></FONT><FONT FACE="Thorndale">
+		copy the following files to </FONT><FONT FACE="Cumberland"><TT>ScriptBindingLibrary</TT>,</FONT><FONT FACE="Thorndale">
+		</FONT><FONT FACE="Cumberland"><TT>dialog.xlb</TT></FONT>,<FONT FACE="Thorndale">
+		</FONT><FONT FACE="Cumberland"><TT>HelpBinding.xdl</TT></FONT><FONT FACE="Thorndale">,
+		</FONT><FONT FACE="Cumberland"><TT>MenuBinding.xdl</TT></FONT>, <FONT FACE="Cumberland"><TT>script.xlb</TT></FONT>,
+		<FONT FACE="Cumberland"><TT>EventsBinding.xdl</TT></FONT>, <FONT FACE="Cumberland"><TT>KeyBinding.xdl</TT></FONT>,
+		</FONT><FONT FACE="Cumberland"><TT>ScriptBinding.xba</TT></FONT></P>
+		<LI><P><FONT FACE="Thorndale">Copy </FONT><FONT FACE="Cumberland"><TT>ScriptBindingLibrary</TT></FONT><FONT FACE="Thorndale, serif">
+		<FONT FACE="Thorndale">directory and its contents to</FONT>
+		<FONT FACE="Cumberland"><TT>&lt;OpenOffice path&gt;/user/basic</TT></FONT>
+		<FONT FACE="Thorndale">directory.</FONT> </FONT>
+		</P>
+		<LI><P><FONT FACE="Thorndale, serif"><FONT FACE="Thorndale">Insert
+		the following lines into</FONT> <FONT FACE="Cumberland"><TT>&lt;OpenOffice
+		path&gt;/user/basic/script.xlc</TT></FONT> </FONT><FONT FACE="Thorndale">(
+		insert these lines immediately above the entry for the Standard
+		library) </FONT>
+		</P>
+		<OL>
+			<P><TT><FONT FACE="Cumberland">&lt;library:library
+			library:name=&quot;ScriptBindingLibrary&quot;
+			xlink:href=&quot;file:://&lt;OpenOffice
+			path&gt;user/basic/ScriptBindingLibrary/script.xlb/&quot;
+			xlink:type=&quot;simple&quot; library:link=&quot;false&quot;/&gt;</FONT></TT></P>
+		</OL>
+		<LI><P><FONT FACE="Thorndale">Insert this following lines into
+		</FONT><FONT FACE="Cumberland">&lt;OpenOffice
+		path&gt;/user/basic/dialog.xlc</FONT> ( insert these lines
+		immediately above the entry for the Standard library) 
+		</P>
+		<OL>
+			<P><TT><FONT FACE="Cumberland">&lt;library:library
+			library:name=&quot;ScriptBindingLibrary&quot;
+			xlink:href=&quot;file://&lt;OpenOffice
+			path&gt;/user/basic/ScriptBindingLibrary/dialog.xlb/&quot;
+			xlink:type=&quot;simple&quot; library:link=&quot;false&quot;/&gt;</FONT></TT></P>
+		</OL>
+		<LI><P><FONT FACE="Thorndale">Create a </FONT><FONT FACE="Thorndale, serif"><FONT FACE="Cumberland"><TT>Scripts</TT></FONT><FONT FACE="Thorndale">
+		directory, create sub-directories </FONT><FONT FACE="Cumberland"><TT>java</TT></FONT><FONT FACE="Thorndale"> and <TT>beanshell</TT>
+		in </FONT><FONT FACE="Cumberland"><TT>Scripts</TT></FONT><FONT FACE="Thorndale">
+		directory. </FONT>
+Create sub directories <TT>MemoryUsage</TT>, <TT>InteractiveBeanShell</TT> in the <TT>beanshell</TT> directory. Copy the contents of each of the <TT>scripting/examples/beanshell</TT> directories into the newly created directories.
+Create sub directories <FONT FACE="Cumberland"><TT>Highlight</TT></FONT><FONT FACE="Thorndale">,
+		</FONT><FONT FACE="Cumberland"><TT>MemoryUsage</TT></FONT><FONT FACE="Thorndale">
+		and </FONT><FONT FACE="Cumberland"><TT>ScriptFrmwrkHelper</TT></FONT></FONT><FONT FACE="Thorndale">
+		in the <TT>java</TT> directory. </FONT>
+    Using the tables below populate the <TT>java</TT>
+		directory with the appropriate files</FONT></TT></TT><FONT FACE="Thorndale">
+		( make sure to rename files where necessary )</FONT></P>
+		<TABLE WIDTH=100% BORDER=1 CELLPADDING=4 CELLSPACING=3>
+			<COL WIDTH=97*>
+			<COL WIDTH=159*>
+			<THEAD>
+				<TR VALIGN=TOP>
+					<TH WIDTH=38%>
+						<P>Source (scripting/examples/java)</P>
+					</TH>
+					<TH WIDTH=62%>
+						<P>Destination file</P>
+					</TH>
+				</TR>
+			</THEAD>
+			<TBODY>
+				<TR VALIGN=TOP>
+					<TD WIDTH=38%>
+						<P>HighlightTextParcel.xml</P>
+					</TD>
+					<TD WIDTH=62%>
+						<P>&lt;OpenOffice
+						Path&gt;/user/Scripts/java/Highlight/parcel-descriptor.xml</P>
+					</TD>
+				<TR VALIGN=TOP>
+					<TD WIDTH=38%>
+						<P>HighlightUtil.java</P>
+					</TD>
+					<TD WIDTH=62%>
+						<P>&lt;OpenOffice
+						Path&gt;/user/Scripts/java/Highlight/HighlightUtil.java</P>
+					</TD>
+				</TR>
+				<TR VALIGN=TOP>
+					<TD WIDTH=38%>
+						<P>HighlightText.java 
+						</P>
+					</TD>
+					<TD WIDTH=62%>
+						<P>&lt;OpenOffice
+						Path&gt;/user/Scripts/java/Highlight/HighlightText.java 
+						</P>
+					</TD>
+				</TR>
+				<TR VALIGN=TOP>
+					<TD WIDTH=38%>
+						<P>MemoryUsage.java</P>
+					</TD>
+					<TD WIDTH=62%>
+						<P>&lt;OpenOffice
+						Path&gt;/user/Scripts/java/MemoryUsage/MemoryUsage.java</P>
+					</TD>
+				</TR>
+				<TR VALIGN=TOP>
+					<TD WIDTH=38%>
+						<P>MemoryUsageParcel.xml</P>
+					</TD>
+					<TD WIDTH=62%>
+						<P>&lt;OpenOffice
+						Path&gt;/user/Scripts/java/MemoryUsage/parcel-descriptor.xml</P>
+					</TD>
+				</TR>
+				<TR VALIGN=TOP>
+					<TD WIDTH=38%>
+						<P>ScriptFrmwrkHelper.java</P>
+					</TD>
+					<TD WIDTH=62%>
+						<P>&lt;OpenOffice
+						Path&gt;/user/Scripts/java/ScriptFrmwrkHelper/ScriptFrmwrkHelper.java</P>
+					</TD>
+				</TR>
+				<TR VALIGN=TOP>
+					<TD WIDTH=38%>
+						<P>ScriptFrameWkHelperParcel.xml</P>
+					</TD>
+					<TD WIDTH=62%>
+						<P>&lt;OpenOffice
+						Path&gt;/user/Scripts/java/ScriptFrmwrkHelper/parcel-descriptor.xml</P>
+					</TD>
+				</TR>
+			</TBODY>
+		</TABLE>
+		<LI><P><FONT FACE="Thorndale">Build example and framework
+		helper scripts. Create a classpath with the following jars
+		</FONT><FONT FACE="Cumberland"><TT>&lt;SOLVERPATH&gt;/&lt;platform&gt;/bin/unoil.jar</TT></FONT>,<FONT FACE="Cumberland"><TT>&lt;SOLVERPATH&gt;/&lt;platform&gt;/bin/jurt.jar</TT></FONT>,
+		<TT><FONT FACE="Cumberland">&lt;SOLVERPATH&gt;/&lt;platform&gt;/</FONT><FONT FACE="Cumberland">bin/jut.jar</FONT></TT>,
+		<TT><FONT FACE="Cumberland">&lt;SOLVERPATH&gt;/&lt;platform&gt;/bin/java_uno.jar</FONT></TT>,
+		<TT><FONT FACE="Cumberland">&lt;SOLVERPATH&gt;/&lt;platform&gt;/bin/ridl.jar</FONT></TT>,
+		<TT><FONT FACE="Cumberland">&lt;SOLVERPATH&gt;/&lt;platform&gt;/bin/sandbox.jar</FONT></TT>.
+<FONT FACE="Thorndale">
+		Change directory to </FONT><FONT FACE="Cumberland"><TT>Highlight</TT></FONT>,
+		<FONT FACE="Cumberland"><TT>MemoryUsage</TT></FONT> and <FONT FACE="Cumberland"><TT>ScriptFrmwrkHelper</TT></FONT>
+		<FONT FACE="Thorndale">in turn, building all java files in each
+		one. Jar up the class files in each directory creating
+		</FONT><FONT FACE="Cumberland"><TT>ScriptFrmwrkHelper.jar</TT></FONT><FONT FACE="Thorndale">
+		in </FONT><FONT FACE="Cumberland"><TT>ScriptFrmwrkHelper</TT></FONT>,
+		<FONT FACE="Cumberland"><TT>Highlight.jar</TT></FONT> in <FONT FACE="Cumberland"><TT>Highlight</TT></FONT>
+		and finally <FONT FACE="Cumberland"><TT>MemUsage.jar</TT></FONT> in
+		<FONT FACE="Cumberland"><TT>MemoryUsage</TT></FONT>.</P>
+		<LI><P>Copy the entire <FONT FACE="Cumberland"><TT>Scripts</TT></FONT>
+		directory hierarchy to <FONT FACE="Cumberland"><TT>&lt;OpenOffice
+		Path&gt;/user/</TT></FONT></P>
+		<LI><P>Install the configuration files. Firstly backup any config
+		files ( *.xml ) present in the <FONT FACE="Cumberland"><TT>&lt;OpenOffice
+		Path&gt;/user/config/soconfig</TT> directory</FONT> ( including
+		sub-directories ). Copy all files with &ldquo;.xml&rdquo; extention
+		( except <FONT FACE="Cumberland"><TT>manifest.xml</TT></FONT> ) from
+		<FONT FACE="Cumberland"><TT>scripting/workben/bindings to &lt;OpenOffice
+		Path&gt;/user/config/soconfig</TT></FONT>. If <FONT FACE="Cumberland"><TT>&lt;OpenOffice
+		Path&gt;/user/config/soconfig/META-INF</TT></FONT> directory doesn't
+		exist create it. Copy <FONT FACE="Cumberland"><TT>manifest.xml</TT></FONT>
+		from directory <FONT FACE="Cumberland"><TT>scripting/workben/bindings</TT></FONT>
+		to <FONT FACE="Cumberland"><TT>&lt;OpenOffice
+		Path&gt;/user/config/soconfig/META-INF</TT></FONT> directory.</P>
+	</OL>
+</OL>
+<P>The script framework is now installed.</P>
+<TABLE CELLPADDING=4 CELLSPACING=0>
+	<TR>
+		<TD WIDTH=25%>
+			<P><A HREF="mailto:dev@framework.openoffice.org">Mailing List</A></P>
+		</TD>
+		<TD WIDTH=75%>
+			<P>Installation, User or Developer queries on the Office Scripting
+			Framework</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=25%>
+			<P>Issues</P>
+		</TD>
+		<TD WIDTH=75%>
+			<P>Issues found in the Office Scripting Framework should be logged
+			in Issuezilla<BR><B>component:</B> framework<BR><B>subcomponent:</B>
+			scripting</P>
+		</TD>
+	</TR>
+</TABLE>
+<H2><BR>Last revision: 
+Wed Mar 19 17:39:14 GMT 2003
+</H2>
+</body>
+</HTML>

@@ -1,0 +1,526 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>Type Detection - Examples</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="CREATED" CONTENT="20010222;14370867">
+	<META NAME="CHANGEDBY" CONTENT="Mathias Bauer">
+	<META NAME="CHANGED" CONTENT="20010411;13383007">
+</head>
+<body>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=0 CELLSPACING=0 STYLE="page-break-before: always">
+	<TR>
+		<TD>
+			<P ALIGN=LEFT><A HREF="services.html">&lt;&lt;</A></P>
+		</TD>
+		<TD>
+			<P ALIGN=CENTER><BR>
+			</P>
+		</TD>
+		<TD>
+			<P ALIGN=RIGHT><A HREF="reference.html">&gt;&gt;</A></P>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 COLOR="#000000">
+<CENTER>
+	<TABLE WIDTH=1289 BORDER=0 CELLPADDING=2 CELLSPACING=0>
+		<COL WIDTH=1285>
+		<TR>
+			<TD WIDTH=1285>
+				<P><FONT SIZE=5>Examples</FONT>
+				</P>
+				<P>The following examples are to illustrate the use of the
+				services involved.</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm">Creation of the necessary
+					objects
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><A HREF="#flat_detection">Flat</A>
+					or <A HREF="#deep_detection">deep</A> detection of a type on the
+					basis of different parameters
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><A HREF="#search_loader">Search
+					and use of a FrameLoader object</A>
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><A HREF="#search_filter">Search
+					and use of a Filter object to import a document</A> (Export
+					similar!)
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><A HREF="#read_filtercfg">Reading
+					of the entire filters configuration</A> (Loader/Types similar!
+					... however at different services!)
+					</P>
+					<LI><P><A HREF="#register_filter">Register a new filter</A>
+					(Loader/Types similar!)
+					</P>
+				</UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=1285>
+				<P><A NAME="includes"></A><BR><FONT SIZE=4>Includes, Declarations
+				...</FONT>
+				</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#ffffcc">
+			<TD WIDTH=1285>
+				<PRE>//*****************************************************************************************************************
+//includes interfaces
+//*****************************************************************************************************************
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include &lt; com/sun/star/lang/XMultiServiceFactory.hpp&gt;
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
+#include &lt; com/sun/star/document/XTypeDetection.hpp&gt;
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XFRAMELOADER_HPP_
+#include &lt; com/sun/star/frame/XFrameLoader.hpp&gt;
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XSYNCHRONOUSFRAMELOADER_HPP_
+#include &lt; com/sun/star/frame/XSynchronousFrameLoader.hpp&gt;
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
+#include &lt; com/sun/star/document/XFilter.hpp&gt;
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XIMPORTER_HPP_
+#include &lt; com/sun/star/document/XImporter.hpp&gt;
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include &lt; com/sun/star/lang/XComponent.hpp&gt;
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include &lt; com/sun/star/beans/XPropertySet.hpp&gt;
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include &lt; com/sun/star/container/XNameAccess.hpp&gt;
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include &lt; com/sun/star/container/XNameContainer.hpp&gt;
+#endif
+
+//*****************************************************************************************************************
+// uno interfaces
+//*****************************************************************************************************************
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include &lt; com/sun/star/uno/Reference.h&gt;
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include &lt; com/sun/star/uno/Sequence.h&gt;
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_ANY_H_
+#include &lt; com/sun/star/uno/Any.h&gt;
+#endif
+
+//*****************************************************************************************************************
+// others
+//*****************************************************************************************************************
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include &lt; comphelper/processfactory.hxx&gt;               // for getProcessServiceFactory()
+#endif
+
+//*****************************************************************************************************************
+// namespaces
+//*****************************************************************************************************************
+using namespace ::com::sun::star::uno        ;
+using namespace ::com::sun::star::lang       ;
+using namespace ::com::sun::star::container  ;
+using namespace ::rtl                        ;
+using namespace ::comphelper                 ;
+
+//*****************************************************************************************************************
+// macros
+//*****************************************************************************************************************
+#define ASCII( SSTRING )                                OUString(RTL_CONSTASCII_USTRINGPARAM( SSTRING ))        // convert an ascii-value to unicode</PRE>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=1285>
+				<P><A NAME="flat_detection"></A><BR><FONT SIZE=4>Flat Detection</FONT>
+								</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#ffffcc">
+			<TD WIDTH=1285>
+				<PRE>void example_flatDetection()
+{
+    // Create UNO-service for type detection.
+    // Use global servicemanager as factory and cast return value to right interface.
+    Reference&lt; XTypeDetection &gt; xTypeDetection( getProcessServiceFactory()-&gt;createInstance( ASCII(&quot;com.sun.star.document.TypeDetection&quot;) ), UNO_QUERY );
+
+    // a) Make flat detection by URL only.
+    OUString sInternalTypeName;
+    sInternalTypeName = xTypeDetection-&gt;queryTypeByURL( ASCII(&quot;file:///c|/temp/test.txt&quot;) );
+
+    // b) Make flat detection by URL and an additional search parameter.
+    Sequence&lt; PropertyValue &gt; lDescriptor( 2 );
+
+    lDescriptor[0].Name    = ASCII(&quot;FileName&quot;                );
+    lDescriptor[0].Value &lt;&lt;= ASCII(&quot;file:///c|/temp/test.txt&quot;);
+
+    lDescriptor[1].Name    = ASCII(&quot;ContentType&quot;             );
+    lDescriptor[1].Value &lt;&lt;= ASCII(&quot;text/plain&quot;              );
+
+    sal_Bool bDeep = sal_False;
+
+    // !!! These can add or change informations of given descriptor !!!
+    sInternalTypeName = xTypeDetection-&gt;queryTypeByDescriptor( lDescriptor, bDeep );
+}</PRE>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=1285>
+				<P><A NAME="deep_detection"></A><BR><FONT SIZE=4>Deep Detection</FONT>
+								</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#ffffcc">
+			<TD WIDTH=1285>
+				<PRE>void example_deepDetection()
+{
+    // Create UNO-service for type detection.
+    // Use global servicemanager as factory and cast return value to right interface.
+    Reference&lt; XTypeDetection &gt; xTypeDetection( getProcessServiceFactory()-&gt;createInstance( ASCII(&quot;com.sun.star.document.TypeDetection&quot;) ), UNO_QUERY );
+
+    // Make deep detection by URL and an additional search parameter.
+    Sequence&lt; PropertyValue &gt; lDescriptor( 2 );
+
+    lDescriptor[0].Name    = ASCII(&quot;FileName&quot;                );
+    lDescriptor[0].Value &lt;&lt;= ASCII(&quot;file:///c|/temp/test.txt&quot;);
+
+    lDescriptor[1].Name    = ASCII(&quot;ContentType&quot;             );
+    lDescriptor[1].Value &lt;&lt;= ASCII(&quot;text/plain&quot;              );
+
+    sal_Bool bDeep = sal_True;
+
+    // !!! These can add or change informations of given descriptor !!!
+    sInternalTypeName = xTypeDetection-&gt;queryTypeByDescriptor( lDescriptor, bDeep );
+}</PRE>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=1285>
+				<P><A NAME="search_loader"></A><BR><FONT SIZE=4>Search for and
+				Use of a FrameLoader Object</FONT>
+				</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#ffffcc">
+			<TD WIDTH=1285>
+				<PRE>void example_loadDocument()
+{
+    // Create UNO-services for type detection and loading document.
+    // Use global servicemanager as factory and cast return value to right interface.
+    Reference&lt; XTypeDetection &gt;       xTypeDetection( getProcessServiceFactory()-&gt;createInstance( ASCII(&quot;com.sun.star.document.TypeDetection&quot;  ) ), UNO_QUERY );
+    Reference&lt; XMultiServiceFactory &gt; xLoaderFactory( getProcessServiceFactory()-&gt;createInstance( ASCII(&quot;com.sun.star.frame.FrameLoaderFactory&quot;) ), UNO_QUERY );
+
+    // Make deep detection by URL only.
+    Sequence&lt; PropertyValue &gt; lDescriptor( 1 );
+
+    lDescriptor[0].Name    = ASCII(&quot;FileName&quot;                );
+    lDescriptor[0].Value &lt;&lt;= ASCII(&quot;file:///c|/temp/test.txt&quot;);
+
+    sal_Bool bDeep = sal_True;
+
+    sInternalTypeName = xTypeDetection-&gt;queryTypeByDescriptor( lDescriptor, bDeep );
+
+    // Search registered loader and create it.
+    Reference&lt; XInterface &gt; xLoaderInterface( xLoaderFactory-&gt;createInstance( sInternalTypeName ), UNO_QUERY );
+
+    // Check for supported load mechanism by this implementation? [async/sync]
+    Reference&lt; XSynchronousFrameLoader &gt; xSyncLoader ( xLoaderInterface, UNO_QUERY );
+    Reference&lt; XFrameLoader &gt;            xAsyncLoader( xLoaderInterface, UNO_QUERY );
+
+    // Don't forget to create a new target frame to load document in it!
+    // Use findFrame() or queryDispatch() mechanism to do that.
+    Reference&lt; XFrame &gt; xTarget = ...;
+
+    if( xSyncLoader.is() == sal_True )
+    {
+        sal_Bool bState = xSyncLoader-&gt;load( lDescriptor, xTarget );
+    }
+    else
+    if( xAsyncLoader.is() == sal_True )
+    {
+        xAsyncLoader-&gt;load( xTarget                          ,
+                            ASCII(&quot;file:///c|/temp/test.txt&quot;),
+                            lDescriptor                      ,
+                            this                             ); // We must support XLoadEventListener interface to get information about succesful loading!
+    }
+}</PRE>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=1285>
+				<P><A NAME="search_filter"></A><BR><FONT SIZE=4>Search for and
+				Use of a Filter Object</FONT>
+				</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#ffffcc">
+			<TD WIDTH=1285>
+				<PRE>void example_filterDocument()
+{
+    // Create UNO-services for type detection and loading document.
+    // Use global servicemanager as factory and cast return value to right interface.
+    Reference&lt; XTypeDetection &gt;       xTypeDetection( getProcessServiceFactory()-&gt;createInstance( ASCII(&quot;com.sun.star.document.TypeDetection&quot;) ), UNO_QUERY );
+    Reference&lt; XMultiServiceFactory &gt; xFilterFactory( getProcessServiceFactory()-&gt;createInstance( ASCII(&quot;com.sun.star.document.FilterFactory&quot;) ), UNO_QUERY );
+
+    // Make deep detection by URL only.
+    Sequence&lt; PropertyValue &gt; lDescriptor( 1 );
+
+    lDescriptor[0].Name    = ASCII(&quot;FileName&quot;                );
+    lDescriptor[0].Value &lt;&lt;= ASCII(&quot;file:///c|/temp/test.txt&quot;);
+
+    sal_Bool bDeep = sal_True;
+
+    sInternalTypeName = xTypeDetection-&gt;queryTypeByDescriptor( lDescriptor, bDeep );
+
+    // Search registered filter and create it.
+    // We will use it as an import filter here! cast it to right interface ...
+    Reference&lt; XFilter &gt;   xFilter      ( xFilterFactory-&gt;createInstance( sInternalTypeName ), UNO_QUERY );
+    Reference&lt; XImporter &gt; xImportFilter( xFilter                                            , UNO_QUERY );
+
+    // We must create the document service which is used by these filter.
+    // These information is available as a property of created filter!
+    Reference&lt; XPropertySet &gt; xFilterProperties( xFilter, UNO_QUERY );
+    OUString sDocumentService;
+    xFilterProperties-&gt;getPropertyValue( ASCII(&quot;DocumentService&quot;) ) &gt;&gt;= sDocumentService;
+    Reference&lt; XComponent &gt; xDocument( getProcessServiceFactory()-&gt;createInstance( sDocumentService ), UNO_QUERY );
+
+    // Set target document service at import filter
+    // and start filter operation.
+    // (xImportFilter and xFilter are the same objects - but different interfaces!)
+    xImportFilter-&gt;setTargetDocument( xDocument );
+    sal_Bool bState = xFilter-&gt;filter( lDescriptor );
+}</PRE>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=1285>
+				<P><A NAME="read_filtercfg"></A><BR><FONT SIZE=4>Reading the
+				Filter Configuration</FONT>
+				</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#ffffcc">
+			<TD WIDTH=1285>
+				<PRE>void example_readFilterCFG()
+{
+    // Create UNO-services FilterFactory - support name container interface too!
+    // Use global servicemanager as factory and cast return value to right interface.
+    Reference&lt; XNameAccess &gt; xFilterContainer( getProcessServiceFactory()-&gt;createInstance( ASCII(&quot;com.sun.star.document.FilterFactory&quot;) ), UNO_QUERY );
+
+    // Step over all registered filters.
+    Sequence&lt; OUString &gt; lFilterNames = xFilterContainer-&gt;getElementNames();
+    sal_Int32            nNameCount   = lFilterNames.getLength()           ;
+
+    for( sal_Int32 nName = 0; nName &lt; nNameCount; ++nName )
+    {
+        // Get all properties of current filter as Sequence&lt; PropertyValue &gt;.
+        // Step over all these properties and copy values to local variables.
+        Sequence&lt; PropertyValue &gt; lProperties;
+        xFilterContainer-&gt;getByName( lFilterNames[ nName ] ) &gt;&gt;= lProperties;
+
+        OUString             sType              ;
+        OUString             sUIName            ;
+        OUString             sDocumentService   ;
+        OUString             sFilterService     ;
+        sal_Int32            nFlags             ;
+        Sequence&lt; OUString &gt; lUserData          ;
+        sal_Int32            nFileFormatVersion ;
+        OUString             sTemplateName      ;
+
+        sal_Int32 nPropertyCount = lProperties.getLength();
+        for( sal_Int32 nProperty = 0; nProperty &lt; nPropertyCount; ++nProperty )
+        {
+            if( lProperties[ nProperty ].Name == ASCII(&quot;Type&quot;) )
+                lProperties[ nProperty ].Value &gt;&gt;= sType;
+            else
+            if( lProperties[ nProperty ].Name == ASCII(&quot;UIName&quot;) )
+                lProperties[ nProperty ].Value &gt;&gt;= sUIName;
+            else
+            if( lProperties[ nProperty ].Name == ASCII(&quot;DocumentService&quot;) )
+                lProperties[ nProperty ].Value &gt;&gt;= sDocumentService;
+            else
+            if( lProperties[ nProperty ].Name == ASCII(&quot;FilterService&quot;) )
+                lProperties[ nProperty ].Value &gt;&gt;= sFilterService;
+            else
+            if( lProperties[ nProperty ].Name == ASCII(&quot;Flags&quot;) )
+                lProperties[ nProperty ].Value &gt;&gt;= nFlags;
+            else
+            if( lProperties[ nProperty ].Name == ASCII(&quot;UserData&quot;) )
+                lProperties[ nProperty ].Value &gt;&gt;= lUserData;
+            else
+            if( lProperties[ nProperty ].Name == ASCII(&quot;FileFormatVersion&quot;) )
+                lProperties[ nProperty ].Value &gt;&gt;= nFileFormatVersion;
+            else
+            if( lProperties[ nProperty ].Name == ASCII(&quot;TemplateName&quot;) )
+                lProperties[ nProperty ].Value &gt;&gt;= sTemplateName;
+        }
+    }
+}</PRE>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=1285>
+				<P><A NAME="register_filter"></A><BR><FONT SIZE=4>Registering a
+				New Filter</FONT>
+				</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#ffffcc">
+			<TD WIDTH=1285>
+				<PRE>void example_registerFilter()
+{
+    // Create UNO-services FilterFactory - support name container interface too!
+    // Use global servicemanager as factory and cast return value to right interface.
+    Reference&lt; XNameContainer &gt; xFilterContainer( getProcessServiceFactory()-&gt;createInstance( ASCII(&quot;com.sun.star.document.FilterFactory&quot;) ), UNO_QUERY );
+
+    // Define all properties and values of new filter.
+    OUString             sType              = ASCII(&quot;type_to_register_for&quot;          );
+    OUString             sUIName            = ASCII(&quot;Own Filter&quot;                    );
+    OUString             sDocumentService   = ASCII(&quot;com.my.company.DocumentService&quot;);
+    OUString             sFilterService     = ASCII(&quot;com.my.company.FilterService&quot;  );
+    sal_Int32            nFlags             = 0                                      ;
+    sal_Int32            nFileFormatVersion = 0                                      ;
+    OUString             sTemplateName      = OUString()                             ;
+    Sequence&lt; OUString &gt; lUserData          = Sequence&lt; OUString &gt;()                 ;
+
+    // Pack it into a Sequence&lt; PropertyValue &gt; to support format of interface method.
+    // Order of elements in sequence isnt important ... We differ it by names only!
+    // You don't must give us all properties - we use default values for missing ones.
+    Sequence&lt; PropertyValue &gt; lProperties[8];
+
+    //--------------------------------------------------------------------------
+    lProperties[0].Name    = ASCII(&quot;Type&quot;)             ;
+    lProperties[0].Value &lt;&lt;= sType                     ;
+
+    /*ATTENTION
+        Register a human readable filtername for current the locale by using the
+        property &#132;UIName&#147; or use the property &quot;UINames&quot; to set it for different
+        locales.
+        In the current build using &#132;UINames&#147; does not work due to problems
+        in the configuration service, so currently always use &#132;UIName&#147; !
+    */
+
+    //--------------------------------------------------------------------------
+    // set UIName for current locale
+    lProperties[1].Name    = ASCII(&quot;UIName&quot;)           ;
+    lProperties[1].Value &lt;&lt;= sUIName                   ;
+
+    //--------------------------------------------------------------------------
+    // set UINames for different locales &#150; but not in current build, see above
+    //    - name of property is an identifier for the locale
+    //    - value is the value for these locale
+    // Sequence&lt; PropertyValue &gt; lUINames[2];
+    // lUINames[0].Name    = ASCII(&quot;de-DE&quot;      );
+    // lUINames[0].Value &lt;&lt;= ASCII(&quot;Mein UIName&quot;);
+    // lUINames[1].Name    = ASCII(&quot;en-US&quot;      );
+    // lUINames[1].Value &lt;&lt;= ASCII(&quot;my UIName&quot;  );
+    // lProperties[1].Name    = ASCII(&quot;UINames&quot;);
+    // lProperties[1].Value &lt;&lt;= lUINames;
+
+    //--------------------------------------------------------------------------
+    lProperties[2].Name    = ASCII(&quot;DocumentService&quot;)  ;
+    lProperties[2].Value &lt;&lt;= sDocumentService          ;
+
+    //--------------------------------------------------------------------------
+    lProperties[3].Name    = ASCII(&quot;FilterService&quot;)    ;
+    lProperties[3].Value &lt;&lt;= sFilterService            ;
+
+    //--------------------------------------------------------------------------
+    lProperties[4].Name    = ASCII(&quot;Flags&quot;)            ;
+    lProperties[4].Value &lt;&lt;= nFlags                    ;
+
+    //--------------------------------------------------------------------------
+    lProperties[5].Name    = ASCII(&quot;UserData&quot;)         ;
+    lProperties[5].Value &lt;&lt;= lUserData                 ;
+
+    //--------------------------------------------------------------------------
+    lProperties[6].Name    = ASCII(&quot;FileFormatVersion&quot;);
+    lProperties[6].Value &lt;&lt;= nFileFormatVersion        ;
+
+    //--------------------------------------------------------------------------
+    lProperties[7].Name    = ASCII(&quot;TemplateName&quot;)     ;
+    lProperties[7].Value &lt;&lt;= sTemplateName             ;
+
+    //--------------------------------------------------------------------------
+    // Pack Sequence&lt; PropertyValue &gt; into an any and insert these new filter.
+    // Give us a filter name too ... but check for already existing ones before!
+    // Otherwise follow call throw an ElementExistException!
+    // (use XNameAccess to do that)
+    Any aPropertySet;
+    aPropertySet &lt;&lt;= lProperties;
+    xFilterContainer-&gt;insertByName( ASCII(&quot;my_own_Filter&quot;), aPropertySet );
+}</PRE>
+			</TD>
+		</TR>
+	</TABLE>
+</CENTER>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=0 CELLSPACING=0>
+	<TR>
+		<TD>
+			<P ALIGN=LEFT><A HREF="services.html">&lt;&lt;</A></P>
+		</TD>
+		<TD>
+			<P ALIGN=CENTER><BR>
+			</P>
+		</TD>
+		<TD>
+			<P ALIGN=RIGHT><A HREF="reference.html">&gt;&gt;</A></P>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 COLOR="#000000">
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
+	<TR>
+		<TD>
+			<P><STRONG><FONT SIZE=2><FONT FACE="Arial">author</FONT></FONT> </STRONG>
+			</P>
+		</TD>
+		<TD>
+			<P><FONT SIZE=2><FONT FACE="Arial">&nbsp;&nbsp;&nbsp;Andreas
+			Schl&uuml;ns</FONT></FONT>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P><STRONG><FONT SIZE=2><FONT FACE="Arial">email</FONT></FONT> </STRONG>
+			</P>
+		</TD>
+		<TD>
+			<P>&nbsp;&nbsp;&nbsp;<A HREF="mailto:andreas.schluens@germany.sun.com"><FONT SIZE=2><FONT FACE="Arial">andreas.schluens@germany.sun.com</FONT></FONT></A>
+						</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P><STRONG><FONT SIZE=2><FONT FACE="Arial">last modification</FONT></FONT>
+			</STRONG>
+			</P>
+		</TD>
+		<TD>
+			<P><FONT SIZE=2><FONT FACE="Arial">&nbsp;&nbsp;&nbsp;19.11.2001</FONT></FONT>
+						</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+</body>
+</HTML>

@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+  <meta http-equiv="CONTENT-TYPE"
+ content="text/html; charset=iso-8859-1">
+  <title>Release Notes for EDR v0.3</title>
+  <meta name="GENERATOR" content="StarOffice 6.0  (Solaris Sparc)">
+  <meta name="CREATED" content="20030319;16001000">
+  <meta name="CHANGED" content="20030320;9393200">
+</head>
+<body lang="en-US">
+<h1>Release Notes</h1>
+<h2>Installation</h2>
+<ul>
+  <li>
+    <p>The installer now takes some optional command line arguments:</p>
+    <pre style="margin-bottom: 0.51cm;"> java -jar SFrameworkInstall.jar [-office &lt;path_to_office_installation&gt;]<br> [-netbeans &lt;path_to_netbeans_installation&gt;]<br> [-net] [-bindings]<br> [-help]</pre>
+  </li>
+  <li>
+    <p>If you are installing the framework on the windows platform (
+for language other than english ) you may experience difficulties, the
+installer looks for the sversion.ini file in either the user's home
+directory or in the &#8220;Application Data&#8221; sub-directory of the user's
+home directory. To install the framework copy the sversion.ini file to
+the user's home directory or to the &#8220;Application Data&#8221; sub-directory in
+the user's home. (Note: you may need to create the sub-directory called
+&#8220;Application Data&#8221;)</p>
+  </li>
+  <li>The problem with installing the 0.3 release in StarOffice has
+been fixed as of 15 July 2003.</li>
+  <li>Installing the Scripting Framework in a
+network (ie. setup -net) installation is currently broken, this will be rectified as soon as possible.
+</li>
+</ul>
+<h2>Script Binding</h2>
+<ul>
+  <li>
+    <p style="margin-bottom: 0cm;">It is important the only the "Assign
+Script To ..." dialogs are used to create &amp; delete script
+bindings for Scripting framework Java &amp; Beanshell scripts. While
+these bindings also appear in the Tools-&gt;Configure dialog, that
+dialog should <b>not </b>be used to delete these bindings as the
+results are undefined and may lead to a loss of all menu items! In a
+future release, both these dialogs will be integrated, resolving this
+issue.</p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;">&#8220;Assign Script to ..&#8221; dialogs work
+only for the following applications, writer, calc, impress, draw and
+presentation.</p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;">The Languages displayed in the
+&#8220;Language&#8221; combo-box for all &#8220;Assign Script to ...&#8221; menus is populated
+with &#8220;Java&#8221; by default and then with the corresponding languages for
+any associated installed runtimes. </p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;">Given that Control-Shift-Digit key
+combinations are not available to OpenOffice.org on all platforms,
+these bindings are not supported by the Scripting framework. </p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;">The scripting framework contains a
+number of helper scripts for its own use. Logical names starting with
+an underscore followed by a dollar sign and a script name, eg.
+"_$HelperScript" are reserved for this purpose, and will not be
+displayed in the assign dialogs. </p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;"><font color="#000000">In order to
+save a script event binding to a menu item or key into a document there
+are two steps which must be followed. Firstly, set up the binding in
+the usual way using the "Assign Script To ..." dialog. Then
+open the Tools-&gt;Configure dialog, and select the "Menu" tab. Click
+the "Save" button, select the document into which you wish to save the
+binding, and click "Save".&nbsp; You will be prompted with a dialog
+that says "The file already exists. Overwrite?". It is OK to click
+"Yes" as this will simply write the bindings into the file. Saving a
+binding to an event into a document can be done by clicking the
+"Document" radio button in the "Assign Script to Event" dialog.</font></p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;">In both the Writer &amp; Calc
+applications, the Format menu is dynamically generated. For this reason
+the Scripting Framework does not allow the user to bind scripts
+to entries in the Format menu in any of the applications. </p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;">It is not possible to assign scripts
+to menus, keys or events in Web or Formula documents (only Writer,
+Calc, Impress &amp; Draw). </p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;">Currently the Scripting Framework
+does not prevent the user from duplicating menu entries, for example it
+is possible to create a second "New" menu entry under the "File"
+menu. </p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;">The Comboboxes in the "Assign Script
+To ..." dialogs are not read-only. Editing their contents will
+prevent the generation of script bindings and will result in a
+StarBasic error message being displayed. </p>
+  </li>
+  <li>
+    <p>It is not possible to create top-level menus from the "Assign
+Script to Menu" dialog. However, the following steps will create a new
+top-level menu which can then be used in the "Assign Script To Menu"
+dialog. Open the Tools-&gt;Configure dialog, collapse the top-level
+menu entry preceding&nbsp; the location where the new top-level menu
+entry is to be placed and click the "New Menu" button. The new menu
+"Menu" will be placed below the highlighted menu item. Left clicking
+this entry, pausing, and left-clicking again (ie. not a double-click),
+will allow the user to rename the menu. </p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;">The user/Scripts directory should
+not be moved or deleted as it contains scripts (in the
+java/ScriptfrmwrkHelper directory) that are used by the Scripting
+Framework (in the creation of script bindings). While the NetBeans
+deploy will re-create a missing user/Scripts directory it does not
+restore the helper scripts.</p>
+  </li>
+  <li>Binding a script to the "Close Application" event may cause
+openOffice to crash, and where this does not happen the script fails to
+run. This bug is being tracked by <a
+ href="http://www.openoffice.org/project/www/issues/show_bug.cgi?id=15726">issue
+15726</a>.<br>
+  </li>
+</ul>
+<h2>Script Security</h2>
+<ul>
+  <li>
+    <p style="margin-bottom: 0cm;">Security warning dialogs are
+displayed upon first invocation, and not on document load as is done
+for StarBasic. </p>
+  </li>
+  <li>
+    <p>When the security setting is "Always", and "Show Warning Before
+Running" the Scripting Framework displays the correct dialog. StarBasic
+displays a dialog more appropriate to "According To Path List", and
+while this issue has been fixed (<a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=11822">Issue
+11822</a>) the fix is not present in OpenOffice.org 1.1 beta.</p>
+  </li>
+</ul>
+<h2>IDE &amp; Deployment</h2>
+<ul>
+</ul>
+<hr>
+<p>Last Modified: Tue Jul 15 15:53:53 BST 2003
+</p>
+</body>
+</html>

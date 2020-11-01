@@ -1,0 +1,345 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="CREATED" CONTENT="20020128;9504400">
+	<META NAME="CHANGED" CONTENT="20020205;7150155">
+	<STYLE>
+	<!--
+		@page { margin: 2cm }
+	-->
+	</STYLE>
+</head>
+<body LANG="en-US">
+<P ALIGN=CENTER STYLE="margin-bottom: 0cm"><FONT SIZE=5><B>Proposal
+v0.2</B></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0cm"><FONT SIZE=5><B>A new
+keyboard shortcut implementation</B></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Due to our efforts making the office
+accessible we have to solve some problems regarding keyboard
+shortcuts. This is a chance to enhance our current implementation for
+a better user convenience. 
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The following list shows problems
+regarding our current keyboard shortcut implementation:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">The database and bibliography
+	components are not sfx based. So these components are not able to
+	use a component specific keyboard shortcut configuration. They are
+	only bound to the global keyboard shortcut configuration implemented
+	in the sfx project.<BR><BR>
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Currently we support keyboard
+	shortcut configuration files, but we have to present a better
+	integration for the user to easily adopt his office to other
+	systems/office (See proposal from FLO &ldquo;<B>Keyboard
+	Accessibility Concept</B>&rdquo; about MS Office compatible keyboard
+	shortcut configuration).<BR><BR>
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">We have two different keyboard
+	shortcut configuration file formats. One is based on our old
+	resource file format and supports different languages. If the user
+	changes the keyboard shortcut configuration through our UI dialogs
+	it is stored in our new XML format. Our xml based keyboard shortcut
+	configuration doesn't support more than one language. So we have to
+	find a way to create language specific XML files. We can write a
+	converter that creates XML files out of our old resource file format
+	automatically.<BR><BR>
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Our current implementation is not
+	fine grained enough. We have a global keyboard shortcut
+	configuration and a component based configuration (writer, calc,
+	...). We should introduce a new keyboard shortcut configuration that
+	can be temporary used . For example complex dialogs can use this
+	kind of keyboard shortcut configuration to improve their
+	accessibility.<BR><BR>
+	</P>
+</UL>
+<P STYLE="margin-bottom: 0cm">A new implementation should use our new
+XML configuration files. It should support sfx and non-sfx based
+components to enable a better integration of newly written
+components, like <SPAN LANG="en-US">OpenOffice</SPAN>-based ones. So
+the new implementation must be based on UNO-interfaces and should
+support querying, changing, extending and applying configuration data
+through this API. This proposal describes an architecture that can be
+used for all our UI configuration data.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The new implementation has three
+configuration levels:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Office configuration level<BR>The
+	office configuration level stores data that is visible to all
+	components. This level assures that common functions are mapped to a
+	defined keyboard shortcut.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Component configuration level<BR>The
+	component configuration level store data that is visible to one type
+	of a component (like writer, calc). This level assures that common
+	component functions are always the same for one component.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Document configuration level<BR>This
+	configuration level stores data that is only visible to a document.
+	It is possible to map document specific functions to a keyboard
+	shortcut. For example a calc document can provide a private function
+	to make a time consuming calculation that be easily access by a
+	shortcut.</P>
+</UL>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="Proposal_Keyboard_shortcuts_html_6a183024.gif" ALIGN=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The implementation should work with two
+different kinds of configurations:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">A one instance service that holds
+	the office configurations and can create settings objects for all
+	components (like writer, <SPAN LANG="en-US">calc</SPAN>, ... ) that
+	are available at runtime. So it works as a factory for component
+	settings objects. The implementation can support new components if
+	the &ldquo;configuration storage service&rdquo; is able to provide
+	streams to the configuration of the component.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Model based configuration that has
+	all configuration data that was stored for a single document. 
+	</P>
+</UL>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The one instance implementation gives
+access to the office configuration and can create all supported
+component based settings objects through a <SPAN LANG="en-US">XMultiServiceFactory</SPAN>
+interface. The controller has references to two different kinds of
+configurations:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Component shortcut configuration
+	that is shared by all controller instances of a component.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Document shortcut configuration
+	that is shared by all controllers of a model. They data is stored in
+	the model. The access between controller and model is a private
+	implementation detail.</P>
+	<P STYLE="margin-bottom: 0cm"></P>
+</UL>
+<P STYLE="margin-bottom: 0cm">The controller implements an interface
+to give access to the component and document settings objects. These
+setting objects support loading/saving a XML based configuration
+(through XInput- <SPAN LANG="en-US">XoutputStream</SPAN>) and to get,
+add, remove and replace keyboard shortcuts. These settings objects
+can be applied to the controller or the global configuration. So it
+is possible to have generic access to this data for example for an UI
+dialog that supports changing the configuration. As the access is
+granted through UNO interfaces an external developer is able to use
+this implementation, too.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Saving and loading a configuration
+would work in the following way. The controller knows its &ldquo;component&rdquo;
+and the current configuration type (for example keyboard ). It asks
+the &ldquo;global configuration storage service&rdquo; for a stream
+that stores data for a &ldquo;writer keyboard&rdquo; configuration.
+So the knowledge output the real storage is only known by this
+service, all other implementation uses XInputStream and XOutputStream
+to fulfill their work. This stream is  given to the concrete settings
+object that knows how to store its data as an XML stream and Save(
+stream ) is called.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The controller supports a function
+<I>MapKeyToFunction</I><SPAN STYLE="font-style: normal"> to get a
+mapping between a com.sun.star.awt.KeyEvent and a function. It should
+first make a lookup into the office configuration to find a valid
+mapping if this is not successful the controller has to ask the
+component settings object and last the document settings object. So
+the call hierachy would be:</SPAN></P>
+<P STYLE="margin-bottom: 0cm; font-style: normal">&ldquo;office cfg&rdquo;
+-&gt; 
+</P>
+<P STYLE="margin-bottom: 0cm; font-style: normal">&ldquo;component
+cfg&rdquo; -&gt; 
+</P>
+<P STYLE="margin-bottom: 0cm; font-style: normal">&ldquo;document
+cfg&rdquo;.</P>
+<P STYLE="margin-bottom: 0cm; font-style: normal"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; font-style: normal">The
+<I>MapKeyToFunction</I> function returns a string that is one of the
+following types:</P>
+<P STYLE="margin-bottom: 0cm; font-style: normal"><BR>
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm; font-style: normal">A slot command
+	URL that can be dispatched.</P>
+	<LI><P STYLE="margin-bottom: 0cm; font-style: normal">A command
+	string that must be executed in the component context, like
+	&ldquo;.uno:copy&rdquo;, &ldquo;.uno:cut&rdquo;, &ldquo;.uno:paste&rdquo;.
+	The command string must comply to the command URL specification
+	&ldquo;protocol:command&rdquo;. The command part can be any kind of
+	string. It would be even possible to have an encoded byte stream
+	that could be executed by a special implementation.</P>
+</UL>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Thorndale, serif"><FONT SIZE=3>The
+current sfx2 keyboard shortcut configuration implementation uses only
+a kind of merged &ldquo;component shortcut configuration&rdquo;. A
+closer look reveals that we can split this configuration into three
+different parts:</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Office configuration that is the
+	real base for all components.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Generic sfx based component
+	configuration. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Component based configuration (
+	writer, calc, draw, ...).</P>
+</UL>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The last two configurations should be
+loaded and merged into the &ldquo;component&rdquo; shortcut
+configuration&rdquo; to fit into our new architecture if we are
+running on a system with old configuration layout.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">This proposal just presents a new
+design for the keyboard shortcut configuration but it isn't
+restricted to this special type. There should be no problem to use
+the design to support also:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Menus</P>
+	<LI><P STYLE="margin-bottom: 0cm">Toolbars</P>
+	<LI><P STYLE="margin-bottom: 0cm">Statusbars</P>
+	<LI><P STYLE="margin-bottom: 0cm">Events</P>
+	<LI><P STYLE="margin-bottom: 0cm">Images</P>
+</UL>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+</body>
+</HTML>

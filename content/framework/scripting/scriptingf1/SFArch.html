@@ -1,0 +1,1509 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>Scripting Framework Architecture</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 7  (Linux)">
+	<META NAME="CREATED" CONTENT="20030310;11571900">
+	<META NAME="CHANGED" CONTENT="20031127;8172100">
+	<STYLE>
+	<!--
+		@page { size: 8.27in 11.69in; margin-left: 0.98in; margin-right: 0.98in; margin-top: 0.8in; margin-bottom: 0.8in }
+		P { margin-bottom: 0.08in; page-break-before: auto }
+		P.western { font-family: "Thorndale", serif; font-size: 11pt }
+		H2 { margin-bottom: 0.08in }
+		H2.western { font-family: "Arial", sans-serif; font-size: 16pt; font-style: normal }
+		H2.cjk { font-family: "HG Mincho Light J"; font-size: 14pt; font-style: italic }
+		H2.ctl { font-family: "Arial Unicode MS"; font-size: 14pt; font-style: italic }
+		H3 { margin-bottom: 0.08in }
+		H3.western { font-family: "Arial", sans-serif; font-size: 12pt }
+		H3.cjk { font-family: "HG Mincho Light J" }
+		H3.ctl { font-family: "Arial Unicode MS" }
+		H4 { margin-bottom: 0.08in }
+		H4.western { font-family: "Arial", sans-serif; font-size: 10pt; font-style: normal }
+		H4.cjk { font-family: "HG Mincho Light J"; font-size: 11pt; font-style: italic }
+		H4.ctl { font-family: "Arial Unicode MS"; font-size: 11pt; font-style: italic }
+		H5 { margin-bottom: 0.08in; page-break-before: auto }
+		H5.western { font-family: "Arial", sans-serif }
+		H5.cjk { font-family: "HG Mincho Light J"; font-size: 11pt }
+		H5.ctl { font-family: "Arial Unicode MS"; font-size: 11pt }
+		TD P { margin-bottom: 0.08in; page-break-before: auto }
+		TD P.western { font-family: "Thorndale", serif; font-size: 11pt }
+		TH P { margin-bottom: 0.08in; page-break-before: auto }
+		TH P.western { font-family: "Thorndale", serif; font-size: 11pt; font-style: italic }
+		TH P.cjk { font-weight: medium }
+		TH P.ctl { font-weight: medium }
+	-->
+	</STYLE>
+</head>
+<body LANG="en-GB" DIR="LTR">
+<P ALIGN=CENTER STYLE="margin-top: 0.17in; border: none; padding: 0in; page-break-after: avoid">
+<BR><BR>
+</P>
+<P ALIGN=CENTER STYLE="margin-top: 0.17in; border: none; padding: 0in; page-break-before: auto; page-break-after: avoid">
+<BR><BR>
+</P>
+<P ALIGN=CENTER STYLE="margin-top: 0.17in; border: none; padding: 0in; page-break-before: auto; page-break-after: avoid">
+<BR><BR>
+</P>
+<P ALIGN=CENTER STYLE="margin-top: 0.17in; border: none; padding: 0in; page-break-before: auto; page-break-after: avoid">
+<BR><BR>
+</P>
+<P ALIGN=RIGHT STYLE="margin-top: 0.17in; margin-bottom: 0.08in; border: none; padding: 0in; line-height: 100%; page-break-before: auto; page-break-after: avoid">
+<BR><BR>
+</P>
+<P ALIGN=RIGHT STYLE="margin-top: 0.17in; border: none; padding: 0in; page-break-before: auto; page-break-after: avoid">
+<FONT FACE="Arial, sans-serif"><FONT SIZE=5 STYLE="font-size: 20pt"><B>Scripting
+Framework Architecture</B></FONT></FONT></P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P STYLE="margin-top: 0.17in; page-break-before: auto; page-break-after: avoid">
+<FONT FACE="Albany, sans-serif"><FONT SIZE=4 STYLE="font-size: 16pt"><B>Revision:
+0.1</B></FONT></FONT></P>
+<P STYLE="margin-left: 0.2in; margin-bottom: 0in; page-break-before: auto">
+<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Date: <SDFIELD TYPE=DATETIME SDVAL="37944.4286453704" SDNUM="1033;2057;DD/MM/YY">19/11/03</SDFIELD></FONT></FONT></P>
+<P CLASS="western" STYLE="margin-left: 1.25in"><BR><BR>
+</P>
+<P CLASS="western" STYLE="margin-left: 1.25in"><BR><BR>
+</P>
+<P STYLE="margin-left: 0.2in; margin-bottom: 0in; page-break-before: auto">
+<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Authors: </FONT></FONT>
+</P>
+<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Noel Power</FONT></FONT></P>
+<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+<BR>
+</P>
+<P CLASS="western" STYLE="margin-left: 1.25in"><BR><BR>
+</P>
+<P STYLE="margin-left: 0.2in; margin-bottom: 0in; page-break-before: auto">
+<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Project: </FONT></FONT>
+</P>
+<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Scripting Framework</FONT></FONT></P>
+<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+<BR>
+</P>
+<P CLASS="western" STYLE="margin-left: 1.25in"><BR><BR>
+</P>
+<P CLASS="western" STYLE="margin-left: 1.25in"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; page-break-before: auto"><BR>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; page-break-before: auto"><BR>
+</P>
+<P CLASS="western" STYLE="page-break-before: always"><BR><BR>
+</P>
+<DIV ID="Table of Contents1" DIR="LTR" STYLE="background: transparent">
+	<DIV ID="Table of Contents1_Head" DIR="LTR">
+		<P STYLE="margin-top: 0.17in; page-break-before: auto; page-break-after: avoid">
+		<FONT FACE="Albany, sans-serif"><FONT SIZE=4 STYLE="font-size: 16pt"><B>Table
+		of Contents</B></FONT></FONT></P>
+	</DIV>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Revision History	2</FONT></FONT></P>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Introduction	2</FONT></FONT></P>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>UNO Language Bridge	2</FONT></FONT></P>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Overview of Architecture
+		3</FONT></FONT></P>
+	<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>MasterScriptProvider	3</FONT></FONT></P>
+	<P STYLE="margin-left: 0.59in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Responsibilites	3</FONT></FONT></P>
+	<P STYLE="margin-left: 0.59in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Lifecycle 	4</FONT></FONT></P>
+	<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>LanguageScriptProvider	4</FONT></FONT></P>
+	<P STYLE="margin-left: 0.59in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Responsibilites	4</FONT></FONT></P>
+	<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Scripting Framework
+	URI	5</FONT></FONT></P>
+	<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Storage of Scripts	5</FONT></FONT></P>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>How To implement a
+	LanguageScriptProvider	5</FONT></FONT></P>
+	<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Using framework helper
+	classes ( Java Only )	5</FONT></FONT></P>
+	<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Using UNO.	6</FONT></FONT></P>
+	<P STYLE="margin-left: 0.59in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Prerequisites	6</FONT></FONT></P>
+	<P STYLE="margin-left: 0.59in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Creating the
+	LanguageScriptProvider component	6</FONT></FONT></P>
+	<P STYLE="margin-left: 0.79in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>InvocationCtx	6</FONT></FONT></P>
+	<P STYLE="margin-left: 0.79in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>InvocationCtx Property
+	Set	6</FONT></FONT></P>
+	<P STYLE="margin-left: 0.79in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>InvocationCtx String	6</FONT></FONT></P>
+	<P STYLE="margin-left: 0.59in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>LanguageScriptProvider
+	expected behaviour	7</FONT></FONT></P>
+	<P STYLE="margin-left: 0.79in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>XBrowseNode method
+	getName()	8</FONT></FONT></P>
+	<P STYLE="margin-left: 0.79in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>XBrowseNode method
+	getChildNodes()	8</FONT></FONT></P>
+	<P STYLE="margin-left: 0.79in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>XBrowseNode method
+	hasChildNodes()	8</FONT></FONT></P>
+	<P STYLE="margin-left: 0.79in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>XBrowseNode method
+	getType()	9</FONT></FONT></P>
+	<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Building a new
+	LangaugeScriptProvider	9</FONT></FONT></P>
+	<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Registering a new
+	LanguageScriptProvider	10</FONT></FONT></P>
+	<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Using the framework with
+	Office	10</FONT></FONT></P>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Appendix I	13</FONT></FONT></P>
+	<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Interfaces	13</FONT></FONT></P>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Appendix II 	13</FONT></FONT></P>
+	<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Skeleton Code	13</FONT></FONT></P>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Appendix III	18</FONT></FONT></P>
+	<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>parcel-descriptor.xml
+	DTD and example	18</FONT></FONT></P>
+	<P STYLE="margin-left: 0.2in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Appendix IV	18</FONT></FONT></P>
+	<P STYLE="margin-left: 0.39in; margin-bottom: 0in; page-break-before: auto">
+	<FONT FACE="Arial, sans-serif"><FONT SIZE=2>Directory Structure	18</FONT></FONT></P>
+</DIV>
+<P CLASS="western"><BR><BR>
+</P>
+<H2 CLASS="western">Revision History</H2>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=29*>
+	<COL WIDTH=25*>
+	<COL WIDTH=49*>
+	<COL WIDTH=153*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=11%>
+				<P CLASS="western">Revision</P>
+			</TH>
+			<TH WIDTH=10%>
+				<P CLASS="western">Date</P>
+			</TH>
+			<TH WIDTH=19%>
+				<P CLASS="western">Author 
+				</P>
+			</TH>
+			<TH WIDTH=60%>
+				<P CLASS="western">Comment</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR>
+			<TD WIDTH=11% VALIGN=BOTTOM SDVAL="0.1" SDNUM="1033;">
+				<P CLASS="western" ALIGN=RIGHT>0.1</P>
+			</TD>
+			<TD WIDTH=10% VALIGN=TOP>
+				<P CLASS="western"><SDFIELD TYPE=DATETIME SDVAL="37944.4296524305" SDNUM="1033;2057;DD/MM/YY">19/11/03</SDFIELD></P>
+			</TD>
+			<TD WIDTH=19% VALIGN=TOP>
+				<P CLASS="western">Noel Power</P>
+			</TD>
+			<TD WIDTH=60% VALIGN=TOP>
+				<P CLASS="western">Initial draft</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P CLASS="western"><BR><BR>
+</P>
+<H2 CLASS="western">Introduction</H2>
+<P CLASS="western">By creating a new LanguageScriptProvider a
+developer can add support for the scripting language of their choice
+to OpenOffice.org. The Scripting Framework provides all the required
+plumbing needed to facilitate the detection, assigning and invocation
+of scripts for a LanguageScriptProvider. The LanguageScriptProvider
+just has to provide the language specific execution environment for
+the script and execute it. The framework takes care of the rest.</P>
+<H2 CLASS="western">UNO Language Bridge</H2>
+<P CLASS="western">There must be a supported UNO bridge for the
+scripting language to allow the framework to make calls against this
+new scripting runtime. The bridge will take care of all the parameter
+marshalling that needs to occur as the framework makes the call to
+the invoke method written in the new language. 
+</P>
+<P CLASS="western">The Java and BeanShell Runtimes are supported by
+the existing Java UNO bridge. Any scripting language with a Java
+implementation could use the Java UNO bridge, such as Jython
+[Python], Jacl [Tcl/TK] andRhino [Javascript]. 
+</P>
+<H2 CLASS="western">Overview of Architecture 
+</H2>
+<H3 CLASS="western">MasterScriptProvider</H3>
+<P CLASS="western"><IMG SRC="fig1.png" NAME="Graphic1" ALIGN=BOTTOM WIDTH=316 HEIGHT=269 BORDER=0>Figure1
+MasterScriptProvider ( name space ommited )</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western">The  MasterScriptProvider is an Office side UNO
+component which is an integral part of the framework. It implements a
+number of services and interfaces. See Figure 1.  It is available and
+deployed as part of an Office installation .</P>
+<H4 CLASS="western">Responsibilites</H4>
+<UL>
+	<LI><P CLASS="western">Identifes the available
+	LangaugeScriptProviders. LanguageScriptProviders must adhere to a
+	specific naming scheme .
+	&ldquo;drafts.com.sun.star.script.provider.ScriptProviderForXXX&rdquo;
+	where &ldquo;XXX&rdquo; is the language name as it appears in a
+	script framework URI. Additionally the  LanguageScriptProvider must
+	implement the following service definition.  
+	</P>
+	<UL>
+		<LI><P CLASS="western">drafts::com::sun::star::script::provider::LanguageScriptProvider
+		( see Figure 2.)</P>
+	</UL>
+	<LI><P CLASS="western">Creates an invocation context from the
+	document model. The invocation context is an implementation of
+	com.sun.star.beans.XPropertySet setup to access the context from
+	which the script was invoked. This invocation context is passed as
+	an argument to any child language LanguageScriptProviders the
+	MasterScriptProvider  creates.</P>
+	<LI><P CLASS="western">Supports
+	drafts.com.sun.star.provider.XScriptProvider interface. Returns a
+	drafts.com.sun.star.script.provider.XScript object for any script
+	URI ( see Scripting Framework URI section ) passed to the
+	getScript() method. The MasterScriptProvider will create instances (
+	or access previously created instances) of the appropriate
+	LanguageScriptProviders for that URI. 
+	</P>
+</UL>
+<UL>
+	<LI><P CLASS="western">Supports the
+	drafts.com.sun.star.script.browe.XBrowseNode API ( see Appendix I )
+	so it provides a single point of contact for browsing and executing
+	scripts by delegating to correct LanguageScriptProviders. When a
+	client accesses the XBrowseNode API the MasterScriptProvider will
+	create an instance ( or access a previously created instance ) of
+	each LanguageScriptProvider. It will access the XBrowseNode API for
+	each LanguageScriptProvider and collate the information available
+	from each provider to present this information back to the caller.</P>
+</UL>
+<H4 CLASS="western">Lifecycle 
+</H4>
+<P CLASS="western">By default MasterScriptProvider is created by any
+document that is opened. Its lifecycle will be tied to the life of
+the document that created it.</P>
+<P CLASS="western">The MasterScriptProvider can also be created
+standalone, in which case it will exist as long as a reference to it
+is held by the client that creates it. 
+</P>
+<P CLASS="western">The MasterScriptProvider is a lightweight object.
+It maintains some static state that will be available to all
+instances of the MasterScriptProvider ( such as list of currently
+open documents). The LanguageScriptProviders themselves are also
+intended to be lightweight objects. The MasterScriptProvider hides
+the details of the construction and access of the
+LanguageScriptProviders from clients and users. 
+</P>
+<H3 CLASS="western">LanguageScriptProvider</H3>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western"><IMG SRC="fig2.png" NAME="Graphic2" ALIGN=BOTTOM WIDTH=316 HEIGHT=269 BORDER=0>Figure
+2. LanguageScriptProvider for language XXXX (namespace omitted)</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western">The LanguageScriptProvider is an UNO component
+that provides the environment to execute a script for a specific
+language. For example when office encounters a scripting framework
+URI ( see Scripting Framework URI section ) in an event assignment it
+delegates to a MasterScriptProvider which in turn finds the
+appropriate LanguageScriptProvider to execute the script. 
+</P>
+<H4 CLASS="western">Responsibilites</H4>
+<P CLASS="western"><BR><BR>
+</P>
+<UL>
+	<LI><P CLASS="western">Responsible for creating the environment
+	necessary to run a script. Implementation specific. 
+	</P>
+	<LI><P CLASS="western">It is intended that the
+	LanguageScriptProvider service will maintain some static state that
+	represents the registry of scripts known to it ( for the specific
+	language of the provider ), including scripts in
+	OFFICE_INSTALATION_PATH/user, OFFICE_INSTALATION_PATH/share and  for
+	each open document. Therefore this information is available to all
+	instances of the LanguageScriptProvider.</P>
+	<LI><P CLASS="western">Given a script URI it is responsible for
+	returning a command like object that implements the
+	drafts.com.sun.star.script.provider.XScript interface that can
+	execute the script described by the URI.</P>
+	<LI><P CLASS="western">Supports XBrowseNode API to allow enumeration
+	for all scripts  
+	</P>
+	<LI><P CLASS="western">The name of the new LanguageScriptProvider
+	service must be of the form
+	drafts.com.sun.star.script.provider.ScriptProviderFor[Language]. 
+	</P>
+	<LI><P CLASS="western">The new LanguageScriptProvider service must
+	support the
+	&ldquo;d<FONT SIZE=3><FONT FACE="Thorndale">rafts.com.sun.star.script.provider.LanguageScriptProvider&rdquo;
+	service.</FONT></FONT></P>
+</UL>
+<H3 CLASS="western">Scripting Framework URI specification</H3>
+<P CLASS="western">vnd.sun.star.script://&lt;script_name&gt;['?'&lt;query_element&gt;('&amp;'&lt;query_element&gt;)*]]</P>
+<P CLASS="western">script_name is something meaningful that the
+ScriptProvider can use to determine what script to run. 
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=38*>
+	<COL WIDTH=218*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TD WIDTH=15%>
+				<P CLASS="western">Parameter</P>
+			</TD>
+			<TD WIDTH=85%>
+				<P CLASS="western">Description</P>
+			</TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=15%>
+				<P CLASS="western">language</P>
+			</TD>
+			<TD WIDTH=85%>
+				<P CLASS="western"> identifies identifies the language, or
+				LanguageScriptProvider to be used to process the URI e.g.
+				language=StarBasic, language=Java, language=JavaScript</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=15%>
+				<P CLASS="western">location</P>
+			</TD>
+			<TD WIDTH=85%>
+				<P CLASS="western"> identifies the container for the script,
+				could be document, user, share e.g. A placeholder to allow
+				relative addressing of the document, user and share areas, the
+				current Scripting Framework URI scheme caters for this by
+				allowing location to be &ldquo;user&rdquo;, &ldquo;share&rdquo;
+				or &ldquo;document&rdquo; indicating the location of the script
+				is located in &ldquo;install_path/User/Scripts/&lt;language&gt;&rdquo;,
+				&ldquo;install_path/Share/Scripts/&lt;language&gt;&rdquo; or
+				document identified by the invocation context.</P>
+				<P CLASS="western"><B><I>note: </I></B>location could be another
+				URI e.g. &ldquo;file://&rdquo; or &ldquo;vnd.<A HREF="http://sun.star.pkg/">sun.star.pkg</A>://&rdquo;.</P>
+				<P CLASS="western">Currently only user/share or document are
+				supported by the framework..</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western">MAY CHANGE, for the next milestone we are going to
+be using a new UNO URL service, format may slightly change as a
+result of conformance to general office URL formating conventions.</P>
+<P CLASS="western"><BR><BR>
+</P>
+<H3 CLASS="western">Storage of Scripts</H3>
+<P CLASS="western">A LanguageScriptProvider is responsible for
+knowing about how its own scripts are stored, where, what format and
+what kind of directory structure is used. 
+</P>
+<P CLASS="western">The scripting framework however attempts to
+standardise how to store and discover scripts by defining  
+</P>
+<UL>
+	<LI><P CLASS="western">a default directory structure  [ see Appendix
+	III]</P>
+	<LI><P CLASS="western">a generic mechanism for enabling discovery of
+	scripts and associating meta data with those scripts. [see  Appendix
+	IV ]</P>
+</UL>
+<P CLASS="western"> In addition the scripting framework provides a
+mechanism for packaging and deploying scripts that wish to use these
+framework defined structures ( see  using <A HREF="http://framework.openoffice.org/scripting/scriptingf1/commandline-devguide.html#usage">commandline-tools</A>)</P>
+<P CLASS="western">Note: it is up to the developer to decide whether
+they use these features or not. 
+</P>
+<H2 CLASS="western">How To implement a LanguageScriptProvider</H2>
+<P CLASS="western">To implement a LanguageScriptProvider you need to
+create an UNO component. The component needs to satisfy certain
+criteria</P>
+<UL>
+	<LI><P CLASS="western">implement service
+	drafts.com.sun.star.script.provider.LanguageScriptProvider,
+	therefore</P>
+	<UL>
+		<LI><P CLASS="western">implement interface
+		drafts.com.sun.star.script.provider.XScriptProvider</P>
+		<LI><P CLASS="western">implement interface
+		drafts.com.sun.star.script.browse.XBrowseNode</P>
+	</UL>
+	<LI><P CLASS="western">satisfy naming convention 
+	&quot;drafts.com.sun.star.script.provider.ScriptProviderFor[languageName]&quot;
+	e.g. &quot;drafts.com.sun.star.script.provider.ScriptProviderForXXXX&rdquo;</P>
+</UL>
+<P CLASS="western"><BR><BR>
+</P>
+<H3 CLASS="western">Using framework helper classes ( Java Only )</H3>
+<P CLASS="western">To bypass the complexity of UNO and to reduce the
+cost of developing an UNO component the Scripting Framework provides
+a helper class in the form of an abstract base class
+com.sun.star.script.framework.provider.ScriptProvider. This class can
+be found in the ScriptFramework.jar. This jar file will be available
+at runtime located in the &ldquo;OFFICE_INSTALL_PATH/program/classes&rdquo;
+directory.</P>
+<P CLASS="western">To create an UNO service to support the scripting
+language you wish to create a LanguageScriptProvider for, you just 
+</P>
+<UL>
+	<LI><P CLASS="western">need to extend 
+	com.sun.star.script.framework.provider.ScriptProvider class.</P>
+	<LI><P CLASS="western">implement the invoke method 
+	</P>
+	<LI><P CLASS="western">provide implementations for 
+	__getServiceFactory()  and __writeRegistryServiceInfo() methods.
+	Please see skeleton code  in APPENDIX II look for &ldquo;<FONT SIZE=2><FONT FACE="Courier, monospace">INSERT
+	CODE TO CALL MyScriptLanguage here&rdquo;.</FONT></FONT></P>
+</UL>
+<P CLASS="western"><FONT FACE="Thorndale"><FONT SIZE=2 STYLE="font-size: 11pt">See
+section on building a new LanguageScriptProvider for details on the
+tools available for building you new implementation.</FONT></FONT></P>
+<H3 CLASS="western">Using UNO.</H3>
+<H4 CLASS="western">Prerequisites</H4>
+<P CLASS="western">Have read and understood the following chapters in
+the Office Developer Guide.</P>
+<UL>
+	<LI><P CLASS="western"><A HREF="http://api.openoffice.org/docs/DevelopersGuide/Preface/ReadersGuide.htm">http://api.openoffice.org/docs/DevelopersGuide/Preface/ReadersGuide.htm</A></P>
+	<LI><P CLASS="western"><A HREF="http://api.openoffice.org/docs/DevelopersGuide/FirstSteps/FirstSteps.htm">http://api.openoffice.org/docs/DevelopersGuide/FirstSteps/FirstSteps.htm</A></P>
+	<LI><P CLASS="western"><A HREF="http://api.openoffice.org/docs/DevelopersGuide/ProfUNO/ProfUNO.htm">http://api.openoffice.org/docs/DevelopersGuide/ProfUNO/ProfUNO.htm</A></P>
+	<LI><P CLASS="western"><A HREF="http://api.openoffice.org/docs/DevelopersGuide/Components/Components.htm">http://api.openoffice.org/docs/DevelopersGuide/Components/Components.htm</A></P>
+</UL>
+<P CLASS="western">Familiarity with building office components either
+manually or using <A HREF="http://api.openoffice.org/SDK/">OpenOffice
+SDK</A> 
+</P>
+<H4 CLASS="western">Creating the LanguageScriptProvider component</H4>
+<P CLASS="western">Create UNO component
+drafts.com.sun.star.script.provider.ScriptProviderForXXXX according
+to the guidelines outlined in the prerequisites mentioned above.</P>
+<P CLASS="western">In addition to the interfaces mentioned in the
+service description it is also necessary for the component to
+implement the com.sun.star.lang.XInitialization interface. 
+</P>
+<P CLASS="western">LanguageScriptProviders are created and
+initialised by the MasterScriptProvider with an Invocation context.</P>
+<H5 CLASS="western"><FONT SIZE=2>Invocation Context</FONT></H5>
+<P CLASS="western" STYLE="margin-bottom: 0in">The invocationCtx
+either an implementation of com.sun.star.beans.XPropertySet or an
+OUString setup by the MasterScriptProvider to pass context
+information to the LanguageScriptProvider. The context a
+LanguageScriptProvider is created with determines its behaviour in
+terms of both execution and what scripts it returns via the
+XBrowseNode API.</P>
+<H5 CLASS="western">Invocation Context Property Set</H5>
+<TABLE WIDTH=623 BORDER=2 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=180>
+	<COL WIDTH=80>
+	<COL WIDTH=341>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=180>
+				<P CLASS="western">Property Key</P>
+			</TH>
+			<TH WIDTH=80>
+				<P CLASS="western">Type</P>
+			</TH>
+			<TH WIDTH=341>
+				<P CLASS="western">Description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=180>
+				<P CLASS="western">DOC_REF</P>
+			</TD>
+			<TD WIDTH=80>
+				<P CLASS="western">XModel</P>
+			</TD>
+			<TD WIDTH=341>
+				<P CLASS="western">The XModel of the current document</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=180>
+				<P CLASS="western">DOC_URI</P>
+			</TD>
+			<TD WIDTH=80>
+				<P CLASS="western">OUString</P>
+			</TD>
+			<TD WIDTH=341>
+				<P CLASS="western">The document URI of the current document 
+				</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P CLASS="western" STYLE="margin-bottom: 0in"><BR>
+</P>
+<H5 CLASS="western">Invocation Context String</H5>
+<P CLASS="western">Contains a url to a location on the file system
+that contains scripts e.g. OFFICE_INSTALL_PATH/user or
+OFFICE_INSTALL_PATH/share</P>
+<P CLASS="western"><BR><BR>
+</P>
+<H4 CLASS="western">LanguageScriptProvider expected behaviour</H4>
+<P CLASS="western">As mentioned above the new LanguageScriptProvider
+service will be instantiated by the MasterScriptProvider. It will be
+passed an invocation context ( invocationCtx  described above ) as a
+parameter of the initialise() method .   
+</P>
+<P STYLE="margin-top: 0.08in; page-break-before: auto"><FONT FACE="Arial, sans-serif"><FONT SIZE=2><I>Xinitialization
+Method initialize()</I></FONT></FONT></P>
+<TABLE WIDTH=625 BORDER=2 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=151>
+	<COL WIDTH=175>
+	<COL WIDTH=278>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=151>
+				<P CLASS="western">Parameter Types</P>
+			</TH>
+			<TH WIDTH=175>
+				<P CLASS="western">Parameters</P>
+			</TH>
+			<TH WIDTH=278>
+				<P CLASS="western">Description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=151>
+				<P CLASS="western">[in] sequence&lt; any &gt;</P>
+			</TD>
+			<TD WIDTH=175>
+				<P CLASS="western">aParams</P>
+			</TD>
+			<TD WIDTH=278>
+				<P CLASS="western">An invocation context. Contains either
+				reference to the XModel ( representing a document context ) or
+				location of user or share directory (representing and application
+				context ). 
+				</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western">A LanguageScriptProvider should 
+</P>
+<UL>
+	<LI><P CLASS="western">be aware of any scripts located in the
+	context it is created with. 
+	</P>
+	<LI><P CLASS="western">be aware of any scripts located in any other
+	context for which a LanguageScriptProvider of the same type has been
+	created. This implies that the LanguageScriptProviders should cache
+	this data statically so that it can be shared amongst the different
+	instances. 
+	</P>
+	<LI><P CLASS="western">be able to locate a script based on a
+	scripting URI and return an object implementing the XScript
+	interface.</P>
+</UL>
+<P STYLE="margin-top: 0.08in; page-break-before: auto"><FONT FACE="Arial, sans-serif"><FONT SIZE=2><I>XScriptProvider
+Method getScript()</I></FONT></FONT></P>
+<TABLE WIDTH=625 BORDER=2 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=151>
+	<COL WIDTH=175>
+	<COL WIDTH=278>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=151>
+				<P CLASS="western">Parameter Types</P>
+			</TH>
+			<TH WIDTH=175>
+				<P CLASS="western">Parameters</P>
+			</TH>
+			<TH WIDTH=278>
+				<P CLASS="western">Description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=151>
+				<P CLASS="western">[in] string</P>
+			</TD>
+			<TD WIDTH=175>
+				<P CLASS="western">URL</P>
+			</TD>
+			<TD WIDTH=278>
+				<P CLASS="western">URL to script.</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P CLASS="western" STYLE="margin-bottom: 0in; page-break-before: auto">
+<BR>
+</P>
+<TABLE WIDTH=625 BORDER=2 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=151>
+	<COL WIDTH=458>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TD WIDTH=151>
+				<P CLASS="western">ReturnType</P>
+			</TD>
+			<TD WIDTH=458>
+				<P CLASS="western">Description</P>
+			</TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=151>
+				<P CLASS="western">XScript</P>
+			</TD>
+			<TD WIDTH=458>
+				<P CLASS="western">Instance of an object implementing the XScript
+				interface that represents a script that will execute against the
+				context of the LanguageScriptProvider that created it.  This
+				means that when the invoke() method of this object is called that
+				script will act on the document from which the script was
+				invoked.</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P CLASS="western">Note: It is up to the LanguageScriptProvider to
+decide what information to pass to a running script. It makes sense
+to pass information to the script which makes the script writer's job
+easier, such as a reference to the current document ( context ),
+reference to the service manager (available from the component
+context passed into the LanguageScriptProvider component's
+constructor by UNO) and a reference to the desktop (available from
+UNO using this service manager).</P>
+<P CLASS="western" STYLE="margin-bottom: 0in">All of the Java based
+reference LanguagesScriptProviders provided with Office make this
+information available to the running script in the form of an object
+implementing the interface
+drafts.com.sun.script.provider.XScriptContext. This provides accessor
+methods to get the current document, the desktop and the component
+context. Depending on the contraints of the language this information
+is passed to the scripts in different ways, for example in Beanshell
+and JavaScript this is available  as an environment variable and in
+the case of Java it is passed as a parameter to the script.</P>
+<P STYLE="margin-top: 0.08in; page-break-before: auto"><FONT FACE="Arial, sans-serif"><FONT SIZE=2><I>Xscript
+invoke() method.</I></FONT></FONT></P>
+<TABLE WIDTH=623 BORDER=2 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=151>
+	<COL WIDTH=175>
+	<COL WIDTH=275>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=151>
+				<P CLASS="western">Parameter Types</P>
+			</TH>
+			<TH WIDTH=175>
+				<P CLASS="western">Parameters</P>
+			</TH>
+			<TH WIDTH=275>
+				<P CLASS="western">Description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=151>
+				<P CLASS="western">[in] string</P>
+			</TD>
+			<TD WIDTH=175>
+				<P CLASS="western">scriptURI</P>
+			</TD>
+			<TD WIDTH=275>
+				<P CLASS="western">Original URI passed to the framework</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=151>
+				<P CLASS="western">[in] sequence&lt; any &gt;</P>
+			</TD>
+			<TD WIDTH=175>
+				<P CLASS="western">aParams</P>
+			</TD>
+			<TD WIDTH=275>
+				<P CLASS="western">Input parameters</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=151>
+				<P CLASS="western">[out] sequence&lt; short &gt;</P>
+			</TD>
+			<TD WIDTH=175>
+				<P CLASS="western">aOutParamIndex</P>
+			</TD>
+			<TD WIDTH=275>
+				<P CLASS="western">Output parameter index</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=151>
+				<P CLASS="western">[out] sequence&lt; any &gt;</P>
+			</TD>
+			<TD WIDTH=175>
+				<P CLASS="western">aOutParam 
+				</P>
+			</TD>
+			<TD WIDTH=275>
+				<P CLASS="western">Output parameters</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; page-break-before: auto">
+<BR>
+</P>
+<TABLE WIDTH=625 BORDER=2 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=151>
+	<COL WIDTH=458>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=151>
+				<P CLASS="western">ReturnType</P>
+			</TH>
+			<TH WIDTH=458>
+				<P CLASS="western">Description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=151>
+				<P CLASS="western">Any</P>
+			</TD>
+			<TD WIDTH=458>
+				<P CLASS="western">Return value of script. 
+				</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P CLASS="western" STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-top: 0.08in; page-break-before: auto"><FONT FACE="Arial, sans-serif"><FONT SIZE=2><I>XScriptContext
+methods</I></FONT></FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in"><BR>
+</P>
+<TABLE WIDTH=623 BORDER=2 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=177>
+	<COL WIDTH=149>
+	<COL WIDTH=275>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=177>
+				<P CLASS="western">XscriptContext Method 
+				</P>
+			</TH>
+			<TH WIDTH=149>
+				<P CLASS="western">Returns</P>
+			</TH>
+			<TH WIDTH=275>
+				<P CLASS="western">Description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=177>
+				<P CLASS="western"><FONT SIZE=2>getDocument</FONT></P>
+			</TD>
+			<TD WIDTH=149>
+				<P CLASS="western"><FONT SIZE=2>XModel</FONT></P>
+			</TD>
+			<TD WIDTH=275>
+				<P CLASS="western"><FONT SIZE=2>Access to the current document.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=177>
+				<P CLASS="western"><FONT SIZE=2>getDesktop</FONT></P>
+			</TD>
+			<TD WIDTH=149>
+				<P CLASS="western"><FONT SIZE=2>XDesktop</FONT></P>
+			</TD>
+			<TD WIDTH=275>
+				<P CLASS="western"><FONT SIZE=2>Access to the current desktop.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=177>
+				<P CLASS="western"><FONT SIZE=2>getComponentContext</FONT></P>
+			</TD>
+			<TD WIDTH=149>
+				<P CLASS="western"><FONT SIZE=2>XComponentContext</FONT></P>
+			</TD>
+			<TD WIDTH=275>
+				<P CLASS="western"><FONT SIZE=2>Can be used by the script to get
+				the default multi component factory to create other UNO services.</FONT></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P CLASS="western"><BR><BR>
+</P>
+<P STYLE="margin-top: 0.08in; page-break-before: auto"><BR><BR>
+</P>
+<P CLASS="western">The Browse interfaces ( XBrowseNode ) exported by
+the new LanguageScriptProvider service are the initial point of
+contact for the office application. In order for the Office process 
+to display all scripts it first needs to create all available
+LanguageScriptProviders, each LanguageScriptProvider is created with
+a context (see above). Depending on how the new
+LanguageScriptProvider is initialised it will enumerate the scripts
+stored in that context. It is expected that the
+LanguageScriptProvider implementation will return the language name
+as the name of the top-level CONTAINER node. It is up to the
+LanguageScriptProvider how to arrange the hierarchy of the scripts
+and how they are presented to the user.</P>
+<H5 CLASS="western">XBrowseNode method getName()</H5>
+<TABLE WIDTH=625 BORDER=2 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=151>
+	<COL WIDTH=458>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=151>
+				<P CLASS="western">ReturnType</P>
+			</TH>
+			<TH WIDTH=458>
+				<P CLASS="western">Description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=151>
+				<P CLASS="western">string</P>
+			</TD>
+			<TD WIDTH=458>
+				<P CLASS="western">Name of Node.</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<H5 CLASS="western">XBrowseNode method getChildNodes()</H5>
+<TABLE WIDTH=625 BORDER=2 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=151>
+	<COL WIDTH=458>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=151>
+				<P CLASS="western">ReturnType</P>
+			</TH>
+			<TH WIDTH=458>
+				<P CLASS="western">Description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=151>
+				<P CLASS="western">Sequence &lt;XBrowseNode&gt;</P>
+			</TD>
+			<TD WIDTH=458>
+				<P CLASS="western">Children of this node.</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<H5 CLASS="western">XBrowseNode method hasChildNodes()</H5>
+<TABLE WIDTH=625 BORDER=2 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=151>
+	<COL WIDTH=458>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=151>
+				<P CLASS="western">ReturnType</P>
+			</TH>
+			<TH WIDTH=458>
+				<P CLASS="western">Description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=151>
+				<P CLASS="western">boolean</P>
+			</TD>
+			<TD WIDTH=458>
+				<P CLASS="western">True if children exist, false otherwise</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<H5 CLASS="western">XBrowseNode method getType()</H5>
+<TABLE WIDTH=625 BORDER=2 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=151>
+	<COL WIDTH=458>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=151>
+				<P CLASS="western">ReturnType</P>
+			</TH>
+			<TH WIDTH=458>
+				<P CLASS="western">Description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=151>
+				<P CLASS="western">short</P>
+			</TD>
+			<TD WIDTH=458>
+				<P CLASS="western">Constant defined in BrowseNodeTypes.idl
+				indicating that node is 
+				</P>
+				<UL>
+					<LI><P CLASS="western">the root node ( Reserved for use by the
+					MasterScriptProvider service )</P>
+					<LI><P CLASS="western">a container of other nodes</P>
+					<LI><P CLASS="western">a script</P>
+				</UL>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western">XBrowseNode implementations of type
+BrowseNodeTypes.SCRIPT is treated by OpenOffice.org as a special node
+see Figure 3. below.</P>
+<P CLASS="western"><IMG SRC="fig3.png" NAME="Graphic6" ALIGN=BOTTOM WIDTH=468 HEIGHT=180 BORDER=0>Figure
+3.</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western">PropertySet 1. available from node of type SCRIPT
+( BroswseNodeTypes.idl  in Appendix I )</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=128*>
+	<COL WIDTH=128*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=50%>
+				<P CLASS="western">Key</P>
+			</TH>
+			<TH WIDTH=50%>
+				<P CLASS="western">Value type</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P CLASS="western">URI</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P CLASS="western">string</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P CLASS="western">EDITABLE</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P CLASS="western">boolean</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P CLASS="western">In order for Office to be able to assign a script
+it needs to be able to retrieve the scripting framework URI that
+describes the script. When a XBrowseNode implementation of type
+SCRIPT is selected it needs to export the URI as a property named
+URI. Similarly it is possible to integrate an IDE that is capable of
+editing the script by exporting a property named Editable. The script
+XBrowseNode implementation object needs to also implement the
+com.sun.star.script.XInvocation interface. This allows the
+implementation object to receive a request to edit the script. It is
+up the implementation to call the IDE and pass it the information
+required for the IDE to be able to edit and invoke the script.</P>
+<P CLASS="western">The prototype ScriptSelector GUI demonstrates this
+capability for the reference LanguageScriptProviders which are
+shipped with Office . See Figure 6. 
+</P>
+<H3 CLASS="western">Building a new LanguageScriptProvider</H3>
+<P CLASS="western">It is possible to build a new
+LanguageScriptProvider component using either the <A HREF="http://api.openoffice.org/SDK ">SDK</A>
+or by integrating changes directly in to the scripting framework
+project and using OpenOffice build environment. 
+</P>
+<P CLASS="western">This section will only cover how to manually build
+a Java LanguageScriptProvider. 
+</P>
+<UL>
+	<LI><P CLASS="western">set up the classpath to contain the following
+	jars located in the program/classes directory of your office
+	installation
+	ScriptFramework.jar,unoil.jar,juh.jar,jurt.jar,jut.jar,ridl.jar and
+	additionally include path to xerces.jar.</P>
+	<LI><P CLASS="western">compile the ScriptProviderForXXXX.java e.g.
+	<FONT FACE="Courier, monospace">javac -d .
+	ScriptProviderForXXXX.java</FONT></P>
+	<LI><P CLASS="western">create a directory structure like <FONT FACE="Courier, monospace">mkdir
+	-p buildDir/skip_registration</FONT></P>
+	<LI><P CLASS="western">place classes needed by the provider at
+	runtime in the skip_registration directory</P>
+	<LI><P CLASS="western">create a Manifest file with the following
+	entry &ldquo;RegistrationClassName:
+	com.sun.star.script.framework.provider.xxxx.ScriptProviderForXXXX&rdquo;</P>
+	<LI><P CLASS="western">make a jar containing the generated class
+	files and the Manifest e.g. j<FONT FACE="Courier, monospace">ar 
+	-cvmf Manifest buildDir/ScriptProviderForXXXX.jar com/</FONT></P>
+	<LI><P CLASS="western">to create an uno package put the jar file in
+	a zip file e.g. when located in the buildDir directory <FONT FACE="Courier, monospace">zip
+	 [OFFICE_INSTALLATION_PATH]/program/newProvider.zip -r . </FONT>
+	</P>
+</UL>
+<H3 CLASS="western">Registering a new LanguageScriptProvider</H3>
+<P CLASS="western">Assuming the new LanguageScriptProvider is bundled
+in an uno package file called newProvider.zip</P>
+<OL>
+	<LI><P CLASS="western">Exit Office  ( on windows make sure that the
+	QuickStarter is also shut down )</P>
+	<LI><P CLASS="western">copy newProvider.zip into INSTALL_DIR/Program
+	directory</P>
+	<LI><P CLASS="western">From INSTALL_DIR/Program run the pkgchk
+	command</P>
+	<OL>
+		<LI><P CLASS="western">./pkgchk newProvider.zip ( unix systems )</P>
+		<LI><P CLASS="western">pkgchk.exe newProvider.zip ( windows systems
+		)</P>
+	</OL>
+</OL>
+<H3 CLASS="western">Using the framework with Office</H3>
+<P CLASS="western">Scripts in Office are executed in two ways</P>
+<UL>
+	<LI><P CLASS="western">Directly from an IDE.</P>
+	<LI><P CLASS="western">As a result of some action that has an script
+	assigned to it being performed. Example a menu item that is assigned
+	to a script.</P>
+</UL>
+<P CLASS="western">One of the main entry points to associate such
+actions with scripts is the Tools/Configure dialog ( shown in Figure
+4.) To assign a script to a menu item</P>
+<UL>
+	<LI><P CLASS="western">open Tools/Configure dialog</P>
+	<LI><P CLASS="western">select the menu tab in the top portion of the
+	dialog</P>
+	<LI><P CLASS="western">expand the available scripts in the
+	&ldquo;Category&rdquo; panel located in the bottom left panel of the
+	dialog.</P>
+	<LI><P CLASS="western">Select where the new menu item will be
+	located ( in the example  shown in Figure 4. this will be under the
+	File menu )</P>
+	<LI><P CLASS="western">Select the available script from the
+	&ldquo;Function&rdquo; panel, click &ldquo;New&rdquo; button to
+	create a new script.</P>
+	<LI><P CLASS="western"> Click &ldquo;OK&rdquo; to confirm the new
+	configuration.</P>
+	<UL>
+		<P CLASS="western"></P>
+	</UL>
+</UL>
+<P CLASS="western">To invoke script select  &ldquo;File&rdquo; in the
+drop down list, you should find the new menu item. Clicking on the
+new menu item should start the script.</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western"><IMG SRC="fig4.png" NAME="Graphic3" ALIGN=BOTTOM WIDTH=585 HEIGHT=470 BORDER=0>Figure
+4.</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western">For detailed help please use the help provided by
+the clicking the&ldquo;Help&rdquo; button. The help text provided
+only considers Basic but should be sufficient to explain the
+functionality. There is a User Guide available for the Scripting
+Framework <A HREF="http://framework.openoffice.org/scripting/scriptingf1/user-guide.html">here</A>.
+It is also possible to assign scripts to Dialogs, embedded Objects
+charts etc. These won't be covered in this document.</P>
+<P CLASS="western">Additionally a number of scripts written in
+Beanshell, JavaScript and Java are provided as examples. These are
+all located under the share  node contained by the &ldquo;OpenOffice,org
+Scripts&rdquo; root node. One of these scripts allows the user select
+ a script and then edit that script in an appropriate IDE. To enable
+this dialog follow the instructions given above to create a menu
+assignment for the ScriptSelector.showOrganiser script see Figure 5.</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western"><IMG SRC="fig5.png" NAME="Graphic4" ALIGN=BOTTOM WIDTH=585 HEIGHT=471 BORDER=0></P>
+<P CLASS="western">Figure 5</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western">Selecting File-&gt;ScriptSelector.showOrganiser
+should display the script selector ( Figure 6. )</P>
+<P CLASS="western">To open the script in the IDE simply navigate to
+the script, if the script is editable and an IDE is available then
+the &ldquo;Edit&rdquo; button should be enabled. 
+</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western"><IMG SRC="fig6.png" NAME="Graphic5" ALIGN=BOTTOM WIDTH=460 HEIGHT=330 BORDER=0></P>
+<P CLASS="western">Figure 6.  Showing  new language XXXX integrated
+with the scripting framework. 
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; page-break-before: auto">
+<BR>
+</P>
+<H2 CLASS="western">Appendix I</H2>
+<H3 CLASS="western">Interfaces</H3>
+<P CLASS="western" STYLE="margin-bottom: 0in; page-break-before: auto">
+<FONT FACE="Arial, sans-serif"><FONT SIZE=2>[ *** Links to the IDL or
+IDL doc for all of the scripting interfaces ]</FONT></FONT></P>
+<H2 CLASS="western">Appendix II 
+</H2>
+
+<H3 CLASS="western">Skeleton Code</H3>
+
+<pre>
+package com.sun.star.script.framework.provider.xxxx;
+
+import com.sun.star.script.framework.provider.*;
+import java.util.*;
+import java.io.*;
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.lang.XInitialization;
+import com.sun.star.lang.XTypeProvider;
+import com.sun.star.lang.XServiceInfo;
+import com.sun.star.lang.*;
+import com.sun.star.registry.*;
+import com.sun.star.frame.XModel;
+import com.sun.star.util.XMacroExpander;
+
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.Any;
+import com.sun.star.lib.uno.helper.*;
+import com.sun.star.comp.loader.*;
+
+import com.sun.star.beans.XPropertySet;
+
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.reflection.InvocationTargetException;
+import com.sun.star.script.CannotConvertException;
+
+import drafts.com.sun.star.script.provider.XScriptContext;
+import drafts.com.sun.star.script.framework.storage.XScriptInfo;
+import drafts.com.sun.star.script.provider.XScriptProvider;
+import drafts.com.sun.star.script.provider.XScript;
+import drafts.com.sun.star.script.browse.XBrowseNode;
+import drafts.com.sun.star.script.browse.BrowseNodeTypes;
+
+import com.sun.star.script.framework.log.LogUtils;
+import com.sun.star.script.framework.browse.DirBrowseNode;
+import com.sun.star.script.framework.browse.DocBrowseNode;
+import com.sun.star.script.framework.browse.XMLParserFactory;
+import java.net.*;
+
+public class ScriptProviderForXXXX
+{
+    static private final String[] __serviceNames = {
+        "drafts.com.sun.star.script.provider.ScriptProviderForXXXX",
+        "drafts.com.sun.star.script.provider.LanguageScriptProvider" };
+
+    public static class _ScriptProviderForXXXX extends ScriptProvider
+    {
+        public _ScriptProviderForXXXX(XComponentContext ctx)
+        {
+            super(ctx, "XXXX");
+        }
+
+        /**
+         * The invoke method of the ScriptProviderForXXXX runs the
+         * XXXX script specified in the URI
+         *
+         *
+         * @param scriptName The scriptName is the language specific
+         * name of the script
+         *
+         * @param invocationCtx The invocation context contains the
+         * documentStorageID and document reference
+         * for use in script name resolving
+         *
+         * @param aParams All parameters; pure, out params are
+         * undefined in sequence, i.e., the value
+         * has to be ignored by the callee
+         *
+         * @param aOutParamIndex Out indices
+         *
+         * @param aOutParam Out parameters
+         *
+         * @returns The value returned from the function
+         * being invoked
+         *
+         * @throws IllegalArgumentException If there is no matching script name
+         *
+         * @throws CannotConvertException If args do not match or cannot
+         * be converted the those of the
+         * invokee
+         *
+         * @throws InvocationTargetException If the running script throws
+         * an exception this information
+         * is captured and rethrown as
+         * this exception type.
+         */
+         
+        private Object invoke( /*IN*/String scriptURI,
+                               /*IN*/Object invocationCtx,
+                               /*IN*/Object[] params,
+                               /*OUT*/short[][] aOutParamIndex,
+                               /*OUT*/Object[][] aOutParam )
+        
+            throws IllegalArgumentException, InvocationTargetException,
+                   CannotConvertException
+        {
+            // Initialise the out paramters - not used at the moment
+            aOutParamIndex[0] = new short[0];
+            aOutParam[0] = new Object[0];
+        
+            XPropertySet languageProps = m_xScriptInfo.getLanguageProperties();
+            String cp = null;
+        
+            // Set up ClassLoader based on property defined with script
+            try {
+                cp = (String)languageProps.getPropertyValue(CLASSPATH);
+            }
+            catch (Exception e) {
+            }
+        
+            if (cp == null) {
+                cp = "";
+            }
+        
+            String parcelURI = m_xScriptInfo.getParcelURI();
+            if (!parcelURI.endsWith("/")) {
+                parcelURI += "/";
+            }
+        
+            Vector classpath;
+            try {
+                classpath = PathUtils.buildClasspath(parcelURI, cp);
+            }
+            catch (MalformedURLException mue) {
+                throw new InvocationTargetException(mue.getMessage());
+            }
+        
+            ClassLoader cl = null;
+            try {
+                cl = ClassLoaderFactory.getClassLoader(m_xContext,
+                this.getClass().getClassLoader(), classpath);
+            }
+            catch (Exception e)
+            {
+                throw new InvocationTargetException(e.getMessage());
+            }
+        
+            try {
+                String script = parcelURI + m_xScriptInfo.getFunctionName();
+                InputStream is;
+                Object result = null;
+        
+                try {
+                    is = PathUtils.getScriptFileStream( script, m_xContext );
+                }
+                catch (IOException ioe) {
+                    throw new InvocationTargetException(ioe.getMessage());
+                }
+        
+                if (is == null) {
+                    throw new InvocationTargetException("Could not load script");
+                }
+        
+                try {
+                //****
+                //* INSERT CODE TO CALL MyScriptingLanguage here
+                //* variables you can use
+                //* is = stream to script
+                //* cl = a classLoader that is setup with the classpath requirements
+                //* specified in the parcel-descriptor.xml
+                //* parcelURI path to location of parcel directory that contains the
+                //* script(s)
+                //*
+                //****
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    throw new InvocationTargetException(e.getMessage());
+                }
+                finally {
+                    try {is.close();} catch (IOException ignored) {}
+                }
+        
+                return result;
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+                throw new InvocationTargetException(ex.getMessage());
+            }
+        }
+        
+        public Object invoke( /*IN*/Object[] aParams,
+                              /*OUT*/short[][] aOutParamIndex,
+                              /*OUT*/Object[][] aOutParam )
+            throws IllegalArgumentException, CannotConvertException,
+                   InvocationTargetException
+        {
+             return invoke(m_scriptURI, m_xInvocationContext, aParams,
+             aOutParamIndex, aOutParam);
+        }
+    }
+        
+    /**
+    * Returns a factory for creating the service.
+    * This method is called by the <code>JavaLoader</code>
+    * <p>
+    *
+    * @param implName the name of the implementation for which a service is desired
+    * @param multiFactory the service manager to be used if needed
+    * @param regKey the registryKey
+    * @return returns a <code>XSingleServiceFactory</code> for creating
+    * the component
+    * @see com.sun.star.comp.loader.JavaLoader
+    */
+    public static XSingleServiceFactory __getServiceFactory( String implName,
+        XMultiServiceFactory multiFactory,
+        XRegistryKey regKey )
+    {
+        XSingleServiceFactory xSingleServiceFactory = null;
+    
+        if ( implName.equals( ScriptProviderForXXXX._ScriptProviderForXXXX.class.getName() ) )
+        {
+            xSingleServiceFactory = FactoryHelper.getServiceFactory(
+                ScriptProviderForXXXX._ScriptProviderForXXXX.class,
+                "drafts.com.sun.star.script.provider.ScriptProviderForXXXX",
+                multiFactory,
+                regKey );
+        }
+    
+        return xSingleServiceFactory;
+    }
+    
+    
+    /**
+    * Writes the service information into the given registry key.
+    * This method is called by the <code>JavaLoader</code>
+    * <p>
+    *
+    * @param regKey the registryKey
+    * @return returns true if the operation succeeded
+    * @see com.sun.star.comp.loader.JavaLoader
+    */
+    public static boolean __writeRegistryServiceInfo( XRegistryKey regKey )
+    {
+        String impl = "com.sun.star.script.framework.provider.xxxx." +
+            "ScriptProviderForXXXX$_ScriptProviderForXXXX";
+    
+        String service = "drafts.com.sun.star.script.provider." +
+            "ScriptProviderForXXXX";
+    
+        if (Factory.writeRegistryServiceInfo(impl, __serviceNames, regKey) ) {
+            return true;
+        }
+        return false;
+    }
+}
+</pre>
+
+<H2 CLASS="western">Appendix III</H2>
+<H3 CLASS="western">parcel-descriptor.xml <A HREF="http://framework.openoffice.org/scripting/scriptingf1/developer-guide.html#dtd">DTD</A>
+and example</H3>
+<H2 CLASS="western">Appendix IV</H2>
+<H3 CLASS="western">Directory Structure</H3>
+<P CLASS="western">At the top level in the uncompressed format of a
+document, OFFICE_INSTALL_PATH/user or OFFICE_INSTALL_PATH/share 
+there exists a &ldquo;Scripts&rdquo; directory with the following
+structure below it.</P>
+<P CLASS="western">Scripts/</P>
+<P CLASS="western">          |</P>
+<P CLASS="western">          +- java/</P>
+<P CLASS="western">          |</P>
+<P CLASS="western">          +- otherLanguage/</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western">under the language specific directory</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western">+- a_language_name/</P>
+<P CLASS="western">                   |</P>
+<P CLASS="western">                   +- &quot;user named deployment
+directory&quot;/</P>
+<P CLASS="western">                                                  
+    |</P>
+<P CLASS="western">                                                  
+    +- bin/</P>
+<P CLASS="western">                                                  
+    |</P>
+<P CLASS="western">                                                  
+    +- src/</P>
+<P CLASS="western">                                                  
+    |</P>
+<P CLASS="western">                                                  
+    +- data/</P>
+<P CLASS="western">                                                  
+    |</P>
+<P CLASS="western">                                                  
+    +- resource/</P>
+<P CLASS="western">directly underneath the &quot;user named
+deployment directory&quot; is where the parcel-descriptor.xml file is
+located.</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western">Note: WILL CHANGE Similar to above, the file
+structure above is expected for storage of scripts that use the
+framework helper classes. At the moment we are discussing ways to
+consolidate UNO packages so that scripts will also be supported. It
+will then be possible to deploy scripts as within such packages. This
+of course means that the storage</P>
+<DIV TYPE=FOOTER>
+	<P ALIGN=RIGHT STYLE="margin-top: 0.2in; margin-bottom: 0in; border-top: 1.00pt solid #000000; border-bottom: none; border-left: none; border-right: none; padding-top: 0.02in; padding-bottom: 0in; padding-left: 0in; padding-right: 0in; page-break-before: auto">
+	<FONT COLOR="#000000"><SPAN STYLE="background: transparent"><SDFIELD TYPE=DOCINFO SUBTYPE=TITLE>Scripting Framework Architecture</SDFIELD><FONT FACE="Arial, sans-serif"><FONT SIZE=1 STYLE="font-size: 8pt">		Page
+	<SDFIELD TYPE=PAGE SUBTYPE=RANDOM FORMAT=PAGE>19</SDFIELD> of <SDFIELD TYPE=DOCSTAT SUBTYPE=PAGE FORMAT=PAGE>19</SDFIELD></SPAN></FONT></FONT></FONT></P>
+</DIV>
+</body>
+</HTML>

@@ -1,0 +1,497 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.1 Beta 1 (Linux)">
+	<META NAME="CREATED" CONTENT="20030313;16153200">
+	<META NAME="CHANGED" CONTENT="20030313;16505100">
+</head>
+<body LANG="en-US" DIR="LTR">
+<H1><A NAME="top"></A>User Guide for the Office Scripting Framework</H1>
+<H2>Contents</H2>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="#prerequisites">Pre-requisites</A>
+		</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="#bindscripts">Binding
+	Office Scripts</A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="#usingsf">Running the
+	example Office Scripts</A></P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="#Leveraging_StarBasic_Security">Leveraging
+	StarBasic Security</A></P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="#Different_behaviour_in_the_Scripting">Different
+	behaviour in the Scripting Framework</A></P>
+	<LI><P><A HREF="#Troubleshooting">Troubleshooting</A> 
+	</P>
+</UL>
+<H2><A NAME="prerequisites"></A>Pre-requisites</H2>
+<P>Before you install the Scripting Framework, be aware of the
+following: 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">This is an Early Developer Release
+	of the Office Scripting Framework provided for users and developers
+	of OpenOffice.org to try out and provide feedback. Future releases
+	of the Framework may change. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">This release of the Scripting
+	Framework runs only on
+        <a href="http://www.openoffice.org/dev_docs/source/644/index.html">
+	OpenOffice.org 644</a> and above.
+        </P>
+	<LI><P>The Scripting Framework is currently available in English
+	only. 
+	</P>
+</UL>
+<H2><A NAME="bindscripts"></A>Binding Office
+Scripts</H2>
+<P>The execution of Office scripts can be bound to menu and key items
+and also to application or document events. These bindings can be
+defined via a set of Assign dialogs which can be started from the
+Tools/Scripting Add-on's menu 
+</P>
+<P><B>Assigning scripts to Menu and Key items</B> 
+</P>
+<P>The dialog shown below is the Assign Script to Menu dialog. This
+dialog is similar in design and function to the Assign Script to Key
+dialog and the instructions below should be seen to apply also to the
+Assign Script to Key dialog. 
+</P>
+<P><IMG SRC="assign-menu.gif" NAME="Graphic1" ALIGN=BOTTOM WIDTH=396 HEIGHT=496 BORDER=0></P>
+<UL>
+	<LI><P>Location 
+	</P>
+	<P>The location combo box will be populated with &ldquo;User&rdquo;,&rdquo;Share&rdquo;
+	or &ldquo;Document&rdquo; the default value will be &ldquo;User&rdquo;
+	which will display all scripts (with the selected language type) in
+	the &ldquo;User&rdquo; area.</P>
+</UL>
+<UL>
+	<LI><P>Language 
+	</P>
+	<P>The language combox is populated with the list of supported
+	languages. The default language is set to java.</P>
+</UL>
+<UL>
+	<LI><P>Script ListBox 
+	</P>
+	<P>Only necessary information will be displayed, logicalname will
+	always be displayed, if the &ldquo;Detailed view&rdquo; check box is
+	selected the scripts will be displayed as follows &ldquo;logicalname
+	[functionname]&rdquo;</P>
+</UL>
+<UL>
+	<LI><P>New</P>
+	<P>This button will not be selectable unless a script from the
+	script ListBox and a menu name is entered in the new menu text box
+	(opposite New button), clicking [New] creates a binding between two.</P>
+	<LI><P>Delete</P>
+	<P>This button will not be selectable unless a sub menu with a
+	script binding is selected, clicking [Delete] removes the binding. 
+	</P>
+	<LI><P>OK</P>
+	<P>Clicking [OK] commits all of the changes the user has made 
+	</P>
+	<LI><P>Cancel</P>
+	<P>Disposes the dialog without committing any changes.</P>
+	<LI><P>Help</P>
+	<P>Will display a dialog describing how to use each of the &ldquo;Assign
+	Script&rdquo; dialogs.</P>
+</UL>
+<P><B>Note: </B>Unlike StarBasic it will not be possible to setup a
+key binding that applies for the whole Office suite &ndash; key
+bindings can only be setup for an application or a document of that
+application type.</P>
+<P><B>Assigning scripts to events</B></P>
+<P><IMG SRC="assign-event.gif" NAME="Graphic2" ALIGN=BOTTOM WIDTH=396 HEIGHT=442 BORDER=0></P>
+<UL>
+	<LI><P>Event ListBox</P>
+	<P>The ListBox will be populated with the list all event types, if a
+	script has already been assigned to an event the existing binding is
+	displayed as follows</P>
+	<P>Event [ script URI ]</P>
+	<P>example: 
+	</P>
+	<P>Start Application<SPAN STYLE="text-decoration: none">
+	<FONT SIZE=2>[script://Highlighter.BeanShell?language=BeanShell&amp;function=highlighter.bsh&amp;location=user]</FONT></SPAN></P>
+	<LI><P>Radio Buttons</P>
+	<P>By default the &ldquo;Document&rdquo; radio button is selected,
+	if selected the event binding is for this document only. If &ldquo;All
+	Applications&rdquo; is selected then the event binding is for all
+	documents of all application types ( writer, calc etc. )</P>
+	<LI><P>Assign</P>
+	<P>This button will not be selectable unless a script from the
+	script ListBox and event from the event ListBox are highlighted
+	(selected), clicking [Assign] creates a binding between two.</P>
+	<LI><P>Delete</P>
+	<P>This button will not be selectable unless an event with a script
+	binding from the event ListBox is selected, clicking [Delete]
+	removes the binding. 
+	</P>
+	<LI><P>OK</P>
+	<P>Clicking [OK] commits all of the changes the user has made 
+	</P>
+	<LI><P>Cancel</P>
+	<P>Disposes the dialog without committing any changes.</P>
+	<LI><P>Help</P>
+	<P>Will display a dialog describing how to use each of the &ldquo;Assign
+	Script&rdquo; dialogs. 
+	</P>
+</UL>
+
+<P><B>Other Scripting-Add'ons Menu Items</B></P>
+<P>Two other menu items are available under the Tools/Scripting Add-on's submenu:
+<UL>
+<LI><P>Interactive BeanShell Scripting - This pops up a window in which the user can experiment with writing and executing BeanShell code against the current document. See <a href="developer-guide.html">Writing Scripts in BeanShell and Java</a> for more information on using this window.
+
+<LI><P>Refresh All Scripts - This is used to refresh the script lists that appear in the Assign dialogs after new scripts have been deployed into your OpenOffice.org installation or documents.
+</UL>
+
+<P><A HREF="#top">Top</A> 
+</P>
+<H2><A NAME="usingsf"></A>Running the example Office Scripts</H2>
+
+<P>There are two examples scripts supplied with the Scripting
+Framework, Highlight and MemoryUsage. Highlight is an application
+level script for Writer that allows the user to search for a word or
+phrase. It will highlight all instances in red and give a count of
+the number of instances. 
+</P>
+<P>The second example, MemoryUsage, is a script stored in a Calc
+spreadsheet that checks the current memory usage in the Java Virtual
+Machine and updates cells in the spreadsheet with the usage values.
+The spreadsheet also contains a graph which will update when the cell
+values are changed. 
+</P>
+<P>The examples are available for both Java and BeanShell in the
+language directories created under &lt;Office Installation&gt;/user/Scripts
+by the installer. 
+</P>
+<P><B>Running the Highlight example</B></P>
+<P>To run this example you first need to create a menu item from
+which you can execute the script. 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">Start OpenOffice.org and open an
+	existing Writer document or create a new one. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Select the menu item
+        Tools/Scripting Add-on's/Assign Scripts To Menu... 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">In the &quot;Assign Scripts To
+	Menu&quot; dialog that pops up do the following: 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><I>Select location and language</I></P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in">Set the location to User and the language to Java in the drop down lists.</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0in"><I>Select script</I></P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in">Select the script
+			HighlightText.showForm from the list.</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0in"><I>Choose the menu to insert the
+		script menu after</I></P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in">Select the top level menu and
+			submenu under which you want to place your new menu item. 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0in"><I>Assign script to new menu</I></P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in">In the New Menu text field enter
+			the label you want for your menu item (eg. Highlight) 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in">Click New Script Menu to create
+			the new script menu item. 
+			</P>
+		</UL>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in">Finally click on the OK button to
+	save your new script menu item. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Your new menu item will now be
+	available and clicking on it will invoke the script. 
+	</P>
+	<LI><P>You should see a Highlight Text dialog appear which you can
+	use to highlight various text strings you are looking for in the
+	document. 
+	</P>
+</UL>
+<P><B>Running the MemoryUsage example</B></P>
+<P>The Java version of the MemoryUsage example is already deployed
+inside an Office document, ExampleSpreadSheet.sxc. To run the Java
+example, just open: 
+</P>
+<P>&lt;Office Installation&gt;/user/Scripts/java/ExampleSpreadSheet.sxc.
+</P>
+<P>You can then execute the MemoryUsage script by pressing
+<B>CTRL+Shift+M</B> with the ExampleSpreadSheet.sxc window focused.
+You should see the memory usage values being updated, and the graph
+should change to reflect the new values. 
+</P>
+<P><A HREF="#top">Top</A> 
+</P>
+<H2><A NAME="Leveraging_StarBasic_Security"></A>Leveraging StarBasic
+Security</H2>
+<P STYLE="margin-bottom: 0in">As part of the Early Developer Release
+v0.2 of the Scripting Framework, we have attempted to mimic the
+Security settings for StarBasic.&nbsp; The settings allow the user to
+control the execution of macros present in OpenOffice.org documents.
+Found in&nbsp; the&nbsp; Tools-&gt;Options dialog under&nbsp;
+OpenOffice.org-&gt;Security, these&nbsp; settings allow the user&nbsp;
+to specify the conditions under which it is permissable to execute
+document based StarBasic macros. The settings in this dialog now
+apply to both StarBasic macros and Scripting Framework scripts.<BR>A
+full description of how these settings work can be found by clicking
+the &quot;Help&quot; button in the dialog, and then clicking
+&quot;OpenOffice.org&quot;, and &quot;Security&quot; in the left-hand
+pane of the Help dialog. The possible scenarios associated with the
+security settings are summarised in the table below.</P>
+<TABLE BORDER=2 CELLPADDING=2 CELLSPACING=2>
+	<TR>
+		<TH>
+			<P>&quot;Run Macro&quot;</P>
+		</TH>
+		<TH>
+			<P>&quot;Confirm in the case of other document sources&quot;</P>
+		</TH>
+		<TH>
+			<P>&quot;Show Warning before Running&quot;</P>
+		</TH>
+		<TH>
+			<P>Document path in &quot;Path List&quot;</P>
+		</TH>
+		<TH>
+			<P>Behaviour</P>
+		</TH>
+	</TR>
+	<TR>
+		<TD>
+			<P>Never</P>
+		</TD>
+		<TD>
+			<P>N/A</P>
+		</TD>
+		<TD>
+			<P>N/A</P>
+		</TD>
+		<TD>
+			<P>N/A</P>
+		</TD>
+		<TD>
+			<P>Macros never run. No warning displayed. 
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>According to path list</P>
+		</TD>
+		<TD>
+			<P>No</P>
+		</TD>
+		<TD>
+			<P>No</P>
+		</TD>
+		<TD>
+			<P>No</P>
+		</TD>
+		<TD>
+			<P>Macros never run. No warning displayed. 
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>According to path list</P>
+		</TD>
+		<TD>
+			<P>No</P>
+		</TD>
+		<TD>
+			<P>No</P>
+		</TD>
+		<TD>
+			<P>Yes</P>
+		</TD>
+		<TD>
+			<P>Macros run. No warning displayed. 
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>According to path list</P>
+		</TD>
+		<TD>
+			<P>No</P>
+		</TD>
+		<TD>
+			<P>Yes</P>
+		</TD>
+		<TD>
+			<P>No</P>
+		</TD>
+		<TD>
+			<P>Macros never run. No warning displayed. 
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>According to path list</P>
+		</TD>
+		<TD>
+			<P>No</P>
+		</TD>
+		<TD>
+			<P>Yes</P>
+		</TD>
+		<TD>
+			<P>Yes</P>
+		</TD>
+		<TD>
+			<P>Warning displayed on document load. If &quot;Run&quot; button
+			clicked macros will run, otherwise they will not.</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>According to path list</P>
+		</TD>
+		<TD>
+			<P>Yes</P>
+		</TD>
+		<TD>
+			<P>No</P>
+		</TD>
+		<TD>
+			<P>No</P>
+		</TD>
+		<TD>
+			<P>Warning with checkbox to add path to path list is displayed on
+			document load. If &quot;Run&quot; button clicked macros will run,
+			otherwise they will not. Regardless of which button is clicked, if
+			checkbox is ticked document path is added to &quot;Path List&quot;.</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>According to path list</P>
+		</TD>
+		<TD>
+			<P>Yes</P>
+		</TD>
+		<TD>
+			<P>No</P>
+		</TD>
+		<TD>
+			<P>Yes</P>
+		</TD>
+		<TD>
+			<P>Macros run. No warning displayed. 
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>According to path list</P>
+		</TD>
+		<TD>
+			<P>Yes</P>
+		</TD>
+		<TD>
+			<P>Yes</P>
+		</TD>
+		<TD>
+			<P>No</P>
+		</TD>
+		<TD>
+			<P>Warning with checkbox to add path to path list is displayed on
+			document load. If &quot;Run&quot; button clicked macros will run,
+			otherwise they will not. Regardless of which button is clicked, if
+			checkbox is ticked document path is added to &quot;Path List&quot;.</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>According to path list</P>
+		</TD>
+		<TD>
+			<P>Yes</P>
+		</TD>
+		<TD>
+			<P>Yes</P>
+		</TD>
+		<TD>
+			<P>Yes</P>
+		</TD>
+		<TD>
+			<P>Warning displayed on document load. If &quot;Run&quot; button
+			clicked macros will run, otherwise they will not.</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>Always</P>
+		</TD>
+		<TD>
+			<P>N/A</P>
+		</TD>
+		<TD>
+			<P>No</P>
+		</TD>
+		<TD>
+			<P>N/A</P>
+		</TD>
+		<TD>
+			<P>Macros run. No warning displayed. 
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>Always</P>
+		</TD>
+		<TD>
+			<P>N/A</P>
+		</TD>
+		<TD>
+			<P>Yes</P>
+		</TD>
+		<TD>
+			<P>N/A</P>
+		</TD>
+		<TD>
+			<P>Warning displayed on document load. If &quot;Run&quot; button
+			clicked macros will run, otherwise they will not.</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR><A HREF="#top">Top</A></P>
+<H2><A NAME="Different_behaviour_in_the_Scripting"></A>Different
+behaviour in the Scripting Framework</H2>
+<P>The Script Security has one significant difference in behaviour to
+the StarBasic security. In the Scripting Framework the security
+warning dialogs are displayed only upon the first script invocation
+on a document containing scripts, unlike StarBasic where the dialogs
+are displayed on loading a document containing macros. <BR>If the
+settings are &quot;Always&quot;, and &quot;Show Warning Before
+Running&quot;, when loading a document containing macros the
+StarBasic dialog display is incorrect (the dialog displayed is more
+appropriate to the &quot;According To Path List&quot; setting). This
+has been logged as <A HREF="http://www.openoffice.org/issues/show_bug.cgi?id=11822">Issue
+11822</A>, the fix for which is not in the OpenOffice.org 1.1 beta
+release. Under the Scripting framework the correct dialog is
+displayed.<BR><BR><A HREF="#top">Top</A></P>
+<H2><A NAME="Troubleshooting"></A>Troubleshooting</H2>
+<P STYLE="margin-bottom: 0in">See the
+<A HREF="release-notes.html">Release Notes</A> page. 
+</P>
+<HR>
+Last Modified: Tue Mar 12 11:40:28 GMT 2003
+</body>
+</HTML>

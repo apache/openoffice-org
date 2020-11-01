@@ -1,0 +1,928 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+            
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+            
+  <meta http-equiv="CONTENT-TYPE"
+ content="text/html; charset=iso-8859-1">
+            
+  <meta name="GENERATOR"
+ content="Mozilla/4.79C-CCK-MCD  [en] (X11; U; SunOS 5.8 sun4u) [Netscape]">
+            
+  <meta name="AUTHOR" content="Robert.Kinsella@Sun.COM">
+            
+  <meta name="CREATED" content="20010103;10350500">
+            
+  <meta name="CHANGED" content="20021008;17390600">
+  <title>Smoke Test</title>
+                   
+  <style>
+	<!--
+		TD P { color: #000000 }
+		H1 { color: #3333dd }
+		P { color: #000000 }
+		H2 { color: #3333dd }
+		A:link { color: #ff0000 }
+		A:visited { color: #551a8b }
+	-->
+	</style> 
+      
+  <style>
+	<!--
+		H1 { color: #3333dd }
+		P { color: #000000 }
+		H2 { color: #3333dd }
+		A:link { color: #ff0000 }
+		A:visited { color: #551a8b }
+	-->
+	</style>
+      
+  <style>
+	<!--
+		H1 { color: #3333dd }
+		P { color: #000000 }
+		H2 { color: #3333dd }
+		A:link { color: #ff0000 }
+		A:visited { color: #551a8b }
+	-->
+	</style>
+</head>
+  <body text="#000000" bgcolor="#ffffff" link="#ff0000" vlink="#551a8b"
+ lang="en-US">
+   &nbsp;   
+<table cols="1" width="100%" nosave="">
+   <tbody>
+      <tr nosave="">
+   <td nosave="">&nbsp;</td>
+   </tr>
+    <tr nosave="">
+   <td nosave="">               
+      <center><b><font color="#000000"><font size="+3">Smoke Tests for OpenOffice.org 
+ Scripting FrameWork</font></font></b></center>
+   </td>
+   </tr>
+         
+  </tbody>  
+</table>
+      
+<center>  
+<table border="1" cellspacing="3" cellpadding="2" width="80%">
+   <caption>&nbsp;</caption>  <tbody>
+      <tr>
+   <td width="11%"><font size="+0"><a href="#README">README</a></font></td>
+    <td width="89%">Outline the order by which the installs of various components 
+ must occur.</td>
+   </tr>
+    <tr>
+   <td width="11%"><font size="+0"><a href="#install_01">Install_01</a></font></td>
+    <td width="89%"><font size="+0">Test the SFrameworkInstall.jar file when 
+ deployed will present to the user options to allow a script to be bound to
+an event.&nbsp;</font> <br>
+        <font size="+0">Also test&nbsp; that scripting framework office.jar
+ file is successfully deployed to NetBeans.&nbsp;</font><br>
+        </td>
+   </tr>
+    <tr>
+   <td width="11%"><font size="+0"><a href="#install_02">Install_02</a></font></td>
+    <td width="89%"><font size="+0">Test the SFrameworkInstall.jar&nbsp;
+will  sense directory names longer than 8 characters.&nbsp;</font></td>
+   </tr>
+    <tr>
+   <td width="11%"><font size="+0"><a href="#install_03">Install_03</a></font></td>
+    <td width="89%"><font size="+0">Test the SFrameworkInstall.jar&nbsp;
+will  sense directory names which contain a space character.&nbsp;</font></td>
+   </tr>
+      <tr>
+   <td width="11%"><br>
+        </td>
+    <td width="89%"><br>
+        </td>
+   </tr>
+    <tr>
+   <td width="11%"><font size="+0"><a href="#bindings_01">Bindings_01</a></font></td>
+    <td width="89%"><font size="+0">Test that the user can assign a deployed 
+ script to a key.&nbsp;</font></td>
+   </tr>
+    <tr>
+   <td width="11%"><font size="+0"><a href="#bindings_02">Bindings_02</a></font></td>
+    <td width="89%"><font size="+0">Test that the user can&nbsp; remove an
+ assigned key.&nbsp;</font></td>
+   </tr>
+    <tr>
+   <td width="11%"><font size="+0"><a href="#bindings_03">Bindings_03</a></font></td>
+    <td width="89%"><font size="+0">Test that the user can assign a deployed 
+ script to the File menu item.&nbsp;</font></td>
+   </tr>
+    <tr>
+   <td width="11%"><font size="+0"><a href="#bindings_04">Bindings_04</a></font></td>
+    <td width="89%"><font size="+0">Test that the user can delete an assigned 
+ File menu item.&nbsp;</font></td>
+   </tr>
+    <tr>
+   <td width="11%"><font size="+0"><a href="#bindings_05">Bindings_05</a></font></td>
+    <td width="89%"><font color="#000000">Test that the user can execute
+a&nbsp;  script stored in a document with a binding stored in the same document.</font></td>
+   </tr>
+      <tr>
+   <td><br>
+        </td>
+    <td><br>
+        </td>
+   </tr>
+            <tr>
+   <td width="11%"><font size="+0"><a href="#netbeans_01">NetBeans_01</a></font></td>
+    <td width="89%"><font color="#000000">Compile and deploy a java script 
+to the application user area using NetBeans.</font></td>
+   </tr>
+    <tr>
+   <td><a href="#netbeans_02">NetBeans_02</a></td>
+    <td><font color="#000000">Compile and deploy a java script to a document&nbsp; 
+ using NetBeans.</font></td>
+   </tr>
+    <tr>
+   <td><a href="#netbeans_03">NetBeans_03</a></td>
+    <td><font color="#000000">Delete a script&nbsp; deployed to a document&nbsp; 
+ using NetBeans.</font></td>
+   </tr>
+      <tr>
+        <td valign="top"><a href="#netbeans_04">NetBeans_04</a><br>
+        </td>
+        <td valign="top">Generate and deploy a script using the command line
+ interface<br>
+        </td>
+      </tr>
+         
+  </tbody>  
+</table>
+  </center>
+      
+<center>   
+<h1 style="text-decoration: none;">    
+<hr width="100%">   
+<hr width="100%"></h1>
+  </center>
+      
+<center>   
+<h1 style="text-decoration: none;"> <a name="README"></a><font
+ color="#000000">Test Case: README</font></h1>
+  </center>
+      
+<h2 style="text-decoration: none;"> <font color="#000000">Test Area: Solaris&nbsp;
+ - Linux - Windows</font></h2>
+   <b><font color="#000000">Test Aim</font></b> <br>
+  <font color="#000000">Outline the order by which the installs of various 
+components must occur.</font> <br>
+  &nbsp;    
+<p style="margin-bottom: 0cm;"><font color="#000000"><b>Prerequisites</b>:-</font> 
+ <br>
+  <font color="#000000">Download NetBeans 3.4&nbsp; from http://www.netbeans.org.</font> 
+ <br>
+  <font color="#000000">Download Scripting Framework from http://framework.openoffice.org/scripting/</font> 
+ <br>
+  <font color="#000000">Download OpenOffice.org 1.1Beta or later from http://www.openoffice.org</font> 
+ <br>
+   </p>
+   
+<hr>    
+<p style="text-decoration: none;"><b><font color="#000000">General Description:</font></b> 
+ <br>
+  <font color="#000000">It is important that the following steps be executed 
+ in order and before and other test cases.</font> </p>
+   
+<p><font color="#000000">1. Install NetBeans</font> <br>
+  <font color="#000000">2.&nbsp; Start NetBeans, cd to the install-dir/bin 
+and execute runide.sh for unix systems,</font> <br>
+  <font color="#000000">select runide.exe for windows. exit NetBeans.</font> 
+ <br>
+  <font color="#000000">3.&nbsp; Install OpenOffice.org.</font> <br>
+  <font color="#000000">4.&nbsp; Copy&nbsp; the SFrameworkInstall.jar file
+ to the users home directory.</font> <br>
+   </p>
+   
+<hr>   
+<hr>   
+<h1 style="text-decoration: none;" align="center">  </h1>
+ 
+<h1 style="text-decoration: none;"> <a name="install_01"></a><small><font
+ color="#000000">Test Case: install_01</font></small></h1>
+       
+<h2 style="text-decoration: none;"> <font color="#000000">Test Area: Solaris&nbsp;
+ - Linux - Windows</font></h2>
+   <b><font color="#000000">Test Aim</font></b> <br>
+  <font color="#000000">Test the SFrameworkInstall.jar file when deployed 
+will present to the user options to allow a script to be bound to an event.</font> 
+ <br>
+  <font color="#000000">Also test&nbsp; that scripting framework office.jar 
+ files is successfully deployed to NetBeans.</font>    
+<p style="margin-bottom: 0cm;"><b><font color="#000000">Requirements</font></b> 
+ <br>
+  <font color="#000000"><a
+ href="file:///home/rk99157/Apachetest/OpenOffice/assertions/scripting/SmokeTest0.2.html#README">README 
+ </a>is performed before running this test case.</font> <br>
+   </p>
+   
+<hr>    
+<p><b><font color="#000000">Description:</font></b> <br>
+  <font color="#000000">1. Copy the SFrameworkInstall.jar file to the user's
+ home&nbsp; directory.</font> <br>
+  <font color="#000000">2. Ensure OpenOffice.org is not running, also ensure 
+ the quickstarters for windows and Linux are not running.</font> <br>
+  <font color="#000000">3. Execute java -jar SFrameworkInstall.jar</font> 
+<br>
+  <font color="#000000">4. On the Scripting Framework Installer welcome screen
+ click next, the welcome screen should state the version of SFramework.jar.</font> 
+ <br>
+  <font color="#000000">5. Select Install, in the dialog select Next.</font> 
+ <br>
+  <font color="#000000">6. When Installation has completed, select Finish, 
+the next dialog should prompt you that the installer has</font> <br>
+  <font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp; found a NetBeans installation,
+ select Next.</font> <br>
+  <font color="#000000">8. Select the IDE's for update, i.e. NetBeans, select
+ Next, Select Install, Select Finish<br>
+   9. Manually check the NetBeans install directory &lt;netbeans-install&gt;/modules
+ for the following file:-</font> <br>
+  <b><font color="#000000">office.jar</font></b> <br>
+  <font color="#000000">10. Manually check that the SFrameworkInstall.log 
+file was writter to the users home directory.</font> <br>
+  <font color="#000000">11. Start OpenOffice.org, select Tools, there should
+ be an entry - Scripting Add On's</font><br>
+  <font color="#000000">12. Select Tools, Scripting Add On's, Interactive 
+Beanshell Scripting, &nbsp;An interactive beanshell editor window should be
+launched.</font>   </p>
+   
+<p style="margin-bottom: 0cm;"><b><font color="#000000">Expected Result:</font></b> 
+ <br>
+  <font color="#000000">All operations should complete successfully.</font> 
+ </p>
+   
+<p> </p>
+   
+<center></center>
+  <br>
+     
+<hr width="100%"> <br>
+  &nbsp; <br>
+  &nbsp;   
+<center>   
+<h1 style="text-decoration: none;"> <a name="install_02"></a><font
+ color="#000000">Test Case: install_02</font></h1>
+  </center>
+      
+<h2 style="text-decoration: none;"> <font color="#000000">Test Area: Windows</font></h2>
+   <b><font color="#000000">Test Aim</font></b> <br>
+  <font color="#000000">Test the SFrameworkInstall.jar&nbsp; will sense directory
+ names longer than 8 characters.</font>    
+<p style="margin-bottom: 0cm;"><b><font color="#000000">Requirements</font></b> 
+ <br>
+  <font color="#000000"><a href="#README">README</a>is performed before running
+ this test case.</font> <br>
+  <font color="#000000">OpenOffice.org installation path directory has a
+name  which is nine characters or more.</font> <br>
+  <font color="#000000">NetBeans installation path directory has a name which
+ is nine characters or more.</font> <br>
+   </p>
+   
+<hr>    
+<p><b><font color="#000000">Description:</font></b> <br>
+  <font color="#000000">1. Copy the SFrameworkInstall.jar file to the user's
+ home directory.</font> <br>
+  <font color="#000000">2. Ensure OpenOffice.org is not running, also ensure 
+ the quickstarters for windows and Linux are not running.</font> <br>
+  <font color="#000000">3. Execute java -jar SFrameworkInstall.jar</font> 
+<br>
+  <font color="#000000">4. On the Scripting Framework Installer welcome screen
+ click next.</font> <br>
+  <font color="#000000">5. Select Install, in the dialog select Next.</font> 
+ <br>
+  <font color="#000000">6. When Installation has completed, select Finish, 
+the next dialog should prompt you that the installer has</font> <br>
+  <font color="#000000">&nbsp;&nbsp;&nbsp; a NetBeans installation, select
+ Next.</font> <br>
+  <font color="#000000">8. Select the IDE's for update, i.e. NetBeans, select
+ Next, Select Install, Select Finish.<br>
+  9. Manually check the NetBeans install directory &lt;netbeans-install&gt;/modules
+ for the following file:-</font> <br>
+  <b><font color="#000000">office.jar.</font></b><br>
+  <font color="#000000">10. Start OpenOffice.org, select Tools,&nbsp;</font><font
+ color="#000000"> there should be an entry - Scripting Add On's</font><br>
+  <font color="#000000">11. Select Tools, Scripting Add On's, Interactive 
+Beanshell Scripting, &nbsp;An interactive beanshell editor window should be
+launched.</font>   <font color="#000000"></font>  </p>
+   
+<p style="margin-bottom: 0cm;"><b><font color="#000000">Expected Result:</font></b> 
+ <br>
+  <font color="#000000">All operations should complete successfully.</font></p>
+      
+<hr> <br>
+  &nbsp; <br>
+  &nbsp;   
+<center>   
+<h1 style="text-decoration: none;"> <a name="install_03"></a><font
+ color="#000000">Test Case: install_03</font></h1>
+  </center>
+      
+<h2 style="text-decoration: none;"> <font color="#000000">Test Area: Windows</font></h2>
+   <b><font color="#000000">Test Aim</font></b> <br>
+  <font color="#000000">Test the SFrameworkInstall.jar&nbsp; will sense directory
+ names which contain a space character.</font>    
+<p style="margin-bottom: 0cm;"><b><font color="#000000">Requirements</font></b> 
+ <br>
+  <font color="#000000"><a href="#README">README </a>is performed before
+running  this test case.</font> <br>
+  <font color="#000000">OpenOffice.org installation path directory has a
+name  which&nbsp; contains a space character.</font> <br>
+  <font color="#000000">NetBeans installation path directory has a name which
+ contains a space character.</font> <br>
+   </p>
+   
+<hr>    
+<p><b><font color="#000000">Description:</font></b> <br>
+  <font color="#000000">1. Copy the SFrameworkInstall.jar file to the user's
+ home&nbsp; directory.</font> <br>
+  <font color="#000000">2. Ensure OpenOffice.org is not running, also ensure 
+ the quickstarters for windows and Linux are not running.</font> <br>
+  <font color="#000000">3. Execute java -jar SFrameworkInstall.jar</font> 
+<br>
+  <font color="#000000">4. On the Scripting Framework Installer welcome screen
+ click next.</font> <br>
+  <font color="#000000">5. Select Install, in the dialog select Next.</font> 
+ <br>
+  <font color="#000000">6. When Installation has completed, select Finish, 
+the next dialog should prompt you that the installer has</font> <br>
+  <font color="#000000">&nbsp;&nbsp;&nbsp; a NetBeans installation, select
+ Next.</font> <br>
+  <font color="#000000">8. Select the IDE's for update, i.e. NetBeans, select
+ Next, Select Install, Select Finish<br>
+  9. Manually check the NetBeans install directory &lt;netbeans-install&gt;/modules
+ for the following file:-</font> <br>
+  <b><font color="#000000">office.jar</font></b><br>
+  <font color="#000000">10. Start OpenOffice.org, select Tools,&nbsp;</font><font
+ color="#000000"> there should be an entry - Scripting Add On's</font><br>
+  <font color="#000000">11. Select Tools, Scripting Add On's Interactive
+Beanshell  Scripting, &nbsp;An interactive beanshell editor window should
+be launched.</font>   <font color="#000000"></font>  </p>
+   
+<p style="margin-bottom: 0cm;"><b><font color="#000000">Expected Result:</font></b> 
+ <br>
+  <font color="#000000">All operations should complete successfully.</font> 
+ <br>
+   </p>
+   
+<hr>   
+<hr> <br>
+  &nbsp;&nbsp;  
+<center></center>
+  <br>
+  &nbsp; <br>
+  &nbsp;   
+<center>   
+<h1 style="text-decoration: none;"> <a name="bindings_01"></a><font
+ color="#000000">Test Case: bindings_01</font></h1>
+  </center>
+      
+<h2 style="text-decoration: none;"> <font color="#000000">Test Area: Solaris&nbsp;
+ - Linux - Windows</font></h2>
+   <b><font color="#000000">Test Aim</font></b> <br>
+  <font color="#000000">Test that the user can assign a deployed script to
+ an key.</font> <br>
+  &nbsp;    
+<p style="margin-bottom: 0cm;"><font color="#000000">Prerequisites:-</font> 
+ <br>
+  <font color="#000000"><a href="#install_01">install_01 </a>is executed
+before  running this test case.</font> <br>
+   </p>
+   
+<hr>    
+<p style="text-decoration: none;"><b><font color="#000000">Description:</font></b> 
+ <br>
+  <font color="#000000">1.&nbsp; Start OpenOffice.org writer document.</font> 
+ <br>
+  <font color="#000000">2. Select Tools - Script Add On's, Assign Script
+to  Key.</font><br>
+  <font color="#000000">3. In the popup dialog,</font> <br>
+  <font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp; in the select script function
+ select <br>
+  &nbsp; &nbsp; Location- User<br>
+  &nbsp; &nbsp; Language- Java<br>
+  &nbsp; &nbsp; Script -&nbsp; HighlightText.showForm</font> <br>
+  <font color="#000000">&nbsp;&nbsp;&nbsp; Select&nbsp; Key Group SHIFT + 
+CONTROL +F keys.</font> <br>
+  <font color="#000000">&nbsp;&nbsp;&nbsp; Select ShortcutKey SHIFT + CONTROL
+ + F3.</font> <br>
+  <font color="#000000">&nbsp;&nbsp;&nbsp; SelectAssign Key.</font> <br>
+  <font color="#000000">4. The Key should now be assigned to HighlightText.showForm. 
+ Select OK.</font> <br>
+  <font color="#000000">5. </font><font color="#000000">Select Shift - Control
+ - F3. The Highlight Text box dialog should be displayed.</font> <br>
+  <font color="#000000">6. Select Tools - </font><font color="#000000">Script
+ Add On's -&nbsp; Assign Script to Key.</font><font color="#000000"> <br>
+  SHIFT-CONTROL-F3 should be listed as assigned to HighlightText.showForm. 
+Close the Assign Script to Key dialog</font>.<br>
+  <font color="#000000">9. Select Tools - Configure, select the Keyboard
+option,  ensure that writer is selected in the top right corner.</font> <br>
+  <font color="#000000">In the shortcut keys scroll to Ctrl+Shift+F3, this
+ should show that it is assigned to [script://HighlightText.showForm].</font> 
+ <br>
+  <font color="#000000">10. Close the Configuration dialog.</font> <br>
+  &nbsp; <br>
+  &nbsp;  </p>
+   
+<p style="margin-bottom: 0cm;"><b><font color="#000000">Expected Result:</font></b> 
+ <br>
+  <font color="#000000">All operations should complete successfully.</font> 
+ <br>
+   </p>
+  <br>
+     
+<hr> <br>
+  &nbsp; <br>
+  &nbsp;   
+<center>   
+<h1 style="text-decoration: none;"> <a name="bindings_02"></a><font
+ color="#000000">Test Case: bindings_02</font></h1>
+  </center>
+      
+<h2 style="text-decoration: none;"> <font color="#000000">Test Area: Solaris&nbsp;
+ - Linux - Windows</font></h2>
+   <b><font color="#000000">Test Aim</font></b> <br>
+  <font color="#000000">Test that the user can&nbsp; remove an assigned key.</font> 
+ <br>
+  &nbsp;    
+<p style="margin-bottom: 0cm;"><font color="#000000">Prerequisites:-</font> 
+ <br>
+  <font color="#000000"><a href="#bindings_01">bindings_01 </a>is executed 
+before running this test case.</font> <br>
+   </p>
+   
+<hr>    
+<p style="text-decoration: none;"><b><font color="#000000">Description:</font></b> 
+ <br>
+  <font color="#000000">1.&nbsp; Start OpenOffice.org writer document.</font> 
+ <br>
+  <font color="#000000">2. Select Tools - </font><font color="#000000">Script
+ Add On's - Assign Script to Key.</font><br>
+  <font color="#000000">3. In the popup dialog,</font> <br>
+  <font color="#000000">&nbsp;&nbsp;&nbsp; Select&nbsp; Key Group SHIFT + 
+CONTROL +F keys.</font> <br>
+  <font color="#000000">&nbsp;&nbsp;&nbsp; Select ShortcutKey SHIFT + CONTROL
+ + F3.</font> <br>
+  <font color="#000000">&nbsp;&nbsp;&nbsp; Select&nbsp; Delete Script Key.</font> 
+ <br>
+  <font color="#000000">4. The Key should not be assigned to anything. Select
+ OK.</font> <br>
+  <font color="#000000">6. Select Shift - Control - F3. The Highlight Text
+ box dialog should be not&nbsp; displayed.</font> <br>
+  <font color="#000000">7. Select Tools -</font><font color="#000000">Script
+ Add On's - Assign Script to Key</font><font color="#000000"> , <br>
+  Key, SHIFT-CONTROL-F3 should not be listed as assigned to anything. Close
+ the Assign Script (Java) to Key dialog</font> <br>
+  <font color="#000000">8. Select Tools - Configure, select the Keyboard
+option,  ensure that writer is selected in the top right corner.</font> <br>
+  <font color="#000000">In the shortcut keys scroll to Ctrl+Shift+F3, this
+ should show that it is not assigned to anything</font> <br>
+  <font color="#000000">9. Close the Configuration dialog.</font> <br>
+  &nbsp; <br>
+  &nbsp;  </p>
+   
+<p style="margin-bottom: 0cm;"><b><font color="#000000">Expected Result:</font></b> 
+ <br>
+  <font color="#000000">All operations should complete successfully.</font> 
+ <br>
+   </p>
+   
+<hr>  <br>
+  &nbsp; <br>
+  &nbsp;   
+<center>   
+<h1 style="text-decoration: none;"> <a name="bindings_03"></a><font
+ color="#000000">Test Case: bindings_03</font></h1>
+  </center>
+      
+<h2 style="text-decoration: none;"> <font color="#000000">Test Area: Solaris&nbsp;
+ - Linux - Windows</font></h2>
+   <b><font color="#000000">Test Aim</font></b> <br>
+  <font color="#000000">Test that the user can assign a deployed script to
+ the File menu item.</font> <br>
+  &nbsp;    
+<p style="margin-bottom: 0cm;"><font color="#000000">Prerequisites:-</font> 
+ <br>
+  <font color="#000000"><a href="#install_01">install_01 </a>is executed
+before  running this test case</font> <br>
+   </p>
+   
+<hr>    
+<p style="text-decoration: none;"><b><font color="#000000">Description:</font></b> 
+ <br>
+  <font color="#000000">1.&nbsp; Start OpenOffice.org&nbsp; writer document.</font> 
+ <br>
+  <font color="#000000">2. Select Tools, Scripting Add On's, Assign Script
+ to Menu.</font><br>
+  <font color="#000000">3. In the popup dialog,</font> select<br>
+  &nbsp; &nbsp; Location - User<br>
+  &nbsp; &nbsp; Language - Java<br>
+  &nbsp; &nbsp; Script - <font color="#000000"> HighlightText.showForm</font><br>
+  <font color="#000000">&nbsp; &nbsp; Select File in the Top Level menu drop
+ down list.</font> <br>
+  <font color="#000000">&nbsp;&nbsp;&nbsp; In the New Menu dialog box , enter
+ a menu item name e.g. menuhighlight.</font> <br>
+  <font color="#000000">&nbsp;&nbsp;&nbsp; Select New, select ok.</font>
+<font color="#000000"><br>
+  4. Select File, menuhighlight - a highlight text box should appear.</font> 
+ <br>
+  &nbsp; <br>
+  &nbsp;  </p>
+   
+<p style="margin-bottom: 0cm;"><b><font color="#000000">Expected Result:</font></b> 
+ <br>
+  <font color="#000000">All operations should complete successfully.</font> 
+ <br>
+   </p>
+   
+<hr>  <br>
+  &nbsp; <br>
+  &nbsp;   
+<center>   
+<h1 style="text-decoration: none;"> <a name="bindings_04"></a><font
+ color="#000000">Test Case: bindings_04</font></h1>
+  </center>
+      
+<h2 style="text-decoration: none;"> <font color="#000000">Test Area: Solaris&nbsp;
+ - Linux - Windows</font></h2>
+   <b><font color="#000000">Test Aim</font></b> <br>
+  <font color="#000000">Test that the user can delete an assigned File menu
+ item.</font> <br>
+  &nbsp;    
+<p style="margin-bottom: 0cm;"><font color="#000000">Prerequisites:-</font> 
+ <br>
+  <font color="#000000"><a href="#bindings_03">bindings_03</a>&nbsp; is&nbsp;
+ executed before running this test case</font> <br>
+   </p>
+   
+<hr>    
+<p style="text-decoration: none;"><b><font color="#000000">Description:</font></b> 
+ <br>
+  <font color="#000000">1.&nbsp; Start OpenOffice.org writer document.</font> 
+ <br>
+  <font color="#000000">2. </font><font color="#000000">Select Tools, Scripting
+ Add On's, Assign Script to Menu.</font><br>
+  <font color="#000000">3. In the popup dialog,</font> <br>
+  <font color="#000000">&nbsp;&nbsp;&nbsp; Select File in the Top Level menu
+ drop down list.</font> <br>
+  <font color="#000000">&nbsp;&nbsp;&nbsp; In the Sub Menu, select menuhighlight 
+ [ HighlightText.ShowForm]</font> <br>
+  <font color="#000000">&nbsp;&nbsp;&nbsp; Select Delete Script Menu. Select
+ OK.</font> <br>
+  <font color="#000000">4. Select File, there should now be no menu option 
+menuhighlight.</font>  <br>
+  &nbsp; <br>
+  &nbsp;  </p>
+   
+<p style="margin-bottom: 0cm;"><b><font color="#000000">Expected Result:</font></b> 
+ <br>
+  <font color="#000000">All operations should complete successfully.</font> 
+ <br>
+   </p>
+   
+<hr>  <br>
+  &nbsp; <br>
+  &nbsp;   
+<center>   
+<h1> <a name="bindings_05"></a><font color="#000000">Test Case: bindings_05</font></h1>
+  </center>
+      
+<h2 style="text-decoration: none;"> <font color="#000000">Test Area: Solaris&nbsp;
+ - Linux - Windows</font></h2>
+   <b><font color="#000000">Test Aim</font></b> <br>
+  <font color="#000000">Test that the user can execute a&nbsp; script stored
+ in a document with a binding stored in the same document.</font> <br>
+  &nbsp;    
+<p style="margin-bottom: 0cm;"><font color="#000000">Prerequisites:-</font> 
+ <br>
+  <font color="#000000">&nbsp;<a href="#install_01">install_01 </a>is executed
+ before running this test case.</font> <br>
+   </p>
+   
+<hr>    
+<p style="text-decoration: none;"><b><font color="#000000">Description:</font></b> 
+ <br>
+  <font color="#000000">1.&nbsp; Start OpenOffice.org.</font> <br>
+  <font color="#000000">2. Select File - Open, navigate to &lt;OpenOffice.org-install-dir&gt;/user/Scripts/java/MemoryUsage.</font> 
+ <br>
+  <font color="#000000">3. Open file ExampleSpreadSheet.sxc, a spreadsheet 
+document with a pie chart should be opened</font> <br>
+  <font color="#000000">4. Press ctrl-shift-m, the user is warned that they
+ are about to execute a sctipt.</font> <br>
+  <font color="#000000">Do you want to execute this script.</font> <br>
+  <font color="#000000">5. Select Yes.</font> <br>
+  <font color="#000000">6. The chart updates with JVM memory usage statistics.</font> 
+ <br>
+  <font color="#000000">7. Repeat steps 4-6 again.</font> <br>
+  &nbsp; <br>
+  &nbsp;  </p>
+   
+<p style="margin-bottom: 0cm;"><b><font color="#000000">Expected Result:</font></b> 
+ </p>
+   
+<div style="margin-bottom: 0cm;"><font color="#000000"><font size="+0">All 
+ operations should complete successfully.</font></font></div>
+      
+<center>   
+<h1 style="text-decoration: none;">    
+<hr width="100%">  
+<hr width="100%"></h1>
+  </center>
+   
+<center>  
+<h1 style="text-decoration: none;"><br>
+   </h1>
+  <br>
+  <br>
+  </center>
+     
+<center>   
+<h1 style="text-decoration: none;"> <a name="netbeans_01"></a><font
+ color="#000000">Test Case: netbeans_01</font></h1>
+  </center>
+      
+<h2 style="text-decoration: none;"> <font color="#000000">Test Area: Solaris&nbsp;
+ - Linux - Windows</font></h2>
+   <b><font color="#000000">Test Aim</font></b> <br>
+  <font color="#000000">Compile and deploy a java script to the application 
+ user area using NetBeans.</font>   
+<p><b><font color="#000000">Prerequisits</font></b> <br>
+  <font color="#000000"><a href="#install_01">install_01 </a>is executed
+before  running this test case.</font> <br>
+  <a
+ href="http://framework.openoffice.org/scripting/release-0.2/netbeans-devguide.html#prerequisites">http://framework.openoffice.org/scripting/release-0.2/netbeans-devguide.html#prerequisites</a><br>
+   </p>
+   
+<hr>    
+<p style="text-decoration: none;"><b><font color="#000000">Description:</font></b> 
+ <br>
+  &nbsp; </p>
+   
+<ol start="2">
+    <font color="#000000">1. Create an examples directory e.g. HelloNetBeans.#</font> 
+   <br>
+    <font color="#000000">Start NetBeans.</font>       
+  <p><font color="#000000">2. Mount the examples directories</font> <br>
+    <font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+Select the File-&gt;Mount Filesystem menu item</font> <br>
+    <font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+In the Choose Filesystem Type window select Local Directory and click Next</font> 
+   <br>
+    <font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+Mount the examples directory you created i.e. HelloNetBeans.</font> <br>
+    <font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+Select Finish.</font> </p>
+       
+  <p><font color="#000000">3.&nbsp;&nbsp; Create a new script parcel</font> 
+   <br>
+    <font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+Right click on your mounted examples directory.</font> <br>
+    <font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+Select New-&gt;Office Scripting-&gt;Parcel Recipe</font> <br>
+    <font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+In the New Wizard window that appears, enter the name you wish to call your
+ new parcel e.g HelloNetBeans.</font> <br>
+    <font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+Select Finish.</font> </p>
+       
+  <p><font color="#000000">4.&nbsp; Click on the Contents-Empty file</font> 
+   <br>
+    <font color="#000000">-Change the name of 'public class Empty' to 'public 
+ class HelloNetBeans'</font> <br>
+    <font color="#000000">-Remove the package declaration 'package HelloNetBeans.Contents;' 
+ at the top of the file</font> <br>
+    <font color="#000000">-Add the following lines to the top of the script 
+ immediately after the first import statement</font> </p>
+       
+  <p><font color="#000000">import com.sun.star.uno.UnoRuntime;</font> <br>
+    <font color="#000000">import com.sun.star.frame.XModel;</font> <br>
+    <font color="#000000">import com.sun.star.text.*;</font> <br>
+  &nbsp; </p>
+       
+  <p><font color="#000000">5. Add the following lines to&nbsp; the public 
+ method doMethod in the </font>HelloNetBeans class. </p>
+       
+  <p><font color="#000000">XModel model = xSc.getDocument();</font> <br>
+    <font color="#000000">&nbsp;XTextDocument textdoc = (XTextDocument)</font> 
+   <br>
+    <font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+ UnoRuntime.queryInterface(XTextDocument.class, model);</font> <br>
+    <font color="#000000">&nbsp;XText oText = textdoc.getText();</font> <br>
+    <font color="#000000">&nbsp;XTextCursor oCursor = oText.createTextCursor();</font> 
+   <br>
+    <font color="#000000">&nbsp;oText.insertString(oCursor, "Hello NetBeans", 
+ false);</font> </p>
+       
+  <p><font color="#000000">6. Right click on the HelloNetBeans in the right 
+ frame and select save.</font> </p>
+       
+  <p><font color="#000000">7.&nbsp;&nbsp; Right click on&nbsp; the HelloNetBeans 
+ directory and select compile. You should note that</font> <br>
+    <font color="#000000">the compile completes successfully from the lower 
+ right hand frame (output window) of NetBeans.</font> </p>
+       
+  <p><font color="#000000">8. Right click on the HelloNetBeans&nbsp; directory 
+ and select build,</font> <br>
+    <font color="#000000">In the dialog which appears select the HelloNetBeans.doMethod 
+ and add to scripts , select OK.</font> <br>
+    <font color="#000000">A HelloNetBeans parcel file should be built.</font> 
+   </p>
+       
+  <p><font color="#000000">9. Right click on the Hello NetBeans parcel file 
+ and select Deploy to OpenOffice.org, user.</font> </p>
+       
+  <p><font color="#000000">10. Check that the files have been successfully 
+ deployed to &lt;office-install&gt;/user/Scripts/java.</font> </p>
+       
+  <p><font color="#000000">11. Assign an event&nbsp; to execute the script.</font> 
+   <br>
+    <font color="#000000">- Start OpenOffice.org&nbsp; writer document.</font> 
+   <br>
+    <font color="#000000">- Select Tools, </font><font color="#000000">Scripting
+ Add On's, Assign Script to Menu.</font><br>
+    <font color="#000000">- In the popup dialog,</font> select<br>
+  &nbsp; &nbsp;Location - user<br>
+  &nbsp; &nbsp;Language - Java<br>
+  &nbsp; &nbsp;Script HelloNetBeans.doMethod<br>
+    <font color="#000000">&nbsp;&nbsp; Select File in the Top Level menu
+drop  down list.</font> <br>
+    <font color="#000000">&nbsp; In the New Menu, enter a menu item name
+e.g.  HelloNetBeans.</font> <br>
+    <font color="#000000">&nbsp; Select New, select ok.</font> <br>
+    <font color="#000000">- Select File, HelloNetBeans - Hello NetBeans should
+ be inserted into the document.</font></p>
+   
+</ol>
+   <b><font color="#000000">Expected Result:</font></b> <br>
+  &nbsp;   
+<p><font color="#000000">All operations should complete successfully.</font> 
+ <br>
+   </p>
+     
+<hr> <br>
+  &nbsp; <br>
+  &nbsp;   
+<center>   
+<h1 style="text-decoration: none;"> <a name="netbeans_02"></a><font
+ color="#000000">Test Case: netbeans_02</font></h1>
+  </center>
+      
+<h2 style="text-decoration: none;"> <font color="#000000">Test Area: Solaris&nbsp;
+ - Linux - Windows</font></h2>
+   <b><font color="#000000">Test Aim</font></b> <br>
+  <font color="#000000">Compile and deploy a java script to a document&nbsp; 
+ using NetBeans.</font>   
+<p><b><font color="#000000">Prerequisites</font></b> <br>
+  <font color="#000000"><a href="#netbeans_01">netbeans_01</a> is executed 
+before running this test case.</font> <br>
+  Delete directory &lt;office-install&gt;/user/Scripts/java/HelloNetBeans. 
+<br>
+  A previously created OpenOffice.org writer document, e.g. TestBindNB.sxw 
+<br>
+   </p>
+   
+<hr> <br>
+  &nbsp;   
+<p>1. Start NetBeans <br>
+  <font color="#000000">&nbsp;Right click on the HelloNetBeans in the right
+ frame and select the previously opened HelloNetBeans.java file.</font> <br>
+  <font color="#000000">Change the "Hello NetBeans" line to "Hello NetBeans 
+ 2 ----"</font> <br>
+  <font color="#000000">Select File Save.</font> </p>
+   
+<p><font color="#000000">2.&nbsp;&nbsp; Right click on&nbsp; the HelloNetBeans 
+ directory and select compile. You should note that</font> <br>
+  <font color="#000000">the compile completes successfully from the lower 
+right hand frame (output window) of NetBeans.</font> </p>
+   
+<p><font color="#000000">3. Right click on the HelloNetBeans&nbsp; directory 
+ and select build,</font> <br>
+  <font color="#000000">In the dialog which appears select the HelloNetBeans.doMethod 
+ and add to scripts , select OK.</font> <br>
+  <font color="#000000">A HelloNetBeans parcel file should be built.</font> 
+ </p>
+   
+<p><font color="#000000">4. Right click on the Hello NetBeans parcel file 
+ and select Deploy to Office Document, select the previously saved</font> 
+<font color="#000000">test document i.e. </font>TestBindNB.sxw<font
+ color="#000000">. A warning dialog should warn the user that the douemnt
+ should not already be opened in OpenOffice.org. If the document is opened,
+ close it and select ok.</font> </p>
+   
+<p><font color="#000000">5. Check that the script has been successfully deployed
+ to the document by running unzip -l&nbsp; </font>TestBindNB.sxw<font
+ color="#000000">. (Unix) or pkunzip -v&nbsp; </font>TestBindNB.sxw <font
+ color="#000000">(Windows). You should see the script saved in the document.</font> 
+ </p>
+   
+<p><font color="#000000">6. Assign an event&nbsp; to execute the script.</font> 
+ <br>
+  <font color="#000000">- Open the TestBindNB.sxw test document.</font> <br>
+  <font color="#000000">- Select Tools,&nbsp;</font><font
+ color="#000000">Scripting  Add On's, Assign Script to Menu.</font> <br>
+  <font color="#000000">- In the popup dialog,</font> select<br>
+  <font color="#000000">&nbsp; &nbsp;Location - Document,<br>
+  &nbsp; &nbsp;Language - Java,<br>
+  &nbsp; &nbsp;Script-&nbsp; HelloNetBeans.doMethod</font> <br>
+  <font color="#000000">&nbsp;&nbsp; Select File in the Top Level menu drop
+ down list.</font> <br>
+  <font color="#000000">&nbsp;&nbsp; In the New Menu, enter a menu item name
+ e.g. HelloNetBeans.</font> <br>
+  <font color="#000000">&nbsp;&nbsp; Select New, select ok.</font> <br>
+  &nbsp; <br>
+  <font color="#000000">- Select File, HelloNetBeans - Hello NetBeans 2 ---- 
+ should be inserted into the document.</font> <br>
+  &nbsp; </p>
+   
+<p> </p>
+   
+<hr> <br>
+  &nbsp; <br>
+  &nbsp;   
+<center>   
+<h1 style="text-decoration: none;"> <a name="netbeans_03"></a><font
+ color="#000000">Test Case: netbeans_03</font></h1>
+  </center>
+      
+<h2 style="text-decoration: none;"> <font color="#000000">Test Area: Solaris&nbsp;
+ - Linux - Windows</font></h2>
+   <b><font color="#000000">Test Aim</font></b> <br>
+  <font color="#000000">Delete a script&nbsp; deployed to a document&nbsp; 
+using NetBeans.</font>   
+<p><b><font color="#000000">Prerequisits</font></b> <br>
+  <font color="#000000"><a href="#netbeans_02">netbeans_02</a> is executed 
+before running this test case.</font> <br>
+   </p>
+   
+<hr>   
+<p>1. Start NetBeans. <br>
+  Mount the file system where&nbsp;<font color="#000000"> </font>TestBindNB.sxw<font
+ color="#000000">. is stored. If TestBindNB.sxw is opened in OpenOffice.org,
+ close it.</font> </p>
+   
+<p><font color="#000000">2. Expand the file TestBindNB.sxw file . Right click
+ on the PARCEL_FILE and select Delete.</font> </p>
+   
+<p><font color="#000000">3. The Script saved in the office document TestBindNB.sxw 
+ should now be deleted.</font> </p>
+   
+<p><font color="#000000">4. Check that it is deleted by running unzip -l </font>TestBindNB.sxw<font
+ color="#000000">. (Unix) or pkunzip -v </font>TestBindNB.sxw <font
+ color="#000000">(Windows). You should see that&nbsp; the previously saved&nbsp;
+script in the document is now gone.</font> </p>
+   
+<p> </p>
+     
+<hr> <br>
+   
+<div align="center">&nbsp;   <b><big></big></b>   
+<h1 style="text-decoration: none;">&nbsp; <a name="netbeans_04"></a><font
+ color="#000000"><b><big><big><big>Test Case : netbeans_04</big></big></big></b></font><br>
+  </h1>
+ </div>
+  <br>
+  <br>
+  <b>Test Aim</b><br>
+  Generate and deploy a script using the command line interface.<br>
+  <br>
+  <b>Prerequisits</b><br>
+  <a href="#netbeans_03">netbeans_03</a> is executed before running this
+test  case.<br>
+<a
+ href="http://framework.openoffice.org/scripting/release-0.2/commandline-devguide.html#prereqs">http://framework.openoffice.org/scripting/release-0.2/commandline-devguide.html#prereqs</a><br>
+  Set the users CLASSPATH to include <br>
+  &lt;netbeans-install-dir&gt;/modules.jar<br>
+  all jar files &lt;office-install-dir&gt;/program/classes/&nbsp; directory.<br>
+  all jar files in the xerces installation path directory.<br>
+  <br>
+  1. Create a new examples directory, e.g. examplesCLI. Create a Contents 
+directory in examplesCLI.<br>
+  2. Copy the <font color="#000000">HelloNetBeans.java </font>and <font
+ color="#000000">HelloNetBeans.class path from the examples directory (HelloNetBeans)
+ previously </font>generated in netbeans_02 to the newly created Contents 
+directory in examplesCLI.<br>
+  3. Enter the command 'java CommandLineTools -g &nbsp;examplesCLI -l Java'.<br>
+  You should be prompted that a examplesCLI.sxp file has been generated.<br>
+  4. Enter the command 'java CommandLineTools -d &lt;absolute path&gt;/examplesCLI.sxp
+ &lt;office-install-dir/share/Scripts.<br>
+  5. Start OpenOffice.org, Select Tools, Scripting Add On's, Assign Script
+ to Menu.<br>
+  Select,<br>
+  Location - Share<br>
+  Language - Java<br>
+  Script - HelloNetBeans.doMethod<br>
+  <br>
+  Create a binding to the File menu, and execute it. HelloNetBeans 2 ---- 
+should be entered in the text document.<br>
+  <br>
+  <br>
+  <br>
+ <br>
+</body>
+</html>

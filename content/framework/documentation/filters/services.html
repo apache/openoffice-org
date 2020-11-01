@@ -1,0 +1,299 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>TypeDetection-Services</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="CREATED" CONTENT="20010222;17102408">
+	<META NAME="CHANGEDBY" CONTENT="Mathias Bauer">
+	<META NAME="CHANGED" CONTENT="20010411;13373543">
+	<STYLE>
+	<!--
+		TD P { color: #000000 }
+		P { color: #000000 }
+		A:visited { color: #800080 }
+		A:link { color: #0000ff }
+	-->
+	</STYLE>
+</head>
+<body TEXT="#000000" LINK="#0000ff" VLINK="#800080">
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=0 CELLSPACING=0 STYLE="page-break-before: always">
+	<TR>
+		<TD>
+			<P ALIGN=LEFT><A HREF="index.html">&lt;&lt;</A></P>
+		</TD>
+		<TD>
+			<P ALIGN=CENTER><BR>
+			</P>
+		</TD>
+		<TD>
+			<P ALIGN=RIGHT><A HREF="example.html">&gt;&gt;</A></P>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 COLOR="#000000">
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<CENTER>
+	<TABLE WIDTH=70% BORDER=0 CELLPADDING=0 CELLSPACING=0>
+		<TR>
+			<TD>
+				<P><FONT SIZE=5>Realization</FONT> <BR><BR>The generic approach,
+				as was already shown in the configuration, continues in
+				realization and implementation. Modularity and exchangeability
+				are generally achieved by consistent use of the UNO service
+				concept. 
+				</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<P><BR><FONT SIZE=5>Service Description</FONT> <BR><BR>The
+				following services were specified:</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><A HREF="#service_MediaDescriptor">com.sun.star.document.MediaDescriptor</A>
+										</P>
+					<LI><P STYLE="margin-bottom: 0cm"><A HREF="#service_TypeDetection">com.sun.star.document.TypeDetection</A>
+										</P>
+					<LI><P STYLE="margin-bottom: 0cm"><A HREF="#service_FrameLoaderFactory">com.sun.star.frame.FrameLoaderFactory</A>
+										</P>
+					<LI><P STYLE="margin-bottom: 0cm"><A HREF="#service_Loader">com.sun.star.frame.FrameLoader</A>
+										</P>
+					<LI><P STYLE="margin-bottom: 0cm"><A HREF="#service_Loader">com.sun.star.frame.SynchronousFrameLoader</A>
+										</P>
+					<LI><P STYLE="margin-bottom: 0cm"><A HREF="#service_FilterFactory">com.sun.star.document.FilterFactory</A>
+										</P>
+					<LI><P STYLE="margin-bottom: 0cm"><A HREF="#service_Filter">com.sun.star.document.ImportFilter</A>
+										</P>
+					<LI><P><A HREF="#service_Filter">com.sun.star.document.ExportFilter</A>
+										</P>
+				</UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<HR SIZE=1 COLOR="#cccccc">
+				<P><A NAME="service_MediaDescriptor"></A><STRONG>com.sun.star.document.MediaDescriptor
+				</STRONG><BR><BR>This is not really a service. Rather, it is a
+				structure that tries to unite all the document information. This
+				is where e.g. URL, MediaType, FilterName, Referrer, Version and
+				an InputStream are available. The point is to <SPAN STYLE="background: transparent">take</SPAN>
+				the MediaDescriptor through all the processes of type detection
+				(detect flat/deep, filter, load...). Resulting information should
+				be added or corrected so that it is available for the next step
+				in the process. <BR>Some things to be aware of: 
+				</P>
+				<OL>
+					<LI><P STYLE="margin-bottom: 0cm">The UNO feature that
+					corresponds to this service is a sequence of elements of the
+					com.sun.star.beans.PropertyValue type. It is thus not a real
+					service in the sense of an object. <BR>e.g. in C++
+					&quot;<FONT COLOR="#666666">::com::sun::star::uno::Sequence&lt;
+					::com::sun::star::beans::PropertyValue &gt; lProperties</FONT>&quot;
+										</P>
+					<LI><P>The elements may only be referenced or kept as a copy for
+					the time necessary for direct processing. 
+					</P>
+				</OL>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<HR SIZE=1 COLOR="#cccccc">
+				<P><A NAME="service_TypeDetection"></A><STRONG>com.sun.star.document.TypeDetection
+				</STRONG>
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><FONT COLOR="#d74601">interface
+					com.sun.star.document.XTypeDetection</FONT> <BR>Makes flat or
+					deep detection of the type of contents, described by the URL or
+					a MediaDescriptor. The result you receive is the internal name
+					of the detected type. This can be used to get registered loaders
+					or filters. The FrameLoaderFactory and FilterFactory services
+					help you do this. 
+					</P>
+					<LI><P><FONT COLOR="#d74601">interface
+					com.sun.star.container.XNameAccess</FONT> <BR>Allows <SPAN STYLE="background: transparent">read-access</SPAN>
+					to the configuration data of all types. 
+					</P>
+				</UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<HR SIZE=1 COLOR="#cccccc">
+				<P><A NAME="service_FrameLoaderFactory"></A><STRONG>com.sun.star.frame.FrameLoaderFactory
+				</STRONG>
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><FONT COLOR="#d74601">interface
+					com.sun.star.lang.XMultiServiceFactory</FONT> <BR>Creates a
+					loader service registered to one type. You enter the internal
+					type name you received from a TypeDetection and get a reference
+					to the object produced. The loader factory already initializes
+					the object produced with its configuration data. <BR>See also
+					<A HREF="#service_Loader">FrameLoader/SynchronousFrameLoader</A>
+					for further information. 
+					</P>
+					<LI><P><FONT COLOR="#d74601">interface
+					com.sun.star.container.XNameAccess</FONT> Allows <SPAN STYLE="background: transparent">read-access</SPAN>
+					to the configuration of all FrameLoaders. 
+					</P>
+				</UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<HR SIZE=1 COLOR="#cccccc">
+				<P><A NAME="service_Loader"></A><STRONG>com.sun.star.frame.FrameLoader<BR>com.sun.star.frame.SynchronousFrameLoader
+				</STRONG>
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><FONT COLOR="#d74601">interface
+					com.sun.star.frame.XFrameLoader</FONT> |
+					<FONT COLOR="#d74601">com.sun.star.frame.XSynchronousFrameLoader</FONT>
+					<BR>With the help of the methods load() and cancel(), you can
+					start processing a document or also abort it. The various
+					services differ only in the way results are returned. The
+					FrameLoader returns immediately and allows the client to listen
+					for the loading completion, whereas the SynchronousFrameLoader
+					returns when finished loading with the result of the process. <SPAN STYLE="background: transparent">If
+					an object implements both interfaces, the synchronous version is
+					preferred. </SPAN>
+					</P>
+					<LI><P><FONT COLOR="#d74601">interface
+					com.sun.star.lang.XInitialization<BR>interface
+					com.sun.star.beans.XPropertySet<BR>[property, readonly]
+					sequence&lt; string &gt; Name<BR>[property, readonly] sequence&lt;
+					string &gt; Types<BR>[property, readonly] string UIName<BR></FONT>These
+					interfaces must be supported by a loader implementation, t<SPAN STYLE="background: transparent">hus
+					making configuration data available by asking the object instead
+					of retrieving it from</SPAN> the FrameLoaderFactory. The
+					properties are re defined as read-only because it does not make
+					sense to make changes at run-time. The XInitialization interface
+					is used by the FrameLoaderFactory to provide the Loader with its
+					configuration data, clients can get them via XPropertySet.</P>
+				</UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<HR SIZE=1 COLOR="#cccccc">
+				<P><A NAME="service_FilterFactory"></A><STRONG><SPAN STYLE="background: transparent">com.sun.star.document.FilterFactory</SPAN></STRONG></P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><FONT COLOR="#d74601">interface
+					com.sun.star.lang.XMultiServiceFactory</FONT> <BR>Use this to
+					create a registered filter suitable for a determined type. You
+					transfer the internal type names and receive a reference to the
+					filter object. The factory then initializes the object with its
+					configuration data. <BR>See also <A HREF="#service_Filter">import/export
+					filters</A> 
+					</P>
+					<LI><P><FONT COLOR="#d74601">interface
+					com.sun.star.container.XNameAccess</FONT> <BR>Allows <SPAN STYLE="background: transparent">read-access</SPAN>
+					to the configuration of all filters. 
+					</P>
+				</UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<HR SIZE=1 COLOR="#cccccc">
+				<P><A NAME="service_Filter"></A><STRONG>com.sun.star.document.ImportFilter<BR>com.sun.star.document.ExportFilter
+				</STRONG>
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><FONT COLOR="#d74601">interface
+					com.sun.star.document.XFilter</FONT> <BR>This interface is
+					supported by both services. Use it to start or interrupt the
+					actual filter process. The result is indicated synchronously.
+					The interface only supports a synchronous loading.</P>
+					<LI><P STYLE="margin-bottom: 0cm"><FONT COLOR="#d74601">interface
+					com.sun.star.document.XImporter<BR>interface
+					com.sun.star.document.XExporter</FONT> <BR>A filter is
+					identified as an import and/or export filter by appropriate
+					flags in its configuration data (see also filter configuration).
+					It can implement one or both interfaces. The purpose of these
+					interfaces is to transfer an interface to the output or target
+					document to the filter.<BR>The following algorithm is used:
+					<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a) get suitable interface for
+					respective process (XImporter/XExporter) <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b)
+					set the document on it (setTargetDocument()/setSourceDocument())
+					<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c) get XFilter interface for
+					the same object and start the process with filter() <BR>Problems
+					might be caused by simultaneous implementation of both
+					interfaces. Then the implementation must detect the method
+					called for setting the document, and, based on that, infer the
+					type of filter process.</P>
+					<LI><P><FONT COLOR="#d74601">interface
+					com.sun.star.lang.XInitialization<BR>interface
+					com.sun.star.beans.XPropertySet<BR>[property, readonly] string
+					Name;<BR>[property, readonly] string Type;<BR>[property,
+					readonly] string UIName;<BR>[property, readonly] string
+					DocumentService;<BR>[property, readonly] string
+					FilterService;<BR>[property, readonly] string Flags;<BR>[property,
+					readonly] string UserData;<BR>[property, readonly] string
+					FileFormatVersion;<BR>[property, readonly] string
+					TemplateName;<BR></FONT><FONT COLOR="#000000">A filter must also
+					make its own configuration accessible to others by implementing
+					these interfaces. <BR>See also the description</FONT>
+					<A HREF="#service_Loader">FrameLoader/SynchronousFrameLoader</A>!</P>
+				</UL>
+			</TD>
+		</TR>
+	</TABLE>
+</CENTER>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=0 CELLSPACING=0>
+	<TR>
+		<TD>
+			<P ALIGN=LEFT><A HREF="index.html">&lt;&lt;</A> 
+			</P>
+		</TD>
+		<TD>
+			<P ALIGN=CENTER><BR>
+			</P>
+		</TD>
+		<TD>
+			<P ALIGN=RIGHT><A HREF="example.html">&gt;&gt;</A></P>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 COLOR="#000000">
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
+	<TR>
+		<TD>
+			<P><STRONG><FONT SIZE=2><FONT FACE="Arial">author</FONT></FONT> </STRONG>
+			</P>
+		</TD>
+		<TD>
+			<P><FONT SIZE=2><FONT FACE="Arial">&nbsp;&nbsp;&nbsp;Andreas
+			Schl&uuml;ns</FONT></FONT> 
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P><STRONG><FONT SIZE=2><FONT FACE="Arial">email</FONT></FONT> </STRONG>
+			</P>
+		</TD>
+		<TD>
+			<P>&nbsp;&nbsp;&nbsp;<A HREF="mailto:andreas.schluens@germany.sun.com"><FONT SIZE=2><FONT FACE="Arial">andreas.schluens@germany.sun.com</FONT></FONT></A>
+						</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P><STRONG><FONT SIZE=2><FONT FACE="Arial">last modification</FONT></FONT>
+			</STRONG>
+			</P>
+		</TD>
+		<TD>
+			<P><FONT SIZE=2><FONT FACE="Arial">&nbsp;&nbsp;&nbsp;11.04.2001</FONT></FONT>
+						</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+</body>
+</HTML>

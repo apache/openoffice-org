@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="AUTHOR" CONTENT=" ">
+	<META NAME="CREATED" CONTENT="20010228;15350717">
+	<META NAME="CHANGEDBY" CONTENT=" ">
+	<META NAME="CHANGED" CONTENT="20010309;11552907">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm; margin: 2cm }
+		H1 { margin-bottom: 0.21cm; font-size: 16pt }
+		TD P { margin-bottom: 0.21cm }
+		H2 { margin-bottom: 0.21cm; font-size: 14pt; font-style: italic }
+		P { margin-bottom: 0.21cm }
+	-->
+	</STYLE>
+</head>
+<body>
+<P ALIGN=CENTER STYLE="margin-top: 0.42cm; margin-bottom: 0.5cm; page-break-after: avoid">
+<FONT FACE="SunSans-Demi, sans-serif"><FONT SIZE=4 STYLE="font-size: 16pt">Proposal
+for a Preview Feature in Dialogs</FONT></FONT></P>
+<P ALIGN=CENTER STYLE="margin-top: 0.42cm; margin-bottom: 0.5cm; page-break-after: avoid">
+<FONT FACE="Times New Roman, serif"><FONT SIZE=3>Version 1</FONT></FONT></P>
+<P ALIGN=CENTER>Date: March 8, 2001</P>
+<H1>Table of Contents</H1>
+<P><A HREF="#2.Introduction|outline">Introduction</A></P>
+<P STYLE="margin-left: 2cm"><A HREF="#2.1.Modeless and Modal Dialogs|outline">Modeless
+and Modal Dialogs</A></P>
+<P><A HREF="#3.Live Mode Concept|outline">Live Mode Concept</A></P>
+<P STYLE="margin-left: 2cm"><A HREF="#3.1.Basic Functionality|outline">Basic
+Functionality</A></P>
+<P STYLE="margin-left: 2cm"><A HREF="#3.2.Buttons|outline">Buttons</A></P>
+<P STYLE="margin-left: 2cm"><A HREF="#3.3.Undo|outline">Undo</A></P>
+<P STYLE="margin-left: 2cm"><A HREF="#3.4.Live Mode Behavior|outline">Live
+Mode Behavior</A></P>
+<P><A HREF="#4.Alternative: Preview Icon|outline">Alternative:
+Preview Icon</A></P>
+<P><A HREF="#5.Benefits to former Apply Proposal|outline">Benefits to
+former Apply Proposal</A></P>
+<P><A HREF="#6.Open Issues|outline">Open Issues</A></P>
+<H1><A NAME="2.Introduction|outline"></A>Introduction</H1>
+<P><FONT FACE="Times New Roman, serif">This document is based on the
+</FONT><A HREF="apply_button_spec.htm"><FONT FACE="Times New Roman, serif">first
+proposal</FONT></A><FONT FACE="Times New Roman, serif"> for a new
+Apply button concept in StarOffice / OpenOffice.org. Based on the
+feedback of the community, we decided to think this concept over. As
+a result a new idea came up, which is described in this document.</FONT></P>
+<P>The initial idea of having an Apply button in dialogs was to
+improve the usability of the program, namely the dialog handling,
+with the goal to reduce the number of steps a user would have to
+complete a task. Therefore an Apply button seemed to be a good
+solution as it allows applying and changing settings without having
+to re-open a dialog several times.</P>
+<P>The community's feedback to the proposal for the use of an Apply
+button in dialogs has shown some problems that would occur when
+introducing it in the application as suggested. 
+</P>
+<P>The disadvantage of the proposed button set was that</P>
+<UL>
+	<LI><P>it contained too much buttons what could be dazzling for a
+	user</P>
+	<LI><P>the combination of OK, Cancel/Close, Apply could be confusing
+	for a user</P>
+	<LI><P>the meaning of an Apply button might not be intuitively
+	understandable</P>
+	<LI><P>it might not be understood easily which data will be effected
+	by the Reset button: single tab, whole dialog or applied data.</P>
+</UL>
+<P>The community's feedback also made clear, that not an Apply
+(=Assign) button is desired but a Preview (=Try) feature. Whereas an
+Apply always assigns settings made in a dialog, a Preview is only for
+testing the settings without applying them ultimately.</P>
+<H2><A NAME="2.1.Modeless and Modal Dialogs|outline"></A>Modeless and
+Modal Dialogs</H2>
+<P>The proposed Apply concept did not distinguish between modal and
+modeless dialog boxes, as the possibility of &quot;testing&quot; some
+settings with having the dialog opened should not depend on the
+dialog type. Therefore the Apply button - that is usually used in
+modeless dialog boxes - seemed to be a good solution for modal
+dialogs, too. But this does not correspond to the desired Preview
+feature:</P>
+<P>In <B>modeless</B> dialog boxes an Apply button is necessary, that
+assigns settings to the actual selection. Changing the selection is
+possible here. Thus it must be possible to assign settings ultimately
+before changing the selection. Here Apply has the same functionality
+as an OK button, the only difference is, that the dialog box is not
+closed when pressing Apply. The sense of an Apply button is not for
+testing but for a better and faster workflow as the dialog remains
+open when switching the selection.</P>
+<P>When introducing this Apply button to <B>modal</B> dialog boxes,
+the behavior of the Apply button must, of course, be the same. Thus
+the settings made in a dialog must be assigned to the document/object
+selection ultimately. But this is something, the user might not
+expect or what he does not want. Instead something like a Preview or
+Try button, that is only for testing the settings without applying
+them ultimately, should be offered. The final assignment should be
+done by clicking on an OK button. (Otherwise, if the settings are
+assigned ultimately via Apply, an Undo of the settings made could be
+too complicated for the user.)</P>
+<H1><A NAME="3.Live Mode Concept|outline"></A>Live Mode Concept</H1>
+<P>Trying to find a solution for all those issues that came up in the
+community's discussion, a new idea came up, which is described in the
+following.</P>
+<H2><A NAME="3.1.Basic Functionality|outline"></A>Basic Functionality</H2>
+<P>Two different button sets should be used for modal/modeless
+dialogs, that only offer the basic functionality that is necessary</P>
+<UL>
+	<LI><P>modal: OK, Cancel, Help</P>
+	<LI><P>modeless: Apply, Close, Help</P>
+</UL>
+<P>Beneath these buttons a Live mode icon is offered for both dialog
+types. If Live mode is active, all settings made in the dialog get
+directly visible in the document. But they are not applied ultimately
+unless the user clicks on OK (for modal) or Apply (for modeless
+dialogs). Switching back to Normal mode is possible by clicking on
+the Live mode icon again (=deactivation).</P>
+<P>If the user changes something in the Normal/Live mode and then
+switches to Live/Normal mode, the information within the dialog
+should not be lost:</P>
+<P>When switching from Normal mode to Live mode, the changes made
+before get directly visible in the document.</P>
+<P>When switching from Live mode to Normal mode, the screen display
+of the document switches back to its former state, with those
+settings that were valid, before the dialog was opened. (But the
+settings made in the Live mode are not re-set in the dialog.)</P>
+<H2><A NAME="3.2.Buttons|outline"></A>Buttons</H2>
+<P>The button set is reduced to a minimum, whereby modal and modeless
+dialogs must have different sets due to their nature.</P>
+<P>The buttons behave as follows:</P>
+<UL>
+	<LI><P>OK: Finally applies the settings made. The dialog is closed.</P>
+	<LI><P>Cancel: Cancels the settings made to return to the original
+	state before the dialog was opened (=undo for all steps). The dialog
+	is closed.</P>
+	<LI><P><SPAN STYLE="background: transparent">Apply: Changes are
+	applied to the selected object within the document but the dialog
+	box is not closed.</SPAN></P>
+	<LI><P><SPAN STYLE="background: transparent">Close: Closes the
+	dialog. (Settings are not applied to the document, unless the user
+	has used the Apply button before.)</SPAN></P>
+	<LI><P>Help: Opens context sensitive help for the dialog.</P>
+</UL>
+<H2><A NAME="3.3.Undo|outline"></A>Undo</H2>
+<P><SPAN STYLE="background: transparent">Undo is possible via menu
+(Edit &#150; Undo). Thus for modal dialogs the user can use this
+command after the dialog has been closed via OK. Here Undo would
+return to the original state before the dialog was opened. For
+modeless dialogs he can even use Undo while the dialog is still open.
+Here an Undo step is valid for the settings applied via Apply button.</SPAN></P>
+<H2><A NAME="3.4.Live Mode Behavior|outline"></A>Live Mode Behavior</H2>
+<P>In the Live mode the user can change the settings of the dialog as
+usual. The only difference to the Normal mode is, that the changes
+get directly visible in the document.</P>
+<P>Whenever the focus is removed from a control, the settings should
+get visible in the document as soon as possible. If the focus is not
+changed from one control to another and the user changes something
+within that single control, then the changes should get visible after
+a defined time. This delay time is necessary to avoid fast screen
+display changes due to hectic user actions. Whenever a change has
+been made and no user's action takes place in this time, then the
+settings get automatically visible in the document.</P>
+<P>The delay time has to be verified, perhaps it should be about 2-3
+seconds. The time might also be adjustable in a Tools/Options dialog.</P>
+<H1><A NAME="4.Alternative: Preview Icon|outline"></A><SPAN STYLE="background: transparent">Alternative:
+Preview Icon</SPAN></H1>
+<P>Instead of a Live mode that shows dialog changes automatically, it
+is also possible to offer a Preview icon: When pressing it, all the
+changes made in the dialog get directly visible in the document (but
+they are not applied ultimately). The difference to the Live mode is,
+that the user must be active to see the changes. 
+</P>
+<P>With this alternative technical problems that might occur with the
+Live mode, such as time consuming data processing, are avoided.</P>
+<H1><A NAME="5.Benefits to former Apply Proposal|outline"></A><FONT FACE="Times New Roman, serif">Benefits
+to former Apply Proposal</FONT></H1>
+<UL>
+	<LI><P>The button set has been reduced to a minimum to offer only
+	the basic features that are necessary. Thus the problem of having
+	too much buttons in a dialog, that might not be understandable,
+	should not appear.</P>
+	<LI><P>A Live or a Preview mode does not apply any settings to the
+	object selection in the document. Therefore a user must not worry
+	about how to undo changes. He just has to decide, if he wants to
+	apply the current settings and then click on Apply (modeless) or OK
+	(modal).</P>
+</UL>
+<H1><A NAME="6.Open Issues|outline"></A><FONT FACE="Times New Roman, serif"><B>Open
+Issues</B></FONT></H1>
+<UL>
+	<LI><P>Should a modal dialog contain an Apply button? This only
+	makes sense to apply settings of an intermediary state, while
+	&quot;playing&quot; with the dialog and trying out some settings. If
+	yes, it should be tested, if the combination of OK/Apply is
+	understood by a user.</P>
+	<LI><P>Should a modeless dialog contain an OK button? This could
+	make sense for offering the possibility to apply settings and close
+	the dialog with just one mouse-click instead of two (=Apply +
+	Close). If yes, it should be tested, if the combination of OK/Apply
+	is easily understood by a user.</P>
+	<LI><P>Is a Live mode, that shows changes automatically, better than
+	a Preview button, that just displays the changes on the screen, when
+	it is pressed by the user? (Technical problems that might appear
+	with a Live mode must be cleared.)</P>
+	<LI><P>Live mode: The names Live mode and Normal mode have to be
+	verified (=&gt; Preview mode active/not active?)</P>
+</UL>
+<P><FONT SIZE=4 STYLE="font-size: 16pt"><B>Further Issues</B></FONT></P>
+<P STYLE="font-weight: medium">Independent of this proposal of a Live
+mode or a Preview button, some issues are still open and are
+summarized for the future:</P>
+<UL>
+	<LI><P>We need to establish functional button sets for use
+	throughout our dialogs to avoid that users might be confused as to
+	the behavior of the buttons (e.g. Reset, Back, Standard).</P>
+	<LI><P>We need to establish window behavior, such as making sure all
+	dialogs that can AND should be modeless, are modeless. This is to
+	guarantee a faster workflow.</P>
+</UL>
+</body>
+</HTML>

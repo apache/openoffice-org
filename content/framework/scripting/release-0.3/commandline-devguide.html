@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Developing Scripts on the Command Line</title>
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+<a name="top"></a>
+<h1>Developing Scripts on the Command Line</h1>
+For users who do not wish to develop their Office Scripts using an IDE
+there is a simple command line interface built into the Office Scripting
+module which can be used for the generation and deployment of Office
+Scripts.
+<h2>Contents</h2>
+<ul>
+  <li>
+    <p><a href="#prereqs">Prerequisites</a> </p>
+  </li>
+  <li>
+    <p><a href="#usage">The CommandLineTools class</a> </p>
+  </li>
+  <li>
+    <p><a href="#examples">Examples</a> </p>
+  </li>
+</ul>
+<a name="prereqs"> </a>
+<h2><a name="prereqs">Prerequisites</a></h2>
+<ul>
+  <li><a name="prereqs">The Scripting module office.jar file should be
+included in the classpath. You can unpack this file from the Scripting
+Framework installer </a><a href="SFrameworkInstall.jar">SFrameworkInstall.jar</a>
+by running the following command:
+    <p> <font face="Courier, monospace" size="2"> jar xf
+SFrameworkInstall.jar ide/office.jar </font> </p>
+  </li>
+  <li>The CommandLineTools class will only work if an XML parser (such
+as <a href="http://xml.apache.org/xerces2-j/index.html">Apache Xerces</a>)
+is available in the classpath. </li>
+</ul>
+<a name="usage"> </a>
+<h2><a name="usage">The CommandLineTools class</a></h2>
+<a name="usage">The CommandLineTools class takes the following options (<b>Note:</b>
+Options in angle brackets "&lt;&gt;" are required, options in square
+brackets "[]" are optional): </a>
+<blockquote> <a name="usage"><b>-g [Path to Parcel directory] [options]</b> </a>
+  <p> <a name="usage">Generates a Script Parcel for the given the
+parcel directory. The parcel name will be the name of the parcel
+directory plus the .sxp extension. </a></p>
+  <ul>
+    <li><a name="usage">If a parcel directory is not specified the
+current directory is used. If the parcel directory does not contain a
+directory named Contents an error message is printed. Otherwise a Script
+Parcel (.sxp) file is generated in the parcel directory containing all
+of the files under the Contents directory. The options that may be used
+with the -g option allow the user to specify how the
+parcel-descriptor.xml file for the Script Parcel is generated (see the
+Scripting Framework </a><a href="developer-guide.html">developer guide</a>
+for more information on the parcel-descriptor.xml file). The following
+options are available:
+      <p> <b>[-l language[=supported extension list]]</b> </p>
+      <p> Specifies which language attribute to use for the parcel
+element in the parcel-descriptor.xml file. The supported extension list
+is ignored if the language is Java. Otherwise all files that have one of
+the supported extensions (the list should be separated by the platform
+specific path separator, ":" on Unix, ";" on Windows) will be added as
+script entries to the parcel-descriptor.xml file. </p>
+      <p> Alternatively the user can specify a list of names at the
+command line which will be added as scripts and no search for script
+names will be performed. The following table shows the behaviour of
+CommandLineTools when the -l flag is used: </p>
+      <p>
+      <table border="1">
+        <tbody>
+          <tr>
+            <th>-l flag used? </th>
+            <th>parcel-descriptor.xml exists? </th>
+            <th>result </th>
+          </tr>
+          <tr>
+            <td align="center">no </td>
+            <td align="center">no </td>
+            <td>error message printed </td>
+          </tr>
+          <tr>
+            <td align="center">yes </td>
+            <td align="center">no </td>
+            <td>parcel-descriptor.xml generated<br>
+parcel.sxp generated </td>
+          </tr>
+          <tr>
+            <td align="center">no </td>
+            <td align="center">yes </td>
+            <td>parcel-descriptor.xml not generated<br>
+parcel.sxp generated </td>
+          </tr>
+          <tr>
+            <td align="center">yes </td>
+            <td align="center">yes </td>
+            <td>if <br>
+language is different from parcel-descriptor.xml language, error <br>
+else <br>
+parcel-descriptor.xml regenerated <br>
+parcel.sxp generated </td>
+          </tr>
+        </tbody>
+      </table>
+      </p>
+      <p> <b>[-p name=value]</b> </p>
+      <p> Specifies a name value pair to be added as a language
+dependent property in the parcel-descriptor.xml file </p>
+      <p> <b>[-v]</b> </p>
+      <p> Specifies that verbose output should be displayed. </p>
+    </li>
+  </ul>
+  <p> <b>-d &lt;Path to Script Parcel&gt; &lt;Target
+Directory|Document&gt;</b> </p>
+  <p> Deploys the given Script Parcel to a directory or an
+OpenOffice.org document. A directory will be created with the name of
+the Parcel and the contents of the Parcel will be put into that
+directory. </p>
+  <ul>
+    <li>If deploying to an OpenOffice.org installation the target
+directory should be the &lt;Office Installation&gt;/user/Scripts or
+&lt;Office Installation&gt;/share/Scripts directory. If the either the
+Script Parcel or the target do not exist an error message is printed.
+Otherwise the Script Parcel is deployed to the target. </li>
+  </ul>
+</blockquote>
+<p><a href="#top">Top</a> <a name="examples"> </a></p>
+<h2><a name="examples">Examples</a></h2>
+<ul>
+  <li>
+    <p><a name="examples"><font face="Courier, monospace" size="2"> java
+CommandLineTools -g myparceldir -l Java </font> </a></p>
+    <p><a name="examples">Generates a myparceldir.sxp file in
+myparceldir automatically exporting all public Java methods which take
+XScriptContext as their first parameter as Office scripts. </a></p>
+  </li>
+  <li><a name="examples"><font face="Courier, monospace" size="2"> java
+CommandLineTools -g -l BeanShell=.bsh </font> </a>
+    <p><a name="examples">Generates a script parcel file in the current
+directory automatically exporting all files that end with the .bsh
+extension as BeanShell scripts </a></p>
+  </li>
+  <li><a name="examples"><font face="Courier, monospace" size="2"> java
+CommandLineTools -g myparceldir -l BeanShell MyScript.bsh </font> </a>
+    <p><a name="examples">Generates a myparceldir.sxp file in
+myparceldir and exports MyScript.bsh as an Office script. </a></p>
+  </li>
+  <li><a name="examples"><font face="Courier, monospace" size="2"> java
+CommandLineTools -g myparceldir -l Java -p classpath=dep1.jar:dep2.jar </font> </a>
+    <p><a name="examples">Generates a myparceldir.sxp file in
+myparceldir, automatically searching for valid Office scripts, and
+adding the classpath property to each Office script. </a></p>
+  </li>
+  <li><a name="examples"><font face="Courier, monospace" size="2"> java
+CommandLineTools -g myparceldir -l Java -p classpath=dep1.jar:dep2.jar
+-p secondprop=secondvalue </font> </a>
+    <p><a name="examples">Generates a myparceldir.sxp file in
+myparceldir, automatically searching for valid Office scripts, and
+adding the classpath and the secondprop properties to each Office
+script. </a></p>
+  </li>
+  <li><a name="examples"><font face="Courier, monospace" size="2"> java
+CommandLineTools -d myparceldir.sxp /export/home/MyOffice/user/Scripts </font> </a>
+    <p><a name="examples">Deploys the myparceldir.sxp Script Parcel to
+the specified office directory.</a></p>
+  </li>
+  <li><a name="examples"> <font face="Courier, monospace" size="2">java
+CommandLineTools -g myparceldir -l JavaScript MyScript.js</font></a><br>
+    <a name="examples">Generates a myparceldir.sxp file in myparceldir
+and exports MyScript.js as an Office script.</a></li>
+</ul>
+<p><a href="#top">Top</a> </p>
+<hr> Last Modified: Tue Mar 12 11:40:28 GMT 2003
+</body>
+</html>
