@@ -1,0 +1,158 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+	<title>Requirements for the New Chart from the Calc's Point of View</title>
+	<meta name="keywords" content="Chart, DataSource, DataSink, DataSourceFilter, Mapping">
+	<meta name="author" content="Bjoern Milcke">
+<!--  	<link rel="stylesheet" type="text/css" href="http://www.openoffice.org/branding/style.css" media="screen"> -->
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/graphics/">graphics</a>&nbsp;&raquo;&nbsp;<a href="/graphics/chart/">chart</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+
+<h2>Requirements for the New Chart from the Calc's Point of View</h2>
+
+<p><em>Last modified: 01/22/2002</em></p>
+
+<h3>Contents</h3>
+
+<a href="#intro">1. Introduction</a><br>
+<a href="#selection">2. Selection of Ranges</a><br>
+<a href="#feedback">3. Feedback from the Chart</a><br>
+<a href="#update">4. Update of Data Sources</a><br>
+<a href="#misc">5. Miscellaneous Things for the New Chart</a><br>
+<!--
+<br>
+<a href="#references">A. References</a>
+-->
+
+<a name="intro"><h3>1. Introduction</h3></a>
+
+This is an overview of the requirements, the Calc application has for the new chart.  All things
+that are currently possible with charts inside of Calc documents must be possible (or improved) in
+the new implementation.  The 'Old Chart' sections refer to those features.  In the 'New Chart'
+sections there are ideas of extensions to the current chart, that should be available in the new
+chart.
+
+<a name="selection"><h3>2. Selection of Ranges</h3></a>
+
+<h4>Old Chart</h4>
+
+<ol>
+ <li> Select a rectangular region of cells in a spreadsheet.  The first row and column may be
+	  designated as captions.  It is possible to interpret rows or columns as data series.</li>
+ <li> Select several regions where all have one dimension in common, e.g., all regions are columns of
+	  length 7.  In this case we have in principle the same as before.  Currently, if, e.g., all
+	  ranges are columns of the same length, but they do not all span the same rows, you get a long
+	  first series.  This should be improved in the new implementation.</li>
+ <li> Add regions with fitting dimension via drag & drop.  The result is as before.</li>
+ <li> Select several regions with arbitrary dimension.  The regions are merged in a more or less
+      intelligent way, to represent a rectangular region.  This should be improved, by using more
+      than one data source and series with different dimensions in one chart.</li>
+ <li> Add a range to a heterogeneous set of ranges, as described before, via  drag & drop.  This
+	  currently works as described in the last point.  Using series with different dimension, this can
+	  also be achieved more intelligently, while preserving the distribution of ranges from
+	  before.</li>
+ <li> Create a chart using A1:A9 and C1:C9.  Later add B1:B9 via drag & drop.  In the result you get
+	  the new series as second series.  The former second series becomes the third one.</li>
+</ol>
+
+<h4>New Chart</h4>
+
+<ol>
+ <li> The selection should be split and merged in the most optimal way, to get exactly what a user
+	  intends in most of the common cases.</li>
+</ol>
+
+
+<a name="feedback"><h3>3. Feedback from the Chart</h3></a>
+
+<h4>Old Chart</h4>
+
+<ol>
+ <li> Select a series in a chart.  The corresponding range used by that series in the spreadsheet is
+	  highlighted.</li>
+ <li> Select the diagram object.  The complete rectangular range is highlighted.  When dealing with
+	  more than one range, the new chart should mark all ranges in the spreadsheet.</li>
+</ol>
+
+<h4>New Chart</h4>
+
+<ol>
+ <li> Select a title object, or other objects that use ranges from the surrounding spreadsheet.
+	  Highlight those ranges in the spreadsheet.</li>
+ <li> Change the size of a data representation object.  The change should result in a change of the
+	  underlying data.  To ensure this is possible, we should have a read-only flag at a data source
+	  or, alternatively, the data source must support a special interface for enabling this feature.
+	  There should also be a UI feature to enable/disable this behavior.
+</ol>
+
+
+<a name="update"><h3>4. Update of Data Sources</h3></a>
+
+<h4>Old Chart</h4>
+
+<ol>
+ <li> If a value of a cell changes (manually or by calculation) and there are charts that use this
+	  cell in a data source, those charts should be notified with the updated data.  If only values
+	  change (and not dimensions), the update should be as specific as possible, i.e., if only one
+	  cell changes it would be best to receive an event that contains only this single cell
+	  reference.</li>
+</ol>
+
+<h4>New Chart</h4>
+
+<ol>
+ <li> An update should not result in a 'BuildChart'.  If possible, only the data representations
+	  affected by the update should be rebuilt or changed.</li>
+</ol>
+
+
+<a name="misc"><h3>5. Miscellaneous Things for the New Chart</h3></a>
+
+<ol>
+ <li> For data series and titles there should be an extra tab page to select the underlying data
+	  source.  This should be a generic dialog, with which you can add all sorts of registered data
+	  sources.  The question remains, how you can integrate a Calc range chooser in such a general
+	  concept</li>
+ <li> You should allow assigning data sources to specific objects as well as selecting a rectangular
+	  region to serve as data for the complete chart.</li>
+</ol>
+
+<!--
+<a name="references"><h3>A. References</h3></a>
+
+<ol>
+ <li>
+  <em>Component-Based Modeling of Data Flow using Dynamic Filter Nets for Graphical
+  Visualization</em>, Andr&eacute; Fischer, Bj&ouml;rn Milcke. Document
+  <a href="data-flow.html">data-flow.html</a> on 
+  <a href="http://graphics.openoffice.org/chart/chart.html">graphics.openoffice.org</a>
+ </li>
+</ol>
+-->
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

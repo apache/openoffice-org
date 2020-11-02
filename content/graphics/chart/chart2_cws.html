@@ -1,0 +1,292 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+        <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+        <title>Chart2 cws</title>
+    
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/graphics/">graphics</a>&nbsp;&raquo;&nbsp;<a href="/graphics/chart/">chart</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+        <h1>Developer notes for new chart2:</h1>
+        <br>
+        If you would like to test the new chart, you will need to use the calc, enter 
+        some values there and insert a chart as usual - via menu or toolbox. The selected data is currently 
+        always interpreted as follows: The first row is used for labels, the first 
+        column is used as categories (for the x-axis) and the series take their data 
+        from columns.<br>
+        <br>
+        The new chart will not open at the usual position on the calc page, but in an 
+        own fullscreen window for the moment.
+        <br>
+        In front of the window you will see the new chart wizard.
+        It is not finished yet, but can give you a first impression.
+        On the first page you are able to select some of the offered charttypes.
+        On the second page you are able to enter titles and check visibility of legend and grids.
+        The second page is considered to work completly.
+        A page to change the data range is still missing.
+        <br>
+        Pay attention that loading or saving will not work at all, so you can use the 
+        new chart only for temporary experiments at the moment.<br>
+        <br>
+        In the following there are list of what you can try to do, what is not 
+        implemented at all and what can be used but will be reworked again anyway.<br>
+        <br>
+        <h2>1. Largely finished / have a look if you like</h2>
+        <ul>
+            <li>
+                Diagram: change object properties for wall, floor and page per dialog; manual 
+                positioning, resizing and rotation for 3D (per dialog or mouse)<br>
+            </li>
+        </ul>
+        known issues:<br>
+        <ul>
+            <ul>
+                <li>
+                    no optimal automatic position and size of diagram ( e.g. axis labels may not 
+                    always be fully visible, help yourself by resizing the diagram manually)</li>
+            </ul>
+            <ul>
+                <li>
+                    Bitmaps are not working to fill the areas<br>
+                </li>
+            </ul>
+        </ul>
+        <br>
+        <ul>
+            <li>
+                All Titles: insert/remove; automatic and manual positioning (per dialog or 
+                mouse); object properties (like color etc. )<br>
+            </li>
+        </ul>
+        known issues:<br>
+        <ul>
+            <ul>
+                <li>
+                    please ignore the wrong font sizes at the moment (see Issue 26557)</li>
+                <li>
+                    sizing elements in pos and size dialog need to be disabled(see Issue 26488)</li>
+                <li>
+                    we will not provide nonsense default title anymore (nobody wants to have a 
+                    title called 'main title') (see Issue 26537)<br>
+                </li>
+            </ul>
+        </ul>
+        <br>
+        <ul>
+            <li>
+                Legend: insert/remove; automatic and manual positioning (per dialog or mouse); 
+                object properties (like color etc. );different symbols for different charttypes<br>
+            </li>
+        </ul>
+        known issues:<br>
+        <ul>
+            <ul>
+                <li>
+                    please ignore the wrong font sizes at the moment (see Issue 26557)</li>
+            </ul>
+        </ul>
+        <br>
+        <ul>
+            <li>
+                All axes: insert/remove; properties dialog (scaling, font attributes, color ); 
+                autoscaling<br>
+            </li>
+        </ul>
+        known issues:<br>
+        <ul>
+            <ul>
+                <li>
+                    please ignore the wrong font sizes at the moment (see Issue 26557)</li>
+                <li>
+                    there is no automatism to find the best layout of labels for a given space so 
+                    far</li>
+                <li>
+                    problems with automatic minimum and maximum: i26811 + i26819<br>
+                </li>
+                <li>
+                    different position for tickmarks at category axis for barcharts (see Issue 
+                    26497)<br>
+                </li>
+                <li>
+                    the name of the axis properties dialog does miss distinction between x, y and z 
+                    (see Issue 26905)<br>
+                </li>
+                <li>
+                    the numberformat for the labels can not be taken from the source (from the calc 
+                    cells)<br>
+                </li>
+            </ul>
+        </ul>
+        <br>
+        <ul>
+            <li>
+                Grids: insert/remove; properties dialog</li>
+        </ul>
+        known issues:
+        <ul>
+            <ul>
+                <li>
+                    no sub grids so far</li>
+            </ul>
+        </ul>
+        <br>
+        <ul>
+            <li>
+                Chart-Types: creation per chartype dialog; properties of series and datapoints; 
+                data labels; statistic<br>
+            </li>
+        </ul>
+        known issues:<br>
+        <ul>
+            <ul>
+                <li>
+                    pie charts are broken</li>
+                <li>
+                    no bitmaps or bullets for datapoint symbols or areas</li>
+                <li>
+                    no percent stacking subtypes</li>
+                <li>
+                    3D area stacking subtype unfinished</li>
+                <li>
+                    3D bar stacking subtypes unfinished</li>
+                <li>
+                    horizontal 3D bar subtype unfinished</li>
+                <li>
+                    stock charts only work if they have sufficient data, otherwise you only get 
+                    lines (which is the chart-type for additionaldata that is not used by the 
+                    candlesticks). This means also that the Chart Type dialog displays a simple 
+                    Line Chart as current type.<br>
+                </li>
+            </ul>
+        </ul>
+        <br>
+        <h2>Not implemented yet / please do not test this</h2>
+        <ul>
+            <li>
+                no load and save* no old Chart API<br>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                no toolbars</li>
+        </ul>
+        <ul>
+            <li>
+                no clipboard</li>
+        </ul>
+        <ul>
+            <li>
+                no keyboard access</li>
+        </ul>
+        <ul>
+            <li>
+                no undo/redo</li>
+        </ul>
+        <ul>
+            <li>
+                no printing</li>
+        </ul>
+        <ul>
+            <li>
+                no 3D effects dialog</li>
+        </ul>
+        <ul>
+            <li>
+                no menu entry disabling/enabling and bitmaps</li>
+        </ul>
+        <ul>
+            <li>
+                no Bitmaps as object filling</li>
+        </ul>
+        <ul>
+            <li>
+                no Transparency Gradients</li>
+        </ul>
+        <ul>
+            <li>
+                no updates of data changes in the spreadsheet. To get an update, you have to 
+                call File/Save (which is the current hack for rebuilding the view).<br>
+            </li>
+        </ul>
+        <br>
+        <h2>3. You will be able to access and use this somehow, but the area is targeted 
+            for rework already, so please don't write bugs for this<br>
+        </h2>
+        <br>
+        <ul>
+            <li>
+                New creation wizard - how do you like this? (first page partly finished, second page finished, range chooser missing)<br>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                New range chooser dialog - how do you like this?
+                <br>                
+                (opens with MainMenu-Format-SourceData; try with stock chart to get a good impression; calc range selection buttons are not working in most cases)
+                <br>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                Charttype dialog (You can use this dialog to change the type, but the dialog 
+                itself will probably be changed to be the same as the first wizard page )<br>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                Chart is positioned in an own fullscreen window at the moment, but this will 
+                change back to an embedded object<br>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                mouse click selection / selection handles / dragging</li>
+        </ul>
+        <ul>
+            <li>
+                sizing and resizing of fonts in general is broken at the moment</li>
+        </ul>
+        <ul>
+            <li>
+                a context menu is available and most entries are working, but the offered 
+                entries need to be adjusted to the context still<br>
+            </li>
+        </ul>
+        <br>
+        <h2>4. Some development hacks</h2>
+        <br>
+        <ul>
+            <li>
+                "File/Save All" is currently bound to reset the chart data to the default data, 
+                which will most probably break things when you created the chart from a 
+                spreadsheet. So don't call it.<br>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                When calling "File/Save" you get an update of data in the spreadsheet.</li>
+        </ul>
+        <br>
+    
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
