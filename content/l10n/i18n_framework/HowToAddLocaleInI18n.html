@@ -1,0 +1,624 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    <title>null</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/l10n/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/l10n/">l10n</a>&nbsp;&raquo;&nbsp;<a href="/l10n/i18n_framework/">i18n_framework</a></div>
+    </div>
+    <div id="clear"></div>
+      <!--#include virtual="/l10n/leftnav.html" -->
+      <!--#include virtual="/l10n/rightnav.html" -->
+    <div id="content">
+      
+      <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+  <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+  <TITLE>How to add a new locale to the i18n framework</TITLE>
+  <META NAME="GENERATOR" CONTENT="OpenOffice.org 1.9.55  (Linux)">
+  <META NAME="CREATED" CONTENT="20020214;18353600">
+  <META NAME="CHANGEDBY" CONTENT="Eike Rathke">
+  <META NAME="CHANGED" CONTENT="20041004;14060600">
+  <STYLE>
+  <!--
+    @page { size: 21cm 29.7cm; margin: 2cm }
+    TD P { margin-bottom: 0.2cm }
+    TH P { margin-bottom: 0.2cm; font-style: italic }
+  -->
+  </STYLE>
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<H2>How to add a new locale to the i18n framework</H2>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H2>Overview</H2>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>The
+i18n framework offers full-featured i18n functionality that covers a range of
+geographies that, besides West and East European derivates, includes East Asia
+(CJK), South Asia and South-East Asia (Indian, Thai) and West Asia and Middle
+East (Arabic, Hebrew), so-called CTL (Complex Text Layout) and BiDi
+(bidirectional) script types. Also, the i18n framework is built over the
+component model UNO thus making the addition of new i18n components
+easy.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>The
+following language and locale specific attributes are supported :</FONT></P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=5 CELLSPACING=0>
+  <COL WIDTH=85*>
+  <COL WIDTH=85*>
+  <COL WIDTH=85*>
+  <THEAD>
+    <TR VALIGN=TOP>
+      <TH WIDTH=33%>
+        <P>i18n Attribute Name</P>
+      </TH>
+      <TH WIDTH=33%>
+        <P>Feature/Consumer</P>
+      </TH>
+      <TH WIDTH=33%>
+        <P>Location in Source</P>
+      </TH>
+    </TR>
+  </THEAD>
+  <TBODY>
+    <TR VALIGN=TOP>
+      <TD WIDTH=33%>
+        <P>Locale Data</P>
+      </TD>
+      <TD WIDTH=33%>
+        <P>Provide all locale sensitive data, like
+        date/time/number/currency format, calendar information etc.</P>
+      </TD>
+      <TD WIDTH=33%>
+        <P>i18npool/source/localedata/data</P>
+      </TD>
+    </TR>
+    <TR VALIGN=TOP>
+      <TD WIDTH=33%>
+        <P>Character Classification</P>
+      </TD>
+      <TD WIDTH=33%>
+        <P>Provide API to implement features such as switching case,
+        capitalization, punctuation and so on.</P>
+      </TD>
+      <TD WIDTH=33%>
+        <P>i18npool/source/characterclassification</P>
+      </TD>
+    </TR>
+    <TR VALIGN=TOP>
+      <TD WIDTH=33%>
+        <P>Calendar</P>
+      </TD>
+      <TD WIDTH=33%>
+        <P STYLE="font-weight: medium"><FONT SIZE=3>Provide the ability
+        to support a variety of calendaring systems</FONT></P>
+      </TD>
+      <TD WIDTH=33%>
+        <P>i18npool/source/calendar</P>
+      </TD>
+    </TR>
+    <TR VALIGN=TOP>
+      <TD WIDTH=33%>
+        <P>Break Iterator</P>
+      </TD>
+      <TD WIDTH=33%>
+        <P STYLE="font-weight: medium"><FONT SIZE=3>Provide
+        language/script specific Cursor placement, Word, Line, and
+        Sentence breaking</FONT></P>
+      </TD>
+      <TD WIDTH=33%>
+        <P>i18npool/source/breakiterator</P>
+      </TD>
+    </TR>
+    <TR VALIGN=TOP>
+      <TD WIDTH=33%>
+        <P>Collator</P>
+      </TD>
+      <TD WIDTH=33%>
+        <P STYLE="font-weight: medium"><FONT SIZE=3>Provide the ability
+        to perform sorting and indexing according to local conventions</FONT></P>
+      </TD>
+      <TD WIDTH=33%>
+        <P>i18npool/source/collator</P>
+      </TD>
+    </TR>
+    <TR VALIGN=TOP>
+      <TD WIDTH=33%>
+        <P>Transliteration</P>
+      </TD>
+      <TD WIDTH=33%>
+        <P>Numerous applications including in Searching, Input, with more
+        applications for Indian languages</P>
+      </TD>
+      <TD WIDTH=33%>
+        <P>i18npool/source/transliteration</P>
+      </TD>
+    </TR>
+    <TR VALIGN=TOP>
+      <TD WIDTH=33%>
+        <P>Index entry</P>
+      </TD>
+      <TD WIDTH=33%>
+        <P STYLE="font-weight: medium"><FONT SIZE=3>Support indexing
+        feature</FONT></P>
+      </TD>
+      <TD WIDTH=33%>
+        <P>i18npool/source/indexentry</P>
+      </TD>
+    </TR>
+    <TR VALIGN=TOP>
+      <TD WIDTH=33%>
+        <P>Search &amp; Replace</P>
+      </TD>
+      <TD WIDTH=33%>
+        <P STYLE="font-weight: medium"><FONT SIZE=3>Support the
+        Find/Change feature</FONT></P>
+      </TD>
+      <TD WIDTH=33%>
+        <P>i18npool/source/search</P>
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H2>Locale Data</H2>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm">For most locales this is the
+only thing you need to implement. Follow the instructions lined out
+in the <A HREF="LocaleData.html">excerpt from the Developers Guide
+I18n chapter</A>.</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>For
+the following topics it might be necessary to implement them,
+depending on the locale. Please refer also to the Developers Guide,
+as information given there might be more up-to-date, and this hasn't
+been synchronized yet.</FONT></P>
+<H2>CharacterClassification</H2>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>The
+component provides toUpper()/toLower()/toTitle() and get various
+character attribute defined by Unicode. These functions are
+implemented by cclass_unicode class, if you need language specific
+requirements for these functions, you can derive a language specific
+class cclass_&lt;locale_name&gt; from cclass_unicode and overwrite
+the methods for the functions. In most cases, these attributes are
+well defined by Unicode, you don't need to create your own class.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>The
+class also provides a number parser, i.e., if a particular language
+needs number parsing, you will need to derive a class and overwrite
+the method cclass_unicode::parsePredefinedToken(). Typical examples
+of where number parsing is needed is to accept date, calendaring
+information.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>A
+manager class 'CharacterClassificationImpl' will handle the loading
+of language specific implementation of CharacterClassification on the
+fly. If no implementation is provided the implementation defaults to
+class 'cclass_unicode'.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H2>Calendar</H2>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>The
+component provides a calendar service. All calendar implementations
+are managed by a class 'CalendarImpl' the front-end, which
+dynamically calls a locale specific implementation.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Calendar_gregorian
+is a wrapper to the ICU Calendar class. </FONT>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>If
+you need to implement a localespecific calendar, you can choose to
+either derive your class from Calendar_gregorian or write one from
+scratch.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>There
+are three steps to create a localespecific calendar,</FONT></P>
+<OL>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Name
+  your calendar &lt;name&gt; (for example, 'gengou' for Japanese
+  Calendar) and add it to localedata XML file with proper
+  day/month/era names.</FONT></P>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Derive
+  a class either from Calendar_gregorian or XCalendar, name it as
+  Calendar_&lt;name&gt;, which will be loaded by CalendarImpl when the
+  calendar is specified.</FONT></P>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Add
+  your new calendar as a service in
+  i18npool/source/registerservices/registerservices.cxx, </FONT>
+  </P>
+</OL>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>If
+you plan to derive from the Gregorian calendar, you need to know the
+mapping between your new calendar and the Gregorian calendar. For
+example, the Japanese Emperor Era calendar has a starting year offset
+to Gregorian calendar for each era. You will need to override the
+method Calendar_gregorian::convertValue to map the Era/Year/Month/Day
+from the Gregorian calendar to the calendar for your language.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H2>BreakIterator</H2>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>This
+component provides Character(Cell)/Word/Sentence/Line-break service
+to its users, e.g. BreakIterator component provides the APIs to
+iterate a string by character, word, line and sentence. Interface of
+this component is used by the Output layer for the following
+operations:</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<UL>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Cursor
+  positioning and selection &mdash; Since a character or cell can take
+  more than one code point, cursor movement cannot be done by
+  incrementing or decrementing the index.</FONT></P>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Complex
+  Text Layout Languages &mdash; In CTL languages (such as Thai,
+  Hebrew, Arabic and Indian), multiple characters may combine to form
+  a display cell. Cursor movement must traverse a display cell instead
+  of a single character.</FONT></P>
+</UL>
+<P>Line breaking must be highly configurable in desktop publishing
+applications. The line breaking algorithm should be able to find a
+line break with or without a hyphenator. Additionally, it should be
+able to parse special characters that are illegal if they occur at
+the end or beginning of a line. 
+</P>
+<P ALIGN=LEFT STYLE="font-weight: medium"><FONT SIZE=3>Both the above
+are locale-sensitive.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>The
+BreakIterator components are managed by the class BreakIteratorImpl,
+which will load the language specific component in service name
+BreakIterator_&lt;language&gt; dynamically.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>The
+base breakiterator class 'BreakIterator_Unicode' is a wrapper to the
+ICU BreakIterator class. While this class meets the requirements for
+western languages, it is not so for other languages such as those of
+East Asia (CJK), South Asia and South-East Asia (Indian, Thai) and
+West Asia and Middle East (Arabic, Hebrew), where we require more
+enhanced functionality as described above</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Thus
+the current BreakIterator base class has two derived classes,
+BreakIterator_CJK and from BreakIterator_Unicode, first one will
+provide dictionary base word break for Chinese and Japanese, second
+will provide more specific definition for Character/Cell/Cluster for
+the language like Thai, Arabic.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Use
+the following steps to create language specific BreakIterator
+service,</FONT></P>
+<OL>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Derive
+  a class either from BreakIterator_CJK or BreakIterator_CTL, name it
+  as BreakIterator_&lt;language&gt;.</FONT></P>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Add
+  new service in registerservices.cxx.</FONT></P>
+</OL>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>There
+are 3 methods for word breaking,
+nextWord()/previousWord/getWrodBoundary(). You can overwrite them by
+your own language rules.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>BreakIterator_CJK
+provides input string caching and dictionary searching for longest
+matching. You may provide a sorted dictionary (the encoding needs to
+be UTF-8) by creating the following file:
+i18npool/source/breakiterator/data/dict_&lt;language&gt;.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>The
+utility 'gendict' will convert it to C code which will be compiled
+into a shared library for dynamical loading. </FONT>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>All
+dictionary searching/loading is performed in xdictionary class, only
+thing you need to do is to derived your class from BreakIterator_CJK
+and create an instance of the xdictionary with language name and pass
+it to parent class. </FONT>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H2>Collation</H2>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>There
+are two type of collations, single or multiple level collation.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Most
+European and English locales need multiple level collation. We use
+the ICU collator to cover this need.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Most
+CJK languages need only single level collation. We have created a two
+step table lookup to do the collation for the languages. If you have
+a new language or algorithm in this category, you can derive a new
+service from Collator_CJK and provide index and weight tables. Here
+is a sample implementation,</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>************************************************************************/</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>#include
+&lt;collator_CJK.hxx&gt;</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>static
+sal_uInt16 index[] = {</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>...</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>};</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>static
+sal_uInt16 weight[] = {</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>...</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>};</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>sal_Int32
+SAL_CALL Collator_zh_CN_pinyin::compareSubstring (</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>const
+::rtl::OUString&amp; str1, sal_Int32 off1, sal_Int32 len1,</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>const
+::rtl::OUString&amp; str2, sal_Int32 off2, sal_Int32 len2)</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>throw
+(::com::sun::star::uno::RuntimeException) {</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>return
+compare(str1, off1, len1, str2, off2, len2, index, weight);</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>}</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>sal_Int32
+SAL_CALL Collator_zh_CN_pinyin::compareString (</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>const
+::rtl::OUString&amp; str1,</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>const
+::rtl::OUString&amp; str2)</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>throw
+(::com::sun::star::uno::RuntimeException) {</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>return
+compare(str1, 0, str1.getLength(), str2, 0, str2.getLength(), index,
+weight);</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>}</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Fontend
+implementation Collator will load and cache language specific service
+on the name Collator_&lt;locale&gt; dynamically.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>The
+step to add new services</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<OL>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Derive
+  new service from above class</FONT></P>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Provide
+  idx and weight tables.</FONT></P>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Register
+  new service in registerservices.cxx</FONT></P>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Add
+  new service in collation section in localedata file.</FONT></P>
+</OL>
+<P><BR><BR>
+</P>
+<H2><FONT SIZE=4 STYLE="font-size: 16pt"><B>Transliteration</B></FONT></H2>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Translation
+is the service for string conversion. Frontend implementation
+TranliterationImpl will load and cache specific transliteration
+services by enum defined in Xtransliteration.idl or by implementation
+name dynamically.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>We
+have defined transliteration in three categories, Ignore, OneToOne
+and Numeric, all of them are derived from
+transliteration_commonclass.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Ignore
+service is for ignore case, half/full width, katakana/hiragana etc.
+You can derive your new service from it and overwrite
+folding/transliteration methods.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>OneToOne
+service is for one to one mapping. For example, converting lower case
+to upper case etc. The class provide two more services, take mapping
+table or mapping function to do folding/transliteration. You can
+derive a class from it and provide a table or function for the parent
+class to do translation.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Numeric
+service is used to convert number to number string in specific
+languages. It can be used to format date strings etc.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>To
+add new transliteration</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<OL>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Derive
+  a new class from above three classes.</FONT></P>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Overwrite
+  folding/transliteration methods or provide table for parent to do
+  transliteration.</FONT></P>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Register
+  new service in registerservices.cxx</FONT></P>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Add
+  new service in transliteration section in localedata file.</FONT></P>
+</OL>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H2>Indexing</H2>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Indexing
+provides a service for generating index pages. The main method for
+the service is getIndexCharacter(). Frontend implementation
+IndexEntrySupplier will load and cache language specific services
+based on the name IndexEntrySupplier_&lt;locale&gt; dynamically.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>We
+have devided languages into two sets. </FONT>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>First
+is Latin1 languages, which can be covered by 256 Unicode code points.
+We use a one step table lookup to generate the index character. We
+have generated alphabetic and numeric tables that cover most Latin1
+languages. But if you think you need another algorithm or have
+conflicts with the table, you can create your own table and derive a
+new class from IndexEntrySupplier_Euro. Here is a sample
+implementation,</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>#include
+&lt;sal/types.h&gt;</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>#include
+&lt;indexentrysupplier_euro.hxx&gt;</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>#include
+&lt;indexdata_alphanumeric.h&gt;</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>OUString
+SAL_CALL i18n::IndexEntrySupplier_alphanumeric::getIndexCharacter(
+const OUString&amp; rIndexEntry,</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>const
+lang::Locale&amp; rLocale, const OUString&amp; rSortAlgorithm ) throw
+(uno::RuntimeException) {</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>return
+getIndexString(rIndexEntry, idxStr);</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>}</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>where
+idxStr is the table.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>For
+the languages which could not be covered in first case, like CJK, we
+use two step table lookup. Here is a sample implementation,</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>#include
+&lt;indexentrysupplier_cjk.hxx&gt;</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>#include
+&lt;indexdata_zh_pinyin.h&gt;</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>OUString
+SAL_CALL i18n::IndexEntrySupplier_zh_pinyin::getIndexCharacter( const
+OUString&amp; rIndexEntry,</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>const
+lang::Locale&amp; rLocale, const OUString&amp; rSortAlgorithm ) throw
+(uno::RuntimeException) {</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>return
+getIndexString(rIndexEntry, idxStr, idx1, idx2);</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>}</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Where
+idx1 and idx2 are two step tables. IdxStr contains all index keys
+that will be returned. If you have a new language or algorithm, you
+can derive new service from IndexEntrySupplier_CJK and provide tables
+for parent class to generate index.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Note,
+the index does very much depend on collation, each index algorithm
+should have a collation algorithm to support it.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>To
+add new service,</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<OL>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Derive
+  a new service from above class.</FONT></P>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Provide
+  table for lookup</FONT></P>
+  <LI><P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Register
+  new service in registerservices.cxx</FONT></P>
+</OL>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H2>Search and Replace</H2>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Search
+and replace is also locale dependent because there are special search
+options only available for a particular locale. For instance if the
+&ldquo;Asian languages support&rdquo; is enabled, you'll see an
+additional option for &ldquo;Sounds like (Japanese)&rdquo; in the
+&ldquo;Find &amp; Replace&rdquo; dialog box. With this option, you
+can turn on/off certain Japanese specific option in the search and
+replace process.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Search
+and replace relies on the transliteration modules for various search
+options. The transliteration modules will be loaded and the search
+string will be converted before the search process.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm; font-weight: medium"><FONT SIZE=3>Search
+supports regular expressions, the regular expression implementation
+uses the transliteration service available for the locale to perform
+case insensitive search.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+</BODY>
+</HTML>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

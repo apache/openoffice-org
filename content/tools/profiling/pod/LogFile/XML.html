@@ -1,0 +1,175 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<TITLE>LogFile::XML - Perl module for writing creating an OpenOffice Calc document.</TITLE>
+<LINK REV="made" HREF="mailto:feedback@suse.de">
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/tools/">tools</a>&nbsp;&raquo;&nbsp;<a href="/tools/profiling/">profiling</a>&nbsp;&raquo;&nbsp;<a href="/tools/profiling/pod/">pod</a>&nbsp;&raquo;&nbsp;<a href="/tools/profiling/pod/LogFile/">LogFile</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+
+<A NAME="__index__"></A>
+<!-- INDEX BEGIN -->
+
+<UL>
+
+  <LI><A HREF="#name">NAME</A></LI>
+  <LI><A HREF="#synopsis">SYNOPSIS</A></LI>
+  <LI><A HREF="#description">DESCRIPTION</A></LI>
+  <LI><A HREF="#customization">CUSTOMIZATION</A></LI>
+  <LI><A HREF="#internals">INTERNALS</A></LI>
+  <UL>
+
+    <LI><A HREF="#colors">Colors</A></LI>
+    <LI><A HREF="#indentation">Indentation</A></LI>
+  </UL>
+
+  <LI><A HREF="#author">AUTHOR</A></LI>
+</UL>
+<!-- INDEX END -->
+
+<HR>
+<P>
+<H1><A NAME="name">NAME</A></H1>
+<P>LogFile::XML - Perl module for writing creating an OpenOffice Calc document.</P>
+<P>
+<HR>
+<H1><A NAME="synopsis">SYNOPSIS</A></H1>
+<PRE>
+    use LogFile::XML;</PRE>
+<PRE>
+    write_calc_document (&quot;test.sxc&quot;,
+        { name =&gt; &quot;table-name&quot;,
+          data =&gt; [ [&quot;first row&quot;, 1],
+                    [&quot;second row&quot;, 2],
+                    [&quot;third row&quot;, 3]
+          ] } );</PRE>
+<P>will generate a XML file readable by the OpenOffice Calc that consists
+of one page named ``table-name'' containing a table consisting of two
+columns and three rows.</P>
+<P>
+<HR>
+<H1><A NAME="description">DESCRIPTION</A></H1>
+<P>Generates a XML file in OpenOffice Calc format.  The file contains a zipped
+collection of three files: <EM>META-INF/manifest.xml</EM>, <EM>meta.xml</EM>, and
+<EM>content.xml</EM>.</P>
+<P>A call to <CODE>write_calc_document</CODE> is passed the name of the zip file to
+create and a data structure that contains the data to be written in
+Calc XML format.  This data structure is a reference to an array of
+data tables.  Each data table is written as a distinct Calc page and
+has to contain the following elements in a hash reference:</P>
+<DL>
+<DT><STRONG><A NAME="item_title">title</A></STRONG><BR>
+<DD>
+The title of the page.
+<P></P>
+<DT><STRONG><A NAME="item_name">name</A></STRONG><BR>
+<DD>
+The name of the page.
+<P></P>
+<DT><STRONG><A NAME="item_threadid">threadid</A></STRONG><BR>
+<DD>
+The id of the thread.
+<P></P>
+<DT><STRONG><A NAME="item_prefix">prefix</A></STRONG><BR>
+<DD>
+A prefix given to all XML names.  With this table specific styles can be
+referenced.
+<P></P>
+<DT><STRONG><A NAME="item_colcount">colcount</A></STRONG><BR>
+<DD>
+the number of columns in the resulting table.
+<P></P>
+<DT><STRONG><A NAME="item_widths">widths (optional)</A></STRONG><BR>
+<DD>
+A reference to an array of column widths.  They widths have to be specified
+by numbers that give the widths in centimeters.
+<P></P>
+<DT><STRONG><A NAME="item_headline">headline</A></STRONG><BR>
+<DD>
+A reference to an array of column descriptions.  The number of descriptions
+may be different from colcount.
+<P></P>
+<DT><STRONG><A NAME="item_data">data</A></STRONG><BR>
+<DD>
+The actual data, an referenced array of array references.  This
+specifies a two-dimensional array arranged in rows and then in columns.
+<P></P></DL>
+<P>
+<HR>
+<H1><A NAME="customization">CUSTOMIZATION</A></H1>
+<P>The variables <CODE>$ZipCmd</CODE> and <CODE>$ZipFlags</CODE> are required to contain the
+name of the executable binary of the zip program and a set of suitable
+arguments.  They are initialized from the environment variables
+LOG_FILE_ZIP_CMD and LOG_FILE_ZIP_FLAGS respectively.  If the environment
+variables are not set then the values ``zip'' and ``'' are used as a default.</P>
+<P>
+<HR>
+<H1><A NAME="internals">INTERNALS</A></H1>
+<P>The functions <CODE>tag</CODE>, <CODE>enter</CODE>, and <CODE>leave</CODE> provide easy means of writing
+correctly nested and indented tags with arbitrary arguments.</P>
+<P>The manifest is taken care of if you create it with <CODE>create_manifest</CODE>, add all
+files making up the document with <CODE>add_file</CODE> and finally write it
+with <CODE>write_manifest</CODE>.</P>
+<P>Files are created with <CODE>open_file</CODE> relative to a temporary directory.  When the
+script terminates the temporary directory together with all files in it, is
+deleted.</P>
+<P>The special files <EM>meta.xml</EM> and <EM>manifest.xml</EM> are written with the
+functions <CODE>write_meta</CODE> and <CODE>write_manifest</CODE>.</P>
+<P>The actual calc document is written with a cascade of functions:</P>
+<DL>
+<DT><STRONG><A NAME="item_write_calc_content">write_calc_content</A></STRONG><BR>
+<DD>
+<DL>
+<DT><STRONG><A NAME="item_write_column_styles">write_column_styles</A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_write_table_list">write_table_list</A></STRONG><BR>
+<DD>
+<DL>
+<DT><STRONG><A NAME="item_write_table">write_table</A></STRONG><BR>
+<DD>
+<DL>
+<DT><STRONG><A NAME="item_write_cell">write_cell</A></STRONG><BR>
+<DD>
+</DL>
+</DL>
+</DL>
+</DL>
+<P>
+<H2><A NAME="colors">Colors</A></H2>
+<P>You can change the backround colors of cells by changing the values of the
+variable <CODE>%Color</CODE>.</P>
+<P>
+<H2><A NAME="indentation">Indentation</A></H2>
+<P>The indentation is specified by the string in <CODE>$IndentationString</CODE>
+which defaults to two spaces.</P>
+<P>
+<HR>
+<H1><A NAME="author">AUTHOR</A></H1>
+<P>Andre Fischer &lt;<A HREF="mailto:andre.w.fischer@sun.com">andre.w.fischer@sun.com</A>&gt;.</P>
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

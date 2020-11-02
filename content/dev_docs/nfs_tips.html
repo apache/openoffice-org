@@ -1,0 +1,69 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>OpenOffice.org - Tips for an NFS Net Install on Linux</title>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/dev_docs/">dev_docs</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+
+<h2>Tips for an NFS Net Install on Linux</h2>
+
+<p><i>Last updated 2004-07-25</i></p>
+
+<p>The steps below will guide you in setting up OpenOffice.org1.1.x on a network where a separate NFS server is used with clients. This example scenario
+uses the example server IP address of 192.168.1.0. Please alter this for your specific case.</p>
+
+<p>The use of BSD-style system initialization scripts is assumed though the basic procedure will work with System V-style scipts as well.</p>
+
+<ol>
+  <li>Add the following lines to the /etc/exports file on the NFS machine (if they aren't present already):
+  <p><code>
+  portmap: 192.168.1.0/24(ro,sync,no_root_squash)<br />
+  rpc.mountd: 192.168.1.0/24(ro,sync,no_root_squash)<br />
+  rpc.nfsd: 192.168.1.0/24(ro,sync,no_root_squash)<br />
+  /opt/OpenOffice.org1.1.x 192.168.1.0/24(ro,sync,no_root_squash)<br />
+  </code></p>
+  <p>(the above assumes a standard network install and a soho network)</p></li>
+
+  <li>On the NFS machine open /etc/rc.d/rc.nfsd in a text editor. In the nfsd_start() section find the code (it may be commented as "NFS file locking
+  services") that starts the rpc.lockd and rpc.statd daemons and comment it out.  Be sure to save your changes. Restart NFS with "<code>
+  ./etc/rc.d/rc.nfsd restart</code>" and make sure the "<code>rpc.lockd</code>" and "<code>rpc.statd</code>" daemons aren't running. Alternatively you could
+  probably remove the execute permission from these two scripts in "<code>/etc/rc.d</code>" and accomplish the same thing.</li>
+
+  <li>Add the following line to the "<code>/etc/fstab</code>" file on the client machine(s):
+  <p><code><b>"NFS machine name"</b>:/opt/ OpenOffice.org1.1.x /mnt/opt/OpenOffice.org1.1.x nfs hard,inter,nolock 0 0</code></p>
+  <p>(the nolock option may not be necessary but it seems to work this way...)</p></li>
+
+  <li>Make sure you are logged in as root and install OpenOffice.org1.1.x on the NFS machine using "<code>./setup -net</code>". Be sure to use the default
+  "<code>/opt/OpenOffice.org1.1.x</code>" directory.</li>
+
+  <li>Install OpenOffice.org1.1.x on the client machine(s) using "<code>./setup</code>".</li>
+</ol>
+
+<p>Thanks to Earl Parker, OOo user, for these tips! :)</p>
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

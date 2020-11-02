@@ -1,0 +1,182 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    <title>Autodoc Commandline Syntax</title>
+  
+                         	 	                  
+  <meta name="GENERATOR" content="StarOffice/5.0 (WinNT/Win95)">
+       	                  
+  <meta name="CREATED" content="19990303;12200107">
+       	                  
+  <meta name="CHANGEDBY" content="Nikolai Pretzell">
+       	                  
+  <meta name="CHANGED" content="19990303;12465284">
+       	                  
+  <style>
+	<!--
+		@page { size: 21.59cm 27.94cm; margin: 2.00cm }
+	-->
+	</style>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/tools/">tools</a>&nbsp;&raquo;&nbsp;<a href="/tools/autodoc/">autodoc</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h1 align="center">Autodoc Commandline Syntax</h1>
+<div align="right"><b> Last updated: 30. 1. 2002</b><br>
+</div>
+<div align="right">
+<p><font size="3"><b>Contact: </b><a href="mailto:nikolai@sun.com">
+         Nikolai Pretzell</a>
+</font><br>
+</p>
+</div>
+<dl><h4>Use:</h4><dd>
+  <pre>autodoc.exe<br>    [ -v &lt;VerboseNr&gt; ]<br>    -html &lt;OutputDirectory&gt;<br>    {<br>        [ -parse ] <br>	[ -name &lt;RepositoryName&gt; ]
+        -lg &lt;ProgrammingLanguage&gt;<br>        {
+            [ -p &lt;ProjectName&gt; &lt;ProjectRootDirectory&gt; ]
+            {
+                -t &lt;SourceDirectory&gt;*
+                -d &lt;SourceDirectory&gt;*
+                -f &lt;SourceFile&gt;*
+            }+
+        }+<br>    }<br></pre>
+  </dd><h4>Legend:</h4><dd>
+    <table cellpadding="2" cellspacing="2" border="0" width="50%">
+      <tbody>
+        <tr>
+          <td valign="top">&lt;Text&gt;<br>
+          </td>
+          <td valign="top">command line parameter<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">[ ]<br>
+          </td>
+          <td valign="top">optional<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">{ }<br>
+          </td>
+          <td valign="top">Block of connected options.<br>
+          The sequence of not connected options does not matter. So the
+ -html or -v options can be used before or after all the parsing options.<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">+<br>
+          </td>
+          <td valign="top">once or more times<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">*<br>
+          </td>
+          <td valign="top">none or more times<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    </dd><br><br><h4>Explanation of the Options</h4><dd>
+      <table cellpadding="3" cellspacing="0" border="1" width="80%">
+        <tbody>
+          <tr>
+            <td valign="top" width="30%">-v &lt;VerboseNr&gt;        </td>
+            <td valign="top">       Only for debugging. Bits 1, 2 and 4 
+in any combination give different output.       </td>
+          </tr>
+          <tr>
+            <td valign="top">-html &lt;OutputDirectory&gt;<br>
+            </td>
+            <td valign="top">Gives the directory, where a HTML version of 
+the docu shall be generated.<br>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">-parse</td>
+            <td valign="top">Starts the block, where all the parse options
+ are given. This can be omitted, because the parse options are identifiable
+ without it, but it may make a commandline more readable.</td>
+          </tr>
+          <tr>
+            <td valign="top">               -name &lt;RepositoryName&gt; 
+             </td>
+            <td valign="top">This name appears as title of the documentation
+ (currently only in the in the C++ version).</td>
+          </tr>
+          <tr>
+            <td valign="top">-lg &lt;ProgrammingLanguage&gt;            
+  <br>
+            </td>
+            <td valign="top">
+            <dl><dt>       Possible values are:</dt><dd>
+                </dd><dl><dt>c++</dt><dd>This parses all files with the endings .hxx and .h .
+                      </dd><dt>idl</dt><dd>This parses all files with the ending .idl .  
+                     </dd></dl></dl>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top">       -p with -t/-d/-f:       
+                        </td>
+                        <td valign="top">If  there are more than one project,
+the -p option        is required for  each  one.<br>
+                        <br>
+The directory given wit the -p option is the root directory of the project.<br>
+  If there  is no -p option, the working directory        is seen as root.
+         <br>
+                        <br>
+All paths given with -t/-d/-f are relative to that root directory.      
+  It is possible to use "." as argument for -t or -d.<br>
+                        <br>
+Each of -t/-d/-f can have several arguments:<br>
+  One could write "-f file1.hxx file2.hxx file_xyz.hxx"<br>
+       </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" colspan="2">       After each -p
+(or after -lg, if there is no -p option), there has to be at least one of
+the following  three:       </td>
+                      </tr>
+                      <tr>
+                        <td valign="top">-t       </td>
+                        <td valign="top"><b>       T</b>ree, which means: 
+include subdirectories        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top">-d       </td>
+                        <td valign="top"><b>D</b>irectory, which means: no
+subdirectories        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top">-f       </td>
+                        <td valign="top"><b>F</b>ile", which means: single 
+file name  with ending.<br>
+This option also allows to parse some files with an ending different from
+those, the -lg option implies.       </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  </dd></dl>
+                  
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

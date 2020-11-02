@@ -1,0 +1,169 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+  <title>Choosing the right build system</title>
+                       
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/tools/">tools</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h1>Autotools and OpenOffice.org</h1>
+draft 0.1 <a href="mailto:mh@openoffice.org">mh@openoffice.org </a>09/18/2002<br>
+<br>
+autoconf is the most standard build system in the OpenSource world. It automatically
+configure software source code packages. These scripts can adapt the packages
+to many kinds of UNIX-like systems without manual user intervention.  Autoconf
+creates a configuration script for a package from a template file that lists
+the operating system features that the package can use, in the form of m4
+macro calls. The sequence:<br>
+<blockquote>./configure<br>
+make<br>
+make install<br>
+</blockquote>
+is well known for many Open Source software packages. Many times the question
+come up, why OpenOffice.org is not or only partly using this standard build
+system.<br>
+<br>
+<h2>Checking the prerequistes</h2>
+one of the major tasks for a build system is to check the prerequites for
+the build. Typical candidates are <br>
+<ul>
+  <li>Build tools like compiler, linker</li>
+  <li>other development tools like flex, bison</li>
+  <li>Software development kits like jdk (Java Development Kit) or minor kits
+(external libraries and header files like neon, freetype, berkerleydb)</li>
+</ul>
+<h2>Creating the Configuration</h2>
+After all the prerequisites have been checked and validated the configuation
+can be created. In the autotools environment this happens through:<br>
+<ul>
+  <li>generation of config.h</li>
+  <li>generation of makefiles</li>
+</ul>
+In the OpenOffice.org this is done through the generation of a script file
+which describes environment variables to be set after source/executing this
+script file. This is a big difference and has some reasons:<br>
+<ul>
+  <li>OpenOffice.org is used to work on a firm feature set per platform, that
+means a Linux build should be on every Linux distribution the same, independent
+from preinstalled development kits (see above). We see it as critical to
+have binary distrubtion of a product available, which have a different feature
+set provided to the user of the product. This is feasable if you are try
+to adopt some source to your local configuration of your local machine, but
+it's not feasable for redistribution in binary form. So we decided not to
+use a dynamic created config.h (long before StarOffice went OpenSource). Also
+there are not many different Unix flavours available and support at the
+time the autotools were introduced. Also almost of the platform dependencies
+should be coved in one Layer (SAL, System Abstraction Layer), most of the
+other stuff (exception are vcl, bridges) should be system independent and
+shouldn't contain any "HAVE_bla" or "#ifdef platform" conditions (in theory).</li>
+  <li>because OpenOffice.org/StarOffice is an end user product, we support
+only well defined versions of compiler. We should not use the compiler which
+we have randomly found on our machine to produce a redistribution of our product.
+Almost every compiler version has different optimization bugs in it, so that
+the risk of program failures is simply to high if using a unkown/untested
+version of a compiler. So the usual testing of a compiler within configure,
+if it is possible to create object files and so on is simply superflous and
+too time consuming. This is also valid for other tools like bison, flex etc.
+Of course a user should be able to choose a compiler of his own.<br>
+  </li>
+  <li>The creation of makefiles and config.h is also critical because everything
+has to be recreated due to the dependency of almost every artifact to these
+files (for this reason compiler cache has been created).</li>
+  <li>The configuration for debug, product, profiles, shared, static build
+method is also hardcoded into the generated makefiles, so a mixture a debug/nondebug,
+optimized/non optimized object files is not possible but necessary for a product
+with the size of OpenOffice.org (e.g. it's on almost all machines not possible
+to run a full debug build in a debugger, because several Gigabytes of RAM
+are needed).</li>
+  <li>autotools implementation relies on complex macro programming (m4) this
+is just a reason more not to use it. The feature set that is needed for a
+OpenOffice.org build is/was not available in autotools and there were no resource
+to reimplement these in autotools (many new rules for resource, idl compiler,
+own resource format, many other OpenOffice.org specific tagets which are
+not available in the current automake implementation).&nbsp;</li>
+  <li>current makefile implementions are written for dmake, there were no
+resources to rewrite it in GNUmake. Are there any advantages in opposite to
+dmake beside the argument that GNUmake is the "standard make" ?</li>
+  <li>configure is too time consuming for just setting up an build environment
+(e.g. configure for binutils 2.13 lasts several minutes on a 2-3 year old
+machine). OpenOffice.org developers work on several codelines
+in parallel, so a long configure time is not acceptable (imagine the worst case: generation
+of over 1000 makefiles or one gigantic makefile ;) ).</li>
+  <li>autotools are using <a
+ href="http://www.tip.net.au/%7Emillerp/rmch/recu-make-cons-harm.html">recursive
+makefiles</a>.<br>
+  </li>
+</ul>
+<br>
+<h2>Building</h2>
+After configuration is done, the build of the product is coming. On a quite
+modern machine (1.8 GHz Linux) the build last about 6 hours. On older machines
+a build will last up to one day. For this reason no StarOffice or
+OpenOffice.org developer will
+build a complete Office on his own. There are centralized builds available, and
+a developer will only grab part of the solver and the source of the modules
+he is interested in. He changes some files and only the effected (object-)
+files have to be recreated. This speeds up development cycle at lot. To set
+up environment we use:<br>
+<ul>
+  <li><a
+ href="http://porting.openoffice.org/source/browse/tools/solenv/bin/setsolar.pl">setsolar.pl</a>
+(alias setsolar.pl 'perl ooo/solenv/bin/setsolar.pl -envroot -sourceroot
+-file ~/.solar.env.$$.tmp !*; source ~/.solar.env.$$.tmp; rm -f ~/.solar.env.$$.tmp'
+leeds to commands like "setsolar -pro -srx643 unxsols3" and set solver paths
+to globally shared copy of solver. An extra switch -ca (copy all) create
+a local enviroment, that means the solver gets copied on your local hard
+disk.</li>
+  <li>dmake options:</li>
+  <ul>
+    <li>dmake debug=t build with debug information in the current directory</li>
+    <li>dmake nopt=t builds without optimization flags</li>
+    <li>dmake depend=t generates new dependencies</li>
+    <li>other options like profile=t, lint=t, linkinc=t also available</li>
+  </ul>
+  <li><a
+ href="http://porting.openoffice.org/source/browse/tools/solenv/bin/build.pl">build.pl
+    </a>tool: avoid recursive makefile and have some goodies:</li>
+  <ul>
+    <li>build -all build all dependent modules up to current module</li>
+    <li>build -from</li>
+    <li>build -since</li>
+    <li>build -PPn : parallel building (see also dmake -Pn)<br>
+    </li>
+  </ul>
+</ul>
+<br>
+<h4>References:</h4>
+autoconf: <a
+ href="http://www.gnu.org/manual/autoconf/html_mono/autoconf.html">http://www.gnu.org/manual/autoconf/html_mono/autoconf.html</a><br>
+automake: <a
+ href="http://www.gnu.org/manual/automake/html_mono/automake.html">http://www.gnu.org/manual/automake/html_mono/automake.html<br>
+</a>make: <a href="http://www.gnu.org/manual/make/html_mono/make.html">http://www.gnu.org/manual/make/html_mono/make.html</a><br>
+<br>
+<br>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

@@ -1,0 +1,311 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 8  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Martin Hollmichel">
+	<META NAME="CREATED" CONTENT="20010419;16101287">
+	<META NAME="CHANGEDBY" CONTENT="Malte Timmermann">
+	<META NAME="CHANGED" CONTENT="20051103;15365971">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="en-US" DIR="LTR">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/tools/">tools</a>&nbsp;&raquo;&nbsp;<a href="/tools/performance/">performance</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H2>OpenOffice.org Performance Tuning 
+</H2>
+<P>This page contains a general list of areas that affect how fast
+the OpenOffice.org application runs. A brief description of the
+current and/or recent work is provided for each area. For application
+specific optimization possibilities see the project pages (e.g. for
+the <A HREF="http://sw.openoffice.org/drafts/optimization.html">Writer</A>).</P>
+<P>An overview of  current and planned performance improvements can
+be found <A HREF="./performance-activities-overview.html">here</A>.</P>
+<P>In addition, a description of the profiling tools for each
+platform and how to use them within the OpenOffice.org build is
+provided. 
+</P>
+<P>If you would like to share any performance tuning work that you
+are currently doing or have already done, please send your suggested
+updates to for this page to <A HREF="mailto:martin.hollmichel@sun.com">martin.hollmichel@sun.com</A>.
+</P>
+<H3>OpenOffice.org performance issues</H3>
+<P>Currently, OpenOffice.org application performance issues can be
+grouped into the following two categories: 
+</P>
+<OL>
+	<LI><P><A NAME="StartupTime"></A><B>Startup Time of the
+	Openoffice.org Application</B> 
+	</P>
+	<P>There are several items that can influence the startup of an
+	application:</P>
+	<UL>
+		<LI><P>Size of Application Binaries</P>
+		<P>As the size of the OpenOffice.org application binaries
+		increases, startup time increases. This increased startup time is
+		due to the time required by the operating system to physically read
+		the application executable and its shared libraries into memory.
+		The increase in startup time is particularly noticeable when the
+		OpenOffice.org binaries reside on mounted disk since the binaries
+		need to be streamed across the network between the machine with the
+		exported disk and the local machine where OpenOffice.org is being
+		run.</P>
+		<P>There are several ways to reduce the size of the OpenOffice.org
+		application binaries and, in turn, decrease startup time <B>without
+		changing any of the OpenOffice.org source code</B>:</P>
+		<UL>
+			<LI><P>Reducing the amount of code that is loaded at startup</P>
+			<P>Ideally, all of the symbols necessary for startup would be put
+			in separate binaries from the symbols used after startup. Also,
+			the runtime linker would load only the startup binaries and would
+			defer loading of the remaining binaries until after startup. 
+			</P>
+			<P>Currently, Sun engineers in Cupertino, California are working
+			on moving the existing Solaris Sparc build to be closer to the
+			ideal. <A HREF="solaris/index.html#StartupTime">Click here</A> for
+			a detailed description of this effort.</P>
+			<LI><P><A NAME="Stripping"></A>Stripping the application binaries</P>
+			<P>On all Unix platforms, the symbol table within each executable
+			and shared library adds considerable size (approximately 40 MB on
+			the Linux Intel and Solaris Sparc platforms). Since the symbol
+			table is not needed at runtime, the <CODE>strip</CODE> command can
+			be used to eliminate these extra size from the OpenOffice.org
+			binaries on most, if not all, of the Unix platforms.</P>
+			<P>Automatic stripping of Unix binaries is now available in the
+			installation set creation process (see the <A HREF="#ToDos">To
+			Do's</A> section).</P>
+			<P>You can enable stripping of the OpenOffice.org binaries on all
+			Unix platforms except Mac OS X by executing the following command
+			after you have completely built OpenOffice.org:</P>
+			<P><CODE>cd $SRC_ROOT/instsetoo ; dmake &quot;strip=true&quot;</CODE></P>
+			<P>You can then install OpenOffice.org as you normally would using
+			the following command:</P>
+			<P><CODE>cd $SRC_ROOT/instsetoo/$INPATH/normal ; ./setup</CODE></P>
+			<P><B>Important note:</B> The above commands will not strip
+			binaries for builds before SRC634. So, if you want to enable
+			stripping in an earlier build, you must execute the following
+			commands before executing the above commands: 
+			</P>
+			<P><CODE>cd $SRC_ROOT/scptools/source/linker</CODE><BR><CODE>cvs
+			update -A lzip.cxx scpzip.cxx</CODE><BR><CODE>cd
+			$SRC_ROOT/scptools ; dmake</CODE><BR><CODE>cd
+			$SRC_ROOT/instsetoo/util</CODE><BR><CODE>cvs update -A makefile.mk</CODE></P>
+		</UL>
+		<LI><P>Unused Code</P>
+		<P>Removing any unused code would reduce the size of the
+		OpenOffice.org binaries which, in turn, would reduce startup time.
+		Since almost all the OpenOffice.org binaries are shared libraries,
+		analysis of each exported symbol could potentially determine which
+		local symbols within each shared library not used and such symbols
+		could be eliminated from the code. However, no work has been done
+		in this area so the amount of unused code within the OpenOffice.org
+		is currently unknown.</P>
+		<P>Anyone who attempts such analysis should double check that their
+		analysis includes any invocations of unexported symbols. Such
+		invocations are frequently executed by the UNO runtime via v-table
+		lookups and less frequently by the direct symbol lookup within the
+		osl_getSymbol function in the sal/inc/osl/module.h source file.</P>
+		<LI><P><A HREF="working_set.html">Working Set</A></P>
+		<LI><P>Memory Footprint</P>
+		<LI><P>Hot Spots</P>
+	</UL>
+	<LI><P><B>Post-Startup Speed of the Openoffice.org Application</B></P>
+	<P>Nearly all of the issues listed in the <A HREF="#StartupTime">Startup
+	Time</A> section are equally applicable to post-startup speed of the
+	OpenOffice.org application.</P>
+	<P>In addition, the following items also affect post-startup speed: 
+	</P>
+	<UL>
+		<LI><P>Symbol Size Optimizations</P>
+		<P>Potentially, the use of certain compiler or linker options can
+		increase or decrease the size of binaries. For example, enabling
+		exceptions on Solaris Sparc increases code size by a noticeable
+		amount. 
+		</P>
+		<P>Currently, Sun engineers in Cupertino, California are looking
+		for compiler and linker options that can decrease code size. Since
+		this is a difficult task to do given the large total size of the
+		OpenOffice.org binaries, Sun engineers are analyzing the <A HREF="binary_diffs_52_60.html">increases
+		in binary sizes</A> on Linux Intel and Solaris Sparc from
+		StarOffice 5.2 to a recent build. Hopefully, by analyzing the
+		changes in the list and/or sizes of the symbols in the binaries
+		with the largest growth, specific types of compiler or linker
+		options (and maybe even coding constructs) that cause symbol size
+		to increase or decrease will be found. Stay tuned for updates.</P>
+		<LI><P>Save/Load Optimization of OpenOffice.org 6.0 files (XML) <A HREF="http://xml.openoffice.org/optimization.html">see
+		more</A></P>
+		<P>Now the new file format of OpenOffice.org is feature complete
+		and so it is time to analyse the performance.</P>
+		<P>Now we have to find the own problems of the applications. The
+		performance of Save/Load OpenOffice.org 6.0 files has to be checked
+		in every OpenOffice.org application.</P>
+	</UL>
+</OL>
+<P>Here you can find some platform specific data for <A HREF="windows/index.html">Windows</A>,
+<A HREF="linux/index.html">Linux</A> and <A HREF="solaris/index.html">Solaris</A>.</P>
+<H3>Tools</H3>
+<UL>
+	<LI><P>Profiling</P>
+	<P>By default, the OpenOffice.org build is <B>not</B> built for
+	profiling. You can enable profiling by rebuilding each module that
+	you want to profile by executing the following command:</P>
+	<P><CODE>cd $SRC_ROOT/(module)</CODE> <CODE>dmake -u &quot;profile=true&quot;</CODE>
+		</P>
+	<P>Sun engineers in have had some experience in using the profiler
+	<CODE>gprof</CODE> on Solaris. <A HREF="solaris/index.html#UsingProfiler">Click
+	here</A> for a detailed instructions for using <CODE>gprof</CODE> on
+	Solaris.</P>
+	<LI><P>Profiling II</P>
+	<P>There is another environment which provides profiling data on a
+	more abstracted level then the known (commercial) tools. The goal is
+	to have a fully automatic process that generates, processes, and
+	analyzes the profiling data. Please see <A HREF="../profiling/index.html">this</A>
+	page contains further information.</P>
+	<LI><P>Optimized Link Processes (usage of mapfiles, minimizing
+	exports, etc.)</P>
+</UL>
+<H3>Links</H3>
+<P>Here is a list of links that may provide some useful information. 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">A discussion on how to tune Linux
+	libraries. <A HREF="http://people.redhat.com/drepper/dsohowto.pdf">How
+	to write shared libraries</A> OpenOffice.org use a lot of shared
+	libraries so this is worth a look. 
+	</P>
+	<LI><P><A HREF="list_classes.html">List Classes</A> Discusses
+	performance problems with OOo's internal List class 
+	</P>
+</UL>
+<H3><A NAME="ToDos"></A>To Do's</H3>
+<CENTER>
+	<TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=2 BGCOLOR="#ffffff">
+		<TR>
+			<TD COLSPAN=3 BGCOLOR="#00315a">
+				<P ALIGN=CENTER><FONT COLOR="#ffffff"><B>To Do's</B></FONT></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD BGCOLOR="#99ccff">
+				<P ALIGN=CENTER><B>Task</B></P>
+			</TD>
+			<TD BGCOLOR="#99ccff">
+				<P ALIGN=CENTER><B>Status</B></P>
+			</TD>
+			<TD BGCOLOR="#99ccff">
+				<P ALIGN=CENTER><B>Responsible Engineer</B></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<P><FONT SIZE=2>Implement optional stripping of binaries on Unix
+				platforms during creation of the OpenOffice.org installation set:
+				</FONT>
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><FONT SIZE=2>Add new -S option
+					to lzip and scpzip build tools and implement stripping of
+					binaries on Unix platforms if the -S option is used </FONT>
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><FONT SIZE=2>Modify makefile
+					in instsetoo module to invoke lzip with the -S option if dmake
+					is run with &quot;strip=true&quot; </FONT>
+					</P>
+					<LI><P><FONT SIZE=2>Update OpenOffice.org build instructions to
+					reflect this new packaging option </FONT>
+					</P>
+				</UL>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER><FONT SIZE=2>Implemented</FONT></P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER><A HREF="mailto:patrick.luby@sun.com"><FONT SIZE=2>Patrick
+				Luby</FONT></A></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<P><FONT SIZE=2>Investigate reducing startup time for Solaris by
+				deferring the loading of large files: </FONT>
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><FONT SIZE=2>Find out how to
+					split the shared libraries that have only a few symbols invoked
+					during startup. </FONT>
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><FONT SIZE=2>Find out how to
+					do lazy linking and if it works the way we understand the linker
+					supposed to work. </FONT>
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><FONT SIZE=2>Test the above to
+					see how much reduction in startup time can be achieved, if any. </FONT>
+					</P>
+					<LI><P><FONT SIZE=2>Examine the large data files and see how
+					their loading can be deferred after startup. </FONT>
+					</P>
+				</UL>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER><FONT SIZE=2>In Progress</FONT></P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER><A HREF="mailto:ping.liao@sun.com"><FONT SIZE=2>Ping
+				Liao</FONT></A></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<P><FONT SIZE=2>Investigate reducing the save and load time of
+				OpenOffice.org 6.0 files (XML): </FONT>
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><FONT SIZE=2>Find where it
+					needs how much time. </FONT>
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><FONT SIZE=2>Think about where
+					and what to optimize. </FONT>
+					</P>
+					<LI><P><FONT SIZE=2>Test the above to see how much reduction in
+					save and load time can be achieved, if any. </FONT>
+					</P>
+				</UL>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER><FONT SIZE=2>In Progress</FONT></P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER><FONT SIZE=2><A HREF="mailto:Sascha.Ballach@germany.sun.com">Sascha
+				Ballach (Spreadsheet)</A><BR><A HREF="mailto:Daniel.Vogelheim@germany.sun.com">Daniel
+				Vogelheim (Text)</A><BR><A HREF="mailto:Bjoern.Milcke@germany.sun.com">Bj&ouml;rn
+				Milcke (Chart)</A><BR><A HREF="mailto:Christian.Lippka@germany.sun.com">Christian
+				Lippka (Draw/Impress)</A></FONT></P>
+			</TD>
+		</TR>
+	</TABLE>
+</CENTER>
+<P><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

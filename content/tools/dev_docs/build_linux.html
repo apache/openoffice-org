@@ -1,0 +1,789 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/tools/">tools</a>&nbsp;&raquo;&nbsp;<a href="/tools/dev_docs/">dev_docs</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+
+<div style="padding:3pt; background-color: #f8d3d0; margin-top: 4pt; margin-bottom: 4pt;">
+<h2>Warning</h2>
+<p>Much of the information here is <b>outdated</b> and refers to obsolete OOo versions.</p>
+<p>For current information on how to build OOo, see the OOo Wiki:
+   <a href="http://wiki.services.openoffice.org/wiki/Documentation/Building_Guide">Building Guide</a></p>
+</div>
+
+<h2>
+Building OpenOffice.org 2.x (680er/300er series) under Linux
+</h2>
+<p><b>Beware! The build instructions for OpenOffice.org 1.1.x (and older) are different!</b>
+</p>
+<p>Last changes made: $Date: 2010/06/08 16:09:13 $</p>
+<p>
+This document describes the requirements and actions that you need to build 
+OpenOffice.org on Linux.
+</p>
+
+<p>
+Commands you have to type on the keyboard 
+follow this syntax throughout this document:
+</p>
+
+
+<pre>
+<KBD>config_office&gt; ./configure</KBD>
+</pre>
+
+<p> 
+In this example, the script <CODE>configure</CODE> is executed 
+in the directory <CODE>config_office</CODE>.
+</p>
+<p>
+Since OpenOffice.org 2.1.x (SRC680_m175) it is possible to use <b>bash</b> instead
+of tcsh. This has to be enabled with the <CODE>--with-use-shell</CODE> configure switch.
+The following instructions are for the tcsh case but the savy *NIX user should be able
+to <em>guess</em> the needed changes. The environment file for bash adds an additional
+<CODE>.sh</CODE> suffix to the tcsh environment filename.
+</p>
+
+
+
+
+<CODE>$SRC_ROOT</CODE> will denote the directory in which the source code 
+of OpenOffice.org is stored.
+
+<br><br><br>
+
+
+
+<H2>Table of Contents</H2>
+
+<ul>
+
+<li>
+<a href="#Overview">Overview</a>
+
+<ul>
+
+<li>
+<a href="#OverviewofPerformingaFullBuild">of Performing a Full Build</a>
+</li>
+
+<!-- Not available for OOo 1.9.x
+<li>
+<a href="#OverviewofBuildinganIndividualProject">of Building an Individual 
+Project</a>
+</li>
+-->
+
+</ul></li>
+
+<li>
+<a href="#BuildRequirements">Build Requirements</a>
+
+<ul>
+
+<li>
+<a href="#ExternalComponents">External Components</a>
+</li>
+
+<li>
+<a href="#GetTheSourceCode">Get the Source Code</a>
+</li>
+
+<li>
+<a href="#GeneratingtheBuildEnvironmentandBuildTools">Generating 
+the Build Environment and Build Tools</a>
+</li>
+
+</ul></li>
+
+<li>
+<a href="#BuildInstructions">Build Instructions</a>
+
+<ul>
+
+<li>
+<a href="#BuildingaFullBuildofOpenOffice">Building a Full Build</a>
+</li>
+
+<!-- Not available for OOo 1.9.x
+<li>
+<a href="#BuildingIndividualProjects">Building 
+Individual Projects with a Prebuilt</a>
+</li>
+-->
+
+<li>
+<a href="#BuildingaProjectwithDebugInformation">Building 
+a Project with Debug Information</a>
+</li>
+
+</ul></li>
+
+<li> 
+<a href="#InstallInstructions">Instructions to 
+Build an Installation Set</a> 
+</li>
+
+<li>
+<a href="#BuildingLocalized">Building Localized Versions of OpenOffice.org</a>
+</li>
+
+<li>
+<a href="#BuildingLangpack">Building Localized Language Packs</a>
+</li>
+
+</ul>
+
+<br><br><br>
+
+
+<h2>
+<a NAME="Overview">Overview</a>
+</h2>
+
+<p>
+This section is meant as a reminder or checklist for those who have some 
+experience in building OpenOffice.org. Everybody else should jump to the 
+<a href="#BuildRequirements">Build Requirements</a> section. 
+
+<p> 
+Even experienced builders are well advised to check the release notes at 
+<a href="http://development.openoffice.org/releases/2.0.0rc2.html">
+http://development.openoffice.org/releases/2.0.0rc2.html</a>
+and the section <a href="#BuildRequirements">Build Requirements</a> in this 
+document to inform yourself about changes since the previous releases. 
+
+<p>
+Detailed step-by-step build descriptions are given from the next section on. 
+
+<!-- Not available for OOo 1.9.x
+<p>
+You can perform a full build, or you can build an individual project using 
+a prebuilt version.
+-->
+
+<H2>
+<a NAME="OverviewofPerformingaFullBuild"></a>Overview of 
+Performing a Full Build
+</H2>
+
+<p>
+To perform a full build, you need to follow these steps:
+
+<ol>
+  <li> Get the source code, either from the download webpage
+    (<a href="http://download.openoffice.org/next/index.html">http://download.openoffice.org/next</a>)
+    or alternatively via a check-out from the cvs tree against a release tag, 
+    e.g. <em>OpenOffice_3_1_0</em>. </li>
+    
+   <li> Run the <CODE>configure</CODE> script to check all requirements and to 
+     create the script 
+   <CODE>LinuxIntelEnv.Set</CODE>. 
+   
+
+  <li> Source the 
+    <CODE>LinuxIntelEnv.Set</CODE> script to set all environment variables.
+	<p>Please see the last screen from the configure script for more specific
+	information on setting up for your platform.</p>
+  </li>
+   
+  <li> Create the build tools using <CODE>bootstrap</CODE>. </li>
+  <li> Recompute tcsh's directory hash using <CODE>rehash</CODE>. </li>
+   
+  <li> Build typing <CODE>dmake</CODE> in <CODE>$SRC_ROOT</CODE>, or 
+    <CODE>build --all</CODE> in the <CODE>instetoo_native</CODE> module, or 
+    <CODE>build</CODE> followed by <CODE>deliver</CODE> in the individual 
+    modules. </li>
+	
+</ol>
+
+For detailed build instructions, see the section 
+<a href="#BuildingaFullBuildofOpenOffice">Building a Full Build of the Office 
+Suite</a> in this document. The installation procedure is described 
+<a href="#InstallInstructions">at the end</a> of this document.
+<br>
+
+
+<!-- Not available for OOo 1.9.x
+<H2> 
+<a NAME="OverviewofBuildinganIndividualProject"></a>Overview of Building 
+an Individual Project
+</H2>
+<p>
+You can use a prebuilt version to build an individual project. Having a 
+prebuilt version is necessary because the individual project you want to 
+build could depend on other projects. A project builds a particular component 
+of OpenOffice.org. For example, the Word Processing project builds the Word 
+Processing application. To build an individual project, you must follow these 
+steps: 
+<ol>
+  <li> Download the appropriate solver tarballs from the download webpage
+    (<a href="http://download.open office.org/index.html">http://download.openoffice.org/index.html</a>)
+    e.g., for 643B the solver tarball 
+    <CODE>solver643B_linux_intel.tar.gz.</CODE> 
+     
+     
+    
+	<p>643 is a very old release.  Please use the <a href="../builds/">latest</a>
+	   version.</p>
+  </li>
+
+  <li> Check out the modules for the project that you want to build from the 
+    OpenOffice.org cvs tree. If your project uses the resources module, 
+    <CODE>res</CODE>, check 
+    out this module also. You can, of course, also download the entire source 
+    from the download webpage 
+    (<a href="http://download.openoffice.org/index.html">http://download.openoffice.org/index.html</a>). 
+    However, it is not possible to download individual modules there. </li>
+  <li> Check out the module <CODE>config_office</CODE>. This is always necessary
+    to create the build environment. </li>
+  <li> Also check out the modules <CODE>dmake, external, sal, solenv, soltools,
+     vos, tools, rsc and xml2cmp</CODE>.
+  
+     These are required by <CODE>bootstrap</CODE> (see below).
+  
+  </li>
+  <li> Unpack the solver tarball in the <CODE>$SRC_ROOT</CODE> directory. </li>
+   
+  <li> Run the <CODE>configure</CODE> script to check all requirements and to 
+    create the settings file
+  
+  <CODE>LinuxIntelEnv.Set</CODE>.
+   
+   
+   
+  <li> Run
+    in tcsh <CODE>source LinuxIntelEnv.Set</CODE> or in bash
+           <CODE>source LinuxIntelEnv.Set.sh</CODE>
+     
+     
+     
+    to set all environment variables and build dmake.exe. 
+  </li>
+   
+  <li> Create the build tools using <CODE>./bootstrap</CODE>. </li>
+   
+  <li> Build each module against the prebuilt <CODE>solver</CODE> using the <CODE>build</CODE> 
+    tool, followed by <CODE>deliver</CODE>. </li>
+</ol>
+
+For detailed build instructions, see 
+<a href="#BuildingIndividualProjects">Building Individual Projects with a 
+Prebuilt</a>. 
+-->
+
+<br><br><br>
+
+
+<h2>
+<a NAME="BuildRequirements"></a>Build Requirements
+</h2>
+
+<p>
+Before you start building, you must ensure that your system satisfies the
+recommended software and hardware requirements for the type of system you
+are working on. For Linux,   
+  these are as follows:</p>
+
+
+
+see <a href="http://wiki.services.openoffice.org/wiki/Build_Linux_Requirements">Linux Build Requirements</a>
+
+
+
+
+
+
+
+<H2>
+<a NAME="GetTheSourceCode"></a>Get the source code
+</H2>
+
+<p>
+You have two options to get the source code:
+
+<ul>
+
+<li>
+Download the source code tarball 
+(<a href="http://download.openoffice.org/3.1.0/source.html">http://download.openoffice.org/3.1.0/source.html</a>),
+e.g. <CODE>OOo_3.1.0_src_core.tar.gz</CODE> in case of the 3.1 stable release.
+<p>
+Unpack the tarballs as follows:</p>
+<pre>
+<KBD>&gt; tar -xvzf OOo_3.1.0_src_core.tar.gz</KBD>
+<KBD>&gt; cd OOO300m9</KBD> 
+</pre>
+<p>This will be $SRC_ROOT from now on. Please check <a href="http://wiki.services.openoffice.org/wiki/Getting_It">the OpenOffice.org Wiki</a> for more detailed information about the source tarballs.</p>
+</li>
+
+<li>
+Another possibility is to check out the code from the subversion tree. 
+
+The non-bold slash means that the command should be in one line. It is 
+possible to update an already existing older copy to a newer release: 
+<pre>
+<KBD>$SRC_ROOT&gt; svn</KBD> /
+<KBD>    co svn://svn.services.openoffice.org/ooo/tags/OpenOffice_3_1_0</KBD> /
+</pre>
+</li>
+
+<li>
+<p>
+A note on the tags (i.e. the argument to the -r option in the cvs commands listed above): 
+If <em>trunk</em> is used as a tag, you will get the newest latest source code. This, 
+however, will most likely not build since development is going on there. 
+See <a href="http://tools.openoffice.org#CWS">http://tools.openoffice.org#CWS</a>
+for a description of the development process with child workspaces and
+<a href="http://eis.services.openoffice.org/EIS2/servlet/GuestLogon">
+<strong>E</strong>nvironment <strong>I</strong>nformation <strong>S</strong>ystem</a>
+for the current child workspaces and milestones.
+</p>
+</li>
+
+</ul>
+
+<br><br><br>
+
+
+
+<H2>
+<a NAME="GeneratingtheBuildEnvironmentandBuildTools"></a>Generating the Build 
+Environment and Build Tools
+</H2>
+
+
+<p>
+The <CODE>configure</CODE> script to check/prepare the build environment.
+It checks that all software, hardware, and 
+system requirements for the build are satisfied, and creates a 
+configuration file called 
+<CODE>LinuxIntelEnv.Set</CODE>
+that is used to set all necessary build environment variables. See the example below.
+
+
+
+<p> 
+This configuration file is created in the <CODE>SRC_ROOT</CODE> directory. 
+A top-level makefile script <CODE>makefile.mk</CODE>  and the 
+script <CODE>bootstrap</CODE> from the <CODE>config-office</CODE> directory  
+are moved into <CODE>SRC_ROOT</CODE> as well. This is due to technical reasons: 
+The <CODE>SRC_ROOT</CODE> directory in the cvs tree can only hold directories. 
+On the other hand, the top-level <CODE>makefile.mk</CODE> should logically be 
+placed in the top-level directory <CODE>SRC_ROOT</CODE>. The cvs tree holds 
+these files in <CODE>config_office</CODE> and <CODE>configure</CODE> copies 
+them up. 
+ 
+
+<p>
+If you are running a compiler with a non-standard name or location
+make sure that the environment variables CC and CXX point to your
+c and c++ compiler. (This can also be used to to use <CODE>ccache</CODE>
+to reduce your compile time.)
+</p>
+
+
+
+<pre>
+<KBD>export CC=/your/path/to/gcc</KBD>
+<KBD>export CXX=/your/path/to/g++</KBD>
+</pre>
+
+
+
+
+<p>To run the <CODE>configure</CODE> script, type the following command:</p>
+
+<pre>
+<KBD>$SRC_ROOT&gt; cd config_office</KBD>
+<KBD>config_office&gt; ./configure</KBD>
+</pre>
+
+
+
+<p>
+There are a number of options that you can use with the
+<CODE>configure</CODE>
+script. To display these options, type the following command:
+</p>
+
+<pre>
+<KBD>config_office&gt; ./configure --help</KBD>
+</pre>
+
+
+
+
+
+
+<p> 
+After running <CODE>configure</CODE>, you have to continue in a tcsh shell:
+</p>
+<pre>
+<KBD>$SRC_ROOT&gt; tcsh</KBD>
+</pre>
+<p>
+To create the dmake make utility that is needed for the build of
+OpenOffice.org type the following command:
+<pre>
+<KBD>$SRC_ROOT&gt; ./bootstrap</KBD>
+</pre>
+<p>
+Now source the configuration file which sets all environment variables:
+</p>
+<pre>
+<KBD>$SRC_ROOT&gt; source LinuxIntelEnv.Set</KBD>
+</pre>
+<p>Don't forget to run
+</p>
+<pre>
+<KBD>$SRC_ROOT&gt; rehash</KBD>
+</pre>
+<p>afterwards.</p>
+
+
+
+<p> 
+If you experiment with the newest sources from the cvs-tree, mind that updates 
+to the configure process may not happen via updates of <CODE>configure</CODE>
+(the script file) but via the files <CODE>configure.in</CODE> and 
+<CODE>set_soenv.in</CODE>. The configure script itself is created from 
+<CODE>configure.in</CODE> using the 
+<CODE>autoreconf</CODE> command. The perl script set_soenv is created when you
+run configure from set_soenv.in.
+</p>
+
+<p>If you need to modify or create a correct configure you would run commands 
+like the following: 
+</p>
+<pre>
+<KBD>$SRC_ROOT&gt; cd config_office</KBD>
+<KBD>config_office&gt; cvs update configure.in</KBD>
+<KBD>config_office&gt; autoreconf</KBD>
+</pre>
+
+
+
+To update the <CODE>configure</CODE> script. If you only use code from the 
+snapshot releases on the web, you don't need to be concerned about this.
+
+
+<br><br><br>
+
+
+<H2>
+<a NAME="BuildInstructions"></a>Build Instructions
+</H2>
+
+
+<H2>
+<a NAME="BuildingaFullBuildofOpenOffice"></a>Building 
+a Full Build of the Office Suite
+</H2>
+
+Now you are ready to build OpenOffice.org. To build the entire suite, all you 
+have to do (after having created the environment as described above) is to run 
+dmake from the top-level directory. This may take several hours. 
+
+<pre>
+<KBD>$SRC_ROOT&gt; dmake</KBD>
+</pre>
+
+<p>If you wish to control the build more you can perform a build with local
+install sets or tarballs.</p>
+
+<ul>
+	<li>instsetoo_native will create rpm's or the actual delivery package for
+	   your platform.</li>
+	<li>instsetoo will create a single tar file containing the build however it
+	   is deprecated.</li>
+</ul>
+
+<pre>
+	cd $SRC_ROOT
+	cd instetoo_native
+	build --all
+</pre>
+
+
+<p>To clean up a previous build you can delete all output directories with</p>
+<pre>
+   rm -rf */unxlngi4.pro
+</pre>
+
+
+
+<p>
+If you decide to rebuild a module or build each module individually (mind 
+dependencies!), you will have to use the <CODE>build</CODE> tool. A subsequent 
+<CODE>deliver</CODE> will copy all created binaries, libraries etc. into the 
+solver tree:
+
+<pre>
+<KBD>$SRC_ROOT/(module)&gt; build</KBD>
+<KBD>$SRC_ROOT/(module)&gt; deliver</KBD>
+</pre>
+
+<p>
+The following table shows the time required to build on a system with a 
+particular specification. You can use these details to estimate the time
+required to build on your system.</p>
+
+
+<table BORDER="1" CELLSPACING=0 CELLPADDING=5>
+  <tr VALIGN=TOP>
+    <td>Architecture</td>
+    <td>Intel</td>
+  </tr>
+  <tr VALIGN=TOP>
+    <td>Processor</td>
+    <td>Pentium III</td>
+  </tr>
+  <tr VALIGN=TOP>
+    <td>Processor speed</td>
+    <td>600 MHz</td>
+  </tr>
+  <tr VALIGN=TOP>
+    <td>RAM</td>
+    <td>256 MB</td>
+  </tr>
+  <tr VALIGN=TOP>
+    <td>Hard disk</td>
+    <td>4 GB IDE</td>
+  </tr>
+  <tr VALIGN=TOP>
+    <td>Time (for 1.x series)</td>
+    <td>~12 h</td>
+  </tr>
+</table>
+<p>Note that using ccache can reduce your compile times and dramatically
+reduce recompile times.</p>
+
+
+ 
+
+<br><br><br>
+
+
+<!-- Not available for OOo 1.9.x
+<H2>
+<a NAME="BuildingIndividualProjects"></a>Building 
+Individual Projects with a Prebuilt
+</H2>
+
+<p>
+OpenOffice.org is organised in several projects. For example, 
+the Word Processing Project. These in turn consist of several 
+modules, organised in separate directories. The source contains 
+approximately 90 modules. 
+
+<p> 
+You can build any project or module individually. Building modules 
+individually should not be misunderstood as reducing OpenOffice.org to a 
+special application, say, for instance, the spreadsheet application. The 
+program will always consist of the entire office suite: text processor, 
+spreadsheet, drawing application, etc. Building individual 
+modules comes in handy if you want to develop on a certain module. 
+Most modules will depend on other modules to be already built. 
+In other words, all modules must build in a particular order. To avoid 
+building all modules which are prerequisites of the module of your 
+interest, you can make use of a prebuilt <CODE>solver</CODE> tree against 
+which you can build any module. 
+
+<p>
+For more information on modules and on the sequence that they build in, and 
+on the dependencies, see 
+<a href="http://tools.openoffice.org/modules.html">tools.openoffice.org/modules.html</a>.
+
+<p> 
+You have to download the <CODE>solver</CODE> tree as a tarball. For example 
+<CODE>solver643B_linux_intel.tar.gz</CODE> 
+ 
+ 
+ 
+from the Download page at 
+<a href="http://download.openoffice.org/index.html">http://download.openoffice.org/index.html</a>,
+use a current release 643 is very old and only used as an example,
+and unpack it in the <CODE>$SRC_ROOT</CODE> directory, e.g.: 
+<pre>
+
+<KBD>$SRC_ROOT&gt; tar -xzvf solver643B_linux_intel.tar.gz</KBD>
+
+
+
+</pre>
+
+
+In order to create the build environment and build tools (bootstrap), you 
+also have to check out the modules <CODE>config_office, dmake, external, 
+xml2cmp, mkdepend, sal, solenv, vos, tools and rscpp</CODE>.
+
+
+
+<p>
+To build a project, you build each of its modules individually in their 
+directory with the <CODE>build</CODE> tool, followed by <CODE>deliver</CODE> 
+to copy the created libraries, binaries etc. into the solver tree: 
+<pre>
+<KBD>$SRC_ROOT/(module-name)&gt; build</KBD>
+<KBD>$SRC_ROOT/(module-name)&gt; deliver</KBD>
+</pre>
+
+Files called <CODE>build.lst</CODE> in the directories 
+<CODE>(module-name)/prj</CODE> contain all information about the 
+subdirectories to be build (each of them containing makefiles 
+<CODE>makefile.mk</CODE>), about internal dependencies, and also about 
+modules the current module depends on. The files 
+<CODE>(module-name)/prj/d.lst</CODE> control the actions done by 
+<CODE>deliver</CODE>. The last or second to last directory to be build is 
+usually <VAR>module-name</VAR><CODE>/util</CODE> which is responsible for 
+linking one or more shared libraries.
+-->
+
+<br><br><br>
+
+
+<H2>
+<a NAME="BuildingaProjectwithDebugInformation"></a>Building 
+a Project with Debug Information
+</H2>
+
+<p>
+To rebuild a complete project with debug information, remove all object
+files by removing the 
+<CODE>unxlngi4.pro</CODE>
+
+ 
+directory. Then run <CODE>build</CODE> with the debug option set to true:
+
+<pre>
+<KBD>$SRC_ROOT/(module)&gt; rm -rf unxlngi4.pro</KBD>
+<KBD>$SRC_ROOT/(module)&gt; build debug=true</KBD>
+</pre>
+
+<br><br><br>
+
+<h2>
+<a NAME="InstallInstructions"></a>Instructions to Build 
+an Installation Set
+</h2>
+
+<p>
+The build process (started with a top-level <CODE>dmake</CODE> or 
+<CODE>build --all</CODE> in <CODE>$SRC_ROOT/instsetoo_native</CODE>) will create 
+an installation sets in English. 
+A simple <CODE>build</CODE> in <CODE>$SRC_ROOT/instsetoo_native</CODE>
+will also create the installation sets, provided all other modules are
+already built. 
+
+<p>
+If you have built an installation set earlier and want to re-build it, 
+please delete the local outpath first: 
+<pre>
+<KBD>$SRC_ROOT/instsetoo_native&gt; rm -rf unxlngi4.pro</KBD>
+</pre>
+
+<p>
+The English installation set will be located at 
+<CODE>$SRC_ROOT/instsetoo_native/unxlngi4.pro/OpenOffice/install/en-US</CODE>. 
+Execute the <CODE>setup</CODE> binary to install:
+<pre>
+<KBD>$SRC_ROOT&gt; cd instsetoo_native/unxlngi4.pro/OpenOffice/install/en-US</KBD>
+<KBD>en-US&gt; ./setup</KBD>
+</pre>
+
+The en-US in the path names indicates that the localization is American English.
+This value corresponds to the language tags defined by RFC 1766 (Tags for the
+Identification of Languages).
+The German installation set will be located in a de subdirectory. This scheme holds
+true for all localizations you may have chosen explicitly (see next section 
+<a href="#BuildingLocalized">Building Localized Versions of OpenOffice.org</a>). 
+
+<p>
+For a network installation, use the <CODE>-net</CODE> option to 
+<CODE>setup</CODE>. Details on the network installation process 
+can be found at 
+<a href="http://installation.openoffice.org/proposals/netinstall.html">
+http://installation.openoffice.org/proposals/netinstall.html</a> 
+in the installation project webpage.
+</p>
+<p>For information on creating an automated
+<a href="http://installation.openoffice.org/01RESPONSE_SO52_final_rev2.pdf">
+installation script</a> and create a response file.</p>
+
+<br><br><br>
+
+
+<H2>
+<a NAME="BuildingLocalized"></a>Building Localized Versions of OpenOffice.org
+</H2>
+
+<p>
+Running the configure script with the --with-lang option will introduce the build
+of additional language resources. This switch accepts one or more RFC 1766 language
+tags as arguments, unfortunately not all languages are supported. Check the value
+of the <CODE>completelangiso</CODE> macro in <CODE>$SRC_ROOT/solenv/inc/postset.mk</CODE>
+for all the currently supported language tags.
+</p>
+<p>
+Example: <CODE>--with-lang="de fr"</CODE> enables the build of the localized german and
+french version.
+</p>
+<p>
+The environment variable <CODE>WITH_LANG</CODE>
+will then contain the language tags of the additional (en-US will always be build)
+languages.
+</p>
+
+<br><br><br>
+
+
+<H2>
+<a NAME="BuildingLangpack"></a>Building Localized Language Packs
+</H2>
+
+<p>
+If you build additional localized languages it is possible to generate Language Packs
+that contain only the changes needed to add the additional language to an OpenOffice.org
+of a different language.
+</p>
+<p>
+The following commands will generate language packs languages that were specified
+with the --with-lang switch during the configure phase. Note that you can only build the
+language packs <b>after</b> you have build the complete office with all selected
+languages.
+</p>
+<pre>
+<KBD>$SRC_ROOT&gt; cd instsetoo_native/util; dmake ooolanguagepack</KBD>
+</pre>
+
+
+<br><br><br>
+
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

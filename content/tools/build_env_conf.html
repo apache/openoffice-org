@@ -1,0 +1,986 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+<title>OpenOffice.org - Configure script</title>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/tools/">tools</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h2>The <code>configure</code> Script for Linux, Solaris, Windows
+and Mac&nbsp;OS&nbsp;X</h2>
+
+<p>The <code>configure</code> script is an <code>autoconf</code>
+script that generates the build environment for the build. This
+section gives details about the <code>configure</code> script,
+including operating environments that it works on, prerequisites,
+and options available, in the following sections:</p>
+
+<ul>
+<li><a href=
+"build_env_conf.html#3.1.1.OperatingEnvironmentsSupportedbyconfigureScript|outline">
+The <code>configure</code> Script Operating Environments</a></li>
+
+<li><a href=
+"build_env_conf.html#3.1.2.CheckingthePrerequisites|outline">Checking
+the Prerequisites</a></li>
+
+<li><a href=
+"build_env_conf.html#3.1.3.CheckingToolVersions|outline">Checking
+Tool Versions</a></li>
+
+<li><a href=
+"build_env_conf.html#3.1.4.OptionsAvailablewithconfigureScript|outline">
+Options Available with <code>configure</code> Script</a></li>
+
+<li><a href="build_env_conf.html#bootstrap">Creating the
+<code>bootstrap</code> Utility</a></li>
+
+<li><a href=
+"build_env_conf.html#3.1.5.SettingtheEnvironmentVariables|outline">Setting
+the Environment Variables</a></li>
+</ul>
+
+<h3><a name=
+"3.1.1.OperatingEnvironmentsSupportedbyconfigureScript|outline"></a>
+The <code>configure</code> Script Operating Environments</h3>
+
+<p>The following table lists the combinations of hardware
+architecture and operating systems that the <code>configure</code>
+script works on. Since we are adding ports all the time to verify that your
+operating system and hardware are supported simply run configure.</p>
+<p>Note that the 64bit port is currently underway but is expected to take some
+time.  Configure will allow Alpha and x86_64 however it is probably not going
+to build a viable OpenOffice.org.  Please email the porting list for further
+information should you require it.</p>
+
+<table border="1" cellspacing="0" cellpadding="5">
+<caption>The <code>configure</code> Script Operating Environments</caption>
+
+<tr valign="top">
+<th>Hardware Architecture</th>
+<th>Operating Systems</th>
+</tr>
+
+<tr valign="top">
+<td>SPARC</td>
+<td>
+<ul type="DISC">
+<li>Solaris</li>
+<li>Linux</li>
+</ul>
+</td>
+</tr>
+
+<tr valign="top">
+<td>Intel</td>
+<td>
+<ul type="DISC">
+<li>Linux</li>
+<li>Windows using <a href="http://sources.redhat.com/cygwin/">cygwin</a></li>
+<li>FreeBSD</li>
+<li>NetBSD</li>
+<li>Solaris</li>
+</ul>
+</td>
+</tr>
+
+<tr valign="top">
+<td>PowerPC</td>
+<td>
+<ul type="DISC">
+<li>Linux</li>
+<li>Mac OS X</li>
+</ul>
+</td>
+</tr>
+
+<tr valign="top">
+<td>Mips</td>
+<td>
+<ul type="DISC">
+<li>Irix</li>
+</ul>
+</td>
+</tr>
+
+<tr valign="top">
+<td>s390</td>
+<td>
+<ul type="DISC">
+<li>Linux</li>
+</ul>
+</td>
+</tr>
+
+</table>
+
+<h3><a name="3.1.2.CheckingthePrerequisites|outline"></a>Checking
+the Prerequisites</h3>
+
+<p>The <code>configure</code> script checks the software, hardware,
+and system requirements. Some of these prerequisites are not
+essential for the <code>configure</code> script to run. If one of
+these prerequisites is missing, you are warned when the
+<code>configure</code> script completes.</p>
+
+<p>Other prerequisites are essential for the the
+<code>configure</code> script to run. If these prerequisites are
+missing, the <code>configure</code> script exits. To continue, you
+must identify the missing prerequisite and take the appropriate
+action. The following table includes information on which
+prerequisites cause the <code>configure</code> script to exit.</p>
+
+<table border="1" cellspacing="0" cellpadding="5" width="100%">
+<caption>Prerequisites Checked by the <code>configure</code>
+Script</caption>
+
+<tr valign="top">
+<th>Prerequisite</th>
+<th>Platform</th>
+<th>If absent</th>
+<th>Comment</th>
+</tr>
+
+<tr valign="top">
+<td>Hardware Architecture</td>
+<td>All</td>
+<td>Script exits</td>
+<td>The <code>configure</code> script only works with certain
+processors.</td>
+</tr>
+
+<tr valign="top">
+<td>Operating System</td>
+<td>All</td>
+<td>Script exits</td>
+<td>The <code>configure</code> script only works with certain
+operating systems.</td>
+</tr>
+
+<tr valign="top">
+<td>Compiler</td>
+<td>All</td>
+<td>Warning displayed</td>
+<td>The <code>configure</code> script only works with certain compilers.</td>
+</tr>
+
+<tr valign="top">
+<td>C Preprocessor</td>
+<td>All, except windows</td>
+<td>Warning displayed</td>
+<td>Needed for the build.  Visual C currently does not support C preprocessor.</td>
+</tr>
+
+<tr valign="top">
+<td><code>sed</code></td>
+<td>All</td>
+<td>Script exits</td>
+<td>Needed by the <code>configure</code> script.</td>
+</tr>
+
+<tr valign="top">
+<td><code>awk</code></td>
+<td>All</td>
+<td>Script exits</td>
+<td>Needed by the <code>configure</code> script and the
+<code>build</code> command.</td>
+</tr>
+
+<tr valign="top">
+<td>Standard C Headers</td>
+<td>All</td>
+<td>Warning displayed</td>
+<td>Needed for the build.</td>
+</tr>
+
+<tr valign="top">
+<td>JDK</td>
+<td>All</td>
+<td>Warning displayed</td>
+<td>Needed for the build.</td>
+</tr>
+
+<tr valign="top">
+<td>Perl</td>
+<td>All</td>
+<td>Script exits</td>
+<td>Needed for the build.</td>
+</tr>
+
+<tr valign="top">
+<td>STLPort 4</td>
+<td>All</td>
+<td>Uses supplied source</td>
+<td>STLPort source is supplied in the checkout, build uses that version</td>
+</tr>
+
+<tr valign="top">
+<td><code>csh</code></td>
+<td>Linux, Solaris, Mac OS X</td>
+<td>Script exits</td>
+<td>Needed for the build.</td>
+</tr>
+
+<tr valign="top">
+<td><code>bison</code></td>
+<td>Linux, Solaris</td>
+<td>Warning displayed</td>
+<td>Bison is needed in the build</td>
+</tr>
+
+<tr valign="top">
+<td><code>flex</code></td>
+<td>Linux, Solaris</td>
+<td>Warning displayed</td>
+<td>Flex is needed for the build</td>
+</tr>
+
+<tr valign="top">
+<td><code>patch</code></td>
+<td>All</td>
+<td>Warning displayed</td>
+<td>Needed for the build.</td>
+</tr>
+
+<tr valign="top">
+<td><code>zip and unzip</code></td>
+<td>Windows</td>
+<td>Warning displayed</td>
+<td>Needed for the build.</td>
+</tr>
+
+<tr valign="top">
+<td><code>GNU Make</code></td>
+<td>All</td>
+<td>Warning displayed
+<br>Error if version not adequate</td>
+<td>GNU make is needed for the build.</td>
+</tr>
+
+<tr valign="top">
+<td>X Runtime libraries and includes</td>
+<td>Linux, Solaris</td>
+<td>Warning displayed</td>
+<td>Needed for the build.</td>
+</tr>
+
+<tr valign="top">
+<td>X Development libraries</td>
+<td>Linux, Solaris</td>
+<td>Script exits</td>
+<td>Needed for the build.</td>
+</tr>
+
+<tr valign="top">
+<td><code>glibc</code></td>
+<td>Linux</td>
+<td>Script exits</td>
+<td>Needed for the build.</td>
+</tr>
+
+<tr valign="top">
+<td>Platform SDK</td>
+<td>Windows</td>
+<td>Error displayed</td>
+<td>Needed for the build.</td>
+</tr>
+
+<tr valign="top">
+<td>GPC</td>
+<td>All</td>
+<td>Error</td>
+<td>The GPC source can be downloaded from 
+<a href="ftp://ftp.cs.man.ac.uk/pub/toby/gpc/gpc231.tar.Z">here.</a></td>
+</tr>
+
+<tr valign="top">
+<td>Pam headers</td>
+<td>Linux</td>
+<td>Warning displayed</td>
+<td>Needed for the build.</td>
+</tr>
+
+<tr valign="top">
+<td>Solaris</td>
+<td>Solaris</td>
+<td>Warning displayed</td>
+<td>Needed for the build. Version 2.6 through 2.9 and various patches.</td>
+</tr>
+</table>
+
+<h3><a name="3.1.3.CheckingToolVersions|outline"></a>Checking Tool
+Versions</h3>
+
+<p>The <code>configure</code> script checks the version number of
+the tools. The following table lists details the tool versions
+checked by the <code>configure</code> script.</p>
+
+<table border="1" cellspacing="0" cellpadding="5">
+<caption>Tool Version Numbers Checked by <code>configure</code>
+Script</caption>
+
+<tr valign="top">
+<th>Tool</th>
+<th>Comment</th>
+</tr>
+
+<tr valign="top">
+<td>Compiler</td>
+<td>
+<ul type="DISC">
+<li><code>gcc</code> 3.0 or better ( gcc 3.2+ recommended)</li>
+
+<li>Workshop C/C++ for Solaris SPARC Version 5.0</li>
+<li>Microsoft Visual C</li>
+<li>MIPSpro 7.2 or better</li>
+<li>Compaq C version 6</li>
+</ul>
+</td>
+</tr>
+
+<tr valign="top">
+<td>JDK</td>
+<td>
+<ul type="DISC">
+<li>JDK 1.3.1 or higher for all platforms
+<p>Note: JDK 1.4.2 support is not reliable.</p>
+</li>
+</ul>
+</td>
+</tr>
+
+<tr valign="top">
+<td>GNU Make</td>
+<td>
+<ul type="DISC">
+<li>GNU Make 3.79.1 or higher for all platforms</li>
+</ul>
+</td>
+</tr>
+
+<tr valign="top">
+<td>Perl</td>
+<td>
+<ul type="DISC">
+<li>Perl 5 or higher for all systems</li>
+</ul>
+</td>
+</tr>
+
+<tr valign="top">
+<td><code>libc</code></td>
+<td>
+<ul type="DISC">
+<li><code>libc</code> 2.1.1 or higher for Linux</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<h3><a name="bootstrap"></a>Creating the <code>bootstrap</code>
+Utility</h3>
+
+<p>The <code>configure</code> script builds the
+<code>bootstrap</code> utility and then copies it to the top-level
+directory. The <code>bootstrap</code> utility creates the tools for
+required for building.</p>
+
+<h3><a name=
+"3.1.4.OptionsAvailablewithconfigureScript|outline"></a>Options
+Available with <code>configure</code> Script</h3>
+
+<p>The options that are available with <code>autoconf</code> are
+also available with the <code>configure</code> script. For
+information on these options, see the <code>autoconf</code> manual
+at the GNU web site at <a href=
+"http://www.gnu.org/">http://www.gnu.org</a>.</p>
+
+<p>There are additional options that you can use with the
+<code>configure</code> script. To display these options, type the
+following command:</p>
+
+<table border="1" cellspacing="0" cellpadding="5" width="476">
+<tr>
+<td valign="top">
+<pre>
+% <kbd>./configure --help</kbd>
+</pre>
+</td>
+</tr>
+</table>
+
+<p>The following table describes the additional options that you
+can use with the <code>configure</code> script.</p>
+
+<table border="1" cellspacing="0" cellpadding="5">
+<caption>Additional Options Available with <code>configure</code>
+Script</caption>
+
+<tr valign="top">
+<th>Option</th>
+<th>Description</th>
+<th>Comment</th>
+</tr>
+<!--- 
+<tr valign="top">
+<td><code>--with-gcc-home</code></td>
+<td>Absolute path to <code>gcc</code> top-level directory.</td>
+<td>If you have built <code>gcc</code> from source using the
+<code>--with-shared</code> option, you specify the path to the root
+of your <code>gcc</code> installation.</td>
+</tr>
+ -->
+
+<tr valign="top">
+<td><code>--with-cl-home</code></td>
+<td>Absolute path to <code>cl</code> directory.</td>
+<td> For Windows NT users, please supply the path for the Microsoft C/C++
+compiler.  Note that this is not the location of the compiler binary but the
+location of the entire distribution.
+</td>
+</tr>
+
+<tr valign="top">
+<td><code>--with-jdk-home</code></td>
+<td>Absolute path to JDK top-level directory.</td>
+<td>If you have JDK 1.3.1 installed, and not in your path, then you
+specify the path to the root of your JDK installation.</td>
+</tr>
+
+<tr valign="top">
+<td><code>--with-perl-home</code></td>
+<td>Absolute path to Perl top-level directory.</td>
+<td>If you have Perl 5 installed, and not in your path, then you
+specify the path to the root of your Perl 5 installation.</td>
+</tr>
+
+<tr valign="top">
+<td><code>--enable-check-only</code></td>
+<td>Checks version numbers of tools in your environment.</td>
+<td>Use this option to check your environment. This option does not
+generate an environment variable file.</td>
+</tr>
+
+<tr valign="top">
+<td><code>--enable-macos9</code></td>
+<td>Generates a Mac OS 9 environment variable file.</td>
+<td>Use this option to generate a Mac OS 9 environment on Mac OS
+X.</td>
+</tr>
+
+<tr valign="top">
+<td><code>--with-stlport4-home</code></td>
+<td>Location of STLport4 library and header files</td>
+<td>Use this option to specify the location of STLport4 library and
+header files.</td>
+</tr>
+
+<tr valign="top">
+<td><code>--with-psdk-home</code></td>
+<td>Location of Microsoft Platform development kit</td>
+<td>For Windows NT users, please supply the path for the Microsoft Platform SDK.
+</td>
+</tr>
+
+<tr valign="top">
+<td><code>--with-lang</code></td>
+<td>language support</td>
+<td>Use this option to build OpenOffice.org with additional
+language support. US English is always included by default.
+Separate multiple languages with commas.</td>
+</tr>
+
+<tr valign="top">
+<td><code>--with-asm-home</code></td>
+<td>assembler compiler</td>
+<td>For Windows users, supply the path for the ml.exe
+assembler.</td>
+</tr>
+
+<tr valign="top">
+<td><code>--disable-gpc</code></td>
+<td>Removes GPC code</td>
+<td>The GPC polygon Clipper code has some licensing issues with some
+distributions.  This option disables this code reducing some of the graphic
+capability.</td>
+</tr>
+
+<tr valign="top">
+<td><code>--enable_debug</code></td>
+<td>Switches various debug options on</td>
+<td>This option is strongly discouraged, it needs about 8gig of disk space</td>
+</tr>
+
+<tr valign="top">
+<td><code>--with-x</code></td>
+<td>X Windows</td>
+<td>use the X Window System</td>
+</tr>
+
+
+<tr valign=top>
+<td><code>--with-gnu-patch</code></td>
+<td>Specify location of GNU patch on Solaris or FreeBSD</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-gnu-cp</code></td>
+<td>Specify location of GNU cp on Solaris or FreeBSD</td>
+</tr>
+
+<tr valign=top>
+<td><code>--enable-libart</code></td>
+<td>Enables the use of libart, instead of GPC for polygon clipping.</td>
+</tr>
+
+<tr valign=top>
+<td><code>--enable-libsn</code></td>
+<td>Enables the use of libstartup-notification</td>
+</tr>
+
+<tr valign=top>
+<td><code>--without-fonts</code></td>
+<td>Removes Bitstream Vera fonts from openoffice.org installation set, for
+people building for specific distributions where the fonts are known to be
+already available
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--disable-mozilla</code></td>
+<td>OO.o usually includes a strangely hacked up mozilla binary for your
+platform, to build without this version, use this option.
+<p>Usage: --disable-mozilla</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--enable-cups</code></td>
+<td>enable cups support in the psprint project
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--enable-fontconfig</code></td>
+<td>enable support for the fontconfig library
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--disable-directx</code></td>
+<td>Remove DirectX implementation for the new XCanvas interface. This requires
+more installed on Windows to compile.  (DirectX SDK, GDI+ libs)
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--enable-symbols</code></td>
+<td>Include debugging symbols in output.  Warning - a complete build needs 8 Gb
+of space and takes much longer.  (enables -g compiler flag)
+<p>--enable-symbols=SMALL sets the gcc -g1 setting which is smaller.</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--enable-dbgutil:</code></td>
+<td>Include additional debugging utilities, such as assertions, object
+counting, etc. Larger build.  Independent from --enable-debug
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--enable-crashdump:</code></td>
+<td>Enable the crashdump feature code. This option implicitly activates
+--enable-symbols.
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--enable-cl-standard</code></td>
+<td>For Microsoft C/C++ compiler users, use non-optimizing standard compiler.
+(This just disables optimization options and therefore removes a lot of
+warnings when using the cheaper standard compiler.)
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--enable-static-gtk:</code></td>
+<td>Modules that are linked against gtk libraries use the static libraries
+instead of the dynamic ones.  (enables -Bstatic linker flag for gtk libraries)
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--disable-rpath:</code></td>
+<td>Disable the use of relative paths in shared libraries
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-system-zlib</code></td>
+<td>Use zlib already on system
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-system-jpeg</code></td>
+<td>Use jpeg already on system
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-system-expat</code></td>
+<td>Use expat already on system
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-system-freetype</code></td>
+<td>Use freetype already on system
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-system-libxml</code></td>
+<td>Use libxml already on system
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-system-python</code></td>
+<td>Use python already on system
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-system-icu</code></td>
+<td>Use icu already on system
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-system-db3</code></td>
+<td>Use berkley ver 3 db already on system
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-system-sablot</code></td>
+<td>Use sablot already on system
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-system-odbc-headers</code></td>
+<td>Use the odbc headers already on system
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-system-curl</code></td>
+<td>Use curl already on system
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-system-nas</code></td>
+<td>Use nas already on system
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-system-neon</code></td>
+<td>Use neon 0.23.x already on system
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-stlport4</code></td>
+<td>The location that STLport4 is installed in. The STL header files are
+assumed to be in stlport4-home/stlport and the STLport4 library in
+stlport4-home/lib.
+<p>Usage: --with-stlport4=&lt;absolute path to stlport4 home&gt;</p>
+<p>Warning!!, --without-stlport4 is possible with gcc >= 3.3.3, but will break
+ABI compatability</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-gxx-include-path</code></td>
+<td>if you want to override the autodetected g++ include path.
+<p>Usage: --with-gxx-include-path=&lt;absolute path to g++ include dir&gt;</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--disable-java</code></td>
+<td>Build without Java support.  Use if there is no supported JDK for your
+platform.  The build will have no support for Java components, applets,
+accessibility or XML filters.
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-ant-home</code></td>
+<td>If you have installed Jakarta Ant on your system, please supply the path
+here.  Note that this is not the location of the Ant binary but the location of
+the entire distribution.
+<p>Usage: --with-ant-home=&lt;absolute path to Ant home&gt;</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-perl-home</code></td>
+<td>If you have installed the Perl 5 Distribution, on your
+system, please supply the path here.
+Note that this is not the location of the Perl binary
+but the location of the entire distribution.
+</p>Usage: --with-perl-home=&lt;absolute path to Perl 5 home&gt</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-mspdb-path</code></td>
+<td>For Microsoft C/C++ compiler users, please supply the path pointing to the
+mspdb60.dll (MSVC 6) or mspdb7x.dll (.NET).
+<p>Usage: --with-mspdb-path=&lt;absolute path to mspdb60.dll/mspdb7x.dll&gt;</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-midl-path</code></td>
+<td>For Microsoft C/C++ .NET compiler users, please supply the path pointing to
+the midl.exe.
+<p>Usage: --with-midl-path=&lt;absolute path to midl.exe&gt;</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-csc-path</code></td>
+<td>For Microsoft C/C++ .NET compiler users, please supply the path
+pointing to the csc.exe.
+<p>Usage: --with-csc-path=&lt;absolute path to csc.exe&gt;</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-frame-home</code></td>
+<td>For Microsoft C/C++ .NET compiler users, please supply the path pointing to
+the .NET Framework SDK.  Usually something like:
+"/cygdrive/c/Programme/Microsoft Visual Studio .NET/FrameworkSDK"
+<p>Usage: --with-frame-home=&lt;absolute path to Framework SDK&gt;</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-wdevenv-path</code></td>
+<td>For Microsoft C/C++ .NET compiler users, please supply the path
+pointing to the wdevenv.exe.
+<p>Usage: --with-wdevenv-path=&lt;absolute path to wdevenv.exe&gt;</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-psdk-home</code></td>
+<td>For Windows NT users, please supply the path for the Microsoft Platform SDK.
+<p>Usage: --with-psdk-home=&lt;absolute path to Microsoft Platform SDK&gt;</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-old-psdk</code></td>
+<td>For Windows users, and compatibility reasons. Please use this option for
+the October 2002 version of the Microsoft Platform SDK.<br>
+This is a temporary workaround!
+<p>Usage: --with-old-psdk</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-local-solenv</code></td>
+<td>If you have solenv in a location other than ../solenv, please supply the
+path here.
+<p>Usage: --with-local-solenv=&lt;absolute path to solenv&gt;</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-local-solver</code></td>
+<td>if you have solver in a location other than ../solver, please supply the
+path here.
+<p>Usage: --with-local-solver=&lt;absolute path to solver&gt</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-dict</code></td>
+<td>Use this option to build OpenOffice.org with dictionary support. ALL
+dictionaries are always included by default unless overridden with this option.
+Separate multiple dictionaries with commas. For all dictionaries, use
+--with-dict=ALL.
+<p>Usage: --with-dict=ENGB,ENUS,ITIT</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-os-version</code></td>
+<td>For FreeBSD users, use this option option to override the detected OSVERSION.
+<p>Usage: --with-os-version=&lt;OSVERSION&gt;
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-zip-home</code></td>
+<td>If you use a non standard zip, for example windows please supply the path
+for zip
+<p>Usage: --with-zip-home=&lt;path to zip executable&gt</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-mingwin</code></td>
+<td>For Windows users, use the mingwin32 compiler within cygwin environment,
+this implies --with-use-shell=tcsh <p>Usage: --with-mingwin=yes</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--with-use-shell</code></td>
+<td>Select shell different form the default shell. For Windows users, don't use
+the 4NT shell with "mingwin32" environment
+<p>Usage: --with-use-shell=&lt;desired shell&gt;</p>
+</td>
+</tr>
+
+<tr valign=top>
+<td><code>--enable-sgistl</code></td>
+<td>for IRIX users, use this option option to build OpenOffice.org using SGI's
+STL.
+<p>Usage: --enable-check-only=yes</p>
+</td>
+</tr>
+</table>
+
+<h3><a name=
+"3.1.5.SettingtheEnvironmentVariables|outline"></a>Setting the
+Environment Variables</h3>
+
+<p>After the <code>configure</code> script finishes checking the
+prerequisites, it creates the perl script
+<code>set_soenv</code> from set_soenv.in. set_soenv creates an environment
+variable file for your system. The name of this file depends on the
+system that it was generated on. The following table shows the
+naming convention for the environment variable files.</p>
+<p>For bash and other bourne shell derivatives add '.sh' to the following names.</p>
+
+<table border="1" cellspacing="0" cellpadding="5">
+<caption>Naming Convention for Environment Variable Files</caption>
+
+<tr valign="top">
+<th>Operating System</th>
+<th>Architecture</th>
+<th>Environment Variable Filename</th>
+</tr>
+
+<tr valign="top">
+<td>Linux</td>
+<td>Intel</td>
+<td><code>LinuxIntelEnv.set</code></td>
+</tr>
+
+<tr valign="top">
+<td>Solaris</td>
+<td>SPARC</td>
+<td><code>SolarisSparcEnv.set</code></td>
+</tr>
+
+<tr valign="top">
+<td>Solaris</td>
+<td>INTEL</td>
+<td><code>SolarisIntelEnv.set</code></td>
+</tr>
+
+<tr valign="top">
+<td>Windows</td>
+<td>Intel</td>
+<td><code>winenv.set</code> for bash builds or <code>winenv.bat</code> for 4nt builds</td>
+</tr>
+
+<tr valign="top">
+<td>Mac OS X</td>
+<td>PowerPC</td>
+<td><code>MacosxEnv.set</code></td>
+</tr>
+</table>
+
+<p>For the actual name please look at the last lines of the configure script
+output.  It tells you the correct file to source and how to do it in the two
+shell types.</p>
+
+<p>The <code>configure</code> script passes the following path
+variables to the set_soenv Perl script:</p>
+
+<ul type="DISC">
+<li>Compiler path</li>
+
+<li>G++ include path</li>
+
+<li>Path to the JDK</li>
+
+<li>Path to the <code>csh</code></li>
+
+<li>Path to Perl</li>
+
+<li>Location of <i>local</i> solenv</li>
+
+<li>Location of <i>local</i> solver</li>
+
+<li>Path to X libraries</li>
+
+<li>Path to X includes</li>
+
+<li>The build number <i>($UPD)</i></li>
+
+<li>Location of CYGWIN <i>(windows only)</i></li>
+
+<li>Location of STLport4</li>
+
+<li>Language settings</li>
+
+<li>Location of assembler <i>(windows only)</i></li>
+
+<li>Plus a number of other values</li>
+</ul>
+
+<p>Once the path to the correct version of Perl is found, it is
+added as a directive to the set_soenv Perl script. The Perl script then
+probes your system for platform and processor type and version, and
+sets the environment variables accordingly.</p>
+
+<p>Any errors are displayed at the end of the set_soenv Perl script. If you
+do not get any errors then you are ready to build.</p>
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

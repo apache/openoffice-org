@@ -1,0 +1,108 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<TITLE>LogFile::Filter - Perl module for filtering out certain time stamps from
+a set of profiling data.</TITLE>
+<LINK REV="made" HREF="mailto:feedback@suse.de">
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/tools/">tools</a>&nbsp;&raquo;&nbsp;<a href="/tools/profiling/">profiling</a>&nbsp;&raquo;&nbsp;<a href="/tools/profiling/pod/">pod</a>&nbsp;&raquo;&nbsp;<a href="/tools/profiling/pod/LogFile/">LogFile</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+
+<A NAME="__index__"></A>
+<!-- INDEX BEGIN -->
+
+<UL>
+
+  <LI><A HREF="#name">NAME</A></LI>
+  <LI><A HREF="#synopsis">SYNOPSIS</A></LI>
+  <LI><A HREF="#description">DESCRIPTION</A></LI>
+  <UL>
+
+    <LI><A HREF="#process_command_line"><CODE>process_command_line</CODE></A></LI>
+    <LI><A HREF="#apply_filter"><CODE>apply_filter</CODE></A></LI>
+  </UL>
+
+</UL>
+<!-- INDEX END -->
+
+<HR>
+<P>
+<H1><A NAME="name">NAME</A></H1>
+<P>LogFile::Filter - Perl module for filtering out certain time stamps from
+a set of profiling data.</P>
+<P>
+<HR>
+<H1><A NAME="synopsis">SYNOPSIS</A></H1>
+<PRE>
+   use LogFile::Parser;
+   use LogFile::Filter;</PRE>
+<PRE>
+   LogFile::Filter::process_comand_line ();</PRE>
+<PRE>
+   my $profiling_data = LogFile::Parser::parse (&quot;profiling_data_1234.log&quot;);
+   $profiling_data = LogFile::Filter::apply_filter ($profiling_data);</PRE>
+<P>Sets up the inclusion and exclusion filters from the command line,
+filters the profiling data set, and returns a new, filtered list.</P>
+<P>
+<HR>
+<H1><A NAME="description">DESCRIPTION</A></H1>
+<P>The LogFileFilter holds an inclusion and an exclusion filter which allow
+to derive a sub-set of interesting time stamps from a given set of profiling
+data.</P>
+<P>Both filters are specified through a file of regular expressions used
+for matching function/scope names and messages each.  The inclusion
+filter is used for keeping only those time stamps in the data set that
+match a regular expression.  An empty inclusion filter does not change
+the data set.  The exclusion filter is used to remove all time stamps
+that match a regular expression.  If both filters are given then a
+time stamp remains in the data set if it matches a regular expression
+of the inclusion filter but none of the exclusion filter.</P>
+<P>Keep the following things in mind:</P>
+<UL>
+<LI>
+Function/scope name and message of a time stamp are divided by the
+string ' : '.
+<P></P>
+<LI>
+Function/scope name or message but not both may be empty.
+<P></P></UL>
+<P>
+<H2><A NAME="process_command_line"><CODE>process_command_line</CODE></A></H2>
+<P>Looks for the options -i &lt;filename&gt; and -e &lt;filename&gt; in @ARGV.  If it finds
+either or both of them it removes them from @ARGV and initializes the respective
+filter.  The files have to be simple text files with one regular expression per
+line with optional empty lines or comment lines whose first character is a '#'.
+Those are ignored.</P>
+<P>
+<H2><A NAME="apply_filter"><CODE>apply_filter</CODE></A></H2>
+<P>Apply the inclusion and exclusion filters to the given list of profiling data
+sets.  The returned value is a new filtered list of data sets.
+The list of data sets taken as argument and returned have the same structure as
+that returned by <CODE>LogFileParser::parse</CODE>.</P>
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

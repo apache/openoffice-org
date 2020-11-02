@@ -1,0 +1,642 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>OpenOffice.org - Makefiles description</title>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/tools/">tools</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+  
+<h2>Makefiles Description</h2>
+<p>The <code>dmake</code> tool uses <code>makefile.mk</code>.</p>
+<p>The following sections describe the general structure of 
+<code>makefile.mk</code> makefiles. </p>
+<ul>
+  <li><a
+ href="#3.5.2.GeneralStructureofmakefile.mkMakefiles%7Coutline">General
+Structure of <code>makefile.mk</code> Makefiles</a></li>
+  <li><a
+ href="#3.5.3.GenerationofObjectFilesandLibraries%7Coutline">Generation
+of Object Files and Libraries</a></li>
+  <li><a
+ href="#3.5.4.GenerationofResourceFiles%7Coutline">Generation
+of Resource Files</a></li>
+  <li><a
+ href="#3.5.5.GenerationofApplications%7Coutline">Generation
+of Applications</a></li>
+  <li><a
+ href="#3.5.6.GenerationofSharedLibrariesorDynamicLinkLibraries%7Coutline">Generation
+of Shared Libraries or Dynamic Link Libraries</a></li>
+  <li><a
+ href="#3.5.7.InternalStructureoftheMakefiles%7Coutline">Internal
+Structure of the Makefiles</a>
+  <ul>
+    <li><a
+ href="#3.5.7.1.Thesettings.mkfile%7Coutline">The <code>settings.mk</code>
+file</a></li>
+    <li><a
+ href="#3.5.7.2.Thetarget.mkfile%7Coutline">The <code>target.mk</code>
+file</a></li>
+  </ul>
+  </li>
+  <li><a
+ href="#3.5.8.SettingAdditionalOptions%7Coutline">Setting
+Additional Options</a></li>
+  <li><a
+ href="#3.5.9.CreationofAdditionalTargets%7Coutline">Creation
+of Additional Targets</a>
+  <ul>
+    <li><a
+ href="#3.5.9.1.AddTargetstoall%7Coutline">Add Targets
+to <code>all</code></a></li>
+    <li><a
+ href="#3.5.9.2.AddingTargetstoaMakefileThatIncludeTargets%7Coutline">Adding
+Targets to a Makefile That Include Targets</a></li>
+    <li><a
+ href="#3.5.9.3.DeclaringDependenciesBeforeAddingTargets%7Coutline">Declaring
+Dependencies Before Adding Targets</a></li>
+  </ul>
+  </li>
+</ul>
+<h3><a name="3.5.2.GeneralStructureofmakefile.mkMakefiles|outline"></a>General
+Structure of <code>makefile.mk</code> Makefiles</h3>
+<p>The general outline of makefiles is as follows: </p>
+<table border="1" cellspacing="0" cellpadding="5" width="746">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <pre>
+PRJ=..
+
+PRJNAME=SW
+
+TARGET=core
+
+.include:settings.mk
+
+# use the predefined macros
+
+.include:target.mk
+
+      </pre>
+      <br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>The following table describes the macros you use in the general outline
+of a makefile. </p>
+<table border="1" cellspacing="0" cellpadding="5">
+  <caption>General Macros Used in <code>makefile.mk</code></caption><tbody>
+    <tr valign="top">
+      <th>Macro</th>
+      <th>Functional Description</th>
+    </tr>
+    <tr valign="top">
+      <td><code>PRJ</code></td>
+      <td>This macro gives the relative position of the root of the current
+module.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>PRJNAME</code></td>
+      <td>This macro gives the name of the module. This name must be unique
+within the tree.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>TARGET</code></td>
+      <td>This macro specifies an identifier for the current directory. This
+name must be unique within the module, or a filename conflict may occur in
+the output or the <code>solver</code> tree. </td>
+    </tr>
+  </tbody>
+</table>
+<h3><a name="3.5.3.GenerationofObjectFilesandLibraries|outline"></a>Generation
+of Object Files and Libraries</h3>
+<p>The following table describes the macros you use to generate object files
+and libraries. The <var>x</var> in these macros signifies a number between
+one and nine. This specifies support for up to nine different libraries. 
+</p>
+<table border="1" cellspacing="0" cellpadding="5">
+  <caption>Macros for Generating Object Files and Libraries</caption><tbody>
+    <tr valign="top">
+      <th>Macro</th>
+      <th>Functional Description</th>
+    </tr>
+    <tr valign="top">
+      <td><code>OBJFILES=$(OBJ)$/file1.obj $(OBJ)$/file.obj  <br>
+SLOFILES=$(SLO)$/file1.obj $(SLO)$/file.obj </code></td>
+      <td>You must set this macro to generate the appropriate object files
+from the following source files: 
+      <ul type="disc">
+        <li><code>file1.cxx</code></li>
+        <li><code>file2.cxx</code></li>
+      </ul>
+      <p>This macro ensures that the build process creates the object files
+for the compiler in the <code>obj</code> or <code>slo</code> directory of
+the output tree. On Linux,  Solaris, and Mac OS X, this creates dummy <code>.obj</code>
+files as well as the <code>.o</code>files in the <code>obj</code> directory.
+      </p>
+      <p>You can use these targets can be used to compile C and C++ sources
+found in different locations.  See the <code>rules.mk</code> file for details.
+      </p>
+      <p>The build process usually creates a library from the object files
+in the <code>lib</code> subdirectory of the output tree. The name of this
+library is the value of the <code>$TARGET</code> variable. On Linux, Solaris,
+and Mac OS X the libraries are dummy libraries containing only the names
+of the dummy <code>.obj</code>files. </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td><code>LIBTARGET=NO</code></td>
+      <td>Set this macro when you do not want to build a library.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>LIBxTARGET=$(LB)$/name.lib</code></td>
+      <td>You can use several library macros of this form to build  libraries
+that do not consist of all object files in a directory  or to merge different
+libraries.  </td>
+    </tr>
+    <tr valign="top">
+      <td><code>LIBxARCHIV=$(LB)$/libname.a</code></td>
+      <td>Sets up support for static linking of libraries. Linux, Solaris,
+and Mac OS X  support this macro.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>LIBxOBJFILES</code></td>
+      <td>Specifies object files to bind into linked libraries.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>LIBxFILES</code></td>
+      <td>Specifies further files to link into the linked library.</td>
+    </tr>
+  </tbody>
+</table>
+<h3><a name="3.5.4.GenerationofResourceFiles|outline"></a>Generation of Resource
+Files</h3>
+<p>The following table describes the macros you use to generate resource
+files. The German language resource files are built by default. To support
+other locales, the environment variable <code>UPDATER</code> must be set
+to YES and the corresponding locale environment variable <code>RES_<i>language</i></code>
+must also be set. </p>
+<p>The <i>x</i> in these macro names signifies a number between one and nine.
+This specifies support for up to nine different resource files. </p>
+<table border="1" cellspacing="0" cellpadding="5">
+  <caption>Macros for Generating Resource Files</caption><tbody>
+    <tr valign="top">
+      <th>Macro</th>
+      <th>Functional Description</th>
+    </tr>
+    <tr valign="top">
+      <td><code>SRCFILES=file1.src file2.src</code></td>
+      <td>You must set up this macro to generate resource files. To create
+one resource file from these files the <code>$(TARGET).srs</code> file is
+created in the <code>srs</code> subdirectory of the output tree, for example:
+      <p><code>SRCTARGET = $(SRS)$/$(TARGET).srs</code></p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td><code>SRSxNAMES</code> and <code>SRSxFILES</code></td>
+      <td>You can use these macros to support the building of several <code>srs</code>
+files.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>RESLIBxNAME</code> and <code>RESLIBxSRSFILES</code></td>
+      <td>You can use these macros to build resource DLLs.</td>
+    </tr>
+  </tbody>
+</table>
+<p>You can also set the <code>give_me_all_languages</code> environment variable
+to build resource files for languages. However, this builds resource files
+for <em>all</em> languages.</p>
+<h3><a name="3.5.5.GenerationofApplications|outline"></a>Generation of Applications</h3>
+<p>The following table describes the macros you use to generate applications.
+The <var>x</var> in these macro names signifies a number between one and
+nine. This specifies support for up to nine different applications. </p>
+<table border="1" cellspacing="0" cellpadding="5">
+  <caption>Macros Used for Generating Applications</caption><tbody>
+    <tr valign="top">
+      <th>Macro</th>
+      <th>Functional Description</th>
+    </tr>
+    <tr valign="top">
+      <td><code>APPxTARGET</code></td>
+      <td>Indicates the filename of the application. The application is always
+built in the <code>bin</code> directory of the output tree.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>APPxOBJS</code></td>
+      <td>Indicates object files that link to the application. Do not use
+this macro to build objects, as it does not recognize dependencies.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>APPxSTDLIBS</code></td>
+      <td>Indicates import libraries that link to the application. These
+are standard binary libraries, such as <code>.a</code> and <code>.so</code>
+files.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>APPxLIBS</code></td>
+      <td>Indicates libraries from the same module that link to the application.
+For UNIX these are simple text lists of object files,  rather than normal
+binary libraries. </td>
+    </tr>
+    <tr valign="top">
+      <td><code>APPxDEF</code></td>
+      <td>Specifies a definition file, if you use one in linking. For Win32
+only.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>APPxDEPN</code></td>
+      <td>Specifies dependencies.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>APPxRES</code></td>
+      <td>Specifies system resources. For Win32 only.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>APPxICON</code></td>
+      <td>Specifies an application icon. For Win32 only.</td>
+    </tr>
+  </tbody>
+</table>
+<h3><a
+ name="3.5.6.GenerationofSharedLibrariesorDynamicLinkLibraries|outline"></a>Generation
+of Shared Libraries or Dynamic Link Libraries</h3>
+<p>The following table describes the macros you use to generate shared libraries
+or dynamic link libraries (DLLs). The <var>x</var> in these macro names signifies
+a number between one and nine. This specifies support for up to nine different
+shared libraries. </p>
+<table border="1" cellspacing="0" cellpadding="5">
+  <caption>Macros Used for Generating Shared Libraries or DLLs</caption><tbody>
+    <tr valign="top">
+      <th>Macro</th>
+      <th>Functional Description</th>
+    </tr>
+    <tr valign="top">
+      <td><code>SHLxTARGET</code></td>
+      <td>Indicates the filename of the shared library. 
+      <p>In Win32, shared libraries are always built as <code>$(shlxtarget).dll</code>
+and are created in the <code>bin</code> directory of the output tree. </p>
+      <p>In UNIX, shared libraries are built as <code>lib$(shlxtarget).so</code>
+and are located in the <code>lib</code> directory of the output tree.</p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td><code>UPD and DLLPOSTFIX</code></td>
+      <td>Provide platform and release independent names, for example: <code>bla$(UPD)$(DLLPOSTFIX)</code>
+results in <code>bla599mi.dll</code> for release 599 on Windows NT.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>SHLxOBJS</code></td>
+      <td>Specify the object files that are used to create the library.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>SHLxSTDLIBS</code></td>
+      <td>Links import libraries.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>SHLxLIBS</code></td>
+      <td>Specifies libraries from the same module to put into the shared
+library. </td>
+    </tr>
+    <tr valign="top">
+      <td><code>SHLxDEF</code></td>
+      <td>Specifies the exported symbols file. For Win32 only.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>SHLxDEPN</code></td>
+      <td>Indicates dependencies.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>SHLxRES</code></td>
+      <td>System dependent resources use this macro.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>SHLxIMPLIB</code></td>
+      <td>Specifies an import library to create. For Win32 only. </td>
+    </tr>
+    <tr valign="top">
+      <td><code>DEFxNAME</code></td>
+      <td>Specifies the name of the definition file. This is usually a similar
+name to the shared library.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>DEFxDEPN</code></td>
+      <td>Indicates definition file dependencies.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>DEFLIBxNAME</code></td>
+      <td>Specifies the library name to parse for symbols. For Win32 only.
+      </td>
+    </tr>
+    <tr valign="top">
+      <td><code>DEFxDES</code></td>
+      <td>A comment on the definition file.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>DEFxEXPORTyy</code></td>
+      <td>A symbol name. The <i>y</i> in this macro name signifies a number
+from 1-99.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>DEFxEXPORTFILE</code></td>
+      <td>A file of symbols to export.</td>
+    </tr>
+  </tbody>
+</table>
+<p>The following example shows how you can use these macros:</p>
+<pre>
+$(MISC)$/$(SHLxTARGET).flt: 
+
+	@echo string &gt;&gt; $@
+</pre>
+<p><b>Note:</b> The new line and indentation are necessary for these lines
+to work.</p>
+<p>This command generates a filter file for automatically creating a definition
+file. The <code>ldump</code> tool parses the library specified in <code>DEFLIBxNAME</code>
+for symbols, removes all symbols that match the string in the <code>*.flt</code>
+file, and writes the resulting list into the definition file. </p>
+<p>You can only do this for Win32. A similar process for Linux, Solaris,
+and Mac OS X is planned. </p>
+<h3><a name="3.5.7.InternalStructureoftheMakefiles|outline"></a>Internal
+Structure of the Makefiles</h3>
+<p>Each makefile contains an include directive to a <code>settings.mk</code>
+file, followed by an include directive to a <code>target.mk</code> file.
+The following sections describe these files. </p>
+<h4><a name="3.5.7.1.Thesettings.mkfile|outline"></a>The <code>settings.mk</code>
+file</h4>
+<p>The file <code>settings.mk</code> sets all the global settings for the
+makefiles. It sets macros, based on the following: </p>
+<ul type="disc">
+  <li>The underlying operating system.</li>
+  <li>The compiler used.</li>
+  <li>The version of the office suite you are building.</li>
+</ul>
+<p>For example, it sets the name of the compiler used, linker, or library
+manager. It can also define the names of libraries, compiler switches, and
+link switches.</p>
+<p>In the <code>target.mk</code> file, the standard target is predefined
+depending on the macros you set. For example, it can contain statements for
+linking applications, libraries, or resources. Typically, the <code>include</code>
+directive gets these files from <code>solenv/inc</code>.  Typically, the
+include directive gets these files from solenv/inc.</p>
+<p>There are other makefiles that specify particular settings that control
+parts of the build. The following table describes these special settings 
+makefiles. These makefiles are included by either  <code>settings.mk</code>
+or <code>target.mk</code>.</p>
+<table border="1" cellspacing="0" cellpadding="5">
+  <caption>Special Settings Files for Makefiles</caption><tbody>
+    <tr valign="top">
+      <th>Makefiles</th>
+      <th>Description</th>
+    </tr>
+    <tr valign="top">
+      <td><code>unitools.mk</code></td>
+      <td>This file defines macros for tools which are available on different
+platforms, for example: 
+      <ul type="disc">
+        <li>AWK</li>
+        <li>COPY</li>
+        <li>FIND</li>
+        <li>TYPE</li>
+        <li>TOUCH</li>
+      </ul>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td><code>[upd]minor.mk</code></td>
+      <td>Macros such as <code>BUILD</code> and <code>LAST_MINOR</code> are
+set in this file.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>libs.mk</code></td>
+      <td>The platform-dependent environment setup for <code>LIBRARIES</code>
+is stored in this file.</td>
+    </tr>
+    <tr valign="top">
+      <td><var>platform-name</var><code>.mk <br>
+(os2.mk, wnt.mk, unx.mk)</code></td>
+      <td>These makefiles specify platform-dependent characteristics, for
+example: 
+      <ul type="disc">
+        <li>CC</li>
+        <li>LINK</li>
+        <li>LIB</li>
+        <li>FLAGS</li>
+        <li>LINKFLAGS</li>
+      </ul>
+      <p>Other platform-specific makefiles may also exist. For example:</p>
+      <ul type="disc">
+        <li><code>unxsols2.mk</code></li>
+        <li><code>unxlngi4.mk</code></li>
+      </ul>
+      <p>These files typically contain variables which are used to change
+the build:</p>
+      <ul>
+        <li><code>CDEFS</code> general compiler defines (C/C++)</li>
+        <li><code>CFLAGS</code> general compiler flags (C/C++)</li>
+        <li><code>CFLAGSCC</code> extra C-only compiler flags</li>
+        <li><code>CFLAGSCXX</code> extra C++ only compiler flags</li>
+      </ul>
+      <p>In addition there are flags enabled for profiling or debug builds:</p>
+      <ul>
+        <li><code>CFLAGSPROF</code></li>
+        <li><code>CFLAGSDEBUG</code> <br>
+The typical value for Linux, Solaris, and Mac OS X platforms for <code>CFLAGSDEBUG</code>
+is <code>-g</code>.</li>
+      </ul>
+      <p>There are corresponding linker flags for profiled and debug builds:</p>
+      <ul>
+        <li><code>LINKFLAGSPROF</code></li>
+        <li><code>LINKFLAGSDEBUG</code></li>
+      </ul>
+      <p>There is also support for whether the target is a command-line user
+interface (CUI) or graphical user interface (GUI), whether it is an object
+or shared library and whether it is single-threaded (ST) or multi- threaded
+(MT) by using the following flags:</p>
+      <ul>
+        <li><code>CFLAGSOBJGUIST</code> GUI, object, single-threaded</li>
+        <li><code>CFLAGSOBJCUIST</code> CUI, object, single-threaded</li>
+        <li><code>CFLAGSOBJGUIMT</code> GUI, object, multithreaded</li>
+        <li><code>CFLAGSOBJCUIMT</code> CUI, object, multithreaded</li>
+        <li><code>CFLAGSSLOGUIMT</code> GUI, object, multithreaded</li>
+      </ul>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td><code>rules.mk</code></td>
+      <td>This files specifies the rules for compiling the following types
+of file: 
+      <ul type="disc">
+        <li><code>.asm</code></li>
+        <li><code>.c</code></li>
+        <li><code>.cxx</code></li>
+        <li><code>.idl</code></li>
+        <li><code>.dpc</code></li>
+      </ul>
+      <p>There may be many rules to build each type of file. From these rules,
+existing source files can build targets. </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h4><a name="3.5.7.2.Thetarget.mkfile|outline"></a>The <code>target.mk</code>
+file</h4>
+<p>After the include of <code>settings.mk</code>, the next major include
+is the <code>target.mk</code> file which describes how to build the targets
+of each platform. The <code>target.mk</code> file is divided into the following
+parts: </p>
+<ol>
+  <li>Expansion of the overall targets.</li>
+  <li>Dependency order.</li>
+  <li>Description of the following individual targets: 
+    <ul type="disc">
+      <li><code>_tg_def.mk</code> - the definition files for shared libraries
+(DLLs).</li>
+      <li><code>_tg_sdi.mk</code> - the target definition for the IDL (<code>svidl</code>)
+files.</li>
+      <li><code>tg_obj.mk</code> - the building of the library from object
+files.</li>
+      <li><code>tg_slo.mk</code> - the building of the library from <code>.slo</code>
+files.</li>
+      <li><code>_tg_lib.mk</code> - the building of the library from any
+files.</li>
+      <li><code>_tg_srs.mk</code> - the translation of the <code>.src</code>
+files.</li>
+      <li><code>_tg_res.mk</code> - the translation of the <code>.srs</code>
+files.</li>
+      <li><code>_tg_rslb.mk</code> - generation of the resource DLLs.</li>
+      <li><code>_tg_shl.mk</code> - generation of the shared libraries.</li>
+      <li><code>tg_jar.mk</code> - generation of the jar files.</li>
+      <li><code>tg_dep.mk</code> - generation of the dependencies.</li>
+    </ul>
+  </li>
+</ol>
+<p>The file also includes the descriptions of many further targets such as
+<code>killobj</code>, <code>killbin</code>, and so on. </p>
+<h3><a name="3.5.8.SettingAdditionalOptions|outline"></a>Setting Additional
+Options</h3>
+<p>You use the macros described in the following table to set additional
+options. </p>
+<table border="1" cellspacing="0" cellpadding="5">
+  <caption>Macros for Setting Special Options</caption><tbody>
+    <tr valign="top">
+      <th>Makefiles</th>
+      <th>Description</th>
+    </tr>
+    <tr valign="top">
+      <td><code>ENVCFLAGS</code></td>
+      <td>This macro supports additional compiler options for C.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>ENVCXXFLAGS</code></td>
+      <td>This macro supports additional compiler options for C++.</td>
+    </tr>
+    <tr valign="top">
+      <td><code>ENVLINKFLAGS</code></td>
+      <td>This macro supports additional linker options.</td>
+    </tr>
+  </tbody>
+</table>
+<h3><a name="3.5.9.CreationofAdditionalTargets|outline"></a>Creation of Additional
+Targets</h3>
+<p>The following sections describe ways to create additional targets in a
+makefile. </p>
+<h4><a name="3.5.9.1.AddTargetstoall|outline"></a>Add Targets to <code>all</code></h4>
+<p>To build targets other than the default targets that are created by the
+<code>target.mk</code> file, follow these steps: </p>
+<ol>
+  <li>Add the targets to the target <code>all</code> as dependencies.</li>
+  <li>End the list of targets with <code>ALLTAR</code>.</li>
+  <li>Make sure <code>target all</code> precedes the include of <code>target.mk</code>
+in the makefile.</li>
+</ol>
+<p>If you write your target in a platform independent form without using
+any hard-coded pathnames, ensure that your target appears before the <code>.include:target.mk</code>
+directive. If this works, this is an acceptable way to create an additional
+target. </p>
+<h4><a name="3.5.9.2.AddingTargetstoaMakefileThatIncludeTargets|outline"></a>Adding
+Targets to a Makefile That Include Targets</h4>
+<p>The typical way to add a target is to add it to an existing <code>makefile.mk</code>
+that already includes targets. This causes the following problems:</p>
+<ul>
+  <li>If you place your target before the <code>.include:target.mk</code>
+directive in the makefile, it disables the global targets.</li>
+  <li>If you place your target after the <code>.include:target.mk</code>
+directive, <code>dmake</code> does not build the target.</li>
+  <li>If you try to build your target by using the technique in the following
+sample, you may encounter several other problems. 
+    <table border="1" cellspacing="0" cellpadding="5" width="746">
+      <tbody>
+        <tr>
+          <td valign="top">
+          <pre>
+
+
+all: \
+
+	<var>new-target</var> \<br><br>	ALLTAR<br><br></pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>The first target is always built. When doing an initial build, <code>dmake</code>
+enters states where no <code>ALLTAR</code>is defined and displays an error
+message and stops.</p>
+    <p>There is also no guaranteed order of execution of those two targets.
+It may work most of the time and produce unusual errors on multiprocessor
+machines.</p>
+  </li>
+</ul>
+<h4><a name="3.5.9.3.DeclaringDependenciesBeforeAddingTargets|outline"></a>Declaring
+Dependencies Before Adding Targets</h4>
+<p>Define explicit dependencies as follows:</p>
+<table border="1" cellspacing="0" cellpadding="5" width="746">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <pre>
+
+
+#this object depends on generated source
+
+$(OBJ)$/myobject.obj : $(MISC)$/myobject.cxx
+
+      </pre>
+      <br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>Then define the target to generate the source file after this statement.
+If this object is needed now, there is a dependency on the source file and
+the target is executed. You must define all the targets and dependencies
+after the <code>.include:target.mk</code>directive.</p>
+<p>There is still a potential problem of conflicts with targets added to 
+the global makefiles in the future. If something in the build environment
+changes and affects your target, it may be difficult to identify the change.</p>
+<br>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
