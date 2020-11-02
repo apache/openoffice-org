@@ -1,0 +1,1460 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <title>IRC Conference log</title>
+  <style type="text/css">
+    #tabs, #apphead, #leftcol, #projecttools,
+    .docs, #toc, .docs, .courtesylinks { display: none }
+  </style>
+</head>
+<body>
+
+<h1>IRC Conference log</h1>
+<h2>
+   Addon development:
+   another way to bring value to OpenOffice.org<br />
+   by Laurent Godard <br />
+   <a href="../slides/30-April-2005-Addon-Development.sxi">Download Slides</a>
+</h2>
+
+<!--  ====================  -->
+<!--       LOG STARTS       -->
+<!--  ====================  -->
+
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  == Slide 1 ==
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Hi all
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  First of all, I want to apologize for my english that may not be as fluent as yours
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  My speech is dedicated to addons production for OOo. Addons or extension is a great way to extend OOo capabilities without diving into source code. It is just an other way to add functionalities to OOo
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  I won't go into details but try to give an overall overview and let us discuss after that
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  == Next Slide : 2 ==
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  I'll cover briefly these points from my own experience and try to propose some ideas on organizing addons production and delivery to end-users
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  == Next Slide : 3 ==
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Here some details about me. We are all over the world, everyone with different culture and way of life. I think it is important to hang relations to real life details.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  nice picture
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  sure
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  ;-)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  == Next Slide : 4 ==
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  :)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  I've been involved in OOo development for now a while. I provided two tools requested by users: DicOOo and FontOOo (and some other perharps less known)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  French spellchecker can not be delivered within OOo. And the deployement has to be multiplateform and easy to end-users. A very few of them did know which files to install and which ones to modify to setup OOo french spellhecker. I wrote DicOOo, a macro, that allow a transparent installation (initially asked by Sophie, our leader, thanks Sophie). It then came it was usefull for all other languages as OOo can not deliver all di
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  FontOOo came few months after to deal with free fonts management. Based on a remote list of free fonts, it proposes to install fonts at OOo level. The interesting point is that it allows to write documents that can be viewed the same on different location, provided we use free fonts. Bitstream fonts are already shipped with OOo. FontOOo allows to extend this kind of interoperability.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  The principle of these two tools is rather simple. A cenralized list, pointing on ressources. The user selects what he wants and the tool retreives the files, unzips and intall them, modifying the configuratiobn file in the case of DicOOo.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DicOOo is in a standalone file as addon deployement is not so easy for end-users and it can contains various translations. Moreover it allowed the easiest way of update in the earliest stages. DicOOo is currently be rewritten
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  == Next Slide : 5 ==
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  I learned a lot writing these tools. Obviously at a technical point of view with API, but also regarding methodology. I did bad things and promise i won't do them the next time. I also discovered what a community is and how it can be powerfull.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Some of the coming points are obvious but newcomers may be happy to know them before starting.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  The main drawback of DicOOo is that it was not initially intended to be internationally delivered. All the source code is in my native language and this a very bad feature. Write your code in english (even bad one)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  I discovered the power of a community when i first call for testers. I've been fed up with tons of e-mails and people were so enthusiastic with a lot of very good ideas to improve my macro. Don't hesitate, call for reviewers at early stage. I thanks all of them here
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  OOo is multiplatform. An OOo tool has to respect this. A lot is provided inside OOoBasic and the API to address this. Think to it while writing and call for testers on various platform. Generally, it is very easy to handle all platforms . For example OOoBasic provides GetGuiType, ConvertFromURL, ConvertToURL ... helper functions. For path and filename, always work with URL and go back to system notation only if needed
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  OOo is multilingual. This is an important point which should be always addressed. Even a rough mechanism, such as in DicOOo, can be sufficient for a first shoot. It can be a good idea to make the translations strings available as plain text so that even non technical people inside native-lang communities can help you. 
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  == Next Slide : 6 ==
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  With DicOOo, i experimented a self update feature. i think i won't keep it for the next version i am writing but it has been of great help at the early stages. For bug hunting but also for adding translations
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  When writing your GUI, think to end-users as if they discovered a wizard for the first time. It has to be as clear as possible. OOo Dialogs have the "step" property. It is magic and helps you writing different pages inside a same dialog. A Next button increasing this step property, and all the GUI elements having their step property at the same value (or 0) are automatically displayed
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  And remember, a good addon (or extension), has to address some points : of course respond to a need but also be end-user oriented and internally respect OOo philosophy. Not only three buttons thrown on a dialog. There are a lot of things behind as we've seen
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  == Next Slide : 7 ==
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  So who can be an addon developer ? Everybody that have basic skills in a supported language or whiling to learn them.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Of course OOo needs core developers, and if you have the skills to help as one of them, Go ! Don't hesitate ! OOo needs you!
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  But, if you not have all the required knowledge you can develop some nice features thanks to UNO bridges.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  More and more languages are supported internally as macros and with OOo 2.0, you will be able to use OOoBasic, Java, Python ...
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  == Next Slide : 8 ==
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  An addon is a self-contained zip file, containing all what is needed : the source code, the addon.xcu and other stuff if needed. So the Addon packaging is rather simple.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  As a lot of discussion occurred past weeks about addons and extensions deployment showing some misunderstanding. I encourage to read the Developer's Guide. Especially chapter 4.7.3 but all chapter 4 is great
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Please note that installing an addon using OOo tools (unopkg, pkgchk) only deals with OOo configuration and do not alter the system at any level. Moreover, the hierarchy of xcu files (difference between share and user level) is strongly respected.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  == Next Slide : 9 ==
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  A lot af valuable work already exists but it faces a problem of audience and standardization for end-users. They are sometimes hard to find, end users do not know how to install them (should change with OOo2). Moreover, people wanting to start with writing addons do not sometimes how to start
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  So here are some ideas in order to built a system allowing to provide end-users a lot af valuable productions
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  I personally think that this task should be handled by a dedicated team. Promoting the system and organizing it. The scripting project seems to be a right place.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  A lot preliminary structural work should be done in order to attract new addon developers. Developing tools to help starting, defining the context of addon submission. I think native-lang projects have a key role in this as contributor will usually start speaking of their addon in their community.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  == Next Slide : 10 ==
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  For developers, some documentation can be centralized at an entry point. The URL, the document has not to be translated at the beginning but a clear methodology, dealing with each supported languages should be written
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Then helpers tools can be provided.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  XRay is mandatory and should perhaps be included in OOo by default. It is a tool that allow to pass an OOo object (say a table) and explore its properties and methods. It is connected to the IDL reference so that it brings contextual help. It is available for OOoBasic and Python. It can be written for other languages as it uses OOo introspection utilities.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  An addon creator also exists in french for OOoBasic macros, creating the xcu file and zipping the package. It could help newcomers for their first addon creation. The xcu file structure is very well explained in the developper's guide
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  These two tools have been developped by Bernard Marcelly.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  A standard model of wizard/autopilot could be written, so that contributor start to focus on their addon functionality and have no deep knowledge to know before having some results. They will acquire knowledge step by step, but psychologically  speaking it is better not to have barriers to cross before having results.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  all of this could perhaps be packaged inside an "addon for developers"
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  for the ones who want to already get started with OOoBasic, you can visit Ian's very interesting site : http://ext.openoffice.org. You'll find valuable resources there as a good starting point to write OOoBasic macros
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  == Next Slide : 11 ==
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  OOo is now heavy enough. It has to think to be 'modular'. Not all functionalities have perhaps to be included in core development. Only the one that are widely used.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  This is now possible due to the ease provided by OOo 2.0.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  An advanced GUI can be defined to show end-users the content of a repository and let them install the addon they need. A prototype has been proposed by Ian. It can be a starting point. The other side is the submission of the addon. OOo project has to be careful, using the right disclaimers and only accept, IMHO, free submissions. Closed source addon should be rejected ...
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  == Next Slide : 12 ==
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  To finish, here are some ideas that could be good addons. The remote installer is the well known Goodies Bag requested for ages and proposed years ago by Sophie Gautier and kevin Hendricks.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  In fact, all idea are welcomed. Calculation tools (such as FitOO), games (such as LeBoolier), conversion utilities (such as BatchConv) can be addons. I don't have time now for my productions but think to it. 
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  == Next Slide : 13 ==
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  As i really love Ben's seagull, here it is. And it is right, We need you
+<br />
+   [<span style='color:#880; font-weight:900'>ericb2</span>]
+  hi
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Addon is really simple to produce. The hardest part is to find the information and deliver the result to end-users. Concerning API a lot of resources exists and mailing lists are open to ask questions. 
+<br />
+   [<span style='color:#a37; font-weight:900'>sgtmcd</span>]
+  I saw that poster in my army recruiting office.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  I hope these few words opened some gates to let OOo be a torrent of value added functionalities through addons
+<br />
+   [<span style='color:#a37; font-weight:900'>sgtmcd</span>]
+  well not exaclty.  :-)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Welcome to all in OOo scripting world
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Thanks to all
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  I would like to add that Laurent is one of the principal mentor of our dedicated "prog@fr" mailing list which has now about 200 mails/month [http://fr.openoffice.org/servlets/SummarizeList?listName=prog] 
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  and thank's a lot Laurent :)
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  clap clap clap clap clap clap clap
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  clap, clap, clap :)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  thanks Sophie :)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  thanks all
+<br />
+   [<span style='color:#808; font-weight:900'>Xhydrogene</span>]
+  Clip, clip, clip, Hourra !
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  thank you Laurent!
+<br />
+   [<span style='color:#800; font-weight:900'>AgnesB</span>]
+  bravo Laurent :-)
+<br />
+   [<span style='color:#890; font-weight:900'>willysr</span>]
+  bravo bravo
+<br />
+   [<span style='color:#854; font-weight:900'>southerncross</span>]
+  congratulations, Laurent
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: I really like your ideas.
+<br />
+   [<span style='color:#854; font-weight:900'>southerncross</span>]
+  and sorry for the delay (a subway issue)
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: I really liked the one about having a pre-made wizard and an installer that makes the .zip package for you.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  charles: no problem, all is logged :)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  the installer already exists for OOoBasic
+<br />
+   [<span style='color:#5a0; font-weight:900'>luco</span>]
+  Clap clap clap clap clap clap clap clap clap 
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  i think it is in french only but could be translted
+<br />
+   [<span style='color:#880; font-weight:900'>ericb2</span>]
+  lgodard : I'm interested too
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  AgnesB : would you be willing to translate FR documentation about add-on to made it available for Doc project ?
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Btw, the website Laurent mentioned is http://ext.openoffice.org.nz
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  oups, sorry for that
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  lgodard: Hi, I came a lil bit late, but I wonder if there is a link sheet that can point out the main resource and documentation to develop OOo Extensions. I knew about the wiki recently and I think is a great idea, but I want to find the information so it can be localized.  As you said there are some extensions but they are written in french. We (in the spanish community) have translated some french reosources but finding the location is what makes it hard.
+<br />
+   [<span style='color:#a37; font-weight:900'>sgtmcd</span>]
+  Daniel and I started a oooauthors doc (way too long ago) attempting to document and help new developers.  obviously both of us are not developers so it didn't get very far.  I think what you have done here is wonderful.
+<br />
+   [<span style='color:#800; font-weight:900'>AgnesB</span>]
+  Sophie: glad if I can help
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  AgnesB : thanks a lot :)
+<br />
+   [<span style='color:#854; font-weight:900'>southerncross</span>]
+  this site is really well done actually. It's a pity we haven't heard about its author earlier
+<br />
+   [<span style='color:#854; font-weight:900'>southerncross</span>]
+  btw who is sgtmcd?
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  what is needed is yes a portal inside the OOo domain
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  only dealing with addons 
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  lgodard : +1
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  not API, but only submitting and delivering, and of course starting
+<br />
+   [<span style='color:#548; font-weight:900'>thing</span>]
+  Thanks, lgodard. I was wondering whether you can comment on how easy/difficult it is to integrate proven addons to the core? E.g. DicOOo is called by opening a document instead of an integrated macro
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  and finding oinfo
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: Personally I find the developers guide overwhelming. I think we need something simpler, tutorial-style. That's why I'm glad to see ext.ooo.nz
+<br />
+   [<span style='color:#854; font-weight:900'>southerncross</span>]
+  lgodard: inside the OOo domain is a very important point
+<br />
+   [<span style='color:#854; font-weight:900'>southerncross</span>]
+  sgtmcd: nice to see we have an ookie on board, Shawn...
+<br />
+   [<span style='color:#a37; font-weight:900'>sgtmcd</span>]
+  thank you.
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  lgodard: for example, I have translate some developer resource like the PyUNO and UCB (universal controller broker) but actually seen what is relevant and what is too techie has not been easy to tell apart.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  thing: this was a quick workaround
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  thing : this is a process that is new and that we (OOo community) have to improve
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Sophie: yes,i agree
+<br />
+   [<span style='color:#800; font-weight:900'>AgnesB</span>]
+  Sophie: could you give me the link about this file to sure it's the right one?
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: It would be /great/ to have an addons page. Maybe we should talk to Russel (form OOoMacros) and ask him to participate. Obviously he's interested.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  sure
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  to nd with integration
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  nb/end
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: Though I think it should be setup different from OOoMacros. For example, it could have a "stable" section where all the add-ons are easy to install.
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  lgodard: sorry wasn't here earlier but what is the difference between macros and add-ons from a programatically point of view.
+<br />
+   [<span style='color:#800; font-weight:900'>AgnesB</span>]
+  ericb2: Hi , glad to see you here, we met last week end (Mulhouse)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  i think that the most of addons should remains external parts
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  example : last needed for cwsQA for community that is not documented. Laurent and EricB have to be the first occupant ;)
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: the macros at OOoMacros are sort of ad-hoc, each one is different.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: if addon remains on a website they will be less used, imho, that if we provide a browser and an installer inside OOo. As DicOOo do in fact
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  JZA : add-on is a self content package (.xcu file) that can be deployed easily by users or admins through share or user directory.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: I agree actually. I just felt that a website could be done sooner.
+<br />
+   [<span style='color:#a37; font-weight:900'>sgtmcd</span>]
+  lgodard, are you speaking of similar to how firefox does 'extensions'?
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  Sophie: but away from the packaging the code might be the same or not?
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  JZA: macros are inside OOo. It is code that is stored at OOo level. Addon is more packaged and contains also a file defining the menus and icons to add to the UI
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: The ideal is add-on installer installer inside OOo, like you said. But that won't happen for some time.
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  lgodard: got it
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: why ?
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: Because of the UI freeze...
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: I thought that develoers didn't like changing UI after the stable release.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: Not a problem, it could be an addon for the first releases. It should be
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  AgnesB : http://fr.openoffice.org/servlets/SummarizeList?listName=prog but be carefull that it should be upgrade to 2.0 about the GUI which is really simplified now, I'll tell you later ;)
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: cool!  :-)
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  Sophie: is there a place on the fr.openoffice.org where you allocate the developer resources and projects?
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: I'm happy to work with Agnes on that. Maybe I can help a little bit.
+<br />
+   [<span style='color:#800; font-weight:900'>AgnesB</span>]
+  Sophie: Thanks , I can already have a look on it
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: Are you working with Ian on the add-on installer?
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  JZA : we have a dedicated mailing list and a how-to section,  a book written by Laurent and Bernard (the benefit of this book is reversed to the community, thanks to the authors :)
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  cool! bravo Laurent.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: unfortunatelly, no. I remùember we exchanged some ideas but that's all
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: ok
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  JZA : we defirenciate core developments here : http://fr.openoffice.org/Laboratory/indexlabo.html
+<br />
+   [<span style='color:#a37; font-weight:900'>sgtmcd</span>]
+  I have to run.  lgodard, very impressive.  thank you.  I am clearing some of my schedule this week to read deaper.  
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Sophie: yes it is a key point to attract contributors
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: thank you for comming!
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  and language developments here : http://fr.openoffice.org/Documentation/How-to/indexht.html
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  sgtmcd:ok :)
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  Sophie: thanks
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  AgnesB, DanielC : ok, don't t hesitate if you have any question
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  can the scripting project be reactivated ? 
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: I look forward to this. Take care.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: who is in charge of scripting?
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  it may be the right place
+<br />
+   [<span style='color:#800; font-weight:900'>AgnesB</span>]
+  Sophie: Thanks a lot
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  scripting : dfoster
+<br />
+   [<span style='color:#854; font-weight:900'>southerncross</span>]
+  lgodard: is the scripting project supposed to be dead? It's been opened for the 2.0
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: real life name?
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  lgodard : yes, off course even if Dan is not there any more
+<br />
+   [<span style='color:#5a0; font-weight:900'>luco</span>]
+  Thanks Laurent and all !) I have to go
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  bye
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  DanielC : Dan Foster
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: thanks.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  souhterncross_of : this is a long time project but nobody has come to join it (I may be the only one ;)
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  what is the goal of the scripting project?
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  I think this is the real good place to put add-on for the community 
+<br />
+   [<span style='color:#854; font-weight:900'>southerncross</span>]
+  Sophie: ah... I think I may have confounded with another project
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  DanielC : collect add-on and scripts of any kind done by the community
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Ok.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Perfect project then.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  and provide entry points for new developers
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  like me!
+<br />
+   [<span style='color:#854; font-weight:900'>southerncross</span>]
+  it's really the best place
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  ;-)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  yes
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  :)
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  lgodard : yes, of course :)
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  http://scripting.openoffice.org/
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  thanks khirano :)
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  scripting is a site that has the same look and feel of other site, so even those who are NLC users know how to deal with it 
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  http://scripting.openoffice.org/servlets/ReadMsg?list=dev&msgNo=287
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  they don't need to learn a new GUI in Englis and a new way to download, find documentation, login and so on :)
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  lgodard: there is very small reference to the technical aspect of the scripting, is there are relevant links beside the one you mentioned
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  like the Chapter 4 of the Dev Guide
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  JZA: the developpers guide chapter 4
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  khirano : even though D.Foster has left, we can reactivate the site if we find that it fits our need.
+<br />
+   [<span style='color:#854; font-weight:900'>southerncross</span>]
+  DanielC: sorry this is a side question, how does it work between OOoAuthors and the Documentation project?
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  is that the only one?
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  lgodard: why don't you take the project over?
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  ok
+<br />
+   [<span style='color:#854; font-weight:900'>southerncross</span>]
+  lgodard: SF would love it :p
+<br />
+   [<span style='color:#854; font-weight:900'>southerncross</span>]
+  JZA: it is at least the best place for this
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  southerncross: Our present agreement is that OOoAuthors is a development site, and Docs is the user site. We are doing most of the work anyways, but they get posted at Docs.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  southerncross: http://documentation.openoffice.org/manuals/
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  southerncross: scroll down.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  khirano: it is a matter of team, looking at the preliminary job needed
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  JZA : has FR community has some knowledge here, we'll try to document it with the help of Agnes an Daniel,
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  :-)
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  lgodard: yes, you are right :)
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  ok
+<br />
+   [<span style='color:#800; font-weight:900'>AgnesB</span>]
+  :-)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  khirano: so the game is to count ourseleves
+<br />
+   [<span style='color:#854; font-weight:900'>southerncross</span>]
+  DanielC: thanks
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  and see if we have a basic foundtion we can start with
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  lgodard: I understand.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: I count for 1/2 because I'm very busy this comming month.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  scripting should not be dedidacated to only OOoBasic, we need all languages contributors
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  about the preliminary job needed, this is : document the code, QA of the package for multiplatform usage, translation... this is energy and resources :)
+<br />
+   [<span style='color:#854; font-weight:900'>southerncross</span>]
+  lgodard: it's important that an active developer (and a popular one) takes over the scripting project
+<br />
+   [<span style='color:#854; font-weight:900'>southerncross</span>]
+  lgodard: we need to get people motivated
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  lgodard: there are issues within Python however (not sure abou other languages) there seem to be very strict on the way python interact with OOo, for example you can't import other modules to the uno python
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  this limits the scripting potential of the binding
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  JZA: are you sure of that ? 
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  lgodard is overwhelmed most of the time, so may be we can think of other people too (I need Laurent as a developer ;)
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: Maybe we should approach Ken Foskey? He seemed interested in the add-ons.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  we can eb co-lead
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  yeah
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  lgodard: is documented
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  lgodard: and is a FAQ on the udk mailing list
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  lgodard : won't you think Bernard would be interested in participating ?
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  not sure if that has change recently with OOo 2 though
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Sophie: perharps asking him is the simpest
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  I know projects like thelessonica?? that have jump to Java (originally written in python) because the lack of flexibility of the bridge
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: Definitely talk to Ian, and Russ Phillips (OOoMacros).
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: yes
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  when back from hollydays
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  I think we have a big enough group to at least get started. Even if all of us are busy.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  yes
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  If everyone does a tiny bit, we can make progress.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  DanielC : imho, we need to define the process of reviewing the packages first
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: Ok. I don't know how this should work, so I'll follow your lead.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  then, also the documentation to make it available for the NLC
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Sophie: it is an important point
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  then, how to organize the standby between the acceptance and the upload to the site
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  then organize the site in an easy understanding for all users on how-to dowload and install the packages
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: and an easy way to upload packages.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Sophie+_: less important if a GUI is provided inside OOo
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: yes
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  DanielC : I was waiting for that one ;)
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  :-)
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  DanielC: what is the function of the package manager in OOo 2.x?
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  ssh + cvs is not difficult, even me I can deal with it every weeks :)
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  DanielC: was this propoused as the extension installer?
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  JZA: That would be in the Laaurent department.  :-)
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: Jean has been trying to get it working for months, without success.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: Ian never figured it out.
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  lgodard: what is the function of the package manager in OOo 2.x?
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: Once CVS is setup it's easy. But the setting up is not easy.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  DanielC : send them to me, I'm a pedagogist ;)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  what about licence policies ?
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: Jeah has already spent a lot of time with Louis, Scott and I think other people tring to get setup.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  Does she had an how-to with screen shots of every steps ?
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: AFAIK the documentation was very very poor.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  JZA: the package manager allows end-users to install addon inside OOo with a GUI, not dealing with command line
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  lgodard : licence shem would be the same has we have on FR site : LGPL for code and PDL for docuementation 
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Sophie:Daniel: i don't think we should be too techie for submitting
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: I agree, keep it simple.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Sophie: i completely disagree
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  for external addons
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: I would give choices like: BSD, LGPL and GPL.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  stick to "standard" FOSS licenses.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  and just a few, to reduce confusion.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  You know, pick licenses that are well understood.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: agree
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  :-)
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  sorry I've been disconnected 
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  ok
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: Laurent and I were just saying that we should limit it to standard licenses (e.g. BSD, LGPL, GPL) because they are well understood.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  to reduce confusion.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  the only licences accepted on the OOo site are : LGPL, PDL and [CC for non editing work]
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  i see the scripting project only a bridge between addon developeprs and end-users
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Sophie: this is a problem
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  but we can put the files elsewhere and just HTML links.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  if you want to add more licences that should be discuss by the CC and submited to him
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  I don't think that we should use the same policies for addons.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  I think someone should start with more choice of licenses. Then, if the addon is popular and they want it included in OOo they sign the JCA.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  Currently, I haven't seen any body refusing to licence his work under LGPL to put it on the OOo site, but
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Because even LGPL is not enough for OOo. The requirement is JCA.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: agree
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  if you think that this is real issue we can think about it
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: But LGPL is not enough for OOo.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  DanielC: JCA if for the code going into the core product only 
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  I thought that the only options were: JCA, PDL, CC
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  I'm holding add-on on the FR site and author didn't sign the JCA
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  DanielC : no if there is no licence, then the JCA apply, if this is LGPL, then LGPL apply without JCA
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  ok
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  as this is external work of core OOo
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  ok, I see.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  well, I feel better already :-)
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  may be only the one who are putting the work on the site need to sign JCA
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  I still want to think a bit more. I like the GPL. :-)
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  hhmm...
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  and in that case I can do it as I've signed both CA and JCA I can be responsible ;)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  we should not restrict to LGPL in order to attract more developeprs
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  for adons
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  I have a thought...
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  anything that is BSD can be re-licensed as LGPL.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  right?
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  So we can accept BSD work too.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  lgodard : ok, Daniel are you ok to sumbmit GPL for add-on at the next CC session ?
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: I can do that, sure.
+<br />
+   [<span style='color:#008; font-weight:900'>JZA</span>]
+  great talk, I am out
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  JZA: bye bye
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  jZA:bye
+<br />
+   [<span style='color:#854; font-weight:900'>southerncross</span>]
+  Laurent, thanks for your conference. Folks, have a nice week-end and see you on the lists!
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  DanielC : this is a diplomatic affair ;)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Sophie: i think we should restrict licenses as less as possible provided it's free
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  it is up to the en-user to decide to accept the addon or not
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  In any event, since BSD work can be turned into LGPL, then we should be able to accept BSD work. We can just say we are "relicensing". But since the user who downloads it still has permission (from the original author) to use it under the BSD...
+<br />
+   [<span style='color:#088; font-weight:900'>TiTiX</span>]
+  i think most of the end users do not care about licensing, they care about the features
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: I do see a point in keeping the number of licenses under control. Not every license.
+<br />
+   [<span style='color:#088; font-weight:900'>TiTiX</span>]
+  licence is a "develloper" problem no ?
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: the addon is under AgnesB certain licence. It stays under this licence. Otherwise, few addono will come
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  TiTiX: I think so.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  lgodard : this is not the first time I try to make GPL available,
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  AgnesB: sorry, don't understand what happens while typing
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: But on the other hand, having 200 different licenses can be confusing and cause other problems.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  but what if this addon is so popular that we want to add-it to the core product ?
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: well, we can't anyways because of the JCA.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Sophie: then ask politly the developper
+<br />
+   [<span style='color:#088; font-weight:900'>TiTiX</span>]
+  or go on shipping it separately as an add on =/
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  So no matter which license the developer picks, we still have to ask the developer to sign the JCA.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  DanielC : JCA could be signed afterwards, but relicencing is more difficult
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  it is an external code, nothing to do with OOo at first glance. It could have stay on a private site
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: Why is relicensing difficult? The moment you sign the JCA, you allow Sun to pick any license they want.
+<br />
+   [<span style='color:#088; font-weight:900'>TiTiX</span>]
+  DanielC: even if you had your code GPL'ed ?
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  (that's part of the idea of the JCA, it gives Sun more options)
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  TiTiX: Yes.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  TiTiX: The JCA means that Sun is a joint copyright holder, along with you.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  TiTiX: and the copyright holder can pick any license they want.
+<br />
+   [<span style='color:#088; font-weight:900'>TiTiX</span>]
+  Yep but we can't include GPL code into L-GPL one right ?
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Only the copyright holder can.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  DanielC : signing the JCA help also Sun to protect your work as it share also the copyright of it
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  this discussion is non-sense for me as we are speaking about addons that will remain 99% of the time as addons
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  yes
+<br />
+   [<span style='color:#088; font-weight:900'>TiTiX</span>]
+  DanielC:  ok, i thought i wasn't possible
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: I was about to sya, there are good reasons for the JCA.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  TiTiX: Think about it. If its your own work, you can do whatever you want with it, right?
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  yes believe my own experience with 
+<br />
+   [<span style='color:#088; font-weight:900'>TiTiX</span>]
+  DanielC: right
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  TiTiX: The JCA makes Sun a co-owner, along with you.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  FR community this is not only a way to profit of your work :)
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  but anyway the question is to make more licence available in cvs repository
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  But in any event, the JCA does have its uses, and this is one of them.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  That you don't have to worry about re-licensing.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  this is what we have to work on
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  the problem occurs because we plan to host the addons on the site, right ?
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  DanielC : each member involved in the FR community have signed the JCA without objection, even consultants
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: So we don't have anything to worry about :-)
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  honestly, I think that if I make an add-on and it becomes popular, I would be more willing to sign the JCA too.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  because I'd want to see it included in OOo.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  so I really don't see currently any developer saying that JCA is wrong, but I see a lot of people arguing against without knowing exactly why
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: agree with you
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: Keep my comments in perspective. I don't completely oppose it. This is proven by the fact that I've already done a full CA with other projects.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  DanielC : I think you have the right thoughts :)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC : and i think it won't happen that often
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  :-)
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  So now, we have to work on licencing of external work like add-ons
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  I think we're safe asking for the JCA afterwards. When the time comes, people will be much less likely to refuse.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  I even think addons should remain addons. Event if packaged at OOo install
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  and make the CC and EST aware that other licences are needed
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: yes.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  ESC sorry
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: Which licenses would you suggest?
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  people here, we need you for this acceptance :)
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  Let propose GPL first, then we will see
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  yes. I think the GPL is the only "issue" anyways.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  a French proverb say if you want to ride long, be carefull of you horse ;)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Sophie: i personnaly hink that opening to free licence is really good, but for the case of external addons, all free licences would be philosophically accepetable
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  It's the only one that is popular but is not compatible with the LGPL.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: I like it. :-)
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: How about... any license that is GPL-compatible?
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  I am concerned about license proliferation.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  lgodard : I agree, but as I say, again,  Paris hasn't be done in one day :)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: better, but ... restricts contributions
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  I worry that license proliferation is one of the big problems facing FOSS right now.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  DanielC : I agree with you
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Sophie:i'm totally aware of the problem but we ar speaking about attracting external developpers for third-party products. Only managing a list
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Sophie: some addons are closed source and won't be elligible to be listed but evry free addon should be
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  perharps only host the one we trust in and licence compatible
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  i spoke about three level
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: But what about the addons that can't be distributed with OOo without making it propietary?
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  lgodard : imho, even if this is the goal, we are far from it now : we have a lot of things to do before : reviewing policy, methodology in acceptance, site maintainance, allowed licences, etc
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  you know that this is always a long run to put things together
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: not an issue or me. They remain addons 
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: but you won't allow Linux distros to package them?
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: and the legality of this is not clear to me.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  Currently we never had issue in putting add-on on the FR site,
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: don't understand teh problem of linux distros
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  so we could start at this first level and improve it 
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: legality ? for me i see no problem
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: If an addon license is not compatible with the OOo license, then they can't include it. Simple as that.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  we say, this addons exists, install it if ypou agree with its licence
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: addon, or extension, are external products
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  it is end-user choice o install it or not
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie, what do you think?
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  for me the problem is the same as dictionaries
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  some are GPL
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  but end-user can install them
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  lgodard : they go in cvs repository so we say also we (OOo community) have a licence policy 
+<br />
+   [<span style='color:#088; font-weight:900'>TiTiX</span>]
+  DanielC: you should'nt care too much on Linux distros, most off them doesn't provides for openoffice at all, and some of then even don't ship with OOo included
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: but the GPL /IS/ a compatible license.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  if you don't agree with it then submit proposed changes to the CC
+<br />
+   [<span style='color:#088; font-weight:900'>TiTiX</span>]
+  (provide addons for OOo sorry)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Sophie: in the CVS, only the compatibleone, named as trusted
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: You can distribute OOo under the GPL if you want.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  lgodard : cvs repository accept LGPL/SISSL, PDL and CC stuff only
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: sorry i don't understand. as end-user I can use a propriatory addon if i need it ?
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  but please currently this is not an issue, so let focus on what have to be done first
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: I don't know.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Sophie: I'm aware of that
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: i can for sure
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  the site and add-on organisation and Daniel and me will care of the licence at next CC agenda
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  Sophie: ok, but i think we have to carrefully think on how we will we manage addons
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  yes
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  At the moment we need resources to make the project alive and viable with people insterested to help
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  +1
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  yes
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  actually we ja community has some addon developers
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  i'll be off for one week but can list what is needed when back 
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  lgodard : yes I'm aware about that and this is may be why this central repository is not already there
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  khirano: How do you handle add-ons ?
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  but you know who I'm :) 
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  We keep it in external server outside OpenOffice.org
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  we need yes addon developeprs, but before we need a team for this hypothetic project willing to help to setup all teh needed stuff
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  and wizards
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  khirano: Ok. And what licenses do you accept?
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  khirano: CDDL :-P
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  The addon developer choose what they like.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  khirano: Would the JA project be interested in helping out here?
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  khirano: is your server mirrored ?
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  sure, but i was about to say that english is the problem.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  ok
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  No Spanish speakers there? :-)
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  lgodard: no, i think.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  khirabno:japanes would be a problem for em. In fact it is a problem for me
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  khirano:server:ok
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  khirano : we have on our (yours and mine) lists a JA/FR translater, may be we may involve him :)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  khirano:wheer is the list of addons hosted ? on ja.ooo page ?
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  :) sounds good
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  but i will try to translate your presentation, documentation and so on
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: Your talk certainly sparked a lot of discussion. :-)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  DanielC: :)
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  and i will encourage them to show their works, addons to you all.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  DanielC : pkgchk is an underknow software of OOo that should have simplified a lot of migration if well documented
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  you can save most of the user configuration with it but nobody know how :(
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  Sophie: Ok, I'm looking forward to learning it.
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  all: I've now to go. You can continue the discussion, i'll read the logs
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  hhmm... 
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  lgodard: Thank you for the talk!
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  I think it was a great success.
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  good job.
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  lgodard: thanks!
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  you're welcome, it was a pleasure
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  thanks to all
+<br />
+   [<span style='color:#800; font-weight:900'>AgnesB</span>]
+  Thanks for all Laurent
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  I wish you very very good time in vactation Laurent, please rest :)
+<br />
+   [<span style='color:#05a; font-weight:900'>lgodard</span>]
+  bye
+<br />
+   [<span style='color:#808; font-weight:900'>Xhydrogene</span>]
+  Thank you Laurent, Bye.
+<br />
+   [<span style='color:#730; font-weight:900'>Sophie</span>]
+  I have to go too, bye to all :)
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  bye bye
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  take care.
+<br />
+   [<span style='color:#800; font-weight:900'>AgnesB</span>]
+  bye bye Sophie, 
+<br />
+   [<span style='color:#808; font-weight:900'>Xhydrogene</span>]
+  Bye Bye Sophie
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  bye Sophie!
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  minari: are you around? :)
+<br />
+   [<span style='color:#a73; font-weight:900'>minari</span>]
+  hoge i finish work now...
+<br />
+   [<span style='color:#a73; font-weight:900'>minari</span>]
+  >khirano
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  minari: do you know who make addons in ja community?
+<br />
+   [<span style='color:#a73; font-weight:900'>minari</span>]
+  addons ? Electoric add on ? or other?
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  :)
+<br />
+   [<span style='color:#a73; font-weight:900'>minari</span>]
+  Mr.sasaki make maybe one addon and Isimura@sun make many add-on
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  and how about ER? is it addon?
+<br />
+   [<span style='color:#088; font-weight:900'>TiTiX</span>]
+  bye all
+<br />
+   [<span style='color:#a73; font-weight:900'>minari</span>]
+  by titix
+<br />
+   [<span style='color:#50a; font-weight:900'>khirano</span>]
+  bye TiTiX
+<br />
+   [<span style='color:#080; font-weight:900'>DanielC</span>]
+  bye
+<br />
