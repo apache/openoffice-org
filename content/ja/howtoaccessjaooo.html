@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<!--Styles for Screen Media-->
+<link rel="stylesheet" media="screen" href="/stylesheets/basic_sc.css">
+<link rel="stylesheet" media="screen" href="/stylesheets/docs_sc.css">
+
+<!--Styles for Printer-->
+<link rel="stylesheet" media="print" href="/stylesheets/basic_pr.css">
+<link rel="stylesheet" media="print" href="/stylesheets/docs_pr.css">
+
+<TITLE>OpenOffice.org日本語プロジェクトのページに書き込む方法</TITLE>
+</head>
+
+<body>
+<h1>OpenOffice.org日本語プロジェクトのページに書き込む方法</h1>
+<h2>はじめに</h2>
+<p>
+OpenOffice.org日本語プロジェクトのページに書き込む方法について解説しました。<a href="http://www.openoffice.org/scdocs/ProjectRoles">Content Developer</a>権限以上を持っている、OpenOffice.org日本語プロジェクトの<a href="http://ja.openoffice.org/servlets/ProjectMemberList">プロジェクトメンバー</a>は、OpenOffice.org日本語プロジェクトのページにcvsを通じて書き込むことができます。
+</p>
+
+<h2>SCA/JCA/CAを提出しているか</h2>
+<p>
+OpenOffice.org日本語プロジェクトでは、<a href="http://www.openoffice.org/scdocs/ProjectRoles">Content Developer</a>権限を持つためには
+<a href="http://ja.openoffice.org/policy.html">SCA/JCA/CAを提出していなければなりません</a>。もしそうでなければ、<a href="http://ja.openoffice.org/howtosubmitsca.html">Sun Microsystems 社貢献者協定(Sun Microsystems Inc Contributor Agreement (SCA))の提出方法</a>を参照し、提出することをお願いしております。JCA/CAについては、既に時代遅れで、新たに提出される場合は、全くおすすめしません。<br>
+自分のSCA/JCA/CAがSUNに届いているかどうかは、<a href="http://www.openoffice.org/copyright/copyrightapproved.html">Copyright-Approved Persons and Companies</a>で名前が載っているかどうかで確認できます。ただし、最近の状況については、<a href="http://www.openoffice.org/issues/show_bug.cgi?id=96075">Stefan Taxhet (st@openoffice.org)にIssueを書いて直接尋ねて確認してください</a>。
+</p>
+
+<h2>SSH DSA public keyの作成 (Linux, MacOSX, FreeBSD, Cygwin)</h2>
+<p>
+まず、SSH2の公開鍵を作ります。これは、UNIX系(Linux, MacOSX, FreeBSD, Cygwin)では以下のような手順で作成されます。
+「ターミナル」または、「端末」を開きます。
+<pre>
+% ssh-keygen -d
+Generating public/private dsa key pair.
+Enter file in which to save the key (/home/maho/.ssh/id_dsa):
+Created directory '/home/maho/.ssh'.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/maho/.ssh/id_dsa.
+Your public key has been saved in /home/maho/.ssh/id_dsa.pub.
+The key fingerprint is:
+99:c8:1b:76:bc:6f:0b:ef:0e:2f:f4:64:54:36:1f:91 maho@debussy.private.org
+</pre>
+そして、以上の場合は、"/home/maho/.ssh/id_dsa.pub"がSSH DSA public keyです。
+これは「公開鍵」と呼ばれ、公開して問題のないものです。つぎに、
+秘密鍵はパーミッションが600です。念のため確認しておきましょう。
+<pre>
+% chmod 600 ~/.ssh/id_dsa
+% ls -la ~/.ssh/id_dsa
+-rw-------  1 maho  users  672 07 17  2009 /home/maho/.ssh/id_dsa
+</pre>
+<font color="#ff0000">注意! ~/.ssh/id_dsaは
+「秘密鍵」です。絶対に公開しないでください。</font>
+</p>
+
+<h2>SSH DSA public keyの作成 (Windows)</h2>
+<a href="http://ttssh2.sourceforge.jp/">TeraTerm</a>を使うと比較的簡単に作成できます。また、cygwinをご利用の方は、cvsおよびopensshパッケージをインストール後、ほぼ上記「SSH DSA public keyの作成 (Linux, MacOSX, FreeBSD, Cygwin)」と同じように
+SSH DSA public keyを作成できます。
+
+<h2>OpenOffice.orgの登録ユーザーになる</h2>
+<p>
+SSH DSA public keyの提出のためにはOpenOffice.orgの登録ユーザーになる必要があります。SCAをサブミットした際はすでに登録しているはずですが、念のため繰りかえします。<a href="http://user.services.openoffice.org/ja/forum/viewtopic.php?f=42&t=34">OpenOffice.orgユーザー登録する</a>を参照し、ユーザー登録してください。その時の"Username"が必要となります。
+</p>
+
+<h2>SSH DSA public keyの提出</h2>
+<p>
+まずOpenOffice.orgへlogin してください。<a href="http://www.openoffice.org/issues/enter_bug.cgi?component=www">IssueTracker</a>のページに飛んで、
+<ul>
+<li> <a href="http://www.openoffice.org/issues/enter_bug.cgi?component=www">www</a>というセクションに飛びます。
+<li> 担当者(Assigned to:) となっているところに、ssh2key@openoffice.org と入力します。
+<li> URL に http://ja.openoffice.org と入力します。
+<li> 要約(summary) Please upload ssh2keyなどとします。
+<li> サブコンポーネント(Subcomponent)はopenoffice.org CVSまたはopenoffice.org svnを選択します。
+<li> 説明(Description)に、
+"Would it be possible to get an ssh key for write CVS access."
+などと書きます。
+<li> 実行(commit) ボタンを押します。
+<li>しばらくしたら issues@openoffice.org からメールが来ます。その URL をアクセスしてください。
+<li>薄い青色の Create a new attachment というセクションが出来ているはずです。
+<li>それをクリックして、自分の SSH2 の dsa public key を plain text で attach してください。
+<li>右上の方にある、CCの追加、にプロジェクトリードのOpenOffice.orgでの登録ユーザー名を書き込んでください。
+<li>お疲れさまでした。これで終わりです。
+</ul>
+登録されるまでしばらく待ちましょう。数日かかります。
+</p>
+
+<h2>あなたの役割(role)をcontent developerにします。</h2>
+<p>
+<ul>
+<li><a href="http://ja.openoffice.org/incharge.html">プロジェクトリード</a>があなたの役割をcontent developerにします。この時点でcommit権が与えられます。
+<li>プロジェクトリードの作業は以下の要になります。
+<pre>
+http://ja.openoffice.org/servlets/ProjectMemberList
+から、Add New Member をクリックでdeveloper にしたい人を選びます。
+Grant these roles to all selected users:
+で Content developer を選びます。
+</pre>
+<li>権限がcontent developerになったら、メールがくるはずです。また、日本語プロジェクトの<a href="http://ja.openoffice.org/servlets/ProjectMemberList">メンバーリスト</a>から自分の権限を確認してください。
+</ul>
+</p>
+
+<h2> JAOOOのCVS(Concurrent Versions System) を使う </h2>
+<p>
+CVS は(同時バージョン管理システムとでも訳すのでしょうか?)
+ファイルのバージョン管理システムです。多人数で多くのファイル達を管理するのを目的として作られました。
+これを使うと「だれがいつどういう理由でどのファイルを変更したか」が明確になりますし、
+さらに「いつでも任意の前のバージョンに戻すことが出来る」という特徴があり、ja.openoffice.org では大変有効な手段です。簡単には、CVS レポジトリ(repository; 倉庫) という場所にファイルをためておき、差分という形で古いバージョンの履歴を持っています。
+<br>
+一般的な使い方についてはここでは触れません。CVS の基本的な仕組みについて、詳しくは書籍や
+webのものを参照してください。ここでは ja.OpenOffice.org にアクセスする場合の特有の方法について述べることになります。
+maho というユーザの場合ですが、自分の OpenOffice.org での登録ユーザー名で置き換えてください。
+</p>
+
+<ul>
+<li> SSHでトンネルを掘る
+<pre>
+% ssh -2 -N -f -L 2401:localhost:2401 tunnel@openoffice.org
+</pre>
+これですぐさまプロンプトが返ってきたら成功です。もし、
+<pre>
+tunnel@openoffice.org's password: 
+</pre>
+などとなれば、お知らせください。
+
+<li> CVSにlogin
+<pre>
+% cvs -d:pserver:maho@localhost:/cvs login
+Logging in to :pserver:maho@localhost:2401/cvs
+CVS password: 
+%
+</pre>
+パスワードは OpenOffice.org の登録したときの物と共通になっています。
+
+<li>CVS レポジトリからファイルを取り出す(cvs checkout)<br>
+<pre>
+% cvs -d:pserver:maho@localhost:/cvs checkout ja
+</pre>
+これで ja.openoffice.org にあるものをすべて持ってくることが出来ます。
+
+<li>ファイルの変更をCVS レポジトリとチェック(cvs diff)<br>
+ファイルを変更した場合、
+<pre>
+% cvs -d:pserver:maho@localhost:/cvs diff -u filename.html
+</pre>
+とします。これで実際にレポジトリにあるファイルと、変更した手元のファイルの違いを
+見ることが出来ます。これでどこが変更されるかちゃんと調べてから commit(後述)
+しましょう。
+
+<li>ファイルをCVS レポジトリに追加する(cvs add)<br>
+新しくファイルを追加したい場合
+<pre>
+% cvs -d:pserver:maho@localhost:/cvs add filename.html
+</pre>
+とします。このあと cvs commit することで実際の CVS レポジトリに反映させることができます。
+
+<li>ファイルを実際にCVS レポジトリに反映する(cvs commit)<br>
+ファイルを変更した場合
+<pre>
+% cvs -d:pserver:maho@localhost:/cvs commit filename.html
+</pre>
+で、実際の CVS レポジトリジに反映させることが出来ます。
+
+<li>commit log について
+<pre>
+CVS commit する場合は どういう変更を加えたかという commit log を残します。
+エディタが立ち上がります。適切なcommit log を書いてください。なかなか難しいですが、英語またはローマ字、で書いていただければ
+と思います。
+</pre>
+
+<li>ファイルをCVS レポジトリから削除する(cvs remove)<br>
+ファイルを削除したい場合、
+<pre>
+% rm filename.html<br>
+% cvs -d:pserver:maho@localhost:/cvs remove filename.html
+</pre>
+とします。このあと cvs commit することで実際の CVS レポジトリに反映させることができます。
+
+<li>ディレクトリを追加したい場合(cvs add)<br>
+<font color="#ff0000">ディレクトリの作成は慎重に!!ディレクトリを削除するのは難しいのです。</font>
+新たにディレクトリを追加したい場合
+<pre>
+% cvs -d:pserver:maho@localhost:/cvs add dirname
+</pre>
+このあと cvs commit することで実際の CVS レポジトリに反映させることができます。
+
+<li> ファイルをアップデートしたい場合(cvs update)<br>
+CVS の Concurrent とは「同時に」を意味するので、他の人はどんどんコミットしてゆきます。
+あるディレクトリを最新の物に更新したい場合は、そのディレクトリで update としてください。
+<pre>
+% cvs -d:pserver:maho@localhost:/cvs update
+</pre>
+
+<h2> CVSWeb(CVS の Web でのインターフェース) </h2>
+<pre>
+ja.openoffice.org の CVS に関するログ、バージョン履歴は web browser を使って
+見ることが出来ます。
+<a href="http://ja.openoffice.org/source/browse/ja/www/">ja.oo.o の CVSweb</a>
+を参照してください。誰が、いつ、どのファイルを変更したか、とその理由、および
+任意の以前のバージョンを見ることが出来ます。
+</pre>
+<h2> トラブルシューティング </h2>
+<ul>
+<li> 接続できない: "tunnel@openoffice.org's password:"とでる。
+<blockquote>
+秘密鍵を~/.ssh/id_dsaに置いているか確認してください。
+</blockquote>
+
+<li> 接続できない
+<blockquote>
+秘密鍵のパーミッションは600ですか?
+</blockquote>
+
+</ul>
+
+<hr>
+</body>
+</html>
