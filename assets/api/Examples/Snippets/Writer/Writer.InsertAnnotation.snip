@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Writer.InsertAnnotation.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2006/07/14 09:36:45 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Writer">
+
+<keywords>
+	<keyword>annotation</keyword>
+	<keyword>annotations</keyword>
+	<keyword>insert annotation</keyword>
+</keywords>
+
+<authors>
+	<author id="matthiasprem" initial="true" email="h0252896@wu-wien.ac.at">Matthias Prem</author>
+</authors>
+
+<question heading="Insert Annotation">How can I insert an annotation?
+</question>
+
+<answer>
+<listing>/* InsertAnnotation.rex */
+/* Macro */
+
+/* get the script context, the XModel and the XTextDocument interface */
+xScriptContext=uno.getScriptContext()
+oDoc=xScriptContext~getDocument
+xTextDoc=oDoc~{%see com.sun.star.text.XTextDocument%XTextDocument}
+xText=xTextDoc~getText()
+
+/* get the XMultiServiceFactory needed for textfields */
+xServiceManager=oDoc~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+
+/* create an annotation */
+annotation=xServiceManager~createInstance(&quot;{%see com.sun.star.text.TextField.Annotation}&quot;)
+annotationTC=annotation~{%see com.sun.star.text.XTextContent%XTextContent}()
+
+/* set author and content of the annotation */
+annotationPS=annotation~{%see com.sun.star.beans.XPropertySet%XPropertySet}()
+annotationPS~setPropertyValue(&quot;Author&quot;, &quot;ooRexx&quot;)
+annotationPS~setPropertyValue(&quot;Content&quot;, &quot;I was here.&quot;)
+
+/* insert annotation at cursor position */
+xCursor=xTextDoc~getText~createTextCursor()
+xText~insertTextContent(xCursor, annotationTC, .false)
+
+::requires UNO.CLS</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="matthiasprem" date="2006-07-10">Initial version</change>
+</changelog>
+
+</snippet>

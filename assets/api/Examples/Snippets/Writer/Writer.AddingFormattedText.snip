@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Writer.AddingFormattedText.snip,v $
+last change: $Revision: 1.2 $ $Author: tomsontom $ $Date: 2006/07/14 09:36:44 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Writer">
+
+<keywords>
+	<keyword>fontname</keyword>
+	<keyword>fontcolor</keyword>
+	<keyword>fontfamily</keyword>
+	<keyword>font</keyword>
+</keywords>
+
+<authors>
+	<author id="matthiasprem" initial="true" email="h0252896@wu-wien.ac.at">Matthias Prem</author>
+</authors>
+
+<question heading="Adding formatted Text">How can I add formatted text?
+</question>
+
+<answer>
+<listing>/* AddingFormattedText.rex */
+/* Macro */
+/* Text shall be underlined, Times New Roman, size 15 and bold */
+
+/* get the script context, the XModel and the XTextDocument interface */
+xScriptContext=uno.getScriptContext()
+
+oDoc=xScriptContext~getDocument
+xTextDoc=oDoc~{%see com.sun.star.text.XTextDocument%XTextDocument}
+
+/* get the TextCursor from the interface&apos;s Text*/
+xTextCursor=xTextDoc~getText~createTextCursor
+
+/* setting the properties of the cursor using the XPropertySet interface */
+CursorProperties=xTextCursor~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+CursorProperties~setPropertyValue(&quot;CharFontName&quot;, &quot;Times New Roman&quot;)
+CursorProperties~setPropertyValue(&quot;CharWeight&quot;, box(&quot;float&quot;, bsf.getConstant(&quot;{%see com.sun.star.awt.FontWeight}&quot;, &quot;BOLD&quot;))) --Value is 150.0
+CursorProperties~setPropertyValue(&quot;CharHeight&quot;, box(&quot;float&quot;, &quot;15&quot;))
+CursorProperties~setPropertyValue(&quot;CharUnderline&quot;, box(&quot;short&quot;, bsf.getConstant(&quot;{%see com.sun.star.awt.FontUnderline}&quot;, &quot;DOUBLE&quot;))) --Value is 2
+
+/* set text at the end of the document */
+xTextDoc~getText~getEnd~setString(&quot;This is OORexx formatted text!&quot;)
+
+::requires UNO.CLS</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="matthiasprem" date="2006-07-06">Initial version</change>
+</changelog>
+
+</snippet>

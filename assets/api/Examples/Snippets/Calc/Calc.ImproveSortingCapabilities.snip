@@ -1,0 +1,190 @@
+<?xml version="1.0"?>
+<snippet language="OOBasic" application="Calc">
+
+<keywords>
+	<keyword>sort</keyword>
+	<keyword>sorting</keyword>
+</keywords>
+
+<authors>
+	<author id="swubuntu" initial="true" email="ooo@wolfachtal.de">Stefan Weigel</author>
+</authors>
+
+<question heading="Improve sorting capabilities">
+
+</question>
+
+<answer>
+<p>This macro provides an improved sorting function for the user.</p>
+<p></p>
+<p>It enables to sort using as many sort criteria as desired. (Calc normally allows max. 3 criteria.)</p>
+<p></p>
+<p>The sort criteria to be used is determined by the currently active cell. (Calc normally uses the first column.)</p>
+<p></p>
+<p>The macro recognizes if there are column headers (Calc normally does not recognize column header when using the sort icons from the toolbar)</p>
+<p></p>
+<p>The macro overcomes issue #7277 and issue #20491. For background info and long description see http://www.stefan-weigel.de/?ID=83. For German text see http://www.stefan-weigel.de/?ID=81</p>
+<listing>REM  *****  BASIC  *****
+
+option explicit
+
+sub SWsortUp()
+	thisComponent.lockcontrollers
+	SWSort true
+	thisComponent.unlockcontrollers
+end sub
+
+sub SWsortDown()
+	thisComponent.lockcontrollers
+	SWSort false
+	thisComponent.unlockcontrollers
+end sub
+
+sub SWsort(blnUpDown)
+
+	Dim oSheet				&apos; affected Calc-Sheet
+	Dim oList as Object 			&apos; area to sort
+	Dim intListStartColumn			&apos; 
+	Dim intListEndColumn			&apos; 
+	Dim lngListStartRow			&apos; 
+	Dim lngListEndRow			&apos;
+	Dim intListCountColumnn			&apos;
+	Dim lngListCountRown			&apos; 
+	Dim intCriteriaColumn as Integer        &apos; number of column which defines the sort
+	Dim blnShowHeader			&apos; should the list contain headers
+	Dim i as Integer			&apos; helper var used as counter
+	Dim oRange as Object			&apos; helper var for cell-range
+	Dim aSortFields(1) as New {@see com.sun.star.table.TableSortField}
+        Dim aSortDesc(1) as New {@see com.sun.star.beans.PropertyValue}
+	
+	
+	&apos;affected Calc-Sheet
+	oSheet = ThisComponent.CurrentController.ActiveSheet
+
+	&apos; Area selected by the user
+	oList = thisComponent.CurrentSelection
+
+	&apos; check that only one are is selected
+	if oList.supportsService(&quot;{@see com.sun.star.sheet.SheetCellRanges}&quot;) then
+		msgbox &quot;It's not allowed to sort more than one cell-range!&quot;,,&quot;&#169; Ingenieurb&#252;ro Weigel&quot;
+		exit sub
+	end if
+	
+	&apos;Find the column with the active cell
+	oRange = thisComponent.createInstance(&quot;{@see com.sun.star.sheet.SheetCellRanges}&quot;)
+	ThisComponent.CurrentController.Select(oRange)
+	intCriteriaColumn = ThisComponent.CurrentSelection.getCellAddress.Column
+	ThisComponent.CurrentController.Select(oList)
+	
+	&apos;Mark the listarea if exactly one cell is selected
+	&apos;(magic: use exact same algorythm used by calc when it sorts)
+	SelectCurrentRange
+	
+	&apos;rows and columns of sort area
+	intListStartColumn = ThisComponent.CurrentSelection.getRangeAddress.StartColumn
+	intListEndColumn = ThisComponent.CurrentSelection.getRangeAddress.EndColumn
+	intListCountColumnn = intListEndColumn - intListStartColumn
+	lngListStartRow = ThisComponent.CurrentSelection.getRangeAddress.StartRow
+	lngListEndRow = ThisComponent.CurrentSelection.getRangeAddress.EndRow
+	lngListCountRown = lngListEndRow - lngListStartRow + 1
+	
+	&apos;number of the of sort-column inside the sort area
+	intCriteriaColumn = intCriteriaColumn - intListStartColumn
+	
+	if lngListCountRown = 1 then exit sub
+	
+	&apos;Headers?
+	blnShowHeader = false
+	&apos;The first row is interpreted as headline if the datatypes of the cells in the first and second row differ
+	for i=intListStartColumn to intListEndColumn
+		if oSheet.getCellByPosition(i,lngListStartRow).FormulaResultType &lt;&gt; oSheet.getCellByPosition(i,lngListStartRow+1).FormulaResultType and _
+									oSheet.getCellByPosition(i,lngListStartRow).FormulaResultType &lt;&gt; 0 and _
+									oSheet.getCellByPosition(i,lngListStartRow+1).FormulaResultType &lt;&gt; 0 then
+		blnShowHeader = true
+		exit for
+		end if
+	next i
+	if blnShowHeader = false then
+	    &apos;The first row is also interpreted as headline
+	    &apos;if the datatypes of the cells in first and second row are equal but there are different formats used
+		for i=intListStartColumn to intListEndColumn
+			if oSheet.getCellByPosition(i,lngListStartRow).CellStyle &lt;&gt; oSheet.getCellByPosition(i,lngListStartRow+1).CellStyle then
+			blnShowHeader = true
+			exit for
+			end if
+		next i
+	end if
+		
+	&apos;Insert a helper column
+	oSheet.Columns.insertByIndex(intListEndColumn+1,1)
+	
+	&apos;number the elements in the helper column
+	for i=lngListStartRow to lngListEndRow
+		oSheet.getCellByPosition(intListEndColumn+1,i).value=i
+	next i
+	&apos;at Andreas Saeger's (saegerei@onlinehome.de) suggestion at users@de.openoffice.org the number is faster this way
+	&apos;but it is lost through the property &quot;stable sort alogrythm&quot;!
+    &apos;dim dA(), rA()
+	&apos;with oSheet.getCellRangeByPosition(intListEndColumn+1,lngListStartRow,intListEndColumn+1,lngListEndRow)
+    &apos;	dA() = .getDataArray()
+    &apos;	for i = lBound(dA()) to uBound(dA())
+    &apos;    	rA() = dA(i)
+    &apos;   	    rA(0) = i
+    &apos;	next
+    &apos;	.setDataArray(dA())
+	&apos;End With 			
+	
+	oList =oSheet.getCellRangeByPosition(intListStartColumn,lngListStartRow,intListEndColumn+1,lngListEndRow)
+
+	&apos;Sort
+    aSortFields(0).Field = intCriteriaColumn		&apos;Column in which the user has marked the selected cell
+    aSortFields(0).IsAscending = blnUpDown
+    aSortFields(0).IsCaseSensitive = false
+    aSortFields(1).Field = intListEndColumn+1           &apos;Helper column if the current order
+    aSortFields(1).IsAscending = true
+    aSortFields(1).IsCaseSensitive = false
+    aSortDesc(0).Name  = &quot;SortFields&quot;
+    aSortDesc(0).Value = aSortFields()
+    aSortDesc(1).Name  = &quot;ContainsHeader&quot;
+    aSortDesc(1).Value = blnShowHeader
+    oList.sort(aSortDesc())
+    
+	&apos;Remove helper column
+	oSheet.Columns.removeByIndex(intListEndColumn+1,1)	
+
+	oList =oSheet.getCellRangeByPosition(intListStartColumn,lngListStartRow,intListEndColumn,lngListEndRow)
+	ThisComponent.CurrentController.Select(oList)
+	
+end sub
+
+
+sub SelectCurrentRange
+	dim oDisp as object
+	dim oDoc as object
+	dim Array()
+	oDoc   = ThisComponent.CurrentController.Frame
+	oDisp = createUnoService(&quot;{@see com.sun.star.frame.DispatchHelper}&quot;)
+	oDisp.executeDispatch(oDoc, &quot;.uno:SortAscending&quot;, &quot;&quot;, 0, Array())
+	oDisp.executeDispatch(ThisComponent.CurrentController.Frame,&quot;.uno:Undo&quot;, &quot;&quot;,0, Array())
+End Sub
+
+</listing>
+</answer>
+
+<versions>
+	<version number="2.1.0" status="tested"/>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="tomsontom" date="2007-02-08">Translated to english</change>
+	<change author-id="swubuntu" date="2007-01-25">Bug Fix</change>
+	<change author-id="swubuntu" date="2006-10-22">Minor code improvements</change>
+</changelog>
+
+</snippet>
+

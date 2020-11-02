@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.CreateDocument.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2005/10/15 13:07:35 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="Python" application="Office">
+
+<keywords>
+</keywords>
+
+<authors>
+	<author id="" initial="true" email="Darragh.Sherwin@propylon.com">Darragh Sherwin</author>
+	<author id="tomsontom" initial="true" email="tom.schindl@bestsolution.at">Tom Schindl</author>
+</authors>
+
+<question heading="create document">How can I create an empty document
+</question>
+
+<answer>
+<listing>
+# Create a new, blank document and get all the specific services required
+def createNewDocument( deskDict, url=&quot;private:factory/swriter&quot; ):
+
+        newDocument = deskDict[&apos;desktop&apos;].loadComponentFromURL( url, &quot;_blank&quot;, 0, () )
+        controller = newDocument.getCurrentController()
+        viewCursor = controller.getViewCursor()
+
+        return  { &apos;document&apos; : newDocument,
+                &apos;controller&apos; : controller,
+                &apos;viewcursor&apos; : viewCursor,
+                &apos;desktop&apos;    : deskDict[&apos;desktop&apos;]
+                }
+
+if __name__=="__main__":
+        # For a connection example see {%internal Office.ConnectViaPipe.snip}
+        remoteContext = connect()
+        # How to get services see {%internal Office.FetchingServicesFromDesktop.snip}
+        deskDict = getDesktopDict( ctx )
+	documentDict = createNewDocument( deskDict )
+
+</listing>
+
+</answer>
+
+<versions>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>
