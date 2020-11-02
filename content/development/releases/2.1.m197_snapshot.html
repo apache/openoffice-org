@@ -1,0 +1,1865 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>2.1 m197 Snapshot - Release Notes</title>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8">
+  <meta name="GENERATOR" content="StarOffice 8 (Linux)">
+  <meta name="CREATED" content="20041215;16393200">
+  <meta name="CHANGEDBY" content="Eike Rathke">
+  <meta name="CHANGED" content="20050906;11430300">
+  <style>
+<!--
+@page { size: 8.5in 11in; margin: 0.79in }
+P { margin-bottom: 0.08in; text-align: justify }
+P.western { font-family: "Albany", sans-serif; font-size: 10pt }
+TD P { margin-bottom: 0.08in; text-align: left }
+TD P.western { font-family: "Albany", sans-serif; font-size: 10pt }
+-->
+  </style>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8">
+  <meta name="GENERATOR" content="StarOffice 8 (Linux)">
+  <meta name="CREATED" content="20041215;16393200">
+  <meta name="CHANGEDBY" content="Eike Rathke">
+  <meta name="CHANGED" content="20050906;11430300">
+  <style>
+<!--
+@page { size: 8.5in 11in; margin: 0.79in }
+P { margin-bottom: 0.08in; text-align: justify }
+P.western { font-family: "Albany", sans-serif; font-size: 10pt }
+TD P { margin-bottom: 0.08in; text-align: left }
+TD P.western { font-family: "Albany", sans-serif; font-size: 10pt }
+-->
+  </style>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/development/">development</a>&nbsp;&raquo;&nbsp;<a href="/development/releases/">releases</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h2>2.1 m197 Snapshot - Release
+Notes</h2>
+<br>
+These notes contains
+changes between SRC680_m191 and&nbsp; SRC680_m197.<br>
+This release will install as OOo-Dev2.1.<br>
+Sources can be received from cvs by tag SRC680_m197.<br>
+<br>
+<h2>What's
+new ?</h2>
+<table bgcolor="#ffffff" border="1" cellpadding="2" cellspacing="0">
+  <thead><tr bgcolor="#eeeeee">
+    <th>Feature title
+    </th>
+    <th>
+TaskId
+    </th>
+    <th>
+Spec. title
+    </th>
+    <th>
+Spec. abstract
+    </th>
+    <th>
+Dev. owner
+    </th>
+    <th>
+Spec. link
+    </th>
+    <th>
+Component
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+field lengths of bibliography database changed
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=16268">
+i16268
+      </a></td>
+      <td>
+&nbsp;
+      </td>
+      <td>
+feature-info:<br>
+Many fields of the bibliography database where too small. The field
+lengths now have changed in the following way:
+Identifier - 255
+Type - 255
+Address - 255
+Annote - 65536
+Author - 65536
+Booktitle - 65536
+Chapter - 255
+Edition - 255
+Editor - 65536
+Howpublish - 255
+Institutn - 65536
+Journal - 65536
+Month - 255
+Note - 65536
+Number - 255
+Organizat - 65536
+Pages - 255
+Publisher - 65536
+School - 65536
+Series - 255
+Title - 65536
+RepType - 255
+Volume - 255
+Year - 255
+URL - 65536
+Custom1 - 65536
+Custom2 - 65536
+Custom3 - 65536
+Custom4 - 65536
+Custom5 - 65536
+ISBN - 255
+      </td>
+      <td>
+      <a href="mailto:tom.verbeek@sun.com">tom.verbeek@sun.com</a>
+      </td>
+      <td>
+      <font color="red"><br>
+      </font></td>
+      <td>dba
+      </td>
+    </tr>
+    <tr>
+      <td>
+UTF-8 encoding for dBase databases
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=62664">
+i62664
+      </a></td>
+      <td>
+&nbsp;
+      </td>
+      <td>
+feature-info:<br>
+The character set restriction previously imposed on dBase databases
+has been relaxed: Previously, it was not possible to use an encoding
+where different characters are to be encoded to different by counts.
+For instance, in UTF-8 encoding, a single Unicode character might be
+encoded as one, two, or even more bytes.
+With CWS dba22ui, all such encodings, and UTF-8 in particular, are
+allowed (as long as the restrictions from
+http://dba.openoffice.org/specifications/character_sets.html still
+apply).
+When using such an encoding, be aware that the "field length" of dBase
+table columns becomes a somewhat fuzzy meaning: According to the dBase
+file format, the field length denotes the number of bytes reserved for
+data in this field. In the OOo user interface, people tend to assume
+that the field length means the maximum number of characters which can
+be written into the field. This is not true for the UTF-8 encoding
+anymore.
+As a consequence, when the user enters a string which has less
+characters than specified in the field length, but is encoded to more
+bytes than the field length, an error message is shown to the user,
+explaining the situation.
+      </td>
+      <td>
+      <a href="mailto:frank.schoenheit@sun.com">frank.schoenheit@sun.com</a>
+      </td>
+      <td>
+      <font color="red"><br>
+      </font></td>
+      <td>dba
+      </td>
+    </tr>
+    <tr>
+      <td>
+"Edit in SQL View..." command for database queries
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=64651">
+i64651
+      </a></td>
+      <td>
+&nbsp;
+      </td>
+      <td>
+feature-info:<br>
+The database application now supports an additional command "Edit in
+SQL View...", which can be applied to one or more queries (i.e. is
+enabled when one or more queries are selected in the queries pane).
+This command is available from the query's context menu, as well as
+from the "Edit" menu of the application window.
+The specification at
+http://dba.openoffice.org/specifications/Database_application.sxw has
+been adjusted accordingly.
+      </td>
+      <td>
+      <a href="mailto:frank.schoenheit@sun.com">frank.schoenheit@sun.com</a>
+      </td>
+      <td>
+      <font color="red"><br>
+      </font></td>
+      <td>dba
+      </td>
+    </tr>
+    <tr>
+      <td>
+forms: date and time fields do not default to "Today" and "Now" anymore
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=6544">
+i6544
+      </a></td>
+      <td>
+&nbsp;
+      </td>
+      <td>
+feature-info:<br>
+In database forms, date and time fields 'til recently had the habit to
+default to "Today" (the date fields) and "Now" (the time fields). That
+is, when you had such a field in your form, and wanted to enter a new
+record, then the fields were pre-filled with the current date
+respectively time.
+This behaviour, which is almost never desired, has been changed - the
+fields are not pre-filled anymore.
+      </td>
+      <td>
+      <a href="mailto:frank.schoenheit@sun.com">frank.schoenheit@sun.com</a>
+      </td>
+      <td>
+      <font color="red"><br>
+      </font></td>
+      <td>dba
+      </td>
+    </tr>
+    <tr>
+      <td>
+query/relation design: visual marker indicating the type of table/query
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=69246">
+i69246
+      </a></td>
+      <td>
+&nbsp;
+      </td>
+      <td>
+feature-info:<br>
+With the implementation of the "queries in queries" feature, it is no
+possible to add both tables and queries to other queries. In the
+graphical query designer, this means that now, it was not possible to
+recognize whether a given existent object denoted a query or table.
+To visualize the difference, the windows which represent a table resp.
+query now show the proper object icon (table or query) in the upper
+left corner.
+Additionally, linked text tables in HSQLDB, which since a while ago
+have a dedicated icon, are also represented with this icon.
+Furthermore, the same applies to the relation designer (which cannot
+include queries, but tables and linked tables).
+      </td>
+      <td>
+      <a href="mailto:frank.schoenheit@sun.com">frank.schoenheit@sun.com</a>
+      </td>
+      <td>
+      <font color="red"><br>
+      </font></td>
+      <td>dba
+      </td>
+    </tr>
+    <tr>
+      <td>
+advanced database setting: "Use keyword AS before table alias names"
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=72252">
+i72252
+      </a></td>
+      <td>
+&nbsp;
+      </td>
+      <td>
+feature-info:<br>
+In the advanced database settings (menu: Edit / Database / Advanced
+Settings, dialog page: special settings) a new option is available,
+called "Use keyword AS before table alias names".
+This option is enabled if and only if "Append the table alias name on
+SELECT statements" option is checked, and itself checked by default
+for newly created databases.
+When checked, SQL statements generated by Base will use the AS keyword
+as follows: SELECT * FROM "table" AS "table"
+When not checked, the above statement would look like SELECT * FROM
+"table" "table"
+The first option is more human readable, the second option is required
+by some databases (Oracle ODBC, in particular).
+      </td>
+      <td>
+      <a href="mailto:frank.schoenheit@sun.com">frank.schoenheit@sun.com</a>
+      </td>
+      <td>
+      <font color="red"><br>
+      </font></td>
+      <td>dba
+      </td>
+    </tr>
+    <tr>
+      <td>
+Annoying focus behavior of OOo was fixed
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=19976">
+i19976
+      </a></td>
+      <td>
+&nbsp;
+      </td>
+      <td>
+feature-info:<br>
+When a document is loaded in the OOo GUI a view is created at the end
+of the loading process. Until now OpenOffice.org always grabbed the
+focus to the window of this view. This is very annoying when a large
+document was loaded and the user sent OOo to the background as he
+wants to do something else while the document is loading. At the end of
+the loading process the document suddenly was brought to
+front and disturbed the user in what he was doing at this time (on
+WinXP it might flicker in the taskbar only when the focus meanwhile
+was transferred to a different application). Now OOo will bring the
+window to front (or starts flickering the
+window in the task bar) only when a modal dialog was opened in the OOo
+document window as part of the loading process (e.g. a dialog asking
+for granting execution of macros). The window could have been left in
+the background even in this case.
+But as modal dialogs could prevent OOo from opening other documents
+until they are closed, users might get confused if they didn't notice
+that their first document is still blocked by a dialog waiting for
+being closed by the user.
+As part of the fix for this annoying user interface bug it was was
+also fixed that dialogs opened in the loading time sometimes had the
+wrong parent window what especially created problems in the GUI test
+tool.
+As this bug fix has an impact on the visual experience of OOo I found
+it's appropriate to send out this notification thought it's neither an
+enhancement nor a feature change.
+      </td>
+      <td>
+      <a href="mailto:mathias.bauer@sun.com">mathias.bauer@sun.com</a>
+      </td>
+      <td>
+      <font color="red"><br>
+      </font></td>
+      <td>framework
+      </td>
+    </tr>
+    <tr>
+      <td>
+scaling in spadmin page property page deleted
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=65681">
+i65681
+      </a></td>
+      <td>
+      </td>
+      <td><font color="red">
+      </font></td>
+      <td>
+      <a href="mailto:philipp.lohmann@sun.com">philipp.lohmann@sun.com</a>
+      </td>
+      <td>
+      <a
+ href="http://gsl.openoffice.org/files/documents/16/1718/padmin_spec.sxw">speclink
+      </a>
+      </td>
+      <td>gsl
+      </td>
+    </tr>
+    <tr>
+      <td>
+Additional options for pdf export
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=68581">
+i68581
+      </a></td>
+      <td>
+PDF Export Dialog
+      </td>
+      <td>
+      <font color="red"><br>
+      </font></td>
+      <td>
+      <a href="mailto:mprove@sun.com,">Matthias
+M&uuml;ller-Prove /MMP
+      </a></td>
+      <td>
+      <a
+ href="http://specs.openoffice.org/appwide/pdf_export/PDFExportDialog.odt">speclink
+      </a>
+      </td>
+      <td>gsl
+      </td>
+    </tr>
+    <tr>
+      <td>
+Desktop-Integration package for slackware
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=59183">
+i59183
+      </a></td>
+      <td>
+Slackware Desktop-Integration package
+      </td>
+      <td>
+OpenOffice.org installsets for linux provide the desktop integration
+stuff (menu-entries, mime-type associations, icons) in
+distribution-specific packages. This specification adds support for
+&ldquo;Slackware&rdquo; distribution.
+      </td>
+      <td>
+      <a href="mailto:cloph@openoffice.org">Christian
+Lohmaier (cloph)
+      </a></td>
+      <td>
+      <a
+ href="http://specs.openoffice.org/installation/native_installer/Slackware-desktop-integration.odt">speclink
+      </a>
+      </td>
+      <td>installation
+      </td>
+    </tr>
+    <tr>
+      <td>
+Show/Hide Slide menu entry split into two entries
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=43547">
+i43547
+      </a></td>
+      <td>
+Slide Show Menu
+      </td>
+      <td>
+Separate commands in Slide Show menu and Slide View Toolbar make clear
+whether slides are hidden or shown.
+      </td>
+      <td>
+      <a href="mailto:Andre.W.Fischer@sun.com">Andre.W.Fischer@sun.com</a>
+      </td>
+      <td>
+      <a
+ href="http://specs.openoffice.org/impress/menus/SlideShowMenu.odt">speclink
+      </a>
+      </td>
+      <td>presentation
+      </td>
+    </tr>
+    <tr>
+      <td>
+Support for NetBSD, Linux 64 bit, Linux SPARC in TestTool Environment
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=66140">
+i66140
+      </a></td>
+      <td>
+&nbsp;
+      </td>
+      <td>
+feature-info:<br>
+With the changes in sysinfo.inc and iniinfo.inc in
+qa/qatesttool/global/system/inc/ the TestTool Environment is able to
+detect NetBSD, Linux 64 bit, Linux SPARC.
+      </td>
+      <td>
+      <a href="mailto:Thorsten.Bosbach@Sun.COM">Thorsten.Bosbach@Sun.COM</a>
+      </td>
+      <td>
+      <font color="red"><br>
+      </font></td>
+      <td>qa
+      </td>
+    </tr>
+    <tr>
+      <td>
+New behavior of "Insert - Sheet From File"
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=66952">
+i66952
+      </a></td>
+      <td>
+&nbsp;
+      </td>
+      <td>
+feature-info:<br>
+Now "Insert - Sheet From File" opens two dialogs. The "Insert
+Sheet"-Dialog in the background and the FileDialog in the foreground.
+If you cancel the FileDialog the "Insert Sheet"-Dialog will be closed
+too.
+      </td>
+      <td>
+      <a href="mailto:hans-peter.burow@sun.com">hans-peter.burow@sun.com</a>
+      </td>
+      <td>
+      <font color="red"><br>
+      </font></td>
+      <td>sc
+      </td>
+    </tr>
+    <tr>
+      <td>
+Import MS Excel files with PivotTables based on external data
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=70650">
+i70650
+      </a></td>
+      <td>
+Import Microsoft Excel PivotTables with External Data Sources from
+Microsoft Excel Files
+      </td>
+      <td>This document describes
+how OpenOffice.org Calc will handle
+Microsoft Excel files containing PivotTables based on external data
+sources (other spreadsheet or a database).
+      </td>
+      <td>
+      <a href="mailto:dr@openoffice.org">Daniel
+Rentz (DR)
+      </a></td>
+      <td>
+      <a
+ href="http://specs.openoffice.org/calc/compatibility/importdpcache.odt">speclink
+      </a>
+      </td>
+      <td>sc
+      </td>
+    </tr>
+    <tr>
+      <td>
+Insert/Delete Note in cell context menu
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=8101">
+i8101
+      </a></td>
+      <td>
+Context Menus in Calc
+      </td>
+      <td>The context menu for
+Calc cells contains commands to manage notes.
+Terminology changes make is easier to insert and delete entire rows and
+columns.
+      </td>
+      <td>
+      <a href="mailto:mprove@sun.com">Matthias
+M&uuml;ller-Prove /MMP
+      </a></td>
+      <td>
+      <a href="http://specs.openoffice.org/calc/menus/ContextMenus.odt">speclink
+      </a>
+      </td>
+      <td>sc
+      </td>
+    </tr>
+    <tr>
+      <td>
+Some UNO Remote Protocol (URP) changes
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=35277">
+i35277
+      </a></td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      <a href="mailto:stephan.bergmann@sun.com">stephan.bergmann@sun.com</a>
+      </td>
+      <td>
+      <a href="http://udk.openoffice.org/common/man/spec/urp.html">speclink
+      </a>
+      </td>
+      <td>udk
+      </td>
+    </tr>
+    <tr>
+      <td>
+Extension Dependency OpenOffice.org-minimal-version
+      </td>
+      <td><a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=70774">
+i70774
+      </a></td>
+      <td>
+&nbsp;
+      </td>
+      <td>
+feature-info:<br>
+Originally, it was planned to introduce actual extension dependencies
+(see
+      <http:>)
+on a by-need basis. No needs for extensions depending on features
+introduced in
+OOo 2.1 have been claimed. However, kso raised concern for the
+following
+scenario: after OOo 2.1 has been released, someone writes an extension
+that does
+depend on features introduced in OOo 2.1. That extension cannot
+declare its
+dependencies adequately, unless we do introduce a dependency
+      <openoffice.org-minimal-version value="2.1"> now. (Which has the
+consequence
+that people will assume that for future versions similar dependencies
+with
+value="2.2" etc. will also be available.)
+Formally, the dependency is an empty XML element whose name consists
+of the
+namespace name "http://openoffice.org/extensions/description/2006" and
+the local
+part "OpenOffice.org-minimal-version". It shall have two attributes,
+namely the
+"name" attribute required for every dependency and an attribute with
+unprefixed
+name "value" whose value is the string representation of an OOo
+version starting
+with OOo 2.1 (in which case the value is the string "2.1"). The
+dependency is
+fulfilled if and only if the value of the current OOo version is
+(element-by-element lexicographically) greater than or equal to the
+specified value.
+      </openoffice.org-minimal-version></http:></td>
+      <td>
+      <a href="mailto:stephan.bergmann@sun.com">stephan.bergmann@sun.com</a>
+      </td>
+      <td>
+      <font color="red"><br>
+      </font></td>
+      <td>udk
+      </td>
+    </tr>
+  </tbody>
+</table>
+<pre></pre>
+<h2>Integrated
+Child
+Workspaces</h2>
+<br>
+List of integrated child workspaces:<br>
+<br>
+<table>
+  <tbody>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4767&amp;Path=SRC680%2Fpji72336">pji72336</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Fix
+P1 build breaker on 64bit platforms (casting pointer to 32bit integer
+in svtools/source/items1/stylepool.cxx, StylePool::nameOf).
+      </p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m197</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4725&amp;Path=SRC680%2Frt18">rt18</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Minor
+build issues, mostly related to deliver</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m197</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4753&amp;Path=SRC680%2Fimpress114">impress114</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">fixes
+for impress/draw</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m197</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4564&amp;Path=SRC680%2Fimpress111">impress111</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Bug
+fixes for OOo 2.2.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m197</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4498&amp;Path=SRC680%2Fdba22ui">dba22ui</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <pre style="padding: 2px; font-family: Courier,monospace;">UI-relevant bug fixes in the DBA project, targeted at 2.2<br><br>FS-&gt;Hamburg RE:<br>there's a number of incompatibilities in this CWS. Please<br>- touch svx/source/inc/dbtoolsclient.hxx<br>- touch sw/inc/swdbtoolsclient.hxx<br>- remove dbaccess'es output trees (that's only to be on the<br> safe side)<br>- ensure offuh is built<br>after integration of this CWS, and before building the new MWS</pre>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m197</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4734&amp;Path=SRC680%2Fobo08">obo08</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;"></p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m197</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4710&amp;Path=SRC680%2Fos90">os90</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Fix
+of i71451 - 64bit-compatibility in binfilter </p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m197</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4714&amp;Path=SRC680%2Fhsqldb1807">hsqldb1807</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">fix
+build with hsqldb 1.8.0.6/7</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m197</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4702&amp;Path=SRC680%2Faw037">aw037</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">BugFixing
+CWS</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m197</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4553&amp;Path=SRC680%2Fsdwarningsbegone">sdwarningsbegone</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">make
+sd project compile warning free on
+wntmsci10,wntmsci10.pro,unxlngi6,unxlngi6.pro,unxsols4,unxsols4.pro,unxsoli4,unxsoli4.pro</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m197</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4522&amp;Path=SRC680%2Fupdatefeed">updatefeed</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Migrate
+online update notification protocol implementation to an UNO service
+shared by OOo and OOo extensions.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m197</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4524&amp;Path=SRC680%2Ffwk54">fwk54</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Extend
+popup menu controllers to be dispatch provider for their own command
+URLs.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m197</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=3772&amp;Path=SRC680%2Fapoctemplate">apoctemplate</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;"></p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m197</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=3595&amp;Path=SRC680%2Ficuupgrade">icuupgrade</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Upgrade
+icu to latest version</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m197</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=3143&amp;Path=SRC680%2Fpresfixes09">presfixes09</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Further
+Impress slideshow fixes</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m197</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4607&amp;Path=SRC680%2Foihelp">oihelp</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <pre style="padding: 2px; font-family: Courier,monospace;">Implement an optional help section in the ObjectInspector<br>(property browser).<br><br>No actual UI changes, that's just an API feature to be used<br>elsewhere.<br><br>Incompatible modules (to re-build completely after integration):<br>- offuh<br>- unoil<br>- qadevOOo</pre>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m197</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4698&amp;Path=SRC680%2Fc04v3_SRC680">c04v3_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;"></p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4736&amp;Path=SRC680%2Fpb19_SRC680">pb19_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">2.1
+Showstopper</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4737&amp;Path=SRC680%2Fft2109mono_SRC680">ft2109mono_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Fix
+visual regression in UI on important platform</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4732&amp;Path=SRC680%2Fnoprotchk">noprotchk</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Remove
+obsolete protocol handler check from installation set and CVS.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4729&amp;Path=SRC680%2Fpj68">pj68</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Mac
+OS X build fixes for SRC680_m195.
+      </p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4722&amp;Path=SRC680%2Fcmcfixes29">cmcfixes29</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">small
+uncontroversial fixes, mostly configure time</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4718&amp;Path=SRC680%2Fsixtyfour10">sixtyfour10</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">obscure
+x86_64-specific work</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4700&amp;Path=SRC680%2Fjw3">jw3</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">warnings
+and build fixes for GNU/Linux SPARC</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4656&amp;Path=SRC680%2Fpj66">pj66</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Remove
+obsolete files from extras.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4551&amp;Path=SRC680%2Fvcl69">vcl69</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">2.2
+issues</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4547&amp;Path=SRC680%2Fdba22a">dba22a</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <pre style="padding: 2px; font-family: Courier,monospace;">ongoing bugfixing towards 2.2 in the DBA modules<br><br>modules to break and rebuilt (caused by offapi changes)<br>- unoil</pre>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4509&amp;Path=SRC680%2Fpdf04">pdf04</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">additional
+PDF export features</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4481&amp;Path=SRC680%2Fdbwizardpp5">dbwizardpp5</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">This
+cws is to fix bugs around OpenOffice assistants</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4683&amp;Path=SRC680%2Fwfilter">wfilter</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">warning
+free filter module</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4667&amp;Path=SRC680%2Fos89">os89</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Bugfixing/Patches
+OOo 2.2</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4665&amp;Path=SRC680%2Fcloph04">cloph04</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">improve
+mac-support of configure</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4632&amp;Path=SRC680%2Fbunoidmap">bunoidmap</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <pre style="padding: 2px; font-family: Courier,monospace;">Removal of deprecated stuff in the Binary Uno shared library loader.<br>Enhancing the Uno runtime by supporting identity mappings.</pre>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4556&amp;Path=SRC680%2Fswqbf89">swqbf89</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Fixes
+in Writer for OOo 2.2</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4491&amp;Path=SRC680%2Ffwk52">fwk52</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Enhancements
+for toolkit and extensions.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=3839&amp;Path=SRC680%2Fswautomatic01">swautomatic01</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <pre style="padding: 2px; font-family: Courier,monospace;">Introduction of "automatic styles" in Writer model.<br>Goal: performance improvement for Load/Save<br><br></pre>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4648&amp;Path=SRC680%2Fobo07">obo07</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Bugfix
+for #i63703#: Remove hard coded stuff from ldump (wntmsci1[0|1] only).</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4540&amp;Path=SRC680%2Ffs07">fs07</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <pre style="padding: 2px; font-family: Courier,monospace;">Uploading a new libwpd 0.8.7 which adds support of WP Mac 1.x documents<br>This means that the file-formats covered by the proprietary, binary filters and<br>by the FOSS filter are the same.</pre>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4504&amp;Path=SRC680%2Fswfwknoassert">swfwknoassert</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Assertion
+free smoke test for non-product builds. Issues which belong to the
+Writer/Framework team.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=1642&amp;Path=SRC680%2Fsb23">sb23</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">UNO
+current context across URP</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4603&amp;Path=SRC680%2Fkendy17">kendy17</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">cws-commit-patch
+is a really useful utility - creates a CWS, associtates tasks, adds
+modules &amp; commits the patch - all in one go...</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4575&amp;Path=SRC680%2Fsmoketest11">smoketest11</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">implement
+new test for extensions</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4463&amp;Path=SRC680%2Fhcshared06">hcshared06</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Help
+issues October 06</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m196</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4706&amp;Path=SRC680%2Fafplock_SRC680">afplock_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Fixes
+file locking problems on AFP Volumes.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4709&amp;Path=SRC680%2Fpb18_SRC680">pb18_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Framework
+showstopper for OOo2.1</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4707&amp;Path=SRC680%2Fimpress113_SRC680">impress113_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">PP5
+bug fixes</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4688&amp;Path=SRC680%2Flocalisation18_SRC680">localisation18_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;"></p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4705&amp;Path=SRC680%2Ftl34_SRC680">tl34_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Show-stoppers
+for OOo 2.1</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4708&amp;Path=SRC680%2Fgtkquickstart3_SRC680">gtkquickstart3_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <pre style="padding: 2px; font-family: Courier,monospace;">fix lifecycle issue after wizard &amp; some internal issues.<br>Changes 1 translated string capitalizing 1 word, but this string is disabled in Sun builds.</pre>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4692&amp;Path=SRC680%2Fupdchk01b_SRC680">updchk01b_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;"></p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4689&amp;Path=SRC680%2Fsw2104_SRC680">sw2104_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;"></p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4691&amp;Path=SRC680%2Fpj67_SRC680">pj67_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Fixes
+to get 2.1 for Mac OS X ready, Debian packages and OOo version number
+fix.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4690&amp;Path=SRC680%2Fnotecrash_SRC680">notecrash_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Crash
+when switching sheets while editing a note</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4652&amp;Path=SRC680%2Fjw2">jw2</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">remove
+warnings with gcc 4.1.2</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4655&amp;Path=SRC680%2Fsixtyfour09">sixtyfour09</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">only
+affect x86_64 users</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4555&amp;Path=SRC680%2Fpj65">pj65</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Cleanup
+modules with warnings on Mac OS X.
+      </p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4696&amp;Path=SRC680%2Fppbfix">ppbfix</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">last
+minute 2.1 fix</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4662&amp;Path=SRC680%2Ftl33">tl33</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">OOo
+2.1 showstopper.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4517&amp;Path=SRC680%2Fause071">ause071</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">build
+fixes/cleanup</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4011&amp;Path=SRC680%2Fqadev27">qadev27</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">implementation
+detaills only. Does not affect StarOffice/OpenOffice.org directly</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=3744&amp;Path=SRC680%2Fhr33">hr33</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">STL
+related minor issues, misc. community patches, clean up</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4599&amp;Path=SRC680%2Fkendy16">kendy16</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Remove
+#define NULL 0 from solar.h.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=3204&amp;Path=SRC680%2Fasyncdialogs">asyncdialogs</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Change
+selected dialogs from synchronous Dialog::Execute() to asynchronous new
+dialog API.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4526&amp;Path=SRC680%2Fscpivotcacheimport">scpivotcacheimport</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Feature
+to import PivotTables from MS Excel files with external source data</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4531&amp;Path=SRC680%2Faw036">aw036</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">BugFixing
+CWS</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4693&amp;Path=SRC680%2Fsw2102_SRC680">sw2102_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Regression
+loading documents with character attribute language "None"</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m195</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4671&amp;Path=SRC680%2Fmhu15_SRC680">mhu15_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Fix
+Solaris x86 backtrace function(s).</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m194</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=1999&amp;Path=SRC680%2Faw024">aw024</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <pre style="padding: 2px; font-family: Courier,monospace;">CWS for Geometry migration. Joined aw006 (overlay) and tasks.<br>Shifting date (SO9). Shifting date again. Shifting again.<br>Synching due to warnings01, preparing for U5. Ready for testing.<br>rescheduled again for 2.2 (m190)</pre>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m194</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4511&amp;Path=SRC680%2Flocalisation17">localisation17</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">l10n
+cws for OOo 2.1</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m194</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4670&amp;Path=SRC680%2Fvclshowstop08_SRC680">vclshowstop08_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Fixes
+for VCL related showstoppers</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m194</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4669&amp;Path=SRC680%2Fsw2101_SRC680">sw2101_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <pre style="padding: 2px; font-family: Courier,monospace;">Fix for regression i71249 introduced by fix for issue i69629, which has been fixed in cws swqbf88<br><br>Please integrate this cws also in SRC680 codeline.</pre>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m194</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4672&amp;Path=SRC680%2Fpyunofixes3_SRC680">pyunofixes3_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">This
+CWS fixes python object allocation in pyuno. It solves crashes on some
+systems.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m194</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4635&amp;Path=SRC680%2Fpure01">pure01</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">invalid
+pure specifier (only `= 0' is allowed)</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4611&amp;Path=SRC680%2Fvq39">vq39</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">pch
+fixes</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4605&amp;Path=SRC680%2Fdba21showstop01">dba21showstop01</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">DBA
+show-stopppers for 2.1 (still before the code freeze, hopefully)</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=3287&amp;Path=SRC680%2Fos71">os71</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">JW
+now QA rep of this CWS.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4574&amp;Path=SRC680%2Fshellfix05">shellfix05</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;"></p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4573&amp;Path=SRC680%2Ffwk57">fwk57</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Last
+fixes for OOo 2.1.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4572&amp;Path=SRC680%2Fmhu14">mhu14</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Crashreporter
+stacktraces on Solaris x86 (zones)</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4549&amp;Path=SRC680%2Fdba21fini">dba21fini</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">final
+DBA bugfixes towards 2.1</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4492&amp;Path=SRC680%2Fause070">ause070</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <pre style="padding: 2px; font-family: Courier,monospace;">makes localize.sdf files optional:<br>WITH_LANG empty just builds en-US version without touching any localize.sdf<br><br>now we're ready to move them to an optional module of their own.<br></pre>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4558&amp;Path=SRC680%2Fvclshowstop07">vclshowstop07</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">2.1
+last minute fixes</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4508&amp;Path=SRC680%2Fjsc14">jsc14</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">used
+for 2.1 bugfixes</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4482&amp;Path=SRC680%2Fsb63">sb63</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Mostly
+community patches.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4309&amp;Path=SRC680%2Ftl28">tl28</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">bug
+fixes in writer</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4538&amp;Path=SRC680%2Ffwk55">fwk55</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Framework
+fixes for OOo2.1</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4523&amp;Path=SRC680%2Fpj64">pj64</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Various
+minor fixes and cleanups for 2.1.
+      </p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=3412&amp;Path=SRC680%2Fsoldep1">soldep1</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;"></p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4542&amp;Path=SRC680%2Fgtkquickstart2">gtkquickstart2</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <pre style="padding: 2px; font-family: Courier,monospace;">Fix various issues in initial quick-starter CWS.<br>Disables the gtk+ quickstarter in the Sun build, to avoid problems.</pre>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4516&amp;Path=SRC680%2Fsloveniantemplates01">sloveniantemplates01</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Add/update
+Slovenian templates for 2.1.
+      </p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4441&amp;Path=SRC680%2Fvcl67">vcl67</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">more
+2.0.5 tasks</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=3979&amp;Path=SRC680%2Funxlngs05">unxlngs05</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Add
+platform ID 16 in automation for GNU/Linux SPARC</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4001&amp;Path=SRC680%2Fi18n27">i18n27</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">i18n
+fixes for Czech Alphabetical sorting, Chinese translation and break
+iterator.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=3454&amp;Path=SRC680%2Fcloph03">cloph03</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Add
+desktop-integration package for slackware based distros (#i59183) and
+add seamonkey as supported e-mail client</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4451&amp;Path=SRC680%2Fbasmgr01">basmgr01</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <pre style="padding: 2px; font-family: Courier,monospace;">implement issue 69957 [1] "separate the BasicManager from<br>the ObjectShell", which is the first step towards fixing<br>issue 49133 [2] "Possibility to put macros in *.odb file".<br><br>[1]http://www.openoffice.org/issues/show_bug.cgi?id=69957<br>[2]http://www.openoffice.org/issues/show_bug.cgi?id=49133<br><br>***Attention***<br>This is incompatible from module basic upwards!</pre>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4628&amp;Path=SRC680%2Fdocstat_SRC680">docstat_SRC680</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Fix
+for i70534: Document statistics not available after import of
+non-native files.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m193</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4561&amp;Path=SRC680%2Fimpress110">impress110</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">important
+impress/draw fixes for 2.1</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4552&amp;Path=SRC680%2Ficonupdate01">iconupdate01</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">update
+of icons. this time only small changes that are not visible on the UI.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4545&amp;Path=SRC680%2Fkendy15">kendy15</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Trivial
+fix of warnings like "warning: 'XYZ' is used uninitialized in this
+function".</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4519&amp;Path=SRC680%2Fabi31">abi31</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">changes
+for soffice script</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4485&amp;Path=SRC680%2Fswqbf88">swqbf88</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Fixes
+in Writer for OOo 2.1</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4410&amp;Path=SRC680%2Fsyswinshape">syswinshape</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">implement
+shaped system windows</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4362&amp;Path=SRC680%2Fshellfix04">shellfix04</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Patches
+for memory leaks and new items in the GConf and KDE configuration
+backend.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4303&amp;Path=SRC680%2Fatkbridge4">atkbridge4</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Updates
+of OOo &lt;-&gt; ATK bridge</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4536&amp;Path=SRC680%2Fscmissinglinks">scmissinglinks</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">#139464#
+use #REF! errors in formulas using cells from missing external linked
+sheets</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4503&amp;Path=SRC680%2Ffwk53">fwk53</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Framework
+fixes for 2.1</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4494&amp;Path=SRC680%2Fimpress109">impress109</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">OOo2.0
+Update 5 bugfixes</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4487&amp;Path=SRC680%2Fnative69">native69</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">OOo
+2.1 installation tasks</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4457&amp;Path=SRC680%2Fbserver22">bserver22</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;"></p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4440&amp;Path=SRC680%2Frt17">rt17</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Tooling
+fixes for CWS and MWS handling.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4520&amp;Path=SRC680%2Fos87">os87</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Fixes
+for OOo 2.1</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4512&amp;Path=SRC680%2Fvcl68">vcl68</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">OOo
+2.1 issues</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4514&amp;Path=SRC680%2Fpj62">pj62</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Remove
+SISSL from module filter.
+      </p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4513&amp;Path=SRC680%2Fmhu13">mhu13</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Security:
+make application stacks non-executable</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4505&amp;Path=SRC680%2Fupdchk01">updchk01</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">make
+the 'automatic update check' more consistent.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4327&amp;Path=SRC680%2Fab30">ab30</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">2.1
+fixes</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4291&amp;Path=SRC680%2Fhcshared05">hcshared05</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Autumn
+06 issues for online help</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=3841&amp;Path=SRC680%2Fnpower4">npower4</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">code
+only cws, adds infrastructure for vba interop project</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=3722&amp;Path=SRC680%2Fabi30">abi30</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">some
+UCB issues</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4477&amp;Path=SRC680%2Fthbpp5">thbpp5</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Fixes
+towards OOo 2.1</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4064&amp;Path=SRC680%2Fcairofixes02">cairofixes02</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Fixes
+for cairocanvas</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=3785&amp;Path=SRC680%2Fnpower3">npower3</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <pre style="padding: 2px; font-family: Courier,monospace;">Basic modules are bounded by 16 bit size limits. This manifests itself in getting <br>"program too large errors" when dealing with large modules. </pre>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=3992&amp;Path=SRC680%2Finplaceobjects">inplaceobjects</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <pre style="padding: 2px; font-family: Courier,monospace;">Prepare framework code to support inplace active objects that are not UIactive.<br>Such objects are needed for the new chart.<br>Some bugs have been fixed "in passing" because their root causes also created problems for the desired goal.<br> </pre>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4049&amp;Path=SRC680%2Ftbe28">tbe28</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">OOo
+2.0.5 accessibility bug fixes</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m192</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4532&amp;Path=SRC680%2Fhsqlandant01">hsqlandant01</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">make
+the hsqldb module build with Ant 1.5.x</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m191</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4496&amp;Path=SRC680%2Fkrmisc">krmisc</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Some
+bugs, some very minor UNO runtime features.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m191</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4473&amp;Path=SRC680%2Fnotecontext">notecontext</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Changed
+context menu (insert/delete note) for Calc cells</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m191</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4048&amp;Path=SRC680%2Fause060">ause060</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">new
+buildsystem features</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m191</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4478&amp;Path=SRC680%2Fextleadfix">extleadfix</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Improve
+line height compatibility on UNX platforms while keeping the layout
+backwards compatible</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m191</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4466&amp;Path=SRC680%2Fnative68">native68</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <p style="padding: 2px; font-family: Courier,monospace;">Preparing
+installation of extensions in installation sets.</p>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m191</font></td>
+    </tr>
+    <tr class="TableRow2">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4450&amp;Path=SRC680%2Fhr39">hr39</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <pre style="padding: 2px; font-family: Courier,monospace;">osl[in|de]crementInterlockedCount(): don't use "lock" prefix on single processor, single core, non HT machines<br><br>The sal functions osl[in|de]crementInterlockedCount() use atomic operations to<br>increment and decrement a counter. On all x86 platforms this is done with a<br>"lock xadd" prefix. "Lock" means here to lock the bus, a quite expensive<br>operation on pre HyperThreading Intel processors and quite uncessary if there is<br>only one non HT, single core processor in the system (xadd with prefix is around<br>8 times slower on some processors than without prefix). The new implementation checks if we are on<br>a single processor single core non HT machine and leaves the "lock" prefix out<br>in this case.<br><br>Some benchmarks:<br><br>1) Just excercising os[in|de]crementInterlockedCount 100.000.000 times each. <br>Times are in seconds user time (Unix) resp. wall clock time (Windows).<br><br>Platform: Processor: hr39: m182:<br>Solaris x86 2x3.06 GHz Xeon 13.26 13.23<br>Solaris x86 1x800 Mhz AMD 10.44 13.95 !<br>Solaris x86 2.2 Ghz Opteron 3.66 3.93<br>Solaris x86 1.8 Ghz Pentium IV 3.76 23.61 !<br><br>Linux x86 2x3.06 GHz Xeon 13.14 13.09<br>Linux x86 1.8 Ghz Pentium IV 4.47 24.81 !<br><br>Windows 2x3.06 GHz Xeon 13.86 13.83<br>Windows 1.8 Ghz Pentium IV 3.43 23.83 !<br><br>2) Starting soffice, loading the spreadsheet "numbers_large.ods"<br>(which is kinda pathologic in its loading behavior), closing<br>the office. Times are in seconds user time.<br><br>Platform: Processor: hr39: m182:<br>Linux x86 1.8 Ghz Pentium IV 29.643 31.097<br> 29.903 31.641<br> 29.125 31.090<br> 29.759 31.769<br> 29.722 31.521<br> ---------------<br> mean 29.603 31.424<br> std. dev. 0.266 0.280<br><br> Improvement: 5.8% !<br><br>Linux x86 2x3.06 Ghz Xeon 19.410 19.250<br> 19.340 19.130<br> 19.400 19.600<br> 19.550 19.380<br> 19.470 19.500<br> ---------------<br> mean 19.434 19.372<br> std. dev. 0.071 0.168<br><br> Degration : 0.3%<br><br></pre>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m191</font></td>
+    </tr>
+    <tr class="TableRow1">
+      <td class="SmallText1"><font class="SmallText1"><a
+ href="http://eis.services.openoffice.org/EIS2/cws.ShowCWS?Id=4358&amp;Path=SRC680%2Fhr38">hr38</a></font></td>
+      <td class="SmallText1"><font class="SmallText1">
+      <pre style="padding: 2px; font-family: Courier,monospace;">Clean up obsolete files in binfilter. Additionally strip all line which start with the //STRIP001 and //auto strip markers.<br><br>Removes ~1200 files, and ~1.5 million lines from binfilter.<br><br>Some statistics (including two ealier clean up CWSs by rt and by me):<br><br> SRC680 m177 hr38<br><br>Disk usage (source only): 148 MBytes 75 MBytes<br>Files: 6896 4998<br>Lines: 3.53 million 1.71 million<br>Compiled files (wntmsci10): 2253 1827<br>Comp. time (wntmsci10, f. local): 3:58:30 2:35:59<br><br><br>This will not be the last clean up CWS, because there are still 129 object files which don't export symbols, thus are no longer needed. This means we can kill an estimated 300 hundred more files from binfilter.<br><br><br><br></pre>
+      </font></td>
+      <td class="SmallText1"><font class="SmallText1">m191</font></td>
+    </tr>
+  </tbody>
+</table>
+<pre></pre>
+<br>
+<br>
+<br>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

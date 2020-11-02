@@ -1,0 +1,964 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/dev_docs/">dev_docs</a>&nbsp;&raquo;&nbsp;<a href="/dev_docs/source/">source</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<STYLE>
+<!--
+KBD {font-weight: bold;}
+VAR {font-style: italic;}
+-->
+</STYLE>
+
+<b>
+<font face="Courier New, Monospaced" color="#CC6600">
+<H1>Building OpenOffice.org under 
+
+
+Windows
+</H1></font>
+</b>
+
+<p>
+<b>
+This document refers to older versions of OpenOffice.org only. If you 
+intend to build the snapshot No. 638 or later, 
+<a href="build_windows.html">go here!</a>
+</b>
+
+<p>
+This document describes the requirements and actions that you need to build 
+OpenOffice.org on 
+
+
+Windows.
+Commands you have to type on the keyboard follow this syntax throughout this 
+document:
+
+
+
+
+<p>
+<pre>
+<KBD>config_office> winenv.bat</KBD>
+</pre>
+
+<p>
+In this example, the script <CODE>winenv.bat</CODE>
+is executed in the directory <CODE>config_office</CODE> under 
+a 4NT shell. Unless stated otherwise, all commands appearing in 
+this document should be entered from a 4NT shell. 
+
+
+<CODE>$SRC_ROOT</CODE> will denote the directory in which 
+the source code of OpenOffice.org is stored. 
+
+<br><p><Br><p><Br><p>
+
+
+
+<H1>Table of contens:</H1>
+
+<ul>
+
+<li>
+<a href="#Overview">Overview</a>
+</li>
+
+<ul>
+
+<li>
+<a href="#OverviewofPerformingaFullBuild">of Performing
+a Full Build</a>
+</li>
+
+<li>
+<a href="#OverviewofBuildinganIndividualProject">of 
+Building an Individual Project</a>
+</li>
+
+</ul>
+
+<li>
+<a href="#BuildRequirements">Build Requirements</a>
+</li>
+
+<ul>
+
+<li>
+<a href="#ExternalComponents">External Components</a>
+</li>
+
+<li>
+<a href="#GetTheSourceCode">Get the Source Code</a>
+</li>
+
+<li>
+<a href="#GeneratingtheBuildEnvironmentandBuildTools">Generating
+the Build Environment and Build Tools</a>
+</li>
+
+</ul>
+
+<li>
+<a href="#BuildInstructions">Build Instructions</a>
+</li>
+
+<ul>
+
+<li>
+<a href="#BuildingaFullBuildofOpenOffice">Building
+a Full Build</a>
+</li>
+
+<li>
+<a href="#BuildingIndividualProjects">Building
+Individual Projects with a Prebuild</a>
+</li>
+
+<li>
+<a href="#BuildingaProjectwithDebugInformation">Building
+a Project with Debug Information</a>
+</li>
+
+</ul>
+
+<li>
+<a href="#InstallInstructions">Instructions to Build an Installation
+Set</a>
+</li>
+
+</ul>
+
+<br><p><br><p><br><p>
+
+
+
+<H1>
+<a NAME="Overview">Overview</a> 
+</H1>
+
+<p>All those who have done a build of OpenOffice.org before may use 
+this section as a reminder. You are well advised to check the release notes at 
+<a href="//dev_docs/source/download.html">www.openoffice.org/dev_docs/source/download.html</a>
+and the section 
+<a href="#BuildRequirements">Build Requirements</a> in this 
+document to inform yourself about changes since the previous releases. 
+
+<p>
+Detailed step-by-step build descriptions are given from the 
+next section on. 
+
+<p>You can perform a full build, or you can build an 
+individual project using a prebuild
+version. 
+
+<H2>
+<a NAME="OverviewofPerformingaFullBuild"></a>Overview
+of Performing a Full Build
+</H2>
+
+<p>To perform a full build, you need to follow these steps:
+
+<ol>
+
+<li>
+Get the source code, either from the download webpage at 
+<a href="//dev_docs/source/get_tarballs.html">www.openoffice.org/dev_docs/source/get_tarballs.html</a>,
+or alternatively via a check-out from the cvs tree against a 
+release tag, e.g. <em>OpenOffice614</em>. 
+</li>
+
+
+
+
+
+
+
+<li>
+Run the <CODE>configure</CODE> script in a cygwin bash shell 
+to check all requirements and
+to create the script <CODE>winenv.bat</CODE>, or edit the 
+sample file <CODE>winenvsample.bat</CODE>.
+</li>
+
+
+<li>
+Run the 
+
+
+<CODE>winenv.bat</CODE>
+script to set all environment variables.
+</li>
+
+
+
+<li>
+Build using the <CODE>dmake</CODE> tool.
+</li>
+
+</ol>
+
+For detailed build instructions, see the section 
+<a href="#BuildingaFullBuildofOpenOffice">Building
+a Full Build of the Office Suite</a> in this document.
+The installation procedure is described 
+<a href="#InstallInstructions">at the end</a> of 
+this document.
+
+<H2>
+<a NAME="OverviewofBuildinganIndividualProject"></a>Overview
+of Building an Individual Project
+</H2>
+
+<p>You can use a prebuild version to build an individual project. Having a
+prebuild version is neccessary because the individual project you want 
+to build could depend on other projects. A project
+builds a particular component of OpenOffice.org. 
+For example, the Word Processing 
+project builds the Word Processing application. To build an individual project,
+you must follow these steps:
+<ol>
+<li>
+Download the appropriate solver tarballs from the download webpage at 
+<a href="//dev_docs/source/get_tarballs.html">www.openoffice.org/dev_docs/source/get_tarballs.html</a>,
+i.e. for 614 the solver tarball 
+
+
+<CODE>solver614_win32intel.tar.gz.</CODE>
+</li>
+
+<li>
+Check out the modules for the project that you want to build from the 
+OpenOffice.org CVS tree. 
+If your project uses the resources module, <CODE>res</CODE>, check
+out this module also.
+You can, of course, also download the entire source from the download webpage 
+(<a href="//dev_docs/source/get_tarballs.html">www.openoffice.org/dev_docs/source/get_tarballs.html</a>).
+However, it is not possible to 
+download individual modules there. 
+</li>
+
+<li>
+Check out the module <CODE>config_office</CODE>. This is always 
+necessary to create the build environment.
+</li>
+
+
+
+<li>
+Also check out the module <CODE>solenv</CODE>. This module provides the 
+build tools.
+</li>
+
+
+<li>
+Unpack the solver tarball.
+</li>
+
+
+
+
+<li>
+Run the <CODE>configure</CODE> script in a cygwin bash shell 
+to check all requirements and
+to create the script <CODE>winenv.bat</CODE>, or edit the sample 
+file <CODE>winenvsample.bat</CODE>.
+</li>
+
+
+<li>
+Run the script 
+
+
+<CODE>winenv.bat</CODE>
+to set all environment variables.
+</li>
+
+
+
+<li>Build each module against the prebuild <CODE>solver</CODE> 
+using the <CODE>dmake</CODE> tool.
+</li>
+
+</ol>
+
+For detailed build instructions, see 
+<a href="#BuildingIndividualProjects">Building
+Individual Projects with a Prebuild</a>. 
+
+
+<br><p><br><p><br><p>
+
+
+
+<H1>
+<a NAME="BuildRequirements"></a>Build Requirements
+</H1>
+
+<P>Before you start building, you must ensure that your system satisfies the
+recommended software and hardware requirements for the type of system you
+are working on. For 
+
+
+Windows, 
+these are as follows:
+
+<p>
+
+
+
+
+
+<b>Build Requirements</b>
+<ul>
+<li>
+Windows NT Version 4 Service Pack 3 or higher.
+</li>
+
+<li>
+Microsoft Visual C++ Version 6 Service Pack 3. 
+</li>
+
+<li>
+4NT Version 2.5 or higher. You can download this from <a href="ftp://jpsoft.com/4nt/">ftp://jpsoft.com/4nt/</a>.
+<p>
+<b>Note:</b> Before you use 4NT, you must ensure that the initialization
+file <CODE>4nt.ini</CODE> is present in the 4NT application directory. The
+following code sample shows the content of the <CODE>4nt.ini</CODE> file:
+<p>
+<pre>
+[4NT]
+CommandSep = ^
+EscapeChar = Ctrl-X
+ParameterChar = &amp;
+LocalAliases = Yes
+</pre>
+
+</li>
+
+<li>
+<a href="http://java.sun.com/products/jdk/1.2">JDK 1.2.2</a>. 
+</li>
+
+<li>
+Perl 5 for Win32. You can download this binary from 
+<a href="http://www.activestate.com/Products/ActivePerl/Download.html">http://www.activestate.com/Products/ActivePerl/Download.html</a>. 
+</li>
+
+<li>
+Cygnus Toolkit. Download the Cygnus Toolkit from
+<a href="http://sources.redhat.com/cygwin/download.html">http://sources.redhat.com/cygwin/download.html</a>. 
+Follow the installation instructions provided. Note: OpenOffice.org was 
+successfully build using the (old) b20 version of cygwin, but we encountered 
+problems with the newest version (in particular with the <CODE>find</CODE> and 
+<CODE>sed</CODE> implementation of cygwin run under the 4NT shell).
+Cygwin-b20 resides under various mirror sites, for instance at 
+<a href="ftp://ftp.ccp14.dl.ac.uk/ccp14/ftp-mirror/programming/cygwin/pub/cygwin/old/cygwin-b20/">
+ftp://ftp.ccp14.dl.ac.uk/ccp14/ftp-mirror/programming/cygwin/pub/cygwin/old/cygwin-b20/</a>. Check the mirror site list on the 
+<a href="http://sources.redhat.com/cygwin/">Cygwin page</a> for a mirror 
+site close to you.<br>
+</li>
+
+<li>
+GNU Bison 1.28: cygwin-b20 only contains Bison 1.25. You can 
+download this from 
+<a href="http://www.gnu.org/software/bison/bison.html">http://www.gnu.org/software/bison/bison.html</a>.
+In fact, only the bison.simple
+file in the <CODE>share</CODE> subdirectory of the cygnus-b20 
+installation has to be replaced by the corresponding file from 
+the Bison version 1.28 (at www.gnu.org, this file is called bisonl.s1). 
+This means that if you have installed bison 1.28 
+at <CODE>C:\bison-1.28</CODE> and cygwin b-20 resides in 
+<CODE>C:\cygnus\cygwin-b20</CODE>, then all you have to do is: <br>
+<KBD>cp C:\bison-1.28\share\bison.s1 C:\cygnus\cygwin-b20\share\bison.simple</KBD>.<br> 
+Bison will also need a \tmp directory to function properly 
+(<CODE>C:\tmp</CODE>). 
+</li>
+
+<li>
+A Microsoft Assembly compiler. Instructions on where and how to get a free 
+version can be found at 
+<a href="http://www2.dgsys.com/~raymoon/faq/masm.html#9">http://www2.dgsys.com/~raymoon/faq/masm.html#9</a>. You need the files 
+ml.exe and ml.err. Place them somewhere in a directory 
+and note the path, i.e. <CODE>C:\ml</CODE>
+</li>
+
+<li>
+<CODE>zip.exe</CODE> Version 2.2 or higher. You can download this from <a href="
+http://ring.omp.ad.jp/pub/text/CTAN/tools/zip/info-zip">http://ring.omp.ad.jp/pub/text/CTAN/tools/zip/info-zip</a>
+</li>
+
+<li>
+from 613 on: STLPort Version 4.0, freely available from 
+<a href="http://www.stlport.org/">http://www.stlport.org</a>.
+No installation required, just download the files, i.e. to 
+<CODE>C:\STLport-4.0</CODE>.
+</li>
+
+<li>
+The header files <CODE>adoctint.h</CODE> and <CODE>SqlUcode.h</CODE> 
+from the Microsoft Platforms SDK, April 2000 Edition. <br>
+Download the Platform SDK Setup, <CODE>psdk-86.exe</CODE>,
+from the Custom Installation section. Then run it in your Win32 environment.
+This starts an interactive download program. Follow the instructions on
+the screen. At the Custom Installation screen, select Build Environment/Data
+Acces Services/OLE DB and the Build Environment/Data Acces Services/ODBC
+from the Custom Installation tree. This downloads a number of files to
+your Win32 environment. You only need to copy the two header files to the
+<CODE>$SRC_ROOT/external/download</CODE> directory.
+</li>
+
+<li>
+from 627 on: The gpc general polygon clipper library release 2.31, located at, for instance, 
+<a href="http://penguinppc.org/files/pub/openoffice/633b/src/">
+http://penguinppc.org/files/pub/openoffice/633b/src/</a> (file gpc231.tar.Z,
+the original site - www.cs.man.ac.uk/~amurta/software - is no longer
+online).
+Download and unpack the tarball. You should have the files 
+gpc.c and gpc.h in <CODE>$SRC_ROOT/external/gpc</CODE>.
+</li>
+
+<li>
+Note: the pgp-files listed here earlier as requirements are obsolete now. 
+</li>
+
+</ul>
+
+The following external requirement is only necessary for older snapshots:
+
+<ul>
+
+<li>
+from 614 to 627: Berkeley DB 3.1.17 from <a href="http://www.sleepycat.com">
+www.sleepycat.com</a>.
+Download the tarball from their <em>download</em> website
+and build the data base following
+their instructions on the <em>documentation</em> website.
+Remember that the java API has to be build as well which is not the
+default option. How to include the java API is explained on the same
+webpage.
+The data base will consist in a directory
+structure (<CODE>db3.1.17</CODE>) including a subdirectory
+<CODE>java/classes</CODE>. Go there and create a java archive
+(<CODE>jar</CODE> command) called <CODE>db.jar</CODE> (db31.jar for older releases) and place this
+into the <CODE>external/common</CODE> directory:
+<pre>
+db3.1.17><KBD> cd java/classes</KBD>
+db3.1.17/java/classes><KBD> jar cvf db.jar *</KBD>
+db3.1.17/java/classes><KBD> mv db.jar $SRC_ROOT/external/common/.</KBD>
+</pre>
+From 632 on, all necessary components of the Berkeley DB are included
+in the OpenOffice.org source.
+</li>
+
+</ul>
+
+
+
+<p>
+
+
+
+
+
+<b>Hardware Requirements</b>
+<ul>
+<li>
+Intel Pentium II PC
+</li>
+
+<li>
+128 MB RAM
+</li>
+
+<li>
+2 GB free disk space
+</li>
+
+</ul>
+
+
+<br><p><br><p><br><p>
+
+<H2>
+<a NAME="ExternalComponents"></a>External Components
+</H2>
+
+<p>
+The code contains some further external components which are 
+already provided. If you are interested in details about these, 
+look at the External Components webpage at 
+<a href="http://tools.openoffice.org/ext_comp.html">http://tools.openoffice.org/ext_comp.html</a>. 
+
+<br><p><br><p><br><p>
+
+
+<H2>
+<a NAME="GetTheSourceCode"></a>Get the source code
+</H2>
+
+<p>
+You have two options to get the source code:
+
+<ul>
+
+<li>
+Download the source code tarball from 
+<a href="//dev_docs/source/get_tarballs.html">
+www.openoffice.org/dev_docs/source/get_tarballs.html</a>, 
+e.g. <CODE>oo_609_src.tar.gz</CODE> in case 
+of the 609 release. 
+
+
+
+There is a second source tarball called
+<CODE>solenv</CODE> containing the build tools. 
+
+
+<p>
+Unpack the tarballs as follows (for the example 609):
+<pre>
+<KBD>> gunzip oo_609_src.tar.gz</KBD>
+<KBD>> tar -xvf oo_609_src.tar</KBD>
+<KBD>> cd oo_609_src</KBD> 
+</pre>
+This will be $SRC_ROOT from now on.<br>
+For releases 627 
+or earlier you will also need the <CODE>solenv</CODE> tarball:
+
+
+
+<pre>
+<KBD>$SRC_ROOT> gunzip solenv609_win32intel.tar.gz</KBD>
+<KBD>$SRC_ROOT> tar -xvf solenv609_win32intel.tar</KBD>
+</pre>
+
+</li>
+
+<li>
+Another possibility is to check out the code from the cvs tree. If you 
+don't have a username and password, you can still do a checkout as 
+<CODE>anoncvs</CODE>:
+<pre>
+<KBD>> runsocks cvs -d:pserver:anoncvs@anoncvs.openoffice.org:/cvs login</KBD>
+<KBD>> cd $SRC_ROOT</KBD>
+<KBD>$SRC_ROOT> runsocks cvs </KBD> /
+<KBD>    -d:pserver:anoncvs@anoncvs.openoffice.org:/cvs </KBD> /
+<KBD>    co -r OpenOffice609 openoffice</KBD>
+</pre>
+The non-bold slash means that the command should be in one line. It is 
+possible to update an already existing older copy to a newer release: 
+<pre>
+<KBD>$SRC_ROOT> runsocks cvs </KBD> /
+<KBD>    -d:pserver:anoncvs@anoncvs.openoffice.org:/cvs </KBD> /
+<KBD>    update -r OpenOffice609 openoffice</KBD>
+</pre>
+</li>
+
+<li>
+If you're only interested in building individual modules, you won't 
+need the entire source code. You can check out individual modules from 
+the cvs tree:
+<pre>
+<KBD>$SRC_ROOT> runsocks cvs </KBD> /
+<KBD>    -d:pserver:anoncvs@anoncvs.openoffice.org:/cvs </KBD> /
+<KBD>    co -r OpenOffice609 (module-name)</KBD>
+</pre>
+</li>
+
+</ul>
+
+<br><p><br><p><br><p>
+
+
+<H2>     
+<a NAME="GeneratingtheBuildEnvironmentandBuildTools"></a>Generating
+the Build Environment and Build Tools
+</H2>
+
+
+
+
+
+<p>
+Ideally, in keeping with the principles of open source, you would use
+an open source shell to build on a computer running a Win32 operating system.
+However, this is not possible at present. You must use a non-open source
+shell to build on a computer running a Win32 operating system: 
+the 4NT command shell. 
+
+<p>
+In the future, it may be possible to build on a Win32 system using the
+Cygnus <CODE>bash</CODE> shell. However, this requires syntax changes to the
+makefiles that the build uses. This is a future project for OpenOffice.org.
+
+<p>
+However, the Cygnus <CODE>bash</CODE> shell is needed to run 
+the <CODE>configure</CODE> script which 
+generates the build environment.
+The <CODE>configure</CODE> script
+checks that all software, hardware, and system requirements for the build
+are satisfied, and  it
+creates a configuration file called <CODE>winenv.bat</CODE>
+that you then execute 
+to set all necessary build environment variables. 
+Alternatively, you can edit the <CODE>winenvsample.bat</CODE> file. 
+
+This configuration file will be moved into the <CODE>SRC_ROOT</CODE> 
+directory. A top-level makefile script <CODE>makefile.rc</CODE> 
+and the script <CODE>bootstrap</CODE> in the 
+<CODE>config-office</CODE> directory will be moved into <CODE>SRC_ROOT</CODE> 
+as well. This is due to technical reasons: The <CODE>SRC_ROOT</CODE> directory 
+in the cvs tree can only hold directories. On the other hand, the 
+top-level <CODE>makefile.rc</CODE> should logically be placed in the 
+top-level directory <CODE>SRC_ROOT</CODE>. The cvs tree holds these files in 
+<CODE>config_office</CODE> and <CODE>configure</CODE> copies them up. 
+
+<p>
+In case you adjust the sample file <CODE>winenvsample.bat</CODE> to your 
+needs rather then running the configure script, you have to copy it by 
+hand to <CODE>SRC_ROOT</CODE> and name it <CODE>winenv.bat</CODE>. 
+Copying the file <CODE>makefile.rc</CODE> from <CODE>$SRC_ROOT/config_office</CODE> to 
+<CODE>$SRC_ROOT</CODE> had to be done by hand as well in this case. 
+
+<p>
+If you experiment with newest sources from the cvs-tree, 
+mind that updates to the 
+configure process do not happen via updates of <CODE>configure</CODE> 
+(the script file) but via the file <CODE>configure.in</CODE>. The 
+configure script itself is created from <CODE>configure.in</CODE> 
+using the <CODE>autoconf</CODE> command. In this case, you would 
+run commands like the following: 
+
+
+<pre>
+<KBD>$SRC_ROOT> cd config_office</KBD>
+<KBD>config_office> cvs update configure.in</KBD>
+get a bash shell
+<KBD>config_office>bash autoconf</KBD>
+exit the bash shell
+</pre>
+<p>
+
+to update the <CODE>configure</CODE> script. If you only use code 
+from the snapshot releases on the web, you don't need to be concerned 
+about this. 
+
+
+
+
+<p>
+To run the <CODE>configure</CODE> script, do the following:
+
+<p>
+open a cygwin bash shell. 
+<pre>
+<KBD>$SRC_ROOT> cd $SRC_ROOT/config_office</KBD>
+<KBD>config_office> bash configure --with-stlport4-home=(path)</KBD>
+</pre>
+<CODE>path</CODE> is the absolute path pointing to your STLPort
+installation, given in a cygwin-specific notation. 
+If, for instance, STLport resides in <CODE>C:\STLport-4.0</CODE>, 
+<em>path</em> would be 
+<CODE>//C/STLport-4.0</CODE>. Exit the bash shell afterwards. 
+<CODE>configure</CODE> will probably also ask you for
+the location of the Java Development Kit 1.2.2, 
+the Microsoft compiler, and the assembly compiler. In case they 
+reside in <CODE>C:\jdk1.2.2</CODE>, 
+<CODE>C:\PROGRA~1/MICROS~3/VC98</CODE>, and <CODE>C:\ml</CODE>, 
+their locations have to be entered as 
+<CODE>//C/jdk1.2.2</CODE>), 
+<CODE>//C/PROGRA~1/MICROS~3/VC98</CODE>, and 
+<CODE>//C/ml</CODE>, respectively. 
+The configure script 
+should find everything else by itself. If not, you can always specify 
+it explicitly, for instance for Perl with the option 
+<CODE>--with-perl-home=//C/Perl</CODE> if it resides in 
+<CODE>C:\Perl</CODE>. Note that all paths 
+given here are for the sake of an example only.
+
+<p>
+There are a number of further options that you can use with the
+<CODE>configure</CODE>
+script. To display these options, type the following command:
+
+<p>
+<pre>
+<KBD>config_office> bash configure --help</KBD>
+</pre>
+Currently, the configure scripts ends for Windows with an error 
+message <em>/bin/sh: No such file or directory</em>. This is a bug, 
+but doesn't lead to any problems and can be ignored.
+
+
+<p>
+The option <CODE>--with-stlport4-home</CODE> is a requirement. 
+For more information on the options that you can use with the
+<CODE>configure</CODE> script, see the Build Environment document at 
+<a href="http://tools.openoffice.org/build_env.html">tools.openoffice.org/build_env.html</a>.
+
+
+
+
+
+
+<p>
+After running <CODE>configure</CODE>, you have to execute the configuration
+file which sets all environment variables. An example of how this file 
+called winenv.bat looks like with the example paths given above is shown 
+<a href="winenv_bat">here</a>. 
+<p>
+Alternatively to running the configure script, you can make use of the 
+sample file <CODE>winenvsample.bat</CODE> in <CODE>$SRC_ROOT/config_office</CODE>, adjust it to your setup, and copy it to <CODE>$SRC_ROOT</CODE> as 
+<CODE>winenv.bat</CODE>. Note that in this case you also have to copy 
+<CODE>makefile.rc</CODE> by hand. 
+<p>
+<pre>
+<KBD>$SRC_ROOT> winenv.bat</KBD>
+</pre>
+or
+<p>
+edit $SRC_ROOT/config_office/winenvsample.bat
+<pre>
+<KBD>$SRC_ROOT> cp config_office/winenvsample.bat winenv.bat</KBD>
+<KBD>$SRC_ROOT> cp config_office/makefile.rc makefile.rc</KBD>
+<KBD>$SRC_ROOT> winenv.bat</KBD>
+</pre>
+
+
+
+
+<br><p><br><p><br><p>
+
+
+<H1>
+<a NAME="BuildInstructions"></a>Build Instructions</a>
+</H1>
+
+
+<H2>
+<a NAME="BuildingaFullBuildofOpenOffice"></a>Building
+a Full Build of the Office Suite
+</H2>
+
+Now you are ready to build OpenOffice.org.
+To build the entire suite, all you have to do 
+(after having created the environment as described above) is to run dmake 
+from the top-level directory. This will take several hours. 
+
+<pre>
+<KBD>$SRC_ROOT> dmake</KBD>
+</pre>
+
+If you are interested in the order in which the individual modules 
+are build, type
+
+<pre>
+<KBD>$SRC_ROOT> dmake -n</KBD>
+</pre>
+
+<p>
+The following table shows the time required to build on a system with
+a particular specification. You can use these details to estimate the time
+required to build on your system.
+
+<p>
+
+
+
+<table BORDER="1" CELLSPACING=0 CELLPADDING=5>
+<tr VALIGN=TOP>
+<td>Architecture</td>
+<td>Intel</td>
+</tr>
+<tr VALIGN=TOP>
+<td>Processor</td>
+<td>Pentium III</td>
+</tr>
+<tr VALIGN=TOP>
+<td>Processor speed</td>
+<td>600 MHz</td>
+</tr>
+<tr VALIGN=TOP>
+<td>RAM</td>
+<td>256 MB</td>
+</tr>
+<tr VALIGN=TOP>
+<td>Hard Disk</td>
+<td>6 GB SCSI</td>
+</tr>
+<tr VALIGN=TOP>
+<td>Time</td>
+<td>~20 h</td>
+</tr>
+</table>
+
+
+<H2>
+<a NAME="BuildingIndividualProjects"></a>Building
+Individual Projects with a Prebuild
+</H2>
+
+<p>
+OpenOffice.org is organised in several projects. For example, 
+the Word Processing Project. These in turn consist of several 
+modules, organised in separate directories. The source contains 
+approximately 90 modules. 
+
+<p>
+You can build any project or module individually. Building modules 
+individually should not be misunderstood as reducing OpenOffice.org to a 
+special application, say, for instance, the spreadsheet application. The 
+program will always consist in the entire office suite: text processor, 
+spreadsheet, drawing application etc.. Building individual
+modules comes in handy if you want to develop on a certain module.
+Most modules will 
+depend on other modules to be already built. In other words, all modules 
+must build in a particular order. 
+To avoid building all modules which are prerequisites of the
+module of your interest,
+you can make use of a pre-build <CODE>solver</CODE> tree
+against which you can build any module.
+
+<p>
+For more information on modules and on the sequence that they build
+in, and on the dependencies, see <a href="http://tools.openoffice.org/modules.html">tools.openoffice.org/modules.html</a>.
+
+<p>
+You have to download the 
+<CODE>solver</CODE> tree as a tarball 
+
+
+<CODE>solver609_win32int.tar.gz</CODE>
+from the Download page at 
+<a href="//dev_docs/source/get_tarballs.html">www.openoffice.org/dev_docs/source/get_tarballs.html</a>
+and unpack it in the <CODE>$SRC_ROOT</CODE> directory: 
+<pre>
+
+
+
+<KBD>$SRC_ROOT> gunzip solver609_win32int.tar.gz</KBD>
+<KBD>$SRC_ROOT> tar -xvf solver609_win32int.tar</KBD>
+
+</pre>
+
+
+
+In order to create the build environment and build tools, you also have to 
+check out the <CODE>config_office</CODE> module and <CODE>solenv</CODE>.
+
+
+<p>To build a project, you build each of its modules individually 
+in their directory with the <CODE>dmake</CODE> tool. 
+<pre>
+<KBD>$SRC_ROOT/(module-name)> dmake</KBD>
+</pre>
+
+Files called <CODE>makefile.rc</CODE> in each directory with further 
+subdirectories iterate through all directories of the module and exectues 
+<CODE>dmake</CODE> in each of them (just like the top-level 
+<CODE>makefile.rc</CODE> does when building the entire office suite). 
+The last or second to last directory is usually 
+<VAR>module-name</VAR><CODE>/util</CODE>
+which is responsible for linking one or more shared libraries.
+
+<br><p><br><p><br><p>
+
+
+
+
+
+<H2>
+<a NAME="BuildingaProjectwithDebugInformation"></a>Building
+a Project with Debug Information
+</H2>
+
+<p>
+To rebuild a complete project with debug information, remove all object
+files by removing the 
+
+
+<CODE>wntmsci7.pro</CODE> 
+(<CODE>wntmsci3.pro</CODE> until snapshot 619)
+directory. Then run 
+<CODE>dmake</CODE> with the debug option set to true:
+
+<pre>
+<KBD>$SRC_ROOT/(module)> rm -rf wntmsci7.pro</KBD>
+<KBD>$SRC_ROOT/(module)> dmake debug=true</KBD>
+</pre>
+
+
+<br><p><br><p><br><p>
+
+
+
+
+<H1>
+<a NAME="InstallInstructions"></a>Instructions to Build
+an Installation Set
+</H1>
+
+<p>
+When you have completed the build, you need to do the following to install
+and set up the office suite:
+
+<ol>
+
+<li>
+From the top-level directory, run the <CODE>dmake install</CODE> command, 
+or run <CODE>dmake</CODE> in the directory <CODE>instsetoo</CODE>:
+<pre>
+<KBD>$SRC_ROOT> dmake install</KBD>
+</pre>
+or
+<pre>
+<KBD>$SRC_ROOT> cd instsetoo</KBD>
+<KBD>instsetoo> dmake</KBD>
+</pre>
+Languages other than english (provided the language option was set in 
+configuring) can be build with the option <CODE>LANGEXT</CODE>. 
+For instance for french: 
+<pre>
+<KBD>$SRC_ROOT/instsetoo> dmake LANGEXT=33</KBD>
+</pre>
+The parameter 33 stems from the international phone code for France. 
+</li>
+
+<p>
+<li>
+Change directory to <CODE>$SRC_ROOT/instsetoo/wntmsci7.pro/normal</CODE> 
+and execute the <CODE>setup</CODE> binary:
+<pre>
+<KBD>$SRC_ROOT> cd instsetoo/wntmsci7.pro/normal</KBD>
+<KBD>normal> ./setup</KBD>
+</pre>
+</li>
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

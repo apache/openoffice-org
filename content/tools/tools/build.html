@@ -1,0 +1,126 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1251">
+	<TITLE>Description of build.pl</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1  (Win32)">
+	<META NAME="CREATED" CONTENT="20020702;11311540">
+	<META NAME="CHANGED" CONTENT="20030620;16194129">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="en-US" DIR="LTR">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/tools/">tools</a>&nbsp;&raquo;&nbsp;<a href="/tools/tools/">tools</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1>Build tool</H1>
+<P>The build tool is a tool written in Perl. It reads the file
+&lt;build.lst&gt; in the prj directory of the cvs module, builds a
+dependencies chain and according to the chain goes through the
+directories of the module calling dmake in each of them. It can also
+generate a shell script (-file option), which can be started
+afterwards. All directories to build and their dependencies are
+listed in the file &lt;build.lst&gt;. The build.lst has the following
+format:</P>
+<OL>
+	<LI><P>two character prefix of the project (obsolete)</P>
+	<LI><P>directory name (described in Windows\MSDOS pathname
+	convention; using a backslash '\' between each subdirectory)</P>
+	<LI><P>The action to be done. Usually the name of the make-tool, for
+	historical reason still called nmake. There is also a get-action
+	which indicates, that this directory contains source files but no
+	makefiles. If the third entry is a &quot;:&quot; the next entry is a
+	list of dependent modules. This list has to be terminated with an
+	'NULL' string.</P>
+	<LI><P>Special Entry. I have no idea what this is for. In all cases
+	'-'.</P>
+	<LI><P>platform: Used if this directory is only relevant for
+	platform 'x'. 'x' is a placeholder for &quot;all, w, p, m u&quot;.
+	all stands for all platforms, w for windows, p for OS/2
+	(Presentation Manager), u for Unix platforms.</P>
+	<LI><P>Name for directory: Unique name for this directory.</P>
+	<LI><P>List of dependency for this directory. List has to be
+	terminated with 'NULL'. The list contains list or directory names.
+	No circular dependencies are allowed.</P>
+</OL>
+<P>Example for an build.lst:</P>
+<PRE>
+<FONT FACE="Terminal, monospace">
+#=========================================================================
+r rsc : tools NULL
+r rsc\source\misc nmake - all rsc_misc NULL
+r rsc\source\tools nmake - all rsc_tool NULL
+r rsc\source\res nmake - all rsc_res NULL
+r rsc\source\parser nmake - all rsc_pars NULL
+r rsc\source\rsc nmake - all rsc_rsc NULL
+r rsc\source\prj nmake - all rsc_sprj rsc_misc rsc_tool rsc_res rsc_pars rsc_rsc NULL
+r rsc\inc get - all rsc_inc NULL
+r rsc\util nmake - all rsc_util rsc_sprj NULL
+</FONT>
+</PRE>
+<BR>
+<P>The build accepts following switches:</P>
+<UL>
+	<LI><P><FONT FACE="Thorndale, serif"><FONT SIZE=2 STYLE="font-size: 10pt"><B>--file|-F
+	&lt;filename&gt;</B>: write build shell script into &lt;filename&gt;</FONT></FONT></P>
+	<LI><P><FONT FACE="Thorndale, serif"><FONT SIZE=2 STYLE="font-size: 10pt"><B>--all|-a[:prjname]</B>
+	builds all projects from very beginning [starting from prjname, i.e.
+	set the -all sequence forward when build was broken in prjname] till
+	current one.</FONT></FONT></P>
+	<LI><P><FONT FACE="Thorndale, serif"><FONT SIZE=2 STYLE="font-size: 10pt"><B>--since|-c
+	&lt;prjname&gt;</B>: the same as '--all:prjname', but omitting
+	&lt;prjname&gt; build</FONT></FONT></P>
+	<LI><P><FONT FACE="Thorndale, serif"><FONT SIZE=2 STYLE="font-size: 10pt"><B>--from|-f
+	&lt;prjname:broken_build_prj [prjname1 [prjname2 [...prjnameN]]]&gt;</B>:
+	build all projects dependent from &lt;prjname [prjname...]&gt; till
+	current one starting from broken_build_prj</FONT></FONT></P>
+	<LI><P><FONT FACE="Thorndale, serif"><FONT SIZE=2 STYLE="font-size: 10pt"><B>--with_branches|-b</B>:
+	 build all projects in neighbour branches and the current branch
+	till current project.</FONT></FONT></P>
+	<LI><P><FONT FACE="Thorndale, serif"><FONT SIZE=2 STYLE="font-size: 10pt"><B>--show|-s</B>:
+	do not build, only show what is going to be done</FONT></FONT></P>
+	<LI><P><FONT FACE="Thorndale, serif"><FONT SIZE=2 STYLE="font-size: 10pt"><B>--deliver|-d</B>:
+	only deliver, do not build</FONT></FONT></P>
+	<LI><P><FONT FACE="Thorndale, serif"><FONT SIZE=2 STYLE="font-size: 10pt"><B>-dlv_switch</B>:
+	use deliver with switches passed</FONT></FONT></P>
+	<LI><P><FONT FACE="Thorndale, serif"><FONT SIZE=2 STYLE="font-size: 10pt"><B>--help|-h</B>:
+	print help</FONT></FONT></P>
+	<LI><P><FONT FACE="Thorndale, serif"><FONT SIZE=2 STYLE="font-size: 10pt"><B>-P
+	&lt;number&gt;</B>: start &lt;number&gt; processes if possible
+	(Unices only), works on modules level as well</FONT></FONT></P>
+	<LI><P><FONT SIZE=2 STYLE="font-size: 10pt"><FONT FACE="Thorndale, serif"><B>--prepare|-p</B><SPAN STYLE="font-weight: medium">:
+	prepare the workspace for incompatible build (recommended to use
+	with &ldquo;<B>--from prjname</B>&rdquo; switch when you have
+	incompatible changes in <B>prjname </B>project (see description to
+	&ldquo;-from&rdquo; switch))</SPAN></FONT></FONT></P>
+	<LI><P STYLE="font-weight: medium"><FONT FACE="Thorndale, serif"><FONT SIZE=2 STYLE="font-size: 10pt"><B>--ignore|-i</B>:
+	ignore all errors</FONT></FONT></P>
+	<LI><P STYLE="font-weight: medium"><FONT FACE="Thorndale, serif"><FONT SIZE=2 STYLE="font-size: 10pt"><B>--version|-v</B>:
+	print tool version</FONT></FONT></P>
+	<LI><P STYLE="font-weight: medium"><FONT FACE="Thorndale, serif"><FONT SIZE=2 STYLE="font-size: 10pt"><B>--
+	dmake_switch1 [dmake_switch2[ ...dmake_switchN]]</B>: explicitly
+	pass switch(es) to dmake</FONT></FONT></P>
+</UL>
+<P>All unknown switches are passed to dmake tool.</P>
+<P>In general, build is used via alias which is created by configure.</P>
+<PRE STYLE="margin-bottom: 0.5cm">alias build=&quot;perl $SOLARENV/bin/build.pl&quot; </PRE>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

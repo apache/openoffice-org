@@ -1,0 +1,2141 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Developing a locale for OpenOffice</title>
+<style>
+<!--
+div.Section1
+  {page:Section1;}
+p
+  {margin-right:0in;
+  margin-left:0in;
+  font-size:12.0pt;
+  font-family:"Times New Roman";
+  }
+ p.MsoNormal
+  {mso-style-parent:"";
+  margin-bottom:.0001pt;
+  font-size:10.0pt;
+  font-family:"Times New Roman";
+  margin-left:0in; margin-right:0in; margin-top:0in}
+ li.MsoNormal
+  {mso-style-parent:"";
+  margin-bottom:.0001pt;
+  font-size:10.0pt;
+  font-family:"Times New Roman";
+  margin-left:0in; margin-right:0in; margin-top:0in}
+p.tablehead-western
+  {margin-right:0in;
+  margin-left:0in;
+  font-size:12.0pt;
+  font-family:"Times New Roman";
+  }
+p.textintable-western
+  {margin-right:0in;
+  margin-left:0in;
+  font-size:12.0pt;
+  font-family:"Times New Roman";
+  }
+div.Section2
+  {page:Section2;}
+ table.MsoNormalTable
+  {mso-style-parent:"";
+  font-size:10.0pt;
+  font-family:"Times New Roman";
+  }
+-->
+</style>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/l10n/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/l10n/">l10n</a>&nbsp;&raquo;&nbsp;<a href="/l10n/i18n_framework/">i18n_framework</a></div>
+    </div>
+    <div id="clear"></div>
+      <!--#include virtual="/l10n/leftnav.html" -->
+      <!--#include virtual="/l10n/rightnav.html" -->
+    <div id="content">
+      
+      
+
+<div align="center">
+
+<table border="0" cellpadding="0" cellspacing="0" width="90%">
+  <!-- MSTableType="layout" -->
+  <tbody><tr>
+    <td valign="top">
+    <!-- MSCellType="ContentBody" -->
+    <div class="Section1">
+      <p class="MsoNormal" align="center">&nbsp;</p>
+      <p class="MsoNormal" align="center"><b><font size="6">Developing a 
+      locale file for OpenOffice.</font></b></p>
+      <p class="MsoNormal"><b><span style="font-size: 11.0pt">&nbsp;</span></b></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      &nbsp;</p>
+      <p class="MsoNormal" style="text-align: center; margin-left: .5in">
+      <span style="font-size: 11pt">Javier SOLA - 
+      <a href="http://www.khmeros.info/">www.khmeros.info</a> - Last edited
+      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%m/%d/%Y" startspan -->05/04/2005<!--webbot bot="Timestamp" i-checksum="12560" endspan --> -
+      <a href="http://svn.apache.org/viewvc/incubator/ooo/ooo-site/trunk/content/l10n/L10N_Framework/ooo20/localization_of_openoffice_2.0.html">Top</a></span></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      &nbsp;</p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">The written culture of a country is 
+      not only defined by its language. Many other conventions are applied 
+      on written texts. </font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">&nbsp;</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">As an example, in the US they write 
+      dates placing the name or number of month before the day of the 
+      month, capitalize the month and make the day of the month an ordinal 
+      (May 2<sup>nd</sup>, 1960), while in Spain the day is written first, 
+      the month is not capitalized and the word &#8220;de&#8221; has to be placed 
+      between the day and the month and between the month and the year (2 
+      de mayo de 1960). In other countries the word &#8220;day&#8221; has to precede 
+      the day number and in others the year is written first. Some others 
+      will use the Buddhist or other calendar, changing dates 
+      altogether... and these are only a few examples.</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">&nbsp;</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">The same applies to numbers (the 
+      period is used as a decimal separator in some countries and the 
+      comma is used in others), currency writing formats (number of 
+      decimals, currency identifier placed before or after, etc), 
+      measurement units and some other pieces of data.</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">&nbsp;</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">Sorting order, word order, 
+      alphabetic order, collation order, or whatever you prefer to call it 
+      (all equivalent terms), is also script and culture dependent. 
+      Cultures that use the same script sometimes have different rules. In 
+      English the sorting order starts with &#8220;a b c d f&#8230;&#8221; while in Spanish 
+      it starts with &#8220;a b c ch d e f&#8230;&#8221;. Accents and diacritics are also 
+      classified differently in different languages.</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">&nbsp;</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">All this data is usually referred to 
+      in the computer world as LOCALE data. Locale data either refers to 
+      the general use of a language (independently of which country or 
+      region it is used in) or to the specific use of a language in a 
+      given country or regions (the conventions for the use of the Spanish 
+      language is Spain are different to the ones used for the Spanish 
+      language as used in Chile).</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">&nbsp;</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">Programs that are localized to many 
+      languages tend to place all the data related to a language or to a 
+      country (region) in a file called a LOCALE for that culture. </font>
+      </p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">&nbsp;</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <b><font style="font-size: 11pt">OpenOffice</font></b><font style="font-size: 11pt"> 
+      requires that you place all the cultural data for your 
+      language/region in a file that has a format specific to OpenOffice. 
+      This file is an XML file that is plain text (utf-8 if your language 
+      requires it). It can be edited with any plain text editor.</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">&nbsp;</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">By now, you should know your locale 
+      name (in this case LanguageCode.xml or languageCode_regionCode.xml). 
+      If you don't, you can find them here.</font></p>
+      <blockquote>
+        <blockquote>
+          <pre wrap=""><a href="http://www.loc.gov/standards/iso639-2/englangn.html"><font style="font-size: 11pt" face="Times New Roman">Language codes - iso639-2 </font></a></pre>
+          <pre wrap=""><a href="http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/index.html"><font style="font-size: 11pt" face="Times New Roman">Country codes - iso3166-1</font></a></pre>
+        </blockquote>
+      </blockquote>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">The locale name in OpenOffice always uses both the 
+      language code on the country code (language code in small letters 
+      and country code in capital letters), separated by an underscore 
+      (not a hyphen), and with the .xml extension. Some examples of names 
+      are: km_KH.xml, es_CL.xml, en_US.xml, etc. Please look into the 
+      directory that contains all the locale files presently included in 
+      OpenOffice:</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">&nbsp;</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <a style="color: blue; text-decoration: underline; text-underline: single" href="http://l10n.openoffice.org/source/browse/l10n/i18npool/source/localedata/data/">
+      <font style="font-size: 11pt">http://l10n.openoffice.org/source/browse/l10n/i18npool/source/localedata/data/</font></a></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">&nbsp;</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">If there is a file for your culture 
+      already, you might want to check it to see if any corrections are 
+      needed. If they are, you should file an issue with OpenOffice 
+      related to mistakes in the file.</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">&nbsp;</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">If there is no file&#8230; then follow the 
+      instructions below on how to create and submit a locale.</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">&nbsp;</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">To try to make it easy for you, we 
+      have created a <a href="http://svn.apache.org/viewvc/incubator/ooo/ooo-site/trunk/content/l10n/L10N_Framework/ooo20/template.xml">template file</a>
+ that originates in the present en-US.xml 
+      file. It includes most of the information that will be needed; 
+other 
+      information is inherited from the en-US.xml (English in the United
+ 
+      States) file. The information that we have not included in our 
+      template file (that we have included as inherited) is not 
+important 
+      for first level localization work. If you localize the 
+template.xml file to your own culture you will have everything that 
+      you need.</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">&nbsp;</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <font style="font-size: 11pt">We will now go through this file 
+      point by point to see what needs to be changed:</font></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      &nbsp;</p>
+      <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+        <li class="MsoNormal" style="text-align: justify">
+        <span style="font-size: 11.0pt">The first block gives general 
+        information about the locale itself. You should not change 
+        anything, unless you know what you are doing, specially in the 
+        first two lines. The third line contains three values (version 
+        number and attributes versionDTD and allowUpdateFromCLDR). For the <b>version</b> 
+        number (at the end of the line) you can start with 1.0 (as it is now) 
+        and change it when needed (later, if you do big upgrades of the 
+        locale file). This version number is for your own internal 
+        control. The versionDTD attribute is the same one in all locale 
+        files for all languages. To make sure that you have the correct 
+        number, you need to look into the file:</span></li>
+      </ul>
+      <blockquote>
+        <p><span style="font-size: 11pt">
+        <a href="http://l10n.openoffice.org/source/browse/l10n/i18npool/source/localedata/data/locale.dtd">
+        /i18npool/source/localedata/data/locale.dtd</a></span></p>
+        <p><span style="font-size: 11pt">In this file, search for 
+        <b>versionDTD</b>, and you will find a line such as:</span></p>
+        <pre>&lt;!ATTLIST Locale versionDTD CDATA #FIXED "2.0"&gt;</pre>
+        <p><span style="font-size: 11pt">which indicates that the value 
+        of versionDTD is a fixed one for all locale files, and it must 
+        be "2.0". If your locale does not have this attribute 
+        or this number is incorrect, be careful, you might have taken - 
+        as a template to start your locale - an old locale file that is 
+        not compatible. We recommend you once again to start with our
+        <a href="http://svn.apache.org/viewvc/incubator/ooo/ooo-site/trunk/content/l10n/L10N_Framework/ooo20/template.xml">template file</a> if you are working on 
+        version 2.0 of OpenOffice.org</span></p>
+        <p><span style="font-size: 11.0pt">The allowUpdateFromCLDR value indicates if you want to 
+        be permit new changes in the CLDR locale file to also take place 
+        automatically in the OOo locale file.</span></p>
+        <p><span style="font-size: 11pt">The
+        <a href="http://www.unicode.org/cldr/">Common Locale Data 
+        Repository (CLDR)</a> is a central location for locale data 
+        managed by the Unicode consortium (and before by the Openi18n 
+        group) that is becoming a central reference location for all 
+        locale data. <a href="http://unicode.org/cldr/data/common/main/">
+        Specific CLDR locales</a> are accesible
+        <a href="http://unicode.org/cldr/data/common/main/">here</a>.</span></p>
+        <p><span style="font-size: 11.0pt">If your OOo locale and the 
+        CLDR locale contain the same general data (such as</span> 
+        separators, day and month names and so on<span style="font-size: 11.0pt">), 
+        as it is already the case for many locales, then you might be 
+        interested on using the value "yes", not to have to think about 
+        upgrading the OOo locale everytime something new comes out in 
+        the CLDR locale. If the CLDR locale for you language/country has 
+        different data from the one that is in the OOo locale (there are 
+        disagreements), and you do not want the values to be changed to 
+        those of the CLDR locale, then you should use the value "no".</span></p>
+      </blockquote>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;&lt;?xml 
+      version="1.0" encoding="UTF-8"?&gt;<br>
+      &lt;!DOCTYPE Locale SYSTEM 'locale.dtd'&gt;<br>
+      &lt;Locale versionDTD="2.0" allowUpdateFromCLDR="no" version="1.0"&gt;</span></p>
+      <p class="MsoNormal">&nbsp;</p>
+      <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+        <li class="MsoNormal" style="text-align: justify">
+        <span style="font-size: 11.0pt">In the following section, you 
+        need to provide the language and region (country) codes, as well 
+        as the name of the language and the region in English (not in 
+        your own language and script). </span></li>
+      </ul>
+      <p class="MsoNormal"><span style="font-size: 11.0pt"><br>
+      &lt;LC_INFO&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Language&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">
+      &lt;LangID&gt;en&lt;/LangID&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultName&gt;English&lt;/DefaultName&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Language&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Country&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;CountryID&gt;US&lt;/CountryID&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultName&gt;United 
+      States&lt;/DefaultName&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Country&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/LC_INFO&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+        <li class="MsoNormal"><span style="font-size: 11.0pt">You have to pay most attention to the &lt;DecimalSeparator&gt; 
+        and the &lt;ThousandSeparator&gt;. If in your country you write &#8220;one 
+        thousand three hundred fifty five and half&#8221; as 1,355.5, you do 
+        not need to change them, but if you usually write 1.355,5 , then 
+        you have to invert them. The list separator is presently not 
+        used in OpenOffice, but it is defined to separate objects in 
+        enumerated list, such as: socks; shoes; Swiss army knife; 
+        toothbrush and clean underware.</span></li>
+      </ul>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;LC_CTYPE unoid="generic"&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Separators&gt;</span></p>
+      <p class="MsoNormal">&nbsp;</p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;ThousandSeparator&gt;,&lt;/ThousandSeparator&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DecimalSeparator&gt;.&lt;/DecimalSeparator&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;ListSeparator&gt;;&lt;/ListSeparator&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <p class="MsoNormal">&nbsp;</p>
+      <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+        <li class="MsoNormal"><span style="font-size: 11.0pt">The 
+        following are declared for future more automatic date and time 
+        formats. They should be in agreement with the separators that 
+        you use further down in the date formats, just for consistency, 
+        so that future automatic dates have the same format that the 
+        ones you are declaring here. They normally do not interact with 
+        the present date formats, with only one exception: &lt;LongDateDayOfWeekSeparator&gt;, 
+        which is, in the long date formats, always inserted after an 
+        occurrence of NNNN (complete name of the day of the week), this 
+        is why in some date formats you will find patterns like the 
+        following one, in which MMMM is placed right after NNNN.</span></li>
+      </ul>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <p class="MsoNormal" style="margin-left: 1.5in">
+      <span style="font-size: 11.0pt">NNNNMMMM DD, YYYY</span></p>
+      <p class="MsoNormal">&nbsp;</p>
+      <p class="MsoNormal" style="margin-left: .5in">
+      <span style="font-size: 11.0pt">As the automatic separator is 
+      inserted, and if we consider the &lt;LongDateDayOfWeekSeparator&gt; 
+      ", ", it will be interpreted in this template locale 
+      as something like:</span></p>
+      <p class="MsoNormal" style="margin-left: .5in">
+      <span style="font-size: 11.0pt">&nbsp;</span></p>
+      <p class="MsoNormal" style="margin-left: 1.5in">
+      <span style="font-size: 11.0pt">Wednesday, March 12, 2023</span></p>
+      <p class="MsoNormal" style="margin-left: .5in">
+      <span style="font-size: 11.0pt"><br>
+      if 3/12/23 was the date. If you inserted another space in the date 
+      format after NNNN, the date would would show a double space.</span> 
+      <br>
+&nbsp;</p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DateSeparator&gt;/&lt;/DateSeparator&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;TimeSeparator&gt;:&lt;/TimeSeparator&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">
+      &lt;Time100SecSeparator&gt;.&lt;/Time100SecSeparator&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;LongDateDayOfWeekSeparator&gt;, 
+      &lt;/LongDateDayOfWeekSeparator&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;LongDateDaySeparator&gt;, 
+      &lt;/LongDateDaySeparator&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;LongDateMonthSeparator&gt; 
+      &lt;/LongDateMonthSeparator&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;LongDateYearSeparator&gt; 
+      &lt;/LongDateYearSeparator&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Separators&gt;</span></p>
+      <ul>
+        <li>
+        <p class="MsoNormal"><span style="font-size: 11.0pt">Here you can 
+      either use advanced directional quotation marks (as they are now), 
+      or the good old-style straight marks ( ' and " , same for Start and 
+      End)</span></p></li>
+      </ul>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Markers&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;QuotationStart&gt;&#8216;&lt;/QuotationStart&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;QuotationEnd&gt;&#8217;&lt;/QuotationEnd&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DoubleQuotationStart&gt;&#8220;&lt;/DoubleQuotationStart&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DoubleQuotationEnd&gt;&#8221;&lt;/DoubleQuotationEnd&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Markers&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+        <li class="MsoNormal"><span style="font-size: 11.0pt">What words 
+        or abbreviations do you use to indicate morning (0:00 to 12:00) 
+        or afternoon (12:00 to 24:00) in a 12 hour clock? </span></li>
+      </ul>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;TimeAM&gt;AM&lt;/TimeAM&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;TimePM&gt;PM&lt;/TimePM&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+        <li class="MsoNormal"><span style="font-size: 11.0pt">Here you 
+        can use metric (as it is now), US or UK (if your country uses 
+        the US or UK measurement systems).</span></li>
+      </ul>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;MeasurementSystem&gt;metric&lt;/MeasurementSystem&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/LC_CTYPE&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+        <li class="MsoNormal"><span style="font-size: 11.0pt">You have 
+        to replace the second $ sign with the sign(s) used to indicate 
+        your currency (up to three characters). The number in the second 
+        part is the Microsoft language ID for your language in 
+        hexadecimal format. You can find it here:</span></li>
+      </ul>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <span style="font-size: 11.0pt">
+      <a style="color: blue; text-decoration: underline; text-underline: single" href="http://www.microsoft.com/globaldev/reference/lcid-all.mspx">
+      http://www.microsoft.com/globaldev/reference/lcid-all.mspx</a>
+      </span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <p class="MsoNormal" style="margin-left: .5in">
+      <span style="font-size: 11.0pt">if your language does not appear in 
+      this list, then say so in the OpenOffice Localization list and they 
+      will assign a number for you.</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;LC_FORMAT 
+      replaceFrom="[CURRENCY]" replaceTo="[$$-409]"&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <p class="tablehead-western" style="text-align: justify; text-indent: -.25in; margin-left: .5in">
+      <span style="font-family: Symbol">�<span style="font-style: normal; font-variant: normal; font-weight: normal; font-size: 7.0pt; font-family: Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </span></span>Dates are the following part. A large number of 
+      formats are used in OpenOffice, each one has different amount of 
+      information and format. Here in the example the data is structured 
+      in the usual US format, with the month before the day of the month 
+      and then the year (I wonder who ever came out with this order). You 
+      will most probably have to change the order, but it is a good idea 
+      to maintain the separators and the amount of information in each 
+      format. The formats are build around this table of &#8220;placeholder&#8221; 
+      letters:</p>
+      <p class="textintable-western" style="text-indent: -.25in; margin-left: 1.5in; margin-right: 0in; margin-top: 0in; margin-bottom: .0001pt">
+      <span style="font-family: Wingdings">�<span style="font-style: normal; font-variant: normal; font-weight: normal; font-size: 7.0pt; font-family: Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </span></span>Era &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; G</p>
+      <p class="textintable-western" style="text-indent: -.25in; margin-left: 1.5in; margin-right: 0in; margin-top: 0in; margin-bottom: .0001pt">
+      <span style="font-family: Wingdings">�<span style="font-style: normal; font-variant: normal; font-weight: normal; font-size: 7.0pt; font-family: Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </span></span>Year &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Y</p>
+      <p class="textintable-western" style="text-indent: -.25in; margin-left: 1.5in; margin-right: 0in; margin-top: 0in; margin-bottom: .0001pt">
+      <span style="font-family: Wingdings">�<span style="font-style: normal; font-variant: normal; font-weight: normal; font-size: 7.0pt; font-family: Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </span></span>Month&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; M&nbsp; 
+      (when within a date)</p>
+      <p class="textintable-western" style="text-indent: -.25in; margin-left: 1.5in; margin-right: 0in; margin-top: 0in; margin-bottom: .0001pt">
+      <span style="font-family: Wingdings">�<span style="font-style: normal; font-variant: normal; font-weight: normal; font-size: 7.0pt; font-family: Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </span></span>Day &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D</p>
+      <p class="textintable-western" style="text-indent: -.25in; margin-left: 1.5in; margin-right: 0in; margin-top: 0in; margin-bottom: .0001pt">
+      <span style="font-family: Wingdings">�<span style="font-style: normal; font-variant: normal; font-weight: normal; font-size: 7.0pt; font-family: Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </span></span>DayofWeek&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; N</p>
+      <p class="textintable-western" style="text-indent: -.25in; margin-left: 1.5in; margin-right: 0in; margin-top: 0in; margin-bottom: .0001pt">
+      <span style="font-family: Wingdings">�<span style="font-style: normal; font-variant: normal; font-weight: normal; font-size: 7.0pt; font-family: Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </span></span>DayOfWeek &nbsp;&nbsp;&nbsp; A ? (probably in old specifications, not 
+      used now)</p>
+      <p class="textintable-western" style="text-indent: -.25in; margin-left: 1.5in; margin-right: 0in; margin-top: 0in; margin-bottom: .0001pt">
+      <span style="font-family: Wingdings">�<span style="font-style: normal; font-variant: normal; font-weight: normal; font-size: 7.0pt; font-family: Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </span></span>Quarter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      Q</p>
+      <p class="textintable-western" style="text-indent: -.25in; margin-left: 1.5in; margin-right: 0in; margin-top: 0in; margin-bottom: .0001pt">
+      <span style="font-family: Wingdings">�<span style="font-style: normal; font-variant: normal; font-weight: normal; font-size: 7.0pt; font-family: Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </span></span>Hour &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; H</p>
+      <p class="textintable-western" style="text-indent: -.25in; margin-left: 1.5in; margin-right: 0in; margin-top: 0in; margin-bottom: .0001pt">
+      <span style="font-family: Wingdings">�<span style="font-style: normal; font-variant: normal; font-weight: normal; font-size: 7.0pt; font-family: Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </span>
+      <span style="font-style: normal; font-variant: normal; font-weight: normal; font-family: Times New Roman">
+      Minutes</span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      M (when used within a time structure)</p>
+      <p class="textintable-western" style="text-indent: -.25in; margin-left: 1.5in; margin-right: 0in; margin-top: 0in; margin-bottom: .0001pt">
+      <span style="font-family: Wingdings">�<span style="font-style: normal; font-variant: normal; font-weight: normal; font-size: 7.0pt; font-family: Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </span>
+      <span style="font-style: normal; font-variant: normal; font-weight: normal; font-family: Times New Roman">
+      Seconds</span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      S</p>
+      <p class="textintable-western" style="text-indent: -.25in; margin-left: 1.5in; margin-right: 0in; margin-top: 0in; margin-bottom: .0001pt">
+      <span style="font-family: Wingdings">�<span style="font-style: normal; font-variant: normal; font-weight: normal; font-size: 7.0pt; font-family: Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </span></span>1/100 of sec.&nbsp;&nbsp;&nbsp;&nbsp; 00</p>
+      <p class="textintable-western" style="text-indent: -.25in; margin-left: 1.5in; margin-right: 0in; margin-top: 0in; margin-bottom: .0001pt">
+      &nbsp;</p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in; margin-bottom:0.0006pt">
+      <span style="font-size: 11.0pt">The number of times a placeholder 
+      letter is repeated is an indication of the number of characters to 
+      be used, but the number of characters does not always correspond 
+      exactly with the number of times the placeholder letter is repeated 
+      in the format. For example: &#8216;D&#8217; means day of the month, with one or 
+      two characters (as needed: 2 for day 2, 12 for day 12), &#8216;DD&#8217; means 
+      that two digits must always be used (day 5 must be 05). M is a one 
+      or two digit month, MM a two digit month, MMM a three letter month 
+      (short month name) and MMMM a long month name (long and short month 
+      names for your language are defined further down in the locale). Of 
+      the following block you only have to localize what is in the &lt;FormatCode&gt; 
+      lines, don&#8217;t touch the other lines. Do not change the format for 
+      entries numbered 32 and 33, they correspond to data in a specific 
+      ISO formats (year first). Also, pay special attention to using the 
+      same number of letters for each piece of data in dates 21 and 47 
+      (change only the order of the elements if needed).</span></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in; margin-bottom:0.0006pt">
+      <span style="font-size: 11.0pt">&nbsp;Spaces inside the dates are 
+      significant. If you include a space, it will be included in the 
+      printed date. In some cases you will see that they day of the week 
+      is attached to the name of the month (no spaces between). This is 
+      because here OpenOffice automatically includes between them the &lt;LongDateDayOfWeekSeparator&gt; 
+      that you defined above (comma + space for US English). </span></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in; margin-bottom:0.0006pt">
+      <span style="font-size: 11.0pt">Inside the date format, you can 
+      include strings with text before, between or after the placeholder 
+      letters, such as in <b>D �de� MMMM �de� YYYY</b> for Spanish. This 
+      is because dates in Spanish should be printed with these words in 
+      the middle: <b>2 de mayo de 1960</b> (note that there are spaces 
+      outside the quotes, which are significant. IF they had been inside 
+      the quotes, they would also be taken into account. What you should 
+      never do is to put spaces inside and outside, then they would be 
+      duplicated in the final date.</span></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in; margin-bottom:0.0006pt">
+      <span style="font-size: 11.0pt">Inside some of the date format, you 
+      will see &#8220;AM/PM&#8221;. Do not translate these. They are placeholders for 
+      the words for AM and PM that you have defined in &lt;TimeAM&gt; and &lt;TimePM&gt;</span></p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in; margin-bottom:0.0006pt">
+      <span style="font-size: 11pt">The placeholder M is used in two 
+      different situations. When used within a date, it means "month", but 
+      when used within a time structure, it means "minute". Note that it 
+      might be used with both meanings within the same format.</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey1" 
+      default="true" type="short" usage="DATE" formatindex="18"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;M/D/YY&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey2" 
+      default="false" type="medium" usage="DATE" formatindex="28"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;NN DD/MMM YY&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey3" 
+      default="false" type="medium" usage="DATE" formatindex="34"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;MM/YY&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey4" 
+      default="false" type="medium" usage="DATE" formatindex="35"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;MMM DD&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey5" 
+      default="false" type="medium" usage="DATE" formatindex="36"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;MMMM&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey6" 
+      default="false" type="medium" usage="DATE" formatindex="37"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;QQ YY&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey7" 
+      default="false" type="medium" usage="DATE" formatindex="21"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;MM/DD/YYYY&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey8" 
+      default="true" type="medium" usage="DATE" formatindex="20"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">
+      &lt;FormatCode&gt;MM/DD/YY&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement 
+      msgid="DateFormatskey9" default="true" type="long" usage="DATE" 
+      formatindex="19"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;NNNNMMMM DD, 
+      YYYY&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey10" 
+      default="false" type="long" usage="DATE" formatindex="22"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;MMM D, YY&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey11" 
+      default="false" type="long" usage="DATE" formatindex="23"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;MMM D, YYYY&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey12" 
+      default="false" type="long" usage="DATE" formatindex="25"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;MMMM D, YYYY&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey13" 
+      default="false" type="long" usage="DATE" formatindex="27"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;NN, MMM D, YY&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey14" 
+      default="false" type="long" usage="DATE" formatindex="29"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;NN, MMMM D, YYYY&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey15" 
+      default="false" type="long" usage="DATE" formatindex="30"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;NNNNMMMM D, YYYY&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey16" 
+      default="false" type="long" usage="DATE" formatindex="24"&gt;</font></p>
+      <p class="MsoNormal"><span lang="FR"><font size="2">&lt;FormatCode&gt;D. 
+      MMM. YYYY&lt;/FormatCode&gt;</font></span></p>
+      <p class="MsoNormal"><span lang="FR"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></span></p>
+      <p class="MsoNormal"><span lang="FR"><font size="2">&lt;/FormatElement&gt;</font></span></p>
+      <p class="MsoNormal"><span lang="FR"><font size="2">&lt;FormatElement 
+      msgid="DateFormatskey17" default="false" type="long" usage="DATE" 
+      formatindex="26"&gt;</font></span></p>
+      <p class="MsoNormal"><span lang="FR"><font size="2">&lt;FormatCode&gt;D. 
+      MMMM YYYY&lt;/FormatCode&gt;</font></span></p>
+      <p class="MsoNormal"><span lang="FR"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></span></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey18" 
+      default="false" type="short" usage="DATE" formatindex="31"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;MM-DD&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey19" 
+      default="false" type="medium" usage="DATE" formatindex="32"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;YY-MM-DD&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;ISO 8601&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey20" 
+      default="false" type="medium" usage="DATE" formatindex="33"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;YYYY-MM-DD&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;ISO 8601&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey21" 
+      default="false" type="medium" usage="DATE" formatindex="38"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;WW&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="TimeFormatskey1" 
+      default="false" type="short" usage="TIME"&nbsp; formatindex="39"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;HH:MM&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="TimeFormatskey2" 
+      default="false" type="medium" usage="TIME"&nbsp; formatindex="40"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;HH:MM:SS&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="TimeFormatskey3" 
+      default="true" type="short" usage="TIME"&nbsp; formatindex="41"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;HH:MM AM/PM&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="TimeFormatskey4" 
+      default="true" type="medium" usage="TIME"&nbsp; formatindex="42"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;HH:MM:SS AM/PM&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="TimeFormatskey5" 
+      default="false" type="medium" usage="TIME"&nbsp; formatindex="43"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;[HH]:MM:SS&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="TimeFormatskey6" 
+      default="false" type="short" usage="TIME"&nbsp; formatindex="44"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;MM:SS.00&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="TimeFormatskey7" 
+      default="false" type="medium" usage="TIME"&nbsp; formatindex="45"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;[HH]:MM:SS.00&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateTimeFormatskey1" 
+      default="true" type="medium" usage="DATE_TIME"&nbsp; formatindex="46"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;MM/DD/YY HH:MM 
+      AM/PM&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateTimeFormatskey2" 
+      default="false" type="medium" usage="DATE_TIME" formatindex="47"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;MM/DD/YYYY HH:MM:SS&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal">&nbsp;</p>
+      <blockquote>
+        <p class="MsoNormal" align="justify">
+        <span style="font-size: 11pt">&nbsp;If you want different 
+        predetermined date formats to appear in the places in OOo in 
+        which date formatting is done automatically (such as in Calc 
+        cell formatting, then you can include additional date formats, 
+        or any other type of formats. By default, numbers in these 
+        formats will be Arab (English) numbers. If you want the new date 
+        formats to use the numbers of your script, you need to precede 
+        the format with [NatNum1]. </span></p>
+        <p class="MsoNormal" align="justify">&nbsp;</p>
+        <p class="MsoNormal" align="justify">
+        <span style="font-size: 11pt">For example, you could add:</span></p>
+        <p class="MsoNormal" align="justify">&nbsp;</p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="DateFormatskey22" 
+      default="false" type="medium" usage="DATE_TIME" formatindex="50"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;[NatNum1]NNNN, 
+      "Day" D "of" MMMM "of the year" YYYY&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+        <p class="MsoNormal">&nbsp;</p>
+        <p class="MsoNormal"><span style="font-size: 11pt">This will not 
+        translate the expressions "Day" or "of the year", but if your 
+        locale is selected, all the numbers will be in your locale.
+        </span></p>
+        <blockquote>
+          <p class="MsoNormal" align="justify">
+          <span style="font-size: 11pt"><b>Warning: </b>if you include 
+          new date styles, you should give them new consecutive 
+          DateFormatskey numbers. If the last one is DateFormatskey21, 
+          you should start with DateFormatskey22...&nbsp; Also, even 
+          more important, you should use formatindex="XX" number in 
+          which XX is over 49, as all numbers under 49 are reserved by 
+          the system. Notice that all formats (dates, numbers, 
+          currency, etc...) share the same formatindex numbers. If you 
+          add dates with formatindex numbers 50 and 51 (for example), 
+          and then add number formats, they must have different 
+          formatindex such as 52, 53, etc. (different from 50, 51). 
+          There is no relation between the number that you use in 
+          DateFormatskey and the number that you use in formatindex.</span></p>
+          <p class="MsoNormal" align="justify">&nbsp;</p>
+        </blockquote>
+      </blockquote>
+      <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+        <li class="MsoNormal" style="text-align: justify">
+        <span style="font-size: 11.0pt">The next block is about number 
+        formats. The most important issues here are the DecimalSeparator, 
+        the ThousandSeparator and how to represent currency: should the 
+        currency symbol be placed before the amount or after? How many 
+        decimals should currency representation have? Look at each 
+        format carefully. Remember to change only the lines that include 
+        &lt;FormatCode&gt;, and make sure that the representation for numbers 
+        that you include here is the same as the &lt;DecimalSeparator&gt;, the 
+        &lt;ThousandSeparator&gt; that you did above. By default, the US 
+        number representation form is in this file, if your form is 
+        different, you must change it.</span></li>
+      </ul>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="FixedFormatskey1" 
+      default="true" type="medium" usage="FIXED_NUMBER"&nbsp; formatindex="0"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;General&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="FixedFormatskey2" 
+      default="true" type="short" usage="FIXED_NUMBER"&nbsp; formatindex="1"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;0&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="FixedFormatskey3" 
+      default="false" type="medium" usage="FIXED_NUMBER"&nbsp; formatindex="2"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;0.00&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="FixedFormatskey4" 
+      default="false" type="short" usage="FIXED_NUMBER"&nbsp; formatindex="3"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;#,##0&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="FixedFormatskey5" 
+      default="false" type="medium" usage="FIXED_NUMBER"&nbsp; formatindex="4"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;#,##0.00&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="FixedFormatskey6" 
+      default="false" type="medium" usage="FIXED_NUMBER"&nbsp; formatindex="5"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;#,###.00&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="CurrencyFormatskey1" 
+      default="true" type="short" usage="CURRENCY"&nbsp; formatindex="12"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;[CURRENCY]#,##0;-[CURRENCY]#,##0&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="CurrencyFormatskey2" 
+      default="false" type="medium" usage="CURRENCY"&nbsp; formatindex="13"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;[CURRENCY]#,##0.00;-[CURRENCY]#,##0.00&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="CurrencyFormatskey3" 
+      default="false" type="medium" usage="CURRENCY"&nbsp; formatindex="14"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;[CURRENCY]#,##0;[RED]-[CURRENCY]#,##0&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="CurrencyFormatskey4" 
+      default="true" type="medium" usage="CURRENCY"&nbsp; formatindex="15"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;[CURRENCY]#,##0.00;[RED]-[CURRENCY]#,##0.00&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="CurrencyFormatskey5" 
+      default="false" type="medium" usage="CURRENCY"&nbsp; formatindex="16"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;#,##0.00 CCC&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="CurrencyFormatskey6" 
+      default="false" type="medium" usage="CURRENCY"&nbsp; formatindex="17"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;[CURRENCY]#,##0.--;[RED]-[CURRENCY]#,##0.--&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="PercentFormatskey1" 
+      default="true" type="short" usage="PERCENT_NUMBER"&nbsp; formatindex="8"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;0%&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="PercentFormatskey2" 
+      default="true" type="long" usage="PERCENT_NUMBER"&nbsp; formatindex="9"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;0.00%&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="ScientificFormatskey1" 
+      default="true" type="medium" usage="SCIENTIFIC_NUMBER"&nbsp; formatindex="6"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;0.00E+000&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatElement msgid="ScientificFormatskey2" 
+      default="false" type="medium" usage="SCIENTIFIC_NUMBER"&nbsp; formatindex="7"&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;FormatCode&gt;0.00E+00&lt;/FormatCode&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;DefaultName&gt;&lt;/DefaultName&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/FormatElement&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/LC_FORMAT&gt;</font></p>
+      <blockquote>
+        <p class="MsoNormal" align="justify">
+        <span style="font-size: 11pt">&nbsp;If you want different 
+        predetermined formats to appear in the places in OOo in which 
+        number formatting is done automatically (such as in Calc cell 
+        formatting), then you can include additional FIXED_NUMBER, 
+        CURRENCY, PERCENT_NUMBER formats, or any other type of formats. 
+        By default, numbers in these formats will be Latin numbers. If 
+        you want the new number formats to use the numbers of your 
+        script, you need to precede the format with [NatNum1]. </span>
+        </p>
+        <blockquote>
+          <p class="MsoNormal" align="justify">
+          <span style="font-size: 11pt"><b>Warning: </b>if you include 
+          new number styles, you should give them new </span>
+          <font style="font-size: 11pt">FixedFormatskey, 
+          CurrencyFormatskey or</font><span style="font-size: 11pt">
+          </span><font style="font-size: 11pt">PercentFormatskey1 </font>
+          <span style="font-size: 11pt">numbers that are consecutive 
+          to the already existing ones. As ane xample, if the last 
+          FIXED_NUMBER is </span><font style="font-size: 11pt">
+          FixedFormatskey6</font><span style="font-size: 11pt">, you 
+          should start with </span><font style="font-size: 11pt">
+          FixedFormatskey7</font><span style="font-size: 11pt">...&nbsp; 
+          Also, even more important, you should use a formatindex="XX" 
+          number in which XX is over 49, as all numbers under 49 are 
+          reserved by the system. Notice that all formats (dates, 
+          numbers, currency, etc...) share the same formatindex 
+          numbers. If you add dates with formatindex numbers 50 and 51 
+          (for example), and then add number formats, they must have 
+          different formatindex such as 52, 53, etc. (different from 
+          50, 51). There is no relation between the number that you 
+          use in DateFormatskey and the number that you use in 
+          formatindex.</span></p>
+        </blockquote>
+      </blockquote>
+      <p class="MsoNormal">&nbsp;</p>
+      <p class="MsoNormal">&nbsp;</p>
+      <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+        <li class="MsoNormal"><span style="font-size: 11pt">Please see
+        <a href="http://svn.apache.org/viewvc/incubator/ooo/ooo-site/trunk/content/l10n/L10N_Framework/ooo20/localization_of_openoffice_2.0.html#Collation">this 
+        page</a> for information on collation</span></li>
+      </ul>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <p class="MsoNormal"><font size="2">&lt;LC_COLLATION&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;Collator unoid="alphanumeric" 
+      default="true"/&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;CollationOptions&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;TransliterationModules&gt;IGNORE_CASE&lt;/TransliterationModules&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/CollationOptions&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/LC_COLLATION&gt;</font></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+        <li class="MsoNormal"><span style="font-size: 11.0pt">No 
+        information</span></li>
+      </ul>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <p class="MsoNormal"><font size="2">&lt;LC_SEARCH&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;SearchOptions&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;TransliterationModules&gt;IGNORE_CASE&lt;/TransliterationModules&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/SearchOptions&gt;</font></p>
+      <p class="MsoNormal"><font size="2">&lt;/LC_SEARCH&gt;</font></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+      <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+        <li class="MsoNormal" style="text-align: justify">
+        <span style="font-size: 11.0pt">In &lt;IndexKey&gt; you should list the 
+        letters of your script that you would use for enumerating with 
+        letters instead of numbering, these characters should replace A-Z 
+        below (unless, as in English, this is what 
+        your language uses). You can name sets of characters by 
+        mentioning the first one and the last one separated by a hyphen 
+        (as in the case of A-Z, corresponding to all letters between A 
+        and Z). </span></li>
+        <li class="MsoNormal" style="text-align: justify">
+        <span style="font-size: 11.0pt">You need to type the real characters (this is a UTF-8 
+        file). &lt;&lt;&lt;&lt;REVIEW *** Then you can list all other characters used, but not in 
+        that range one-by-one. In Spanish this would probably amount to: 
+        A-Z � � � � � � � � � � � �&gt;&gt;&gt;&gt;&gt;&gt;</span></li>
+      </ul>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;&nbsp;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;LC_INDEX&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;IndexKey unoid="alphanumeric" 
+      default="true" phonetic="false"&gt;A-Z&lt;/IndexKey&gt;</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;&nbsp;</span></p>
+      <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+        <li class="MsoNormal" style="text-align: justify">
+        <span style="font-size: 11.0pt">In the next block, you have to 
+        define &lt;UnicodeScript&gt;. If your language uses the basic Latin 
+        alphabet (as used by the English language), do not change this, 
+        leave the two entries. IF your language script has its own 
+        characters and is listed in Unicode, you should remove one of 
+        the two &lt;UnicodeScript&gt; lines and in the other place the number 
+        of the following table that corresponds to your script. </span>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;&nbsp;</span></p></li>
+      </ul>
+      <div align="center">
+        <table id="table2" border="0">
+          <tbody><tr>
+          <td style="width: 199px; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom">
+      <table class="MsoNormalTable" style="width: 145.8pt; border-collapse: collapse; margin-left: 4.6pt" id="table4" border="0" cellpadding="0" cellspacing="0" width="194">
+        <tbody><tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">0</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">BasicLatin</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">1</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Latin1Supplement</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">2</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">LatinExtendedA</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">3</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">LatinExtendedB</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">4</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">IPAExtension</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">5</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">SpacingModifier</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">6</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">CombiningDiacritical</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">7</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Greek</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">8</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Cyrillic</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">9</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Armenian</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">10</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Hebrew</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">11</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Arabic</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">12</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Syriac</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">13</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Thaana</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">14</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Devanagari</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">15</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Bengali</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">16</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Gurmukhi</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">17</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Gujarati</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">18</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal">
+          <span lang="ES"><font size="1">Oriya</font></span></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">19</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal">
+          <span lang="ES"><font size="1">Tamil</font></span></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">20</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal">
+          <span lang="ES"><font size="1">Telugu</font></span></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">21</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal">
+          <span lang="ES"><font size="1">Kannada</font></span></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">22</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal">
+          <span lang="ES"><font size="1">Malayalam</font></span></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">23</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Sinhala</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">24</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Thai</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">25</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Lao</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">26</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Tibetan</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">27</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Myanmar </font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">28</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Georgian</font></p></td>
+        </tr>
+      </tbody></table>
+            </td>
+          <td style="width: 209px; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom">
+      <table class="MsoNormalTable" style="width: 145.8pt; border-collapse: collapse; margin-left: 4.6pt" id="table3" border="0" cellpadding="0" cellspacing="0" width="194">
+        <tbody><tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">29</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">HangulJamo</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">30</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Ethiopic</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">31</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Cherokee</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">32</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">UnifiedCanadianAboriginalSyll</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">33</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Ogham</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">34</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Runic</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">35</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Khmer</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">36</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Mongolian</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">37</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">LatinExtendedAdditional</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">38</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">GreekExtended</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">39</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">GeneralPunctuation</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">40</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">SuperSubScript</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">41</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">CurrencySymbolScript</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">42</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">SymbolCombiningMark</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">43</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">LetterlikeSymbol</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">44</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">NumberForm</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">45</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Arrow</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">46</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">MathOperator</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">47</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">MiscTechnical</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">48</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">ControlPicture</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">49</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">OpticalCharacter</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">50</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">EnclosedAlphanumeric</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">51</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">BoxDrawing</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">52</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">BlockElement</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">53</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">GeometricShape</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">54</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">MiscSymbol</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">55</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Dingbat</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">56</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">BraillePatterns</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">57</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">CJKRadicalsSupplement</font></p></td>
+        </tr>
+      </tbody></table>
+            </td>
+          <td style="width: 329px; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom">
+      <table class="MsoNormalTable" style="width: 145.8pt; border-collapse: collapse; margin-left: 4.6pt" id="table5" border="0" cellpadding="0" cellspacing="0" width="194">
+        <tbody><tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">58</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">KangxiRadicals</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">59</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">IdeographicDescriptionChars</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">60</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">CJKSymbolPunctuation</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">61</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Hiragana</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">62</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Katakana</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">63</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Bopomofo</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">64</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">HangulCompatibilityJamo</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">65</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">Kanbun</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">66</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">BopomofoExtended</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">67</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">EnclosedCJKLetterMonth</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">68</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">CJKCompatibility</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">69</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">CJKUnifiedIdeographsExtA</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">70</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">CJKUnifiedIdeograph</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">71</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">YiSyllables</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">72</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal">
+          <span lang="FR"><font size="1">YiRadicals</font></span></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">73</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal">
+          <span lang="FR"><font size="1">HangulSyllable</font></span></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">74</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal">
+          <span lang="FR"><font size="1">HighSurrogate</font></span></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">75</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal">
+          <span lang="FR">
+          <font size="1">HighPrivateUseSurrogate</font></span></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">76</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal">
+          <span lang="FR"><font size="1">LowSurrogate</font></span></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">77</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">PrivateUse</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">78</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">CJKCompatibilityIdeograph</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">79</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">AlphabeticPresentation</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">80</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">ArabicPresentationA</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">81</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">CombiningHalfMark</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">82</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">CJKCompatibilityForm</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">83</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">SmallFormVariant</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">84</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">ArabicPresentationB</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">85</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">NoScript</font></p></td>
+        </tr>
+        <tr style="height: 12.75pt">
+          <td style="width: 19.8pt; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="26">
+          <p class="MsoNormal" style="text-align: right" align="right">
+          <font size="1">86</font></p></td>
+          <td style="width: 1.75in; height: 12.75pt; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0in; padding-bottom: 0in" nowrap="nowrap" valign="bottom" width="168">
+          <p class="MsoNormal"><font size="1">HalfwidthFullwidthForm</font></p></td>
+        </tr>
+      </tbody></table>
+            </td>
+          </tr>
+        </tbody></table>
+      </div>
+      <div class="Section2">
+      &nbsp;</div>
+      <blockquote>
+        <p><span style="font-size: 11.0pt">If you 
+        cannot find the script here, you should point your browser to:</span></p>
+        <blockquote>
+          <p class="MsoNormal" style="text-align: justify">
+          <span style="font-size: 11.0pt">&nbsp;</span><a style="color: blue; text-decoration: underline; text-underline: single" href="http://api.openoffice.org/source/browse/api/offapi/com/sun/star/i18n/UnicodeScript.idl">http://api.openoffice.org/source/browse/api/offapi/com/sun/star/i18n/UnicodeScript.idl</a></p>
+        </blockquote>
+      </blockquote>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      &nbsp;</p>
+      <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+      <span style="font-size: 11.0pt">and click on view. This will show 
+      you a file that has the last version of this list&#8230; but 
+      unfortunately, the entries are not numbered. If you find the script 
+      for your language there, you have to start counting from the 
+      beginning (BasicLatin is number 0) and figure out what is the 
+      correct number of your &lt;UnicodeScript&gt;. If your script is in 
+      Unicode, but you still do not find the script listed here, you 
+      should write to the
+      <a style="color: blue; text-decoration: underline; text-underline: single" href="mailto:L10N@openoffice.apache.org">
+      L10N@openoffice.apache.org</a> list mentioning this and asking what 
+      should be done.</span></p>
+      <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p></div>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;UnicodeScript&gt;0&lt;/UnicodeScript&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;UnicodeScript&gt;1&lt;/UnicodeScript&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+      <li class="MsoNormal"><span style="font-size: 11.0pt">The next 
+      characters refer to the abbreviation used in your language to talk 
+      about the following page or pages (such as s. and ss. in Spanish or 
+      sv. in both cases in French).</span></li>
+    </ul>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;FollowPageWord&gt;p.&lt;/FollowPageWord&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;FollowPageWord&gt;pp.&lt;/FollowPageWord&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/LC_INDEX&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+      <li class="MsoNormal"><span style="font-size: 11.0pt">The next one 
+      is easy, if your country uses the Gregorian 12 month, 7 day week 
+      Gregorian (western) calendar. For each day of the week and for each 
+      month, you have to defined a long (full) name and a short or 
+      abbreviated name. You should not translate the ID fields (&lt;DayID&gt; or 
+      &lt;MonthID&gt;), they are used for reference. Translate only the 
+      abbreviated and Full names (&lt;DefaultAbbrvName&gt; and &lt;DefaultFullName&gt;) 
+      using the characters of your language. If you want to define a 
+      different type of calendar, you will have to ask about it in the 
+      list.</span></li>
+    </ul>
+    <p class="MsoNormal" style="margin-left: .5in">
+    <span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal" style="margin-left: .5in">
+    <span style="font-size: 11.0pt">Use the right capitalization. In English 
+    the Months are written capitalizing the first letter, in other languages 
+    months are written all in small letters.</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;LC_CALENDAR&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Calendar unoid="gregorian" 
+    default="true"&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DaysOfWeek&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Day&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DayID&gt;sun&lt;/DayID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Sun&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;Sunday&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Day&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Day&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DayID&gt;mon&lt;/DayID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Mon&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;Monday&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Day&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Day&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DayID&gt;tue&lt;/DayID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Tue&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;Tuesday&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Day&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Day&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DayID&gt;wed&lt;/DayID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Wed&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;Wednesday&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Day&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Day&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DayID&gt;thu&lt;/DayID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Thu&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;Thursday&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Day&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Day&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DayID&gt;fri&lt;/DayID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Fri&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;Friday&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Day&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Day&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DayID&gt;sat&lt;/DayID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Sat&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;Saturday&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Day&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/DaysOfWeek&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;MonthsOfYear&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;MonthID&gt;jan&lt;/MonthID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Jan&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;January&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;MonthID&gt;feb&lt;/MonthID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Feb&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;February&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;MonthID&gt;mar&lt;/MonthID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Mar&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;March&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;MonthID&gt;apr&lt;/MonthID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Apr&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;April&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;MonthID&gt;may&lt;/MonthID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;May&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;May&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;MonthID&gt;jun&lt;/MonthID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Jun&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;June&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;MonthID&gt;jul&lt;/MonthID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Jul&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;July&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;MonthID&gt;aug&lt;/MonthID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Aug&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;August&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;MonthID&gt;sep&lt;/MonthID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Sep&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">
+    &lt;DefaultFullName&gt;September&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;MonthID&gt;oct&lt;/MonthID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Oct&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;October&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;MonthID&gt;nov&lt;/MonthID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Nov&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;November&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;MonthID&gt;dec&lt;/MonthID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;Dec&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;December&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Month&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/MonthsOfYear&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+      <li class="MsoNormal"><span style="font-size: 11.0pt">Change the 
+      following if your language uses different names for the eras of the 
+      Gregorian calendar (before and after Christ).</span></li>
+    </ul>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Eras&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Era&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;EraID&gt;bc&lt;/EraID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;BC&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt" lang="ES">&lt;DefaultFullName&gt;Before 
+    Christ&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt" lang="ES">&lt;/Era&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt" lang="ES">&lt;Era&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;EraID&gt;ad&lt;/EraID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultAbbrvName&gt;AD&lt;/DefaultAbbrvName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DefaultFullName&gt;Anno 
+    Domini&lt;/DefaultFullName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Era&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Eras&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+      <li class="MsoNormal"><span style="font-size: 11.0pt">In the US, the 
+      week starts on Sunday, but in Spain and other countries, the week is 
+      considered to start on Monday. Select the correct one for your 
+      language. Indicate it by the corresponding three letter &#8220;DayID&#8221; as 
+      expressed above in the translations of the days of the week.</span></li>
+    </ul>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;StartDayOfWeek&gt;&lt;DayID&gt;sun&lt;/DayID&gt;&lt;/StartDayOfWeek&gt;</span></p>
+    <p class="MsoNormal">&nbsp;</p>
+    <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+      <li class="MsoNormal"><span style="font-size: 11.0pt">At the 
+      beginning of a month, how many days does a week need to have in 
+      order to be considered a working week?</span></li>
+    </ul>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;MinimalDaysInFirstWeek&gt;1&lt;/MinimalDaysInFirstWeek&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Calendar&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/LC_CALENDAR&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+      <li class="MsoNormal"><span style="font-size: 11.0pt">Currency ID 
+      can be found in <a href="http://www.khmeros.info/tools/CurrencyIDs.gif">this graph</a>&#8230;&nbsp; or in:</span></li>
+    </ul>
+    <p class="MsoNormal" style="margin-left: .5in">
+    <span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal" style="margin-left: .5in">
+    <span style="font-size: 11.0pt">
+    <a style="color: blue; text-decoration: underline; text-underline: single" href="http://nsdsa.phdnswc.navy.mil/mspecs/docs/styleman2000/chapter_txt-17.html#17t6">
+    http://nsdsa.phdnswc.navy.mil/mspecs/docs/styleman2000/chapter_txt-17.html#17t6</a></span></p>
+    <p class="MsoNormal" style="margin-left: .5in">
+    <span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal" style="margin-left: .5in">
+    <span style="font-size: 11.0pt">Currency symbol should be in your own 
+    script.</span></p>
+    <p class="MsoNormal" style="margin-left: .5in">
+    <span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal" style="margin-left: .5in" align="justify">
+    <span style="font-size: 11.0pt">Currency codes (&lt;BankSymbol&gt;), &lt;CurrencyName&gt; 
+    and &lt;DecimalPlaces&gt; come from the ISO4217 list can be found 
+    <a href="http://www.khmeros.info/tools/Currency%20codes.pdf">in here</a>. If 
+    your currency is&nbsp; new one and is not in here, you should try to 
+    find it by yourself in your country, because if you go the standards 
+    body mantainer (<a href="http://www.bsi-global.com/">BSI Global</a>) , 
+    they will make you PAY for the data. </span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;LC_CURRENCY&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Currency 
+    default="true" usedInCompatibleFormatCodes="true"&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;CurrencyID&gt;dollar&lt;/CurrencyID&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;CurrencySymbol&gt;$&lt;/CurrencySymbol&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;BankSymbol&gt;USD&lt;/BankSymbol&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;CurrencyName&gt;US 
+    Dollar&lt;/CurrencyName&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;DecimalPlaces&gt;2&lt;/DecimalPlaces&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Currency&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/LC_CURRENCY&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+      <li class="MsoNormal"><span style="font-size: 11pt">Used for specify 
+      character conversion algorithms. Languages that use Latin characters 
+      do use upper to lowercase conversion algorithms, such as the ones 
+      mentioned in this file. Some languages, such as Japanese, Chinese or 
+      Korean, have complicated transliteration schemes. Specific 
+      transliteration could be used, but it is not used in other scripts 
+      so far. Transliteration procedures need to be written before they 
+      are included here. If your language is not Chinese, Korean or 
+      Japanese, just leave this as it is... and if it is one of them.. 
+      then it has already been done. Again, if you really want to do 
+      transliteration, please look into:</span></li>
+    </ul>
+    <blockquote>
+      <blockquote>
+        <p><span style="font-size: 11pt">
+        <a href="http://l10n.openoffice.org/i18n_framework/HowToAddLocaleInI18n.html">
+        http://l10n.openoffice.org/i18n_framework/HowToAddLocaleInI18n.html</a>
+        </span></p>
+      </blockquote>
+    </blockquote>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;LC_TRANSLITERATION&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Transliteration 
+    unoid="LOWERCASE_UPPERCASE"/&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Transliteration 
+    unoid="UPPERCASE_LOWERCASE"/&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;Transliteration 
+    unoid="IGNORE_CASE"/&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/LC_TRANSLITERATION&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+      <li class="MsoNormal"><span style="font-size: 11.0pt">Write here the 
+      translation of the words &#8220;true&#8221; and &#8220;false&#8221; to your language.</span></li>
+    </ul>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;LC_MISC&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;ReservedWords&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;trueWord&gt;true&lt;/trueWord&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;falseWord&gt;false&lt;/falseWord&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+      <li class="MsoNormal"><span style="font-size: 11.0pt">Translate the 
+      following four expressions, in reference to whatever is more used in 
+      your language, quarters, trimesters or any other way that your 
+      language uses to call the four three-month groups contained in a 
+      year.</span></li>
+    </ul>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;quarter1Word&gt;1st 
+    quarter&lt;/quarter1Word&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;quarter2Word&gt;2nd 
+    quarter&lt;/quarter2Word&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;quarter3Word&gt;3rd 
+    quarter&lt;/quarter3Word&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;quarter4Word&gt;4th 
+    quarter&lt;/quarter4Word&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+      <li class="MsoNormal"><span style="font-size: 11.0pt">Translate the 
+      words &#8220;above&#8221; and &#8220;below&#8221;.</span></li>
+    </ul>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;aboveWord&gt;above&lt;/aboveWord&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;belowWord&gt;below&lt;/belowWord&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+      <li class="MsoNormal"><span style="font-size: 11.0pt">Abbreviated 
+      way of describing the four quarters or trimesters. Don&#8217;t let this 
+      bugger you. If you don&#8217;t have any idea. Leave it as it is or change 
+      it to T1, T2&#8230;.</span></li>
+    </ul>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">
+    &lt;quarter1Abbreviation&gt;Q1&lt;/quarter1Abbreviation&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt" lang="FR">
+    &lt;quarter2Abbreviation&gt;Q2&lt;/quarter2Abbreviation&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt" lang="FR">
+    &lt;quarter3Abbreviation&gt;Q3&lt;/quarter3Abbreviation&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">
+    &lt;quarter4Abbreviation&gt;Q4&lt;/quarter4Abbreviation&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/ReservedWords&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/LC_MISC&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <ul>
+      <li>
+      <p class="MsoNormal"><span style="font-size: 11pt">
+      <a name="numberinglevel"></a>The next section relates to <b>
+      numbering styles</b> for paragraphs. In the locale file we will 
+      define what styles will be included in OpenOffice.or Writer in 
+      Format--&gt;bullets and Numbering--&gt;Numbering type tab. Each line in 
+      the locale file defines one of the 8 squares in this page. For each 
+      one of the it defines three things: the style of numbering, what 
+      character should be palced before the number (prefix) and what 
+      character should be placed after the numbering. The NumType value 
+      refers to a list of types of numbers that is defined in:</span></p>
+      </li>
+    </ul>
+    <blockquote>
+      <p class="MsoNormal"><span style="font-size: 11pt">
+      <a href="http://api.openoffice.org/source/browse/api/offapi/com/sun/star/style/NumberingType.idl">offapi/com/sun/star/style/NumberingType.idl 
+      </a></span>
+      </p><p class="MsoNormal">&nbsp;</p>
+      <p class="MsoNormal"><span style="font-size: 11pt">and that includes 
+      some traditional western types of numbering (Latin letters, Arab 
+      numbers, Latin Numbers), the possibility of using numbers in the 
+      script of the locale (number 12) or creating specific numbering 
+      series (such as for example Thai letters). In our reference file 
+      number 4 refers to Arab number (as used in English), 2 refers to 
+      capital Latin numbers (not the ones used by English language), 0 to capital Latin letters, 1 to lower case 
+      Latin letters and 3 to lower case Latin numbers. You should define 
+      here the method that would best fit your culture. Some of the 
+      locales replace number 4 by number 12, making the first two or three in 
+      local numbering, and then use other methods. You should evaluate, for 
+      example, if Latin numbers are known to your culture.</span></p>
+    </blockquote>
+    <p class="MsoNormal">&nbsp;</p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;LC_NumberingLevel&gt;<br>
+    &lt;NumberingLevel Prefix=" " NumType="4" Suffix=")" /&gt;<br>
+    &lt;NumberingLevel Prefix=" " NumType="4" Suffix="." /&gt;<br>
+    &lt;NumberingLevel Prefix="(" NumType="4" Suffix=")" /&gt;<br>
+    &lt;NumberingLevel Prefix=" " NumType="2" Suffix="." /&gt;<br>
+    &lt;NumberingLevel Prefix=" " NumType="0" Suffix=")" /&gt;<br>
+    &lt;NumberingLevel Prefix=" " NumType="1" Suffix=")" /&gt;<br>
+    &lt;NumberingLevel Prefix="(" NumType="1" Suffix=")" /&gt;<br>
+    &lt;NumberingLevel Prefix=" " NumType="3" Suffix="." /&gt;<br>
+    &lt;/LC_NumberingLevel&gt;</span></p>
+    <p class="MsoNormal">&nbsp;</p>
+    <ul>
+      <li>
+      <p class="MsoNormal"><span style="font-size: 11pt">
+      <a name="outlinenumbering"></a><b>Outline Numbering Styles</b> are 
+      defined in the next section. In the locale file we will define what 
+      styles will be included in OpenOffice.or Writer in Format--&gt;bullets 
+      and Numbering--&gt;Numbering type tab. Each &lt;OutlineStyle&gt; block in the 
+      locale file defines one of the 8 squares in this page. Each block 
+      has five lines defining the first five levels of heading. The first 
+      line of a block (for example) will define how paragraphs with style 
+      'Heading 1' will be numbered (including number style, and characters 
+      to be placed before and after the number), if some bullet characters 
+      should be used, the left margin of Heading 1 numbered paragraphs, 
+      etc... In subsequente levels (other lines), it is important to say 
+      how many levels of heading will be named in this specific number... 
+      for example, if we are defining the numbering of level 3 (Heading 
+      3), the ParentingNumber could be 0 (in which case only one number 
+      will be showed) could be 1 (two numbers shown, as in 1.1) or 2, in 
+      which case we will have numbers of the style 1.1.1.</span></p></li>
+    </ul>
+    <blockquote>
+      <p class="MsoNormal"><span style="font-size: 11pt">If you want to 
+      use numbers in the script of the locale, you need to use 
+      NumType="12". Information about the different number styles is 
+      available in : </span></p>
+      <p class="MsoNormal">&nbsp;</p>
+      <p class="MsoNormal"><span style="font-size: 11pt">
+      <a href="http://api.openoffice.org/source/browse/api/offapi/com/sun/star/style/NumberingType.idl">offapi/com/sun/star/style/NumberingType.idl 
+      </a></span></p>
+    </blockquote>
+    <p class="MsoNormal">&nbsp;</p>
+    <p class="MsoNormal"><font size="2">&lt;LC_OutLineNumberingLevel&gt;<br>
+    &lt;OutlineStyle&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="0" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="1" LeftMargin="50" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="100" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " 
+    BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" 
+    LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " 
+    BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" 
+    LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;/OutlineStyle&gt;<br>
+    &lt;OutlineStyle&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="0" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="50" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " 
+    BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" 
+    LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " 
+    BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" 
+    LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " 
+    BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" 
+    LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;/OutlineStyle&gt;<br>
+    &lt;OutlineStyle&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="0" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix="(" NumType="1" Suffix=")" 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="50" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="100" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="150" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="6" Suffix="." 
+    BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" 
+    LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;/OutlineStyle&gt;<br>
+    &lt;OutlineStyle&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="0" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="50" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="100" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="150" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="200" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;/OutlineStyle&gt;<br>
+    &lt;OutlineStyle&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="0" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="50" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="100" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="150" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " 
+    BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" 
+    LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;/OutlineStyle&gt;<br>
+    &lt;OutlineStyle&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="0" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="50" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="100" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="150" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " 
+    BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" 
+    LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;/OutlineStyle&gt;<br>
+    &lt;OutlineStyle&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " 
+    BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="0" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " 
+    BulletChar="0020" BulletFontName="" ParentNumbering="1" LeftMargin="50" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " 
+    BulletChar="0020" BulletFontName="" ParentNumbering="2" LeftMargin="100" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " 
+    BulletChar="0020" BulletFontName="" ParentNumbering="3" LeftMargin="150" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " 
+    BulletChar="0020" BulletFontName="" ParentNumbering="4" LeftMargin="200" 
+    SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;/OutlineStyle&gt;<br>
+    &lt;OutlineStyle&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " 
+    BulletChar="27A2" BulletFontName="StarSymbol" ParentNumbering="0" 
+    LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " 
+    BulletChar="E006" BulletFontName="StarSymbol" ParentNumbering="0" 
+    LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="6" Suffix=")" 
+    BulletChar="E004" BulletFontName="StarSymbol" ParentNumbering="0" 
+    LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " 
+    BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" 
+    LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " 
+    BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" 
+    LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" /&gt;<br>
+    &lt;/OutlineStyle&gt;<br>
+    &lt;/LC_OutLineNumberingLevel&gt;</font></p>
+    <p class="MsoNormal">&nbsp;</p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&lt;/Locale&gt;</span></p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal" style="text-align: justify; margin-left: .5in">
+    <span style="font-size: 11.0pt">And you are finished. Save your file, 
+    check it a couple of times and then submit it as an ENHANCEMENT issue 
+    against the Localization (L10n) project and submit the file. To submit 
+    an issue you first need to login into the OpenOffice website, then hit
+    <b>File Issue</b> on the left hand menu&#8230; go to <b>proceed</b> in the 
+    next page&#8230; click in the component<b> l10n</b> in the next one&#8230; are you 
+    are ready to file it. Select version <b>current</b>, subcomponent <b>
+    code</b>, type <b>ENHANCEMENT</b>, Summary <b>Locale file for 
+    language&#8230;., </b>and hit<b> Submit. </b>The system will ask you if you 
+    want to attach a file and what type<b>. </b>Attach the file that you 
+    have been working on, <b>submit it&#8230; </b>and you are done.</span></p>
+    <p class="MsoNormal" style="text-align: justify">
+    <span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal" style="text-align: justify">
+    <span style="font-size: 11pt">If you would - nevertheless - like to 
+    prepare a more developed locale, please look at the following documents:</span></p>
+    <p class="MsoNormal" style="text-align: justify">
+    &nbsp;</p>
+    <p class="MsoNormal" style="margin-left: .5in">
+    <span style="font-size: 11.0pt">
+    <a style="color: blue; text-decoration: underline; text-underline: single" href="http://l10n.openoffice.org/i18n_framework/HowToAddLocaleInI18n.html">
+    http://l10n.openoffice.org/i18n_framework/HowToAddLocaleInI18n.html</a></span></p>
+    <p class="MsoNormal" style="margin-left: .5in">
+    &nbsp;</p>
+    <p class="MsoNormal" style="margin-left: .5in">
+    <u><font color="#0000FF"><span style="font-size: 11pt">
+    http://l10n.openoffice.org/source/browse/l10n/i18npool/source/localedata/data/locale.dtd</span></font></u></p>
+    <p class="MsoNormal" style="margin-left: .5in">
+    <span style="font-size: 11.0pt">&nbsp;</span></p>
+    <p class="MsoNormal" style="margin-left: .5in">
+    <span style="font-size: 11.0pt">
+    <a style="color: blue; text-decoration: underline; text-underline: single" href="http://l10n.openoffice.org/i18n_framework/LocaleData.html">
+    http://l10n.openoffice.org/i18n_framework/LocaleData.html</a></span></p>
+    <p class="MsoNormal" style="margin-left: .5in">
+    &nbsp;</p>
+    <p class="MsoNormal" style="margin-left: .5in">
+    <u><font color="#0000FF"><span style="font-size: 11pt">
+    <a href="http://api.openoffice.org/docs/common/ref/com/sun/star/i18n/NumberFormatIndex.html">
+    http://api.openoffice.org/docs/common/ref/com/sun/star/i18n/NumberFormatIndex.html</a></span></font></u></p>
+    <p class="MsoNormal" style="margin-left: .5in">
+    &nbsp;</p>
+    <p class="MsoNormal" style="margin-left: .5in">
+    &nbsp;</p>
+    <p class="MsoNormal"><span style="font-size: 11.0pt">&nbsp;</span></p>
+    &nbsp;</td>
+  </tr>
+</tbody></table>
+
+</div>
+
+
+
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

@@ -1,0 +1,186 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Solaris Sparc)">
+	<META NAME="AUTHOR" CONTENT="Jens-Heiner Rechtien">
+	<META NAME="CREATED" CONTENT="20010528;19140800">
+	<META NAME="CHANGEDBY" CONTENT="Jens-Heiner Rechtien">
+	<META NAME="CHANGED" CONTENT="20010529;13214800">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/tools/">tools</a>&nbsp;&raquo;&nbsp;<a href="/tools/performance/">performance</a>&nbsp;&raquo;&nbsp;<a href="/tools/performance/linux/">linux</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1>Excessive shared libraries file sizes</H1>
+<P>Recent versions of OpenOffice/StarOffice exhibit an disturbing
+increase in shared library file size. This is especially true for the
+Unix platforms, topped by whopping 73% increase from SRC569 to SRC624
+on Linux.</P>
+<H2>Reasons</H2>
+<P>The biggest increase in code size especially on GCC based
+platforms is probably due to the increased use of exceptions. Since
+abandoning exceptions is out of question we can't do much about this
+currently. It's interesting to note that the use of exception
+specifications which should in principle help reducing the costs of
+exception handling has a pretty averse effect on GCC platforms.
+Exception specifications increase the code size of callees by a
+significant amount (up to 300 bytes for GCC/Linux/X86 per method!),
+without having a noticeable effect on the code size of the caller.
+Even the empty exception specification throw() applied to a leave
+(non calling) function incurs this cost. This is clearly a very
+pronounced deficiency of GCC.</P>
+<H2>Solutions</H2>
+<OL>
+	<LI><P>Remove all exception specifications, especially on all inline
+	functions. This seems to be the only possible way to reduce the code
+	size of gcc-2.95.2 build libraries significantly. <BR><BR>Some
+	preliminary evaluation of gcc-3.0 indicates that the gcc developers
+	noticed this problem. Gcc-3.0 offers a switch which allows the
+	compiler to not to enforce the exception specifications.
+	Additionally the compiler is much more able in recognizing that
+	some functions will never throw and produces way smaller code in
+	this case even in the case of honored exception specifications. It
+	might be very worthwhile to switch to gcc-3.0 when it's ready.
+	Gcc-3.0 is scheduled to be available at the end of the 1Q 2001. The
+	downside of Gcc-3.0 will be that it's in no way binary compatible to
+	gcc-2.95.2</P>
+	<P>Update 2000/05/28: gcc-2.95.3 (bugfix release) seems to produce
+	more compact code in some cases. It has not yet been investigated if
+	this improvement is related to exception specifications. Anyway,
+	improvements from 0.4% up to 20% can be observed. Preliminary tests
+	have been done on SRC633, details can be found <A HREF="comparison.html">here</A>.</P>
+	<LI><P>Export minimized shared libraries could be smaller on
+	GCC/GNU-binutils platforms. The GNU ld has a deficiency regarding
+	minimizing the .dynstr section of a shared library if version map
+	are used to minimize the exports from the library. All it's does is
+	to remove the references of the &quot;localized&quot; strings from
+	the .dyntab, but it never deletes the strings itself from the
+	.dynstr section. Neither does &quot;strip&quot;. <BR><BR>The Mozilla
+	developers noticed this, too. They invented a small tool called
+	&quot;elf-gc-dynstr&quot; which removes the unused strings and than
+	relocates the references to the remaining stuff in the .dyntab
+	section. Some tests showed that this operation has no side effects
+	and does reduce the overall size of the *.so files by about 2.5% to
+	3.5%. 
+	</P>
+	<TABLE WIDTH=957 BORDER=1 CELLPADDING=5 CELLSPACING=4>
+		<COL WIDTH=303>
+		<COL WIDTH=306>
+		<COL WIDTH=300>
+		<THEAD>
+			<TR VALIGN=TOP>
+				<TH WIDTH=303>
+					<P>size of all stripped *.so in kBytes</P>
+				</TH>
+				<TH WIDTH=306>
+					<P>SRC569</P>
+				</TH>
+				<TH WIDTH=300>
+					<P>SRC624</P>
+				</TH>
+			</TR>
+		</THEAD>
+		<TBODY>
+			<TR>
+				<TD WIDTH=303 VALIGN=TOP>
+					<P>without elf-gc-dynstr treatment</P>
+				</TD>
+				<TD WIDTH=306 VALIGN=BOTTOM SDVAL="116898" SDNUM="1033;">
+					<P ALIGN=CENTER>116898</P>
+				</TD>
+				<TD WIDTH=300 VALIGN=BOTTOM SDVAL="202844" SDNUM="1033;">
+					<P ALIGN=CENTER>202844</P>
+				</TD>
+			</TR>
+			<TR>
+				<TD WIDTH=303 VALIGN=TOP>
+					<P>with elf-gc-dynstr treatment</P>
+				</TD>
+				<TD WIDTH=306 VALIGN=BOTTOM SDVAL="114409" SDNUM="1033;">
+					<P ALIGN=CENTER>114409</P>
+				</TD>
+				<TD WIDTH=300 VALIGN=BOTTOM SDVAL="195756" SDNUM="1033;">
+					<P ALIGN=CENTER>195756</P>
+				</TD>
+			</TR>
+		</TBODY>
+	</TABLE>
+	<P>The more export minimized shared libraries ( components! ) we
+	have the more will be the overall savings.<BR><BR>We use
+	elf-gc-dynstr on unxlngi3 since SRC625 b</P>
+	<LI><P>Patched GCC called &quot;FrankenGCC&quot;. Another offshot of
+	Mozilla, can be found <A HREF="http://www.mozilla.org/projects/footprint/frankengcc.html">here</A>.
+	<BR><BR>GCC tends to the create a vtable even in the case of a class
+	with only pure virtual methods. Another problem is that certain
+	inlined static constructs end up in every object file but not in the
+	link-once section. Thus ld fails to combine these constructs at
+	shared library link time.<BR><BR>I tried the patch but didn't see
+	any improvement in code size. The opposite was true, the file size
+	did even increase.<BR><BR><BR>
+	</P>
+</OL>
+<DL>
+	<DL>
+		<DD>
+		<TABLE WIDTH=100% BORDER=1 CELLPADDING=5 CELLSPACING=4>
+			<COL WIDTH=85*>
+			<COL WIDTH=85*>
+			<COL WIDTH=85*>
+			<THEAD>
+				<TR VALIGN=TOP>
+					<TH WIDTH=33%>
+						<P>SRC624 stripped libcfgmgr2.so</P>
+					</TH>
+					<TH WIDTH=33%>
+						<P>gcc-2.95.2</P>
+					</TH>
+					<TH WIDTH=33%>
+						<P>frankengcc-2.95.2</P>
+					</TH>
+				</TR>
+			</THEAD>
+			<TBODY>
+				<TR>
+					<TD WIDTH=33% VALIGN=TOP>
+						<P>library size in kBytes</P>
+					</TD>
+					<TD WIDTH=33% VALIGN=BOTTOM SDVAL="6084924" SDNUM="1033;">
+						<P ALIGN=CENTER>6084924</P>
+					</TD>
+					<TD WIDTH=33% VALIGN=BOTTOM SDVAL="6422940" SDNUM="1033;">
+						<P ALIGN=CENTER>6422940</P>
+					</TD>
+				</TR>
+			</TBODY>
+		</TABLE>
+	</DL>
+</DL>
+<P><BR><BR>
+</P>
+<P>Author: <A HREF="mailto:Jens-Heiner.Rechtien@germany.sun.com?subject=Excessive file sizes">Jens-Heiner
+Rechtien</A></P>
+<P>Last changed: 16.03.2001</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

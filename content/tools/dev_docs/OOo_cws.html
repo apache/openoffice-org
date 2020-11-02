@@ -1,0 +1,177 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>cws howto</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.2  (Linux)">
+	<META NAME="CREATED" CONTENT="20040426;15160100">
+	<META NAME="CHANGEDBY" CONTENT="Martin Hollmichel">
+	<META NAME="CHANGED" CONTENT="20040624;14194800">
+	<STYLE>
+	<!--
+		@page { size: 8.5in 11in; margin-left: 1.25in; margin-right: 1.25in; margin-top: 1in; margin-bottom: 1in }
+		P { margin-bottom: 0.08in }
+		H1 { margin-bottom: 0.08in }
+		H1.western { font-family: "Arial", sans-serif; font-size: 16pt }
+		H1.cjk { font-family: "Mincho"; font-size: 16pt }
+		H1.ctl { font-family: "Lucidasans"; font-size: 16pt }
+		H2 { margin-bottom: 0.08in }
+		H2.western { font-family: "Arial", sans-serif; font-size: 14pt; font-style: italic }
+		H2.cjk { font-family: "Mincho"; font-size: 14pt; font-style: italic }
+		H2.ctl { font-size: 14pt; font-style: italic }
+		H3 { margin-bottom: 0.08in }
+		H3.western { font-family: "Arial", sans-serif }
+		H3.cjk { font-family: "Mincho" }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="en-US" DIR="LTR">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/tools/">tools</a>&nbsp;&raquo;&nbsp;<a href="/tools/dev_docs/">dev_docs</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1 CLASS="western">OpenOffice.org source control</H1>
+<H2 CLASS="western">OpenOffice.org main codelines</H2>
+<P>OpenOffice.org does use the cvs Source Control System. The major
+releases of OpenOffice.org are implemented on, so called, cvs branches.
+The development of the next major releases is developed on HEAD of
+the cvs tree, the maintenance of older versions also happens on
+branches.</P>
+<P> 
+</P>
+<P><IMG SRC="OOo_cws_html_5227a09.png" NAME="Graphic1" ALIGN=LEFT WIDTH=483 HEIGHT=115 BORDER=0><BR CLEAR=LEFT>In
+the OpenOffice.org environment these branches are often called
+codelines or master(-branches). Builds on these codelines does not
+happen continuously (daily builds) but within regular milestones. For
+the 1.1.x codeline this result in a cvs branch tag called mws_srx645
+which represents the latest status of this codeline and several more
+tags which represent a specific milestone on this codeline
+(SRX645_m34, SRX645_m40). The same scheme applies to the 2.0 codeline
+(mws_src680 for the latest status, SRC680_m36 for a specific
+milestone). Usually every week there will be a new milestone on the
+active development line available. There is also the possibility to
+achieve some more granularity with the introduction of steps, so that
+more than one build per week is possible (SRC680_m33s1).</P>
+<P>The names like SRC680, SRX645 will be deprecated in the future,
+they represent the old scheme of milestone naming.</P>
+<P>As soon as the OOo 2.0 comes close to release, a new branch for
+this codeline will be created so that concurrent development of the
+next release can be started.</P>
+<P><IMG SRC="OOo_cws_html_6fa87fb4.png" NAME="Graphic2" ALIGN=LEFT WIDTH=576 HEIGHT=101 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<H2 CLASS="western">Development branches</H2>
+<P>Since OpenOffice.org build times are pretty high and the goal is
+to have at all times a milestone available which is in release quality,
+no commits to the master codeline are made. OpenOffice.org is
+developed by more than 100 developers, it builds for more than 10
+platforms, for more than 25 languages and it has more than 7 million
+lines of code with a plenty of build time needed for a complete
+recompile. So the risk of breaking something is pretty high, even if
+the comitters is sure about his changes. Due to this complexity we
+introduced the concept of doing any feature development and bug fixes
+on cvs branches. This means that a new feature has to be developed on
+a cvs branch, until the feature is complete and has been tested on at
+least to major platforms (usually one Unix derivate and Windows). The
+same applies for bugs fixes, but bug fixes should be grouped together
+on one branch.</P>
+<P><IMG SRC="OOo_cws_html_697e8ea2.png" NAME="Graphic3" ALIGN=LEFT WIDTH=351 HEIGHT=125 BORDER=0><BR CLEAR=LEFT>These
+branches are called within the OpenOffice.org environment child
+workspaces. Since it is possible to create many child workspaces
+in parallel, some additional processes has been developed to make
+life more easy and secure on these child workspaces. For example, the
+problem of “repeated merges” is quite common in cvs. This
+situation occurs quite often when dealing with many branches in
+parallel, for example if a bug fix has been applied to more than one branch.
+</P>
+<H3 CLASS="western">Child workspace resynchronization</H3>
+<P>Many of the “repeated merge” problems can be solved before the
+merge back to the master branch if you were able to bring your copy
+of the cvs branch up to date of the latest know stable version of
+your master. For this the resynchronization action (cwsresync)
+command has been introduced.</P>
+<P><IMG SRC="OOo_cws_html_78507a9f.png" NAME="Graphic4" ALIGN=LEFT WIDTH=406 HEIGHT=137 BORDER=0><BR CLEAR=LEFT>The
+resync mechanism is able to deal with repeated operation, so that
+this process can be executed frequently. In case a conflict has to be
+resolved, this will happen in the child workspace, so the risk of
+having a broken master workspace is less than in the classical
+approach, when a branch will be merged back to the master with the
+usual 'cvs update' command.</P>
+<H3 CLASS="western">Child workspace reintegration</H3>
+<P>When all the changes being made on a child workspace are joined
+back, the log history of the branch will be saved and stored in the
+log history of the trunk as well. Otherwise the tracking of what had
+happened on a branch is difficult.</P>
+<P>Since the reintegration is always done by a unique entity (usually
+Release Engineering associated with this codeline) we loose the
+ability to see the original author of a single line with the 'cvs
+annotate' command, but we still are able to see when a line of code
+has been changed and can use the log for getting more details.</P>
+<H3 CLASS="western"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">revision
+1.38</FONT></FONT></H3>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">date:
+2004/04/02 13:49:24;  author: rt;  state: Exp;  lines: +9 -1</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">INTEGRATION:
+CWS sj05 (1.34.80); FILE MERGED</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">2004/03/15
+13:47:50 sj 1.34.80.4: RESYNC: (1.36-1.37); FILE MERGED</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">2004/02/13
+17:38:38 sj 1.34.80.3: RESYNC: (1.34-1.36); FILE MERGED</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">2004/02/09
+15:01:36 cl 1.34.80.2: #i20484# added new CustomShape ui</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">2004/02/04
+11:39:15 cl 1.34.80.1: #i20484# added new CustomShape ui</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">----------------------------</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">revision
+1.37</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">date:
+2004/02/25 15:55:41;  author: kz;  state: Exp;  lines: +0 -10</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">INTEGRATION:
+CWS layoutmanager (1.34.20); FILE MERGED</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">2004/02/19
+16:33:04 cd 1.34.20.3: RESYNC: (1.35-1.36); FILE MERGED</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">2004/01/29
+16:56:22 cd 1.34.20.2: RESYNC: (1.34-1.35); FILE MERGED</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">2003/11/24
+07:25:16 cd 1.34.20.1: #111899# Remove old menu controller
+registration</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">----------------------------</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">revision
+1.36</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">date:
+2004/02/03 16:35:11;  author: hr;  state: Exp;  lines: +17 -12</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">INTEGRATION:
+CWS dialogdiet (1.34.60); FILE MERGED</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">2004/01/26
+14:32:05 mba 1.34.60.3: #i22972#: SvxErrorHandler needs to be created
+by apps</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">2004/01/19
+23:47:01 mba 1.34.60.2: RESYNC: (1.34-1.35); FILE MERGED</FONT></FONT></P>
+<P CLASS="frame-contents" STYLE="margin-bottom: 0in"><FONT FACE="Courier, monospace"><FONT SIZE=1 STYLE="font-size: 8pt">2003/11/28
+18:08:12 mba 1.34.60.1: #i22972#: offmgr removed</FONT></FONT></P>
+<H3 CLASS="western">Environment Information System (EIS)</H3>
+<P>There is a web frontend to view a list of child workspaces and
+their status (
+<A HREF="http://eis.services.openoffice.org/EIS2/servlet/GuestLogon">http://eis.services.openoffice.org/EIS2/servlet/GuestLogon</A>).
+The status of a child workspace and the corresponding master
+workspace can be viewed.</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

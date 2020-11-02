@@ -1,0 +1,284 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/tools/">tools</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1><A NAME="5.1.TroubleshootingtheBuild|outline"></A>Troubleshooting
+the Build</H1>
+
+<P>This section gives you some tips and advice on things to do if you
+encounter problems when building the office suite.
+</P>
+
+<P>If the office suite does not build successfully, the following tips may
+be helpful in attempting to fix the build.</P>
+
+	
+		
+<TABLE BORDER="1" CELLPADDING=5 CELLSPACING=0>
+<TR VALIGN=TOP>
+	<TH>
+If...
+	</TH>
+	<TH>
+Then...
+	</TH>
+</TR>
+<TR VALIGN=TOP>
+	<TD>
+You get the following error on executing <CODE>dmake</CODE>:
+
+<PRE>
+Error -- makefile.mk not found
+</PRE>
+	</TD>
+	<TD>
+You did not run the <CODE>configure</CODE> script.
+Run the <CODE>configure</CODE>
+script then run <CODE>dmake</CODE> again.
+<p>Source the settings file.  Look at the last few lines from configure for a
+hint.</p>
+	</TD>
+</TR>
+<TR VALIGN=TOP>
+	<TD>
+You get the following error on executing <CODE>dmake</CODE>:
+
+<PRE>
+Error -- Configuration file startup.mk not found
+</PRE>
+	</TD>
+	<TD>
+The environment variable <CODE>DMAKEROOT</CODE>
+is not set correctly to the following value: 
+
+<PRE>
+$SRC_ROOT/solenv/inc/startup
+</PRE>
+<p>You probably have not run source on you ????.set.sh file in your build directory.</p>
+<P>For example, in Linux <CODE>dmake</CODE> reads
+the following files in the following order:</P>
+<PRE>
+$SRC_ROOT/solenv/inc/startup/startup.mk
+$SRC_ROOT/solenv/inc/startup/config.mk
+$SRC_ROOT/solenv/inc/startup/local.mk
+$SRC_ROOT/solenv/inc/startup/LINUX/macros.mk
+$SRC_ROOT/solenv/inc/UNIX/macros.mk
+$SRC_ROOT/solenv/inc/macros.mk</PRE>
+<P>You can check this by running <CODE>dmake</CODE> in verbose
+(<CODE>-v</CODE>) mode.</p>
+</TD>
+</TR>
+<TR VALIGN=TOP>
+<TD>You get a compile error.
+</TD>
+<TD>Ensure that you have the most current source.  Often minor patches are
+applied after the source tarball is created.  This includes support of
+changing compilers such as gcc and bison.  Do a `cvs update` in that
+directory.
+<p>Check for an existing issue and patch. <a
+href="http://www.openoffice.org/issues/query.cgi">Search</a> for an existing
+issue report and look for some patches. If you have the same issue and have
+a patch, please add it to the issue.  If you have the same issue but a
+different platform please add a comment.<p>
+<p>Dependencies are not perfect with openoffice.org sometimes you have to
+purge the whole build to get accurate rebuild results.  `dmake  clean` will
+purge your build for a fresh start. You must do this when you change cvs tags.</p>
+</TD>
+</TR>
+<TR>
+<TD>You need help.
+</TD>
+<TD>Please subscribe to dev@openoffice.apache.org mailing list and write a message
+requesting help.  Include:
+<BR>Your platform and version eg Linux Redhat 9.0 or Windows 2000
+<BR>Your compiler and version eg gcc --version (gcc 3.3.1) or Visual C
+include patch releases.
+<BR>You Java compiler version if it is a java problem.
+<BR>If Windows whether you are 4nt or cugwin build.
+<p>If you are working on a new platform like OS/2 then you might find help
+on the porting list.</p>
+</TD>
+</TR>
+<TR VALIGN=TOP>
+	<TD>
+It is not obvious from the <CODE>dmake</CODE>
+error what the problem is. 
+	
+	</TD>
+	<TD>
+Run the following command to get a
+full description of the <CODE>dmake</CODE>
+instructions and an expansion of all the variables used in the
+build: 
+<PRE>
+% <KBD>dmake -p -v</KBD>
+</PRE>
+<P>
+The <CODE>-p</CODE> option expands all build variables. The <CODE>-v</CODE> option sets <CODE>dmake</CODE> to verbose mode.
+Note that this will generate a lot of output. Note also that <CODE>dmake</CODE> prints some of its messages to <CODE>stderr</CODE>.
+</P>
+	</TD>
+</TR>
+<TR VALIGN=TOP>
+	<TD>
+You want to run the imagemaker program <CODE>bmp</CODE>.
+	</TD>
+	<TD>
+On an X Windows system, make sure the <CODE>DISPLAY</CODE>
+variable is set when running the imagemaker program <CODE>bmp</CODE>.
+This is built in the module <CODE>svtools</CODE>.
+Also, ensure that you have the appropriate privileges to access
+the system. 
+
+	</TD>
+</TR>
+<TR VALIGN=TOP>
+<TD>The build stops complaining it cannot find a .bmp file</TD>
+<TD>
+This is really the same problem as the previous one - you must have the 
+DISPLAY variable set so the program bmp can make a connection to an X server.
+</TD>
+</TR>
+<TR VALIGN=TOP>
+	<TD>
+You need to debug a particular tool
+or create a debug build.
+	</TD>
+	<TD>
+To use debug switches you can use the following command:
+<PRE>
+% <KBD>dmake debug=true</KBD>
+</PRE>
+
+<P>
+Alternatively, you can set the environment variable DEBUG to TRUE by using the following command: 
+</P>
+<PRE>
+% <KBD>setenv DEBUG TRUE</KBD>    (csh shells)
+$ <KBD>export DEBUG=TRUE</KBD>    (sh shells)
+</PRE>
+
+<P>
+Setting up your environment again unsets this variable.
+</P>
+	</TD>
+</TR>
+<TR VALIGN=TOP>
+	<TD>
+You want to force a full recompilation of a particular project. 
+
+	</TD>
+	<TD>
+The simplest thing to do is to
+remove the output tree. For example, in the <CODE>tools</CODE>
+project on Linux: 
+
+<PRE>
+$SRC_ROOT/tools
+rm -rf unxlngi4.pro
+</PRE>
+<P>
+In other words, in that project, remove the directory and contents of the tree created by your build.
+</P>
+	</TD>
+</TR>
+<TR VALIGN=TOP>
+	<TD>
+You suspect that OpenOffice.org/StarOffice is building in the wrong order. 
+
+	</TD>
+	<TD>
+The dependencies between the
+modules are quite complex. Therefore you must build the
+projects in a particular order. You can see this order in the
+top level <CODE>instsetoo/prj/build.lst</CODE>.
+	</TD>
+</TR>
+<TR VALIGN=TOP>
+	<TD>
+You get the following error while running <CODE>dmake</CODE>:
+<PRE>
+IGNORE SUBDIRS
+</PRE>
+	</TD>
+	<TD>
+If you use the build tool, it may
+set the <CODE>mk_tmp</CODE> environment variable
+to TRUE. For <CODE>dmake</CODE> to run correctly,
+you must reset the value of <CODE>mk_tmp</CODE> to
+blank, as follows:
+<PRE>
+% <KBD>setenv mk_tmp</KBD>    (csh shells)
+$ <KBD>unset mk_tmp</KBD>     (sh shells)
+</PRE>
+<P>
+The equivalent command on Win32 systems is as follows:
+</P>
+<PRE>
+C:\&gt; <KBD>unset mk_tmp</KBD>
+</PRE>
+
+
+	</TD>
+</TR>
+<TR VALIGN=TOP>
+	<TD>
+When you run the command <CODE>./setup</CODE>
+in <CODE>$SRC_ROOT/instsetoo/$INPATH/normal</CODE>
+and encounter the following error:
+
+<PRE>
+replace xxxxxx.res? [y]es, [n]o, [A]ll,
+[N]one, [r]ename: 
+</PRE>
+	</TD>
+	<TD>
+This error occurs when you run the command <CODE>dmake
+install</CODE> over an existing installation set. To resolve
+this error, remove the output tree in the module <CODE>instsetoo</CODE>,
+as follows:
+<PRE>
+% <KBD>cd $SRC_ROOT/instsetoo</KBD>
+% <KBD>rm -rf $INPATH</KBD>
+</PRE>
+<P>Then rerun the <CODE>dmake install</CODE>
+command as follows:</P>
+<PRE>
+% <KBD>cd $SRC_ROOT</KBD>
+% <KBD>dmake install</KBD>
+</PRE>
+<P>Then run <CODE>setup</CODE> again, as follows:</P>
+<PRE>
+% <KBD>cd instsetoo/$INPATH/normal</KBD>
+% <KBD>./setup</KBD>
+</PRE>
+	</TD>
+</TR>
+</TABLE>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

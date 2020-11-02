@@ -1,0 +1,133 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+  <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+  <TITLE></TITLE>
+  <!-- Changed by: Andre Fischer, 14-Sep-2001 -->
+  <META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+  <META NAME="AUTHOR" CONTENT="Martin Hollmichel">
+  <META NAME="CREATED" CONTENT="20010419;16101287">
+  <META NAME="CHANGED" CONTENT="20010802;14455412">
+  <STYLE>
+  <!--
+    SAMP { font-size: 10pt }
+  -->
+  </STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/tools/">tools</a>&nbsp;&raquo;&nbsp;<a href="/tools/profiling/">profiling</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H2>write-calc-doc.pl</H2>
+<P>The Perl script write-calc-doc.pl transforms a log file into a
+Calc document containing two data sheets for every thread. The first
+sheet displays a pretty printed version of the raw data. The second
+sheet is made up by a table that contains for each function or other
+scope the minimal, maximal, average, and total time and the number of
+calls.</P>
+<H3>Synopsis</H3>
+<P>write-calc-doc.pl &lt;log-file-name&gt; [&lt;calc-document-name&gt;]</P>
+<P>The two arguments specify the name of the log-file to process and
+an optional name under which to write the report.  If that name is
+not given explicetly, then it is derived from the log-file name by
+replacing the suffix <CODE>.log</CODE> by the suffix <CODE>.sxc</CODE>.</P>
+<P>write-calc-doc.pl understands the following option parameters that
+may stand anywhere on the command line (but of course behind the
+script name):</P>
+<UL>
+  <LI><P>-h prints a short help text describing the command line
+  parameters.</P>
+  <LI><P>-i &lt;filename&gt; specifies a file that contains regular
+  expressions (in Perl style). Every time stamp in the log file that
+  matches at least one of these expressions is included into the
+  report.</P>
+  <LI><P>-e &lt;filename&gt; specifies a file that contains regular
+  expressions (in Perl style). Every time stamp in the log file that
+  matches at least one of these expressions is <B>not</B> included
+  into the report.</P>
+</UL>
+<H3>Configuration</H3>
+<P>There are several configuration features which the script tries to
+determine automatically. If that fails you have to specify them
+explicitly:</P>
+<UL>
+  <LI><P>If the perl interpreter is not found you have to specify it
+  on the command line: use <SAMP>&lt;perl-path&gt;/perl
+  write-calc-doc.pl &lt;arguments&gt;</SAMP> instead of
+  <SAMP>write-calc-doc.pl &lt;arguments&gt;</SAMP>.</P>
+  <LI><P>The Perl script uses several modules in the sub-directory
+  LogFile. If that sub-directory is not in your Perl search path and
+  can't be deduced automatically from the script's own name then you
+  have to pass that directory with the -I command line option to the
+  perl interpreter: use <SAMP>&lt;perl-path&gt;/perl
+  -I&lt;src-path&gt;/tools/contrib/profiling write-calc-doc.pl
+  &lt;arguments&gt;.</SAMP></P>
+  <LI><P>A zip executable is used to pack all XML files into a single
+  archive. If no zip executable with the base name &#132;zip&#147; is
+  found in the current search path, then you have to set the
+  environment variables LOG_FILE_ZIP_COMMAND to the path name of the
+  zip executable. The variable LOG_FILE_ZIP_FLAGS can be used to
+  control it's behaviour.</P>
+</UL>
+<P>Usually it should be sufficient to say</P>
+<P><SAMP>&lt;src-path&gt;/tools/contrib/profiling/write-calc-document.pl
+/tmp/profiling_1234.log</SAMP></P>
+<P>It creates the Calc document <CODE>/tmp/profiling_1234.sxc</CODE>.</P>
+<H3>Filtering the log file</H3>
+<P>On the command line you can specify two files with regular
+expressions. These expressions are used to filter the time stamps in
+the log file. A time stamp is taken into account for the report
+generation if it a) matches at least one regular expression in the
+inclusion filter file or that file is empty and b) matches none of
+the regular expressions in the exclusion filter file or that file is
+empty. The expressions in the filter files have to be written in the
+Perl <SPAN STYLE="font-style: normal">syntax.</SPAN></P>
+<H4>Filter Examples</H4>
+<P>An inclusion filter file containing only the line</P>
+<P><CODE>\(af119097\)</CODE></P>
+<P>includes exactly those time stamps into the report that belong the
+author with Sun id af119097.</P>
+<P>An exclusion filter file containing only the line</P>
+<P><CODE>^sch\b</CODE></P>
+<P>removes all time stamps from the report that belong to the chart
+project.</P>
+<h3>Further documentation</h3>
+Follow the links below to the documentation contained in the
+Perl scripts write-calc-document.pl and the modules loaded by it.  It has been created by running
+pod2html on the script files.
+<ul>
+<li><a href="pod/write-calc-doc.html">write-calc-doc.pl</a></li>
+<li><a href="pod/LogFile/Filter.html">LogFile/Filter.pm</a></li>
+<li><a href="pod/LogFile/Parser.html">LogFile/Parser.pm</a></li>
+<li><a href="pod/LogFile/Processor.html">LogFile/Processor.pm</a></li>
+<li><a href="pod/LogFile/XML.html">LogFile/XML.pm</a></li>
+</ul>
+<H3>References</H3>
+<P>For writing filters suitable for a given task you should have a
+look at the <A HREF="time-stamp-format.html">specification</A> of the
+general time stamp format and the <A HREF="time-stamp-documentation.html">documentation</A>
+of the time stamps emitted from the individual projects.</P>
+<P><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

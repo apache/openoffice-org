@@ -1,0 +1,1077 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+ <meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+ <META name="generator" content="HTML Tidy for Linux/x86 (vers 1st November 2003), see www.w3.org">
+ <style type="text/css">@import url("cvs.css"); </style>
+<TITLE>Development digest : Week 48 </TITLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/development/">development</a>&nbsp;&raquo;&nbsp;<a href="/development/digest/">digest</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      <div class="digest"><div class="leadin">
+  <H1>OpenOffice.org<BR>
+  Development digest<BR>
+  30th November 2003</H1>
+
+  <H3 align="center">by <A href="mailto:cphennessy@openoffice.org">C.P. Hennessy</A></H3>Welcome to what I hope will become the weekly digest of OpenOffice.org development.
+
+  <UL>
+    <LI>
+      <A href="#intro">Introduction</A>
+
+      <UL>
+        <LI><A href="#intro_help">So how can I help?</A></LI>
+
+        <LI><A href="#intro_branches">So what are all these branches?</A></LI>
+
+        <LI><A href="#intro_cvs">Current organization and contents of the CVS log</A></LI>
+      </UL>
+    </LI>
+
+    <LI><A href="#intro_summary">This weeks summary</A></LI>
+
+    <LI><A href='#cvs_stats'>CVS statistics</A></LI>
+
+    <LI><A href="#branch_index">Branches with changes this week</A></LI>
+
+    <LI><A href="#project_index">Projects which were changed</A></LI>
+
+    <LI><A href="#details">Detailed changes on each branch</A></LI>
+  </UL><A name="intro"></A>
+
+  <H2>Introduction</H2>Following what's happening in OpenOffice.org code development is not so easy, not because there is no information, but rather because that there is so much information and it is so spread out. Hopefully this digest will help to summarize all of that information into something reasonably readable and useful.
+
+  <P>Most of this digest will be concerned with what code has changed in CVS, and presenting that info in a readable format, but I also hope to include news and information from other OpenOffice.org projects including <A href="http://qa.openoffice.org">QA</A>, <A href="http://native-lang.openoffice.org">native language projects</A>, <A href="http://api.openoffice.org">API</A>, and any other interesting projects.</P>
+
+  <P>Obviously I could really use help with all of this so if you have something you would like to contribute, or you see omissions or mistakes please <A href="mailto:cphennessy@openoffice.org?subject=OOo%20Digest%20Suggestion">email me</A> your contribution to the digest.</P>
+
+  <P>Some of the areas which are not related to development I do not plan on covering, these include <A href="http://marketing.openoffice.org">marketing</A>, <A href="http://documentation.openoffice.org">documentation</A>, and the <A href="http://website.openoffice.org">website</A>. However, I will obviously include any news sent to me about these projects.</P>
+
+  <P><A name="intro_help"></A></P>
+
+  <H3>So how can I help?</H3>There are several teams who could do with your help :
+
+  <UL>
+    <LI>for <B>anyone</B> there is the <A href="http://qa.openoffice.org">QA team</A> where you can help to get enough details to reproduce bugs and triage them, help the <A href="http://documentation.openoffice.org">documentation project</A> by contributing templates and clipart, and the <A href="http://native-lang.openoffice.org">localization projects</A> ( e.g. <A href="http://lingucomponent.openoffice.org/servlets/ReadMsg?msgId=965426&amp;listName=dev">help to improve compound word spellchecking</A> );</LI>
+
+    <LI>for the <B>script programmer</B> there is the <A href="http://api.openoffice.org">API project</A> where you can develop on top of OpenOffice.org and program in StarBasic ( very similar to VBA ), java, python, C++, and perl. A good project to learn the object model on and improve your OpenOffice.org scripting skills might be the <A href="http://bibliographic.openoffice.org/">bibliographic project</A> where a <A href="http://bibliographic.openoffice.org/servlets/ReadMsg?msgId=965024/&amp;listName=dev">programmer new to python and OpenOffice.org APIs</A> was able to help after only a few days!;</LI>
+
+    <LI>for the <B>XML programmer</B>, there are also interesting projects which you could help write using various technologies to transform OpenOffice.orgs based XML based to other formats. Two transforms which come with OpenOffice.org 1.1 are DocBook, and XHTML, have a look at the <A href="http://xml.openoffice.org">XML</A> project for more details. There is infrastructure to use XSLT directly from OpenOffice.org. It is of course possible to generate OpenOffice.org file formats without ever having OpenOffice.org installed. There are several projects already doing this, some of these will be covered in future issues. To help get you started, <A href="http://books.evc-cit.info/">OpenOffice.org XML Essentials - Using OpenOffice.org's XML Data Format</A> is a book in progress written by J. David Eisenberg for <A href="http://www.oreilly.com/">O'Reilly &amp; Associates</A> using the <A href="http://creativecommons.org/licenses/by-nd-nc/1.0">Creative Commons License</A>.</LI>
+
+    <LI>for <B>the budding OpenOffice.org developer</B> there are many areas to get involved in including a call for helping to <A href="http://lingucomponent.openoffice.org/servlets/ReadMsg?msgId=965426/&amp;listName=dev">improve the code for the spellchecker ( especially for German)</A>(which is also use in Mozilla.org), and help to <A href="http://sc.openoffice.org/servlets/ReadMsg?msgId=965017/&amp;listName=dev">increase the number of rows Calc can handle</A>.
+
+      <P>It is not always necessary to recompile all of OpenOffice.org to work on only one of its components, but if you do then a very good place to start would be the <A href="http://ooo.ximian.com/hackers-guide.html">Unofficial OpenOffice Hacker's guide</A> which explains how to build and work on OpenOffice.org source code. If you have development related questions then please send an email to <A href="mailto:dev@openoffice.apache.org">the development project</A>.</P>
+    </LI>
+  </UL>Over the next number of weeks and months I hope to add more information here to help you understand how and where you can contribute, how OpenOffice.org the community works, and how the various components within OpenOffice.org the product work.
+
+  <P><A name="intro_branches"></A></P>
+
+  <H3>So what are all these branches?</H3>There is alot of OpenOffice.org development happening as can be seen from the details below.
+
+  <P>As with many very large projects with many developers, development is going on independently in parallel. To help manage the code in a reasonable way a feature of <A href="http://www.cvshome.org">CVS</A> called branches is used quite extensively. Basically each makor feature is developed on a branch by one developer (or a small team of developers).<BR>
+  This type of branch is called a "child workspaces"(CWS). Usually when a feature has been completed and some fundamental testing has been performed, the branch is then marked as ready for merging to a master branch.<BR>
+  Sometime later the developers branch with the feature is then merged to the master branch where further testing happens to make sure that features from different branches do not conflict and cause errors.</P>
+
+  <P>At some point a master branch is labelled and a public release of code is made.</P>
+
+  <P>An overview of which features will be implement on which branches can be found <A href="http://development.openoffice.org/releases/OOo_2_0_timetable.html">here</A>. There is a <A href="http://tools.openoffice.org/builds/index.html">more complete (and accurate) description of important branches currently used</A>.</P>
+
+  <P><A name="intro_cvs"></A></P>
+
+  <H2>Current organization and contents of the CVS log</H2>The CVS summary below is organized into what has changed on a particular branch by a each developer. There is currently a color coding on the left side to make it easier to see what type of change has occurred. For each change you should see :
+
+  <UL>
+    <LI>a link to the relevant bug in <A href="http://www.openoffice.org/issues/query.cgi">Issuezilla</A> (except for bugs over 100000 as these are currently Sun internal);</LI>
+
+    <LI>a comment the developer made while checking in those changes; and</LI>
+
+    <LI>a link to the difference of each change in webcvs.</LI>
+  </UL>This info is provided for all modifications and additions but not for all merges and resyncs as this information is not very interesting and would add alot more output to this already very large digest.<BR>
+  There is also two indexes, the first lists all of the development branches and logically groups these branches.<BR>
+  The second index lists all of the OpenOffice.org components which were worked on and lists those branches which have changes on those components.
+
+  <P><A name="intro_summary"></A></P>
+
+  <H2>This weeks summary</H2>A developers release (read do not even consider this alpha quality) called <A href="http://www.openoffice.org/dev_docs/source/680/">680_m13</A> is now available and contains many fixes and some new features including the new VCL plug (which will allow native toolkits to be used instead of the OpenOffice.org one), <A href="http://www.openoffice.org/servlets/ReadMsg?msgId=971485&amp;listName=announce">improvements to the scripting framework</A>(you can start to use JavaScript now), lots of compatibility and rtl fixes), improvement in graphics handling and the draw tool, and changes in the installation process. Note the temporary <A href="%20http://graphics.openoffice.org/unbranded-source/browse/~checkout~/graphics/svx/res/Attic/openintro_sun.bmp?rev=1.1.2.1&amp;content-type=image/bmp">splash screen</A>! ( <A href="mailto:dev@openoffice.apache.org">Maybe you can contribute</A>? )<BR>
+  <B>Note: this IS a developers release so be careful and do not complain if it crashes, burns and/or eats your computer!</B>
+
+  <P>As progress to the next major release there should be development snapshots every 2 weeks with more features for you to examine.</P>
+
+  <P>Many bugs have been worked on and resolved ( as of Dec 01 2003 ):</P>
+
+  <TABLE class="iz_stats" tyle="border-collapse: separate; border : 1px solid black ;">
+
+    <TR>
+      <TH></TH>
+
+      <TH>No this week</TH>
+
+      <TH>Change from last week</TH>
+    </TR>
+
+    <TR>
+      <TD>Issues submitted in the week before for all projects</TD>
+
+      <TD>267</TD>
+
+      <TD>0</TD>
+    </TR>
+
+    <TR>
+      <TD>Issues which have the status UNCONFIRMED</TD>
+
+      <TD>650</TD>
+
+      <TD>+3</TD>
+    </TR>
+
+    <TR>
+      <TD>Issues which have the status NEW</TD>
+
+      <TD>686</TD>
+
+      <TD>-9</TD>
+    </TR>
+
+    <TR>
+      <TD>Issues which have the status STARTED</TD>
+
+      <TD>873</TD>
+
+      <TD>+55</TD>
+    </TR>
+
+    <TR>
+      <TD>Issues which have the status FIXED</TD>
+
+      <TD>7096</TD>
+
+      <TD>+60</TD>
+    </TR>
+
+    <TR>
+      <TD>Issues submitted in last week resolved or closed</TD>
+
+      <TD>60</TD>
+
+      <TD>+12</TD>
+    </TR>
+  </TABLE>Please note that even though the unconfirmed issues remain a bit high, the <A href="http://qa.openoffice.org">QA</A> team is really doing some great work in keeping the bugs triaged ready for developers to dissect.
+
+  <P>Some of the interesting developments over the last week include:</P>
+
+  <UL>
+    <LI>the <A href="#cws_srx645_ooo111fix1_ihi">merge of bug fixes in branches for 1.1.1</A> is ongoing</LI>
+
+    <LI>working on converting OpenOffice.org's widget set so that it can use the <A href="#cws_srx645_nativewidget1">platforms native widgets</A> is going very well. Most of the work is concentrating on the <a href="so-blue.PNG">Win32</a> and <a href="ooo-gtk.png">GTK</a> widgets ( if you are interested in contributing to this please join the mailing lists of the <A href="http://gsl.openoffice.org">Graphics System Layer</A> project. Some work has started on the <A ref="">Qt/KDE widget integration</A>. Nothing yet has started for the Aqua port, but the work on GTK/Win32 widgets will make it relatively easy and if you are interested please join the dev mailing list of the <A href="http://porting.openoffice.org">porting</A> project</LI>
+
+    <LI>more work on <A href="#cws_srx645_layoutmanager">the new layout manager for custom toolbars and menus</A></LI>
+
+    <LI><A href="#cws_src680_xmlsec01">xml security</A>, <A href="#cws_src680_so8forms1">xpath</A>, and <A href="#HEAD_lo">dom</A> APIs and features were worked on</LI>
+
+    <LI>nice <A href="#cws_srx645_alphaart">alpha artwork and fixes</A> added by <A href="http://ximina.com">Ximian</A></LI>
+
+    <LI>continued improvements on compatibility : <A href="#cws_srx645_droghedafilterteam15">drogheda</A>, <A href="#cws_src680_mullingarfilterteam18">mullingar</A>, <A href="#cws_src680_portlaoisefilterteam16">portlaoise</A></LI>
+
+    <LI><A href="#cws_srx645_ooo111fix1_pjanik">Catalan, Hungarian, Finnish and Slovenian changes</A> were added</LI>
+
+    <LI>the work to <A href="#cws_srx645_cellbreak">split a table row over a page boundary</A> continues</LI>
+
+    <LI><A href="#cws_src680_networker2">more reworking of the installation mechanism</A></LI>
+
+    <LI>the <A href="http://api.openoffice.org/DevelopersGuide/DevelopersGuide.html">developers guide</A> was also <A href="#HEAD_jsc">updated</A></LI>
+
+    <LI>and finally alot of integration of branches : <A href="#mws_fix645_hr">1</A>, <A href="#mws_fix645_obo">2</A> and <A href="#HEAD_rt">3</A>.</LI>
+  </UL>
+</BODY>
+</HTML>
+
+<p><a name='cvs_stats'></a><H2>CVS statistics</h2>
+2052 commits by 67 developers resulted in
+123762 lines added, and 43756 lines removed.<p>
+<a name='branch_index'></a><H2>Branches with changes this week</H2>
+<small><center>( from  00:00 Thursday January 01 1970 UTC (week 00) <br>to 00:00 Thursday January 01 1970 UTC (week 00) )</center></small><br>
+<table class='branch_index' border='1' cellspacing='0'><tr>
+<th class='group_col'>Group</th><th class='branch_col'>Branch
+</td></tr><tr><td class='group'> cws_src680 </td><td>
+<a class='index_branch' href='#cws_src680_aw006'>aw006</a>
+<a class='index_branch' href='#cws_src680_cfg04'>cfg04</a>
+<a class='index_branch' href='#cws_src680_crashrep12'>crashrep12</a>
+<a class='index_branch' href='#cws_src680_dialogdiet'>dialogdiet</a>
+<a class='index_branch' href='#cws_src680_dr14'>dr14</a>
+<a class='index_branch' href='#cws_src680_draw24'>draw24</a>
+<a class='index_branch' href='#cws_src680_frmcontrols01'>frmcontrols01</a>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q09'>geordi2q09</a>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q10'>geordi2q10</a>
+<a class='index_branch' href='#cws_src680_interop12'>interop12</a>
+<a class='index_branch' href='#cws_src680_mav07'>mav07</a>
+<a class='index_branch' href='#cws_src680_mozab03'>mozab03</a>
+<a class='index_branch' href='#cws_src680_mullingarfilterteam18'>mullingarfilterteam18</a>
+<a class='index_branch' href='#cws_src680_networker2'>networker2</a>
+<a class='index_mergedbranch' href='#cws_src680_ooo20031110'>ooo20031110</a>
+<a class='index_branch' href='#cws_src680_os24'>os24</a>
+<a class='index_branch' href='#cws_src680_portlaoisefilterteam16'>portlaoisefilterteam16</a>
+<a class='index_branch' href='#cws_src680_qadev14'>qadev14</a>
+<a class='index_branch' href='#cws_src680_qwizards1'>qwizards1</a>
+<a class='index_branch' href='#cws_src680_rowlimit'>rowlimit</a>
+<a class='index_branch' href='#cws_src680_sal05'>sal05</a>
+<a class='index_branch' href='#cws_src680_sj05'>sj05</a>
+<a class='index_branch' href='#cws_src680_sj07'>sj07</a>
+<a class='index_branch' href='#cws_src680_so8forms1'>so8forms1</a>
+<a class='index_branch' href='#cws_src680_swq01'>swq01</a>
+<a class='index_branch' href='#cws_src680_tabstops'>tabstops</a>
+<a class='index_branch' href='#cws_src680_tbe9'>tbe9</a>
+<a class='index_branch' href='#cws_src680_unopkg1'>unopkg1</a>
+<a class='index_branch' href='#cws_src680_vcl17'>vcl17</a>
+<a class='index_mergedbranch' href='#cws_src680_vclcleanup01'>vclcleanup01</a>
+<a class='index_branch' href='#cws_src680_xmlsec01'>xmlsec01</a>
+</td></tr><tr><td class='group'> cws_srx644 </td><td>
+<a class='index_branch' href='#cws_srx644_ab02vba'>ab02vba</a>
+<a class='index_branch' href='#cws_srx644_calcrtl'>calcrtl</a>
+</td></tr><tr><td class='group'> cws_srx645 </td><td>
+<a class='index_branch' href='#cws_srx645_alphaart'>alphaart</a>
+<a class='index_branch' href='#cws_srx645_brazilianextras1'>brazilianextras1</a>
+<a class='index_branch' href='#cws_srx645_c01'>c01</a>
+<a class='index_branch' href='#cws_srx645_calc20'>calc20</a>
+<a class='index_branch' href='#cws_srx645_canvas01'>canvas01</a>
+<a class='index_branch' href='#cws_srx645_cellbreak'>cellbreak</a>
+<a class='index_mergedbranch' href='#cws_srx645_corkfilterteam10'>corkfilterteam10</a>
+<a class='index_branch' href='#cws_srx645_cups01'>cups01</a>
+<a class='index_mergedbranch' href='#cws_srx645_dba01pp1'>dba01pp1</a>
+<a class='index_mergedbranch' href='#cws_srx645_dr9'>dr9</a>
+<a class='index_mergedbranch' href='#cws_srx645_draw20pp1'>draw20pp1</a>
+<a class='index_mergedbranch' href='#cws_srx645_draw21'>draw21</a>
+<a class='index_branch' href='#cws_srx645_draw22'>draw22</a>
+<a class='index_branch' href='#cws_srx645_droghedafilterteam15'>droghedafilterteam15</a>
+<a class='index_branch' href='#cws_srx645_filtercfg'>filtercfg</a>
+<a class='index_branch' href='#cws_srx645_formdesign01'>formdesign01</a>
+<a class='index_mergedbranch' href='#cws_srx645_fwk01pp1'>fwk01pp1</a>
+<a class='index_mergedbranch' href='#cws_srx645_fwk02pp1'>fwk02pp1</a>
+<a class='index_branch' href='#cws_srx645_fwk03pp1'>fwk03pp1</a>
+<a class='index_branch' href='#cws_srx645_impress1'>impress1</a>
+<a class='index_branch' href='#cws_srx645_insight01'>insight01</a>
+<a class='index_mergedbranch' href='#cws_srx645_kso8'>kso8</a>
+<a class='index_branch' href='#cws_srx645_layoutmanager'>layoutmanager</a>
+<a class='index_branch' href='#cws_srx645_mnemonics'>mnemonics</a>
+<a class='index_branch' href='#cws_srx645_nativewidget1'>nativewidget1</a>
+<a class='index_branch' href='#cws_srx645_oj07'>oj07</a>
+<a class='index_branch' href='#cws_srx645_oj5'>oj5</a>
+<a class='index_branch' href='#cws_srx645_ooo111fix1'>ooo111fix1</a>
+<a class='index_mergedbranch' href='#cws_srx645_os16'>os16</a>
+<a class='index_mergedbranch' href='#cws_srx645_os22'>os22</a>
+<a class='index_branch' href='#cws_srx645_sal06'>sal06</a>
+<a class='index_branch' href='#cws_srx645_sch7pp2'>sch7pp2</a>
+<a class='index_branch' href='#cws_srx645_sdk10'>sdk10</a>
+<a class='index_mergedbranch' href='#cws_srx645_setuppp01'>setuppp01</a>
+<a class='index_branch' href='#cws_srx645_setuppp02'>setuppp02</a>
+<a class='index_branch' href='#cws_srx645_sj06'>sj06</a>
+<a class='index_mergedbranch' href='#cws_srx645_sw7pp1'>sw7pp1</a>
+<a class='index_mergedbranch' href='#cws_srx645_sw7pp1b'>sw7pp1b</a>
+<a class='index_branch' href='#cws_srx645_sw7pp2a'>sw7pp2a</a>
+<a class='index_branch' href='#cws_srx645_tl01'>tl01</a>
+<a class='index_branch' href='#cws_srx645_tracingfilterteam17'>tracingfilterteam17</a>
+<a class='index_mergedbranch' href='#cws_srx645_vcl7pp1r1'>vcl7pp1r1</a>
+<a class='index_mergedbranch' href='#cws_srx645_vcl7pp1r2'>vcl7pp1r2</a>
+<a class='index_branch' href='#cws_srx645_vcl7pp1r4'>vcl7pp1r4</a>
+<a class='index_mergedbranch' href='#cws_srx645_waterfordfilterteam12'>waterfordfilterteam12</a>
+</td></tr><tr><td class='group'> mws </td><td>
+<a class='index_branch' href='#mws_fix645'>fix645</a>
+<a class='index_branch' href='#mws_srx645'>srx645</a>
+</td></tr><tr><td class='group'> merged branches </td><td>
+<a class='index_mergedbranch' href='#merged_'></a>
+<a class='index_mergedbranch' href='#merged_aw003'>aw003</a>
+<a class='index_mergedbranch' href='#merged_comboboxlink'>comboboxlink</a>
+<a class='index_mergedbranch' href='#merged_corkfilterteam10'>corkfilterteam10</a>
+<a class='index_mergedbranch' href='#merged_dba01pp1'>dba01pp1</a>
+<a class='index_mergedbranch' href='#merged_dr9'>dr9</a>
+<a class='index_mergedbranch' href='#merged_draw20pp1'>draw20pp1</a>
+<a class='index_mergedbranch' href='#merged_draw21'>draw21</a>
+<a class='index_mergedbranch' href='#merged_fwk01pp1'>fwk01pp1</a>
+<a class='index_mergedbranch' href='#merged_fwk02pp1'>fwk02pp1</a>
+<a class='index_mergedbranch' href='#merged_geordi2q09'>geordi2q09</a>
+<a class='index_mergedbranch' href='#merged_geordi2q10'>geordi2q10</a>
+<a class='index_mergedbranch' href='#merged_kso8'>kso8</a>
+<a class='index_mergedbranch' href='#merged_oj01parser'>oj01parser</a>
+<a class='index_mergedbranch' href='#merged_ooo20031110'>ooo20031110</a>
+<a class='index_mergedbranch' href='#merged_os16'>os16</a>
+<a class='index_mergedbranch' href='#merged_os21'>os21</a>
+<a class='index_mergedbranch' href='#merged_os22'>os22</a>
+<a class='index_mergedbranch' href='#merged_os23'>os23</a>
+<a class='index_mergedbranch' href='#merged_pmselectedfixes2'>pmselectedfixes2</a>
+<a class='index_mergedbranch' href='#merged_pp1i18n1'>pp1i18n1</a>
+<a class='index_mergedbranch' href='#merged_pp1selectedfixes3'>pp1selectedfixes3</a>
+<a class='index_mergedbranch' href='#merged_sab007'>sab007</a>
+<a class='index_mergedbranch' href='#merged_sb11'>sb11</a>
+<a class='index_mergedbranch' href='#merged_sb7'>sb7</a>
+<a class='index_mergedbranch' href='#merged_sch7pp1'>sch7pp1</a>
+<a class='index_mergedbranch' href='#merged_setuppp01'>setuppp01</a>
+<a class='index_mergedbranch' href='#merged_sw02pp1'>sw02pp1</a>
+<a class='index_mergedbranch' href='#merged_sw7pp1'>sw7pp1</a>
+<a class='index_mergedbranch' href='#merged_sw7pp1a'>sw7pp1a</a>
+<a class='index_mergedbranch' href='#merged_sw7pp1b'>sw7pp1b</a>
+<a class='index_mergedbranch' href='#merged_sw7pp1c'>sw7pp1c</a>
+<a class='index_mergedbranch' href='#merged_sw7pp1neu'>sw7pp1neu</a>
+<a class='index_mergedbranch' href='#merged_thb07'>thb07</a>
+<a class='index_mergedbranch' href='#merged_valgrind01'>valgrind01</a>
+<a class='index_mergedbranch' href='#merged_vcl7pp1r1'>vcl7pp1r1</a>
+<a class='index_mergedbranch' href='#merged_vcl7pp1r2'>vcl7pp1r2</a>
+<a class='index_mergedbranch' href='#merged_vclcleanup01'>vclcleanup01</a>
+<a class='index_mergedbranch' href='#merged_waterfordfilterteam12'>waterfordfilterteam12</a>
+</td></tr><tr><td class='group'> misc </td><td>
+<a href='#'></a>
+<a href='#HEAD' style='word-spacing: 1em;'>HEAD and other branches</a>
+</td></tr></table>
+</div><p>
+<a name='project_index'></a><H2>Projects which were changed</H2>
+<small>(excluding integration and resyncing)</small><br>
+<table class='project_index' border='1' cellspacing='0'>
+<tr><th class='project_col'>Project<br>(linked to the project page)</th>
+<th>Branch Group</th><th class='branch_col'>Branch<br>
+(linked to the branch changes below)</th></tr>
+<tr><td rowspan='4'><a class='project' href='http://api.openoffice.org'>API (aka api)</a></td>
+<td> srx645 </td>
+<td>
+<a class='index_branch' href='#cws_srx645_filtercfg'>filtercfg</a>
+<a class='index_branch' href='#cws_srx645_insight01'>insight01</a>
+<a class='index_branch' href='#cws_srx645_layoutmanager'>layoutmanager</a>
+</td></tr>
+<tr>
+<td> srx644 </td>
+<td>
+<a class='index_branch' href='#cws_srx644_ab02vba'>ab02vba</a>
+</td></tr>
+<tr>
+<td> src680 </td>
+<td>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q09'>geordi2q09</a>
+<a class='index_branch' href='#cws_src680_mav07'>mav07</a>
+<a class='index_branch' href='#cws_src680_sj05'>sj05</a>
+<a class='index_branch' href='#cws_src680_so8forms1'>so8forms1</a>
+<a class='index_branch' href='#cws_src680_unopkg1'>unopkg1</a>
+<a class='index_branch' href='#cws_src680_xmlsec01'>xmlsec01</a>
+</td></tr>
+<tr>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='3'><a class='project' href='http://dba.openoffice.org'>Database Access (aka dba)</a></td>
+<td> srx645 </td>
+<td>
+<a class='index_branch' href='#cws_srx645_insight01'>insight01</a>
+<a class='index_branch' href='#cws_srx645_mnemonics'>mnemonics</a>
+<a class='index_branch' href='#cws_srx645_ooo111fix1'>ooo111fix1</a>
+</td></tr>
+<tr>
+<td> src680 </td>
+<td>
+<a class='index_branch' href='#cws_src680_dialogdiet'>dialogdiet</a>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q10'>geordi2q10</a>
+<a class='index_branch' href='#cws_src680_mozab03'>mozab03</a>
+</td></tr>
+<tr>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='2'><a class='project' href='http://external.openoffice.org'>External (aka external)</a></td>
+<td>master</td><td>
+<a class='index_branch' href='#mws_srx645'>srx645</a>
+<a class='index_branch' href='#mws_fix645'>fix645</a>
+</td></tr>
+<tr>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='4'><a class='project' href='http://framework.openoffice.org'>Application Framework (aka framework)</a></td>
+<td> srx645 </td>
+<td>
+<a class='index_branch' href='#cws_srx645_alphaart'>alphaart</a>
+<a class='index_branch' href='#cws_srx645_c01'>c01</a>
+<a class='index_branch' href='#cws_srx645_filtercfg'>filtercfg</a>
+<a class='index_branch' href='#cws_srx645_fwk03pp1'>fwk03pp1</a>
+<a class='index_branch' href='#cws_srx645_layoutmanager'>layoutmanager</a>
+<a class='index_branch' href='#cws_srx645_ooo111fix1'>ooo111fix1</a>
+<a class='index_branch' href='#cws_srx645_vcl7pp1r4'>vcl7pp1r4</a>
+</td></tr>
+<tr>
+<td> src680 </td>
+<td>
+<a class='index_branch' href='#cws_src680_dialogdiet'>dialogdiet</a>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q09'>geordi2q09</a>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q10'>geordi2q10</a>
+<a class='index_branch' href='#cws_src680_unopkg1'>unopkg1</a>
+<a class='index_branch' href='#cws_src680_vcl17'>vcl17</a>
+<a class='index_mergedbranch' href='#cws_src680_vclcleanup01'>vclcleanup01</a>
+</td></tr>
+<tr>
+<td>master</td><td>
+<a class='index_branch' href='#mws_srx645'>srx645</a>
+<a class='index_branch' href='#mws_fix645'>fix645</a>
+</td></tr>
+<tr>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='3'><a class='project' href='http://graphics.openoffice.org'>Graphic Applications (aka graphics)</a></td>
+<td> srx645 </td>
+<td>
+<a class='index_branch' href='#cws_srx645_alphaart'>alphaart</a>
+<a class='index_branch' href='#cws_srx645_canvas01'>canvas01</a>
+<a class='index_branch' href='#cws_srx645_draw22'>draw22</a>
+<a class='index_branch' href='#cws_srx645_filtercfg'>filtercfg</a>
+<a class='index_branch' href='#cws_srx645_formdesign01'>formdesign01</a>
+<a class='index_branch' href='#cws_srx645_impress1'>impress1</a>
+<a class='index_branch' href='#cws_srx645_insight01'>insight01</a>
+<a class='index_branch' href='#cws_srx645_layoutmanager'>layoutmanager</a>
+<a class='index_branch' href='#cws_srx645_mnemonics'>mnemonics</a>
+<a class='index_branch' href='#cws_srx645_ooo111fix1'>ooo111fix1</a>
+<a class='index_branch' href='#cws_srx645_sch7pp2'>sch7pp2</a>
+<a class='index_branch' href='#cws_srx645_sw7pp2a'>sw7pp2a</a>
+</td></tr>
+<tr>
+<td> src680 </td>
+<td>
+<a class='index_branch' href='#cws_src680_dialogdiet'>dialogdiet</a>
+<a class='index_branch' href='#cws_src680_dr14'>dr14</a>
+<a class='index_branch' href='#cws_src680_draw24'>draw24</a>
+<a class='index_branch' href='#cws_src680_frmcontrols01'>frmcontrols01</a>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q10'>geordi2q10</a>
+<a class='index_branch' href='#cws_src680_interop12'>interop12</a>
+<a class='index_branch' href='#cws_src680_mullingarfilterteam18'>mullingarfilterteam18</a>
+<a class='index_branch' href='#cws_src680_os24'>os24</a>
+<a class='index_branch' href='#cws_src680_sj05'>sj05</a>
+<a class='index_branch' href='#cws_src680_sj07'>sj07</a>
+</td></tr>
+<tr>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='5'><a class='project' href='http://gsl.openoffice.org'>Graphic System Layer (aka gsl)</a></td>
+<td> srx645 </td>
+<td>
+<a class='index_branch' href='#cws_srx645_alphaart'>alphaart</a>
+<a class='index_branch' href='#cws_srx645_canvas01'>canvas01</a>
+<a class='index_branch' href='#cws_srx645_cups01'>cups01</a>
+<a class='index_branch' href='#cws_srx645_layoutmanager'>layoutmanager</a>
+<a class='index_branch' href='#cws_srx645_mnemonics'>mnemonics</a>
+<a class='index_branch' href='#cws_srx645_nativewidget1'>nativewidget1</a>
+<a class='index_branch' href='#cws_srx645_ooo111fix1'>ooo111fix1</a>
+<a class='index_branch' href='#cws_srx645_vcl7pp1r4'>vcl7pp1r4</a>
+</td></tr>
+<tr>
+<td> srx644 </td>
+<td>
+<a class='index_branch' href='#cws_srx644_calcrtl'>calcrtl</a>
+</td></tr>
+<tr>
+<td> src680 </td>
+<td>
+<a class='index_branch' href='#cws_src680_dialogdiet'>dialogdiet</a>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q09'>geordi2q09</a>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q10'>geordi2q10</a>
+<a class='index_branch' href='#cws_src680_vcl17'>vcl17</a>
+<a class='index_mergedbranch' href='#cws_src680_vclcleanup01'>vclcleanup01</a>
+</td></tr>
+<tr>
+<td>master</td><td>
+<a class='index_branch' href='#mws_srx645'>srx645</a>
+</td></tr>
+<tr>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='4'><a class='project' href='http://installation.openoffice.org'>Installation (aka installation)</a></td>
+<td> srx645 </td>
+<td>
+<a class='index_branch' href='#cws_srx645_brazilianextras1'>brazilianextras1</a>
+<a class='index_branch' href='#cws_srx645_filtercfg'>filtercfg</a>
+<a class='index_branch' href='#cws_srx645_layoutmanager'>layoutmanager</a>
+<a class='index_branch' href='#cws_srx645_ooo111fix1'>ooo111fix1</a>
+<a class='index_branch' href='#cws_srx645_setuppp02'>setuppp02</a>
+</td></tr>
+<tr>
+<td> src680 </td>
+<td>
+<a class='index_branch' href='#cws_src680_crashrep12'>crashrep12</a>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q09'>geordi2q09</a>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q10'>geordi2q10</a>
+<a class='index_branch' href='#cws_src680_networker2'>networker2</a>
+<a class='index_branch' href='#cws_src680_qwizards1'>qwizards1</a>
+<a class='index_branch' href='#cws_src680_xmlsec01'>xmlsec01</a>
+</td></tr>
+<tr>
+<td>master</td><td>
+<a class='index_branch' href='#mws_srx645'>srx645</a>
+<a class='index_branch' href='#mws_fix645'>fix645</a>
+</td></tr>
+<tr>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='2'><a class='project' href='http://l10n.openoffice.org'>Localization (aka l10n)</a></td>
+<td> src680 </td>
+<td>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q10'>geordi2q10</a>
+</td></tr>
+<tr>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='1'><a class='project' href='http://lingucomponent.openoffice.org'>Lingucomponent (aka lingucomponent)</a></td>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='3'><a class='project' href='http://porting.openoffice.org'>Porting (aka porting)</a></td>
+<td> srx645 </td>
+<td>
+<a class='index_branch' href='#cws_srx645_ooo111fix1'>ooo111fix1</a>
+</td></tr>
+<tr>
+<td> src680 </td>
+<td>
+<a class='index_branch' href='#cws_src680_crashrep12'>crashrep12</a>
+<a class='index_branch' href='#cws_src680_qadev14'>qadev14</a>
+<a class='index_branch' href='#cws_src680_sal05'>sal05</a>
+</td></tr>
+<tr>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='4'><a class='project' href='http://sc.openoffice.org'>Spreadsheet (aka sc)</a></td>
+<td> srx645 </td>
+<td>
+<a class='index_branch' href='#cws_srx645_calc20'>calc20</a>
+<a class='index_mergedbranch' href='#cws_srx645_dr9'>dr9</a>
+<a class='index_branch' href='#cws_srx645_layoutmanager'>layoutmanager</a>
+<a class='index_branch' href='#cws_srx645_mnemonics'>mnemonics</a>
+<a class='index_branch' href='#cws_srx645_ooo111fix1'>ooo111fix1</a>
+<a class='index_branch' href='#cws_srx645_tracingfilterteam17'>tracingfilterteam17</a>
+</td></tr>
+<tr>
+<td> srx644 </td>
+<td>
+<a class='index_branch' href='#cws_srx644_calcrtl'>calcrtl</a>
+</td></tr>
+<tr>
+<td> src680 </td>
+<td>
+<a class='index_branch' href='#cws_src680_dialogdiet'>dialogdiet</a>
+<a class='index_branch' href='#cws_src680_dr14'>dr14</a>
+<a class='index_branch' href='#cws_src680_rowlimit'>rowlimit</a>
+</td></tr>
+<tr>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='4'><a class='project' href='http://sw.openoffice.org'>Word Processing (aka sw)</a></td>
+<td> srx645 </td>
+<td>
+<a class='index_branch' href='#cws_srx645_cellbreak'>cellbreak</a>
+<a class='index_branch' href='#cws_srx645_droghedafilterteam15'>droghedafilterteam15</a>
+<a class='index_branch' href='#cws_srx645_layoutmanager'>layoutmanager</a>
+<a class='index_branch' href='#cws_srx645_mnemonics'>mnemonics</a>
+<a class='index_branch' href='#cws_srx645_ooo111fix1'>ooo111fix1</a>
+<a class='index_branch' href='#cws_srx645_sw7pp2a'>sw7pp2a</a>
+</td></tr>
+<tr>
+<td> src680 </td>
+<td>
+<a class='index_branch' href='#cws_src680_dialogdiet'>dialogdiet</a>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q09'>geordi2q09</a>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q10'>geordi2q10</a>
+<a class='index_branch' href='#cws_src680_mullingarfilterteam18'>mullingarfilterteam18</a>
+<a class='index_branch' href='#cws_src680_os24'>os24</a>
+<a class='index_branch' href='#cws_src680_portlaoisefilterteam16'>portlaoisefilterteam16</a>
+<a class='index_branch' href='#cws_src680_swq01'>swq01</a>
+<a class='index_branch' href='#cws_src680_tabstops'>tabstops</a>
+</td></tr>
+<tr>
+<td>master</td><td>
+<a class='index_branch' href='#mws_fix645'>fix645</a>
+</td></tr>
+<tr>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='4'><a class='project' href='http://tools.openoffice.org'>Build Tools and Environment (aka tools)</a></td>
+<td> srx645 </td>
+<td>
+<a class='index_branch' href='#cws_srx645_ooo111fix1'>ooo111fix1</a>
+</td></tr>
+<tr>
+<td> src680 </td>
+<td>
+<a class='index_mergedbranch' href='#cws_src680_ooo20031110'>ooo20031110</a>
+</td></tr>
+<tr>
+<td>master</td><td>
+<a class='index_branch' href='#mws_fix645'>fix645</a>
+</td></tr>
+<tr>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='3'><a class='project' href='http://ucb.openoffice.org'>Universal Content Broker (aka ucb)</a></td>
+<td> srx645 </td>
+<td>
+<a class='index_branch' href='#cws_srx645_ooo111fix1'>ooo111fix1</a>
+<a class='index_branch' href='#cws_srx645_sal06'>sal06</a>
+</td></tr>
+<tr>
+<td> src680 </td>
+<td>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q10'>geordi2q10</a>
+<a class='index_branch' href='#cws_src680_unopkg1'>unopkg1</a>
+</td></tr>
+<tr>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='3'><a class='project' href='http://udk.openoffice.org'>UNO Development Kit / Component Technology (aka udk)</a></td>
+<td> srx645 </td>
+<td>
+<a class='index_branch' href='#cws_srx645_sdk10'>sdk10</a>
+</td></tr>
+<tr>
+<td> src680 </td>
+<td>
+<a class='index_branch' href='#cws_src680_xmlsec01'>xmlsec01</a>
+</td></tr>
+<tr>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='1'><a class='project' href='http://ui.openoffice.org'>User Interface (aka ui)</a></td>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='4'><a class='project' href='http://util.openoffice.org'>Utilities (aka util)</a></td>
+<td> srx645 </td>
+<td>
+<a class='index_branch' href='#cws_srx645_alphaart'>alphaart</a>
+<a class='index_branch' href='#cws_srx645_canvas01'>canvas01</a>
+<a class='index_branch' href='#cws_srx645_filtercfg'>filtercfg</a>
+<a class='index_branch' href='#cws_srx645_formdesign01'>formdesign01</a>
+<a class='index_branch' href='#cws_srx645_insight01'>insight01</a>
+<a class='index_branch' href='#cws_srx645_layoutmanager'>layoutmanager</a>
+<a class='index_branch' href='#cws_srx645_mnemonics'>mnemonics</a>
+<a class='index_branch' href='#cws_srx645_ooo111fix1'>ooo111fix1</a>
+<a class='index_branch' href='#cws_srx645_tl01'>tl01</a>
+<a class='index_branch' href='#cws_srx645_vcl7pp1r4'>vcl7pp1r4</a>
+</td></tr>
+<tr>
+<td> srx644 </td>
+<td>
+<a class='index_branch' href='#cws_srx644_ab02vba'>ab02vba</a>
+</td></tr>
+<tr>
+<td> src680 </td>
+<td>
+<a class='index_branch' href='#cws_src680_aw006'>aw006</a>
+<a class='index_branch' href='#cws_src680_cfg04'>cfg04</a>
+<a class='index_branch' href='#cws_src680_dialogdiet'>dialogdiet</a>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q09'>geordi2q09</a>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q10'>geordi2q10</a>
+<a class='index_branch' href='#cws_src680_tabstops'>tabstops</a>
+<a class='index_branch' href='#cws_src680_tbe9'>tbe9</a>
+<a class='index_branch' href='#cws_src680_unopkg1'>unopkg1</a>
+<a class='index_branch' href='#cws_src680_vcl17'>vcl17</a>
+</td></tr>
+<tr>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+<tr><td rowspan='2'><a class='project' href='http://xml.openoffice.org'>XML File Formats (aka xml)</a></td>
+<td> src680 </td>
+<td>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q09'>geordi2q09</a>
+<a class='index_mergedbranch' href='#cws_src680_geordi2q10'>geordi2q10</a>
+<a class='index_branch' href='#cws_src680_sj05'>sj05</a>
+</td></tr>
+<tr>
+<td>misc<td>
+<a class='index_branch' href='#HEAD'>HEAD</a>
+</td></tr>
+</table>
+<a name='details'></a><H2>Detailed changes on each branch</H2>
+
+<a name='cws_srx645_dba01pp1'></a><a name='cws_srx645_dba01pp1_vg'></a><div class="mergedbranch">cws_srx645_dba01pp1 was changed by Vladimir Glazounov(vg) [ <a href='#merged_dba01pp1'>and it was merged</a> ]</div>
+<div class='modified'>modified : <span class='comment'>     RESYNC:; FILE MERGED    </span>
+<div class="file-list">
+ files from:
+dba/dbaccess/source/ui/querydesign/:
+<a href='http://dba.openoffice.org/source/browse/dba/dbaccess/source/ui/querydesign/QueryDesignView.cxx.diff?r1=1.61.16.1&r2=1.61.16.2'>QueryDesignView.cxx</a>,
+<a href='http://dba.openoffice.org/source/browse/dba/dbaccess/source/ui/querydesign/SelectionBrowseBox.cxx.diff?r1=1.50.16.2&r2=1.50.16.3'>SelectionBrowseBox.cxx</a>,
+graphics/svx/source/form/<a href='http://graphics.openoffice.org/source/browse/graphics/svx/source/form/fmshimp.cxx.diff?r1=1.41.280.1&r2=1.41.280.2'>fmshimp.cxx</a>
+dba/connectivity/source/parse/<a href='http://dba.openoffice.org/source/browse/dba/connectivity/source/parse/sqliterator.cxx.diff?r1=1.34.38.1&r2=1.34.38.2'>sqliterator.cxx</a>
+gsl/forms/source/component/<a href='http://gsl.openoffice.org/source/browse/gsl/forms/source/component/ComboBox.cxx.diff?r1=1.19.42.1&r2=1.19.42.2'>ComboBox.cxx</a>
+</div>
+</div>
+<p>
+
+<a name='cws_srx645_setuppp02'></a><a name='cws_srx645_setuppp02_dv'></a><div class="branch">cws_srx645_setuppp02 was changed by Dirk Voelzke(dv)</div>
+<div class='modified'>modified : <span class='comment'>     RESYNC:; FILE MERGED    </span>
+<div class="file-list">
+ files from:
+installation/setup2/source/agenda/<a href='http://installation.openoffice.org/source/browse/installation/setup2/source/agenda/agenda.cxx.diff?r1=1.82.72.1&r2=1.82.72.2'>agenda.cxx</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     #114069# Added StarSuite support for logo and vendor bitmap, too    </span>
+<div class="file-list">
+    installation/setup2/source/ui/<a href='http://installation.openoffice.org/source/browse/installation/setup2/source/ui/mainwnd.cxx.diff?r1=1.19.106.1&r2=1.19.106.2'>mainwnd.cxx</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     #112855# Avoid recursive paint in LeftWin::Paint()    </span>
+<div class="file-list">
+    installation/setup2/source/ui/<a href='http://installation.openoffice.org/source/browse/installation/setup2/source/ui/mainwnd.cxx.diff?r1=1.19&r2=1.19.106.1'>mainwnd.cxx</a>
+</div>
+</div>
+<p>
+
+<a name='cws_src680_rowlimit'></a><a name='cws_src680_rowlimit_er'></a><div class="branch">cws_src680_rowlimit was changed by Eike Rathke(er)</div>
+<div class='removed'>removed : <span class='comment'>     remove file that doesn't exist anymore according to it's content ;-)  </span>
+<div class="file-list">
+ files from:
+sc/source/ui/inc/:
+applink.hxx,
+objects.hxx,
+pivotobj.hxx,
+scsbx.hxx,
+sumctl.hxx,
+template.hxx,
+</div>
+</div>
+<div class='removed'>removed : <span class='comment'>     remove legacy file  </span>
+<div class="file-list">
+ files from:
+sc/inc//scuiks.hxx
+</div>
+</div>
+<div class='removed'>removed : <span class='comment'>     remove dead file  </span>
+<div class="file-list">
+ files from:
+sc/inc//splcfg.hxx
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     <a href='http://www.openoffice.org/issues/show_bug.cgi?id=1967'> #i1967#</a> move ScAddress, ScRange from global.hxx to address.hxx    </span>
+<div class="file-list">
+    sc/sc/source/core/data/<a href='http://sc.openoffice.org/source/browse/sc/sc/source/core/data/documen4.cxx.diff?r1=1.11&r2=1.11.178.1'>documen4.cxx</a>
+    sc/sc/inc/<a href='http://sc.openoffice.org/source/browse/sc/sc/inc/addincol.hxx.diff?r1=1.4&r2=1.4.302.1'>addincol.hxx</a>
+</div>
+</div>
+<div class='added'>added : <span class='comment'>     <a href='http://www.openoffice.org/issues/show_bug.cgi?id=1967'> #i1967#</a> move ScAddress, ScRange from global.hxx to address.hxx    </span>
+<div class="file-list">
+    sc/sc/inc/  :  <a href='http://sc.openoffice.org/source/browse/sc/sc/inc/address.hxx.diff?r1=1.1&r2=1.1.2.1'>address.hxx</a>, <a href='http://sc.openoffice.org/source/browse/sc/sc/inc/paramisc.hxx.diff?r1=1.1&r2=1.1.2.1'>paramisc.hxx</a> ;
+</div>
+</div>
+<p>
+
+<a name='cws_srx645_setuppp01'></a><a name='cws_srx645_setuppp01_kz'></a><div class="mergedbranch">cws_srx645_setuppp01 was changed by Kurt Zenker(kz) [ <a href='#merged_setuppp01'>and it was merged</a> ]</div>
+<div class='modified'>modified : <span class='comment'>     RESYNC:; FILE MERGED    </span>
+<div class="file-list">
+ files from:
+installation/scp/inc/<a href='http://installation.openoffice.org/source/browse/installation/scp/inc/gcfg.inc.diff?r1=1.66.24.1.24.1&r2=1.66.24.1.24.2'>gcfg.inc</a>
+installation/setup2/script/:
+<a href='http://installation.openoffice.org/source/browse/installation/setup2/script/setupzip_linux.inf.diff?r1=1.5.114.1.2.1&r2=1.5.114.1.2.2'>setupzip_linux.inf</a>,
+<a href='http://installation.openoffice.org/source/browse/installation/setup2/script/setupzip_solsparc.inf.diff?r1=1.5.114.1.2.1&r2=1.5.114.1.2.2'>setupzip_solsparc.inf</a>,
+<a href='http://installation.openoffice.org/source/browse/installation/setup2/script/setupzip_windows.inf.diff?r1=1.5.114.1.2.1&r2=1.5.114.1.2.2'>setupzip_windows.inf</a>,
+installation/setup2/source/ui/pages/<a href='http://installation.openoffice.org/source/browse/installation/setup2/source/ui/pages/ppatch.src.diff?r1=1.19.48.1&r2=1.19.48.2'>ppatch.src</a>
+installation/setup2/mow/source/loader/<a href='http://installation.openoffice.org/source/browse/installation/setup2/mow/source/loader/loader.c.diff?r1=1.49.14.2.2.3&r2=1.49.14.2.2.4'>loader.c</a>
+installation/setup2/win/source/loader/<a href='http://installation.openoffice.org/source/browse/installation/setup2/win/source/loader/loader.cxx.diff?r1=1.28.74.1.2.1&r2=1.28.74.1.2.2'>loader.cxx</a>
+installation/setup2/source/agenda/<a href='http://installation.openoffice.org/source/browse/installation/setup2/source/agenda/instdb.cxx.diff?r1=1.12.138.1&r2=1.12.138.2'>instdb.cxx</a>
+installation/setup2/source/ui/:
+<a href='http://installation.openoffice.org/source/browse/installation/setup2/source/ui/main.cxx.diff?r1=1.114.38.1&r2=1.114.38.2'>main.cxx</a>,
+<a href='http://installation.openoffice.org/source/browse/installation/setup2/source/ui/mainevt.cxx.diff?r1=1.83.44.1&r2=1.83.44.2'>mainevt.cxx</a>,
+</div>
+</div>
+<p>
+
+<a name='cws_src680_os24'></a><a name='cws_src680_os24_os'></a><div class="branch">cws_src680_os24 was changed by Oliver Specht(os)</div>
+<div class='modified'>modified : <span class='comment'>     <a href='http://www.openoffice.org/issues/show_bug.cgi?id=22986'> #i22986#</a> ::Apply: remove deleted bookmarks before inserting a new one    </span>
+<div class="file-list">
+    sw/sw/source/ui/misc/<a href='http://sw.openoffice.org/source/browse/sw/sw/source/ui/misc/bookmark.cxx.diff?r1=1.6&r2=1.6.296.1'>bookmark.cxx</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     #112674# set metric of tab stop position correctly    </span>
+<div class="file-list">
+    sw/sw/source/ui/index/<a href='http://sw.openoffice.org/source/browse/sw/sw/source/ui/index/cnttab.cxx.diff?r1=1.52&r2=1.52.296.1'>cnttab.cxx</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     <a href='http://www.openoffice.org/issues/show_bug.cgi?id=21267'> #i21267#</a> ::GetInfo() corrected    </span>
+<div class="file-list">
+    sw/sw/source/ui/fldui/<a href='http://sw.openoffice.org/source/browse/sw/sw/source/ui/fldui/fldtdlg.cxx.diff?r1=1.10&r2=1.10.104.1'>fldtdlg.cxx</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     <a href='http://www.openoffice.org/issues/show_bug.cgi?id=22199'> #i22199#</a> Liechtenstein now correctly spelled    </span>
+<div class="file-list">
+    graphics/svx/source/dialog/<a href='http://graphics.openoffice.org/source/browse/graphics/svx/source/dialog/langtab.src.diff?r1=1.44&r2=1.44.74.1'>langtab.src</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     #114117# help ids for ListBoxes and CheckBoxes in Appearance TabPage    </span>
+<div class="file-list">
+    graphics/svx/util/<a href='http://graphics.openoffice.org/source/browse/graphics/svx/util/hidother.src.diff?r1=1.24&r2=1.24.202.1'>hidother.src</a>
+    graphics/svx/inc/<a href='http://graphics.openoffice.org/source/browse/graphics/svx/inc/helpid.hrc.diff?r1=1.39&r2=1.39.24.1'>helpid.hrc</a>
+    graphics/svx/source/options/<a href='http://graphics.openoffice.org/source/browse/graphics/svx/source/options/optcolor.cxx.diff?r1=1.29&r2=1.29.116.1'>optcolor.cxx</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     #112561# wrong disabling of database merge via Drag and Drop undone    </span>
+<div class="file-list">
+    sw/sw/source/ui/docvw/<a href='http://sw.openoffice.org/source/browse/sw/sw/source/ui/docvw/edtdd.cxx.diff?r1=1.16&r2=1.16.212.1'>edtdd.cxx</a>
+</div>
+</div>
+<p>
+
+<a name='cws_src680_sj07'></a><a name='cws_src680_sj07_sj'></a><div class="branch">cws_src680_sj07 was changed by Sven Jacobi(sj)</div>
+<div class='modified'>modified : <span class='comment'>     fixed bug: start presentation from page is now working correct    </span>
+<div class="file-list">
+    graphics/sd/source/filter/<a href='http://graphics.openoffice.org/source/browse/graphics/sd/source/filter/pptin.cxx.diff?r1=1.49&r2=1.49.60.1'>pptin.cxx</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     not accessing uninitialized memory if bullet indentation is not available    </span>
+<div class="file-list">
+    graphics/svx/source/svdraw/<a href='http://graphics.openoffice.org/source/browse/graphics/svx/source/svdraw/svdfppt.cxx.diff?r1=1.112&r2=1.112.52.1'>svdfppt.cxx</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     not creating placeholder object for text instance    </span>
+<div class="file-list">
+    graphics/sd/source/filter/<a href='http://graphics.openoffice.org/source/browse/graphics/sd/source/filter/pptin.cxx.diff?r1=1.49.60.1&r2=1.49.60.2'>pptin.cxx</a>
+</div>
+</div>
+<p>
+
+<a name='cws_srx645_cups01'></a><a name='cws_srx645_cups01_pl'></a><div class="branch">cws_srx645_cups01 was changed by Philipp Lohmann(pl)</div>
+<div class='modified'>modified : <span class='comment'>     removed an ambiguity for workshop compiler    </span>
+<div class="file-list">
+    gsl/psprint/source/helper/<a href='http://gsl.openoffice.org/source/browse/gsl/psprint/source/helper/strhelper.cxx.diff?r1=1.3.76.1&r2=1.3.76.2'>strhelper.cxx</a>
+    gsl/vcl/source/gdi/<a href='http://gsl.openoffice.org/source/browse/gsl/vcl/source/gdi/bitmap4.cxx.diff?r1=1.2.292.1&r2=1.2.292.1.32.1'>bitmap4.cxx</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     RESYNC:; FILE MERGED    </span>
+<div class="file-list">
+ files from:
+gsl/psprint/source/fontmanager/<a href='http://gsl.openoffice.org/source/browse/gsl/psprint/source/fontmanager/fontmanager.cxx.diff?r1=1.39.16.1&r2=1.39.16.2'>fontmanager.cxx</a>
+gsl/psprint/source/fontsubset/<a href='http://gsl.openoffice.org/source/browse/gsl/psprint/source/fontsubset/sft.c.diff?r1=1.23.4.2&r2=1.23.4.3'>sft.c</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     <a href='http://www.openoffice.org/issues/show_bug.cgi?id=23057'> #i23057#</a> fall back to old print stuff if CUPS has no dests    </span>
+<div class="file-list">
+    gsl/psprint/inc/<a href='http://gsl.openoffice.org/source/browse/gsl/psprint/inc/cupsmgr.hxx.diff?r1=1.1.2.3&r2=1.1.2.4'>cupsmgr.hxx</a>
+</div>
+</div>
+<p>
+
+<a name='cws_srx645_sw7pp2a'></a><a name='cws_srx645_sw7pp2a_fme'></a><div class="branch">cws_srx645_sw7pp2a was changed by Frank Meies(fme)</div>
+<div class='modified'>modified : <span class='comment'>     #112929# Catch 0 pointer within FindLastCntnt    </span>
+<div class="file-list">
+    sw/sw/source/core/layout/<a href='http://sw.openoffice.org/source/browse/sw/sw/source/core/layout/tabfrm.cxx.diff?r1=1.41.138.1&r2=1.41.138.2'>tabfrm.cxx</a>
+</div>
+</div>
+<p>
+
+<a name='cws_srx645_sw7pp2a'></a><a name='cws_srx645_sw7pp2a_os'></a><div class="branch">cws_srx645_sw7pp2a was changed by Oliver Specht(os)</div>
+<div class='modified'>modified : <span class='comment'>     <a href='http://www.openoffice.org/issues/show_bug.cgi?id=15268'> #i15268#</a> use URL notation to match existing document    </span>
+<div class="file-list">
+    graphics/svx/source/svxlink/<a href='http://graphics.openoffice.org/source/browse/graphics/svx/source/svxlink/linkmgr.cxx.diff?r1=1.16&r2=1.16.150.1'>linkmgr.cxx</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     <a href='http://www.openoffice.org/issues/show_bug.cgi?id=22575'> #i22575#</a> setting of maximum percent value corrected    </span>
+<div class="file-list">
+    sw/sw/source/ui/frmdlg/<a href='http://sw.openoffice.org/source/browse/sw/sw/source/ui/frmdlg/frmpage.cxx.diff?r1=1.36&r2=1.36.286.1'>frmpage.cxx</a>
+</div>
+</div>
+<p>
+
+<a name='cws_src680_mav07'></a><a name='cws_src680_mav07_mav'></a><div class="branch">cws_src680_mav07 was changed by Mikhail Voitenko(mav)</div>
+<div class='added'>added : <span class='comment'>     #112923# separate factory from creator    </span>
+<div class="file-list">
+    api/offapi/com/sun/star/embed/  :  <a href='http://api.openoffice.org/source/browse/api/offapi/com/sun/star/embed/XEmbedObjectCreator.idl.diff?r1=1.1&r2=1.1.2.1'>XEmbedObjectCreator.idl</a>, <a href='http://api.openoffice.org/source/browse/api/offapi/com/sun/star/embed/XLinkCreator.idl.diff?r1=1.1&r2=1.1.2.1'>XLinkCreator.idl</a> ;
+</div>
+</div>
+<div class='added'>added : <span class='comment'>     #112923# allow to create link of specified type    </span>
+<div class="file-list">
+    api/offapi/com/sun/star/embed/<a href='http://api.openoffice.org/source/browse/api/offapi/com/sun/star/embed/XLinkFactory.idl.diff?r1=1.1&r2=1.1.2.1'>XLinkFactory.idl</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     #112923# links can have a persistent    </span>
+<div class="file-list">
+    api/offapi/com/sun/star/embed/<a href='http://api.openoffice.org/source/browse/api/offapi/com/sun/star/embed/XEmbedObjectFactory.idl.diff?r1=1.2.4.3&r2=1.2.4.4'>XEmbedObjectFactory.idl</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     #112923# allow to create link of specified type    </span>
+<div class="file-list">
+    api/offapi/com/sun/star/embed/<a href='http://api.openoffice.org/source/browse/api/offapi/com/sun/star/embed/makefile.mk.diff?r1=1.2.4.6&r2=1.2.4.7'>makefile.mk</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     #112923# separate factory from creator    </span>
+<div class="file-list">
+    api/offapi/com/sun/star/embed/  :  <a href='http://api.openoffice.org/source/browse/api/offapi/com/sun/star/embed/XEmbedObjectFactory.idl.diff?r1=1.2.4.5&r2=1.2.4.6'>XEmbedObjectFactory.idl</a>, <a href='http://api.openoffice.org/source/browse/api/offapi/com/sun/star/embed/XEmbedObjectCreator.idl.diff?r1=1.1.2.1&r2=1.1.2.2'>XEmbedObjectCreator.idl</a> ;
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     #112923# temporary change that allows to test OLE objects    </span>
+<div class="file-list">
+    api/offapi/com/sun/star/embed/<a href='http://api.openoffice.org/source/browse/api/offapi/com/sun/star/embed/XEmbedObjectFactory.idl.diff?r1=1.2.4.4&r2=1.2.4.5'>XEmbedObjectFactory.idl</a>
+</div>
+</div>
+<p>
+
+<a name='cws_srx645_os16'></a><a name='cws_srx645_os16_kz'></a><div class="mergedbranch">cws_srx645_os16 was changed by Kurt Zenker(kz) [ <a href='#merged_os16'>and it was merged</a> ]</div>
+<div class='modified'>modified : <span class='comment'>     RESYNC:; FILE MERGED    </span>
+<div class="file-list">
+ files from:
+installation/scp/source/office/<a href='http://installation.openoffice.org/source/browse/installation/scp/source/office/profile.scp.diff?r1=1.182.8.3&r2=1.182.8.4'>profile.scp</a>
+</div>
+</div>
+<p>
+
+<a name='cws_src680_tbe9'></a><a name='cws_src680_tbe9_tbe'></a><div class="branch">cws_src680_tbe9 was changed by Thomas Behrens(tbe)</div>
+<div class='modified'>modified : <span class='comment'>     <a href='http://www.openoffice.org/issues/show_bug.cgi?id=22087'> #i22087#</a> wrong selection and caret position    </span>
+<div class="file-list">
+    util/svtools/source/edit/<a href='http://util.openoffice.org/source/browse/util/svtools/source/edit/textwindowaccessibility.cxx.diff?r1=1.20.154.1&r2=1.20.154.2'>textwindowaccessibility.cxx</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     <a href='http://www.openoffice.org/issues/show_bug.cgi?id=22088'> #i22088#</a> too many object::text-selection-changed events    </span>
+<div class="file-list">
+    util/svtools/source/edit/<a href='http://util.openoffice.org/source/browse/util/svtools/source/edit/textwindowaccessibility.cxx.diff?r1=1.20&r2=1.20.154.1'>textwindowaccessibility.cxx</a>
+</div>
+</div>
+<p>
+
+<a name='cws_srx645_draw20pp1'></a><a name='cws_srx645_draw20pp1_obo'></a><div class="mergedbranch">cws_srx645_draw20pp1 was changed by Oliver Bolte(obo) [ <a href='#merged_draw20pp1'>and it was merged</a> ]</div>
+<div class='modified'>modified : <span class='comment'>     RESYNC:; FILE MERGED    </span>
+<div class="file-list">
+ files from:
+graphics/sd/source/ui/app/<a href='http://graphics.openoffice.org/source/browse/graphics/sd/source/ui/app/sdmod1.cxx.diff?r1=1.23.48.1&r2=1.23.48.2'>sdmod1.cxx</a>
+</div>
+</div>
+<p>
+
+<a name='cws_srx645_sdk10'></a><a name='cws_srx645_sdk10_sb'></a><div class="branch">cws_srx645_sdk10 was changed by Stephan Bergmann(sb)</div>
+<div class='modified'>modified : <span class='comment'>     <a href='http://www.openoffice.org/issues/show_bug.cgi?id=19974'> #i19974#</a> After destroying a bridge, a newly created bridge with the same from/to pair as the old one will use the same java_environment as the old one, so make sure all proxies from the old bridge get removed from the java_environment when the old bridge is disposed.    </span>
+<div class="file-list">
+    udk/jurt/com/sun/star/lib/uno/environments/java/<a href='http://udk.openoffice.org/source/browse/udk/jurt/com/sun/star/lib/uno/environments/java/java_environment.java.diff?r1=1.11&r2=1.11.52.1'>java_environment.java</a>
+    udk/jurt/prj/<a href='http://udk.openoffice.org/source/browse/udk/jurt/prj/build.lst.diff?r1=1.7&r2=1.7.40.1'>build.lst</a>
+    udk/jurt/com/sun/star/lib/uno/bridges/java_remote/<a href='http://udk.openoffice.org/source/browse/udk/jurt/com/sun/star/lib/uno/bridges/java_remote/java_remote_bridge.java.diff?r1=1.30&r2=1.30.26.1'>java_remote_bridge.java</a>
+</div>
+</div>
+<p>
+
+<a name='cws_src680_tabstops'></a><a name='cws_src680_tabstops_pb'></a><div class="branch">cws_src680_tabstops was changed by Peter Burow(pb)</div>
+<div class='modified'>modified : <span class='comment'>     fix: #114144# mkdir pck directory if necessary    </span>
+<div class="file-list">
+    util/officecfg/prj/<a href='http://util.openoffice.org/source/browse/util/officecfg/prj/d.lst.diff?r1=1.32&r2=1.32.152.1'>d.lst</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     fix: #114144# instead of one bitfield now several booleans    </span>
+<div class="file-list">
+    util/svtools/source/config/<a href='http://util.openoffice.org/source/browse/util/svtools/source/config/compatibility.cxx.diff?r1=1.2&r2=1.2.44.1'>compatibility.cxx</a>
+    util/officecfg/registry/data/org/openoffice/Office/<a href='http://util.openoffice.org/source/browse/util/officecfg/registry/data/org/openoffice/Office/Compatibility.xcu.diff?r1=1.1&r2=1.1.30.1'>Compatibility.xcu</a>
+    util/officecfg/registry/schema/org/openoffice/Office/<a href='http://util.openoffice.org/source/browse/util/officecfg/registry/schema/org/openoffice/Office/Compatibility.xcs.diff?r1=1.2&r2=1.2.24.1'>Compatibility.xcs</a>
+    util/svtools/inc/<a href='http://util.openoffice.org/source/browse/util/svtools/inc/compatibility.hxx.diff?r1=1.2&r2=1.2.44.1'>compatibility.hxx</a>
+</div>
+</div>
+<p>
+
+<a name='cws_src680_tabstops'></a><a name='cws_src680_tabstops_fme'></a><div class="branch">cws_src680_tabstops was changed by Frank Meies(fme)</div>
+<div class='modified'>modified : <span class='comment'>     #114143# Tab stop compatibility    </span>
+<div class="file-list">
+    sw/sw/source/core/text/  :  <a href='http://sw.openoffice.org/source/browse/sw/sw/source/core/text/itrform2.cxx.diff?r1=1.79&r2=1.79.44.1'>itrform2.cxx</a>, <a href='http://sw.openoffice.org/source/browse/sw/sw/source/core/text/inftxt.cxx.diff?r1=1.90&r2=1.90.58.1'>inftxt.cxx</a>, <a href='http://sw.openoffice.org/source/browse/sw/sw/source/core/text/portab.hxx.diff?r1=1.3&r2=1.3.466.1'>portab.hxx</a> ;
+</div>
+</div>
+<p>
+
+<a name='cws_src680_tabstops'></a><a name='cws_src680_tabstops_os'></a><div class="branch">cws_src680_tabstops was changed by Oliver Specht(os)</div>
+<div class='modified'>modified : <span class='comment'>     #114143# Number recognition switced off by default in Writer and Writer/Web tables    </span>
+<div class="file-list">
+    util/officecfg/registry/schema/org/openoffice/Office/<a href='http://util.openoffice.org/source/browse/util/officecfg/registry/schema/org/openoffice/Office/Writer.xcs.diff?r1=1.23&r2=1.23.74.1'>Writer.xcs</a>
+</div>
+</div>
+<p>
+
+<a name='cws_srx645_corkfilterteam10'></a><a name='cws_srx645_corkfilterteam10_obo'></a><div class="mergedbranch">cws_srx645_corkfilterteam10 was changed by Oliver Bolte(obo) [ <a href='#merged_corkfilterteam10'>and it was merged</a> ]</div>
+<div class='modified'>modified : <span class='comment'>     RESYNC:; FILE MERGED    </span>
+<div class="file-list">
+ files from:
+sw/sw/source/filter/ww8/:
+<a href='http://sw.openoffice.org/source/browse/sw/sw/source/filter/ww8/ww8par.cxx.diff?r1=1.111.32.7&r2=1.111.32.8'>ww8par.cxx</a>,
+<a href='http://sw.openoffice.org/source/browse/sw/sw/source/filter/ww8/ww8par.hxx.diff?r1=1.113.32.5&r2=1.113.32.6'>ww8par.hxx</a>,
+<a href='http://sw.openoffice.org/source/browse/sw/sw/source/filter/ww8/ww8par2.hxx.diff?r1=1.30.62.1&r2=1.30.62.2'>ww8par2.hxx</a>,
+<a href='http://sw.openoffice.org/source/browse/sw/sw/source/filter/ww8/ww8par5.cxx.diff?r1=1.68.32.2&r2=1.68.32.3'>ww8par5.cxx</a>,
+</div>
+</div>
+<p>
+
+<a name='cws_srx645_fwk02pp1'></a><a name='cws_srx645_fwk02pp1_vg'></a><div class="mergedbranch">cws_srx645_fwk02pp1 was changed by Vladimir Glazounov(vg) [ <a href='#merged_fwk02pp1'>and it was merged</a> ]</div>
+<div class='modified'>modified : <span class='comment'>     RESYNC:; FILE MERGED    </span>
+<div class="file-list">
+ files from:
+framework/sfx2/source/control/<a href='http://framework.openoffice.org/source/browse/framework/sfx2/source/control/bindings.cxx.diff?r1=1.25.78.1&r2=1.25.78.2'>bindings.cxx</a>
+framework/desktop/source/app/<a href='http://framework.openoffice.org/source/browse/framework/desktop/source/app/app.cxx.diff?r1=1.121.10.1.10.1&r2=1.121.10.1.10.2'>app.cxx</a>
+framework/sfx2/source/appl/<a href='http://framework.openoffice.org/source/browse/framework/sfx2/source/appl/app.cxx.diff?r1=1.68.102.1&r2=1.68.102.2'>app.cxx</a>
+framework/sfx2/source/doc/<a href='http://framework.openoffice.org/source/browse/framework/sfx2/source/doc/objstor.cxx.diff?r1=1.118.34.1&r2=1.118.34.2'>objstor.cxx</a>
+</div>
+</div>
+<p>
+
+<a name='cws_src680_ooo20031110'></a><a name='cws_src680_ooo20031110_mh'></a><div class="mergedbranch">cws_src680_ooo20031110 was changed by Martin Hollmichel(mh) [ <a href='#merged_ooo20031110'>and it was merged</a> ]</div>
+<div class='modified'>modified : <span class='comment'>     RESYNC:; FILE MERGED    </span>
+<div class="file-list">
+ files from:
+util/configmgr/source/api2/:
+<a href='http://util.openoffice.org/source/browse/util/configmgr/source/api2/apinodeupdate.hxx.diff?r1=1.5.54.1&r2=1.5.54.2'>apinodeupdate.hxx</a>,
+<a href='http://util.openoffice.org/source/browse/util/configmgr/source/api2/listenercontainer.hxx.diff?r1=1.11.54.1&r2=1.11.54.2'>listenercontainer.hxx</a>,
+gsl/forms/source/component/<a href='http://gsl.openoffice.org/source/browse/gsl/forms/source/component/Columns.hxx.diff?r1=1.5.100.1&r2=1.5.100.2'>Columns.hxx</a>
+gsl/forms/source/inc/<a href='http://gsl.openoffice.org/source/browse/gsl/forms/source/inc/strings.hxx.diff?r1=1.3.128.1&r2=1.3.128.2'>strings.hxx</a>
+</div>
+</div>
+<p>
+
+<a name='cws_src680_ooo20031110'></a><a name='cws_src680_ooo20031110_waratah'></a><div class="mergedbranch">cws_src680_ooo20031110 was changed by Ken Foskey(waratah) [ <a href='#merged_ooo20031110'>and it was merged</a> ]</div>
+<div class='modified'>modified : <span class='comment'>     Deprecated gcc 2.95 from support    </span>
+<div class="file-list">
+    tools/config_office/  :  <a href='http://tools.openoffice.org/source/browse/tools/config_office/configure.in.diff?r1=1.56.4.5&r2=1.56.4.6'>configure.in</a>, <a href='http://tools.openoffice.org/source/browse/tools/config_office/configure.diff?r1=1.37.4.5&r2=1.37.4.6'>configure</a> ;
+</div>
+</div>
+<p>
+
+<a name='cws_src680_frmcontrols01'></a><a name='cws_src680_frmcontrols01_fs'></a><div class="branch">cws_src680_frmcontrols01 was changed by Frank Schoenheit(fs)</div>
+<div class='modified'>modified : <span class='comment'>     <a href='http://www.openoffice.org/issues/show_bug.cgi?id=21853'> #i21853#</a>    </span>
+<div class="file-list">
+    graphics/svx/sdi/<a href='http://graphics.openoffice.org/source/browse/graphics/svx/sdi/svxslots.src.diff?r1=1.95.40.4&r2=1.95.40.5'>svxslots.src</a>
+</div>
+</div>
+<p>
+
+<a name='cws_src680_geordi2q10'></a><a name='cws_src680_geordi2q10_rt'></a><div class="mergedbranch">cws_src680_geordi2q10 was changed by R�diger Timm(rt) [ <a href='#merged_geordi2q10'>and it was merged</a> ]</div>
+<div class='modified'>modified : <span class='comment'>     #111934#: join CWS sw7pp1c    </span>
+<div class="file-list">
+    sw/sw/source/core/docnode/<a href='http://sw.openoffice.org/source/browse/sw/sw/source/core/docnode/ndsect.cxx.diff?r1=1.11&r2=1.11.298.1'>ndsect.cxx</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     #111934#: join CWS sw7pp1a    </span>
+<div class="file-list">
+    sw/sw/inc/<a href='http://sw.openoffice.org/source/browse/sw/sw/inc/ndarr.hxx.diff?r1=1.4&r2=1.4.94.1'>ndarr.hxx</a>
+</div>
+</div>
+<div class='modified'>modified : <span class='comment'>     #111934#: join CWS dba01pp1    </span>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

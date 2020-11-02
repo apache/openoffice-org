@@ -1,0 +1,311 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+ <style type="text/css">@import url("cvs.css"); </style>
+ <meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+  <title>Developers Digest : Week 3 ( 2004 )</title>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/development/">development</a>&nbsp;&raquo;&nbsp;<a href="/development/digest/">digest</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h1 align="center">OpenOffice.org<br>
+Development digest<br>
+19th January 2004<br>
+</h1>
+<h3 align="center">by <a href="mailto:cphennessy@openoffice.org">C.P.
+Hennessy</a></h3>
+
+<ul>
+  <li> <a href="#specs">So whats currently being implemented for OOo 2.0?</a>
+  <li><a href="#other">Other development news</a></li>
+    <ul>
+      <li><a href="#m20">Release of developers snapshot m20</a></li>
+      <li><a href="#thesauri">OOo thesauri development</a></li>
+      <li><a href="#native_za">Native Lang Translation Tools"</a></li>
+      <li><a href="#grammar">The start of a grammar checker?</a></li>
+      <li><a href="#api_newsletter">The dev@api.openoffice.org newsletter</a></li>
+      <li><a href="#dev_guide">Developers Guides in multiple languages</a></li>
+      <li><a href="#icons">Separation of icon set from build process</a></li>
+      <li><a href="#macosx">Separate builds of 1.1.1 for Mac OSX 10.2 and 10.3</a></li>
+      <li><a href="#multiple">Multiple-Inheritance Interface Types for UNO</a></li>
+      <li><a href="#mingw">MinGW + tcsh build efforts started</a></li>
+   </ul>
+  </li>
+  <li><a href="#iz_summary">This weeks Issuezilla summary</a></li>
+  <li><a href="#cvs_highlights">This weeks CVS highlights</a></li>
+</ul>
+
+
+<a name="specs"></a>
+<h2>So whats currently being implemented for OOo 2.0?</h2>
+The next major version of OpenOffice.org is currently planned to be 2.0 and is
+hoped to be released sometime in early 2005.
+<p>
+So what features are planned for version 2.0 ?<br>
+There are alot of features planned, many of them to help with the compatability with MSOffice,
+many to improve performance (especially startup performance), more usability improvements,
+better desktop integration, easier administration, and some extra XML features.
+The general concept document giving more context and a bit more detail for all of this is available
+in the <a href="http://development.openoffice.org/releases/q-concept.html">
+Product Concept Document</a>
+(OOo 2.0 is also codenamed "Q" similarily to OOo 1.1 being codenamed "Geordi")
+<p>
+The <a href="">OpenOffice.org Specification Project</a> currently contains over 70 document which explain
+exactly how these concepts will be implemented. <br>
+Many of these documents contian very specific implementation details with proposed screen shots,
+shortcuts, and APIs. You can comment on all of these documents, but be aware (and have a look
+at the CVS digest) that many of these features are currently being implemented.
+The categories available are : Writer(24 documents), Application Wide(14), Calc(12), (data)Base(10),
+General User Interface(6), Globalization(3), Scripting Framework(1), and Installation(1).
+There are currently no specification documents available for the other projects.
+
+<p><a name="other"></a></p>
+<h2>In Other Development News</h2>
+<h3>Release of developers snapshot m20</h3>
+The developers snapshot <a href="http://development.openoffice.org/releases/680_m20_snapshot.html">m20</a>
+has been released. Changes in most areas including new controls, a dialog factory which
+will be used to improve performace by loading dialogs only when they are first needed,
+many improvements to controls, continues improvement in compatability for MSWord files and RTF files.
+
+<a name="thesauri"></a>
+<h3>OOo thesauri development</h3>
+Giuseppe Modugno has written an application (called <a href="http://prdownloads.sourceforge.net/ooodocs/thescoder.zip?download">thescoder</a>) which creates the
+files needed by the thesaurus in OOo from a simple list of words in text format.<p>
+The advantages of thescoder in comparison to previous solutions are:
+<ul>
+<li>it is possible to insert spaces among different synonymous
+<li>if a synonym is not also present as word, such word
+<li>is added automaticly without synonymous (it is displayed a warning for such operation)
+<li>if a word is present without synonymous this is preserved (and also in this case a line of warning is displayed)
+<li>the list of words doesn't necessarily have to be sorted
+</ul>
+This tool is <a href="http://native-lang.openoffice.org/servlets/ReadMsg?list=dev&msgNo=2298">
+already being used</a> by the <a href="http://it.openoffice.org">Italian OpenOffice.org Lang Project</a>
+
+
+<a name="native_za"></a>
+<h3>Native Lang Translation Tools</h3>
+The <a href="http://translate.org.za">translate.org.za</a> project has been working on the
+localization for several South African languages including Zulu, and Africans.
+Many of these tools may be useful for other native-lang teams.
+<p>
+Some of these tools include:
+<ul>
+<li>oo2po - converts gsi style translation files to the Gettext PO format.
+  This makes it possible to use many of the rich featured PO editors
+such as Kbabel and POedit instead of a text editor.
+<li>po2csv - converts PO files to comma seperated value (CSV). We needed
+this for translators running Windows so that they could edit the
+translations in a spreadsheet.  Rather ironic doing OpenOffice.org
+translations using Microsoft Excel.
+</ul>
+And of course tools to convert these back.
+<ul>
+<li>checker - checks for various portential errors in translations including:
+<ul>
+<li>starting and ending punctuation
+<li>variables
+<li>simple capitalisation
+<li>accelerators
+<li>whitespace only translation, translation = original and very short
+translations
+<li>escapes and quoting
+</ul>
+</ul>
+<p>
+Dwayne Bailey writes:
+<ul>"Currently checker only runs on PO files but the tests evaluate only the
+strings and are seperate from the input format.
+Checker is invaluable in idetifying some very silly mistakes and provide
+a nice approach to cleaning up translations."
+</ul>
+
+The translate.org.za team also have started work on a portal to allow easier web-based
+translations and they have a preliminary patch againts OOo to allow it to use GNU
+Gettext for localisation. This makes OOo much more usefull and usable
+on a Linux in that new localisations can be easily installed and
+seperate from the main OOo build. Although this is not necessarily the direction that
+will occur in OpenOffice.org for 2.0 as this approach is seen as quite specific to
+Unix/Linux platforms.
+
+
+<a name="grammar"></a>
+<h3>The start of a grammar checker?</h3>
+Many people request that a grammar checker be added to OOo, but as many would remain quite
+happy without it as they consider most languages to be much more complex than a grammar
+checker could really deal with. They say that in general grammar checkers give as many
+false warnings and many people also complain that they do not give warnings when they should.
+<p>
+However, as we are dealing with open source software, if there is an itch it will get scratched.
+As <a ref="http://lingucomponent.openoffice.org/servlets/ReadMsg?list=dev&msgNo=326">reported on
+the native-lang list</a>, in this case Kevin Patrick Scannell, the author of the
+myspell-ga package for openoffice, has written a GPL grammar checker for Irish called <a
+href="http://borel.slu.edu/gramadoir/index.html">An Gramad&oacute;ir</a> (and for those of you
+who are unsure that is Gaeilge Irish).
+
+<a name="api_newsletter"></a>
+<h3>The dev@api.openoffice.org newsletter</h3>
+The dev@api.openoffice.org mailing list is used to ask questions about using the OOo object model
+and associated APIs.
+Michael Hoennig posted the <a href="http://api.openoffice.org/servlets/ReadMsg?list=dev&msgNo=9299">
+December API newsletter</a> to the list. Topics include:
+<ul>
+<li>JVM Configuration for OpenOffice.org/StarOffice;
+<li>Running Multiple Macros from the OOo Command Line
+<li>Changing The Mouse Cursor
+<li>Scripting Framework Evaluation Available
+<li>Pitfalls with Large Database Query Result Sets
+<li>How to Get C++ Header Files for IDL Types
+<li>By Whom and When is XComponent::dispose() called
+<li>UNO IDL services and their implementation
+<li>Tracking Unanswered Questions on dev@api.openoffice.org
+<li>Inserting Alien XML Attributes into OOo Documents
+<li>How to Change Text Document Fonts Programatically?
+<li>Updated Version of Developers Guide Available
+<li>No API for the Gallery yet
+<li>Thoughts and Questions Regarding a New Impress Viewer
+<li>Programmatically Adding a BASIC Library.
+<li>CodeSnippet to Delopy Arbitrary Files within AddOns
+</ul>
+
+<a name="dev_guide"></a>
+<h3>Developers Guides in multiple languages</h3>
+The <a href="http://docs.sun.com/db/doc/817-1826?q=StarOffice">StarOffice 7 Software Basic Programmer's Guide</a>
+ provides an introduction to StarBasic and the API and provides a lot of useful hints
+for migrating from another well known Basic language to StarBasic/OpenOffice.org Basic.<p>
+This document is now available in :
+  <a href="http://docs.sun.com/db/doc/817-1826?q=StarOffice">English</a> |
+  <a href="http://docs.sun.com/db/doc/817-3924?l=de&q=StarOffice&s=t">German</a> |
+  <a href="http://docs.sun.com/db/doc/817-3917?l=fr&q=StarOffice&s=t">French</a> |
+  <a href="http://docs.sun.com/db/doc/817-3923?l=es&q=StarOffice">Spanish</a> |
+  <a href="http://docs.sun.com/db/doc/817-3918?l=it&q=StarOffice&s=t">Italian</a> |
+  <a href="http://docs.sun.com/db/doc/817-3921?l=sv&q=StarOffice&s=t">Swedish</a> |
+  <a href="http://docs.sun.com/db/doc/817-3925?l=ja&q=StarSuite+Basic&s=t">Japanese</a> |
+  <a href="http://docs.sun.com/db/doc/817-3927?l=zh&q=StarSuite&s=t">Simplified Chinese</a> |
+  <a href="http://docs.sun.com/db/doc/817-3928?l=zh_TW&q=StarSuite&s=t">Traditional Chinese</a> |
+  <a href="http://docs.sun.com/db/doc/817-3926?l=ko&q=StarSuite&s=t">Korean</a>.
+
+
+<a name="icons"></a>
+<h3>Separation of icon set from build process</h3>
+On the <a href="http://installation.openoffice.org">installation project</a> dev mailing list there was a
+<a href="http://installation.openoffice.org/servlets/ReadMsg?list=dev&msgNo=423">short email</a>
+on how to deal with different icon set in OOo in the future.
+<br>
+The idea is to separate the different sets of pixel graphics in a zip-archive.
+This probably also means separating these graphics from the build process.
+But this conversation is not finished yet, so stay tuned.
+
+<a name="macosx"></a>
+<h3>Separate builds of 1.1.1 for Mac OSX 10.2 and 10.3</h3>
+<a href="http://www.openoffice.org/servlets/ReadMsg?list=releases&msgNo=6686">Kevin B. Hendricks mentions</a>
+that for Mac OS X we are going to need to have separate Panther and Jaguar builds in the long run anyway.
+Right now a build on Panther it will not run on Jaguar and a Jaguar build will probably not run on Panther either.
+<br><bold>If you are an Apple developer</bold> and would like to see OpenOffice.org on Mac OSX why not contribute a small
+amount of time and see how you can help on the <a href="http://porting.openoffice.org">porting</a> dev mailing list.
+
+<a name="mingw"></a>
+<H3>MinGW + tcsh build efforts started</h3>
+The <a href="http://www.mingw.org/">MinGW</a> compiler is a "collection of GNU toolsets that allow one to produce native Windows programs that do not rely on any 3rd-party C runtime DLLs". With this work it be should be possible to compile OOo code on Windows without having to have the latest version of Visual .Net tools from Microsoft.
+<br>
+A few patches are currently needed and they are listed in IZ<a href="http://www.openoffice.org/issues/show_bug.cgi?id=24588">#24588</a>. If you want to comtribute or to ask a question the <a href="http://porting.openoffice.org">porting project</a> dev mailing list is the right place to ask.
+
+
+<a name="multiple"></a>
+<h3>Multiple-Inheritance Interface Types</h3>
+On the <a href="http://udk.openoffice.org">UDK</a> dev mailing list Stephan Bergmann <a href="http://udk.openoffice.org/servlets/ReadMsg?list=dev&msgNo=2307">wrote</a> to tell
+us about the <a href="http://udk.openoffice.org/common/man/draft/multinherit.html">Multiple-Inheritance
+Interface Types</a> for UNO APIs.
+
+<a name="iz_summary"></a>
+<h2>This weeks Issuezilla summary</h2>
+Many bugs have been worked on and resolved (as of Monday Jan 19 2004
+):
+<table class="iz_stats" border="1" cellspacing="0">
+  <tbody>
+    <tr>
+      <th><br>
+      </th>
+      <th>&nbsp;No this week</th>
+      <th>&nbsp;Change from last week</th>
+    </tr>
+    <tr>
+      <td>Issues which have the status UNCONFIRMED</td>
+      <td style="text-align: center;">390<br>
+      </td>
+      <td style="text-align: center;">-41<br>
+      </td>
+    </tr>
+    <tr>
+      <td>Issues which have the status NEW</td>
+      <td style="text-align: center;">952<br>
+      </td>
+      <td style="text-align: center;">+4<br>
+      </td>
+    </tr>
+    <tr>
+      <td>Issues which have the status STARTED</td>
+      <td style="text-align: center;">1035<br>
+      </td>
+      <td style="text-align: center;">+44<br>
+      </td>
+    </tr>
+    <tr>
+      <td>Issues which have the status FIXED</td>
+      <td style="text-align: center;">7585<br>
+      </td>
+      <td style="text-align: center;">+65<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+(a more detailed set of statistics is available <a
+ href="http://qa.openoffice.org/iz_statistic.html">here</a>)<br>
+<br>
+
+
+<a name="cvs_summary"></a>
+<H2>Some of the more interesting developments over the last week include:</h2>
+
+<a href="http://development.openoffice.org/digest/cvs2004_03.html">week 3 (2004)</a>:<br>
+  <ul>
+    <li><a href="cvs2004_03.html#cws_src680_rowlimit">change types for row, column and tab count in preparation of increaing limits beyond 32k</a>
+    <li>MSWord compatabilities : <a href="cvs2004_03.html#cws_src680_swlinespacing">new option to control line spacing</a>
+    <a href="cvs2004_03.html#cws_src680_traleefilterteam20">cleanups</a>,
+    <a href="cvs2004_03.html#"></a>
+    <li><a href="cvs2004_03.html#cws_srx645_apoc02">session management work</a>
+    <li>lots of fixes for 1.1.1 <a href="cvs2004_03.html#cws_fix645_ooo111fix2_fa">more OS X fixes</a>, <a href="cvs2004_03.html#cws_fix645_ooo111fix2_khendricks">SDK now uses port 2083 instead of 8100</a> <a href="cvs2004_03.html#cws_fix645_ooo111fix2_mrauch">NetBSD UDK bridge</a>,
+    <li><a href="cvs2004_03.html#cws_srx645_nativewidget1_fa">more native widget fixes for buttons, combo boxes, list boxes, edit boxes, and spin buttons</a>
+    <li><a href="cvs2004_03.html#cws_src680_scriptingf3">add python scripting to scripting framework</a>
+    <li><a href="cvs2004_03.html#cws_src680_eforms2">start of XForms</a>
+    <li><a href="cvs2004_03.html#cws_src680_hiddentext">more hidden text compatability work</a>
+    <li><a href="cvs2004_03.html#cws_src680_dialogdiet">dialog slimming continues</a>
+    <li><a href="cvs2004_03.html#mws_srx645">merges for 1.1.1</a>
+    <li><a href="cvs2004_03.html#HEAD_bm">net(radar) chart changes  </a>
+    <li><a href="cvs2004_03.html#HEAD_iha">introduced polarcoordinate system</a>
+    <li><a href="cvs2004_03.html#HEAD_thb">initial 3D code for charts</a>
+  </ul>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

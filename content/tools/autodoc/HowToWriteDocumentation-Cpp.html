@@ -1,0 +1,396 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<meta http-equiv="CONTENT-TYPE" content="text/html; charset=iso-8859-1">
+<meta name="author" content="Nikolai Pretzell">
+<meta name="description" content="User guide for documenting with Autodoc-">
+<title>How to Write C++ Source Code Documentation for Autodoc</title>
+<style>
+	<!--
+		@page { margin: 2cm }
+		H5 { margin-bottom: 4pt; font-family: "Arial", sans-serif; font-size: 11pt; }
+		H3 { margin-bottom: 4pt; font-family: "Arial", sans-serif; font-size: 13pt; }
+		TD { margin-bottom: 4pt; }
+		H1 { margin-bottom: 20pt; font-family: "Arial", sans-serif; font-size: 16pt }
+		P  { margin-top:2pt; margin-bottom: 2pt }
+	-->
+</style>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/tools/">tools</a>&nbsp;&raquo;&nbsp;<a href="/tools/autodoc/">autodoc</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+
+<div align="center">
+<h1>How to Write C++ Source Code Documentation for Autodoc</h1>
+</div>
+<div align="right"><b> Last updated: January 14 2005</b><br>
+</div>
+
+<div align="right">
+    <font size="3">
+    <b>Contact: </b>
+    <a href="mailto:nikolai@sun.com">Nikolai Pretzell</a>
+   </font>
+</div>
+
+<h5>Content</h5>
+<p style="margin-top:2pt; margin-bottom:20pt;">
+<a href="#basic">Basic Rules</a><br>
+<a href="#what">What can be documented</a><br>
+<a href="#layout">Layout</a><br>
+<a href="#tags">Tags</a><br>
+<a href="#t_common" style="margin-left:12pt;">Common Tags</a><br>
+<a href="#t_class" style="margin-left:12pt;">Tags for Classes</a><br>
+<a href="#t_funct" style="margin-left:12pt;">Tags for Functions</a><br>
+<a href="#t_var" style="margin-left:12pt;">Tags for Variables</a><br>
+<a href="#t_global" style="margin-left:12pt;">Global Tags</a><br>
+<a href="#typic">A Typical Documentation</a><br>
+</p>
+
+
+<h3>Scope</h3>
+
+<p>This is a description of how to write documentation within C++ code such
+it can be automatically parsed by the source code documentation tool
+Autodoc.
+</p>
+
+<h3><a name="basic">Basic Rules</a></h3>
+
+<ul>
+    <li>
+    <p>There are two possibilities to put documentation in a C++ file:<br>
+       Multi line documentation starts with <span style=""><font face="Courier New, monospace">
+       /**</font></span> and ends with <span style=""><font face="Courier New, monospace">
+       */</font></span> so it looks like this:
+    </p>
+    <pre>/** Some text
+    .................
+    .................
+*/</pre>
+
+    <p> Single line or &#8220;inline&#8221; documentation starts with
+        <font face="Courier New, monospace">
+        /// </font>
+        and ends with the line,  so  it looks
+        like this:
+    </p>
+    <pre>///  Some text .......</pre>
+
+    <p>A &#8220;documentation paragraph&#8221; we call any of the two
+       just described documentation blocks. </p>
+    </li>
+    <li>The language of documentation is English.</li>
+    <li>So far, only header files are parsed by Autodoc.</li>
+    <li>For most typical uses, the documentation style is compatible to
+        Javadoc.<br>
+        Only you can not use the leftside *-bar as it is used in Java:
+    <pre>/** Text
+  * ...
+  */</pre> will not work.
+    </li>
+    <li><strong>Attention:</strong> The first "/**"-comment in each file is ignored.<br>
+        That is because Autodoc is usually used to parse files with
+        license-, CVS- or other specific headers which usually start with "/**" as well.<br>
+        Should you have a file without such a header, you need to insert a
+        dummy comment.
+    </li
+</ul>
+
+<h3><a name="what">What can be Documented</a></h3>
+
+<p>Documentable code entities in C++ are: </p>
+
+<ul>
+    <li>classes (including structs and unions)</li>
+    <li>enums</li>
+    <li>functions / methods</li>
+    <li>variables (including constants)</li>
+    <li>enum values </li>
+    <li>#define-s </li>
+    <li>#define-d macros. </li>
+</ul>
+
+<p>
+    All documentation belongs to the next following documentable code
+    entity. If there are more than one documentation paragraph following
+    each other, the last one wins.<br>
+    Also be aware, that the first "/**"-comment in each file is interpreted
+    as special file header and not recognized by Autodoc.
+</p>
+
+<h3><a name="layout">Layout</a></h3>
+
+<p>If there is no @-tag at the beginning of a documentation paragraph, the first part
+             of it is interpreted like <a href="#at_short">@short</a>
+                            , if it is not more than two lines and followed
+ by  an  empty    line.<br>
+                            After that empty line, or if it is more than
+two   lines,    text   without     an  @-tag it is interpreted like <a href="#at_descr">
+         @descr</a>
+                  .</p>
+
+<p>The following layout is required:</p>
+
+<ul>
+           <li>Leading '*'s or '#'s in each documentation        line must
+not be used!   </li>
+           <li>               All @-tags have to be the first non whitespace
+in their       line,  except of the  <tt>/** start </tt>of a documentation paragraph.</li>
+
+</ul>
+
+<p>The following layout is recommended:</p>
+
+<ul>
+           <li>Use multi line documentation (/**...*/).</li>
+           <li>               Start the documentation in the same line as
+the <tt>             /**</tt>  .</li>
+           <li>               The begin and end sign ( <tt>/**</tt> and <tt>
+*/</tt>              ) of a  multi line documentation start in the   same
+  column   as  the   documented  code entity.</li>
+           <li>               Each line and each tag start 4 columns to the
+right of       the begin    and   end   sign (&#8220;/** and */&#8221;). </li>
+
+</ul>
+
+<p>HTML tags can be used or not.<br>
+             Default is no HTML. ( Because this makes writing documentation
+             easier and faster.  If documentation is easier its probability to exist increases.
+  )  In    this     case, all line breaks and all indentations will be preserved
+    in   the generated     documentation. All other things like &#8220;&lt;BR&gt;&#8221;
+ will   appear without modification, still     in the generated documentation.<br>
+             If HTML shall be used (for publicly used libraries a more sophisticated
+             layout may be desired), this can be done by the tags <a href="#at_html">
+             @HTML</a>
+              and <a href="#at_nohtml">@NOHTML</a>
+             .      They  switch the recognising of HTML on or off for the
+ rest   of  the  file,     or until  the next such tag.
+   <br>
+   </p>
+
+<h3><a name="tags">Tags</a></h3>
+<h5>Legend</h5>
+
+<blockquote>
+<dl>
+<dt>A '|' within a tag </dt>
+    <dd>means that the tag can be abbreviated at this  position
+    </dd>
+<dt>Words in the same line as the @-tag</dt>
+    <dd> are parameters to it.</dd>
+<dt>   &lt;ABC&gt;</dt>
+    <dd>a parameter</dd>
+<dt>  "by" </dt><dd>Text within "" is to be used literally. </dd><dt>[...] </dt><dd>Parameters within [] is optional.</dd><dt>NOTEXT</dt><dd>There can't be any additional text to this
+   tag. </dd></dl>
+                                 </blockquote>
+
+
+                              <p>          All tags with parameters  can't
+   have any more text in the same line after the parameters. Parameters
+not enclosed in square brackets [] are required and must be specified.
+<pre>
+tag  required-parameter [optional-parameter]
+</pre>
+</p>
+
+<h5><a name="t_common">Common Tags</a></h5>
+<dl><dt>@ATT|ENTION</dt><dd>Is to be used, if intuitive use of a
+function       may be wrong.   Or    if it is to be used only in very specific
+circumstances.</dd><dt>@author &lt;A.Name&gt;</dt><dd>Creator of the code. This is to be
+   changed       to the (last)   person, who did changes and therefore is
+responsible   for    the   present   code. If the person, who did the last
+change, is not  responsible      for   the code (may be, because the author
+was on vacation),   the @change   tag    is to be used. This tag can be used
+hierarchically:  If there is an author tag in the class documentation, not every member
+needs an own  one  If there is an author tag in a member too, it belongs
+to that member  only. The same for enums and their values.<br>
+                            NOTEXT.</dd><dt>@change &lt;dd.mm.yyyy&gt; "by"
+   &lt;WhoDidTheChange&gt;</dt><dd>There has to be a new @change
+       tag for each change, newest at top.</dd><dt>@deprecated</dt><dd>Marks an code entity as existing
+   only for      backwards     compatibility.<br>
+                            NOTEXT</dd><dt><a name="at_descr"></a>
+          @descr</dt><dd>The main text describing
+   the documented entity.<br>
+                            The tag can be omitted before this text (see
+                                                  <a href="#typic">
+           A Typical Documentation</a>
+                            ).</dd><dt>@docdate &lt;dd.mm.yyyy&gt;</dt><dd>Date of documentation.
+   The last date, when this documentation was changed.<br>
+                            NOTEXT.</dd>
+							<dt>@empty</dt><dd>Special tag for
+   tested documentation.  It       means, here, no documentation is intended.<br>
+      NOTEXT.<br>
+                                                             </dd><dt>@internal</dt><dd>Typical for
+   not exported or otherwise hidden functions. The documentation for  this  code
+    entity can be filtered out of the created documentation.<br>
+                            NOTEXT.</dd><dt>@key &lt;KeyWord&gt;</dt><dd>This
+tag provides the possibility   to    search       in the created documentation
+   or to filter it, by the given   key.<br>
+                            One tag for each key. <br>
+                            Use with care. Too many keys don't support clarity.
+   Maybe, possible    keywords     in  a  project  should be defined by the
+  team.<br>
+                            NOTEXT.</dd><dt>@see|also
+    &gt;&gt;WhatToSee&lt;&lt;</dt><dd>This
+   points to a related documented     code       entity. <br>
+                            NOTEXT.</dd><dt><a name="at_short"></a>
+          @short</dt><dd>
+      A short text (typical  just  one line) describing       the documented
+  entity.  For instance, this  text  may be used in indices   as   a short
+ description.<br>
+                            The tag can be omitted before this text (see
+<a href="#typic">
+                 A Typical Documentation</a>
+                            ).</dd><dt>
+      @todo</dt><dd>
+      Tasks which are still   open   with a code entity.</dd></dl>
+
+<h5><a name="t_class">Tags for Classes</a></h5>
+<dl>
+    <dt>
+      @base &gt;&gt;BaseClass&lt;&lt;</dt><dd>
+        Comment to a base   class. <br>
+                            Use this only, if there are comments. Simple
+listing     of  base   classes     is  done  automaticly.</dd><dt>
+      @collab|orator  &gt;&gt;TheCollaborator&lt;&lt;</dt><dd>
+      &gt;This is  to  be  used in the sense of <a href="http://c2.com/cgi/wiki?CrcCards">
+                     CRC Cards</a>
+                            .<br>
+                            One tag for each collaborator.</dd><dt>
+      @derive</dt><dd>
+        If the class  is designed for derivation,       here can be described,
+   how  to do this: Which methods should be rewritten,       which should not etc.</dd><dt>
+      @instance    &lt;ObjectName&gt;</dt><dd>
+        Describes   a (or the one) specific instance       of this class.<br>
+                            One tag for each instance.</dd><dt>
+        @interface</dt><dd>
+          This  tag says, this class is to be used only as an interface and
+ implementation       is in derived classes.<br>
+                            NOTEXT.</dd><dt>
+          @invariant</dt><dd>
+               Can be used for formal invariants of this       class. Recommended
+    for   publicly  used library classes/interfaces.</dd><dt>
+             @resp|onsibility  </dt><dd>
+               This is to be used in the sense of <a href="http://c2.com/cgi/wiki?CrcCards">
+                            CRC Cards</a>
+                            .<br>
+                            One tag for each responsibility.</dd><dt>
+             @tpl|param &lt;TplParamName&gt;</dt><dd>
+               Only for templates. Describes a template       parameter:
+meaning,   requirements, restrictions.<br>
+      One tag for each template parameter.<br>
+
+                                        </dd></dl>
+
+<h5><a name="t_funct">Tags for Functions</a></h5>
+<dl>
+<dt>@exception  &gt;&gt;ExceptionType&lt;&lt;</dt><dd>
+               Describes one exception.<br>
+                            One tag for each exception.<br>
+                            Use this only, if there are comments. Simple
+listing     of  exceptions      is  done  automaticly.</dd><dt>
+             @invariant</dt><dd>
+               Can be used for formal invariants of this       function.�</dd><dt>
+             @onerror</dt><dd>
+               Handling of error conditions. Can be used,       if there
+is  no  exception     specification.</dd><dt>
+             @param &lt;ParameterName&gt;  [ "["&lt;ValidRange&gt; "]" ]</dt><dd>
+               Describes one function parameter. <br>
+                            The range is optional, but the '[' and ']' must
+ be  literally      there,    if  a range is given. (They are not meant as
+an "optional parameter" sign here).<br>
+                            One tag for each parameter.<br>
+                            Use this only, if there are comments. Simple
+listing     of  parameters      is  done  automaticly.</dd><dt>
+             @postcond</dt><dd>
+               Can be used for formal postconditions of      this function.
+ Recommended       for publicly used library functions.</dd><dt>
+             @precond</dt><dd>
+               Can be used for formal preconditions of this function. Recommended
+    for   publicly  used library functions.</dd><dt>
+             @return</dt><dd>
+               Describes the return values of the function.        </dd><dt>
+             @tpl|param &lt;TplParameterName&gt;</dt><dd>
+               Only for templates. Describes a template       parameter:
+meaning,    requirements, restrictions.<br>
+                            One tag for each template parameter.</dd></dl>
+
+<h5><a name="t_var">Tags for Variables</a></h5>
+<dl>
+<dt>
+      @dyn</dt><dd>
+      This marks a pointer variable as owner of a heap object. If  used consequently,
+   this is always makes clear, if a pointer  should be deleted or is only
+referencing.   This tag must not be used for refcounted objects. If it exists,
+it always   means: Use delete on this variable, or pass it on to somebody,
+who deletes   it reliably.<br>
+   </dd><dt>
+             @life|cycle</dt><dd>
+               Describes, when a variable is created and destroyed.</dd><dt>
+             @multi|plicity &lt;Range&gt;</dt><dd>
+               Range can be something like &#8220;1+&#8221;, &#8220;0+&#8221;, &#8220;2..5&#8221;, &#8220;Strings up
+ to  255 characters&#8221;.</dd>
+</dl>
+
+
+<h5><a name="t_global">Global Tags</a></h5>
+<dl>
+<dt><a name="at_html"></a>@HTML</dt>
+    <dd>For the rest of the source code file (or till the next
+        <a href="#at_nohtml">@NOHTML</a>
+        ), HTML-tags  in documentation will be recognised   as   such.
+    </dd>
+<dt><a name="at_nohtml"></a>@NOHTML</dt>
+    <dd>For the rest of the source code file (or       till the next
+        <a href="#at_html">           @HTML</a>
+        ), HTML-tags in documentation will be ignored and  handled
+        like normal text, ie. not translated.
+    </dd>
+</dl>
+
+
+<h3><a name="typic"></a>A Typical Documentation</h3>
+
+<pre>/** Short comment: This is for .... .
+
+    After an empty line, here comes the main description of the code
+    entity. Here can be a longer text, examples,
+    philosophical considerations and special solution descriptions.
+    After this text, only @-tags are allowed. Each following text belongs
+    to its prefacing @-tag.
+
+    @param integer1 [0 .. 255]
+    Describe parameter integer1.
+
+    @param str2
+    Describe the parameter str2.
+
+    @return true, if everything is ok. Else false.
+*/
+bool   funct_00( int integer1, const char * str2 );
+</pre>
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

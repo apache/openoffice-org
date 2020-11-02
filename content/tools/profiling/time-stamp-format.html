@@ -1,0 +1,188 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+  <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+  <TITLE></TITLE>
+  <META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+  <META NAME="CREATED" CONTENT="20010719;12323000">
+  <META NAME="CHANGED" CONTENT="20010802;10214237">
+  <STYLE>
+  <!--
+    @page { margin: 2cm }
+    H2 { margin-bottom: 0.21cm; font-style: normal; text-align: justify }
+    P { margin-bottom: 0.21cm; text-align: left; page-break-before: auto; page-break-after: auto }
+    H1 { margin-bottom: 0.21cm; text-align: justify }
+    P { margin-bottom: 0.21cm; text-align: left; page-break-before: auto; page-break-after: auto }
+    CODE { font-size: 12pt }
+    SAMP { font-size: 9pt }
+  -->
+  </STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/tools/">tools</a>&nbsp;&raquo;&nbsp;<a href="/tools/profiling/">profiling</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1 STYLE="text-indent: 1.38cm">How to format profiling time stamp
+messages</H1>
+<P>Carsten Driesner and Andre Fischer, last change on August 2<SUP>nd</SUP>,
+2001</P>
+<H2>Introduction</H2>
+<P>Each use of the macros <CODE>RTL_LOGFILE_CONTEXT_AUTHOR,
+RTL_LOGFILE_CONTEXT_TRACE</CODE><EM>&lt;n&gt;</EM><CODE>,</CODE> and<CODE>
+RTL_LOGFILE_TRACE_AUTHOR</CODE><EM>&lt;n&gt;</EM> writes a time stamp
+into a logfile that can be parsed by post-processing scripts. This
+works only if the text that is given as arguments to the macros
+follows certain rules.</P>
+<P>The next section describes the overall format of the time stamps
+written by the macros. The format of the text passed as arguments to
+the macros is described int the third section.</P>
+<H2>Overall time stamp format</H2>
+<P STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: auto">
+Each time stamp written by one of the macros
+<CODE>RTL_LOGFILE_CONTEXT_AUTHOR, RTL_LOGFILE_CONTEXT_TRACE</CODE><EM>&lt;n&gt;</EM><CODE>,</CODE>
+and <CODE>RTL_LOGFILE_TRACE_AUTHOR</CODE><EM>&lt;n&gt;</EM> has the
+format</P>
+<P STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: auto">
+%d %d %c %s : %s</P>
+<P STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: auto">
+with the following arguments:</P>
+<OL>
+  <LI><P STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: auto">
+  Time in milliseconds after the first time stamp. This implies that
+  the first time stamp has always a value of 0 in this field. To
+  convert the relative times into absolute ones or ones that are
+  relative to the application start you can evaluate the first line in
+  the log-file which is described below.</P>
+  <LI><P STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: auto">
+  Id of the thread from which the time stamp has been emitted. The
+  process id can be determined from the name of the log-file.</P>
+  <LI><P STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: auto">
+  A character the classifies the time steps into three classes:</P>
+</OL>
+<OL>
+  <LI><P STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: auto">
+  An { indicates the beginning of a function or other scope.</P>
+  <LI><P STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: auto">
+  An } indicates the end of a function or other scope.</P>
+  <LI><P STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: auto">
+  An | indicates a message from within a scope or without a scope.</P>
+</OL>
+<OL START=4>
+  <LI><P STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: auto">
+  Name or description of a function or other scope. This name is used
+  to group beginnings and ends of a scope together. If
+  <CODE>RTL_LOGFILE_TRACE_AUTHOR</CODE><EM>&lt;n&gt;</EM> is used
+  instead of <CODE>RTL_LOGFILE_CONTEXT_TRACE</CODE><EM>&lt;n&gt;</EM>
+  then this field remains empty.</P>
+  <LI><P STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: auto">
+  Arbitrary message written by <CODE>RTL_LOGFILE_TRACE_AUTHOR</CODE><EM>&lt;n&gt;</EM>
+  and <CODE>RTL_LOGFILE_CONTEXT_TRACE</CODE><EM>&lt;n&gt;</EM>. If
+  <CODE>RTL_LOGFILE_CONTEXT_AUTHOR</CODE> is used instead then this
+  field remains empty.</P>
+</OL>
+<P STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: auto">
+Note that the dividing colon between the last two fields is written
+even if one of them remains empty.</P>
+<P STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: auto">
+As you can see, you can only specify the content of the last two
+fields. The format that they may have is described in the following
+section.</P>
+<H2>Admissable format of scope names and messages</H2>
+<P>This section focuses on the format of the last two fields of a
+time stamp. The first one should have format</P>
+<P>%s (%s) %s 
+</P>
+<P>with the following arguments:</P>
+<OL>
+  <LI><P>Module name. This will be strings like <CODE>sfx2</CODE> or
+  <CODE>desktop</CODE>.</P>
+  <LI><P>Sun id with prefixed shortcut of responsible developer. That
+  would be <CODE>cd100003</CODE> or <CODE>af119097</CODE> for the
+  authors. Use the Sun id of the project owner, if you have no Sun id<I>.</I></P>
+  <LI><P>Fully qualified function name with leading double colon. Add
+  a simplified signature only if that is necessary to distinguish it
+  from other functions with the same name. The function name starts
+  with the complete namespace, the class name (if it is really a
+  method) and finally the actual function name.</P>
+</OL>
+<P>The three fields are separated by singles spaces.</P>
+<P>The second argument may have any format you like with two
+constraints:</P>
+<OL>
+  <LI><P>It may not contain a newline character.</P>
+  <LI><P>If it starts with an opening or a closing curly bracket then
+  it has a meaning similar to the third field of the overall format:
+  it describes the beginning or end of a scope. You can define a
+  logical scope with this format even though you don't have an analog
+  physical representation and don't want to introduce a new scope for
+  it.</P>
+</OL>
+<P>Use RTL_LOGFILE_CONTEXT_AUTHOR&lt;n&gt; if possible to
+automatically write the fields described above with every time stamp
+emitted from the context. If that is not possible or usefull then
+start the message field with a string that has the format described
+above. Use your common sense to fill in the second and fourth field.
+Divide that string with a colon surrounded by spaces from the actual
+message string.</P>
+<H2>Examples</H2>
+<P>The following pseudo code uses a context to write time stamps at
+the beginning and end of scopes in the implicit form and the explicit
+one that uses the message string to indicate the scope boundaries.</P>
+<P><SAMP>void ::Desktop::OpenStartupscreen (arguments)</SAMP></P>
+<P><SAMP>{</SAMP></P>
+<P><SAMP>RTL_LOGFILE_CONTEXT_AUTHOR (aInstance, &#132;desktop&#147;,
+&#132;cd100003&#147;, &#132;::Desktop::OpenStartupscreen&#147;);</SAMP></P>
+<P><SAMP>...</SAMP></P>
+<P><SAMP>RTL_LOGFILE_CONTEXT_TRACE (aInstance, &#132;{ lengthy
+calculation&#147;);</SAMP></P>
+<P><SAMP>for (...)</SAMP></P>
+<P><SAMP>{</SAMP></P>
+<P><SAMP>do something</SAMP></P>
+<P><SAMP>}</SAMP></P>
+<P><SAMP>RTL_LOGFILE_CONTEXT_TRACE (aInstance, &#132;} lengthy
+calculation&#147;);</SAMP></P>
+<P><CODE>}</CODE></P>
+<P>It generate time stamps like these:</P>
+<P><SAMP>001234 11 { desktop (cd100003) ::Desktop::OpenStartupscreen</SAMP></P>
+<P><SAMP>002345 11 | desktop (cd<SAMP>100003</SAMP>)
+::Desktop::OpenStartupscreen : { lengthy calculation</SAMP></P>
+<P><SAMP>003456 11 | desktop (cd<SAMP>100003</SAMP>)
+::Desktop::OpenStartupscreen : } lengthy calculation</SAMP></P>
+<P><SAMP>004567 11 } desktop (cd<SAMP>100003</SAMP>)
+::Desktop::OpenStartupscreen</SAMP></P>
+<P><BR><BR>
+</P>
+<P>This pseudo code uses the context free version:</P>
+<P><SAMP>void ::Desktop::CloseStartupscreen</SAMP></P>
+<P><SAMP>{</SAMP></P>
+<P><SAMP>...</SAMP></P>
+<P><SAMP>RTL_LOGFILE_TRACE_AUTHOR (&#132;desktop&#147;, &#132;cd<SAMP>100003&#147;,
+&#132;:</SAMP>:Desktop::CloseStartupscreen : Startup finished&#147;);</SAMP></P>
+<P><SAMP>}</SAMP></P>
+<P>It's output might look like this:</P>
+<P><SAMP>099999 11 | desktop (cd<SAMP>100003</SAMP>)
+::Desktop::CloseStartupscreen : Startup finished</SAMP></P>
+<P><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
