@@ -1,0 +1,266 @@
+<html>
+<head>
+<title>Service FormController</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="http://api.openoffice.org/docs/common/ref/idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a>
+<table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="FormController-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#IncludedServices" class="navisub">Included Services</a></td>
+<td class="navisub"><a href="#ExportedInterfaces" class="navisub">Exported Interfaces</a></td>
+<td class="navisub"><a href="#PropertiesSummary" class="navisub">Properties' Summary</a></td>
+<td class="navisub"><a href="#PropertiesDetails" class="navisub">Properties' Details</a></td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">form</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">service FormController</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>specifies a component controlling the interaction between the user and form functionality.
+
+</dd>
+<dd><p>As soon as a form (containing controls) is to be presented to the user,
+there is a need for an instance controlling the user interaction. <br/>
+Such a <a href="FormController.html">FormController</a> is responsible for dialog processing,
+like controlling the tab order and the grouping of controls. </p>
+
+<p>As a form may contain one or many subforms, a <a href="FormController.html">FormController</a> may
+contain one or more other <a href="FormController.html">FormController</a> s, so the form model structure or hierarchy
+is reflected in the structure of <a href="FormController.html">FormController</a> s. </p>
+
+<h3>Responsibilities </h3>
+<p>A <a href="FormController.html">FormController</a> is responsible for a ::com::sun::star::<a href="../awt/module-ix.html">awt</a>::<a href="../awt/UnoControlContainer.html">UnoControlContainer</a> ,
+and all controls therein. </p>
+
+<p>Furthermore, a form controller is responsible for preventing invalid user input. That is, if the form
+contains controls bound to a database, or to an external validator, then the form controller will
+check their current value when the current record is to be saved to the database. </p>
+
+<p>First, it will check whether any controls with an external validator exist. If so, those validators
+will be asked to validate the current control content. If this fails, the message provided by the validator
+is displayed to the user, the control is focused, and the update of the record is vetoed. </p>
+
+<p>Second, the controls are examined for NULL values. If a control is bound to a database field which
+is declared to be <code>NOT NULL </code>, no auto-increment field, but still <b>NULL</b> , then an error
+message is shown to the user saying that input is required, the respective control is focused, and
+the update of the record is vetoed. </p>
+
+<p>Note that you can precent the second check - for database fields containing <b>NULL</b> values - on
+a per-form and a per-database basis. <br/>
+For the former, you need to add a boolean property <code>FormsCheckRequiredFields </code>to the form
+(aka the <code>FormController </code>'s model), using its
+::com::sun::star::<a href="../beans/module-ix.html">beans</a>::<a href="../beans/XPropertyContainer.html">XPropertyContainer</a>::<a href="../beans/XPropertyContainer.html#addProperty">addProperty</a> method, with a value
+of <b>false</b> . <br/>
+For the latter, you need to set the respective property of the data source's <code>Settings </code>
+(also named <code>FormsCheckRequiredFields </code>) to <b>false</b> . </p>
+
+</dd>
+<dt><b>See also</b></dt>
+<dd>::com::sun::star::form::<a href="component/module-ix.html">component</a>, ::com::sun::star::<a href="../awt/module-ix.html">awt</a>::<a href="../awt/XTabController.html">XTabController</a>, ::com::sun::star::form::<a href="binding/module-ix.html">binding</a>::<a href="binding/BindableControlModel.html">BindableControlModel</a>, ::com::sun::star::<a href="../sdb/module-ix.html">sdb</a>::<a href="../sdb/DataSource.html">DataSource</a>::<a href="../sdb/DataSource.html#Settings">Settings</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="IncludedServices"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Included Services</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="FormControllerDispatcher.html">FormControllerDispatcher</a></td>
+<td class="imsum_right"><dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>allows delegating form controller functionality to the component
+
+</dd>
+<dd><p>If a control which the controller is responsible for supports the ::com::sun::star::<a href="../frame/module-ix.html">frame</a>::<a href="../frame/XDispatchProviderInterception.html">XDispatchProviderInterception</a>
+interface, the controller registers a dispatch interceptor. Then, the control can try to delegate part of its
+functionality to the controller by querying the dispatch interceptor for it. </p>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<a name="ExportedInterfaces"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Exported Interfaces</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XFormController.html">XFormController</a></td>
+<td class="imsum_right"><dl>
+<dt><b>Description</b></dt>
+<dd>is used for notifying the (de)activation of the controller.
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../awt/module-ix.html">awt</a>::<a href="../awt/XTabController.html">XTabController</a></td>
+<td class="imsum_right"><dl>
+<dt><b>Description</b></dt>
+<dd>is used for tab controlling and grouping of the controls.
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../container/module-ix.html">container</a>::<a href="../container/XChild.html">XChild</a></td>
+<td class="imsum_right"><dl>
+<dt><b>Description</b></dt>
+<dd>A FormController may have a parent controller, such as when the related form is a subform.
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XComponent.html">XComponent</a></td>
+<td class="imsum_right"><dl>
+<dt><b>Description</b></dt>
+<dd>A FormController must be disposable.
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../container/module-ix.html">container</a>::<a href="../container/XEnumerationAccess.html">XEnumerationAccess</a></td>
+<td class="imsum_right"><dl>
+<dt><b>Description</b></dt>
+<dd>A FormController must provide access to its sub controllers.
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../util/module-ix.html">util</a>::<a href="../util/XModifyBroadcaster.html">XModifyBroadcaster</a></td>
+<td class="imsum_right"><dl>
+<dt><b>Description</b></dt>
+<dd>A FormController must communicate if any of its children (means sub controllers) or contained
+controls have been modified.
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XConfirmDeleteBroadcaster.html">XConfirmDeleteBroadcaster</a></td>
+<td class="imsum_right"><dl>
+<dt><b>Description</b></dt>
+<dd>used to notify deletions of data in the form before they happen.
+
+</dd>
+<dd><p>A form controller listens for deletion events at the form it is responsible for. <br/>
+If and only if no <a href="XConfirmDeleteListener.html">XConfirmDeleteListener</a> is registered at
+the controller, it uses an own dialog to ask the user for confirmation. </p>
+
+<p>You may use this interface to integrate your own confirmation dialogs. </p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../sdb/module-ix.html">sdb</a>::<a href="../sdb/XSQLErrorBroadcaster.html">XSQLErrorBroadcaster</a></td>
+<td class="imsum_right"><dl>
+<dt><b>Description</b></dt>
+<dd>used to notify errors which happen in the form the controller is responsible for.
+
+</dd>
+<dd><p>A form controller listens for error events at the form it is responsible for. <br/>
+If and only if no ::com::sun::star::<a href="../sdb/module-ix.html">sdb</a>::<a href="../sdb/XSQLErrorListener.html">XSQLErrorListener</a> is registered at the controller, it
+uses an own dialog to notify the user of the error. </p>
+
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../sdb/module-ix.html">sdb</a>::<a href="../sdb/XRowSetApproveBroadcaster.html">XRowSetApproveBroadcaster</a></td>
+<td class="imsum_right"><dl>
+<dt><b>Description</b></dt>
+<dd>is used for multiplexing row set events happening on the form which the controller is responsible for.
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XDatabaseParameterBroadcaster.html">XDatabaseParameterBroadcaster</a></td>
+<td class="imsum_right"><dl>
+<dt><b>Description</b></dt>
+<dd>is used broadcasting parameter events in the form.
+
+</dd>
+<dd><p>A form controller listens for parameter events at the form it is responsible for. <br/>
+If and only if no <a href="XDatabaseParameterListener.html">XDatabaseParameterListener</a> is registered at the controller, it
+uses an own dialog to ask the user for parameter values. </p>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<a name="PropertiesSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Properties' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::form::<a href="runtime/module-ix.html">runtime</a>::<a href="runtime/XFormOperations.html">XFormOperations</a><br>
+<a href="#FormOperations">FormOperations</a></td>
+<td class="imsum_right"><b>[ OPTIONAL ]<br>
+</b>denotes the instance which is used to implement operations on the form which the controller
+works for.
+
+&nbsp;</td>
+</tr>
+</table>
+<a name="PropertiesDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Properties' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="FormOperations" class="membertitle">FormOperations</a>
+<table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>::com::sun::star::form::<a href="runtime/module-ix.html">runtime</a>::<a href="runtime/XFormOperations.html">XFormOperations</a> <b>FormOperations</b>;<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>denotes the instance which is used to implement operations on the form which the controller
+works for.
+
+</dd>
+<dd><p>This instance can be used, for instance, to determine the current state of certain form features. </p>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<br>&nbsp;<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2003 Sun Microsystems, Inc.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	
+  <meta http-equiv="CONTENT-TYPE"
+ content="text/html; charset=windows-1252">
+  <title>Form Navigator Data Exchange Functional Spec</title>
+	 	
+  <meta name="GENERATOR" content="StarOffice 6.0  (Win32)">
+	
+  <meta name="CREATED" content="20020513;14164900">
+	
+  <meta name="CHANGEDBY" content="Frank Schönheit">
+	
+  <meta name="CHANGED" content="20020521;16011356">
+</head>
+<body lang="de-DE">
+<div id="Table of Contents1">
+<div style="text-align: center;"> 	</div>
+<div id="Table of Contents1_Head">
+<div style="text-align: center;"> 		<font size="+3"><span
+ style="font-weight: bold;">Data Exchange in the Form Navigator</span></font><br>
+<font size="+1"><span style="font-style: italic; font-weight: bold;">Functional
+specification</span></font><br>
+</div>
+<br>
+This document describes the data exchange functionality in the form
+navigator. This is the small floater which can be switched on when
+designing a form document, and visualizes the logical structure of the
+form components (forms, sub forms, control models). <br>
+<br>
+Data exchange means Drag and Drop functionality as well as Clipboard
+activities.
+<h2><a name="mozTocId51302" class="mozTocH2"></a>Table 		of Contents</h2>
+	</div>
+	 	 	 	 	
+<ul id="mozToc">
+<!--mozToc h3 3 h4 4 h5 5--><li><a href="#mozTocId975628">1 Acceptance
+Rules</a></li>
+  <ul>
+    <li><a href="#mozTocId24028">1.1 Actions for different Component</a></li>
+    <li><a href="#mozTocId581363">1.2 Move</a></li>
+    <li><a href="#mozTocId244433">1.3 Copy</a></li>
+  </ul>
+    <li><a href="#mozTocId125168">2 Functionality</a>
+      <ul>
+        <li><a href="#mozTocId665767">2.1 Drag and Drop</a>
+          <ul>
+            <li><a href="#mozTocId134648">2.1.1 Activation</a><br></li>
+            <li><a href="#mozTocId658958">2.1.2 Mode selection</a></li>
+          </ul>
+		</li>
+        <li><a href="#mozTocId547415">2.2 Clipboard</a>
+          <ul>
+		    <li><a href="#mozTocId4311">2.2.1 Activation</a></li>
+		    <li><a href="#mozTocId14953">2.2.2 Cutting Entries</a></li>
+          </ul>
+		</li>
+      </ul>
+	</li>
+	<li><a href="#mozTocId620921">3 Clipboard formats</a>
+      <ul>
+        <li><a href="#mozTocId563632">3.1 Hidden controls</a></li>
+        <li><a href="#mozTocId166879">3.2 Control paths</a></li>
+        <li><a href="#mozTocId755191">3.3 Tree list entries</a></li>
+      </ul>
+    </li>
+    <li><a href="#mozTocId320803">4 Test cases</a>
+      <ul>
+        <li><a href="#mozTocId929325">4.1 Hidden controls</a></li>
+        <li><a href="#mozTocId985204">4.2 Non-Hidden Controls</a></li>
+        <li><a href="#mozTocId970357">4.3 More to come .....</a></li>
+      </ul>
+    </li>
+  </ul>
+</ul>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+</div>
+<p class="western"><br>
+</p>
+<h3><a name="mozTocId975628" class="mozTocH3"></a>1 Acceptance Rules</h3>
+<p class="western">When doing a copy or move operation, given a set of
+source components (e.g. the drag source) and a target component (the
+drop target), the operation is rejected according to the rules below. If
+and only neither of the rules applies, the operation is accepted.<br>
+In general and by default, the source can be an arbitrary mixture of
+hidden controls, "normal" controls, and forms, while the destination can
+be any valid entry in the form navigator.</p>
+<h4><a name="mozTocId24028" class="mozTocH4"></a>1.1 Actions for
+different Component</h4>
+<p class="western">Allowed actions differ for the different types of
+components: (hidden/non-hidden controls, and forms). Additionally, there
+is a difference if the data exchange is in-place (within the same
+navigator instance) or if it crosses document boundaries.</p>
+<p class="western">The following table shows the acceptance matrix
+under these aspects.</p>
+<table width="642" border="1" bordercolor="#000000" cellpadding="4"
+ cellspacing="0">
+	<col width="126"> 	<col width="119"> 	<col width="119"> 	<col width="119">
+	<col width="118"> 	<thead> 		<tr valign="top">
+			<th width="126"> 				
+    <p class="western" style="">control \ action</p>
+			</th>
+			<th width="119"> 				
+    <p class="western" style="">copy, in-place</p>
+			</th>
+			<th width="119"> 				
+    <p class="western" style="">move, in-place</p>
+			</th>
+			<th width="119"> 				
+    <p class="western" style="">copy, crossing</p>
+			</th>
+			<th width="118"> 				
+    <p class="western" style="">move, crossing</p>
+			</th>
+		</tr>
+	</thead> 	<tbody>
+		<tr valign="top">
+			<td width="126"> 				
+      <p class="western">hidden control</p>
+			</td>
+			<td width="119"> 				
+      <p class="western" align="center">+</p>
+			</td>
+			<td width="119"> 				
+      <p class="western" align="center">+</p>
+			</td>
+			<td width="119"> 				
+      <p class="western" align="center">+</p>
+			</td>
+			<td width="118"> 				
+      <p class="western" align="center">-</p>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td width="126"> 				
+      <p class="western">non-hidden control</p>
+			</td>
+			<td width="119"> 				
+      <p class="western" align="center">-</p>
+			</td>
+			<td width="119"> 				
+      <p class="western" align="center">+</p>
+			</td>
+			<td width="119"> 				
+      <p class="western" align="center">-</p>
+			</td>
+			<td width="118"> 				
+      <p class="western" align="center">-</p>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td width="126"> 				
+      <p class="western">forms</p>
+			</td>
+			<td width="119"> 				
+      <p class="western" align="center">-</p>
+			</td>
+			<td width="119"> 				
+      <p class="western" align="center">+</p>
+			</td>
+			<td width="119"> 				
+      <p class="western" align="center">-</p>
+			</td>
+			<td width="118"> 				
+      <p class="western" align="center">-</p>
+			</td>
+		</tr>
+	
+  </tbody>
+</table>
+<p class="western"><br>
+<br>
+</p>
+<p class="western">If the source of a data exchange operation contains
+a mixed set of different types, the weakest rules determine the result.
+Means if you mix for instance a hidden control with a form, then the
+acceptance rules for the form apply.</p>
+<p class="western">There are additional rules which may restrict the
+operation even further, they are explained in the next paragraphs.</p>
+<h4><a name="mozTocId581363" class="mozTocH4"></a>1.2 Move</h4>
+<p class="western">In addition to the rules from chapter 1.1, a move
+operation is rejected if one of the following points applies:</p>
+<ol>
+	<li>
+    <p class="western">The target does not exist, i.e. 	the components
+were dropped onto empty space.</p>
+	</li>
+  <li>
+    <p class="western">The root entry is part of the 	source components
+– you can't move the root</p>
+	</li>
+  <li>
+    <p class="western">One of the source components</p>
+	
+    <ol type="a">
+		<li>
+        <p class="western">is a child of the target 		component</p>
+		</li>
+      <li>
+        <p class="western">equals the target component</p>
+		</li>
+      <li>
+        <p class="western">is a form, and at the same time 		an
+ancestor of the target</p>
+		</li>
+      <li>
+        <p class="western">is a control, and the target is 		the root
+component</p>
+	</li>
+    </ol>
+	</li>
+  <li>
+    <p class="western">The target component is a 	control</p>
+  </li>
+</ol>
+<h4><a name="mozTocId244433" class="mozTocH4"></a>1.3 Copy</h4>
+<p class="western">In addition to the rules from chapter 1.1, a copy
+operation is rejected if and only if one of the following points applies:</p>
+<ol>
+	<li>
+    <p class="western">The target does not exist, i.e. 	the components
+were dropped onto empty space.</p>
+	</li>
+  <li>
+    <p class="western">The target component is no form</p>
+  </li>
+</ol>
+<h3><a name="mozTocId125168" class="mozTocH3"></a>2 Functionality</h3>
+<h4><a name="mozTocId665767" class="mozTocH4"></a>2.1 Drag and Drop</h4>
+<h5><a name="mozTocId134648" class="mozTocH5"></a>2.1.1 Activation</h5>
+<p class="western">as usual: Select an arbitrary set of entries in the
+navigator, and start dragging them.</p>
+<h5><a name="mozTocId658958" class="mozTocH5"></a>2.1.2 Mode selection</h5>
+<p class="western">The default mode is "move", i.e. if you do a DnD
+operation without any modifier keys, a move will be triggered.<br>
+You can use the usual platform-dependent (e.g. on Windows: Ctrl)
+modifier key(s) to force copying</p>
+<h4><a name="mozTocId547415" class="mozTocH4"></a>2.2 Clipboard</h4>
+<h5><a name="mozTocId4311" class="mozTocH5"></a>2.2.1 Activation</h5>
+<p class="western">as usual: Select an arbitrary set of entries in the
+navigator, open the context menu (no matter if by mouse or keyboard),
+and choose "Copy" or "Cut" therein. Alternatively, press the usual,
+platform-dependent keyboard shortcuts (e.g. on Windows: Ctrl-C for copy,
+Ctrl-X for cut).</p>
+<p class="western" style="font-style: normal;">The Paste aka Insert
+functionality is reachable when via context menu and usual shortcut,
+too. It is not available if no entry is selected, if more than one entry
+is selected, or if the selected entry does not fullfill the acceptance
+rules from chapter 1.</p>
+<h5><a name="mozTocId14953" class="mozTocH5"></a>2.2.2 Cutting Entries</h5>
+<p class="western">If you started a cut, the entries in question will
+get a brighter icon, indicating that they are to be moved once the move
+operation is finished. This means they are not removed from the model
+when you do the cut, but only when you do the paste from the clipboard.</p>
+<h3><a name="mozTocId620921" class="mozTocH3"></a>3 Clipboard formats</h3>
+<p class="western">This chapter is for completeness. It describes the
+internal clipboard formats used.</p>
+<p class="western">The following formats are used for transfering data
+within one or more instances of the form navigator.</p>
+<h4><a name="mozTocId563632" class="mozTocH4"></a>3.1 Hidden controls</h4>
+<ul>
+	<li>
+    <p class="western">format name:
+	application/x-openoffice;windows_formatname="svxform.HiddenControlModelsExchange"</p>
+	</li>
+  <li>
+    <p class="western" style="font-style: normal;">content: 	a
+Sequence&lt; XPropertySet &gt;, denoting the models of the hidden
+	controls to transfer</p>
+  </li>
+</ul>
+<h4><a name="mozTocId166879" class="mozTocH4"></a>3.2 Control paths</h4>
+<ul>
+	<li>
+    <p class="western">format 	name:
+	application/x-openoffice;windows_formatname="svxform.ControlPathExchange"</p>
+	</li>
+  <li>
+    <p class="western" style="font-style: normal;"> 	content:
+Sequence&lt; Any &gt;, 2 elements</p>
+	
+    <ul>
+		<li>
+        <p class="western" style="font-style: normal;"> 		first element:
+Reference&lt; XNameContainer &gt; which 		represents the collections of
+all forms</p>
+		</li>
+      <li>
+        <p class="western" style="font-style: normal;"> 		second
+element: Sequence&lt; Sequence&lt; int &gt; &gt;: 		Every element
+describes a "path“ to a control model, 		relative to the container in
+the container above.<br>
+        <br>
+E.g., if 		the sequence is "( ( 0, 2 ), (1, 3, 2) )", then two
+		elements with the paths "(0, 2)" and "(1, 3, 2)" 		are described.
+Means the first element is the third (2!) children 		of the first (0!)
+children of the container, and the second element 		is the third
+children of the forth children of the second children 		of the container.</p>
+	</li>
+    </ul>
+  </li>
+</ul>
+<h4><a name="mozTocId755191" class="mozTocH4"></a>3.3 Tree list entries</h4>
+<ul>
+	<li>
+    <p class="western">format name:
+	application/x-openoffice;windows_formatname="svxform.FieldNameExchange"</p>
+	</li>
+  <li> content: 	Virtually nothing :). This is not really transfered via
+the usual 	exchange mechanisms, it is just a shortcut for instances
+where the 	drag source is the same as the drop target; in this case the
+latter 	does not need to rebuild all the internal information from the
+	persistent format 2.<br>
+In particular, this means the format does 	not supply data, it acts as
+placeholder only. </li>
+</ul>
+<h3><a name="mozTocId320803" class="mozTocH3"></a>4 Test cases</h3>
+<h4><a name="mozTocId929325" class="mozTocH4"></a>4.1 Hidden controls</h4>
+<ul>
+	<li>
+    <p class="western">Create a form containing a hidden control.
+	Create a new sub form below the first form.</p>
+	
+    <ul>
+		<li>
+        <p class="western">Try to DnD this control to itself, to it's
+		parent, to the sub form, to a free place in the navigator. Check
+		that moving is allowed (and works) on the sub form, and nowhere 		else.</p>
+		</li>
+      <li>
+        <p class="western">Try the same actions with the first modifier
+		key (Ctrl). This should be a copy operation, thus it should be
+		allowed (and work) on the forms, but nowhere else.</p>
+	</li>
+    </ul>
+	</li>
+  <li>
+    <p class="western">Create a second document, and a form therein</p>
+	
+    <ul>
+		<li>
+        <p class="western">Try to DnD the hidden control from the first
+		document to the form in the second document. Only copying to a form
+		should work.</p>
+	</li>
+    </ul>
+  </li>
+</ul>
+<h4><a name="mozTocId985204" class="mozTocH4"></a>4.2 Non-Hidden
+Controls</h4>
+<ul>
+	<li>
+    <p class="western">Create a form with some controls (except than
+	hidden controls)</p>
+	
+    <ul>
+		<li>
+        <p class="western">mark an arbitrary set of controls, and try
+		to DnD them in the navigator. Should be refused all times: Movement
+		is not allowed (as the only existent form is the parent of the
+		controls), and copy is not allowed in general for non-hidden
+		controls.</p>
+	</li>
+    </ul>
+  </li>
+</ul>
+<h4><a name="mozTocId970357" class="mozTocH4"></a>4.3 More to come .....</h4>
+</body>
+</html>

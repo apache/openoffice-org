@@ -1,0 +1,780 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <style type="text/css">@import url("/css/dba.css");</style>
+    <title>PostgreSQL SDBC driver</title>
+    <script type="text/javascript" src="/js/dba_default.js"></script>
+  </head>
+  <body>
+    <b>Project Sections</b>:
+        <a href="../../index.html">Home</a>
+      | <a href="../../specifications/index.html">Specifications</a>
+      | <a href="../../QA/index.html">QA</a>
+      | <a href="../../development/index.html">Development</a>
+      | <a href="../index.html"><b>Database Drivers</b></a><br/>
+        <b>Database drivers</b>:
+          <a href="../postgresql/index.html"><b>PostgreSQL</b></a>
+        | <a href="../mdb/index.html">Linux MDB</a>
+        | <a href="../sqlite/index.html">SQLite</a>
+    <hr/>
+    <div class="dba">
+      <h1 id="postgres_driver">postgresql-sdbc-driver</h1>
+      <h2>Content</h2>
+      <ul>
+        <li>
+          <a href="#intro">Introduction</a>
+        </li>
+        <li> <a href="#requirements">Requirements </a></li>
+        <li> <a href="#download">Download</a></li>
+        <li>
+          <a href="#install_2.0">Installation and usage in OO3.x/OOo2.x</a>
+        </li>
+        <li>
+          <a href="#install_1.1">Installation and usage in OO1.1.x</a>
+        </li>
+	<li> <a href="#changes">Changes</a></li>
+        <li>
+          <a href="#features">Features and know bugs</a></li>
+        <li>
+          <a href="#api">Using the driver via the API</a></li>
+        <li>
+          <a href="#source">Building from source</a></li>
+        <li>
+          <a href="#report">Reporting bugs</a></li>
+        <li>
+          <a href="#older_versions">Outdated versions</a>
+        </li>
+        <li>
+          <a href="#author">Author</a>
+        </li>
+      </ul>
+      <a name="intro">
+        <h2>
+          Introduction</h2>
+      </a>The postgresql SDBC Driver allows to use the <a href="http://www.postgresql.org">
+        postgresql database</a> from OpenOffice.org without any wrapper layer
+      such as odbc or jdbc.
+
+      <p> The current version 0.7.6a can be considerded as good beta quality (
+          with some <a href="#known_bugs">known issues</a> and missing features). 
+
+      </p>
+      <p>
+        The driver is aimed at the OpenOffice.org versions 3.x/2.x/1.1.x, it does not
+        work with OOo1.0.x trees.
+      </p>
+      <p>
+        The final aim is to have an easier to use, faster, more feature rich database
+        driver than the jdbc-odbc solution. The current version should already allow
+        this in most places (though I actually have never compared them feature by feature).
+
+     <h2 id="requirements">Requirements</h2>
+
+        Install a postgresql server if you haven't one already. The current driver
+        version was tested using postgresql-7.3.2. It does not work with
+        postgresql 7.2.x server version. It should work with all other currently available including 8.x versions.
+
+        <p>
+        Install OpenOffice.org.
+
+     <h2 id="download">Download</h2></a>
+
+        Download the binary version of the driver (depending on your OOo version). <strong> Follow below installation instructions.</strong>
+        <table border="5">
+          <tbody>
+            <tr>
+              <th>Version</th>
+	      <th>OOo version</th>
+              <th>
+                Platform</th>
+              <th>
+                Location</th>
+              <th>
+                md5sum</th>
+            </tr>
+	    <tr>
+	      <td> <strong>0.7.6b</strong> (released 2010-08-12)</td>
+              <td>OOo 3.3 and above</td> 
+              <td>
+                Windows, Linux x86 (multi platform package)<br>
+              </td>
+              <td>
+                <a href="postgresql-sdbc-0.7.6b.zip">http://dba.openoffice.org/drivers/<wbr>postgresql/postgresql-sdbc-0.7.6b.zip</a>
+              </td>
+              <td>ae8915cfd031b2c4c0cd970f9409a736</td>
+            </tr>
+	    <tr>
+	      <td> <strong>0.7.6a</strong> (released 2010-02-06)</td>
+              <td>OOo 2.x -&gt; 3.2</td> 
+              <td>
+                Windows, Linux x86 (multi platform package)<br>
+              </td>
+              <td>
+                <a href="postgresql-sdbc-0.7.6a.zip">http://dba.openoffice.org/drivers/<wbr>postgresql/postgresql-sdbc-0.7.6a.zip</a>
+              </td>
+              <td>1723de995efd1ad69ee59b5e15e805a6</td>
+            </tr>
+
+            <tr>
+	      <td> <strong>0.7.5</strong></td>
+              <td>OOo 1.1.x</td> 
+              <td>
+                Windows, Linux x86 (multi platform package)<br>
+              </td>
+              <td>
+                <a href="postgresql-sdbc-0.7.5-for-oo11.zip">http://dba.openoffice.org/drivers/<wbr>postgresql/postgresql-sdbc-0.7.5-for-oo11.zip</a>
+              </td>
+              <td>03484e135e2b3517a633936b211e7c7a</td>
+            </tr>
+          </tbody>
+        </table>
+      </p>
+      
+      <p> Older (outdated) builds can be found <a href="#older_versions">below</a>. If your platform does not appear in the above list, you can build the driver from <a href="#source"> source</a>.
+
+      <h2 id="install_2.0"> Installation with OOo 3.x/2.x </h2>
+      <table>
+      <tr><td bgcolor="lightgrey"> OOo 2.x</td><td>
+      There are two different ways to install the driver:<br>
+      <table>
+      <tr><td bgcolor="lightgrey">1</td><td>
+      Start OpenOffice, choose Tools/Package Manager ... <br>
+      Click on the add button and select the downladed file (DO NOT EXTRACT IT !) in the
+      upcoming File dialog. The driver gets installed now, afterwards, the file is listed
+      in the dialog with state enabled. In case you have installed an older version of the
+      driver, remove it now. Close the dialog and shutdown openoffice (even the
+      quickstarter on windows must be shut down !!!).
+      </td></tr>
+      <tr><td bgcolor="lightgrey">2</td><td>
+          Shutdown OpenOffice.org (even the
+          quickstarter on windows must be closed, see the system tray at the
+          bottom right of your desktop).
+      </p>
+
+      <p> Start a shell and switch to /path/to/openoffice/program.
+      <p> <strong>Check, whether you have installed an older version of the driver.</strong>
+
+      <pre>
+          unopkg list
+      </pre>
+
+      In case there is an older version, remove it e.g. by invoking
+
+      <pre>
+          unopkg remove postgresql-sdbc-0.6.2.zip
+      </pre>
+
+      . Then install the new version with the following command:
+
+      <pre>
+      unopkg add /path/to/your/download/postgresql-sdbc-0.7.6.zip
+      </pre>
+
+      . Using the --shared option will install the driver for all users.
+      </td></tr></table>
+
+      <p>
+      Then start the OpenOffice.org Base program ./sbase. In the upcoming dialog choose
+      the option <strong> connect to an existing database</strong>. In the
+      combobox should appear <strong>postgresql</strong> (if the it is not there,
+      the installation of the driver has failed).
+
+      <p>In the upcoming dialog, you can enter space separated name/value pairs describing
+         the database connection. Note that there must not be a leading nor a trailing space
+         surrounding the attributes. At the simplest level, this string can be empty
+         ( which means connecting to the user's database instance running on the same machine ).
+         A typical url e.g. is
+
+         <pre>
+         dbname=pqtest host=mydatabaseserver
+         </pre>
+         . A full list of possible options can be found on the <a href="http://www.postgresql.org/docs/7.3/static/libpq-connect.html">postgresql site</a>
+
+         . User/password can be given in the following dialog (so that the password does not appear
+         in plain text).
+         <p> You can press the Test Connection button to verify, that your settings work.
+
+      Then press the Finish button, and you can work with your postgresql database.
+
+      <p>
+      Tip: Open the Tools/Table Filter dialog afterwards and deselect the schemas and tables, you don't want to work with (typically
+      you won't want to work with the pg_catalog (postgresql intern) schema.
+      </td></tr></table>
+
+
+      <h2 id="install_1.1"> Installation with OOo 1.1.x </h2>
+
+      <table>
+      <tr><td bgcolor="lightgrey"> OOo 1.1</td><td>
+
+      <p> <strong> In case you have used an older version of this driver, you have to deinstall
+      the old one before</strong>. This can simply be done by deleting the postgresql-sdbc-$(VERSION).zip (e.g. 0.5.0
+      or 0.6.0) file from the OpenOffice1.1.0/user/uno_packages folder.
+
+      <p>
+        Copy the postgresql-sdbc-0.7.5-for-oo11.zip file in <code>OpenOffice1.1.0/user/uno_packages</code> folder
+	<strong>(Note: USE the zip file as a whole, DO NOT extract it)</strong>. Open up a shell and switch to
+        the OpenOffice1.1.0/program directory and start the
+      </p>
+      <p>
+        pkgchk
+      </p>
+      <p>
+        tool (assuming that you have a . in your PATH). It should deinstall the old and install
+        the new version during in one run in case you have followed the steps as described above.
+        On success, no output is given.
+      </p>
+      <p>
+        Alternatively, you can install the driver for all users of a OpenOffice.org
+        network installation. This must be done by the user, who installed the network installation
+        (typically root or Administrator). All users should terminate there office before, running
+        offices won't see an effect until next restart and at worst may crash during or
+        after the installation. Place the file into the
+        <code>OpenOffice1.1.0/share/uno_packages</code>
+
+        folder (it must be the OpenOffice1.1.0 directory, which contains all the shared
+         libraries and executables). Change the
+          ownership of the file to root. Then start
+      </p>
+      <p>
+      pkgchk --shared
+
+      <p> (again assuming that you have a . in PATH). </p>
+
+      <p> You can uninstall the package by deleting the file in the uno_packages
+       directory and starting pkgchk (or as root pkgchk --shared) again.
+      </p>
+
+          <h3>
+            Adding a datasource
+          </h3>
+          <p>
+          In case you have used an older version of this driver, you can continue
+          to use your earlier configured datasources.
+          </p>
+          <p>
+        </a>You can add a new datasource via the common Tools/Data Sources dialog.
+        Click on new datasource and select postgresql from the Database type combobox.
+        You should currently put all connection information into url line by using the
+        following format (except for user/password, which optionally can be entered differently, see below ):
+        <a name="url">
+          <h3>URL format
+          </h3>
+        </a>The <code>XDriver.connect()</code> expects a url as parameter. This section
+        specifies, how the url must look like to access the postgresql driver.
+      </p>
+      <p>
+        Format: <code>sdbc:postgresql:[name1=value1] [name2=value2] [...] </code>
+      </p>
+      <p>
+        The URL must start with the <code>sdbc:postgresql:</code>prefix. The string
+        following this prefix is the connection string as it is expected by the <a href="http://www.postgresql.org/docs/7.3/static/libpq-connect.html">
+          postgresql client API </a>. Note that there must not be a leading nor a trailing space
+          surrounding the attributes, but all attributes must be separated by a space.
+          At the simplest level, this string can be empty ( which means connecting to
+          the user's database instance running on the same machine ).
+       </p>
+          <p> If you want to connect with a password and you don't want to have it appear in the url,
+       you can instead activate the second (in OOo1.1.x unnamed) tab page between General and Tables,
+       fill in the user in the appropriate input field and check the password required box. You are
+       now prompted for the password when connecting to the data source.
+       </p>
+
+
+       <p> After you have entered the url, you should switch to the tables tab in the same
+       dialog. The driver connects to the database and shows the found schemas and tables.
+       Select the schemas you want to work with (in general, you won't want to work with
+       the pg_catalog schema).
+       <a name="features">
+      </td></tr></table>
+
+        <h2>Supported and missing features</h2>
+      <ul>
+        <li>
+          Integration into OpenOffice GUI via DataSources
+        </li>
+        <li> Viewing, inserting and updating tables via the beamer window (press F4)
+        </li>
+        <li> Creation of a new table, view or index
+        </li>
+        <li> Structural modifications to existing tables</li>
+        <li> Viewing and creation of table's relationships (relational keys)</li>
+        <li> Supported data types include now strings, numbers, binaries, date and time.</li>
+      </ul>
+
+      <a name="known_bugs">The</a> following features work with some limitations one needs to keep in mind:
+      <ul>
+        <li> Renaming tables<br>
+	     You can only change the schema of table or view, when your postgresql server's version is 8.1 or later.
+	     Note that the change is not transactional,
+	     (the alter table statement does not allow this). First the driver changes the schema
+	     and if this succeeds, it tries to change the table's name.
+	     
+	     With former versions, you can only change the table's name.
+	</li>
+        <li> Data modifcation <br>
+	     Modification of data in tables via the UI (e.g. via the beamer window) is only possible, when
+	     <strong>your table has a primary key</strong> and the primary key is part of the
+	     used select statement (otherwise the OOo framework has no possibility to find the row
+	     again to write the modification).
+	</li>
+	
+	<li> The serial datatype (and default values)<br>
+	     Support for serial  (= auto increment ) datatype is difficult to implement,
+	     because it is not really a type in postgresql.
+
+     	     <p> You can create tables with serial columns. Therefor you have
+	     to choose a int or big int as data type of the column and set the autoincrement
+	     flag to true. Note, that you can only do this during creation of the table
+	     (before you press the save button the <strong>first</strong> time), as postgresql does not
+	     support serials in ALTER TABLE statements.
+	     
+	     <p> Additionally it is difficult to retrieve the generated value after an insertion in
+	     such a table. The driver follows two strategies here. When the table supports
+	     posgresql oids, it uses oid to find the just inserted row again. In case it does not,
+	     it queries for the structure of the primary key of the table and uses the curr_val()
+	     function to retrieve the last increment of the serial in this session.
+	     <p> This is a little slow (because these reflection queries are executed for
+	     every insertion). It might be sped up with cashing the reflection data when
+	     too  many people complain.
+	 </li>
+	<li> Updateable resultsets<br>
+	   Updateable resultsets are currently implemented for selects on simple
+	   tables only. Resultsets containing data from multiple tables
+	   raise errors in case a modification is attempted.
+	 </li>
+	 <li>Creating and editing table structures<br>
+	    Creating and editing table structures works, but keep the following problems in mind
+	    <ol>
+	    <li> The table wizard does not yet work with the postgresql driver
+	    (see <a href="http://qa.openoffice.org/issues/show_bug.cgi?id=74185">i74185</a>).</li>
+	    <li> You cannot change the type (including the lengths for
+	    fixed width types) of a column. Instead delete the column,
+	    press save, add a column with the same name and choose your new type
+	    and press save again. This data stored in this column is lost.
+
+	    <p> When you change the type by accident, OOo behaves somewhat strange.
+	    When you press the save button, you don't get an error message but the
+	    save button does not become disabled as it does normally. You have to
+	    close the window without saving, otherwise you are locked up in
+	    this window.
+	    </li>
+	    <li>Note also, that
+	    all column comments are stored into the user's office
+	    configuration and not within the postgresql database.
+	    Consequently, the comments already stored in the postgresql
+	    database are not shown. <p>
+	    This is currently a limitation in the OOo framework itself,
+	    so the framework will need to change to allow this.
+	    </ol>
+	 </li>
+	 <li> Logging<br>
+           For diagnostic purposes, a rudimentary logging has been
+	   implemented in the driver. The loglevel can be set by editing
+	   a .ini or rc file in the extracted package. The file is
+	   located in the following path :
+	   ~/openoffice.org2/uno_packages/cache/uno_packages/postgresql-sdbc-0.7.6.zip.1086437099/postgresql-sdbc.unorc
+	   , where the number is different on your system. The file
+	   can be edited with a texteditor.  The logevel can be set to
+	   NONE (no logging), ERROR (only errornouss situations are logged),
+	    INFO (some more verbose output) and SQL (every SQL statement
+	   sent to the server is logged including access time in milliseconds ).
+
+	   The data gets logged into the sdbc-pqsql.log in the program directory.
+	   It would be nice, if someone with some database knowledge woud review
+	   the queries needed to reflect the postgresql database for
+	   performance problems, but just give me hints on the internal structure
+	   of the queries. I can't do anything against the fact, that some queries are
+	   executed multiple times (this must be done in the OOo framework).
+	 </li>
+	 <li> User Administration <br>
+	 Priviliges are not shown and cannot be modified in the user administration dialog.
+	 
+	 </li>
+	 <li> Knwon issues</li>
+	 <table>
+	 <tr>
+	 <td><a href="http://www.openoffice.org/issues/show_bug.cgi?id=30059">#i30059#</a></td>
+	  <td>Updates may fail on tables with non-primary-indexes</td>
+	 </tr>
+	 <tr>
+	 <td><a href="http://www.openoffice.org/issues/show_bug.cgi?id=16426">#i16426#</a></td>
+	  <td>Table design dialog offer not-existent schema name</td>
+	 </tr>
+	 </table>
+      </ul>
+
+
+      The following features are not implemented yet, but may follow in future.
+      <ul>
+        <li> data types like clobs, blobs and arrays  are not yet
+             supported. The whole datatype handling for non-standard datatypes is
+             crippled currently, here needs to be developed a concept first.
+        </li>
+        <li>
+          Callable statements (XConnection.prepareCall())
+        </li>
+      </ul>
+
+
+       <a name="api">
+          <h2>
+            Using the driver via the API</h2>
+        </a>You may use the driver via the API directly by instantiating <code>org.openoffice.comp.connectivity.pq.Driver</code>
+        service. You can use the driver also from within a python process or with a standalone java/C++ program.
+
+
+      <h2 id="source">Building from source </h2>
+      Build in a OO1.1 environment (this is needed to keep up compatibility with OOo1.1). I have actually
+      never checked, whether the driver builds in OOo2.0 env also.
+      <p>
+        Download the postgresql module from <a href="postgresql.zip">here</a>, it
+        contains the makefiles to build postgresql client API. You must place the
+        postgresql-7.3.2 tarball into the
+        download directory. Build and deliver the <code>postgresql</code> module.
+        Note, that the driver just uses the client part of the API. As postgresql
+        interprocess protocol is backward compatible, it shouldn't be problem to
+        later connect also to newer versions of the database.
+      </p>
+      <p>
+        Check out the connectivity project (e.g.
+      </p>
+      <p>
+        cvs co -r OpenOffice_1_1_rc3 connectivity
+      </p>
+      <p>
+        and then retrieve the postgresql driver code with this special tag OO_PQSDBC_x_y_z (where x,y,z are
+        the major, minor, micro of the version you wish to build).
+      </p>
+      <p>
+        cvs update -d connectivity/source/drivers/postgresql
+        connectivity/workben/postgresql<br>
+        cvs update -r OO_PQSDBC_0_6_1 connectivity/source/drivers/postgresql connectivity/workben/postgresql
+      </p>
+      <p>. Build connectivity/source/drivers/postgresql. You will then find a <code>postgresql-sdbc-0.x.y.zip</code>
+        uno-package in the bin or lib output directory.
+      </p>
+      <h3>
+        Test
+      </h3>
+      In order to test your build, you need a running instance of postgresql database
+      server and PyUNO. The test can be found in connectivity/workben/postgresql. The
+      test syntax for the dmake command is <code>dmake runtest
+        "dburl=sdbc:postgresql:dbname=pqtest" </code>. You should create a fresh
+      database pqtest (or any other name) as the test also writes data and drops
+      tables.
+      <p>
+        (Note, when you have never used postgresql server before and just want to test
+        your build, this short series of calls should give you an postgresql
+        test-server [note, that this is not the suggested way to install a postgresql
+        server, follow the postgresql instructions therefor]).
+        <table width="100%" bgcolor="lightgrey">
+          <tbody>
+            <tr>
+              <td><font size="-1">
+                  <pre>gunzip &lt; postgresql-7.3.2.tar.gz | tar -xvf -<br>cd postgresql-7.3.2<br>./configure --prefix=/path/to/your/postgres/installation<br>make ; make install<br>setenv PATH "$PATH":/path/to/your/postgres/installation/bin<br>mkdir /path/to/your/postgresql/installation/data<br>initdb -D /path/to/your/postgresl/installation/data<br>postmaster -D /path/to/your/postgresl/installation/data<br><br>now start a a separate shell:<br>setenv PATH "$PATH":/path/to/your/postgres/installation/bin<br>createuser <your-system-user><br>createdb pqtest<br><br><br></your-system-user></pre>
+                </font>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </p>
+      <p>
+
+     <a name="changes"><h2>Changes</h2></a>
+     <ul>
+     <li>Version 0.7.6b<br>
+       <ul>
+	 <li> <a href="http://www.openoffice.org/issues/show_bug.cgi?id=113494">i113494</a> the driver caused an error on OOo3.3 startup. This was fixed (an outdated configfile was removed from the package).</li>
+       </ul>
+     <li>Version 0.7.6a<br>
+       <ul>
+	 <li> <a href="http://qa.openoffice.org/issues/show_bug.cgi?id=108928">i108928</a> the driver didn't work with OOo3.2. This was fixed (an additional configuration
+	   file within the package was necessary).</li>
+       </ul>
+     <li>Version 0.7.6<br>
+        <ul>
+	<li> <a href="http://qa.openoffice.org/issues/show_bug.cgi?id=89685">i89685</a> numeric columns can now be edited again. The problem showed up since some OOo2.x version,
+	     it does not occur in OOo1.x. As this is the only change, there is no 0.7.6 for OOo1.x.
+	</ul>
+     <li>Version 0.7.5<br>
+        <ul>
+	<li> <a href="http://www.openoffice.org/issues/show_bug.cgi?id=52352">i52352</a> you get now results when executing native (postgresql) queries 
+	<li> minor build issues (
+	     <a href="http://qa.openoffice.org/issues/show_bug.cgi?id=80085">i80085</a>,
+	     <a href="http://qa.openoffice.org/issues/show_bug.cgi?id=77337">i77337</a>,
+	     <a href="http://qa.openoffice.org/issues/show_bug.cgi?id=77336">i77336</a> )
+	<li> <a href="http://www.openoffice.org/issues/show_bug.cgi?id=80904">i80904</a>
+	     a quoted single quote within a statement is now correctly recognized.
+	<li> There are now two different packages, one targeted at 1.1 version of OpenOffice, the other
+	     one targeted at 2.x version of OpenOffice. The linux version differ, the windows
+	     version is the same in both packages (both built in the OO1.1 build enviroment)
+	</ul>
+     <li>Version 0.7.4a<br>
+        <ul>
+	<li> identical source tree to 0.7.4, just ensures, that the driver also works, when OOo2.x is started with soffice.bin.
+	(see <a href="http://www.openoffice.org/issues/show_bug.cgi?id=77188">i77188</a>). Works only on Linux x86 with OOo2.2 and above.
+	</ul>
+     <li>Version 0.7.4<br>
+        <ul>
+	<li> Earlier versions of the driver couldn't interoperate with OOo's table wizard. There
+	     had to be done changes within the driver (integrated in 0.7.4 release)
+	     and OOo's table wizard (see
+	     <a href="http://qa.openoffice.org/issues/show_bug.cgi?id=74185">i74185</a>). The fixes
+	     for the table wizard have not yet been integrated into OOo (probably not before OOo 2.3).
+	<li> The varchar type is now reflected as varchar (You realize the change only in the
+	     table's design view, there is now the type 'Text' instead of 'Text fix').
+	<li> Regression: The linux version of 0.7.3 had logging enabled by default, therefor the
+	     driver logs information into the program directory (sdbc-pqsql.log), this has been
+	     disabled again as it should.
+        </ul>
+     <li>Version 0.7.3<br>
+        <ul>
+	<li> Now both schema and table name can be changed via "table's context menu / Rename",
+	     when postgresql-server's version is 8.1 or later. Note that the change is not transactional,
+	     (the alter table statement does not allow this). First the driver changes the schema
+	     and if this succeeds, it tries to change the table's name.
+	   
+	<li> In former version, the retrieval of auto values failed, when the table/primary key column
+	     names had to be quoted. This bug has been fixed.
+	<li> The driver now builds also in OOo 2.x build environment.
+        </ul>
+     <li>Version 0.7.2<br>
+        <ul>
+        <li> postgresql &gt;= 8.1.x fully supported<br>
+             In former versions, the driver could not edit/create a table with postgresql 8.1.0 and above.
+             This has been fixed (this was, because postgresql 8.1 does some stricter SQL checking).
+        <li> Type content recognition<br>
+
+             The postgresql function, that returns the type of a certain column of a result set
+             was not used correctly, this has been fixed. No content type recognition is needed
+             anymore (was introduced in 0.7.1) (thx a lot for the hint from the postgresql community).
+        </ul>
+     </li>
+     <li>Version 0.7.1<br>
+        <ul>
+        <li> Domain types fully supported (
+             <a href="http://www.openoffice.org/issues/show_bug.cgi?id=63918">63918</a>).<br>
+             In former versions, the driver could not handle columns with with domain types (
+             domain type columns were simply empty within the UI), now they are
+             fully supported.
+        <li> Type content recognition
+             <a href="http://www.openoffice.org/issues/show_bug.cgi?id=61887">61887</a>).<br>
+             When the postgresql database API does not inform about the type of a certain column in
+             a resultset, the driver now <i>guesses</i> the type of the column from content
+             of the first 100 rows within the resultset. Integers, numerics, date, time and timestamps
+             are guessed.
+             The is useful e.g. when you drag data into a spreadsheet.
+        <li> View renaming/deletion (
+             <a href="http://qa.openoffice.org/issues/show_bug.cgi?id=61777">61777</a> )<br>
+             Views can now be renamed or deleted using OOo UI.
+        </ul>
+     </li>
+     <li>Version 0.7.0<br>
+        <ul>
+        <li> raised driver from alpha to beta state (
+             no serious bugs have been reported for the earlier versions)
+        <li> fixed several issues with the former driver version and OO2.0.x (
+             problems with table creation, table renaming and crashes in user administration
+             have been fixed)
+        <li> data can now be inserted into tables without oids and the addition gets correctly
+             reflected in the UI. This also holds for tables with auto increment values in the
+             primary key. In former versions, this was only the case for tables with oids.
+             However the current solution requires some additional reflection queries, which
+             makes it a little slow and resource consuming.
+        <li> fixed a crash when executing native sql (see
+             <a href="http://qa.openoffice.org/issues/show_bug.cgi?id=52352">i52352</a>).
+             The bug itself is not fixed though, native sql statements still return empty resultsets only.
+        <li> adding/deleting users and password change is now supported. Privilege administration
+             is still not supported.
+        </ul>
+     <li>Version 0.6.2<br>
+        <ul>
+        <li> Tables created by OOo should now appear immediatly in the list of available
+             tables e.g. in the beamer window. Structural changes to tables (e.g. the addition
+             of a column) are now shown after reselecting the table in the beamer window. In
+             earlier versions, one had to a reconnect on the data source to see the changes.
+        <li> The driver now supports arrays, however, as the OOo framework itself currently does
+             not display arrays correctly, they are still reflected as plain strings as in earlier
+             versions. You can only make use of this new feature by using the driver via the API.
+        <li> An annoying bug has been fixed, that led to 'Input Error' pop up windows in forms. Under
+             certain circumstances, the 'not null' column property could be transported transported
+             incorrectly to OOo.
+        </ul>
+     <li>Version 0.6.1<br>
+       <ul>
+       <li> Data type handling<br>
+         Some postgresql data types are not yet correctly suppported by the driver (
+         arrays, blobs and 'esoteric types' such as circle, point, etc.). In prior version,
+         values of this type were not displayed by the driver at all. Now, they are shown in their
+         default string representation, which also allows modification of the values.
+         <p> All these types get currently mapped to the OOo Memo type, this is recognizable
+         in the Edit-table window, where they are grouped together in the type selection box.
+       </li>
+       <li> Named parameters in prepared statements (or subform support)<br>
+         In prior versions, only a '?' as a placeholder in prepared statements was supported,
+         which did not work out properly with subforms. Now additionally named parameters
+         (e.g. ':x' or ':myvar') are supported, which allows full subform support.
+       </li>
+       </ul>
+     </li>
+     </ul>
+      <h2 id="report">Reporting bugs</h2>
+      Please read through the <a href="#known_bugs"> known bugs section</a> before reporting bugs. Create an issue
+      and assign the issue to myself (jbu@openoffice.org).Questions should be raised
+      in dev@dba.openoffice.org mailinglist. Please don't fire usage questions directly at myself.
+
+        <h2 id="older_versions">Outdated versions</h2>
+        <table border="5">
+          <tbody>
+            <tr>
+              <th>Version</th>
+              <th>
+                Platform</th>
+              <th>
+                Location</th>
+              <th>
+                md5sum</th>
+            </tr>
+	    <tr>
+	      <td> 0.7.6 for &gt;= OO2.x and &lt;= OOo3.1 (released 2008-08-23)</td>
+              <td>
+                Windows, Linux x86 (multi platform package)<br>
+              </td>
+              <td>
+                <a href="postgresql-sdbc-0.7.6.zip">http://dba.openoffice.org/drivers/<wbr>postgresql/postgresql-sdbc-0.7.6.zip</a>
+              </td>
+              <td>f30bd071ce0e35da6eadedbec4f6eef5</td>
+            </tr>
+            <tr>
+	      <td> 0.7.5 for OO2.x (released 2007-08-27)</td>
+              <td>
+                Windows, Linux x86 (multi platform package)<br>
+              </td>
+              <td>
+                <a href="postgresql-sdbc-0.7.5.zip">http://dba.openoffice.org/drivers/<wbr>postgresql/postgresql-sdbc-0.7.5.zip</a>
+              </td>
+              <td>6db1a4b3b811957e4c1191ae2ba736ac</td>
+            </tr>
+            <tr>
+	      <td> 0.7.4  (released 2007-02-16)</td>
+              <td>
+                Windows, Linux x86 (multi platform package)<br>
+		Note: For Linux x86, use this only with OpenOffice.org 1.1 (see below)
+              </td>
+              <td>
+                <a href="postgresql-sdbc-0.7.4.zip">http://dba.openoffice.org/drivers/<wbr>postgresql/postgresql-sdbc-0.7.4.zip</a>
+              </td>
+              <td>4e15fa7dcb017b66dfb060498ab92f4d</td>
+            </tr>
+            <tr>
+	      <td> 0.7.4a(recommended for OOo2.2 and above) (released 2007-05-27)</td>
+              <td>
+                ONLY Linux x86  with OpenOffice.org 2.2 and above (see issue
+		<a href="http://www.openoffice.org/issues/show_bug.cgi?id=77188">i77188</a>)
+              </td>
+              <td>
+                <a href="postgresql-sdbc-0.7.4a.zip">http://dba.openoffice.org/drivers/<wbr>postgresql/postgresql-sdbc-0.7.4a.zip</a>
+              </td>
+              <td>02e30ed857e836230159ab052ce21a70</td>
+            </tr>
+            <tr>
+	      <td> 0.7.3 (released 2007-01-08 )</td>
+              <td>
+                Windows, Linux x86 (multi platform package)
+              </td>
+              <td>
+                <a href="postgresql-sdbc-0.7.3.zip">http://dba.openoffice.org/drivers/<wbr>postgresql/postgresql-sdbc-0.7.3.zip</a>
+              </td>
+              <td>8586328f1e57f17e458a42da949ea174</td>
+            </tr>
+            <tr>
+	      <td> 0.7.2</td>
+              <td>
+                Windows, Linux x86 (multi platform package)
+              </td>
+              <td>
+                <a href="postgresql-sdbc-0.7.2.zip">http://dba.openoffice.org/drivers/<wbr>postgresql/postgresql-sdbc-0.7.2.zip</a>
+              </td>
+              <td>f3fa2a7b859eb5d1ccc2859a739cf620</td>
+            </tr>
+            <tr>
+              <td> 0.7.1 </td>
+              <td>
+                Windows, Linux x86 (multi platform package)
+              </td>
+              <td>
+                <a href="postgresql-sdbc-0.7.1.zip">http://dba.openoffice.org/drivers/<wbr>postgresql/postgresql-sdbc-0.7.1.zip</a>
+              </td>
+              <td>213a34341a3c9e12476f58c76e29204b</td>
+            </tr>
+            <tr>
+              <td> 0.7.0</td>
+              <td>
+                Windows, Linux x86 (multi platform package)
+              </td>
+              <td>
+                <a href="postgresql-sdbc-0.7.0.zip">http://dba.openoffice.org/drivers/<wbr>postgresql/postgresql-sdbc-0.7.0.zip</a>
+              </td>
+              <td>3d5d7996474f75cee9de20d741ffa5d8</td>
+            </tr>
+            <tr>
+              <td> 0.6.2</td>
+              <td>
+                Windows, Linux x86 (multi platform package)
+              </td>
+              <td>
+                <a href="postgresql-sdbc-0.6.2.zip">http://dba.openoffice.org/drivers/<wbr>postgresql/postgresql-sdbc-0.6.2.zip</a>
+              </td>
+              <td>9522c14a1bc45edc3b5b3b50c99c2f9a</td>
+            </tr>
+            <tr>
+              <td> 0.6.1 </td>
+              <td>
+                Windows, Linux x86 (multi platform package)
+              </td>
+              <td>
+                <a href="postgresql-sdbc-0.6.1.zip">http://dba.openoffice.org/drivers/<wbr>postgresql/postgresql-sdbc-0.6.1.zip</a>
+              </td>
+              <td>058689603b18a4f9a050e47fb35921ec</td>
+            </tr>
+            <tr>
+              <td> 0.6.0 </td>
+              <td>
+                Windows, Linux x86 (multi platform package)
+              </td>
+              <td>
+                <a href="postgresql-sdbc-0.6.0.zip">http://dba.openoffice.org/drivers/<wbr>postgresql/postgresql-sdbc-0.6.0.zip</a>
+              </td>
+              <td>e7866011e976641b206b43c269fa1fcf</td>
+            </tr>
+            <tr>
+              <td> 0.5.0 </td>
+              <td>
+                Windows, Linux x86, Solaris sparc (multi platform uno package)
+              </td>
+              <td>
+                <a href="postgresql-sdbc-0.5.0.zip">http://dba.openoffice.org/drivers/<wbr>postgresql/postgresql-sdbc-0.5.0.zip</a>
+              </td>
+              <td>24edb8fac50676b486dc9534a73f9e3e</td>
+            </tr>
+            <tr>
+              <td>0.5.0</td>
+              <td>Linux PPC</td>
+              <td>
+                <a href="ftp://ftp.sunsite.utk.edu/pub/linux/yellowdog/software/openoffice/postgresql-sdbc-0.5.0.zip">
+                  ftp://ftp.sunsite.utk.edu/pub<wbr>/linux/yellowdog/software/openoffice/<wbr>postgresql-sdbc-0.5.0.zip</a>
+              </td>
+              <td>
+                n.a.</td>
+            </tr>
+          </tbody>
+        </table>
+      <h2 id="author">Authors</h2>
+      The driver has been implemented and is maintained by Joerg Budischewski (<a href="mailto:JoergBudi@gmx.de">JoergBudi@gmx.de</a>
+      ) in my spare time.
+    </div>
+  </body>
+</html>

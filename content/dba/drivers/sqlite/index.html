@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <style type="text/css">@import url("/css/dba.css");</style>
+    <title>Linux SQLite driver - alpha version</title>
+    <script type="text/javascript" src="/js/dba_default.js"></script>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  </head>
+  <body>
+    <b>Project Sections</b>:
+        <a href="../../index.html">Home</a>
+      | <a href="../../specifications/index.html">Specifications</a>
+      | <a href="../../QA/index.html">QA</a>
+      | <a href="../../development/index.html">Development</a>
+      | <a href="../index.html"><b>Database Drivers</b></a><br/>
+        <b>Database drivers</b>:
+          <a href="../postgresql/index.html">PostgreSQL</a>
+        | <a href="../mdb/index.html">Linux MDB</a>
+        | <a href="../sqlite/index.html"><b>SQLite</b></a>
+    <hr/>
+    <div class="dba">
+      <h1 id="sqlite_driver">sqlite-sdbc-driver-0.1.0</h1>
+      <h2>Content</h2>
+      <ul>
+        <li>
+          <p style="margin-bottom: 0cm;"><a href="#intro">Introduction</a>
+          </p>
+        </li>
+        <li>
+          <p style="margin-bottom: 0cm;"><a href="#install">Installation</a>
+          </p>
+          <ul>
+            <li>
+              <p style="margin-bottom: 0cm;"><a href="#datasource">Adding a datasource</a>
+              </p>
+            </li>
+            <li>
+              <p style="margin-bottom: 0cm;"><a href="#url">Url format</a>
+              </p>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <p style="margin-bottom: 0cm;"><a href="#features">Features</a>
+          </p>
+        </li>
+        <li>
+          <p style="margin-bottom: 0cm;"><a href="#questions">Open questions</a>
+          </p>
+        </li>
+        <li>
+          <p style="margin-bottom: 0cm;"><a href="#source">Building from source</a>
+          </p>
+        </li>
+        <li>
+          <p><a href="#author">Author</a>
+          </p>
+        </li>
+      </ul>
+      <h2><a name="intro"></a>Introduction</h2>
+      <p><a name="install"></a>Use <a href="http://www.sqlite.org">SQLite 2.8.x</a> to
+        read single file SQLite databases under Linux (and later Windows).
+      </p>
+      <h2>Installation</h2>
+      <ol>
+        <li>
+          <p style="margin-bottom: 0cm;">On Linux, install the SQLite binary package
+            suitable for your distro. The minimum SQLite version required is 2.8.13
+          </p>
+        </li>
+        <li>
+          <p style="margin-bottom: 0cm;">Install OpenOffice.org 1.1 or newer.<br>
+          </p>
+        </li>
+        <li>
+          <p>Download the binary version of the driver.
+          </p>
+        </li>
+      </ol>
+      <p>
+      <ul>
+      <li><a name="datasource"></a><a href="http://www.ch-werner.de/sqliteodbc/sqlite-sdbc-0.1.1.zip">sqlite-sdbc-driver-0.1.1.zip</a></li>
+      <li><a name="datasource"></a><a href="http://www.ch-werner.de/sqliteodbc/sqlite3-sdbc-0.1.1.zip">sqlite3-sdbc-0.1.1.zip</a></li>
+      </ul>
+      (The sqlite3... driver is a quick port to the upcoming SQLite 3 engine (currently beta version 3.0.6 on www.sqlite.org). It does
+      not use newer features of the SQLite3 API but merely is an adaption of the current driver.)
+      </p>
+
+      <p>
+        Copy the zip file in <code>OpenOffice1.1/user/uno_packages</code> folder (Note:
+        USE the zip file as a whole, DO NOT extract it). Open up a shell and switch to
+        the OpenOffice1.1/program directory and start the pkgchk tool. On success, no
+        output is given. Alternatively, you can install the driver for all users of a
+        OpenOffice.org network installation by placing the file into the <code>OpenOffice1.1/share/uno_packages</code>
+        and starting pkgchk --shared You can uninstall the package by deleting the file
+        in the uno_packages directory and starting pkgchk again.
+      </p>
+      <h3>Adding a datasource</h3>
+      <p><a name="url"></a>You can now add a datasource via the common Tools/Data
+        Sources dialog. Click on new datasource and select sqlite from the Database
+        type combobox. Then put the file name of your SQLite database right after the
+        sqlite: into the URL input field.</p>
+      <h3>URL format</h3>
+      <p>Format: <code>sdbc:sqlite:sqlite_database_filename </code>
+      </p>
+      <h3><br>
+      </h3>
+      <h2><a name="features"></a>Supported and missing features</h2>
+      <p>The driver supports reading and writing SQLite 2 databases. It has the
+        following limitations:
+      </p>
+      <ol>
+        <li>
+          <p style="margin-bottom: 0cm;">It uses the encoding of the SQLite engine.
+            Depending on how SQLite was generated, this is ISO 8859-1 or UTF-8.
+          </p>
+        </li>
+        <li>
+          <p style="margin-bottom: 0cm;">The data types supported for now are INTEGER and
+            VARCHAR. In result sets, INTEGER is only reported for "INTEGER PRIMARY KEY"
+            fields, i.e. SQLite's auto incrementing columns. All other columns are
+            VARCHARs.</p>
+        </li>
+        <li>
+          <p>It is possible to create new SQLite tables from OpenOffice.org's table
+            designer. However, creating/deleting indexes may fail due to bugs in SQLite's
+            SQL parser or OpenOffice.org's SQL dialect.</p>
+        </li>
+        <li>
+          The driver is always in auto commit mode.</li>
+        <li>
+          <p>The driver may contain memory leaks and bugs which can crash OpenOffice.org<br>
+          </p>
+        </li>
+      </ol>
+      <h2><a name="questions"></a>Open questions</h2>
+      <h2><a name="source"></a>Building from source</h2>
+      <p>Linux: Fetch the <a href="http://www.ch-werner.de/sqliteodbc/sqlite-sdbc.tar.gz">
+          source code</a> and unpack it in .../connectivity/source/drivers. Setup your
+        OOo environment for building, then goto the
+        .../connectivity/source/drivers/sqlite directory and type dmake. The source
+        code expects the SQLite header files and libraries in standard places
+        (/usr/include and /usr/lib)<br>
+      </p>
+      <p>Building on Windows should be possible but was not tested so far.<br>
+      </p>
+      <h2><a name="author"></a>Authors</h2>
+      <p style="margin-bottom: 0cm;">The driver has been implemented based on the MDB
+        driver by Christian Werner(chw@openoffice.org)
+      </p>
+    </div>
+  </body>
+</html>

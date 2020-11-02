@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>Data Sources Character Sets - Functional Spec</title>
+</head>
+<body>
+<div style="text-align: center;"><font size="+3"><span
+ style="font-weight: bold;">Data Sources Character Sets<br>
+<span style="font-style: italic;"><span style="font-weight: bold;"><font
+ size="+1">Functional Specification<br>
+</font></span></span></span></font>
+<div style="text-align: left;">
+<h2>Content</h2>
+<div style="margin-left: 40px;"><a href="#abstract">Abstract<br>
+</a><a href="#functional">Functional Description</a><br>
+</div>
+<h2><a name="abstract"></a>Abstract</h2>
+OpenOffice.org, Unicode-enabled itself, allows to access non-Unicode
+(8-Bit) databases. Thus when transfering string data from connections
+to such databases, OOo must convert the data into UniCode. For this,
+the user can specify which character set to use for this conversion.<br>
+<h2><a name="functional"></a>Functional Description</h2>
+<ul>
+  <li>
+    <p><font face="arial, sans-serif" size="2">Character sets 				are
+specified per data source. This means that in the data source
+				administration dialog, there is an option where the user chooses
+				a character set to use for every connection created for a data
+				source.</font></p>
+				</li>
+  <li>
+    <p><font face="arial, sans-serif" size="2">The Character 				Sets
+setting is available for the following data source types: 				Adabas,
+ODBC, dBase, Text, MySQL (when adapted via ODBC, see the 				<a
+ href="../specifications/MySQL_data_source_page.html">MySQL
+spec</a>)</font></p>
+				</li>
+  <li>
+    <p><font size="2" face="arial, sans-serif">In general 				(with on
+exception, see below), only character sets which are 				part of the
+respective <a href="http://www.iana.org/assignments/character-sets">IANA-standard</a>
+				can be supported by StarOffice. The reason for this is that
+				character sets need to be transported via UNO, and instead of
+				defining an own standard for naming them, we decided to use the
+				most comprehensive standard available - IANA.</font></p>
+				</li>
+  <li>
+    <p><font face="arial, sans-serif" size="2">OpenOffice.org
+				versions up to 1.0.x supported only a very limited set of
+				character sets, namely windows-1252, macintosh, IBMPC 437,
+				~850,~860,~861,~863,~865,~866, UTF-8 and Big5-HKSCS.</font></p>
+			</li>
+</ul>
+			
+<ul>
+  <p>Since OpenOffice.org 1.1, this list has been extended. For
+				compatibility reasons, the encodings above form the very minimal
+				set of required encodings.</p>
+  <p><font face="arial, sans-serif" size="2"><i>Nowadays, OOo 				data
+sources support every encoding which is known to OOo in 				general,
+and which is a valid IANA name. This list is much too 				large to cite
+it here completely, and it can be extended in the 				future without
+further notice.</i></font></p>
+  <li>
+    <p style="font-style: normal;"><font face="arial, sans-serif"
+ size="2">The 				display names of the character sets are the usual
+names as used 				in other places, too (for instance
+"Tools/Options/Load/Save/HTML compatibility/Character Set").</font></p>
+				</li>
+  <li>
+    <p style="font-style: normal;"><font face="arial, sans-serif"
+ size="2">There 				is one "virtual" character set named "System".
+				Choosing this just means that the current system character set is
+				used, so the user does not need to care for an explicit setting.
+				This is the default when creating new data sources. For Text and
+				dBase data sources, all text encodings which do not have a
+				constant character size are forbidden. For instance, UTF-8 uses a
+				different number of bytes to code different characters &#8211; 				thus
+UTF-8 and all character sets with the same characteristics 				are not
+allowed for dBase and Text.</font></p>
+				</li>
+  <li>
+    <p style="font-style: normal;"><font face="arial, sans-serif"
+ size="2">Consider 				a character set which, in the current
+environment or for the 				current data source type, is not available.
+First, this means 				that the list box for selecting the character sets
+does not 				display it. If, however, the user changed the character set
+for a 				data source by other means than our UI, then we fallback to
+				&#8220;System encoding&#8221;, means instead of the invalid 				encoding
+&#8220;System&#8221; is displayed.</font></p>
+			</li>
+</ul>
+<font size="+3"><span style="font-weight: bold;"><span
+ style="font-style: italic;"><span style="font-weight: bold;"></span></span></span></font><br>
+<hr style="width: 100%; height: 1px;">Author: <a
+ href="mailto:fs@openoffice.org">Frank 			Sch&ouml;nheit</a><br>
+Last Modified: $Date: 2003/07/08 07:21:39 $<br>
+<span style="font-style: italic;">Copyright &COPY; 2001-2003
+OpenOffice.org</span><font size="+3"><span style="font-weight: bold;"><span
+ style="font-style: italic;"><span style="font-weight: bold;"></span></span></span></font></div>
+</div>
+</body>
+</html>

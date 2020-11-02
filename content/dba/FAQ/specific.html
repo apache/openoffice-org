@@ -1,0 +1,487 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+    <meta content="text/css" http-equiv="Content-Style-Type">
+    <style type="text/css">@import url("/css/dba.css");</style>
+    <title>OpenOffice.org Base - Tips 'n' Tricks</title>
+    <script type="text/javascript" src="/js/dba_default.js"></script>
+  </head>
+  <body lang="en-US">
+    <span style="font-weight: bold;">Project Sections</span>:
+      <a href="../index.html">Home</a>
+    | <a href="../specifications/index.html">Specifications</a>
+    | <a style="font-weight: bold;" href="../FAQ/index.html">Tips 'n' Tricks</a>
+    | <a href="/QA/index.html">QA</a>
+    | <a href="../development/index.html">Development</a>
+    | <a href="/drivers/index.html">Database Drivers</a><br/>
+      <span style="font-weight: bold;">Tips 'n' Tricks Sections</span>:
+        <a href="../FAQ/specific.html"><b>Database Specific Problems</b></a>
+    <hr/>
+    <div class="dba">
+      <h1 id="dba_tt_specific">Database Specific Problems</h1>
+      <table style="width: 100%; text-align: left;" border="0" cellspacing="0" cellpadding="0">
+        <tbody>
+          <tr>
+            <td colspan="2" rowspan="1" width="20"><a style="font-weight: bold;" href="#mysql">MySQL</a><br>
+            </td>
+          </tr>
+          <tr>
+            <td width="20"/>
+            <td><a href="#libversion">I get a strange error message about <b>library versions</b> and <b>symbols</b> - what's up?</a></td>
+          </tr>
+          <tr>
+            <td width="20"/>
+            <td><a href="#connectmysql">How can I <b>connect</b> to <b>MySQL</b>?</a></td>
+          </tr>
+          <tr>
+            <td width="20"><br>
+            </td>
+            <td><a href="#editmysqltable">I cannot <b>edit</b> a newly created <b>table</b>!</a>
+            </td>
+          </tr>
+          <tr>
+            <td><br>
+            </td>
+            <td><a href="#mysqlenc">My strings are not correctly <b>encoded</b> when using
+                MySQL <b>connector</b> (JDBC).</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;"/>
+            <td style="vertical-align: top;"><a href="#mysqlnumeric">I get an error when
+                inserting values into a numeric field.</a></td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;"><br>
+            </td>
+            <td style="vertical-align: top;"><a href="#mysqllocalhost">I can't get <b>write
+                  access</b> to the database running on <b>localhost</b> when connecting via <b>JDBC</b>!</a><br>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" rowspan="1"><a href="#sqlserver"><b>SQL Server</b><br>
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td><br>
+            </td>
+            <td><a href="#sqls_auto">How to get the correct value for an auto value (<b>auto
+                  increment</b>) when inserting a new row?<br>
+              </a>
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="2" rowspan="1"><a href="#ms_access"><b>MS Access</b><br>
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td><br>
+            </td>
+            <td><a href="#access_auto"><b>Auto increment</b> fields are not shown by connecting over <b>ODBC</b><br>
+              </a>
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="2" rowspan="1"><a href="#sapdb"><b>SAP DB</b><br>
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td><br>
+            </td>
+            <td><a href="#sap_adabas">How do I connect to a <b>SAP DB</b> through the <b>Adabas</b>
+                driver?<br>
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" rowspan="1"><a href="#postgresql"><b>PostgreSQL</b><br>
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td><br>
+            </td>
+            <td><a href="#postgres_hang">When trying to connect (ODBC) to <b>PostgreSQL</b> my
+                Office seems to <b>hang</b>.<br>
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td><br>
+            </td>
+            <td><a href="#postgres_serial"><b>Serial</b> columns don't work.<br>
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td><br>
+            </td>
+            <td><a href="#postgres_tcid">When executing a SQL query I get the error message
+                that column <b>tcid</b> is duplicate.<br>
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;"><br>
+            </td>
+            <td style="vertical-align: top;"><a href="#tablecrash">OOo <b>crashes</b> when I <b>create
+                  a table</b> in PostgreSQL</a><br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;"><br>
+            </td>
+            <td style="vertical-align: top;"><a href="#postgres_oid">I get the error <b>"ERROR: Attribute oid not found"</b> when I try to <b>open</b> a table</h4>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" rowspan="1" width="20"><a href="#oracle"><b>Oracle</b><br>
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td><br>
+            </td>
+            <td><a href="#oracle_odbc">When using the <b>ODBC</b> driver to connect to <b>Oracle</b>,
+                not all seems to work well.<br>
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td><br>
+            </td>
+            <td><a href="#Oracle_Currency">All columns are shown as currency fields when using
+                their <b>JDBC</b> driver.</a><br>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" rowspan="1"><a href="#db2"><b>DB2</b><br>
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td><br>
+            </td>
+            <td><a href="#db2_relation">When trying to create <b>relations</b>, the new
+                relations aren't visible after reopening the relation design.<br>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <hr style="width: 100%; height: 4px;">
+      <h3><a name="mysql"></a>MySQL</h3>
+
+      <!-- ============================================== -->
+      <h4><a name="libversion"></a>I get a strange error message about library versions and symbols - what's up?</h4>
+      <p>
+      When you try to connect to a MySQL Database via ODBC you may receive the following
+      error:
+      <pre>
+[unixODBC][Driver Manager]Can't open lib
+'/usr/lib/libmyodbc.so.2' : /usr/lib/libmyodbc.so.2: symbol errno, version
+GLIBC_2.0 not defined in file libc.so.6 with link time reference
+</pre>
+
+      This is because the ODBC Driver was compiled for kernel 2.4 and you are using
+      kernel 2.6.<br/>
+      A workaround is to start Open Office with a command line like this:
+      LD_ASSUME_KERNEL=2.4.22 '/path/to/OpenOffice.org1.1.1/soffice' -calc
+      </p>
+
+      <p>Thanks to <a href="mailto:eddie.who@gmx.at">Othmar Edel</a> for contributing this item.</p>
+      <div style="text-align: right;">
+        <div style="text-align: right;"><a href="http://www.openoffice.org">OpenOffice.org</a>
+          - <a href="http://dba.openoffice.org/index.html">Database Access</a> - <a href="index.html">
+            Tips and Tricks</a> - <a href="#mysql">MySQL</a><br>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <h4><a name="connectmysql"></a>How can I connect to MySQL?</h4>
+      We just introduced a new type, specifically for MySQL. But you have always to
+      know which kind of connection you want to use. Please have a look at the MySQL
+      spec page <a href="http://dba.openoffice.org/specifications/MySQL_data_source_page.html">
+        http://dba.openoffice.org/specifications/MySQL_data_source_page.html</a>.<br>
+      First you should decide which kind of driver you should use. At the moment
+      there are two possibilities. Either you use an ODBC or a JDBC implementation.<br>
+      <br>
+      via ODBC: A good first look at can be found on the <a href="http://www.unixodbc.org/doc/OOoMySQL9.pdf">
+        unixODBC sites</a> in the manuals section.<br>
+      <br>
+      via JDBC: (These steps are only valid for the MySQL connector)<br>
+      <ol>
+        <li>
+          Get the newest JDBC driver from <a href="http://www.mysql.com">www.mysql.com</a>
+        </li>
+        <li>
+          Start OpenOffice.org
+          <ul>
+            <li>
+              Goto Tools/Options/Security
+            </li>
+            <li>
+              press the browse button near "Classpath" and browse for the *.jar file(s) of
+              your driver.</li>
+          </ul>
+        </li>
+        <li>
+          Restart OpenOffice.org
+        </li>
+        <li>
+          Open the data source administration dialog (Tools/Data Sources...)
+        </li>
+        <li>
+          Press the button "New Data Source", in the name field, enter a valid name like
+          "MySQL JDBC", and keep "JDBC" as type.
+        </li>
+        <li>
+          Enter the data source URL mysql://host:3306/DataabaseName
+        </li>
+        <li>
+          Switch to the tab page JDBC. Now you have to enter the driver class name. For
+          the MySQL connector driver you have to insert: com.mysql.jdbc.Driver.<br>
+          If you use any other kind of driver, you have to look at the manual for the
+          correct driver name.
+        </li>
+        <li>
+          Enter the name of the user you wish to connect, and mark the checkbox if this
+          user needs a password.
+        </li>
+        <li>
+          To be sure that your settings will be saved, press the Apply button.
+        </li>
+        <li>
+          To test if you could connect to MySQL switch to the Tables page.</li>
+      </ol>
+      If all went well you should now see the tables which already exists in the
+      database. If the connection has failed the tables control in the middle will be
+      disabled.<br>
+      <br>
+      <div style="text-align: right;">
+        <div style="text-align: right;"><a href="http://www.openoffice.org">OpenOffice.org</a>
+          - <a href="http://dba.openoffice.org/index.html">Database Access</a> - <a href="index.html">
+            Tips and Tricks</a> - <a href="#mysql">MySQL</a><br>
+        </div>
+      </div>
+      <h4><a name="editmysqltable"></a>I cannot edit a newly created table!</h4>
+      The first reason may be that the table was created without a primary key or a
+      unique index. In this case open the table design for that specific table and
+      select the columns which identify a row uniquely, open the context menu and
+      select the entry "Primary key" and save the table. After that the table should
+      be editable.<br>
+      <br>
+      Second reason, the table privileges are not set right. This is the case when
+      the table "Mysql.tables_priv" doesn't contain the right privileges. To verify
+      this, open a new query design and insert in the text view the statement "SELECT
+      * FROM mysql.tables_priv" and switch the mode to native in toolbar. When
+      executing this statement, you should see your table name with the necessary
+      privileges. If your table name doesn't appear in this list, you have to grant
+      yourself the privileges. This isn't done automatically. Open the context menu
+      upon your tables entry on the left side in your data source browser and choose
+      SQL. In the appearing window insert "GRANT ALL ON yourtablename TO
+      yourusername" (find more about the <a href="http://www.mysql.com/doc/en/GRANT.html">
+        GRANT syntax</a> at the MySQL documentation site) and execute this statement.
+      Now your table should be editable.<br>
+      If you're connecting to MySQL via JDBC, the
+      <span style="font-weight: bold; font-family: monospace;">useHostsInPrivileges=false</span>
+      option in the connection URL may be worth additional consideration. It tells
+      MySQL to ignore the host which you are connecting from, when calculating your
+      privileges.<br>
+      <br>
+      Third reason, your driver which you are using isn't up to date. In earlier
+      releases of MyODBC we recognize that the privileges and the currently username
+      are not correctly returned.<br>
+      <br>
+      <div style="text-align: right;"><a href="http://www.openoffice.org">OpenOffice.org</a>
+        - <a href="http://dba.openoffice.org/index.html">Database Access</a> - <a href="index.html">
+          Tips and Tricks</a> - <a href="index.html#mysql">MySQL</a></div>
+      <h4><a name="mysqlenc"></a>My strings are not correctly encoded when using MySQL
+        connector (JDBC).</h4>
+      You can enable the use of Unocode with extending the connection string for
+      jdbc:mysql:<br>
+      <br>
+      <span style="font-family: monospace;">mysql://host:3306/DatabaseName?<span style="font-weight: bold;">useUnicode=TRUE&amp;characterEncoding=your
+encoding</span></span><br>
+      <br>
+      When the character encoding is not set, then the encoding from server will be
+      used. Please have a look at the MySQL documentation for more information about
+      this topic.<br>
+      <br>
+      <div style="text-align: right;"><a href="http://www.openoffice.org">OpenOffice.org</a>
+        - <a href="http://dba.openoffice.org/index.html">Database Access</a> - <a href="index.html">
+          Tips and Tricks</a> - <a href="index.html#mysql">MySQL</a><br>
+        <div style="text-align: left;">
+          <h4><a name="mysqlnumeric"></a>I got an error when inserting values into a
+            numeric field.</h4>
+          The current implementation of MySQL ODBC doesn't recognize the correct locale.
+          So if you try to insert any value into a numeric field and you use an other
+          locale than English, you got an error.<br>
+          <br>
+          The workaround for this would be to switch your language setting to US-English.<br>
+          <br>
+          Here is a link to the issue, describing the bug. <a href="http://dba.openoffice.org/project/www/issues/show_bug.cgi?id=6600">
+            http://dba.openoffice.org/project/www/issues/show_bug.cgi?id=6600</a><br>
+          <br>
+          <div style="text-align: right;"><a href="http://www.openoffice.org">OpenOffice.org</a>
+            - <a href="http://dba.openoffice.org/index.html">Database Access</a> - <a href="file:///G:/src/dba/www/FAQ/index.html">
+              Tips and Tricks</a> - <a href="file:///G:/src/dba/www/FAQ/index.html#mysql">MySQL</a><br>
+            <div style="text-align: left;">
+              <h4><a name="mysqllocalhost"></a>I can't get write access to the database running
+                on localhost when connecting via JDBC!</h4>
+              You probably already granted permissions to <b>user@localhost</b> for the table
+              in question, and you probably already <a href="/howto/IgnoreDriverPrivileges.html">
+                convinced OOo to assume all privileges</a> (ignoring what the driver tells).
+              Then you may also need to grant privileges to <b>user@127.0.0.1</b> (which is
+              the IP address of "localhost").<br>
+              Credits go to <a href="mailto:jpmcc@openoffice.org">John McCreesh</a> for
+              finding this.<br>
+              <div style="text-align: right;"><a href="http://www.openoffice.org">OpenOffice.org</a>
+                - <a href="http://dba.openoffice.org/index.html">Database Access</a> - <a href="file:///G:/src/dba/www/FAQ/index.html">
+                  Tips and Tricks</a> - <a href="file:///G:/src/dba/www/FAQ/index.html#mysql">MySQL</a><br>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h3><b><a name="sqlserver"></a>SQL Server</b></h3>
+      <h4><b><a name="sqls_auto"></a>How to get the correct value for an "auto value"
+          (auto increment) when inserting a new row?</b></h4>
+      To fetch auto increment values, insert "SELECT @@identity" into the field
+      "Query of generated values" on the second page in the data source
+      administration dialog.<br>
+      <br>
+      <div style="text-align: right;">
+        <div style="text-align: right;"><b><a href="http://www.openoffice.org">OpenOffice.org</a>
+            - <a href="http://dba.openoffice.org/index.html">Database Access</a> - <a href="index.html">
+              Tips and Tricks</a> - <a href="#sqlserver">SQL server</a><br>
+          </b>
+        </div>
+      </div>
+
+      <h3><b><a name="ms_access"></a>MS Access</b></h3>
+      <h4><b><a name="access_auto"></a>Auto increment fields are not shown by connecting over ODBC</b></h4>
+      The problem with Access and ODBC is that you can create tables which contain auto increment fields, but the driver never tell you again that this column was an auto increment one. So auto increment columns,
+Access and ODBC do not work well with each other. If possible, connecting over ADO is to prever.<br>
+      <br>
+      <div style="text-align: right;">
+        <div style="text-align: right;"><b><a href="http://www.openoffice.org">OpenOffice.org</a>
+            - <a href="http://dba.openoffice.org/index.html">Database Access</a> - <a href="index.html">
+              Tips and Tricks</a> - <a href="#ms_access">MS Access</a><br>
+          </b>
+        </div>
+      </div>
+
+      <h3><b><a name="sapdb"></a>SAP DB</b></h3>
+      <h4><b><a name="sap_adabas"></a>How do I connect to a SAP DB through the Adabas
+          driver?</b></h4>
+        To connect to SAP DB, you have to create a new folder (e.g. sapdb), in this
+        folder you create a 2nd folder named sql. In this folder you copy all libs (on
+        windows dlls) which are included in the ODBC driver of SAP DB. Then you define
+        a new data source for your SAP DB. A sample for this can be found in your SAP
+        DB installation (under Windows just open your ?ata Sources (ODBC)?. The next
+        step will be to define a system variable named DBROOT. This variable has to
+        point to the folder you created in the first step (sapdb). Now you can define a
+        data source in your OpenOffice and access the database.<br>
+        On Unix systems you also have to define soft link named odbclib.so to
+        ContentStorage.so. (ln -s $DBROOT/depend74/lib/ContentStorage.so
+        $DBROOT/depend74/lib/odbclib.so )<br>
+        This lib can be found in your sap installation sapdb/depend74/lib (may be this
+        folder is named different depending on your SapDB version you use).<br>
+        <br>
+        Another possibility to connect to SapDB would be simply to use the existing
+        ODBC or JDBC driver from SapDB.<br>
+      <div style="text-align: right;"><b><a href="http://www.openoffice.org">OpenOffice.org</a>
+          - <a href="http://dba.openoffice.org/index.html">Database Access</a> - <a href="index.html">
+            Tips and Tricks</a> - <a href="#sapdb">SAP DB</a><br>
+        </b>
+      </div>
+      <h3><b><a name="postgresql"></a>PostgreSQL</b></h3>
+      <h4><b><a name="postgres_hang"></a>When trying to connect (ODBC) to PostgreSQL my
+          Office seems to hang.</b></h4>
+        Check the ODBC driver you are using. If this driver has the number 7.02.0005
+        then you have to go back and use a prior one. 7.02.0003 works.<br>
+        <br>
+      <div style="text-align: right;"><b><a href="http://www.openoffice.org">OpenOffice.org</a>
+          - <a href="http://dba.openoffice.org/index.html">Database Access</a> - <a href="index.html">
+            Tips and Tricks</a> - <a href="#postgresql">PostgreSQL</a><br>
+        </b>
+      </div>
+      <h4><b><a name="postgres_serial"></a>Serial columns don't work.</b></h4>
+        Can't be solved until the ODBC driver returns correct information about this
+        kind of type. :-( Sorry.<br>
+        You might also be interested in <a href="http://www.openoffice.org/issues/show_bug.cgi?id=3872">
+          this bug</a> which requests the feature.<br>
+      <div style="text-align: right;"><b><a href="http://www.openoffice.org">OpenOffice.org</a>
+          - <a href="http://dba.openoffice.org/index.html">Database Access</a> - <a href="index.html">
+            Tips and Tricks</a> - <a href="index.html#postgresql">PostgreSQL</a><br>
+        </b>
+      </div>
+      <h4><b><a name="postgres_tcid"></a>When executing a SQL query I get the error
+          message that column "tcid" is duplicate.</b></h4>
+        This is a bug of the driver with number 7.02.0005. The version 7.02.0003
+        works. You can download PostgreSQL ODBC drivers from <a href="http://www.geocities.jp/inocchichichi/psqlodbc">
+          here</a>.<br>
+        <br>
+      <div style="text-align: right;"><b><a href="http://www.openoffice.org">OpenOffice.org</a>
+          - <a href="http://dba.openoffice.org/index.html">Database Access</a> - <a href="index.html">
+            Tips and Tricks</a> - <a href="index.html#postgresql">PostgreSQL</a><br>
+        </b>
+      </div>
+      <h4><b><a name="tablecrash"></a>OOo crashes when I create a table in PostgreSQL</b></h4>
+            If you're using unixodbc 2.2.4, please <a href="http://www.unixodbc.org/">upgrade
+            to 2.2.6</a>, at least. This version fixes the problem.<br>
+            If you're already using 2.2.6 or higher, or if you're using another driver
+            manager, or another platform, then you encountered a new bug. In this case,
+            please help us improving the product and <a href="http://www.openoffice.org/issues/enter_bug.cgi">
+              submit an issue for this</a> (component: "database access").<br>
+            <br>
+          <div style="text-align: right;"><b><a href="http://www.openoffice.org">OpenOffice.org</a>
+              - <a href="http://dba.openoffice.org/index.html">Database Access</a> - <a href="file:///G:/src/www/dba/FAQ/index.html">
+                Tips and Tricks</a> - <a href="file:///G:/src/www/dba/FAQ/index.html#postgresql">
+                PostgreSQL</a><br>
+            </b>
+          </div>
+       <h4><b><a name="postgres_oid"></a>I get the error "ERROR: Attribute oid not found" when I try to open a postgres table</b></h4>
+            Please UNcheck the "updateable cursors" option in the settings of the ODBC driver
+            <br>
+          <div style="text-align: right;"><b><a href="http://www.openoffice.org">OpenOffice.org</a>
+              - <a href="http://dba.openoffice.org/index.html">Database Access</a> - <a href="file:///G:/src/www/dba/FAQ/index.html">
+                Tips and Tricks</a> - <a href="file:///G:/src/www/dba/FAQ/index.html#postgresql">
+                PostgreSQL</a><br>
+            </b>
+          </div>
+
+      <h3><b><a name="oracle"></a>Oracle</b></h3>
+      <h4><b><a name="oracle_odbc"></a>When using the ODBC driver to connect to Oracle,
+          not all seems to work well.</b></h4>
+        Try the newest JDBC driver from Oracle - older drivers are known to have some
+        problems together with OpenOffice.org.<br>
+      <h4><b><a name="Oracle_Currency"></a>All columns are shown as currency fields when
+          using their JDBC driver.</b></h4>
+        This is a bug in the JDBC driver from Oracle.<br>
+      <div style="text-align: right;"><b><a href="http://www.openoffice.org">OpenOffice.org</a>
+          - <a href="http://dba.openoffice.org/index.html">Database Access</a> - <a href="index.html">
+            Tips and Tricks</a> - <a href="#oracle">Oracle</a><br>
+        </b>
+      </div>
+      <h3><b><a name="db2"></a>DB2</b></h3>
+      <h4><b><a name="db2_relation"></a>When trying to create relations, the new
+          relations aren't visible after reopening the relation design.</b></h4>
+        This is a problem the ODBC driver for DB2 has. You should switch to their JDBC
+        driver to avoid such problems. May be this driver is even better than the ODBC
+        one.<br>
+        <br>
+      <div style="text-align: right;"><b><a href="http://www.openoffice.org">OpenOffice.org</a>
+          - <a href="http://dba.openoffice.org/index.html">Database Access</a> - <a href="index.html">
+            Tips and Tricks</a> - <a href="#db2">DB2</a></b></div>
+    </div>
+  </body>
+</html>

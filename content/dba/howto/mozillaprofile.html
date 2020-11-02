@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>How do I change the preferred mozilla address book user profile?</title>
+</head>
+<body>
+<h1><a name="mozTocId184500" class="mozTocH1"></a>How do I change the
+preferred mozilla address book user profile?</h1>
+<h2>Table of Content</h2>
+<ul>
+  <li><a href="#background">Background</a></li>
+  <li><a href="#config">Configuration</a></li>
+  <li><a href="#restrictions">Restrictions</a></li>
+  <li><a href="#sample">Sample Basic Macro</a><br>
+  </li>
+</ul>
+<h2><a name="background"></a>Background</h2>
+OpenOffic.org features a database driver which allows access to a
+variety of address data sources (mozilla address data, Outlook/Outlook
+Express address data, LDAP data).<br>
+When accessing the mozilla database, by default the first user profile
+found is choosen. On systems where more than one profile exists, this
+may not be what the user wants.<br>
+<h2><a name="config"></a>Configuration</h2>
+There is a configuration entry which tells the SDBC driver accessing
+the address data which profile to use when logging on to mozilla (I use
+the term "log on" here, because for every access to any of the
+above-mentioned data types a connection to mozilla, which provides all
+the data, is necessary).<br>
+<br>
+Setting this entry to a mozilla profile name string forces the driver
+to prefer this profile &#8211; if it is existent.<br>
+<br>
+This entry is located in the configuration module
+/org.openoffice.Office.DataAccess. There is a key
+/DriverSettings/com.sun.star.comp.sdbc.MozabDriver, which stores
+settings for the SDBC address book driver (the second part of the kay is
+the it's implementation name).<br>
+<br>
+Thereunder, there is a key MozillaPreferences/ProfileName, which is of
+type string. If this string is a valid mozilla profiles name, this
+profile is used when logging on to mozilla.<br>
+<h2><a name="restrictions"></a>Restrictions</h2>
+As mozilla does not allow to change the profile name of a session while
+the session is running, after changing the configuration entry
+OpenOffice.org must be restarted if it already opened a mozilla session
+&#8211; i.e. if you already connected to any of the above-mentioned address
+data source types. If you did not do this before, your change in the
+configuration will take effect immediately.<br>
+<h2><a name="sample"></a>Sample Basic Macro</h2>
+The following Basic function will change the configuration entry in
+question to the string passed&nbsp; to it (You can download this macro
+in the <a href="../downloads/index.html">Tools section</a>):
+<pre style="font-family: monospace;"><span
+ style="color: rgb(0, 0, 128);">Sub</span> <span
+ style="color: rgb(0, 128, 0);">ChangeMozillaAddressBookProfile</span>( <span
+ style="color: rgb(0, 128, 0);">sProfileName</span> <span
+ style="color: rgb(0, 0, 128);">as String</span> )<br>  <span
+ style="color: rgb(102, 102, 102);">' access the global configuration provider</span><br>  <span
+ style="color: rgb(0, 0, 153);"><span style="color: rgb(0, 0, 128);">Dim</span> </span><span
+ style="color: rgb(0, 128, 0);">aConfigProvider</span> <span
+ style="color: rgb(0, 0, 128);">As Object</span><br><br>  <span
+ style="color: rgb(0, 128, 0);">aConfigProvider</span> = <span
+ style="color: rgb(0, 128, 0);">createUnoService</span>( _<br>	<span
+ style="color: rgb(255, 0, 0);">"com.sun.star.configuration.ConfigurationProvider"</span> )<br><br>  <span
+ style="color: rgb(102, 102, 102);">' create an access object for the driver settings key</span><br>  <span
+ style="color: rgb(0, 0, 153);"><span style="color: rgb(0, 0, 128);">Dim</span> </span><span
+ style="color: rgb(0, 128, 0);">aParams</span>(0) <span
+ style="color: rgb(0, 0, 128);">As new</span> <span
+ style="color: rgb(0, 128, 0);">com.sun.star.beans.PropertyValue</span><br>  <span
+ style="color: rgb(0, 128, 0);">aParams</span>(0).<span
+ style="color: rgb(0, 0, 128);">Name </span>= <span
+ style="color: rgb(255, 0, 0);">"nodepath"</span><br>  <span
+ style="color: rgb(0, 128, 0);">aParams</span>(0).<span
+ style="color: rgb(0, 128, 0);">Value</span> = _<br>	  <span
+ style="color: rgb(255, 0, 0);">"/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.MozabDriver"</span><br><br>  <span
+ style="color: rgb(0, 0, 128);">Dim</span> <span
+ style="color: rgb(0, 128, 0);">aDriverSettings</span> <span
+ style="color: rgb(0, 0, 128);">As Object</span><br>  <span
+ style="color: rgb(0, 128, 0);">aDriverSettings</span> = <span
+ style="color: rgb(0, 128, 0);">aConfigProvider.createInstanceWithArguments</span>( _<br>    <span
+ style="color: rgb(255, 0, 0);">"com.sun.star.configuration.ConfigurationUpdateAccess"</span>, _<br>    <span
+ style="color: rgb(0, 128, 0);">aParams</span>() )<br><br>  <span
+ style="color: rgb(102, 102, 102);">' create an access object for the mozilla preferences node</span><br>  <span
+ style="color: rgb(0, 0, 128);">Dim</span> <span
+ style="color: rgb(0, 128, 0);">aMozPrefs</span> <span
+ style="color: rgb(0, 0, 128);">As Object</span><br>  <span
+ style="color: rgb(0, 128, 0);">aMozPrefs</span> = <span
+ style="color: rgb(0, 128, 0);">aDriverSettings.getByName</span>( <span
+ style="color: rgb(255, 0, 0);">"MozillaPreferences"</span> )<br><br>  <span
+ style="color: rgb(102, 102, 102);">' set the preferred profile name</span><br>  <span
+ style="color: rgb(0, 128, 0);">aMozPrefs.replaceByName</span>( <span
+ style="color: rgb(255, 0, 0);">"ProfileName"</span>, <span
+ style="color: rgb(0, 128, 0);">sProfileName</span> )<br><br>  <span
+ style="color: rgb(102, 102, 102);">' commit the changes done</span><br>  <span
+ style="color: rgb(0, 128, 0);">aDriverSettings.commitChanges()<br><span
+ style="color: rgb(0, 0, 128);">End Sub</span><br></span></pre>
+<br>
+</body>
+</html>
