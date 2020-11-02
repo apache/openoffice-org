@@ -1,0 +1,1368 @@
+<html>
+<head>
+<title>Interface XLayoutManager</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XLayoutManager-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">frame</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XLayoutManager</td>
+</tr>
+<tr>
+<td/></tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>central interface to query for, create, destroy and manipulate user
+ interface elements which are bound to a layout manager.
+
+ </dd>
+<dd><p>
+ Every user interface element which is controlled by a layout manager has
+ a unique identifier called resource URL.
+
+ A resourcce URL must meet the following syntax:
+ "private:resource/$type/$name". It is only allowed to use ascii characters
+ for type and name.
+
+ Currently the following user interface element types are defined:
+ <ul>
+ <li><b>menubar</b>A configurable user interface element representing
+ a menu bar.</li>
+ <li><b>popupmenu</b>A configurable user interface element representing
+ a popup menu.</li>
+ <li><b>toolbar</b>A configurable user interface element a tool
+ bar.</li>
+ <li><b>statusbar</b>A configurable user interfave element representing
+ a status bar.</li>
+ <li><b>floater</b>A basic user interface element representing a
+ floating window.</li>
+ </ul>
+
+ </dd>
+<dt><b>Since </b></dt>
+<dd>OOo 2.0</dd>
+<dt><b>See also</b></dt>
+<dd>com::sun::star::ui::UIElementTypes</dd>
+<dt><b>See also</b></dt>
+<dd><a href="XFrame.html">XFrame</a><br>
+</p>
+
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#attachFrame">attachFrame</a></td>
+<td class="imsum_right">attaches a <a href="XFrame.html">XFrame</a> to a layout manager.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#reset">reset</a></td>
+<td class="imsum_right">resets the layout manager and remove all of its internal user interface
+ elements.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getCurrentDockingArea">getCurrentDockingArea</a></td>
+<td class="imsum_right">provides the current docking area size of the layout manager.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getDockingAreaAcceptor">getDockingAreaAcceptor</a></td>
+<td class="imsum_right">retrieves the current docking area acceptor that controls the border space of the frame's
+ container window.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setDockingAreaAcceptor">setDockingAreaAcceptor</a></td>
+<td class="imsum_right">sets a docking area acceptor that controls the border space of the frame's container window.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#createElement">createElement</a></td>
+<td class="imsum_right">creates a new user interface element.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#destroyElement">destroyElement</a></td>
+<td class="imsum_right">destroys a user interface element.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#requestElement">requestElement</a></td>
+<td class="imsum_right">request to make a user interface element visible if it is not in hidden state.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getElement">getElement</a></td>
+<td class="imsum_right">retrieves a user interface element which has been created before.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getElements">getElements</a></td>
+<td class="imsum_right">retrieves all user interface elements which are currently instanciated.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#showElement">showElement</a></td>
+<td class="imsum_right">shows a user interface element.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#hideElement">hideElement</a></td>
+<td class="imsum_right">hides a user interface element.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#dockWindow">dockWindow</a></td>
+<td class="imsum_right">docks a window based user interface element to a specified docking area.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#dockAllWindows">dockAllWindows</a></td>
+<td class="imsum_right">docks all windows which are member of the provided user interface element type.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#floatWindow">floatWindow</a></td>
+<td class="imsum_right">forces a window based user interface element to float.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#lockWindow">lockWindow</a></td>
+<td class="imsum_right">locks a window based user interface element if it's in a docked state.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#unlockWindow">unlockWindow</a></td>
+<td class="imsum_right">unlocks a window based user interface element if it's in a docked state.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setElementSize">setElementSize</a></td>
+<td class="imsum_right">sets a new size for a window based user interface element.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setElementPos">setElementPos</a></td>
+<td class="imsum_right">sets a new position for a window based user interface element.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setElementPosSize">setElementPosSize</a></td>
+<td class="imsum_right">sets a new position and size for a window based user interface element.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#isElementVisible">isElementVisible</a></td>
+<td class="imsum_right">retrieves the current visibility state of a window based user interface element.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#isElementFloating">isElementFloating</a></td>
+<td class="imsum_right">retrieves the current floating state of a window based user interface element.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#isElementDocked">isElementDocked</a></td>
+<td class="imsum_right">retrieves the current docking state of a window based user interface element.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#isElementLocked">isElementLocked</a></td>
+<td class="imsum_right">retrieves the current lock state of a window based user interface element.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getElementSize">getElementSize</a></td>
+<td class="imsum_right">retrieves the current size of a window based user interface element.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getElementPos">getElementPos</a></td>
+<td class="imsum_right">retrieves the current pixel position of a window based user interface element.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#lock">lock</a></td>
+<td class="imsum_right">prohibit all layout updates until unlock is called again.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#unlock">unlock</a></td>
+<td class="imsum_right">permit layout updates again.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#doLayout">doLayout</a></td>
+<td class="imsum_right">forces a complete new layouting of all user interface elements.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setVisible">setVisible</a></td>
+<td class="imsum_right">sets the layout manager to invisible state and hides all user interface elements.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#isVisible">isVisible</a></td>
+<td class="imsum_right">retrieves the visibility state of a layout manager.
+
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="attachFrame" class="membertitle">attachFrame</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>attachFrame</b>(</td>
+<td valign="top">[in] <a href="XFrame.html">XFrame</a></td>
+<td valign="bottom">&nbsp;Frame );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>attaches a <a href="XFrame.html">XFrame</a> to a layout manager.
+
+ </dd>
+<dt><b>Parameter Frame</b></dt>
+<dd>specifies the frame that should be attached to the layout manager
+
+ <p>
+ A layout manager needs a <a href="XFrame.html">XFrame</a> to be
+ able to work. Without a it no user interface elements can be created.
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="reset" class="membertitle">reset</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>reset</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>resets the layout manager and remove all of its internal user interface
+ elements.
+
+ </dd>
+<dd><p>
+ This call should be handled with care as all user interface elements will
+ be destroyed and the layout manager is reseted to a state after a
+ <a href="#attachFrame">attachFrame</a> has been made. That means an attached frame
+ which has been set by <a href="#attachFrame">attachFrame</a> is not released.
+ The layout manager itself calls reset after a component has been attached
+ or reattached to a frame.
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getCurrentDockingArea" class="membertitle">getCurrentDockingArea</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">::com::sun::star::<a href="../awt/module-ix.html">awt</a>::<a href="../awt/Rectangle.html">Rectangle</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getCurrentDockingArea</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>provides the current docking area size of the layout manager.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>The ::com::sun::star::<a href="../awt/module-ix.html">awt</a>::<a href="../awt/Rectangle.html">Rectangle</a> contains pixel values. The
+ members of ::com::sun::star::<a href="../awt/module-ix.html">awt</a>::<a href="../awt/Rectangle.html">Rectangle</a> are filled as following:
+ <ul>
+ <li>X = docking area on left side (in pixel)</li>
+ <li>Y = docking area on top side (in pixel)</li>
+ <li>Width = docking area on right side (in pixel)</li>
+ <li>Height = docking area on bottom side (in pixel)</li>
+ </ul>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getDockingAreaAcceptor" class="membertitle">getDockingAreaAcceptor</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">::com::sun::star::<a href="../ui/module-ix.html">ui</a>::<a href="../ui/XDockingAreaAcceptor.html">XDockingAreaAcceptor</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getDockingAreaAcceptor</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>retrieves the current docking area acceptor that controls the border space of the frame's
+ container window.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>current docking area acceptor which controls the border space of frame's container window.
+
+ <p>
+ A docking area acceptor retrieved by this method is owned by the layout manager. It is not
+ allowed to dispose this object, it will be destroyed on reference count!
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setDockingAreaAcceptor" class="membertitle">setDockingAreaAcceptor</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setDockingAreaAcceptor</b>(</td>
+<td valign="top">[in] ::com::sun::star::<a href="../ui/module-ix.html">ui</a>::<a href="../ui/XDockingAreaAcceptor.html">XDockingAreaAcceptor</a></td>
+<td valign="bottom">&nbsp;xDockingAreaAcceptor );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>sets a docking area acceptor that controls the border space of the frame's container window.
+
+ </dd>
+<dt><b>Parameter xDockingAreaAcceptor</b></dt>
+<dd>a docking area acceptor which controls the border space of frame's container window.
+
+ <p>
+ A docking area acceptor decides if the layout manager can use requested border space for
+ docking windows. If the acceptor denies the requested space the layout manager automatically
+ set all docked windows into floating state and will not use this space for docking.<br/>
+ After setting a docking area acceptor the object is owned by the layout manager. It is not
+ allowed to dispose this object, it will be destroyed on reference count!
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="createElement" class="membertitle">createElement</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>createElement</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>creates a new user interface element.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies which user interface element should be created. A resourcce URL must meet the following
+ syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+ name.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="destroyElement" class="membertitle">destroyElement</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>destroyElement</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>destroys a user interface element.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies which user interface element should be destroyed. A resourcce URL must meet
+ the following syntax: "private:resource/$type/$name". It is only allowed to use ascii
+ characters for type and name.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="requestElement" class="membertitle">requestElement</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>requestElement</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>request to make a user interface element visible if it is not in hidden state.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies which user interface element should be made visible. A resourcce URL must
+ meet the following syntax: "private:resource/$type/$name". It is only allowed to use
+ ascii characters for type and
+ name.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>returns <b>true</b> if the user interface element could be made visible, otherwise
+ <b>false</b> will be returned.
+
+ <p>
+ If a user interface element should forced to the visible state
+ <a href="XLayoutManager.html">XLayoutManager</a>::<a href="XLayoutManager.html#showElement">showElement</a> should be used. This function can be
+ used for context dependent elements which should respect a the current visibility
+ state.
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getElement" class="membertitle">getElement</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">::com::sun::star::<a href="../ui/module-ix.html">ui</a>::<a href="../ui/XUIElement.html">XUIElement</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getElement</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>retrieves a user interface element which has been created before.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies which user interface element should be retrieved. A resourcce URL must meet the following
+ syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+ name.
+
+ <p>
+ The layout manager instance is owner of the returned user interface element. That means that the life time of
+ the user interface element is controlled by the layout manager. It can be disposed at every time!
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getElements" class="membertitle">getElements</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">sequence&lt; ::com::sun::star::<a href="../ui/module-ix.html">ui</a>::<a href="../ui/XUIElement.html">XUIElement</a> &gt;</td>
+</tr>
+<tr>
+<td valign="top"><b>getElements</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>retrieves all user interface elements which are currently instanciated.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a sequence of user interface elements providing ::com::sun::star::<a href="../ui/module-ix.html">ui</a>::<a href="../ui/XUIElement.html">XUIElement</a>
+ interface.
+
+ <p>
+ The layout manager instance is owner of the returned user interface elements. That means that the life time of
+ the user interface elements is controlled by the layout manager. They can be disposed at every time!
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="showElement" class="membertitle">showElement</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>showElement</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>shows a user interface element.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies which user interface element should be shown. A resourcce URL must meet the following
+ syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+ name.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>returns <b>true</b> if the user interface element has been shown, otherwise <b>false</b> will be returned.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="hideElement" class="membertitle">hideElement</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>hideElement</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>hides a user interface element.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies which user interface element should be hidden. A resourcce URL must meet the following
+ syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+ name.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>returns <b>true</b> if the user interface element has been hidden, otherwise <b>false</b> will be returned.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="dockWindow" class="membertitle">dockWindow</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>dockWindow</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../ui/module-ix.html">ui</a>::<a href="../ui/DockingArea.html">DockingArea</a></td>
+<td valign="bottom">&nbsp;DockingArea,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../awt/module-ix.html">awt</a>::<a href="../awt/Point.html">Point</a></td>
+<td valign="bottom">&nbsp;Pos );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>docks a window based user interface element to a specified docking area.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies which user interface element should be docked. A resourcce URL must meet the following
+ syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+ name.
+
+ </dd>
+<dt><b>Parameter DockingArea</b></dt>
+<dd>specifies on which docking area the window based user interface element should docked.
+
+ </dd>
+<dt><b>Parameter Pos</b></dt>
+<dd>specifies the position inside the docking area.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>returns <b>true</b> if the user interface element has been docked, otherwise <b>false</b> will be returned.
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd>::com::sun::star::<a href="../ui/module-ix.html">ui</a>::<a href="../ui/DockingArea.html">DockingArea</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="dockAllWindows" class="membertitle">dockAllWindows</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>dockAllWindows</b>(</td>
+<td valign="top">[in] short</td>
+<td valign="bottom">&nbsp;nElementType );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>docks all windows which are member of the provided user interface element type.
+
+ </dd>
+<dt><b>Parameter nElementType</b></dt>
+<dd>specifies which user interface element type should be docked.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>returns <b>true</b> if all user interface elements of the requested type could be
+ docked, otherwise <b>false</b> will be returned.
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd>::com::sun::star::<a href="../ui/module-ix.html">ui</a>::<a href="../ui/UIElementType.html">UIElementType</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="floatWindow" class="membertitle">floatWindow</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>floatWindow</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>forces a window based user interface element to float.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies which user interface element should be float. A resourcce URL must meet the following
+ syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+ name.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>returns <b>true</b> if the user interface element has been docked, otherwise <b>false</b> will be returned.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="lockWindow" class="membertitle">lockWindow</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>lockWindow</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>locks a window based user interface element if it's in a docked state.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies which user interface element should be locked. A resourcce URL must meet the following
+ syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+ name.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>returns <b>true</b> if the user interface element has been locked, otherwise <b>false</b> will be returned.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="unlockWindow" class="membertitle">unlockWindow</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>unlockWindow</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>unlocks a window based user interface element if it's in a docked state.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies which user interface element should be unlocked. A resourcce URL must
+ meet the following syntax: "private:resource/$type/$name". It is only allowed
+ to use ascii characters for type and name.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>returns <b>true</b> if the user interface element has been unlocked, otherwise
+ <b>false</b> will be returned.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setElementSize" class="membertitle">setElementSize</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setElementSize</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../awt/module-ix.html">awt</a>::<a href="../awt/Size.html">Size</a></td>
+<td valign="bottom">&nbsp;Size );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>sets a new size for a window based user interface element.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies which user interface element should be resized. A resourcce URL must meet the following
+ syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+ name.
+
+ </dd>
+<dt><b>Parameter Size</b></dt>
+<dd>specifies the new size in pixel.
+
+ <p>
+ It is up to the layout manager to decide if the user interface element can be resized. The new size can be retrieved
+ by calling <a href="#getElementSize">getElementSize</a>.
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setElementPos" class="membertitle">setElementPos</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setElementPos</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../awt/module-ix.html">awt</a>::<a href="../awt/Point.html">Point</a></td>
+<td valign="bottom">&nbsp;Pos );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>sets a new position for a window based user interface element.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies which user interface element should be moved. A resourcce URL must meet the following
+ syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+ name.
+
+ </dd>
+<dt><b>Parameter Pos</b></dt>
+<dd>specifies the new position in pixel.
+
+ <p>
+ It is up to the layout manager to decide if the user interface element can be moved. The new position can be retrieved
+ by calling <a href="#getElementPos">getElementPos</a>.
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setElementPosSize" class="membertitle">setElementPosSize</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setElementPosSize</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../awt/module-ix.html">awt</a>::<a href="../awt/Point.html">Point</a></td>
+<td valign="bottom">&nbsp;Pos,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../awt/module-ix.html">awt</a>::<a href="../awt/Size.html">Size</a></td>
+<td valign="bottom">&nbsp;Size );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>sets a new position and size for a window based user interface element.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies which user interface element should be moved and resized. A resourcce URL must meet the following
+ syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+ name.
+
+ </dd>
+<dt><b>Parameter Pos</b></dt>
+<dd>specifies the new position in pixel.
+
+ </dd>
+<dt><b>Parameter Size</b></dt>
+<dd>specifies the new position in pixel.
+
+ <p>
+ It is up to the layout manager to decide if the user interface element can be moved and resized. The new position and size can
+ be retrieved by calling <a href="#getElementPos">getElementPos</a> and <a href="#getElementSize">getElementSize</a>.
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="isElementVisible" class="membertitle">isElementVisible</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>isElementVisible</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>retrieves the current visibility state of a window based user interface element.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies for which user interface element the visibility state should be retrieved. A resource URL must meet
+ the following syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+ name.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd><b>true</b> if the user interface element is visible, otherwise <b>false</b>.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="isElementFloating" class="membertitle">isElementFloating</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>isElementFloating</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>retrieves the current floating state of a window based user interface element.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies for which user interface element the floating state should be retrieved. A resource URL must meet
+ the following syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+ name.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd><b>true</b> if the user interface element is floating, otherwise <b>false</b>.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="isElementDocked" class="membertitle">isElementDocked</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>isElementDocked</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>retrieves the current docking state of a window based user interface element.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies for which user interface element the docking state should be retrieved. A resource URL must meet
+ the following syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+ name.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd><b>true</b> if the user interface element is docked, otherwise <b>false</b>.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="isElementLocked" class="membertitle">isElementLocked</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>isElementLocked</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>retrieves the current lock state of a window based user interface element.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies for which user interface element the lock state should be retrieved. A resource URL must meet
+ the following syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+ name.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd><b>true</b> if the user interface element is locked, otherwise <b>false</b>.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getElementSize" class="membertitle">getElementSize</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">::com::sun::star::<a href="../awt/module-ix.html">awt</a>::<a href="../awt/Size.html">Size</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getElementSize</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>retrieves the current size of a window based user interface element.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies for which user interface element the current size should be retrieved. A resource URL must meet
+ the following syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+ name.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the size in pixel of the user interface element. A non-window based user interface element provides a zero size.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getElementPos" class="membertitle">getElementPos</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">::com::sun::star::<a href="../awt/module-ix.html">awt</a>::<a href="../awt/Point.html">Point</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getElementPos</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceURL );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>retrieves the current pixel position of a window based user interface element.
+
+ </dd>
+<dt><b>Parameter ResourceURL</b></dt>
+<dd>specifies for which user interface element the current position should be retrieved. A resource URL must meet
+ the following syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+ name.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the size in pixel of the user interface element. A non-window based user interface element provides a zero size.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="lock" class="membertitle">lock</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>lock</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>prohibit all layout updates until unlock is called again.
+
+ </dd>
+<dd><p>
+ This call can be used to speed up the creation process of serveral user interface elements. Otherwise the layout manager
+ would calculate the layout for every creation.
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="unlock" class="membertitle">unlock</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>unlock</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>permit layout updates again.
+
+ </dd>
+<dd><p>
+ This function should be called to permit layout updates. The layout manager starts to calculate the new layout after
+ this call.
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="doLayout" class="membertitle">doLayout</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>doLayout</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>forces a complete new layouting of all user interface elements.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setVisible" class="membertitle">setVisible</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setVisible</b>(</td>
+<td valign="top">[in] boolean</td>
+<td valign="bottom">&nbsp;Visible );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>sets the layout manager to invisible state and hides all user interface elements.
+
+ </dd>
+<dd><p>
+ A layout manager can be set to invisible state to force it to hide all of its
+ user interface elements. If another component wants to use the window for its
+ own user interface elements it can use this function. This function is normally
+ used to implement inplace editing.
+ </p>
+
+ </dd>
+<dt><b>Parameter Visible</b></dt>
+<dd>provide <b>false</b> to make layout manager invisible otherwise this must be
+ set to <b>true</b>.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="isVisible" class="membertitle">isVisible</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>isVisible</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>retrieves the visibility state of a layout manager.
+
+ </dd>
+<dd><p>
+ A layout manager can be set to invisible state to force it to hide all of its
+ user interface elements. If another component wants to use the window for its
+ own user interface elements it can use this function. This function is normally
+ used to implement inplace editing.
+ </p>
+
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

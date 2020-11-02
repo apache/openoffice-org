@@ -1,0 +1,1055 @@
+<html>
+<head>
+<title>Interface XConnection</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XConnection-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">sdbc</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XConnection</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Base Interfaces</b></dt>
+<dd><pre style="font-family:monospace;"><strong>XConnection</strong>
+&#x2517 <a href="XCloseable.html">XCloseable</a>
+
+</pre></dd>
+<dd><a name/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="crosstitle">
+<tr>
+<td class="imsum_left"><a href="XCloseable.html">XCloseable</a></td>
+<td class="imsum_right"><dl>
+<dt>(referenced interface's summary:)</dt>
+<dd>provides for the releasing of resources acquired by the implementing object.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>represents a connection (session) with a specific
+ database. Within the context of a Connection, SQL statements are
+ executed and results are returned.
+ 
+ 
+ </dd>
+<dd><p>
+ A Connection's database is able to provide information
+ describing its tables, its supported SQL grammar, its stored
+ procedures, and the capabilities of this connection. This
+ information is obtained with the 
+ <a href="XDatabaseMetaData.html">XDatabaseMetaData</a>::<a href="XDatabaseMetaData.html#getMetaData">getMetaData()</a>
+ method.
+ 
+ </p>
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="XDriverManager.html">XDriverManager</a>, <a href="XStatement.html">XStatement</a>, <a href="XDatabaseMetaData.html">XDatabaseMetaData</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#createStatement">createStatement</a></td>
+<td class="imsum_right">creates a new 
+ <a href="Statement.html">Statement</a>
+ object for sending SQL statements to the database.
+ 
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#prepareStatement">prepareStatement</a></td>
+<td class="imsum_right">creates a 
+ <a href="PreparedStatement.html">PreparedStatement</a>
+ object for sending parameterized SQL statements to the database.
+ 
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#prepareCall">prepareCall</a></td>
+<td class="imsum_right">creates a 
+ <a href="CallableStatement.html">CallableStatement</a>
+ object for calling
+ database stored procedures.
+ 
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#nativeSQL">nativeSQL</a></td>
+<td class="imsum_right">converts the given SQL statement into the system's native SQL grammar.
+ A driver may convert the JDBC SQL grammar into its system's
+ native SQL grammar prior to sending it; this method returns the
+ native form of the statement that the driver would have sent.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setAutoCommit">setAutoCommit</a></td>
+<td class="imsum_right">sets this connection's auto-commit mode.
+ 
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getAutoCommit">getAutoCommit</a></td>
+<td class="imsum_right">gets the current auto-commit state.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#commit">commit</a></td>
+<td class="imsum_right">makes all changes made since the previous commit/rollback
+ permanent and releases any database locks currently held
+ by the Connection. This method should be
+ used only when auto-commit mode has been disabled.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#rollback">rollback</a></td>
+<td class="imsum_right">drops all changes made since the previous
+ commit/rollback and releases any database locks currently held
+ by this Connection. This method should be used only when auto-commit has been disabled.
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#isClosed">isClosed</a></td>
+<td class="imsum_right">tests to see if a connection is closed.
+ 
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getMetaData">getMetaData</a></td>
+<td class="imsum_right">gets the metadata regarding this connection's database.
+ 
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setReadOnly">setReadOnly</a></td>
+<td class="imsum_right">puts this connection in read-only mode as a hint to enable
+ database optimizations.
+ 
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#isReadOnly">isReadOnly</a></td>
+<td class="imsum_right">tests to see if the connection is in read-only mode.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setCatalog">setCatalog</a></td>
+<td class="imsum_right">sets a catalog name in order to select
+ a subspace of this Connection's database in which to work.
+ If the driver does not support catalogs, it will
+ silently ignore this request.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getCatalog">getCatalog</a></td>
+<td class="imsum_right">returns the Connection's current catalog name.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setTransactionIsolation">setTransactionIsolation</a></td>
+<td class="imsum_right">attempts to change the transaction isolation level to the one given.
+ 
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getTransactionIsolation">getTransactionIsolation</a></td>
+<td class="imsum_right">gets this Connection's current transaction isolation level.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getTypeMap">getTypeMap</a></td>
+<td class="imsum_right">gets the type map object associated with this connection. Only drivers
+ which implement the custom type mapping facility will return an object otherwise
+ NULL could be returned.
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setTypeMap">setTypeMap</a></td>
+<td class="imsum_right">installs the given type map as the type map for this connection.
+ The type map will be used for the custom mapping of SQL structured types
+ and distinct types.
+ 
+ 
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="createStatement" class="membertitle">createStatement</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XStatement.html">XStatement</a></td>
+</tr>
+<tr>
+<td valign="top"><b>createStatement</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>creates a new 
+ <a href="Statement.html">Statement</a>
+ object for sending SQL statements to the database.
+ 
+ 
+ </dd>
+<dd><p>
+ SQL statements without parameters are normally
+ executed using Statement objects. If the same SQL statement
+ is executed many times, it is more efficient to use a
+ <a href="PreparedStatement.html">PreparedStatement</a>
+ .
+ </p>
+ <p>
+ Result sets created using the returned Statement will have
+ forward-only type, and read-only concurrency, by default.
+ </p>
+ <p>
+ Escape processing for the SQL-Statement is enabled, by default.
+ </p>
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a new Statement object
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="prepareStatement" class="membertitle">prepareStatement</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XPreparedStatement.html">XPreparedStatement</a></td>
+</tr>
+<tr>
+<td valign="top"><b>prepareStatement</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;sql )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>creates a 
+ <a href="PreparedStatement.html">PreparedStatement</a>
+ object for sending parameterized SQL statements to the database.
+ 
+ 
+ </dd>
+<dd><p>
+ A SQL statement with or without IN parameters can be
+ pre-compiled and stored in a PreparedStatement object. This
+ object can then be used to efficiently execute this statement
+ multiple times.
+ 
+ </p>
+ <p>
+ <b>
+ Note:
+ </b>
+ This method is optimized for handling
+ parametric SQL statements that benefit from precompilation. If
+ the driver supports precompilation,
+ the method 
+ <code>prepareStatement</code>
+ will send
+ the statement to the database for precompilation. Some drivers
+ may not support precompilation. In this case, the statement may
+ not be sent to the database until the 
+ <a href="PreparedStatement.html">PreparedStatement</a>
+ is executed. This has no direct effect on users; however, it does
+ affect which method throws certain SQLExceptions.
+ </p>
+ <p>
+ Result sets created using the returned PreparedStatement will have
+ forward-only type and read-only concurrency, by default.
+ </p>
+ <p>
+ Escape processing for the SQL-Statement is enabled, by default.
+ </p>
+
+ </dd>
+<dt><b>Parameter sql</b></dt>
+<dd>a SQL statement that may contain one or more '?' IN parameter placeholders
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a new PreparedStatement object containing the pre-compiled statement
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="prepareCall" class="membertitle">prepareCall</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XPreparedStatement.html">XPreparedStatement</a></td>
+</tr>
+<tr>
+<td valign="top"><b>prepareCall</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;sql )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>creates a 
+ <a href="CallableStatement.html">CallableStatement</a>
+ object for calling
+ database stored procedures.
+ 
+ 
+ </dd>
+<dd><p>
+ The CallableStatement provides methods for setting up its IN and OUT
+ parameters, and methods for executing the call to a stored procedure.
+ </p>
+ <p>
+ <b>
+ Note:
+ </b>
+ This method is optimized for handling stored
+ procedure call statements. Some drivers may send the call
+ statement to the database when the method 
+ <code>prepareCall</code>
+ is done;
+ <br/>
+ others may wait until the CallableStatement is executed. This has no
+ direct effect on users; however, it does affect which method
+ throws certain SQLExceptions.
+ Result sets created using the returned CallableStatement will have
+ forward-only type and read-only concurrency, by default.
+ </p>
+
+ </dd>
+<dt><b>Parameter sql</b></dt>
+<dd>a SQL statement that may contain one or more '?' IN parameter placeholders
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a new PreparedStatement object containing the pre-compiled statement
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="nativeSQL" class="membertitle">nativeSQL</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">string</td>
+</tr>
+<tr>
+<td valign="top"><b>nativeSQL</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;sql )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>converts the given SQL statement into the system's native SQL grammar.
+ A driver may convert the JDBC SQL grammar into its system's
+ native SQL grammar prior to sending it; this method returns the
+ native form of the statement that the driver would have sent.
+
+ </dd>
+<dt><b>Parameter sql</b></dt>
+<dd>a SQL statement that may contain one or more '?' parameter placeholders
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the native form of this statement
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setAutoCommit" class="membertitle">setAutoCommit</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setAutoCommit</b>(</td>
+<td valign="top">[in] boolean</td>
+<td valign="bottom">&nbsp;autoCommit )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>sets this connection's auto-commit mode.
+ 
+ 
+ </dd>
+<dd><p>
+ If a connection is in auto-commit mode, then all its SQL
+ statements will be executed and committed as individual
+ transactions. Otherwise, its SQL statements are grouped into
+ transactions that are terminated by a call to either
+ the method 
+ <a href="XConnection.html">XConnection</a>::<a href="XConnection.html#commit">commit()</a>
+ or the method 
+ <a href="XConnection.html">XConnection</a>::<a href="XConnection.html#rollback">rollback()</a>
+ .
+ By default, new connections are in auto-commit mode.
+ </p>
+ <p>
+ The commit occurs when the statement completes or the next
+ execute occurs, whichever comes first. In the case of
+ statements returning a ResultSet, the statement completes when
+ the last row of the ResultSet has been retrieved or the
+ ResultSet has been closed. In advanced cases, a single
+ statement may return multiple results as well as output
+ parameter values. In these cases the commit occurs when all results and
+ output parameter values have been retrieved.
+ </p>
+
+ </dd>
+<dt><b>Parameter autoCommit</b></dt>
+<dd><b>true</b> enables auto-commit; <b>false</b> disables auto-commit.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getAutoCommit" class="membertitle">getAutoCommit</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>getAutoCommit</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>gets the current auto-commit state.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the current state of auto-commit mode.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="#setAutoCommit">setAutoCommit</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="commit" class="membertitle">commit</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>commit</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>makes all changes made since the previous commit/rollback
+ permanent and releases any database locks currently held
+ by the Connection. This method should be
+ used only when auto-commit mode has been disabled.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="#setAutoCommit">setAutoCommit</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="rollback" class="membertitle">rollback</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>rollback</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>drops all changes made since the previous
+ commit/rollback and releases any database locks currently held
+ by this Connection. This method should be used only when auto-commit has been disabled.
+ 
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="#setAutoCommit">setAutoCommit</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="isClosed" class="membertitle">isClosed</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>isClosed</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>tests to see if a connection is closed.
+ 
+ 
+ </dd>
+<dd><p>
+ <b>
+ Note:
+ </b>
+ A Connection is automatically closed if no one references it
+ anymore. Certain fatal errors also result in a closed Connection.
+ </p>
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd><b>true</b> if the connection is closed; <b>false</b> if it's still open.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getMetaData" class="membertitle">getMetaData</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XDatabaseMetaData.html">XDatabaseMetaData</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getMetaData</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>gets the metadata regarding this connection's database.
+ 
+ 
+ </dd>
+<dd><p>
+ A Connection's database is able to provide information
+ describing its tables, its supported SQL grammar, its stored
+ procedures, the capabilities of this connection, and so on. This
+ information is made available through a DatabaseMetaData
+ object.
+ </p>
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a DatabaseMetaData object for this Connection.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setReadOnly" class="membertitle">setReadOnly</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setReadOnly</b>(</td>
+<td valign="top">[in] boolean</td>
+<td valign="bottom">&nbsp;readOnly )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>puts this connection in read-only mode as a hint to enable
+ database optimizations.
+ 
+ 
+ </dd>
+<dd><p>
+ <b>
+ Note:
+ </b>
+ This method cannot be called while in the
+ middle of a transaction. Calling setReadOnly with
+ <b>true</b>
+ does not
+ necessarily cause writes to be prohibited.
+ </p>
+
+ </dd>
+<dt><b>Parameter readONly</b></dt>
+<dd><b>true</b> enables read-only mode; <b>false</b> disables read-only mode.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="isReadOnly" class="membertitle">isReadOnly</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>isReadOnly</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>tests to see if the connection is in read-only mode.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd><b>true</b> if connection is read-only and <b>false</b> otherwise.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setCatalog" class="membertitle">setCatalog</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setCatalog</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;catalog )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>sets a catalog name in order to select
+ a subspace of this Connection's database in which to work.
+ If the driver does not support catalogs, it will
+ silently ignore this request.
+ </dd>
+<dt><b>Parameter catalog</b></dt>
+<dd>the name of the catalog.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getCatalog" class="membertitle">getCatalog</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">string</td>
+</tr>
+<tr>
+<td valign="top"><b>getCatalog</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>returns the Connection's current catalog name.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the current catalog name or an empty string.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setTransactionIsolation" class="membertitle">setTransactionIsolation</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setTransactionIsolation</b>(</td>
+<td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;level )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>attempts to change the transaction isolation level to the one given.
+ 
+ 
+ </dd>
+<dd><p>
+ The constants defined in
+ <a href="TransactionIsolation.html">TransactionIsolation</a>
+ are the possible transaction isolation levels.
+ </p>
+ <p>
+ <b>
+ Note:
+ </b>
+ This method cannot be called while
+ in the middle of a transaction.
+ </p>
+ </dd>
+<dt><b>Parameter level</b></dt>
+<dd>one of the TransactionIsolation values with the exception of NONE; some databases may not support other values.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="XDatabaseMetaData.html">XDatabaseMetaData</a>::<a href="XDatabaseMetaData.html#supportsTransactionIsolationLevel">supportsTransactionIsolationLevel()</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getTransactionIsolation" class="membertitle">getTransactionIsolation</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">long</td>
+</tr>
+<tr>
+<td valign="top"><b>getTransactionIsolation</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>gets this Connection's current transaction isolation level.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the current TransactionIsolation mode value.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getTypeMap" class="membertitle">getTypeMap</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">::com::sun::star::<a href="../container/module-ix.html">container</a>::<a href="../container/XNameAccess.html">XNameAccess</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getTypeMap</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>gets the type map object associated with this connection. Only drivers
+ which implement the custom type mapping facility will return an object otherwise
+ NULL could be returned.
+ 
+ </dd>
+<dd><p>
+ Unless the application has added an entry to the type map, the map
+ returned will be empty.
+ </p>
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the XNameAccess object associated with this Connection object.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setTypeMap" class="membertitle">setTypeMap</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setTypeMap</b>(</td>
+<td valign="top">[in] ::com::sun::star::<a href="../container/module-ix.html">container</a>::<a href="../container/XNameAccess.html">XNameAccess</a></td>
+<td valign="bottom">&nbsp;typeMap )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>installs the given type map as the type map for this connection.
+ The type map will be used for the custom mapping of SQL structured types
+ and distinct types.
+ 
+ 
+ </dd>
+<dd><p>
+ Only if the driver supports custom type mapping is the setting of a map allowed.
+ </p>
+
+ </dd>
+<dt><b>Parameter typeMap</b></dt>
+<dd>set the XNameAccess object associated with this Connection object.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

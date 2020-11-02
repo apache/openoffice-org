@@ -1,0 +1,307 @@
+<html>
+<head>
+<title>Service CopyTableWizard</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimainnone">Use</td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#ConstructorsSummary" class="navisub">Constructors' Summary</a></td>
+<td class="navisub"><a href="#ConstructorsDetails" class="navisub">Constructors' Details</a></td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../../module-ix.html" class="namechain">::</a> <a href="../../../../module-ix.html" class="namechain">com</a> :: <a href="../../../module-ix.html" class="namechain">sun</a> :: <a href="../../module-ix.html" class="namechain">star</a> :: <a href="../module-ix.html" class="namechain">sdb</a> :: <a href="module-ix.html" class="namechain">application</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title"><table class="title-table" width="99%">
+<tr>
+<td width="25%" class="title2">unpublished </td>
+<td width="50%" class="title">service CopyTableWizard</td>
+<td width="*"/></tr>
+</table>
+</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Supported Interface</b></dt>
+<dd><a href="XCopyTableWizard.html">XCopyTableWizard</a></dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>not published</i></dd>
+<dt><b>Description</b></dt>
+<dd>describes a wizard which can be used to copy table like data from one
+ database to another.
+
+ <dt><b><a name="interaction"></a>Interactions</b></dt>
+ <dd>
+ </dd>
+<dd><p>There are various cases where the wizard needs to interact with the user (except of
+ course the obvious case to display and operate the wizard dialog itself). For those cases,
+ an interaction handler is needed, which is used for
+ <ul>
+ <li>fulfilling parameter requests. This might become necessary if the copy source
+ describes a parametrized query.</li>
+ <li>user interaction in case copying a row fails. If no copy table listener is
+ registered at the wizard, or none of the registered listener handles an error during
+ copying a row, or a registered listeners explicitly tells the wizard to ask the user
+ how to handle the error, then the interaction handler is used together with the
+ error (an <code>SQLException</code>, usually) that happened.</li>
+ <li>displaying other errors which happen during copying, in particular errors in
+ creating the target table or view.</li>
+ </ul></p>
+
+ <p>When you do not specify an interaction handler by using the
+ <a href="CopyTableWizard.html#createWithInteractionHandler">createWithInteractionHandler</a> constructor, the wizard will use the interaction
+ handler associated with the copy target, i.e. the interaction handler specified when loading
+ the document which the copy target refers to. If the copy target cannot be associated with
+ a database document (e.g. because it is a mere <code>ConnectionResource</code>, or a connection
+ not obtained from a data source), or if the copy target's database document cannot provide
+ an interaction handler, a newly-created instance of an interaction handler is used.</p>
+
+ <p>There's one exception to the above, however: Upon creating the copy table wizard,
+ the copy source and the copy target descriptors are used to create a Connection. For any
+ interaction during this phase - including, for instance, necessary authentication -, the
+ interaction handler of the respective data source is used, no matter what you specified
+ in <a href="CopyTableWizard.html#createWithInteractionHandler">createWithInteractionHandler</a>. Only if there is no such interaction
+ handler, the processing described above, to find another handler, is applied.</p>
+ </dd>
+
+ </dd>
+<dt><b>Since </b></dt>
+<dd>OOo 2.4 </dd>
+<dt><b>See also</b></dt>
+<dd>::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../ParametersRequest.html">ParametersRequest</a>, <a href="XCopyTableWizard.html">XCopyTableWizard</a>::<a href="XCopyTableWizard.html#addCopyTableListener">addCopyTableListener</a>, <a href="CopyTableContinuation.html">CopyTableContinuation</a>, ::com::sun::star::<a href="../../document/module-ix.html">document</a>::<a href="../../document/MediaDescriptor.html">MediaDescriptor</a>::<a href="../../document/MediaDescriptor.html#InteractionHandler">InteractionHandler</a>, ::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../DatabaseDocument.html">DatabaseDocument</a>, ::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../DataSource.html">DataSource</a>, ::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../DataAccessDescriptor.html">DataAccessDescriptor</a>::<a href="../DataAccessDescriptor.html#ConnectionResource">ConnectionResource</a>, ::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../InteractionHandler.html">InteractionHandler</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<hr>
+<a name="ConstructorsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Constructors' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#create">create</a></td>
+<td class="imsum_right">creates an executable wizard dialog, which is to guide the user through copying
+ a table from one database to another.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#createWithInteractionHandler">createWithInteractionHandler</a></td>
+<td class="imsum_right">creates an executable wizard dialog, which is to guide the user through copying
+ a table from one database to another.
+
+ &nbsp;</td>
+</tr>
+</table>
+<a name="ConstructorsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Constructors' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="create" class="membertitle">create</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"/></tr>
+<tr>
+<td valign="top"><b>create</b>(</td>
+<td valign="top">[in] ::com::sun::star::<a href="../../beans/module-ix.html">beans</a>::<a href="../../beans/XPropertySet.html">XPropertySet</a></td>
+<td valign="bottom">&nbsp;Source,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../../beans/module-ix.html">beans</a>::<a href="../../beans/XPropertySet.html">XPropertySet</a></td>
+<td valign="bottom">&nbsp;Destination )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../../lang/module-ix.html">lang</a>::<a href="../../lang/IllegalArgumentException.html">IllegalArgumentException</a>,<br>
+::com::sun::star::<a href="../../sdbc/module-ix.html">sdbc</a>::<a href="../../sdbc/SQLException.html">SQLException</a>,<br>
+::com::sun::star::<a href="../../lang/module-ix.html">lang</a>::<a href="../../lang/WrappedTargetException.html">WrappedTargetException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>creates an executable wizard dialog, which is to guide the user through copying
+ a table from one database to another.
+
+ </dd>
+<dd><p>At creation time, an attempt will be made to obtain the connections described
+ by <arg>Source</arg> resp. <arg>Dest</arg>. Failing to do so will result in an
+ exception.</p>
+
+ <p>If the connection has been newly created by the wizard (e.g. because the
+ data access descriptor specified a <code>DataSource</code> instead of an <code>ActiveConnection</code>),
+ then this connection will be disposed upon disposal of the wizard.</p>
+
+ </dd>
+<dt><b>Parameter Source</b></dt>
+<dd>the ::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../DataAccessDescriptor.html">DataAccessDescriptor</a> describing the
+ data to copy.
+
+ <p>The following members of the <code>DataAccessDescriptor</code> are supported, and evaluated
+ in the given order:
+ <ol><li><code>ActiveConnection</code></li>
+ <li><code>DataSourceName</code></li>
+ <li><code>DatabaseLocation</code></li>
+ <li><code>ConnectionResource</code></li>
+ <li><code>ConnectionInfo</code></li>
+ <li><code>Command</code></li>
+ <li><code>CommandType</code></li>
+ </ol>
+ The first 5 items are used to obtain the connection, the last two to determine which
+ of the connection's objects is to be copied. Note that <code>Command</code> and <code>CommandType</code>
+ are required.</p>
+
+ <p>Additionally to the obvious restrictions (such as that creating a view is not possible
+ if the copy source and the copy destination denote different databases), the following restrictions
+ apply to the settings, and possible combinations:
+ <ul><li>Only ::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../CommandType.html">CommandType</a>::<a href="../CommandType.html#TABLE">TABLE</a> and
+ ::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../CommandType.html">CommandType</a>::<a href="../CommandType.html#QUERY">QUERY</a> are supported.</li>
+
+ <li>If you specify a <code>ConnectionResource</code>, or an
+ <code>ActiveConnection</code> which implements an ::com::sun::star::<a href="../../sdbc/module-ix.html">sdbc</a>::<a href="../../sdbc/Connection.html">Connection</a> only
+ (as opposed to a ::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../Connection.html">Connection</a>), then the resulting connection is
+ not able to provide queries, thus a command type <code>QUERY</code> will be rejected.</li>
+
+ <li><code>Filter</code>, <code>Order</code>, <code>HavingClause</code> and <code>GroupBy</code>
+ are unsupported at the moment.</li>
+ </ul>
+ Violating any of the above restrictions will result in an error at creation time.</p>
+
+ </dd>
+<dt><b>Parameter Destination</b></dt>
+<dd>the ::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../DataAccessDescriptor.html">DataAccessDescriptor</a> describing the
+ target for the copy operation.
+
+ <p>Only <code>DataSourceName</code>, <code>DatabaseLocation</code>, <code>ActiveConnection</code>
+ are supported, effectively describing the target connection to copy the data to. They're evaluated
+ in the order mentioned here, so if multiple of the are present, only the first one is evaluated.</p>
+
+ <p>Also, at the moment the connection which is implied by either of the settings above
+ must support the ::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../Connection.html">Connection</a> service. In particular,
+ it is not sufficient to pass an SDBC-level connection.</p>
+
+ <p>Note that creating a view (see <a href="CopyTableOperation.html">CopyTableOperation</a>::<a href="CopyTableOperation.html#CreateAsView">CreateAsView</a>) is
+ not supported if the target connection is an SDBC-level connection only.</p>
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>::com::sun::star::lang::IllegalArgumentException
+ if
+ <ul><li>either <code>Source</code> or <code>Destination</code> is <b>NULL</b></li>
+ <li>either <code>Source</code> or <code>Destination</code> are not sufficient
+ to describe a database connection.</li>
+ <li><code>Source</code> is not sufficient to describe the to-be-copied data</li>
+ <li>either <code>Source</code> or <code>Destination</code> contain unsupported settings.</li>
+ </ul>
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>::com::sun::star::sdbc::SQLException
+ if an error occurs during obtaining the source or destination connection. Those errors
+ are passed unchanged to the creator of the wizard.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>::com::sun::star::lang::WrappedTargetException
+ if an error other than the ones mentioned above occurs while extracting the necessary
+ information from any of the data access descriptors. For instance, this might
+ be an ::com::sun::star::<a href="../../sdbc/module-ix.html">sdbc</a>::<a href="../../sdbc/SQLException.html">SQLException</a> thrown upon connecting
+ to a data source described by the descriptor's <code>DataSourceName</code> member.
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd>::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../DataAccessDescriptor.html">DataAccessDescriptor</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="createWithInteractionHandler" class="membertitle">createWithInteractionHandler</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"/></tr>
+<tr>
+<td valign="top"><b>createWithInteractionHandler</b>(</td>
+<td valign="top">[in] ::com::sun::star::<a href="../../beans/module-ix.html">beans</a>::<a href="../../beans/XPropertySet.html">XPropertySet</a></td>
+<td valign="bottom">&nbsp;Source,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../../beans/module-ix.html">beans</a>::<a href="../../beans/XPropertySet.html">XPropertySet</a></td>
+<td valign="bottom">&nbsp;Destination,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../../task/module-ix.html">task</a>::<a href="../../task/XInteractionHandler.html">XInteractionHandler</a></td>
+<td valign="bottom">&nbsp;InteractionHandler )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../../lang/module-ix.html">lang</a>::<a href="../../lang/IllegalArgumentException.html">IllegalArgumentException</a>,<br>
+::com::sun::star::<a href="../../sdbc/module-ix.html">sdbc</a>::<a href="../../sdbc/SQLException.html">SQLException</a>,<br>
+::com::sun::star::<a href="../../lang/module-ix.html">lang</a>::<a href="../../lang/WrappedTargetException.html">WrappedTargetException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>creates an executable wizard dialog, which is to guide the user through copying
+ a table from one database to another.
+
+ </dd>
+<dd><p>The only difference to the <a href="#create">create</a> constructor is that
+ <code>createWithInteractionHandler</code> takes an additional argument, which
+ can be used to intercept interactions (such as error messages) during the wizard
+ run.</p>
+
+ </dd>
+<dt><b>Parameter InteractionHandler</b></dt>
+<dd>specifies an interaction handler to use when user input is required.
+
+ <p>When specifying this parameter, you should use an implementation
+ supporting the ::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../InteractionHandler.html">InteractionHandler</a>, since
+ the general-purpose ::com::sun::star::<a href="../../task/module-ix.html">task</a>::<a href="../../task/InteractionHandler.html">InteractionHandler</a> cannot
+ handle all requests described <a href="#interaction">above</a>.</p>
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd>::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../InteractionHandler.html">InteractionHandler</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<br>&nbsp;<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

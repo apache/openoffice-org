@@ -1,0 +1,190 @@
+<html>
+<head>
+<title>Service AccessibleHeaderFooterView</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="AccessibleHeaderFooterView-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub">Services' Summary</td>
+<td class="navisub"><a href="#InterfacesSummary" class="navisub">Interfaces' Summary</a></td>
+<td class="navisub">Properties' Summary</td>
+<td class="navisub">Services' Details</td>
+<td class="navisub"><a href="#InterfacesDetails" class="navisub">Interfaces' Details</a></td>
+<td class="navisub">Properties' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">text</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">service AccessibleHeaderFooterView</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>The accessible view of headers and footers. 
+
+ </dd>
+<dt><b>Since </b></dt>
+<dd>OOo 1.1.2 </dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="InterfacesSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Exported Interfaces - Summary</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../accessibility/module-ix.html">accessibility</a>::<a href="../accessibility/XAccessibleContext.html">XAccessibleContext</a></td>
+<td class="imsum_right"><p>This interface gives access to any paragraph and table that is
+ contained in the header and footer and is at least partially visible
+ on the screen.
+ 
+ (<a href="#XAccessibleContext">details</a>)</p>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../accessibility/module-ix.html">accessibility</a>::<a href="../accessibility/XAccessibleComponent.html">XAccessibleComponent</a></td>
+<td class="imsum_right"><p>This interface describes the graphical representation of a header
+ or footer.
+ </p>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../accessibility/module-ix.html">accessibility</a>::<a href="../accessibility/XAccessibleEventBroadcaster.html">XAccessibleEventBroadcaster</a></td>
+<td class="imsum_right"><p>This is the interface for listeners </p>
+</td>
+</tr>
+</table>
+<a name="InterfacesDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Exported Interfaces - Details</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XAccessibleContext" class="membertitle">::com::sun::star::<a href="../accessibility/module-ix.html">accessibility</a>::<a href="../accessibility/XAccessibleContext.html">XAccessibleContext</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>This interface gives access to any paragraph and table that is
+ contained in the header and footer and is at least partially visible
+ on the screen.
+ 
+ </dd>
+<dd><ul>
+ <li>The parent returned by 
+ <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleParent</method>
+ is either the accessible view of a text document,
+ a page of the accessible page preview of a text document,
+ or the accessible page preview of a spreadsheet document.
+ <li>The children returned by 
+ <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleChild</method> all
+ support the interface XAccessible. Calling 
+ <method scope="::com::sun::star::accessibility"
+                >XAccessible::getAccessibleContext</method> for these children returns
+ an object that supports one of the following services.
+ <ul>
+ <li><a href="AccessibleParagraphView.html">AccessibleParagraphView</a>:
+ A child of this kind is returned for every paragraph
+ that is contained in the document body and
+ is at least partially visible. The child always
+ represents a whole paragarph (and not a fragment only),
+ because there are no page breaks within headers and
+ footers.
+ <li>::com::sun::star::<a href="../table/module-ix.html">table</a>::<a href="../table/AccessibleTableView.html">AccessibleTableView</a>:
+ A child of this kind is returned for every table
+ that is contained in the document body
+ and is at least partially visible. The child always
+ represents a whole table (and not a fragment only),
+ because there are no page breaks within headers and
+ footers.
+ </ul>
+ <p>The logical order of paragraphs and tables is never changed.
+ <li>The role is either 
+ <b>AccessibleRole::HEADER</b> or 
+ <b>AccessibleRole::FOOTER</b>.
+ <li>The name is "header" or "footer" (or the equivalent term
+ in application's language) with a number appended.
+ <li>The description is "header" or "footer" (or the equivalent term
+ in application's language) with the page number appended in
+ the format that is specified in the page's style.
+ <li>There are no relations.
+ <li>The following states might be contained in the state set
+ returned by <method scope="::com::sun::star::accessibility"
+                >XAccessible::getAccessibleStateSet:
+ <ul>
+ <li><b>AccessibleStateType::DEFUNC</b> (indicates that
+ the document window has been closed or the header or 
+ footer is not existing any longer)
+ <li><b>AccessibleStateType::EDITABLE</b>
+ <li><b>AccessibleStateType::ENABLED</b> (always contained)
+ <li><b>AccessibleStateType::OPAQUE</b>
+ <li><b>AccessibleStateType::SHOWING</b>
+ <li><b>AccessibleStateType::VISIBLE</b>
+ </ul>
+ <li>Depending of the application's region setting, the locale is
+ the western, asian or complex default language of the document.
+ </ul>
+
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XAccessibleComponent" class="membertitle">::com::sun::star::<a href="../accessibility/module-ix.html">accessibility</a>::<a href="../accessibility/XAccessibleComponent.html">XAccessibleComponent</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>This interface describes the graphical representation of a header
+ or footer.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XAccessibleEventBroadcaster" class="membertitle">::com::sun::star::<a href="../accessibility/module-ix.html">accessibility</a>::<a href="../accessibility/XAccessibleEventBroadcaster.html">XAccessibleEventBroadcaster</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>This is the interface for listeners </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<br>&nbsp;<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

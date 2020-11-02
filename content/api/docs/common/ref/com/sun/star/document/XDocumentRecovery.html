@@ -1,0 +1,243 @@
+<html>
+<head>
+<title>Interface XDocumentRecovery</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XDocumentRecovery-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">document</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title"><table class="title-table" width="99%">
+<tr>
+<td width="25%" class="title2">unpublished </td>
+<td width="50%" class="title">interface XDocumentRecovery</td>
+<td width="*"/></tr>
+</table>
+</td>
+</tr>
+<tr>
+<td/></tr>
+<tr>
+<td><dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>not published</i></dd>
+<dt><b>Description</b></dt>
+<dd>is the interface to be implemented by documents who wish to participate in
+ the document emergency-save / recovery process.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#wasModifiedSinceLastSave">wasModifiedSinceLastSave</a></td>
+<td class="imsum_right">determines whether the document has been modified since the last call to <a href="#storeToRecoveryFile">storeToRecoveryFile</a>.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#storeToRecoveryFile">storeToRecoveryFile</a></td>
+<td class="imsum_right">does an emergency save of the document
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#recoverFromFile">recoverFromFile</a></td>
+<td class="imsum_right">recovers the document after a previous emergency or session save.
+
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="wasModifiedSinceLastSave" class="membertitle">wasModifiedSinceLastSave</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>wasModifiedSinceLastSave</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>determines whether the document has been modified since the last call to <a href="#storeToRecoveryFile">storeToRecoveryFile</a>.
+
+ </dd>
+<dd><p>If <code>storeToRecoveryFile</code> has not been called before, this method returns whether the document
+ has been modified since it has been loaded respectively created.</p>
+
+ <p>When saving a session, either in case of a emergency (when OpenOffice.org crashed), or during a
+ periodic session save as configured by the user, <a href="#storeToRecoveryFile">storeToRecoveryFile</a> is called for every
+ document where <code>wasModifiedSinceLastSave</code> returns <b>true</b>.</p>
+
+ <p>It's allowed to implement this method sloppy, by returning <b>true</b> in cases where it is not sure whether
+ the document actually has been modified. So, the most simple implementation could simply delegate this call
+ to ::com::sun::star::<a href="../util/module-ix.html">util</a>::<a href="../util/XModifiable.html">XModifiable</a>::<a href="../util/XModifiable.html#isModified">isModified</a>. (Well, actually that's the
+ second simple implementation, the <em>most</em> simple one would, still egitimately, always return <b>true</b>.)</p>
+
+ <p>However, in such a case, the document might be saved more often than needed. In particular during the
+ periodic session save, this might become a problem when saving is expensive, for a single document
+ or the sum of all open documents.</p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="storeToRecoveryFile" class="membertitle">storeToRecoveryFile</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>storeToRecoveryFile</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;TargetLocation,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] sequence&lt; ::com::sun::star::<a href="../beans/module-ix.html">beans</a>::<a href="../beans/PropertyValue.html">PropertyValue</a> &gt;</td>
+<td valign="bottom">&nbsp;MediaDescriptor )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../io/module-ix.html">io</a>::<a href="../io/IOException.html">IOException</a>,<br>
+::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/WrappedTargetException.html">WrappedTargetException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>does an emergency save of the document
+
+ </dd>
+<dd><p>A default implementation of this method could simply delegate this call to
+ ::com::sun::star::<a href="../frame/module-ix.html">frame</a>::<a href="../frame/XStorable.html">XStorable</a>::<a href="../frame/XStorable.html#storeToURL">storeToURL</a>.</p>
+
+ </dd>
+<dt><b>Parameter TargetLocation</b></dt>
+<dd>specifies the URL of the location to which the document should be emergency-saved.
+
+ </dd>
+<dt><b>Parameter MediaDescriptor</b></dt>
+<dd>contains additional arguments for the save process, for instance an StatusIndicator.
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="MediaDescriptor.html">MediaDescriptor</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="recoverFromFile" class="membertitle">recoverFromFile</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>recoverFromFile</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;SourceLocation,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;SalvagedFile,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] sequence&lt; ::com::sun::star::<a href="../beans/module-ix.html">beans</a>::<a href="../beans/PropertyValue.html">PropertyValue</a> &gt;</td>
+<td valign="bottom">&nbsp;MediaDescriptor )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../io/module-ix.html">io</a>::<a href="../io/IOException.html">IOException</a>,<br>
+::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/WrappedTargetException.html">WrappedTargetException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>recovers the document after a previous emergency or session save.
+
+ </dd>
+<dd><p>The document itself has previously been created, but <em>not</em> loaded
+ (via ::com::sun::star::<a href="../frame/module-ix.html">frame</a>::<a href="../frame/XLoadable.html">XLoadable</a>::<a href="../frame/XLoadable.html#load">load</a>) or initialized (via
+ ::com::sun::star::<a href="../frame/module-ix.html">frame</a>::<a href="../frame/XLoadable.html">XLoadable</a>::<a href="../frame/XLoadable.html#initNew">initNew</a>).</p>
+
+ <p>Upon successful return, the document must be fully initialized. In particular, the
+ caller is not responsible for calling ::com::sun::star::<a href="../frame/module-ix.html">frame</a>::<a href="../frame/XModel.html">XModel</a>::<a href="../frame/XModel.html#attachResource">attachResource</a>.
+ Instead, the implementation is responsible to do so, if required.</p>
+
+ <p>A default implementation of this method could simply delegate this call to
+ ::com::sun::star::frame:::XLodable::load, followed by
+ ::com::sun::star::<a href="../frame/module-ix.html">frame</a>::<a href="../frame/XModel.html">XModel</a>::<a href="../frame/XModel.html#attachResource">attachResource</a>.</p>
+
+ </dd>
+<dt><b>Parameter SourceLocation</b></dt>
+<dd>specifies the URL of the location to which the document was previously emergency-saved.
+
+ </dd>
+<dt><b>Parameter SalvagedFile</b></dt>
+<dd>specifies the original URL of the file which had been emergency-saved. If this is empty,
+ then the file should be recovered from its original location.
+
+ </dd>
+<dt><b>Parameter MediaDescriptor</b></dt>
+<dd>contains additional arguments for the load process, for instance an StatusIndicator.
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="MediaDescriptor.html">MediaDescriptor</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

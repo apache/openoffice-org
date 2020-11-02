@@ -1,0 +1,195 @@
+<html>
+<head>
+<title>Service TypeDescriptionManager</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="TypeDescriptionManager-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub">Services' Summary</td>
+<td class="navisub"><a href="#InterfacesSummary" class="navisub">Interfaces' Summary</a></td>
+<td class="navisub">Properties' Summary</td>
+<td class="navisub">Services' Details</td>
+<td class="navisub"><a href="#InterfacesDetails" class="navisub">Interfaces' Details</a></td>
+<td class="navisub">Properties' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">reflection</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">service TypeDescriptionManager</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>This service manages type descriptions and acts as a central access point
+ to every type description. It delegates calls for demanded types to
+ subsequent
+ <a href="TypeDescriptionProvider.html">TypeDescriptionProvider</a>s
+ and may cache type descriptions.<br>
+ Using cppuhelper's bootstrapping routines bootstrapping an initial
+ component context, there is a singleton accessable via key
+ "/singletons/com.sun.star.reflection.theTypeDescriptionManager".
+ This singleton object is hooked into the C UNO runtime typelib and
+ lives until the context is shut down.<br>
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="TypeDescriptionProvider.html">TypeDescriptionProvider</a>, <a href="XTypeDescription.html">XTypeDescription</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="InterfacesSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Exported Interfaces - Summary</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../container/module-ix.html">container</a>::<a href="../container/XHierarchicalNameAccess.html">XHierarchicalNameAccess</a></td>
+<td class="imsum_right"><p>Interface to retrieve type descriptions.
+
+ (<a href="#XHierarchicalNameAccess">details</a>)</p>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../container/module-ix.html">container</a>::<a href="../container/XSet.html">XSet</a></td>
+<td class="imsum_right"><p>You can manually add or remove a providers via this interface.
+ </p>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XComponent.html">XComponent</a></td>
+<td class="imsum_right"><p>Interface to signal shutdown to the manager.<br>
+ This signals all providers to shut down, because usually each provider
+ references its manager, listening for disposing events.
+ (<a href="#XComponent">details</a>)</p>
+</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XTypeDescriptionEnumerationAccess.html">XTypeDescriptionEnumerationAccess</a></td>
+<td class="imsum_right"><p>Interface for creating enumerations for type descriptions supported
+ by this <a href="TypeDescriptionManager.html">TypeDescriptionManager</a>
+
+ (<a href="#XTypeDescriptionEnumerationAccess">details</a>)</p>
+</td>
+</tr>
+</table>
+<a name="InterfacesDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Exported Interfaces - Details</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XHierarchicalNameAccess" class="membertitle">::com::sun::star::<a href="../container/module-ix.html">container</a>::<a href="../container/XHierarchicalNameAccess.html">XHierarchicalNameAccess</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>Interface to retrieve type descriptions.
+
+ </dd>
+<dd><ul>
+ <li>Names are given in dotted notation, for example
+ <code>"com.sun.star.uno.XInterface"</code>.</li>
+
+ <li>Sequence types are accessible via
+ <code>"[]<var>ComponentType</var>"</code></li>
+
+ <li>Instantiated polymorphic struct types are accessible via
+ <code>"<var>StructType</var>&lt;<!--
+            --><var>Parameter</var><sub>1</sub>,&hellip;,<!--
+            --><var>Parameter</var><sub><var>n</var></sub>&gt;"</code>.</li>
+
+ <li>Members of interface types are accessible via
+ <code>"<var>InterfaceType</var>::<var>Member</var>"</code>.</li>
+ </ul>
+
+ <p>The returned values are of interface type
+ <a href="XTypeDescription.html">XTypeDescription</a>.</p>
+
+ <p>Even though the name of this interface suggests that the used type
+ names are hierarchic, this need not be the case. (For example, consider
+ the names of instantiated polymorphic struct types, like
+ <code>"Struct&lt;long&gt;"</code>.)</p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XSet" class="membertitle">::com::sun::star::<a href="../container/module-ix.html">container</a>::<a href="../container/XSet.html">XSet</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>You can manually add or remove a providers via this interface.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XComponent" class="membertitle">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XComponent.html">XComponent</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>Interface to signal shutdown to the manager.<br>
+ This signals all providers to shut down, because usually each provider
+ references its manager, listening for disposing events.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XTypeDescriptionEnumerationAccess" class="membertitle"><a href="XTypeDescriptionEnumerationAccess.html">XTypeDescriptionEnumerationAccess</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>Interface for creating enumerations for type descriptions supported
+ by this <a href="TypeDescriptionManager.html">TypeDescriptionManager</a>
+
+ </dd>
+<dt><b>Since </b></dt>
+<dd>OOo 1.1.2 </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<br>&nbsp;<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

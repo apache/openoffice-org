@@ -1,0 +1,337 @@
+<html>
+<head>
+<title>Module accessibility</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimainself">Module</td>
+<td class="navimainnone">Use</td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub">Nested Modules</td>
+<td class="navisub"><a href="#Services" class="navisub">Services</a></td>
+<td class="navisub">Singletons</td>
+<td class="navisub"><a href="#Interfaces" class="navisub">Interfaces</a></td>
+<td class="navisub"><a href="#Structs" class="navisub">Structs</a></td>
+<td class="navisub"><a href="#Exceptions" class="navisub">Exceptions</a></td>
+<td class="navisub">Enums</td>
+<td class="navisub">Typedefs</td>
+<td class="navisub"><a href="#ConstantGroups" class="navisub">Constant Groups</a></td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">module accessibility</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>UNO Accessibility API
+
+ </dd>
+<dd><p>This modules contains the basic interfaces of the UAA (UNO
+ Accessibility API). Services that describe how these interfaces are
+ implemented can be found in other modules. The services in this module
+ describe only what every accessible object has to support.</p>
+
+ <p>Making a class accessible starts by supporting the <a href="XAccessible.html">XAccessible</a> interface.
+ This interface' only method returns the actual accessibility object, an
+ instance of <a href="XAccessibleContext.html">XAccessibleContext</a>.
+ These two interfaces may be implemented by the same class in which case
+ a call to <method scope="::com::sun::star::accessibility"
+    >XAccessible::getAccessible</method> returns the same object that is
+ called. Alternatively the implementation of the <a href="XAccessibleContext.html">XAccessibleContext</a>
+ interface can be done by another class. This makes it possible to put
+ all accessibility implementations into their own library which has only
+ to be loaded when necessary.</p>
+
+ <p>Note that all other interfaces have to be implemented by the same
+ class that implements the <a href="XAccessibleContext.html">XAccessibleContext</a>
+ interface. Note also that there is no way back from an accessibility
+ object to the object from which it has been obtained by means of the
+ UAA. If you need such a back-link you have to provide one on your
+ own.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="Services"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Services</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="AccessBridge.html">AccessBridge</a></td>
+<td class="imsum_right">The UNO <-> Java Access Bridge allows any native frame window
+ to become accessible by implementing the XAccessible interface.
+ 
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="Accessible.html">Accessible</a></td>
+<td class="imsum_right">Every class has to support this service in order to be accessible.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="AccessibleContext.html">AccessibleContext</a></td>
+<td class="imsum_right">Central service of the Accessibility API that gives access to various
+ facets of an object's content.
+
+ </td>
+</tr>
+</table>
+<a name="Interfaces"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Interfaces</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessible.html">XAccessible</a></td>
+<td class="imsum_right">This interface has to be implemented by any class that wants to be
+ accessible.
+ 
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleAction.html">XAccessibleAction</a></td>
+<td class="imsum_right">Implement this interface to give access to actions that can be executed
+ for accessible objects.
+ 
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleComponent.html">XAccessibleComponent</a></td>
+<td class="imsum_right">The <a href="XAccessibleComponent.html">XAccessibleComponent</a> interface should be supported by
+ any class that can be rendered on the screen.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleContext.html">XAccessibleContext</a></td>
+<td class="imsum_right">Implement this interface for exposing various aspects of a class'
+ content.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleEditableText.html">XAccessibleEditableText</a></td>
+<td class="imsum_right">Implement this interface to give read and write access to a text
+ representation.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleEventBroadcaster.html">XAccessibleEventBroadcaster</a></td>
+<td class="imsum_right">makes it possible to register listeners which are called whenever
+ an accessibility event (see <a href="AccessibleEventObject.html">AccessibleEventObject</a>) occurs.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleEventListener.html">XAccessibleEventListener</a></td>
+<td class="imsum_right">makes it possible to register a component as a listener, which is called whenever
+ an accessibility event occurs.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleExtendedComponent.html">XAccessibleExtendedComponent</a></td>
+<td class="imsum_right">The <a href="XAccessibleExtendedComponent.html">XAccessibleExtendedComponent</a> interface contains
+ additional methods to those of the <a href="XAccessibleComponent.html">XAccessibleComponent</a>
+ interface. These methods provide information that is used not as often. The
+ division into two interfaces allows classes to support the more
+ frequently used methods of the <a href="XAccessibleComponent.html">XAccessibleComponent</a>
+ interface and only support the <a href="XAccessibleExtendedComponent.html">XAccessibleExtendedComponent</a>
+ interface if that makes sense for the class.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleHyperlink.html">XAccessibleHyperlink</a></td>
+<td class="imsum_right">Implement this interface to represent a hyperlink or a group of
+ hyperlinks.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleHypertext.html">XAccessibleHypertext</a></td>
+<td class="imsum_right">Implement this interface to expose the hypertext structure of a document.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleImage.html">XAccessibleImage</a></td>
+<td class="imsum_right">Implement this interface to represent images and icons.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleKeyBinding.html">XAccessibleKeyBinding</a></td>
+<td class="imsum_right">This interface can be used to represent any number of key bindings which
+ then can be associated to a certain action.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleMultiLineText.html">XAccessibleMultiLineText</a></td>
+<td class="imsum_right">not yet published</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleRelationSet.html">XAccessibleRelationSet</a></td>
+<td class="imsum_right">Implement this interface to give access to an object's set of relations.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleSelection.html">XAccessibleSelection</a></td>
+<td class="imsum_right">Implement this interface to represent a selection of accessible objects.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleStateSet.html">XAccessibleStateSet</a></td>
+<td class="imsum_right">Implement this interface to represent a set of states.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleTable.html">XAccessibleTable</a></td>
+<td class="imsum_right">Implement this interface to give access to a two-dimensional table.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleText.html">XAccessibleText</a></td>
+<td class="imsum_right">Implement this interface to give read-only access to a text.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleTextAttributes.html">XAccessibleTextAttributes</a></td>
+<td class="imsum_right">Implement this interface to give access to the attributes of a text.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleTextMarkup.html">XAccessibleTextMarkup</a></td>
+<td class="imsum_right">Implement this interface to expose the text markups of a text.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XAccessibleValue.html">XAccessibleValue</a></td>
+<td class="imsum_right">Implement this interface to give access to a single numerical value.
+
+ </td>
+</tr>
+</table>
+<a name="Structs"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Structs</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="AccessibleEventObject.html">AccessibleEventObject</a></td>
+<td class="imsum_right">this struct describes an accessible event, that is broadcasted from
+ the <a href="XAccessibleEventBroadcaster.html">XAccessibleEventBroadcaster</a> and notified to
+ <a href="XAccessibleEventListener.html">XAccessibleEventListener</a>.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="AccessibleRelation.html">AccessibleRelation</a></td>
+<td class="imsum_right">An <a href="AccessibleRelation.html">AccessibleRelation</a> object defines a one-to-many
+ relation.
+ 
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="AccessibleTableModelChange.html">AccessibleTableModelChange</a></td>
+<td class="imsum_right">This structure lets an event give access to a change of a table model.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="TextSegment.html">TextSegment</a></td>
+<td class="imsum_right">This structure describes a text segment that is embedded in a larger
+ portion of text. It is used for example by the
+ <a href="XAccessibleText.html">XAccessibleText</a> interface to describe a text portion that
+ was inserted into or deleted from an accessible text.
+
+ </td>
+</tr>
+</table>
+<a name="Exceptions"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Exceptions</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="IllegalAccessibleComponentStateException.html">IllegalAccessibleComponentStateException</a></td>
+<td class="imsum_right">Indicates invalid or unavailable state information.
+
+ </td>
+</tr>
+</table>
+<a name="ConstantGroups"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Constant Groups</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="AccessibleEventId.html">AccessibleEventId</a></td>
+<td class="imsum_right">These constants identify the type of <a href="AccessibleEventObject.html">AccessibleEventObject</a>
+ objects.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="AccessibleRelationType.html">AccessibleRelationType</a></td>
+<td class="imsum_right">Collection of relation types.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="AccessibleRole.html">AccessibleRole</a></td>
+<td class="imsum_right">Collection of roles.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="AccessibleStateType.html">AccessibleStateType</a></td>
+<td class="imsum_right">Collection of state types.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="AccessibleTableModelChangeType.html">AccessibleTableModelChangeType</a></td>
+<td class="imsum_right">Type of a change made to a table model.
+
+ </td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="AccessibleTextType.html">AccessibleTextType</a></td>
+<td class="imsum_right">Collection of types of text portions.
+
+ </td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

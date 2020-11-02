@@ -1,0 +1,86 @@
+<html>
+<head>
+<title>struct _rtl_ModuleCount</title>
+<link rel="stylesheet" type="text/css" href="../cpp.css">
+</head>
+<body>
+<div id="adc-cppref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="1" cellspacing="0">
+<tr align="center" valign="top">
+<td class="navimain">&nbsp;<a href="../index.html">Overview</a>&nbsp;</td>
+<td class="navimain">&nbsp;<a href="index.html">Namespace</a>&nbsp;</td>
+<td class="navimainself">&nbsp;Class&nbsp;</td>
+<td class="navimain">&nbsp;<a href="../index-files/index-1.html">Index</a>&nbsp;</td>
+<td class="navimain">&nbsp;<a href="../help.html">Help</a>&nbsp;</td>
+</tr>
+</table>
+<table class="navisub" cellpadding="0" cellspacing="3"></table>
+<hr>
+<a href="../names/index.html" alt="Global Namespace in C++"><font size="+1"><b>::</b></font></a> <div class="title"><h2>struct _rtl_ModuleCount</h2>
+</div><hr>
+<dl>
+<dt>Base Classes</dt>
+<dd>None.</dd>
+</dl>
+<dl>
+<dt>Known Derived Classes</dt>
+<dd>None.</dd>
+</dl>
+<br>
+<table class="flag-table" border="1" cellspacing="0">
+<tr>
+<td width="25%" class="flagname">virtual</td>
+<td width="25%" class="flagname">abstract</td>
+<td width="25%" class="flagname">interface</td>
+<td width="25%" class="flagname">template</td>
+</tr>
+<tr>
+<td class="flagno">NO</td>
+<td class="flagno">NO</td>
+<td class="flagno">NO</td>
+<td class="flagno">NO</td>
+</tr>
+</table>
+<dl>
+<dt>Description</dt>
+<dd>Pointers to <code>rtl_ModuleCount</code> are passed as arguments to the default factory creator
+functions: <code>createSingleComponentFactory</code>, <code>createSingleFactory</code>,
+<code>createOneInstanceFactory</code>.
+The factory implementation is calling <code>rtl_ModuleCount.acquire</code> when it is being 
+constructed and it is calling <code>rtl_ModuleCount.release</code>. The implementations of
+<code>acquire</code>
+and <code>release</code> should influence the return value of <code>component_canUnload</code>
+in a way that it
+returns <code>sal_False</code> after <code>acquire</code> has been called. That is the module will not be unloaded
+once a default factory has been created. A call to <code>release</code> may cause 
+<code>component_canUnload</code> to return <code>sal_False</code>, but only if there are
+no object alive which 
+originated from the module. These objects are factory instances and the service instances
+which have been created by these factories.
+<p>
+It is not necessary to synchronize <code>acquire</code> and <code>release</code> as a whole.
+Simply sychronize the 
+access to a counter variable, e.g. the <code>rtl_moduleCount_release</code> implementation:
+<pre>
+extern "C" void rtl_moduleCount_acquire(rtl_ModuleCount * that )
+{
+    rtl_StandardModuleCount* pMod= (rtl_StandardModuleCount*)that;
+    osl_incrementInterlockedCount( &pMod->counter);
+}
+</pre>
+The SAL library offers functions that can be used for <code>acquire</code> and <code>release</code>. See struct 
+<code>_rtl_StandardModuleCount</code>.
+</dd>
+</dl>
+<dl>
+<dt>File</dt>
+<dd>unload.h</dd>
+</dl>
+<hr>
+<a href="#_top_" class="objchapter">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2012, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-cppref" -->
+</body>
+
+</html>

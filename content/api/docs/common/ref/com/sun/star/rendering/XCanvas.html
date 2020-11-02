@@ -1,0 +1,1534 @@
+<html>
+<head>
+<title>Interface XCanvas</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XCanvas-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">rendering</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XCanvas</td>
+</tr>
+<tr>
+<td/></tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>Central interface for rendering.</dd>
+<dd><p>
+
+ This is the central interface for graphical output production, and
+ the place where all draw methods are located.<p>
+
+ Some notes are in order to explain the concepts used here. The
+ <a href="XCanvas.html">XCanvas</a> interface is free of client-modifiable state,
+ i.e. it can be used safely and without external synchronization in
+ a multi-threaded environment. On the other hand, this implies that
+ for nearly every canvas operation, external state is
+ required. This is provided by <a href="ViewState.html">ViewState</a> and
+ <a href="RenderState.html">RenderState</a> in a unified fashion, supplemented by a
+ few extra state parameters for some methods (e.g. textured
+ polygons or text rendering).<p>
+
+ When used careless, this scheme can be inefficient to some extend,
+ because internally, view, render and other states have to be
+ combined before rendering. This is especially expensive for
+ complex clip polygons, i.e. when both <a href="ViewState.html">ViewState</a> and
+ <a href="RenderState.html">RenderState</a> have a complex clip polygon set, which
+ have to be intersected before rendering. It is therefore
+ recommended to combine <a href="ViewState.html">ViewState</a> and
+ <a href="RenderState.html">RenderState</a> already at the client side, when objects
+ are organized in a hierarchical way: the classic example are
+ grouped draw shapes, whose parent group object imposes a
+ common clipping and a common transformation on its siblings. The
+ group object would therefore merge the <a href="ViewState.html">ViewState</a> and
+ the <a href="RenderState.html">RenderState</a> it is called with into a new
+ <a href="ViewState.html">ViewState</a>, and call its siblings with a
+ <a href="RenderState.html">RenderState</a> containing only the local offset (and no
+ extra clipping).<p>
+
+ Furtheron, this stateless nature provides easy ways for
+ caching. Every non-trivial operation on <a href="XCanvas.html">XCanvas</a> can
+ return a cache object, which, when called to redraw, renders the
+ primitive usually much more quickly than the original method. Note
+ that such caching is a lot more complicated, should the actual
+ rendering a method yields depend on internal state (which is the
+ case e.g. for the
+ ::com::sun::star::drawing::XGraphics
+ interface). Please note, though, that deciding whether to return
+ an <a href="XCachedPrimitive.html">XCachedPrimitive</a> is completely up to the
+ implementation - don't rely on the methods returning something
+ (this is because there might be cases when returning such a cache
+ object will actually be a pessimization, since it involves memory
+ allocation and comparisons).<p>
+
+ Things that need more than a small, fixed amount of data are
+ encapsulated in own interfaces, e.g. polygons and bitmaps. You
+ can, in principle, roll your own implementations of these
+ interfaces, wrap it around your internal representation of
+ polygons and bitmaps, and render them. It might just not be overly
+ fast, because the <a href="XCanvas.html">XCanvas</a> would need to convert for
+ each render call. It is therefore recommended to create such
+ objects via the <a href="XGraphicDevice.html">XGraphicDevice</a> factory (to be
+ retrieved from every canvas object via the
+ <a href="XCanvas.html#getDevice()">getDevice()</a> call) - they will then internally
+ optimize to the underlying graphics subsystem.<p>
+
+ </dd>
+<dt><b>Since </b></dt>
+<dd>OOo 2.0 </dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#clear">clear</a></td>
+<td class="imsum_right">Clear the whole canvas area.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#drawPoint">drawPoint</a></td>
+<td class="imsum_right">Draw a point in device resolution on the device.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#drawLine">drawLine</a></td>
+<td class="imsum_right">Draw a line in device resolution width (i.e. one device pixel
+ wide).
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#drawBezier">drawBezier</a></td>
+<td class="imsum_right">Draw a cubic bezier curve in device resolution width (i.e. one
+ device pixel wide).
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#drawPolyPolygon">drawPolyPolygon</a></td>
+<td class="imsum_right">Draw a poly-polygon in device resolution line width (i.e. the
+ lines are one device pixel wide).
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#strokePolyPolygon">strokePolyPolygon</a></td>
+<td class="imsum_right">Stroke each polygon of the provided poly-polygon with the
+ specified stroke attributes.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#strokeTexturedPolyPolygon">strokeTexturedPolyPolygon</a></td>
+<td class="imsum_right">Stroke each polygon of the provided poly-polygon with the
+ specified stroke attributes, fill the stroked outline
+ with the specified texture graphics.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#strokeTextureMappedPolyPolygon">strokeTextureMappedPolyPolygon</a></td>
+<td class="imsum_right">Stroke each polygon of the provided poly-polygon with the
+ specified stroke attributes, fill the stroked outline
+ with the specified texture graphics, map the texture to the
+ outline via the specified texture mapping.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#queryStrokeShapes">queryStrokeShapes</a></td>
+<td class="imsum_right">Query the polygonal representation of the stroke outlines, as
+ it would be generated by the strokePolyPolygon methods.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#fillPolyPolygon">fillPolyPolygon</a></td>
+<td class="imsum_right">Fill the given poly-polygon.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#fillTexturedPolyPolygon">fillTexturedPolyPolygon</a></td>
+<td class="imsum_right">Fill the given poly-polygon with a texture.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#fillTextureMappedPolyPolygon">fillTextureMappedPolyPolygon</a></td>
+<td class="imsum_right">Fill the given poly-polygon with a mapped texture.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#createFont">createFont</a></td>
+<td class="imsum_right">Create a suitable font for the specified font description.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#queryAvailableFonts">queryAvailableFonts</a></td>
+<td class="imsum_right">Query font information, specific to this canvas.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#drawText">drawText</a></td>
+<td class="imsum_right">Draw the text given by the substring of the specified string
+ with the given font.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#drawTextLayout">drawTextLayout</a></td>
+<td class="imsum_right">Draw the formatted text given by the text layout.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#drawBitmap">drawBitmap</a></td>
+<td class="imsum_right">Render the given bitmap.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#drawBitmapModulated">drawBitmapModulated</a></td>
+<td class="imsum_right">Render the given bitmap, with a global color modulation.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getDevice">getDevice</a></td>
+<td class="imsum_right">Request the associated graphic device for this canvas.&nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="clear" class="membertitle">clear</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>clear</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Clear the whole canvas area.</dd>
+<dd><p>
+
+ This method clears the whole canvas area to the device default
+ color (e.g. white for a printer, transparent for an
+ <a href="XCustomSprite.html">XCustomSprite</a>).
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="drawPoint" class="membertitle">drawPoint</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>drawPoint</b>(</td>
+<td valign="top">[in] ::com::sun::star::<a href="../geometry/module-ix.html">geometry</a>::<a href="../geometry/RealPoint2D.html">RealPoint2D</a></td>
+<td valign="bottom">&nbsp;aPoint,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="ViewState.html">ViewState</a></td>
+<td valign="bottom">&nbsp;aViewState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="RenderState.html">RenderState</a></td>
+<td valign="bottom">&nbsp;aRenderState )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Draw a point in device resolution on the device.
+
+ </dd>
+<dt><b>Parameter aPoint</b></dt>
+<dd>The point to draw.
+
+ </dd>
+<dt><b>Parameter aViewState</b></dt>
+<dd>The viewstate to be used when drawing this point.
+
+ </dd>
+<dt><b>Parameter aRenderState</b></dt>
+<dd>The renderstate to be used when drawing this point.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the view and renderstate parameters are outside the
+ specified range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="drawLine" class="membertitle">drawLine</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>drawLine</b>(</td>
+<td valign="top">[in] ::com::sun::star::<a href="../geometry/module-ix.html">geometry</a>::<a href="../geometry/RealPoint2D.html">RealPoint2D</a></td>
+<td valign="bottom">&nbsp;aStartPoint,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../geometry/module-ix.html">geometry</a>::<a href="../geometry/RealPoint2D.html">RealPoint2D</a></td>
+<td valign="bottom">&nbsp;aEndPoint,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="ViewState.html">ViewState</a></td>
+<td valign="bottom">&nbsp;aViewState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="RenderState.html">RenderState</a></td>
+<td valign="bottom">&nbsp;aRenderState )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Draw a line in device resolution width (i.e. one device pixel
+ wide).
+
+ </dd>
+<dt><b>Parameter aStartPoint</b></dt>
+<dd>The start point of the line to draw.
+
+ </dd>
+<dt><b>Parameter aEndPoint</b></dt>
+<dd>The end point of the line to draw.
+
+ </dd>
+<dt><b>Parameter aViewState</b></dt>
+<dd>The viewstate to be used when drawing this line.
+
+ </dd>
+<dt><b>Parameter aRenderState</b></dt>
+<dd>The renderstate to be used when drawing this line.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the view and renderstate parameters are outside the
+ specified range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="drawBezier" class="membertitle">drawBezier</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>drawBezier</b>(</td>
+<td valign="top">[in] ::com::sun::star::<a href="../geometry/module-ix.html">geometry</a>::<a href="../geometry/RealBezierSegment2D.html">RealBezierSegment2D</a></td>
+<td valign="bottom">&nbsp;aBezierSegment,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../geometry/module-ix.html">geometry</a>::<a href="../geometry/RealPoint2D.html">RealPoint2D</a></td>
+<td valign="bottom">&nbsp;aEndPoint,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="ViewState.html">ViewState</a></td>
+<td valign="bottom">&nbsp;aViewState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="RenderState.html">RenderState</a></td>
+<td valign="bottom">&nbsp;aRenderState )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Draw a cubic bezier curve in device resolution width (i.e. one
+ device pixel wide).
+
+ </dd>
+<dt><b>Parameter aBezierSegment</b></dt>
+<dd>The start and the two control points of the bezier curve.
+
+ </dd>
+<dt><b>Parameter aEndPoint</b></dt>
+<dd>The end point of the bezier curve.
+
+ </dd>
+<dt><b>Parameter aViewState</b></dt>
+<dd>The viewstate to be used when drawing this curve.
+
+ </dd>
+<dt><b>Parameter aRenderState</b></dt>
+<dd>The renderstate to be used when drawing this curve.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the view and renderstate parameters are outside the
+ specified range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="drawPolyPolygon" class="membertitle">drawPolyPolygon</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XCachedPrimitive.html">XCachedPrimitive</a></td>
+</tr>
+<tr>
+<td valign="top"><b>drawPolyPolygon</b>(</td>
+<td valign="top">[in] <a href="XPolyPolygon2D.html">XPolyPolygon2D</a></td>
+<td valign="bottom">&nbsp;xPolyPolygon,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="ViewState.html">ViewState</a></td>
+<td valign="bottom">&nbsp;aViewState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="RenderState.html">RenderState</a></td>
+<td valign="bottom">&nbsp;aRenderState )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Draw a poly-polygon in device resolution line width (i.e. the
+ lines are one device pixel wide).
+
+ </dd>
+<dt><b>Parameter xPolyPolygon</b></dt>
+<dd>The poly-polygon to draw.
+
+ </dd>
+<dt><b>Parameter aViewState</b></dt>
+<dd>The viewstate to be used when drawing this polygon.
+
+ </dd>
+<dt><b>Parameter aRenderState</b></dt>
+<dd>The renderstate to be used when drawing this polygon.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a handle to the cached rendering output.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the view and renderstate parameters are outside the
+ specified range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="strokePolyPolygon" class="membertitle">strokePolyPolygon</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XCachedPrimitive.html">XCachedPrimitive</a></td>
+</tr>
+<tr>
+<td valign="top"><b>strokePolyPolygon</b>(</td>
+<td valign="top">[in] <a href="XPolyPolygon2D.html">XPolyPolygon2D</a></td>
+<td valign="bottom">&nbsp;xPolyPolygon,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="ViewState.html">ViewState</a></td>
+<td valign="bottom">&nbsp;aViewState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="RenderState.html">RenderState</a></td>
+<td valign="bottom">&nbsp;aRenderState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="StrokeAttributes.html">StrokeAttributes</a></td>
+<td valign="bottom">&nbsp;aStrokeAttributes )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Stroke each polygon of the provided poly-polygon with the
+ specified stroke attributes.</dd>
+<dd><p>
+
+ This method considers the stroking of all polygons as an
+ atomic operation in relation to the <a href="RenderState.html">RenderState</a>'s
+ ::CompositeOperationy operation. That means,
+ overlapping strokes from distinct polygons will look exactly
+ as overlapping segments of the same polygon, even with
+ transparency.<p>
+
+ </dd>
+<dt><b>Parameter xPolyPolygon</b></dt>
+<dd>The poly-polygon to render.
+
+ </dd>
+<dt><b>Parameter aViewState</b></dt>
+<dd>The viewstate to be used when stroking this polygon.
+
+ </dd>
+<dt><b>Parameter aRenderState</b></dt>
+<dd>The renderstate to be used when stroking this polygon.
+
+ </dd>
+<dt><b>Parameter aStrokeAttributes</b></dt>
+<dd>Further attributes used to parameterize the stroking.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a handle to the cached rendering output.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the view and renderstate parameters are outside the
+ specified range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="strokeTexturedPolyPolygon" class="membertitle">strokeTexturedPolyPolygon</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XCachedPrimitive.html">XCachedPrimitive</a></td>
+</tr>
+<tr>
+<td valign="top"><b>strokeTexturedPolyPolygon</b>(</td>
+<td valign="top">[in] <a href="XPolyPolygon2D.html">XPolyPolygon2D</a></td>
+<td valign="bottom">&nbsp;xPolyPolygon,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="ViewState.html">ViewState</a></td>
+<td valign="bottom">&nbsp;aViewState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="RenderState.html">RenderState</a></td>
+<td valign="bottom">&nbsp;aRenderState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] sequence&lt; <a href="Texture.html">Texture</a> &gt;</td>
+<td valign="bottom">&nbsp;aTextures,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="StrokeAttributes.html">StrokeAttributes</a></td>
+<td valign="bottom">&nbsp;aStrokeAttributes )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a>,<br>
+<a href="VolatileContentDestroyedException.html">VolatileContentDestroyedException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Stroke each polygon of the provided poly-polygon with the
+ specified stroke attributes, fill the stroked outline
+ with the specified texture graphics.</dd>
+<dd><p>
+
+ This method considers the stroking of all polygons as an
+ atomic operation in relation to the <a href="RenderState.html">RenderState</a>'s
+ ::CompositeOp operation. That means, overlapping
+ strokes from distinct polygons will look exactly as
+ overlapping segments of the same polygon, even with
+ transparency.<p>
+
+ </dd>
+<dt><b>Parameter xPolyPolygon</b></dt>
+<dd>The poly-polygon to render.
+
+ </dd>
+<dt><b>Parameter aViewState</b></dt>
+<dd>The viewstate to be used when strokes this polygon.
+
+ </dd>
+<dt><b>Parameter aRenderState</b></dt>
+<dd>The renderstate to be used when stroking this polygon.
+
+ </dd>
+<dt><b>Parameter aTextures</b></dt>
+<dd>A sequence of texture definitions, with which to fill the
+ stroked area.
+
+ </dd>
+<dt><b>Parameter aStrokeAttributes</b></dt>
+<dd>Further attributes used to parameterize the stroking.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a handle to the cached rendering output.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the view and renderstate parameters are outside the
+ specified range.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd><a href="VolatileContentDestroyedException.html">VolatileContentDestroyedException</a>
+ if a texture bitmap was volatile, and the content was
+ destroyed before the rendering could take place.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="strokeTextureMappedPolyPolygon" class="membertitle">strokeTextureMappedPolyPolygon</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XCachedPrimitive.html">XCachedPrimitive</a></td>
+</tr>
+<tr>
+<td valign="top"><b>strokeTextureMappedPolyPolygon</b>(</td>
+<td valign="top">[in] <a href="XPolyPolygon2D.html">XPolyPolygon2D</a></td>
+<td valign="bottom">&nbsp;xPolyPolygon,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="ViewState.html">ViewState</a></td>
+<td valign="bottom">&nbsp;aViewState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="RenderState.html">RenderState</a></td>
+<td valign="bottom">&nbsp;aRenderState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] sequence&lt; <a href="Texture.html">Texture</a> &gt;</td>
+<td valign="bottom">&nbsp;aTextures,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../geometry/module-ix.html">geometry</a>::<a href="../geometry/XMapping2D.html">XMapping2D</a></td>
+<td valign="bottom">&nbsp;xMapping,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="StrokeAttributes.html">StrokeAttributes</a></td>
+<td valign="bottom">&nbsp;aStrokeAttributes )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a>,<br>
+<a href="VolatileContentDestroyedException.html">VolatileContentDestroyedException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Stroke each polygon of the provided poly-polygon with the
+ specified stroke attributes, fill the stroked outline
+ with the specified texture graphics, map the texture to the
+ outline via the specified texture mapping.</dd>
+<dd><p>
+
+ This method considers the stroking of all polygons as an
+ atomic operation in relation to the <a href="RenderState.html">RenderState</a>'s
+ ::CompositeOp operation. That means, overlapping
+ strokes from distinct polygons will look exactly as
+ overlapping segments of the same polygon, even with
+ transparency.
+
+ </dd>
+<dt><b>Parameter xPolyPolygon</b></dt>
+<dd>The poly-polygon to render.
+
+ </dd>
+<dt><b>Parameter aViewState</b></dt>
+<dd>The viewstate to be used when stroking this polygon.
+
+ </dd>
+<dt><b>Parameter aRenderState</b></dt>
+<dd>The renderstate to be used when stroking this polygon.
+
+ </dd>
+<dt><b>Parameter aTextures</b></dt>
+<dd>A sequence of texture definitions, with which to fill the
+ stroked area.
+
+ </dd>
+<dt><b>Parameter xMapping</b></dt>
+<dd>A bilinear mapping function which defines the warping of the
+ textures on the output area.
+
+ </dd>
+<dt><b>Parameter aStrokeAttributes</b></dt>
+<dd>Further attributes used to parameterize the stroking.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a handle to the cached rendering output.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the view and renderstate parameters are outside the
+ specified range.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd><a href="VolatileContentDestroyedException.html">VolatileContentDestroyedException</a>
+ if a texture bitmap was volatile, and the content was
+ destroyed before the rendering could take place.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="queryStrokeShapes" class="membertitle">queryStrokeShapes</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XPolyPolygon2D.html">XPolyPolygon2D</a></td>
+</tr>
+<tr>
+<td valign="top"><b>queryStrokeShapes</b>(</td>
+<td valign="top">[in] <a href="XPolyPolygon2D.html">XPolyPolygon2D</a></td>
+<td valign="bottom">&nbsp;xPolyPolygon,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="ViewState.html">ViewState</a></td>
+<td valign="bottom">&nbsp;aViewState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="RenderState.html">RenderState</a></td>
+<td valign="bottom">&nbsp;aRenderState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="StrokeAttributes.html">StrokeAttributes</a></td>
+<td valign="bottom">&nbsp;aStrokeAttributes )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Query the polygonal representation of the stroke outlines, as
+ it would be generated by the strokePolyPolygon methods.</dd>
+<dd><p>
+
+ This method can be used to e.g. set a clipping which covers the same
+ area as a stroke.<p>
+
+ </dd>
+<dt><b>Parameter xPolyPolygon</b></dt>
+<dd>The poly-polygon to render.
+
+ </dd>
+<dt><b>Parameter aViewState</b></dt>
+<dd>The viewstate to be used when generating the outline.
+
+ </dd>
+<dt><b>Parameter aRenderState</b></dt>
+<dd>The renderstate to be used when generating the outline.
+
+ </dd>
+<dt><b>Parameter aStrokeAttributes</b></dt>
+<dd>Further attributes used to parameterize the stroking.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a poly-polygon describing the outline of the stroked
+ area.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the view and renderstate parameters are outside the
+ specified range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="fillPolyPolygon" class="membertitle">fillPolyPolygon</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XCachedPrimitive.html">XCachedPrimitive</a></td>
+</tr>
+<tr>
+<td valign="top"><b>fillPolyPolygon</b>(</td>
+<td valign="top">[in] <a href="XPolyPolygon2D.html">XPolyPolygon2D</a></td>
+<td valign="bottom">&nbsp;xPolyPolygon,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="ViewState.html">ViewState</a></td>
+<td valign="bottom">&nbsp;aViewState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="RenderState.html">RenderState</a></td>
+<td valign="bottom">&nbsp;aRenderState )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Fill the given poly-polygon.</dd>
+<dd><p>
+
+ This method fills the given poly-polygon according to the
+ <a href="RenderState.html">RenderState</a>'s color and the poly-polygon's fill
+ rule.<p>
+
+ </dd>
+<dt><b>Parameter xPolyPolygon</b></dt>
+<dd>The poly-polygon to render.
+
+ </dd>
+<dt><b>Parameter aViewState</b></dt>
+<dd>The viewstate to be used when filling this polygon.
+
+ </dd>
+<dt><b>Parameter aRenderState</b></dt>
+<dd>The renderstate to be used when filling this polygon.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a handle to the cached rendering output.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the view and renderstate parameters are outside the
+ specified range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="fillTexturedPolyPolygon" class="membertitle">fillTexturedPolyPolygon</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XCachedPrimitive.html">XCachedPrimitive</a></td>
+</tr>
+<tr>
+<td valign="top"><b>fillTexturedPolyPolygon</b>(</td>
+<td valign="top">[in] <a href="XPolyPolygon2D.html">XPolyPolygon2D</a></td>
+<td valign="bottom">&nbsp;xPolyPolygon,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="ViewState.html">ViewState</a></td>
+<td valign="bottom">&nbsp;aViewState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="RenderState.html">RenderState</a></td>
+<td valign="bottom">&nbsp;aRenderState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] sequence&lt; <a href="Texture.html">Texture</a> &gt;</td>
+<td valign="bottom">&nbsp;xTextures )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a>,<br>
+<a href="VolatileContentDestroyedException.html">VolatileContentDestroyedException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Fill the given poly-polygon with a texture.</dd>
+<dd><p>
+
+ This method fills the given poly-polygon according to the
+ <a href="RenderState.html">RenderState</a>'s color, the given textures and
+ poly-polygon's fill rule.<p>
+
+ </dd>
+<dt><b>Parameter xPolyPolygon</b></dt>
+<dd>The poly-polygon to render.
+
+ </dd>
+<dt><b>Parameter aViewState</b></dt>
+<dd>The viewstate to be used when filling this polygon.
+
+ </dd>
+<dt><b>Parameter aRenderState</b></dt>
+<dd>The renderstate to be used when filling this polygon.
+
+ </dd>
+<dt><b>Parameter aTextures</b></dt>
+<dd>A sequence of texture definitions, with which to fill the
+ polygonal area.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a handle to the cached rendering output.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the view and renderstate parameters are outside the
+ specified range.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd><a href="VolatileContentDestroyedException.html">VolatileContentDestroyedException</a>
+ if a texture bitmap was volatile, and the content was
+ destroyed before the rendering could take place.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="fillTextureMappedPolyPolygon" class="membertitle">fillTextureMappedPolyPolygon</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XCachedPrimitive.html">XCachedPrimitive</a></td>
+</tr>
+<tr>
+<td valign="top"><b>fillTextureMappedPolyPolygon</b>(</td>
+<td valign="top">[in] <a href="XPolyPolygon2D.html">XPolyPolygon2D</a></td>
+<td valign="bottom">&nbsp;xPolyPolygon,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="ViewState.html">ViewState</a></td>
+<td valign="bottom">&nbsp;aViewState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="RenderState.html">RenderState</a></td>
+<td valign="bottom">&nbsp;aRenderState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] sequence&lt; <a href="Texture.html">Texture</a> &gt;</td>
+<td valign="bottom">&nbsp;xTextures,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../geometry/module-ix.html">geometry</a>::<a href="../geometry/XMapping2D.html">XMapping2D</a></td>
+<td valign="bottom">&nbsp;xMapping )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a>,<br>
+<a href="VolatileContentDestroyedException.html">VolatileContentDestroyedException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Fill the given poly-polygon with a mapped texture.</dd>
+<dd><p>
+
+ This method fills the given poly-polygon according to the
+ <a href="RenderState.html">RenderState</a>'s color, the given textures and
+ poly-polygon's fill rule. The texture is mapped to the
+ poly-polygon's interior via the given texture mapping.<p>
+
+ </dd>
+<dt><b>Parameter xPolyPolygon</b></dt>
+<dd>The poly-polygon to render.
+
+ </dd>
+<dt><b>Parameter aViewState</b></dt>
+<dd>The viewstate to be used when filling this polygon.
+
+ </dd>
+<dt><b>Parameter aRenderState</b></dt>
+<dd>The renderstate to be used when filling this polygon.
+
+ </dd>
+<dt><b>Parameter aTextures</b></dt>
+<dd>A sequence of texture definitions, with which to fill the
+ polygonal area.
+
+ </dd>
+<dt><b>Parameter xMapping</b></dt>
+<dd>A bilinear mapping function which defines the warping of the
+ textures on the output area.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a handle to the cached rendering output.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the view and renderstate parameters are outside the
+ specified range.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd><a href="VolatileContentDestroyedException.html">VolatileContentDestroyedException</a>
+ if a texture bitmap was volatile, and the content was
+ destroyed before the rendering could take place.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="createFont" class="membertitle">createFont</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XCanvasFont.html">XCanvasFont</a></td>
+</tr>
+<tr>
+<td valign="top"><b>createFont</b>(</td>
+<td valign="top">[in] <a href="FontRequest.html">FontRequest</a></td>
+<td valign="bottom">&nbsp;aFontRequest,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] sequence&lt; ::com::sun::star::<a href="../beans/module-ix.html">beans</a>::<a href="../beans/PropertyValue.html">PropertyValue</a> &gt;</td>
+<td valign="bottom">&nbsp;aExtraFontProperties,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../geometry/module-ix.html">geometry</a>::<a href="../geometry/Matrix2D.html">Matrix2D</a></td>
+<td valign="bottom">&nbsp;aFontMatrix )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Create a suitable font for the specified font description.
+
+ </dd>
+<dt><b>Parameter aFontRequest</b></dt>
+<dd/><dt><b>Parameter aExtraFontProperties</b></dt>
+<dd>Additional font properties to be applied when selecting this
+ font. Normally, you should not need this parameter. Currently,
+ the following properties are recognized:
+ <ul>
+
+ <il>Kerning: a ::double between 0 and 1, where
+ 0 completely disables kerning. Whether kerning is on or
+ off by default is font-dependent.</il>
+
+ <il>IsEmphasisMarks: a ::boolean, where <b>true</b>
+ enables automatic placements of emphasis marks, e.g. for
+ Hebrew. The default value, if this property is not
+ specified, is <b>false</b>.</il>
+
+ <il>ExpandedSpacing: a ::double value which is added
+ between all cell distances for this font. The default value for
+ this property is zero. Use negative values for condensed output,
+ and positive values for expanded output.</il>
+
+ <il>OptionalLayoutFeatures: a sequence of ::PropertyValue listing
+ font-specific optional layout features, like glyph
+ variants.</il>
+
+ </ul>
+
+ </dd>
+<dt><b>Parameter aFontMatrix</b></dt>
+<dd>Font-specific transformation matrix, which affects both the
+ glyphs as well as the advancement.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the requested font, or an invalid reference, if the
+ request failed.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the parameters is not within the allowed range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="queryAvailableFonts" class="membertitle">queryAvailableFonts</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">sequence&lt; <a href="FontInfo.html">FontInfo</a> &gt;</td>
+</tr>
+<tr>
+<td valign="top"><b>queryAvailableFonts</b>(</td>
+<td valign="top">[in] <a href="FontInfo.html">FontInfo</a></td>
+<td valign="bottom">&nbsp;aFilter,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] sequence&lt; ::com::sun::star::<a href="../beans/module-ix.html">beans</a>::<a href="../beans/PropertyValue.html">PropertyValue</a> &gt;</td>
+<td valign="bottom">&nbsp;aFontProperties )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Query font information, specific to this canvas.</dd>
+<dd><p>
+
+ </dd>
+<dt><b>Parameter aFilter</b></dt>
+<dd>Filter parameter to reduce the list of returned fonts. Every
+ member of <a href="FontInfo.html">FontInfo</a> that is not the empty string
+ or the "don't care" value restricts the list of returned fonts
+ to contain only those that have the specified attribute.
+
+ </dd>
+<dt><b>Parameter xFontProperties</b></dt>
+<dd>This interface can provide additional font properties to
+ filter the list of available fonts against.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the list of fonts matching the filter set.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the font properties are invalid or not recognized,
+ or if one of the <a href="FontInfo.html">FontInfo</a> members is not within
+ the permitted range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="drawText" class="membertitle">drawText</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XCachedPrimitive.html">XCachedPrimitive</a></td>
+</tr>
+<tr>
+<td valign="top"><b>drawText</b>(</td>
+<td valign="top">[in] <a href="StringContext.html">StringContext</a></td>
+<td valign="bottom">&nbsp;aText,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="XCanvasFont.html">XCanvasFont</a></td>
+<td valign="bottom">&nbsp;xFont,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="ViewState.html">ViewState</a></td>
+<td valign="bottom">&nbsp;aViewState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="RenderState.html">RenderState</a></td>
+<td valign="bottom">&nbsp;aRenderState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] byte</td>
+<td valign="bottom">&nbsp;nTextDirection )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Draw the text given by the substring of the specified string
+ with the given font.</dd>
+<dd><p>
+
+ The local origin of this output operation is either the left
+ end of the text baseline, for textDirection equal
+ LEFT_TO_RIGHT, or the right end of the baseline, for
+ textDirection equal to RIGHT_TO_LEFT, respectively.<p>
+
+ </dd>
+<dt><b>Parameter aText</b></dt>
+<dd>The text to output.
+
+ </dd>
+<dt><b>Parameter xFont</b></dt>
+<dd>The font retrieved from this canvas to be used when drawing
+ the text.
+
+ </dd>
+<dt><b>Parameter aViewState</b></dt>
+<dd>The viewstate to be used when drawing this text.
+
+ </dd>
+<dt><b>Parameter aRenderState</b></dt>
+<dd>The renderstate to be used when drawing this text.
+
+ </dd>
+<dt><b>Parameter nTextDirection</b></dt>
+<dd>A value from the <a href="TextDirection.html">TextDirection</a> collection,
+ denoting the main writing direction for this string. The main
+ writing direction determines the origin of the text output,
+ i.e. the left edge for left-to-right and the right edge for
+ right-to-left text.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a handle to the cached rendering output.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the view and renderstate parameters are outside the
+ specified range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="drawTextLayout" class="membertitle">drawTextLayout</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XCachedPrimitive.html">XCachedPrimitive</a></td>
+</tr>
+<tr>
+<td valign="top"><b>drawTextLayout</b>(</td>
+<td valign="top">[in] <a href="XTextLayout.html">XTextLayout</a></td>
+<td valign="bottom">&nbsp;xLayoutetText,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="ViewState.html">ViewState</a></td>
+<td valign="bottom">&nbsp;aViewState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="RenderState.html">RenderState</a></td>
+<td valign="bottom">&nbsp;aRenderState )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Draw the formatted text given by the text layout.</dd>
+<dd><p>
+
+ The glyphs as represented by the text layout are always output
+ with the reference position being the leftmost edge of the
+ layout object's baseline. If the layout contains more than one
+ baseline, the baseline of the first strong character in
+ logical order is used here (strong in this context means that
+ the character can be unambiguously assigned to a unicode
+ script).<p>
+
+ </dd>
+<dt><b>Parameter xLayoutetText</b></dt>
+<dd>An interface to the readily layouted text, obtained from a
+ <a href="XCanvasFont.html">XCanvasFont</a> created at this canvas. The text
+ layout already carries intrinsic font information.
+
+ </dd>
+<dt><b>Parameter aViewState</b></dt>
+<dd>The viewstate to be used when drawing this text.
+
+ </dd>
+<dt><b>Parameter aRenderState</b></dt>
+<dd>The renderstate to be used when drawing this text.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a handle to the cached rendering output.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the view and renderstate parameters are outside the
+ specified range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="drawBitmap" class="membertitle">drawBitmap</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XCachedPrimitive.html">XCachedPrimitive</a></td>
+</tr>
+<tr>
+<td valign="top"><b>drawBitmap</b>(</td>
+<td valign="top">[in] <a href="XBitmap.html">XBitmap</a></td>
+<td valign="bottom">&nbsp;xBitmap,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="ViewState.html">ViewState</a></td>
+<td valign="bottom">&nbsp;aViewState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="RenderState.html">RenderState</a></td>
+<td valign="bottom">&nbsp;aRenderState )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a>,<br>
+<a href="VolatileContentDestroyedException.html">VolatileContentDestroyedException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Render the given bitmap.</dd>
+<dd><p>
+
+ This method renders the bitmap, at a position and shape as
+ specified by the combined view and render transformations. For
+ fast render speed, the bitmap should be created by the
+ corresponding <a href="XGraphicDevice.html">XGraphicDevice</a>'s
+ <a href="XGraphicDevice.html">XGraphicDevice</a>::<a href="XGraphicDevice.html#createCompatibleBitmap">createCompatibleBitmap()</a>
+ method.<p>
+
+ </dd>
+<dt><b>Parameter xBitmap</b></dt>
+<dd>The bitmap to render.
+
+ </dd>
+<dt><b>Parameter aViewState</b></dt>
+<dd>The viewstate to be used when drawing this text.
+
+ </dd>
+<dt><b>Parameter aRenderState</b></dt>
+<dd>The renderstate to be used when drawing this text.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a handle to the cached rendering output.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the view and renderstate parameters are outside the
+ specified range.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd><a href="VolatileContentDestroyedException.html">VolatileContentDestroyedException</a>
+ if a texture bitmap was volatile, and the content was
+ destroyed before the rendering could take place.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="drawBitmapModulated" class="membertitle">drawBitmapModulated</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XCachedPrimitive.html">XCachedPrimitive</a></td>
+</tr>
+<tr>
+<td valign="top"><b>drawBitmapModulated</b>(</td>
+<td valign="top">[in] <a href="XBitmap.html">XBitmap</a></td>
+<td valign="bottom">&nbsp;xBitmap,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="ViewState.html">ViewState</a></td>
+<td valign="bottom">&nbsp;aViewState,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="RenderState.html">RenderState</a></td>
+<td valign="bottom">&nbsp;aRenderState )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a>,<br>
+<a href="VolatileContentDestroyedException.html">VolatileContentDestroyedException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Render the given bitmap, with a global color modulation.</dd>
+<dd><p>
+
+ This method renders the bitmap, at a position and shape as
+ specified by the combined view and render transformations. For
+ fast render speed, the bitmap should be created by the
+ corresponding <a href="XGraphicDevice.html">XGraphicDevice</a>'s
+ <a href="XGraphicDevice.html">XGraphicDevice</a>::<a href="XGraphicDevice.html#createCompatibleBitmap">createCompatibleBitmap()</a>
+ method. The bitmap's color channel values are multiplied with
+ the device color values as specified in the render state.<p>
+
+ </dd>
+<dt><b>Parameter xBitmap</b></dt>
+<dd>The bitmap to render.
+
+ </dd>
+<dt><b>Parameter aViewState</b></dt>
+<dd>The viewstate to be used when drawing this text.
+
+ </dd>
+<dt><b>Parameter aRenderState</b></dt>
+<dd>The renderstate to be used when drawing this text. The device
+ color entry in the renderstate is multiplied with every pixel
+ color value, and only the result is rendered into the
+ canvas. If, for example, the bitmap should be rendered with
+ increased global transparency, set all device color channels
+ to 1.0, except for the alpha channel, which should be set to
+ the desired transparency.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a handle to the cached rendering output.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the view and renderstate parameters are outside the
+ specified range.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd><a href="VolatileContentDestroyedException.html">VolatileContentDestroyedException</a>
+ if a texture bitmap was volatile, and the content was
+ destroyed before the rendering could take place.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getDevice" class="membertitle">getDevice</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XGraphicDevice.html">XGraphicDevice</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getDevice</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Request the associated graphic device for this canvas.</dd>
+<dd><p>
+
+ A graphic device provides methods specific to the underlying
+ output device capabilities, which are common for all canvases
+ rendering to such a device. This includes device resolution,
+ color space, or bitmap formats.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the associated <a href="XGraphicDevice.html">XGraphicDevice</a>.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

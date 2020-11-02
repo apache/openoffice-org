@@ -1,0 +1,280 @@
+<html>
+<head>
+<title>Interface XContextChangeEventMultiplexer</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XContextChangeEventMultiplexer-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">ui</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title"><table class="title-table" width="99%">
+<tr>
+<td width="25%" class="title2">unpublished </td>
+<td width="50%" class="title">interface XContextChangeEventMultiplexer</td>
+<td width="*"/></tr>
+</table>
+</td>
+</tr>
+<tr>
+<td/></tr>
+<tr>
+<td><dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>not published</i></dd>
+<dt><b>Description</b></dt>
+<dd>Provide a central access point for a group of events.
+
+ Listeners can be added with a simple restriction on the event source.
+ They are only called for events that originate at the specified source.
+
+ Event providers can broadcast an event to all interested listeners.
+
+ The XEventMultiplexer interface is typically implemented as a singleton
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#addContextChangeEventListener">addContextChangeEventListener</a></td>
+<td class="imsum_right">Add an event listener that is called only when events are broadcast for the specified
+ event focus.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#removeContextChangeEventListener">removeContextChangeEventListener</a></td>
+<td class="imsum_right">Remove an event listener for the specified event focus.
+
+ When the same listener was added for other event foci then
+ these associations remain unmodified.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#removeAllContextChangeEventListeners">removeAllContextChangeEventListeners</a></td>
+<td class="imsum_right">Remove an event listener for all event foci.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#broadcastContextChangeEvent">broadcastContextChangeEvent</a></td>
+<td class="imsum_right">Call all event listeners that where added for the specified event focus.
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="addContextChangeEventListener" class="membertitle">addContextChangeEventListener</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>addContextChangeEventListener</b>(</td>
+<td valign="top">[in] <a href="XContextChangeEventListener.html">XContextChangeEventListener</a></td>
+<td valign="bottom">&nbsp;xListener,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../uno/module-ix.html">uno</a>::<a href="../uno/XInterface.html">XInterface</a></td>
+<td valign="bottom">&nbsp;xEventFocus )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Add an event listener that is called only when events are broadcast for the specified
+ event focus.
+
+ </dd>
+<dt><b>Parameter xListener</b></dt>
+<dd>An empty reference results in an InvalidArgumentException.
+
+ One listener may be added more than once for different
+ event foci. Adding a listener a second time for the same
+ event focus results in an InvalidArgumentException.
+ 
+ </dd>
+<dt><b>Parameter xEventFocus</b></dt>
+<dd>An empty reference is a valid value. In this case the
+ registered listener will be called for every event
+ broadcast, regardless of its event focus.
+
+ The event focus may or may not be the source of the event.
+ 
+ A typical example for an event focus is the XController of
+ a view. Using an XController restricts events passed to
+ a listener to events that belong to one view.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ 
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="removeContextChangeEventListener" class="membertitle">removeContextChangeEventListener</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>removeContextChangeEventListener</b>(</td>
+<td valign="top">[in] <a href="XContextChangeEventListener.html">XContextChangeEventListener</a></td>
+<td valign="bottom">&nbsp;xListener,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../uno/module-ix.html">uno</a>::<a href="../uno/XInterface.html">XInterface</a></td>
+<td valign="bottom">&nbsp;xEventFocus )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Remove an event listener for the specified event focus.
+
+ When the same listener was added for other event foci then
+ these associations remain unmodified.
+
+ </dd>
+<dt><b>Parameter xListener</b></dt>
+<dd>An empty reference results in an InvalidArgumentException.
+
+ When the listener is not registered for the given event
+ focus then an InvalidArgumentException is thrown.
+ 
+ </dd>
+<dt><b>Parameter xEventFocus</b></dt>
+<dd>The listener is only removed for this event focus.
+ An empty reference is a valid value.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="removeAllContextChangeEventListeners" class="membertitle">removeAllContextChangeEventListeners</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>removeAllContextChangeEventListeners</b>(</td>
+<td valign="top">[in] <a href="XContextChangeEventListener.html">XContextChangeEventListener</a></td>
+<td valign="bottom">&nbsp;xListener )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Remove an event listener for all event foci.
+
+ </dd>
+<dt><b>Parameter xListener</b></dt>
+<dd>An empty reference results in an InvalidArgumentException.
+
+ It is not an error when the listener is not registered for any event focus.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="broadcastContextChangeEvent" class="membertitle">broadcastContextChangeEvent</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">[oneway] void</td>
+</tr>
+<tr>
+<td valign="top"><b>broadcastContextChangeEvent</b>(</td>
+<td valign="top">[in] <a href="ContextChangeEventObject.html">ContextChangeEventObject</a></td>
+<td valign="bottom">&nbsp;aEvent,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../uno/module-ix.html">uno</a>::<a href="../uno/XInterface.html">XInterface</a></td>
+<td valign="bottom">&nbsp;xEventFocus );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Call all event listeners that where added for the specified event focus.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

@@ -1,0 +1,506 @@
+<html>
+<head>
+<title>Interface XStringResourceResolver</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XStringResourceResolver-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">resource</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XStringResourceResolver</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Base Interfaces</b></dt>
+<dd><pre style="font-family:monospace;"><strong>XStringResourceResolver</strong>
+&#x2517 ::com::sun::star::<a href="../util/module-ix.html">util</a>::<a href="../util/XModifyBroadcaster.html">XModifyBroadcaster</a>
+
+</pre></dd>
+<dd><a name/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="crosstitle">
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../util/module-ix.html">util</a>::<a href="../util/XModifyBroadcaster.html">XModifyBroadcaster</a></td>
+<td class="imsum_right"><dl>
+<dt>(referenced interface's summary:)</dt>
+<dd>broadcasts each modification made on the date data of the object which
+ supports this interface.
+ 
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>Interface to access strings in a resource.
+
+ The interface is derived from
+ ::com::sun::star::<a href="../util/module-ix.html">util</a>::<a href="../util/XModifyBroadcaster.html">XModifyBroadcaster</a>
+
+ All registered ::com::sun::star::<a href="../util/module-ix.html">util</a>::<a href="../util/XModifyListener.html">XModifyListener</a>
+ interfaces will be notified if either the current locale changes or if
+ a string is added, changed or removed. This usually will only happen if
+ the implementing object also supports the interface
+ <a href="XStringResourceManager.html">XStringResourceManager</a>
+ and is used in the design mode of a Dialog or String table editor.
+ But also changing the locale at runtime can be supported in this way.
+
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#resolveString">resolveString</a></td>
+<td class="imsum_right">Resolves the passed ResoureID for the current locale. This
+ locale is set during initalisation of the object implementing
+ this interface or - in case that also the interface
+ <a href="XStringResourceManager.html">XStringResourceManager</a>
+ is supported - by using the <code>XStringResourceManager::setLocale</code>
+ method.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#resolveStringForLocale">resolveStringForLocale</a></td>
+<td class="imsum_right">Resolves the passed ResoureID for a specific locale.
+
+ It's not recommended to use this method to get the best
+ performance as the implementation may be optimized for
+ the use of the current locale.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#hasEntryForId">hasEntryForId</a></td>
+<td class="imsum_right">Checks if the resource contains an entry for the given ResourceID
+ and current locale.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#hasEntryForIdAndLocale">hasEntryForIdAndLocale</a></td>
+<td class="imsum_right">Checks if the resource contains an entry for the given ResourceID and locale.
+
+ It's not recommended to use this method to get the best
+ performance as the implementation may be optimized for
+ the use of the current locale.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getResourceIDs">getResourceIDs</a></td>
+<td class="imsum_right">Returns a sequence of all valid Resource IDs for the current locale
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getResourceIDsForLocale">getResourceIDsForLocale</a></td>
+<td class="imsum_right">Returns a sequence of all valid Resource IDs for a specific locale
+
+ It's not recommended to use this method to get the best
+ performance as the implementation may be optimized for
+ the use of the current locale.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getCurrentLocale">getCurrentLocale</a></td>
+<td class="imsum_right">Returns the current locale specified in the accessed resource.
+
+ If no locale is available, the returned Locale structure
+ only contains empty strings.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getDefaultLocale">getDefaultLocale</a></td>
+<td class="imsum_right">Returns the default locale of the accessed resource. In many
+ cases this will be the locale of the Office initially used
+ to create the resource.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getLocales">getLocales</a></td>
+<td class="imsum_right">Returns a sequence of all supported locales
+
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="resolveString" class="membertitle">resolveString</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">string</td>
+</tr>
+<tr>
+<td valign="top"><b>resolveString</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceID )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="MissingResourceException.html">MissingResourceException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Resolves the passed ResoureID for the current locale. This
+ locale is set during initalisation of the object implementing
+ this interface or - in case that also the interface
+ <a href="XStringResourceManager.html">XStringResourceManager</a>
+ is supported - by using the <code>XStringResourceManager::setLocale</code>
+ method.
+
+ </dd>
+<dt><b>Parameter ResourceID</b></dt>
+<dd>ID to specify the string inside the resource.
+ The ID can - but not needs to - be a hierarchical
+ name like "foo.nothing.invalid".
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the localized string for the specified ID
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>::com::sun::star::resource::MissingResourceException
+ if no entry exists for the given ResourceID
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="resolveStringForLocale" class="membertitle">resolveStringForLocale</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">string</td>
+</tr>
+<tr>
+<td valign="top"><b>resolveStringForLocale</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceID,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/Locale.html">Locale</a></td>
+<td valign="bottom">&nbsp;locale )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="MissingResourceException.html">MissingResourceException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Resolves the passed ResoureID for a specific locale.
+
+ It's not recommended to use this method to get the best
+ performance as the implementation may be optimized for
+ the use of the current locale.
+
+ </dd>
+<dt><b>Parameter ResourceID</b></dt>
+<dd>ID to specify the string inside the resource.
+ The ID can - but not needs to - be a hierarchical
+ name like "foo.nothing.invalid".
+
+ </dd>
+<dt><b>Parameter locale</b></dt>
+<dd>The locale the string should be resolved for.
+ The locale has to match exactly with one of the locales provided by
+ <a href="#getLocales">getLocales</a>. A closest match search is not supported.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the localized string for the specified ID and Locale
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd><a href="MissingResourceException.html">MissingResourceException</a>
+ if no entry exists for the given ResourceID or locale
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="hasEntryForId" class="membertitle">hasEntryForId</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>hasEntryForId</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceID );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Checks if the resource contains an entry for the given ResourceID
+ and current locale.
+
+ </dd>
+<dt><b>Parameter ResourceID</b></dt>
+<dd>ID to specify the string inside the resource.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd><b>true</b> if an entry exists, otherwise <b>false</b>
+
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="hasEntryForIdAndLocale" class="membertitle">hasEntryForIdAndLocale</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>hasEntryForIdAndLocale</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ResourceID,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/Locale.html">Locale</a></td>
+<td valign="bottom">&nbsp;locale );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Checks if the resource contains an entry for the given ResourceID and locale.
+
+ It's not recommended to use this method to get the best
+ performance as the implementation may be optimized for
+ the use of the current locale.
+
+ </dd>
+<dt><b>Parameter ResourceID</b></dt>
+<dd>ID to specify the string inside the resource.
+
+ </dd>
+<dt><b>Parameter locale</b></dt>
+<dd>The locale the entry should be checked for.
+ The locale has to match exactly with one of the locales provided by
+ <a href="#getLocales">getLocales</a>. A closest match search is not supported.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd><b>true</b> if an entry exists, otherwise <b>false</b>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getResourceIDs" class="membertitle">getResourceIDs</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">sequence&lt; string &gt;</td>
+</tr>
+<tr>
+<td valign="top"><b>getResourceIDs</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Returns a sequence of all valid Resource IDs for the current locale
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a sequence of all valid Resource IDs
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getResourceIDsForLocale" class="membertitle">getResourceIDsForLocale</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">sequence&lt; string &gt;</td>
+</tr>
+<tr>
+<td valign="top"><b>getResourceIDsForLocale</b>(</td>
+<td valign="top">[in] ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/Locale.html">Locale</a></td>
+<td valign="bottom">&nbsp;locale );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Returns a sequence of all valid Resource IDs for a specific locale
+
+ It's not recommended to use this method to get the best
+ performance as the implementation may be optimized for
+ the use of the current locale.
+
+ </dd>
+<dt><b>Parameter locale</b></dt>
+<dd>The locale the ResourceIDs should be returned for.
+ The locale has to match exactly with one of the locales provided by
+ <a href="#getLocales">getLocales</a>. A closest match search is not supported.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a sequence of all valid Resource IDs
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getCurrentLocale" class="membertitle">getCurrentLocale</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/Locale.html">Locale</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getCurrentLocale</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Returns the current locale specified in the accessed resource.
+
+ If no locale is available, the returned Locale structure
+ only contains empty strings.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the used locale
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getDefaultLocale" class="membertitle">getDefaultLocale</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/Locale.html">Locale</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getDefaultLocale</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Returns the default locale of the accessed resource. In many
+ cases this will be the locale of the Office initially used
+ to create the resource.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the used locale
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getLocales" class="membertitle">getLocales</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">sequence&lt; ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/Locale.html">Locale</a> &gt;</td>
+</tr>
+<tr>
+<td valign="top"><b>getLocales</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Returns a sequence of all supported locales
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a sequence of all supported locales
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

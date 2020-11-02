@@ -1,0 +1,776 @@
+<html>
+<head>
+<title>Interface XPerformanceTest</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XPerformanceTest-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub"><a href="#AttributesSummary" class="navisub">Attributes' Summary</a></td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub"><a href="#AttributesDetails" class="navisub">Attributes' Details</a></td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../../module-ix.html" class="namechain">::</a> <a href="../../../../module-ix.html" class="namechain">com</a> :: <a href="../../../module-ix.html" class="namechain">sun</a> :: <a href="../../module-ix.html" class="namechain">star</a> :: <a href="../module-ix.html" class="namechain">test</a> :: <a href="module-ix.html" class="namechain">performance</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XPerformanceTest</td>
+</tr>
+<tr>
+<td/></tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>A performance test object has to be implemented in a special way, that:
+ </dd>
+<dd><ul>
+ <li>queryInterface() execution times remain (nearly) static</li>
+ <li>functions kept simple, thus there is (nearly) no execution time of the function itself</li>
+ <li>no dynamic data is ever returned except of createObject(), so return 0, empty strings etc.</li>
+ </ul>
+ The interface is divided into three sections:
+ <ul>
+ <li>measuring asynchron/ synchron calls</li>
+ <li>complex data calls with/out return value; in/out parameters</li>
+ <li>single data types like long, float, string etc.</li>
+ <li>method calls versa attribute calls</li>
+ <li>raising RuntimeException</li>
+ </ul>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#async">async</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#sync">sync</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#complex_in">complex_in</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#complex_inout">complex_inout</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#complex_oneway">complex_oneway</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#complex_noreturn">complex_noreturn</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#createObject">createObject</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getLong">getLong</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setLong">setLong</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getHyper">getHyper</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setHyper">setHyper</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getFloat">getFloat</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setFloat">setFloat</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getDouble">getDouble</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setDouble">setDouble</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getString">getString</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setString">setString</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getInterface">getInterface</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setInterface">setInterface</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getAny">getAny</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setAny">setAny</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getSequence">getSequence</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setSequence">setSequence</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getStruct">getStruct</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setStruct">setStruct</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#raiseRuntimeException">raiseRuntimeException</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+</table>
+<a name="AttributesSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Attributes' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#Long_attr">Long_attr</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#Hyper_attr">Hyper_attr</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#Float_attr">Float_attr</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#Double_attr">Double_attr</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#String_attr">String_attr</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#Interface_attr">Interface_attr</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#Any_attr">Any_attr</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#Sequence_attr">Sequence_attr</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#Struct_attr">Struct_attr</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="async" class="membertitle">async</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">[oneway] void</td>
+</tr>
+<tr>
+<td valign="top"><b>async</b>();</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="sync" class="membertitle">sync</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>sync</b>();</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="complex_in" class="membertitle">complex_in</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="ComplexTypes.html">ComplexTypes</a></td>
+</tr>
+<tr>
+<td valign="top"><b>complex_in</b>(</td>
+<td valign="top">[in] <a href="ComplexTypes.html">ComplexTypes</a></td>
+<td valign="bottom">&nbsp;aVal );</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="complex_inout" class="membertitle">complex_inout</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="ComplexTypes.html">ComplexTypes</a></td>
+</tr>
+<tr>
+<td valign="top"><b>complex_inout</b>(</td>
+<td valign="top">[inout] <a href="ComplexTypes.html">ComplexTypes</a></td>
+<td valign="bottom">&nbsp;aVal );</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="complex_oneway" class="membertitle">complex_oneway</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">[oneway] void</td>
+</tr>
+<tr>
+<td valign="top"><b>complex_oneway</b>(</td>
+<td valign="top">[in] <a href="ComplexTypes.html">ComplexTypes</a></td>
+<td valign="bottom">&nbsp;aVal );</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="complex_noreturn" class="membertitle">complex_noreturn</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>complex_noreturn</b>(</td>
+<td valign="top">[in] <a href="ComplexTypes.html">ComplexTypes</a></td>
+<td valign="bottom">&nbsp;aVal );</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="createObject" class="membertitle">createObject</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XPerformanceTest.html">XPerformanceTest</a></td>
+</tr>
+<tr>
+<td valign="top"><b>createObject</b>();</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getLong" class="membertitle">getLong</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">long</td>
+</tr>
+<tr>
+<td valign="top"><b>getLong</b>();</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setLong" class="membertitle">setLong</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setLong</b>(</td>
+<td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;n );</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getHyper" class="membertitle">getHyper</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">hyper</td>
+</tr>
+<tr>
+<td valign="top"><b>getHyper</b>();</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setHyper" class="membertitle">setHyper</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setHyper</b>(</td>
+<td valign="top">[in] hyper</td>
+<td valign="bottom">&nbsp;n );</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getFloat" class="membertitle">getFloat</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">float</td>
+</tr>
+<tr>
+<td valign="top"><b>getFloat</b>();</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setFloat" class="membertitle">setFloat</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setFloat</b>(</td>
+<td valign="top">[in] float</td>
+<td valign="bottom">&nbsp;f );</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getDouble" class="membertitle">getDouble</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">double</td>
+</tr>
+<tr>
+<td valign="top"><b>getDouble</b>();</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setDouble" class="membertitle">setDouble</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setDouble</b>(</td>
+<td valign="top">[in] double</td>
+<td valign="bottom">&nbsp;f );</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getString" class="membertitle">getString</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">string</td>
+</tr>
+<tr>
+<td valign="top"><b>getString</b>();</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setString" class="membertitle">setString</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setString</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;s );</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getInterface" class="membertitle">getInterface</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">::com::sun::star::<a href="../../uno/module-ix.html">uno</a>::<a href="../../uno/XInterface.html">XInterface</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getInterface</b>();</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setInterface" class="membertitle">setInterface</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setInterface</b>(</td>
+<td valign="top">[in] ::com::sun::star::<a href="../../uno/module-ix.html">uno</a>::<a href="../../uno/XInterface.html">XInterface</a></td>
+<td valign="bottom">&nbsp;x );</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getAny" class="membertitle">getAny</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">any</td>
+</tr>
+<tr>
+<td valign="top"><b>getAny</b>();</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setAny" class="membertitle">setAny</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setAny</b>(</td>
+<td valign="top">[in] any</td>
+<td valign="bottom">&nbsp;a );</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getSequence" class="membertitle">getSequence</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">sequence&lt; ::com::sun::star::<a href="../../uno/module-ix.html">uno</a>::<a href="../../uno/XInterface.html">XInterface</a> &gt;</td>
+</tr>
+<tr>
+<td valign="top"><b>getSequence</b>();</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setSequence" class="membertitle">setSequence</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setSequence</b>(</td>
+<td valign="top">[in] sequence&lt; ::com::sun::star::<a href="../../uno/module-ix.html">uno</a>::<a href="../../uno/XInterface.html">XInterface</a> &gt;</td>
+<td valign="bottom">&nbsp;seq );</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getStruct" class="membertitle">getStruct</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="ComplexTypes.html">ComplexTypes</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getStruct</b>();</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setStruct" class="membertitle">setStruct</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setStruct</b>(</td>
+<td valign="top">[in] <a href="ComplexTypes.html">ComplexTypes</a></td>
+<td valign="bottom">&nbsp;c );</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="raiseRuntimeException" class="membertitle">raiseRuntimeException</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>raiseRuntimeException</b>();</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="AttributesDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Attributes' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="Long_attr" class="membertitle">Long_attr</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>long <b>Long_attr</b>;<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="Hyper_attr" class="membertitle">Hyper_attr</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>hyper <b>Hyper_attr</b>;<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="Float_attr" class="membertitle">Float_attr</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>float <b>Float_attr</b>;<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="Double_attr" class="membertitle">Double_attr</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>double <b>Double_attr</b>;<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="String_attr" class="membertitle">String_attr</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>string <b>String_attr</b>;<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="Interface_attr" class="membertitle">Interface_attr</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>::com::sun::star::<a href="../../uno/module-ix.html">uno</a>::<a href="../../uno/XInterface.html">XInterface</a> <b>Interface_attr</b>;<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="Any_attr" class="membertitle">Any_attr</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>any <b>Any_attr</b>;<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="Sequence_attr" class="membertitle">Sequence_attr</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>sequence&lt; ::com::sun::star::<a href="../../uno/module-ix.html">uno</a>::<a href="../../uno/XInterface.html">XInterface</a> &gt; <b>Sequence_attr</b>;<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="Struct_attr" class="membertitle">Struct_attr</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><a href="ComplexTypes.html">ComplexTypes</a> <b>Struct_attr</b>;<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

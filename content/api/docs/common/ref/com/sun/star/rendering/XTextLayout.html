@@ -1,0 +1,896 @@
+<html>
+<head>
+<title>Interface XTextLayout</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XTextLayout-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">rendering</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XTextLayout</td>
+</tr>
+<tr>
+<td/></tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>This is the central interface for text layouting.</dd>
+<dd><p>
+
+ This is the central interface for text-related tasks more
+ complicated than simple string rendering. Note that all query
+ methods are subject to the current layout state of this
+ object. That is, calls to <a href="XTextLayout.html#justify()">justify()</a>
+ or <a href="XTextLayout.html#applyLogicalAdvancements()">applyLogicalAdvancements()</a> are
+ likely to change subsequent output of those query methods.<p>
+
+ Similar to <a href="XCanvasFont.html">XCanvasFont</a>, all measurements and
+ coordinates accepted and returned by this interface are relative
+ to the font's local coordinate system (which only equals device
+ coordinate space, if the combined render transformation used
+ during text output is the identity transformation). Conversely, if
+ the combined transformation used during text output is
+ <em>not</em> the identity transformation, all measurements
+ returned by this interface should be subjected to that
+ transformation, to yield values in device coordinate space.
+ Depending on the underlying font technology, actual device output
+ might be off by up to one device pixel from the transformed
+ metrics.<p>
+
+ </dd>
+<dt><b>Since </b></dt>
+<dd>OOo 2.0 </dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#queryTextShapes">queryTextShapes</a></td>
+<td class="imsum_right">Extract the polygonal shapes of the layouted text.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#queryInkMeasures">queryInkMeasures</a></td>
+<td class="imsum_right">Query the ink bounding boxes for every glyph in the layouted
+ text.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#queryMeasures">queryMeasures</a></td>
+<td class="imsum_right">Query the logical bounding boxes of every character in the
+ given text string.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#queryLogicalAdvancements">queryLogicalAdvancements</a></td>
+<td class="imsum_right">Query the advancements for every character in the input string.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#applyLogicalAdvancements">applyLogicalAdvancements</a></td>
+<td class="imsum_right">Apply explicit advancements for every character in the layout
+ string.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#queryTextBounds">queryTextBounds</a></td>
+<td class="imsum_right">Query the overall bounding box of the text.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#justify">justify</a></td>
+<td class="imsum_right">Justify the text to the given size.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#combinedJustify">combinedJustify</a></td>
+<td class="imsum_right">Justify a number of text layouts to the given size.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getTextHit">getTextHit</a></td>
+<td class="imsum_right">This method determines the hit position in the text.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getCaret">getCaret</a></td>
+<td class="imsum_right">This method converts an insertion index to a caret.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getNextInsertionIndex">getNextInsertionIndex</a></td>
+<td class="imsum_right">This method calculates a new insertion index.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#queryVisualHighlighting">queryVisualHighlighting</a></td>
+<td class="imsum_right">This method generates a highlight polygon.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#queryLogicalHighlighting">queryLogicalHighlighting</a></td>
+<td class="imsum_right">This method generates a highlight polygon.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getBaselineOffset">getBaselineOffset</a></td>
+<td class="imsum_right">This method yields the baseline offset.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getMainTextDirection">getMainTextDirection</a></td>
+<td class="imsum_right">This method returns the main writing direction.&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getFont">getFont</a></td>
+<td class="imsum_right">Request the associated font for this layout..
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getText">getText</a></td>
+<td class="imsum_right">Request the text this layout contains.
+
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="queryTextShapes" class="membertitle">queryTextShapes</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">sequence&lt; <a href="XPolyPolygon2D.html">XPolyPolygon2D</a> &gt;</td>
+</tr>
+<tr>
+<td valign="top"><b>queryTextShapes</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Extract the polygonal shapes of the layouted text.</dd>
+<dd><p>
+
+ Each glyph is represented by a separate
+ <a href="XPolyPolygon2D.html">XPolyPolygon2D</a> in the returned sequence.<p>
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a sequence of <a href="XPolyPolygon2D.html">XPolyPolygon2D</a> in font
+ coordinate space, one for every glyph.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="queryInkMeasures" class="membertitle">queryInkMeasures</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">sequence&lt; ::com::sun::star::<a href="../geometry/module-ix.html">geometry</a>::<a href="../geometry/RealRectangle2D.html">RealRectangle2D</a> &gt;</td>
+</tr>
+<tr>
+<td valign="top"><b>queryInkMeasures</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Query the ink bounding boxes for every glyph in the layouted
+ text.</dd>
+<dd><p>
+
+ Ink, or tight bounding boxes in this case means that for
+ e.g. an 'a', the bounding box for the
+ <a href="XPolyPolygon2D.html">XPolyPolygon2D</a> describing the glyph 'a' is
+ returned, not the logical dimensions of the character in the
+ font.<p>
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a sequence of rectangles in font coordinate space,
+ specifying the bounds, one for every glyph.
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="XTextLayout.html">XTextLayout</a>::<a href="XTextLayout.html#queryMeasures">queryMeasures()</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="queryMeasures" class="membertitle">queryMeasures</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">sequence&lt; ::com::sun::star::<a href="../geometry/module-ix.html">geometry</a>::<a href="../geometry/RealRectangle2D.html">RealRectangle2D</a> &gt;</td>
+</tr>
+<tr>
+<td valign="top"><b>queryMeasures</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Query the logical bounding boxes of every character in the
+ given text string.</dd>
+<dd><p>
+
+ Logical bounding boxes means the space that the font allocates
+ for the given character, which, e.g. for a '.', might be
+ significantly broader than the bounds returned via
+ <a href="XTextLayout.html">XTextLayout</a>::<a href="XTextLayout.html#queryInkMeasures">queryInkMeasures()</a>.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a sequence of rectangles specifying the bounds in
+ font coordinate space, one for every glyph.
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="XTextLayout.html">XTextLayout</a>::<a href="XTextLayout.html#queryInkMeasures">queryInkMeasures()</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="queryLogicalAdvancements" class="membertitle">queryLogicalAdvancements</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">sequence&lt; double &gt;</td>
+</tr>
+<tr>
+<td valign="top"><b>queryLogicalAdvancements</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Query the advancements for every character in the input string.</dd>
+<dd><p>
+
+ This method returns a sequence of advancements, one for each
+ character in the input string (<em>not</em> for every
+ glyph. There might be multiple glyphs per input character, or
+ multiple input characters per glyph). Adding up all
+ advancements yields the total advancement of this layout. To
+ manipulate the layout of a string on the level of characters,
+ this method can be used to query for the layout's default
+ advancements, which can subsequently be changed and applied to
+ the layout via
+ <a href="XTextLayout.html">XTextLayout</a>::<a href="XTextLayout.html#applyLogicalAdvancements">applyLogicalAdvancements()</a>.<p>
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a sequence of ::double specifying the
+ advancements per character in font coordinate space.
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="XTextLayout.html">XTextLayout</a>::<a href="XTextLayout.html#applyLogicalAdvancements">applyLogicalAdvancements()</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="applyLogicalAdvancements" class="membertitle">applyLogicalAdvancements</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>applyLogicalAdvancements</b>(</td>
+<td valign="top">[in] sequence&lt; double &gt;</td>
+<td valign="bottom">&nbsp;aAdvancements )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Apply explicit advancements for every character in the layout
+ string.</dd>
+<dd><p>
+
+ This method applies the specified advancements to every
+ logical character in the input string (<em>not</em> for every
+ glyph. There might be multiple glyphs per input character, or
+ multiple input characters per glyph). This is useful to
+ explicitely manipulate the exact output positions of
+ characters, e.g. relative to a reference output device.<p>
+
+ </dd>
+<dt><b>Parameter aAdvancements</b></dt>
+<dd>A sequence of character advancements, in font coordinate
+ space.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if the size of aAdvancements does not match the number of
+ characters in the text.
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="XTextLayout.html">XTextLayout</a>::<a href="XTextLayout.html#queryLogicalAdvancements">queryLogicalAdvancements()</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="queryTextBounds" class="membertitle">queryTextBounds</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">::com::sun::star::<a href="../geometry/module-ix.html">geometry</a>::<a href="../geometry/RealRectangle2D.html">RealRectangle2D</a></td>
+</tr>
+<tr>
+<td valign="top"><b>queryTextBounds</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Query the overall bounding box of the text.</dd>
+<dd><p>
+
+ This method is similar to
+ <a href="XTextLayout.html">XTextLayout</a>::<a href="XTextLayout.html#queryTextMeasures">queryTextMeasures</a>, only that the
+ overall bounds are returned by this method.<p>
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the overall bounding box for the given layout, in font
+ coordinate space.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="justify" class="membertitle">justify</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">double</td>
+</tr>
+<tr>
+<td valign="top"><b>justify</b>(</td>
+<td valign="top">[in] double</td>
+<td valign="bottom">&nbsp;nSize )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Justify the text to the given size.</dd>
+<dd><p>
+
+ This method is the core of the <a href="XTextLayout.html">XTextLayout</a>
+ interface, because it layouts the text in a typographically
+ correct way into the available space.<p>
+
+ </dd>
+<dt><b>Parameter nSize</b></dt>
+<dd>The requested size of the text after justification (either
+ width or height, depending on the writing mode). This
+ parameter is interpreted in font coordinate space.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the actual size of the text after the justification in
+ the font coordinate space. Depending on the font and the
+ script type, this might be somewhat different from the size
+ requested. If the requested size was smaller than the
+ justification algorithm could compress the text, this value
+ might even be significantly larger than nSize.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if nSize is 0 or negative.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="combinedJustify" class="membertitle">combinedJustify</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">double</td>
+</tr>
+<tr>
+<td valign="top"><b>combinedJustify</b>(</td>
+<td valign="top">[in] sequence&lt; <a href="XTextLayout.html">XTextLayout</a> &gt;</td>
+<td valign="bottom">&nbsp;aNextLayouts,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] double</td>
+<td valign="bottom">&nbsp;nSize )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Justify a number of text layouts to the given size.</dd>
+<dd><p>
+
+ This method can be used to combine the layout of a text line
+ into a single justification run. This is e.g. useful if the
+ line consists of several text portions (e.g. because of
+ different fonts or colors), but it is desirable to spread the
+ available space more globally across the different layout
+ objects. If, for example, one layout object contains
+ significantly more whitespace or Kashidas than the rest, this
+ method can assign proportionally more space to this layout
+ object.<p>
+
+ </dd>
+<dt><b>Parameter aNextLayouts</b></dt>
+<dd>A sequence of layouts following this one in logical text
+ order.
+
+ </dd>
+<dt><b>Parameter nSize</b></dt>
+<dd>The requested size of the text for <em>all</em>
+ <a href="XTextLayout.html">XTextLayout</a>s after justification in font
+ coordinate space (either width or height, depending on the
+ writing mode).
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the actual size of the text after the justification,
+ in font coordinate space. Depending on the font and the
+ script type, this might be somewhat different from the size
+ requested. If the requested size was smaller than the
+ justification algorithm could compress the text, this value
+ might even be significantly larger than nSize.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if one of the parameters are not in the valid range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getTextHit" class="membertitle">getTextHit</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="TextHit.html">TextHit</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getTextHit</b>(</td>
+<td valign="top">[in] ::com::sun::star::<a href="../geometry/module-ix.html">geometry</a>::<a href="../geometry/RealPoint2D.html">RealPoint2D</a></td>
+<td valign="bottom">&nbsp;aHitPoint );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>This method determines the hit position in the text.</dd>
+<dd><p>
+
+ This method determines the index of the character hit at the
+ specified position (in font coordinate space).<p>
+
+ </dd>
+<dt><b>Parameter aHitPoint</b></dt>
+<dd>The position in font coordinate space to determine the
+ underlying character index for.
+
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getCaret" class="membertitle">getCaret</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="Caret.html">Caret</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getCaret</b>(</td>
+<td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nInsertionIndex,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] boolean</td>
+<td valign="bottom">&nbsp;bExcludeLigatures )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IndexOutOfBoundsException.html">IndexOutOfBoundsException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>This method converts an insertion index to a caret.</dd>
+<dd><p>
+
+ This method generates caret information for a given insertion
+ point in the layout text.<p>
+
+ </dd>
+<dt><b>Parameter nInsertionIndex</b></dt>
+<dd>The insertion index, as e.g. returned by
+ <a href="XTextLayout.html">XTextLayout</a>::<a href="XTextLayout.html#getTextHit">getTextHit()</a>. This value must be
+ in the range 0 up to the number of characters in the string.
+
+ </dd>
+<dt><b>Parameter bExcludeLigatures</b></dt>
+<dd>Set this to <b>true</b>, to skip the positions inside ligatures as
+ valid caret placements. That means, on cannot e.g. set the
+ caret between the 'f' and the 'i' in a 'fi' ligature.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the generated Caret structure.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IndexOutOfBoundsException
+ if nInsertionIndex is outside the permissible range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getNextInsertionIndex" class="membertitle">getNextInsertionIndex</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">long</td>
+</tr>
+<tr>
+<td valign="top"><b>getNextInsertionIndex</b>(</td>
+<td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nStartIndex,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nCaretAdvancement,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] boolean</td>
+<td valign="bottom">&nbsp;bExcludeLigatures )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IndexOutOfBoundsException.html">IndexOutOfBoundsException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>This method calculates a new insertion index.</dd>
+<dd><p>
+
+ This method calculates a new insertion index, given a start
+ index and the number of characters to skip. This is most
+ useful for caret traveling.<p>
+
+ </dd>
+<dt><b>Parameter nStartIndex</b></dt>
+<dd>The insertion index to start from.
+
+ </dd>
+<dt><b>Parameter nCaretAdvancement</b></dt>
+<dd>For values greater than 0, the caret is visually moved to the
+ right. For values smaller than 0, the caret is visually moved
+ to the left.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the new insertion index.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IndexOutOfBoundsException
+ if nStartIndex or nCaretAdvancement is outside the permissible
+ range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="queryVisualHighlighting" class="membertitle">queryVisualHighlighting</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XPolyPolygon2D.html">XPolyPolygon2D</a></td>
+</tr>
+<tr>
+<td valign="top"><b>queryVisualHighlighting</b>(</td>
+<td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nStartIndex,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nEndIndex )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IndexOutOfBoundsException.html">IndexOutOfBoundsException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>This method generates a highlight polygon.</dd>
+<dd><p>
+
+ This method generates a highlighting polygon from two
+ insertion indices. This polygon will be visually continuous,
+ i.e. will not have non-highlighted text in between.<p>
+
+ </dd>
+<dt><b>Parameter nStartIndex</b></dt>
+<dd>Start of the selection range.
+
+ </dd>
+<dt><b>Parameter nEndIndex</b></dt>
+<dd>End of the selection range.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the highlight polygon in the font coordinate space.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IndexOutOfBoundsException
+ if nStartIndex or nEndIndex are outside the permissible
+ range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="queryLogicalHighlighting" class="membertitle">queryLogicalHighlighting</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XPolyPolygon2D.html">XPolyPolygon2D</a></td>
+</tr>
+<tr>
+<td valign="top"><b>queryLogicalHighlighting</b>(</td>
+<td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nStartIndex,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nEndIndex )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IndexOutOfBoundsException.html">IndexOutOfBoundsException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>This method generates a highlight polygon.</dd>
+<dd><p>
+
+ This method generates a highlighting polygon from two
+ insertion indices. This polygon will not always be visually
+ continuous, if e.g. the text direction changes in the middle
+ of the selection, the might be parts visually between start
+ and end position that are not selected.<p>
+
+ </dd>
+<dt><b>Parameter nStartIndex</b></dt>
+<dd>Start of the selection range.
+
+ </dd>
+<dt><b>Parameter nEndIndex</b></dt>
+<dd>End of the selection range.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the highlight polygon in the font coordinate space.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IndexOutOfBoundsException
+ if nStartIndex or nEndIndex are outside the permissible
+ range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getBaselineOffset" class="membertitle">getBaselineOffset</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">double</td>
+</tr>
+<tr>
+<td valign="top"><b>getBaselineOffset</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>This method yields the baseline offset.</dd>
+<dd><p>
+
+ This method returns the baseline offset for this layout
+ object, either measured from the top or the left edge,
+ depending on the writing direction (horizontally or
+ vertically). Since rendering this layout via
+ <a href="XCanvas.html">XCanvas</a>::<a href="XCanvas.html#drawTextLayout">drawTextLayout()</a> outputs relative to
+ the layout object's baseline, this method can be used to
+ e.g. output relative to the left, top edge.<p>
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the distance of the main baseline from the top or the
+ left edge of this object, depending on the writing direction.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getMainTextDirection" class="membertitle">getMainTextDirection</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">byte</td>
+</tr>
+<tr>
+<td valign="top"><b>getMainTextDirection</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>This method returns the main writing direction.</dd>
+<dd><p>
+
+ This method returns the main writing direction of this layout,
+ i.e. either LEFT_TO_RIGHT or RIGHT_TO_LEFT.<p>
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the main text direction of this layout.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getFont" class="membertitle">getFont</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XCanvasFont.html">XCanvasFont</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getFont</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Request the associated font for this layout..
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the associated font for this layout.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getText" class="membertitle">getText</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="StringContext.html">StringContext</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getText</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Request the text this layout contains.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the text this layout contains.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

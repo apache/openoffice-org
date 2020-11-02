@@ -1,0 +1,282 @@
+<html>
+<head>
+<title>Interface XPackageRegistry</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XPackageRegistry-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">deployment</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title"><table class="title-table" width="99%">
+<tr>
+<td width="25%" class="title2">unpublished </td>
+<td width="50%" class="title">interface XPackageRegistry</td>
+<td width="*"/></tr>
+</table>
+</td>
+</tr>
+<tr>
+<td/></tr>
+<tr>
+<td><dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>not published</i></dd>
+<dt><b>Description</b></dt>
+<dd>Interface to bind an UNO package.
+ 
+ </dd>
+<dt><b>Since </b></dt>
+<dd>OOo 2.0</dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#bindPackage">bindPackage</a></td>
+<td class="imsum_right">binds a package URL to a <a href="XPackage.html">XPackage</a> handle.
+ The returned UNO package handle ought to late-initialize itself,
+ thus the process of binding must not be an expensive operation, because
+ it is not abortable.
+
+ Calling the function several time with the same parameters must result
+ in returning the same object.
+
+ The file or folder at the location where url points to may not exist or
+ it was replaced. This can happen, for example, when a bundled extension
+ was removed by the setup and a user later starts OOo. Then the user data
+ may still contain all registration data of that extension, but the
+ actual extension files do not exist anymore. The registration data must
+ then be cleaned of all the remains of that extension. To to that one
+ creates an <a href="XPackage.html">XPackage</a> object on behalf of that extension and
+ calls <a href="XPackage.html">XPackage</a>::<a href="XPackage.html#revokePakage">revokePakage</a>. The parameter
+ <code>removed</code> indicates this case. The returned object may not
+ rely on the file or folder to which refers <code>url</url>. Instead it
+ must use previously saved data to successfully carry out the revocation
+ of this object (<a href="XPackage.html">XPackage</a>::<a href="XPackage.html#revokePackage">revokePackage</a>).
+
+ The implementation must ensure that there is only one instance of
+ <a href="XPackage.html">XPackage</a> for the same <code>url</code> at any
+ time. Therefore calling <a href="#bindPackage">bindPackage</a> again with the same
+ <code>url</code> but different <code>mediaType<code> (the exeption is,
+ if previsously an empty string was proveded to cause the determination
+ of the media type) or <code>removed</code> parameters will cause an
+ exception. An ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> will be
+ thrown in case of a different <code>mediaType</code> parameter and a
+ <a href="InvalidRemovedParameterException.html">InvalidRemovedParameterException</a> is thrown if the
+ <code>removed</code> parameter is different.
+
+ The <code>identifier</code> parameter must be provided when
+ <code>removed</code> = true. If not, then an ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> will be
+ thrown.
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getSupportedPackageTypes">getSupportedPackageTypes</a></td>
+<td class="imsum_right">gets the supported <a href="XPackageTypeInfo.html">XPackageTypeInfo</a>s.
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#packageRemoved">packageRemoved</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="bindPackage" class="membertitle">bindPackage</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XPackage.html">XPackage</a></td>
+</tr>
+<tr>
+<td valign="top"><b>bindPackage</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;url,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;mediaType,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] boolean</td>
+<td valign="bottom">&nbsp;removed,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;identifier,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../ucb/module-ix.html">ucb</a>::<a href="../ucb/XCommandEnvironment.html">XCommandEnvironment</a></td>
+<td valign="bottom">&nbsp;xCmdEnv )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="DeploymentException.html">DeploymentException</a>,<br>
+<a href="InvalidRemovedParameterException.html">InvalidRemovedParameterException</a>,<br>
+::com::sun::star::<a href="../ucb/module-ix.html">ucb</a>::<a href="../ucb/CommandFailedException.html">CommandFailedException</a>,<br>
+::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>binds a package URL to a <a href="XPackage.html">XPackage</a> handle.
+ The returned UNO package handle ought to late-initialize itself,
+ thus the process of binding must not be an expensive operation, because
+ it is not abortable.
+
+ Calling the function several time with the same parameters must result
+ in returning the same object.
+
+ The file or folder at the location where url points to may not exist or
+ it was replaced. This can happen, for example, when a bundled extension
+ was removed by the setup and a user later starts OOo. Then the user data
+ may still contain all registration data of that extension, but the
+ actual extension files do not exist anymore. The registration data must
+ then be cleaned of all the remains of that extension. To to that one
+ creates an <a href="XPackage.html">XPackage</a> object on behalf of that extension and
+ calls <a href="XPackage.html">XPackage</a>::<a href="XPackage.html#revokePakage">revokePakage</a>. The parameter
+ <code>removed</code> indicates this case. The returned object may not
+ rely on the file or folder to which refers <code>url</url>. Instead it
+ must use previously saved data to successfully carry out the revocation
+ of this object (<a href="XPackage.html">XPackage</a>::<a href="XPackage.html#revokePackage">revokePackage</a>).
+
+ The implementation must ensure that there is only one instance of
+ <a href="XPackage.html">XPackage</a> for the same <code>url</code> at any
+ time. Therefore calling <a href="#bindPackage">bindPackage</a> again with the same
+ <code>url</code> but different <code>mediaType<code> (the exeption is,
+ if previsously an empty string was proveded to cause the determination
+ of the media type) or <code>removed</code> parameters will cause an
+ exception. An ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> will be
+ thrown in case of a different <code>mediaType</code> parameter and a
+ <a href="InvalidRemovedParameterException.html">InvalidRemovedParameterException</a> is thrown if the
+ <code>removed</code> parameter is different.
+
+ The <code>identifier</code> parameter must be provided when
+ <code>removed</code> = true. If not, then an ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> will be
+ thrown.
+ 
+ </dd>
+<dt><b>Parameter url</b></dt>
+<dd>package URL, must be UCB conform
+ </dd>
+<dt><b>Parameter mediaType</b></dt>
+<dd>media type of package, empty string if to be detected
+ </dd>
+<dt><b>Parameter removed</b></dt>
+<dd>@para unfulfilledPrerequisites
+ has a value other null if the extension could not be installed previously
+ because <a href="XPackage.html">XPackage</a>::<a href="XPackage.html#checkPrerequisites">checkPrerequisites</a> failed.
+ 
+ </dd>
+<dt><b>Parameter identifier</b></dt>
+<dd>the identifier of the extension
+ 
+ </dd>
+<dt><b>Parameter xCmdEnv</b></dt>
+<dd>command environment for error and progress handling
+ </dd>
+<dt><b>Returns</b></dt>
+<dd><a href="XPackage.html">XPackage</a> handle
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getSupportedPackageTypes" class="membertitle">getSupportedPackageTypes</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">sequence&lt; <a href="XPackageTypeInfo.html">XPackageTypeInfo</a> &gt;</td>
+</tr>
+<tr>
+<td valign="top"><b>getSupportedPackageTypes</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>gets the supported <a href="XPackageTypeInfo.html">XPackageTypeInfo</a>s.
+ 
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>supported <a href="XPackageTypeInfo.html">XPackageTypeInfo</a>s.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="packageRemoved" class="membertitle">packageRemoved</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>packageRemoved</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;url,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;mediaType )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="DeploymentException.html">DeploymentException</a>,<br>
+::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>
