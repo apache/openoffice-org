@@ -1,0 +1,354 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>The StarOffice XML based file format</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Daniel Vogelheim">
+	<META NAME="CREATED" CONTENT="20010803;16470900">
+	<META NAME="CHANGEDBY" CONTENT="Daniel Vogelheim">
+	<META NAME="CHANGED" CONTENT="20010821;15101200">
+	<STYLE>
+	<!--
+		@page { margin: 2cm }
+		P { margin-bottom: 0.21cm; text-align: justify }
+		H1 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 16pt }
+		H2 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 14pt; font-style: normal }
+		H3 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 12pt }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/xml/">xml</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<P ALIGN=JUSTIFY STYLE="margin-top: 0.42cm; page-break-after: avoid"><FONT FACE="Arial, sans-serif"><FONT SIZE=5>The
+StarOffice XML based file format</FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-top: 0.2cm; margin-bottom: 2cm; page-break-after: avoid">
+<FONT FACE="Arial, sans-serif"><FONT SIZE=3>To boldly go where no
+office suite has gone before</FONT></FONT></P>
+<H1>1Introduction</H1>
+<P>StarOffice 6.0 and OpenOffice.org use a new, XML based file format
+for all its documents. The constituent parts of an office document,
+content, layout and meta information, are stored as XML streams
+inside a ZIP file, along with embedded graphics and objects contained
+in the document.</P>
+<P>Before musing on the technical virtues and uses of the XML based
+file format, it should be noted that the format as well as the
+OpenOffice.org application, which serves as a reference
+implementation for the format, are available under a GNU license.
+This open and free licensing guarantees that you are not at the mercy
+of a single company for improvements and fixes of the format or its
+supporting software, thus providing very strong protection for all
+investments and efforts you put into this format. Additionally, Sun
+aims at standardizing the format, thus providing any interested
+parties with a way to participate in the evolution of the format.</P>
+<P>The next chapter will introduce several features of the XML
+format, followed by a chapter in which benefits can be derived from
+these features for various types of users. Finally, a conclusion will
+be presented.</P>
+<H1>2How It Works &#150; The Means</H1>
+<P>This chapter will highlight several technicalities of the XML
+based file format. The following chapter will then show how to put
+these into use.</P>
+<H2>2.1Separation of Content, Layout, and Meta Information</H2>
+<P STYLE="font-style: normal">An office document contains content,
+for example the text of a letter, or the data in a spreadsheet, along
+with layout information, which describes how the content should look
+like. Also part of document is meta information like who edited a
+document and how it is called, or additional information such as
+images or embedded objects. To a user, these are inseparable parts of
+a single document. But for processing the document, it makes sense to
+separate them such that they can be read, interpreted and modified
+independently of each other. To facilitate this, the StarOffice XML
+file format stores content, layout, meta information, images and
+embedded objects in separate streams of a ZIP based package file. The
+whole file contains the whole document, the individual streams
+contain the constituent parts of the document.</P>
+<H2>2.2Standards Based</H2>
+<P>When creating the XML based file format, we tried to gain as much
+as was possible from related standards. The very use of XML is one
+example. The ZIP format we use for packages are in widespread use.
+Many elements and attributes are borrowed from HTML, XSL-FO, XLink,
+Dublin Core, or SVG. For Math, we use MathML. This allows easy
+transformation from and into those formats, and also it allows people
+to quickly understand our format, if they are already familiar with
+those formats we make use of.</P>
+<H2>2.3Uniform Representation of Formatting and Layout Information</H2>
+<P>The StarOffice and OpenOffice.org applications distinguish between
+formatting through styles and <I>direct</I> formatting, which means
+applying formatting directly to text or cell ranges. In the XML
+format, these different ways to format a document use the same
+style-based representation. The <I>direct</I> formatting is
+automatically converted into <I>automatic styles</I>,  which is a
+style-based formatting equivalent of the <I>direct</I> formatting the
+user applied to the document.</P>
+<H2>2.4Structured Format</H2>
+<P STYLE="font-style: normal">A primary design goal of the XML format
+was to represent all structured information contained in an document
+as XML structures, thus making the document fully accessible to
+standard XML tools.  This is a quite different solution to, for
+example, an XHTML/CSS solution, where all CSS formatting information
+is encoded in a text-only format. This way, all layout information
+appears as a single string to an XSLT processor, making it very hard
+to process the layout information in any way.</P>
+<H2>2.5Idealized Format</H2>
+<P><SPAN STYLE="font-style: normal">Our XML file format is a properly
+designed file format, as opposed </SPAN>to a mere XML dump o<SPAN STYLE="font-style: normal">f
+core structures with all their implementation details and
+limitations. The documents are represented in a way which is easy to
+understand and use, and not in a way which is easy to implement. This
+allows the format to abstract application peculiarities and therefore
+the format may also be used by applications other than StarOffice and
+OpenOffice.org. Throughout the development of the format, great care
+was taken to make sure the file format is easy to process. Also, the
+idealized representation makes it easier to improve the StarOffice
+and OpenOffice.org applications without having to make major changes
+to the format itself.</SPAN></P>
+<H2>2.6Common Format Across All Office Applications</H2>
+<P STYLE="font-style: normal">The same format is used across all
+office applications. Similar concepts in the different applications
+always use the same XML representation. For example, spreadsheet
+tables and word processor tables share a common XML representation,
+even though their implementations and limitations are quite
+different. This has great advantages when processing or generating
+StarOffice files: The same code works for all applications. For
+example, a single XSLT style sheet can process both spreadsheets and
+text documents.</P>
+<H2>2.7Open For Extensions and Supplemental Information</H2>
+<P STYLE="font-style: normal">Arbitrary XML attributes may be
+attached to style information and will be preserved when editing such
+a modified file with StarOffice. Because all formatting information
+is uniformly represented as styles, and because any document content
+can be formatted using styles, this allows arbitrary information to
+be attached to any part of the document content. Further means to add
+supplemental information, such as allowing complete streams to be
+part of the packages, may be added.</P>
+<H1>3What You Gain &#150; The Ends</H1>
+<P>The previous chapter has highlighted several features and
+mechanisms of our new file format. This chapter will look at how this
+helps different groups of users.</P>
+<H2>3.1Office Users</H2>
+<P>To the user of StarOffice and OpenOffice.org, the main benefits
+may be summarized as increased robustness, openness, document
+longevity, and version interoperability. In additional, the user will
+gain additional benefits as the document processing and additional
+solutions described in the following chapters become reality.</P>
+<H3>Increased Robustness</H3>
+<P>To a user, their own documents are usually valuable resources,
+into which lots of time and effort has been invested. What happens,
+if through an error in the used hardware or software used, the
+documents become corrupted? With a binary format, the user is at the
+mercy of the original application: If it can still read or recover
+the document, all is well. If not, the document is lost. 
+</P>
+<P STYLE="font-style: normal">XML makes it easy to ignore and
+tolerate problems in the documents, so the likelihood of lost
+documents is reduced. Additionally, the human readable/editable
+nature of XML allows advanced users or service personnel to inspect
+corrupt files and restore the documents, even without specialized
+tools or very much in-depth knowledge.</P>
+<H3>Document Archiving</H3>
+<P>For some users, long-term storage of documents is important. With
+binary file formats, documents can be read only as long as the
+supporting application as well as the system it runs on exists. XML,
+being a text based and human readable format, allows files to be read
+even if the original application (or the OS, or the hardware it ran
+on) are not available anymore. Additionally, the thorough
+documentation of the format allows the files to be fully interpreted.</P>
+<H3>Version Interoperability</H3>
+<P>A well-known problem with office documents is a file format
+versioning problem: New versions of the office suite usually come
+with a new version of a file format, which the older version don't
+know about. To be able read the newer documents, users find
+themselves forced to upgrade their application.</P>
+<P>Contrast this with an XML based format: XML is extensible, making
+it easy to to add new features to the format without loosing the
+ability to read older files. Older applications will simply ignore
+the new (and, to them, unknown) content, thus reading the newer files
+as well as they can. The result is a high degree of forwards and
+backwards compatibility. 
+</P>
+<H3>Documented and Transparent File Content</H3>
+<P>With the XML file format, the user can finally inspect the content
+of files that are being sent or received. If yet another macro virus
+threatens your organization, a simple combination of unzip and grep
+allows you to check for suspicious content. If you want to make sure
+that files you send to other people don't contain sensitive
+information, then now you can simply look at them. Or if you need to
+quickly find a certain document, just use Unix grep or the Windows
+Explorer context menu  to search through the meta information, which
+are stored as plain text.</P>
+<H2>3.2Document Processing and Developers</H2>
+<P>Advanced users and developers may want to make use of the new
+freedom the StarOffice XML file brings them, and use and process
+StarOffice files with other tools and applications. There are several
+advantages for them:</P>
+<H3>Standards Based and Openness</H3>
+<P>The StarOffice XML file format relies on many standards in
+addition to the actual XML standard itself: It makes use of elements
+and attributes from HTML, XLink, XSL-FO, Dublin Core, and SVG.
+Developers familiar with these can easily pick up on the StarOffice
+format. Also, a developer has a wide choice of tools and code
+libraries for many programming languages that allow processing and
+manipulation of XML or ZIP files.</P>
+<P>This use of established standards is particularly useful for
+making office documents available outside of traditional PC
+applications. For example, by transforming our office documents into
+HTML, you can make them available through the World Wide Web. Similar
+transformations are  into WAP or XSL-FO are possible. 
+</P>
+<P>An example of transforming our documents into HTML is available on
+the OpenOffice.org website, and another one is available through the
+xml.com website (see reference at the end of this paper). 
+</P>
+<H3>Easy Import and Export of Other File Formats</H3>
+<P>Import and export of other '<I>foreign</I>' file formats can be
+accomplished by converting the document into the XML file format.
+This approach has several advantages:</P>
+<OL>
+	<LI><P>The XML file format provides the developer with a clean,
+	documented target.</P>
+	<LI><P>Due to XML's human readability, debugging becomes much
+	easier.</P>
+	<LI><P>The file format and the StarOffice API hide the details of a
+	particular office version, so the developer doesn't have to
+	recompile and update the import/export component for every new
+	version of StarOffice.</P>
+	<LI><P>Several XML based import or export components may be chained
+	to each other. This can be used to convert between two
+	non-StarOffice formats.</P>
+	<LI><P>Import and Export components can be integrated into
+	StarOffice and OpenOffice.org, or they can be used stand-alone. In
+	the latter mode, they could be used e.g. for batch conversion of
+	many files. Also, they can be used to view StarOffice XML documents
+	without having to start the full StarOffice application.</P>
+</OL>
+<H3>Leverage Available Infrastructures</H3>
+<P>Being based on XML and ZIP, the StarOffice file format can be used
+with the growing number of widely available tools that can process
+these formats. Examples are:</P>
+<OL>
+	<LI><P>XML viewers and editors</P>
+	<P>Any of the available XML viewers can be used to examine the
+	document content. XML Editors can be used to manually make changes
+	to the document content or its layout.</P>
+	<LI><P>XML transformations</P>
+	<P>XML transformation tools and libraries, such as XSLT engines or
+	XPathScript (Perl), can be used to automatically edit, modify or
+	generate StarOffice documents.</P>
+	<LI><P>XML Databases</P>
+	<P>There is a growing number of XML aware database and storage
+	products. These may be used to store, index, query and manipulate
+	StarOffice documents.</P>
+	<LI><P>ZIP tools</P>
+	<P>With the package mechanism using the well-known ZIP format,
+	standard ZIP tools may be used to change the package content. For
+	example, using any ZIP tool, embedded graphics can be changed from
+	low resolution to high resolution ones before giving a document to a
+	print shop.</P>
+</OL>
+<H2>3.3Solution Providers</H2>
+<P>A generic office suite may not be the right solution for everyone.
+Often, significant improvements to productivity can be achieved by
+using custom software solutions tailored exactly to the requirements
+of a particular organization. StarOffice and OpenOffice.org can
+become part of such a solution, supplying office functionality as
+part of an larger, fully integrated package. Solution providers who
+want to integrate StarOffice or OpenOffice.org into their software
+will find the XML file format along with the open StarOffice API to
+be the enabling features for this.</P>
+<H3>StarOffice as Editor Component</H3>
+<P>The StarOffice API enables the use of StarOffice as an editor
+component. In this mode of operation, StarOffice may appear as an
+edit area within the custom application, controlled through the API.
+The custom application only needs to represent its own data in the
+StarOffice XML file format and hand it to the StarOffice component.
+When the editing is done, the custom application can then convert the
+XML data stream back into its own, native format for storage or
+further processing.</P>
+<H3>Search Engines / Knowledge Management Systems</H3>
+<P STYLE="font-style: normal">The use of XML makes office documents
+accessible to search engines and more advanced knowledge management
+systems. Since the full document structure is available as XML,
+knowledge management system could easily extract or value document
+content based on how or where it is contained in the document.</P>
+<P STYLE="font-style: normal">Search engines can usually been
+configured for different file types. To index and search StarOffice
+XML files, all that is necessary is to teach the search engine to run
+the venerable 'unzip' command on each file before processing it.</P>
+<H3>Document Management</H3>
+<P STYLE="font-style: normal">StarOffice and OpenOffice.org are
+ideally suited for integration into document management systems.
+Here, a key feature is the ability to attach additional data to
+documents or parts of documents. A document management system can use
+this to include additional information into the documents while still
+keeping the documents fully editable by the user. As detailed above,
+StarOffice and OpenOffice.org may additionally be used as editing
+components inside the document management system.</P>
+<H3>Partial Editing and Two-way Conversion</H3>
+<P>Custom applications may want to modify or update office documents
+based on specific data or computations. XML makes it easy to identify
+specific parts of a document and to replace them. The separation of
+content and layout further helps this because it allows changing one
+without having to change the other.</P>
+<P>A similar approach is to extract data from a StarOffice document
+and process it in some way. Then, merge the new data into the
+document again, or just recreate the document based on the new data.
+Such back-and-forth conversions are simplified by XML's nature, and
+the content/layout separation.</P>
+<P>This technique could be used to support StarOffice documents (or
+parts of documents) on resource constrained devices, such as PDAs. 
+</P>
+<H3>StarOffice as Layout Engine</H3>
+<P><SPAN STYLE="font-style: normal">At the end of the data processing
+chain, a </SPAN>custom application may need to present data to users
+or generate printable documents, summaries and reports. When using
+StarOffice, this can be achieved by converting the presentation data
+into the StarOffice XML file format, and loading it into StarOffice
+for layout and printing. This way, the full power of StarOffice can
+be leveraged for professionally looking documents without having to
+recreate the entire formatting and layout logic. Once again, the
+separation of content and layout helps, as it allows painless
+generation of the plain content data, which can then be combined with
+professional, artistic layout information.</P>
+<H1>4Conclusion</H1>
+<P>The upcoming StarOffice 6.0 and OpenOffice.org both feature a new
+XML based file format, which stores document content, layout, and
+meta information as XML inside of a ZIP package, along with embedded
+graphics and objects. This organization as well as many details in
+the XML format itself provide many advantages to various groups of
+users, creating a win-win situation for all end users, developers and
+solution providers that make use of it.</P>
+<H1>5Online Resources and Further information</H1>
+<P ALIGN=LEFT>OpenOffice.org XML Homepage: <A HREF="http://xml.openoffice.org/">http://xml.openoffice.org/</A></P>
+<P ALIGN=LEFT>StarOffice/OpenOffice.org XML based file format
+definition: <A HREF="http://xml.openoffice.org/xml_specification.pdf">http://xml.openoffice.org/xml_specification.pdf</A></P>
+<P ALIGN=LEFT>The StarOffice/OpenOffice.org API:
+<A HREF="http://api.openoffice.org/">http://api.openoffice.org/</A></P>
+<P ALIGN=LEFT>&#147;Adventures with OpenOffice and XML&#148; by Matt
+Sergeant: <A HREF="http://www.xml.com/pub/a/2001/02/07/openoffice.html">http://www.xml.com/pub/a/2001/02/07/openoffice.html</A></P>
+<P ALIGN=LEFT>OpenOffice.org Filter-Development Using XML:
+<A HREF="http://xml.openoffice.org/filter/">http://xml.openoffice.org/filter/</A></P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

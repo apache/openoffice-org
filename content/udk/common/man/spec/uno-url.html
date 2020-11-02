@@ -1,0 +1,138 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<TITLE>UNO Url - Specification</TITLE>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8"/>
+<style type="text/css">
+	<!--
+h1 { text-align:center; margin-top: 0.2cm; text-decoration: none; color: #ffffff; font-size: 6; margin-top: 0.2cm}
+h2 { margin-top: 0.2cm; margin-bottom=0.1cm; color: #ffffff;
+     background-color: #666699 }
+li {margin-bottom: 0.2cm;}
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm;}
+dt {margin-bottom: 0.2cm;}
+-->
+</style>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/">common</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/">man</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/spec/">spec</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4 WIDTH="100%" summary=header
+   bgcolor=#666699>
+<tr>
+<td>
+<h1> UNO Url - Specification </h1>
+</td><td>
+<a href="http://www.openoffice.org/">
+<img SRC="../../../images/open_office_org_logo.gif" ALT="OpenOffice" BORDER=0 height=54 width=114 align=right></img>
+</a>
+</td>
+</tr>
+</table>
+
+<h2> Specification </h2>
+<p>
+The UNO-Url is used to address a specific UNO object in a different process. It allows
+services such as the
+<a href="http://api.openoffice.org/common/ref/com/sun/star/bridge/UnoUrlResolver.html">
+com.sun.star.bridge.UnoUrlResolver</a> to map the addressed object from a remote process
+into the local process by setting  an interprocess connection and by using a certain
+kind of protocol on this connection.
+<p> 
+<img src="../images/uno-url.gif"></img>
+<p>
+
+The UNO-Url consists of four parts separated by colon and semicolon.
+<ol type=I>
+<li> The constant string 'uno:'. This identifies the url as UNO-Url and is needed to distinguish
+a uno-url e.g. from an http or ftp url.
+</li>
+<li> A string which characterizes the type of the connection, that shall be
+used to access
+the other process. Directly after this string can optionally follow a comma separated list
+of name-value pairs, where name and value are separated by a '='.
+
+<p>
+The connection-type-string and the names may only consist of ASCII letters and digits. They
+are not case sensitive. The value part is an arbitrary Unicode string, which is
+encoded in UTF8. Any character except letters, digits and <code>!$&'()*+-./:?@_~</code>
+must be converted to <code>%xx</code>, where xx is the hexadecimal representation of the UTF8
+byte. There are functions defined (see <a href="../../../cpp/ref/names/rtl/c-Uri.html">Uri</a> class) which
+support such conversions.
+
+<p>
+
+The <a href="connection_services.html">connection_services</a> document explains currently
+supported connection types and parameters and how the connection types can be extended.
+<p>
+The connection-type specifies the transport mechanism used to transfer a bytestream (e.g.
+tcp/ip-sockets or named pipes).
+</li>
+
+<li>
+A string which characterizes the type of protocol that is used to communicate over the
+established byte stream connection. The string can be followed by a comma separated list
+of name-value pairs, which can be used to customize the protocol to specific needs. The
+suggested protocol is urp (Uno Remote Protocol), have a look at the <a href="urp.html">
+specification</a> to see how it works and to get a list of possible properties.
+
+<p>
+The protocol-type-string and the names may only consist of ASCII letters and digits. They
+are interpreted case insensitive. The value part is an arbitrary Unicode string, which is
+encoded in UTF8. Any character except letters, digits and <code>!$&'()*+-./:?@_~</code>
+must be converted to <code>%xx</code>, where xx is the hexadecimal representation of the UTF8
+byte. There are functions defined (see <a href="../../../cpp/ref/names/rtl/c-Uri.html">Uri</a> class),
+which support such conversions.
+
+<p>
+The arrangement of connections and bridges is explained in detail in the
+<a href="remotebridge.html">remotebridge</a> document.
+
+<li>The object name of the object to be imported. A process
+must explicitly export a certain object by this distinct name, it is not possible
+to access an arbitrary UNO-object (for example as it would be possible in with CORBA's IOR).
+
+<p>Valid characters are letters, digits, and <code>!$&'()*+,-./:?=@_~</code>. Other characters
+are forbidden, such that this string can be taken as is (no conversion or escaping required).
+</li>
+</ol>
+
+<h2> <font color="#FFFFFF">Examples</font></h2>
+
+<ul>
+<li>uno:socket,host=localhost,port=2002;urp;StarOffice.ServiceManager</li>
+<li>uno:pipe,name=mypipename;urp;MyObjectName</li>
+</ul>
+
+<table bgcolor=#666699 width=100%>
+<tr> <td>
+<font color="#FFFFFF">Author: <a href="mailto:joerg.budischewski@sun.com">
+<font color=#ffffff>J&ouml;rg Budischewski</font></a> ($Date: 2004/11/27 13:16:03 $)
+<br><I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I></font>
+</td></tr>
+</table>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

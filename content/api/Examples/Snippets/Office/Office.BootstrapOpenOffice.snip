@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.BootstrapOpenOffice.snip,v $
+last change: $Revision: 1.2 $ $Author: tomsontom $ $Date: 2006/12/11 10:26:07 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="Java" application="Office">
+
+<keywords>
+	<keyword>bootstrap</keyword>
+	<keyword>start</keyword>
+</keywords>
+
+<authors>
+	<author id="tobiaskrais" initial="true" email="tuxmail-spam@bats.ch" copyright="GPL">Tobias Krais (www.design-to-use.de)</author>
+</authors>
+
+<question heading="Bootstrap OpenOffice">How to bootstrap OpenOffice.org?
+</question>
+
+<answer>
+<p>This method bootstraps OpenOffice.</p>
+<p>If you don&apos;t want to add all the UNO jars to your classpath do following:</p>
+<p>1. Add these files to your jar (you find them in a SDK subfolder):</p>
+<p>com/sun/star/lib/loader/Loader$CustomURLClassLoader.class</p>
+<p>com/sun/star/lib/loader/Loader.class</p>
+<p>com/sun/star/lib/loader/InstallationFinder$StreamGobbler.class</p>
+<p>com/sun/star/lib/loader/InstallationFinder.class</p>
+<p>com/sun/star/lib/loader/WinRegKey.class</p>
+<p>com/sun/star/lib/loader/WinRegKeyException.class</p>
+<p>win/unowinreg.dll</p>
+<p></p>
+<p>2. Create a MANIFEST.MF file for your jar and use it when creating</p>
+<p>the jar. The MANIFEST.MF must look like:</p>
+<p>Main-Class: com.sun.star.lib.loader.Loader</p>
+<p></p>
+<p>Name: com/sun/star/lib/loader/Loader.class</p>
+<p>Application-Class: my.package.MyClass</p>
+<p>Application-Name: my/package/MyClass.class</p>
+<p></p>
+<p>3. Start your application using e.g. this command:</p>
+<p>java -jar myjar.jar</p>
+<listing>import {%see com.sun.star.comp.helper.Bootstrap};
+import {%see com.sun.star.comp.helper.BootstrapException};
+import {%see com.sun.star.lang.XMultiComponentFactory};
+import {%see com.sun.star.uno.XComponentContext};
+
+/**
+ * This method bootstraps a OpenOffice and returns it&apos;s Desktop.
+ * 
+ * @return
+ */
+public void bootstrapOpenOffice()
+{
+	XComponentContext xRemoteContext = null;
+	try
+	{
+		// Connect or start a OpenOffice instance
+		xRemoteContext = Bootstrap.bootstrap();
+	}
+	catch (BootstrapException e) {
+	}
+
+	// get OO desktop
+	XMultiComponentFactory xRemoteServiceManager = 
+			xRemoteContext.getServiceManager();
+
+	Object desktop = null;
+	try	{
+		desktop = xRemoteServiceManager.createInstanceWithContext(
+				&quot;com.sun.star.frame.Desktop&quot;, xRemoteContext
+		);
+	}
+	catch (Exception e)	{
+	}
+}</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="tobiaskrais" date="2006-12-11">Linked resources.</change>
+	<change author-id="tobiaskrais" date="2006-03-27">Added the hints for usage without classpath.</change>
+	<change author-id="" date="2006-03-20">Initial version</change>
+</changelog>
+
+</snippet>
+

@@ -1,0 +1,162 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+  <meta http-equiv="CONTENT-TYPE"
+ content="text/html; charset=windows-1252">
+  <title>Help IDs in OpenOffice.org</title>
+  <style>
+      <!--
+    code { font:fixed !important; color:#0000C0; }
+    --></style>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body lang="en-US">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ui/">ui</a>&nbsp;&raquo;&nbsp;<a href="/ui/knowledge/">knowledge</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h2>Help IDs in OpenOffice.org</h2>
+<p>In OpenOffice.org, ever user interface element (a dialog control, a
+menu item, whatever), needs to have a unique help id. To some extent,
+you as the developer are responsible for ensuring this ...</p>
+<h3>Content</h3>
+<table>
+  <tbody>
+    <tr>
+      <td colspan="2"><a href="#why">Why your controls need help ids</a></td>
+    </tr>
+    <tr>
+      <td colspan="2"><a href="#dialogs">Dialogs, Tab pages, and the
+like</a></td>
+    </tr>
+    <tr>
+      <td width="20"> <br>
+      </td>
+      <td><a href="#resources">Resources</a></td>
+    </tr>
+    <tr>
+      <td width="20"> <br>
+      </td>
+      <td><a href="#programmatic">Programmatic element creation</a></td>
+    </tr>
+    <tr>
+      <td colspan="2"><a href="#menus">Menus and toolbars</a></td>
+    </tr>
+    <tr>
+      <td colspan="2"><a href="#manually">Manually declaring help ids</a></td>
+    </tr>
+  </tbody>
+</table>
+<h3><a name="why"></a>Why your controls need help ids</h3>
+<ul>
+  <li> Every visible "item" in the UI must have a unique help id, so
+help content can be created for it</li>
+  <li> Automated testing using the <a
+ href="http://qa.openoffice.org/qatesttool/index.html"> QA test tool</a>
+needs help ids to address certain UI elements within the test scripts.</li>
+</ul>
+<h3><a name="dialogs"></a>Dialogs, Tab pages, and the like</h3>
+<h4><a name="resources"></a>Resources</h4>
+<p>If you declare your dialogs (which from now on will be a placeholder
+for Dialog, ModalDialog, TabPage, and other such "control containers")
+using resources, some things are done automatically. For instance,
+let's consider the following resource:</p>
+<pre>    ModalDialog RID_DLG_IDENTIFIER<br>    {<br>        // ... some stuff<br>        Text = "the dialog";<br><br>        FixedText FT_LABEL<br>        {<br>            // Pos/Size/etc. ...<br>            Text = "the label";<br>        };<br>        Control CTL_CONTROL<br>        {<br>            // Pos/Size/etc. ...<br>        };<br>        OKButton PB_OK<br>        {<br>            // Pos/Size/etc. ...<br>        };<br>        CancelButton PB_CANCEL<br>        {<br>            // Pos/Size/etc. ...<br>        };<br>    };<br>    </pre>
+<p>Here, you don't have to care about the fixed text, and the buttons
+(and even the dialog itself). Simply forget about them: HelpIDs will be
+generated automatically for them, both for usage with the help system,
+and for usage with the QA test tool.</p>
+<p>However, you need to care for the Control. For this "generic" type
+(as opposed to the concrete types you usually encounter), you need to
+manually ensure that it gets a help id, and that this help id is usable
+for others. See "<a href="#manually"> Manually declaring help ids</a>"
+below for how you do this.</p>
+<h4><a name="programmatic"></a>Programmatic element creation</h4>
+<p>If you create your UI elements programmatically (e.g. within the C++
+source code at runtime), then you also need to <a href="#manually">declare
+help ids manually</a>.</p>
+<h3><a name="menus"></a>Menus and toolbars</h3>
+<p><em>(Yet to come)</em></p>
+<h3><a name="manually"></a>Manually declaring help ids</h3>
+If you have an UI element which needs a manually declared help id, the
+following is necessary:
+<ul>
+  <li>
+    <p><em>Find a number</em>: Usually, the project you live in has a
+file <code>*help*.hrc</code> (or so) where help ids for this project
+are declared. Find a free place therein, and add a new define such as </p>
+    <pre>    #define HID_MY_PERSONAL_HELP_ID         ( base + offset )<br>          </pre>
+Here, <code>base</code> is usually a project-wide base id, and offset
+an incrementing number within this project. For instance, if you're
+within the project <code>svx</code>, base would be <code>HID_SVX_START</code>.
+    <p></p>
+    <p>However, care must be taken: Every project does not only have a
+start for its help ids, but also an <b>end</b>. It's really a
+project-relative <b>range</b> of ids you are allowed to use. If you
+leave this range, bad (and hard to notice) things will happen at
+runtime. In <code>svx</code>, for example, the range you have to
+respect ends with <code>HID_SVX_END</code>.</p>
+    <p>Now how can you determine this range, and what do you do when
+the range is used up? Look at <a
+ href="http://ooo.ximian.com/lxr/source/util/svtools/inc/solar.hrc">
+svtools/solar.hrc</a>: This is where all help id ranges (and for that
+matter, other id ranges such as for resource ids) are defined. If you
+want to know where your particular range ends, or if you need a new
+range: Use this file.</p>
+    <p>To stay with our example: You will find that <code>svtools.hrc</code>
+defines two ranges for <code>svx</code>, one from <code>HID_SVX_START</code>
+to <code>HID_SVX_END</code> and one from <code>HID_SVX_EXT0_START</code>
+to <code>HID_SVX_EXT0_END</code> ... </p>
+  </li>
+  <li>
+    <p><em>Assign this number</em>: Set the new help id at your UI
+element. In a resource file, you may do this with </p>
+    <pre>    HelpId = HID_MY_PERSONAL_HELP_ID;<br>        </pre>
+In C++, you'd do this with
+    <pre>    m_aMyControl.SetHelpId( HID_MY_PERSONAL_HELP_ID );<br>        </pre>
+  </li>
+  <li>
+    <p><em>Export the number</em>: With the previous steps, the help id
+is already available to the online help. However, your QA engineer will
+tell you that s/he cannot test the new dialog/tabpage/whatever, because
+the <a href="http://qa.openoffice.org/qatesttool/index.html">QA test
+tool</a> does not have access to your control(s). This is because you
+need to <em>export</em> the help ids which you declared manually (in
+opposite to the ones which where declared implicitly during the build).</p>
+    <p>Every project should have a <code>hidother.src</code> file,
+usually located in the <code>util</code> directory. Grab it, and add
+your new id there as follows: </p>
+    <pre>    hidspecial HID_MY_PERSONAL_HELP_ID { HelpId = HID_MY_PERSONAL_HELP_ID; };<br>        </pre>
+    <p>If your project does not yet have a <code>hidother.src</code>
+file just create one. To get it built you also have to insert the
+following line in your <code>makefile.mk</code> just somewhere below
+the TRAGET= line: </p>
+    <pre>    GEN_HID_OTHER=TRUE<br>        </pre>
+Now, build the project, and deliver it. When you (now or later) build
+the <code>instsetoo</code> project, a file called <code>hid.lst</code>
+will be generated, and placed in <code>&lt;platform&gt;/bin.&lt;minor&gt;</code>
+(e.g. <code>unxlngi5.pro/bin.m38/hid.lst</code>). This should make
+your QA engineer happy .... </li>
+</ul>
+<hr>
+<p align="right">Last modified: $Date: 2004/09/01 12:14:46 $</p>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

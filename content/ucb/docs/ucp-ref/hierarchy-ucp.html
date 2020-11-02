@@ -1,0 +1,248 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>The Hierarchy Content Provider</title>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="AUTHOR" CONTENT="Kai Sommerfeld">
+	<META NAME="CREATED" CONTENT="20000714;12280562">
+	<META NAME="CHANGEDBY" CONTENT="Kai Sommerfeld">
+	<META NAME="CHANGED" CONTENT="20010503;10171433">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm; margin: 2cm }
+		H1 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 16pt }
+		TH P { margin-bottom: 0.21cm; font-style: italic }
+		TD P { margin-bottom: 0.21cm }
+		H2 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 14pt; font-style: italic }
+		P { margin-bottom: 0.21cm }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ucb/">ucb</a>&nbsp;&raquo;&nbsp;<a href="/ucb/docs/">docs</a>&nbsp;&raquo;&nbsp;<a href="/ucb/docs/ucp-ref/">ucp-ref</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1>The Hierarchy Content Provider</H1>
+<H2>Preface</H2>
+<P>The Hierarchy Content Provider ( HCP ) implements a Content
+Provider for the Universal Content Broker (UCB). It provides access
+to a persistent, customizable hierarchy of contents.</P>
+<H2>HCP Contents</H2>
+<P>The HCP provides three different types of contents: <B>Link</B>,
+<B>Folder</B> and <B>Root Folder</B>.</P>
+<OL>
+	<LI><P>A HCP Link is a content which &#132;points&#147; to another
+	(UCB) content. It is always contained in HCP Folder. A HCP Link has
+	no children.</P>
+	<LI><P>A HCP Folder is a container for other HCP Folders and HCP
+	Links.</P>
+	<LI><P>There is at most one instance of a HCP Root Folder at a time.
+	All other HCP contents are children of this folder. The HCP Root
+	Folder can contain HCP Folders and HCP Links. It has the URL
+	&#132;<B>vnd.sun.star.hier:/</B><SPAN STYLE="font-weight: medium">&#147;.</SPAN></P>
+</OL>
+<P><IMG SRC="hierarchy-contents.gif" NAME="Graphic1" ALIGN=LEFT WIDTH=496 HEIGHT=231 BORDER=0><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<H2><BR><BR>
+</H2>
+<H2><BR><BR>
+</H2>
+<H2><BR><BR>
+</H2>
+<H2>Creation Of New HCP Contents</H2>
+<P>HCP Folders and the HCP Root Folder implement the interface
+XContentCreator. HCP Links and HCP Folders support the command
+&#132;insert&#147;. Thats why all HCP Folders and the HCP Root Folder
+as well can create new HCP Folders and HCP Links. To create a new
+child of a HCP Folder:</P>
+<OL>
+	<LI><P>Let the parent folder create a new content by calling its
+	createNewContent-method. The content type to use for new folders is
+	<B>application/vnd.sun.star.hier-folder</B><SPAN STYLE="font-weight: medium">.
+	To create a new link, use the type string
+	</SPAN><B>application/vnd.sun.star.hier-link</B><SPAN STYLE="font-weight: medium">.</SPAN></P>
+	<LI><P STYLE="font-weight: medium">Set a title at the new
+	folder/link. ( Let the new child execute a setPropertyValues &#150;
+	command, which sets at least the property &#132;Title&#147; to a
+	non-empty value ). For a link, you need to set the property
+	&#132;TargetURL&#147; as well at this time to a non-empty value.</P>
+	<LI><P STYLE="font-weight: medium">Let the new child ( not the
+	parent! ) execute the command &#132;insert&#147;. This will commit
+	the creation process.</P>
+</OL>
+<H2>URL Scheme for HCP Contents</H2>
+<P>Each HCP content has an identifier corresponding to the following
+scheme:</P>
+<P>vnd.sun.star.hier:/&lt;path&gt;</P>
+<P>where &lt;path&gt; is a hierarchical path of the form</P>
+<P>&lt;name&gt;/&lt;name&gt;/.../&lt;name&gt;</P>
+<P>where &lt;name&gt; is a string encoded according to the URL
+conventions.</P>
+<P><BR><BR>
+</P>
+<P STYLE="font-weight: medium">Examples:</P>
+<P STYLE="font-weight: medium"><B>vnd.sun.star.hier:/ </B>( The URL
+of the HCP Root Folder )</P>
+<P><B>vnd.sun.star.hier:/Bookmarks/Sun%20Microssystems%20Home%20Page</B></P>
+<P><B>vnd.sun.star.hier:/Workplace/Printers</B></P>
+<P><BR><BR>
+</P>
+<H2 STYLE="page-break-before: always">Appendix</H2>
+<P>The following table gives an overview of the different HCP
+contents.</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=35*>
+	<COL WIDTH=54*>
+	<COL WIDTH=64*>
+	<COL WIDTH=51*>
+	<COL WIDTH=51*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=14%>
+				<P><BR>
+				</P>
+			</TH>
+			<TH WIDTH=21%>
+				<P>UCB Type</P>
+				<P>(returned by XContent::getContentType )</P>
+			</TH>
+			<TH WIDTH=25%>
+				<P>Properties</P>
+			</TH>
+			<TH WIDTH=20%>
+				<P>Commands</P>
+			</TH>
+			<TH WIDTH=20%>
+				<P>Interfaces</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=14%>
+				<P>Link</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>application/vnd.sun.star.hier-link</P>
+			</TD>
+			<TD WIDTH=25%>
+				<P>[readonly] ContentType</P>
+				<P>[readonly] IsDocument</P>
+				<P>[readonly] IsFolder</P>
+				<P>Title</P>
+				<P>TargetURL 
+				</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>getCommandInfo</P>
+				<P>getPropertySetInfo</P>
+				<P>getPropertyValues</P>
+				<P>setPropertyValues</P>
+				<P>insert</P>
+				<P>delete</P>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>lang::<B>XTypeProvider</B>,</P>
+				<P>lang::<B>XServiceInfo</B>,</P>
+				<P>lang::<B>XComponent</B>,</P>
+				<P>ucb::<B>XContent</B>,</P>
+				<P>ucb::<B>XCommandProcessor</B>,</P>
+				<P>beans::<B>XPropertiesChangeNotifier</B>,</P>
+				<P>beans::<B>XPropertyContainer</B>,</P>
+				<P>beans::<B>XPropertySetInfoChangeNotifier</B>,</P>
+				<P>ucb::<B>XCommandInfoChangeNotifier</B>,</P>
+				<P>container::<B>XChild</B></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=14%>
+				<P>Folder</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>application/vnd.sun.star.hier-folder</P>
+			</TD>
+			<TD WIDTH=25%>
+				<P>[readonly] ContentType</P>
+				<P>[readonly] IsDocument</P>
+				<P>[readonly] IsFolder</P>
+				<P>Title 
+				</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>getCommandInfo</P>
+				<P>getPropertySetInfo</P>
+				<P>getPropertyValues</P>
+				<P>setPropertyValues</P>
+				<P>insert</P>
+				<P>delete</P>
+				<P>open</P>
+				<P>transfer*</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P><B>same as HCP Link</B></P>
+				<P>plus ucb::<B>XContentCreator</B></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=14%>
+				<P>Root Folder</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>application/vnd.sun.star.hier-folder</P>
+			</TD>
+			<TD WIDTH=25%>
+				<P>[readonly] ContentType</P>
+				<P>[readonly] IsDocument</P>
+				<P>[readonly] IsFolder</P>
+				<P>Title 
+				</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>getCommandInfo</P>
+				<P>getPropertySetInfo</P>
+				<P>getPropertyValues</P>
+				<P>setPropertyValues</P>
+				<P>open</P>
+				<P>transfer*</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P><B>same as HCP Folder</B></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P STYLE="font-weight: medium">*) The &#132;transfer&#147; command
+only transfers HCP-contents to HCP folders. It does not handle
+contents with a URL scheme other then the HCP-URL-scheme.</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

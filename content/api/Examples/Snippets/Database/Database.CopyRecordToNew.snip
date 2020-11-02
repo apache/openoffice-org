@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Database.CopyRecordToNew.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2007/09/24 08:04:49 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="OOBasic" application="Database">
+
+<keywords>
+	<keyword>record</keyword>
+	<keyword>template</keyword>
+	<keyword>form</keyword>
+	<keyword>copy</keyword>
+</keywords>
+
+<authors>
+	<author id="ms2" initial="true" email="ms2@openoffice.org">Marc Santhoff</author>
+</authors>
+
+<question heading="copy record to new">How can I copy an existing record to a new one as template?
+<p>When typing in data into a database form sometimes many records only differ in a small number of fields.</p>
+<p>In this case it is desirable to copy one record to a new, empty one and only change the minor differences by hand.</p>
+</question>
+
+<answer>
+<listing>&apos; Copies the value currently shown in the form
+&apos; as a template to a new record. This new record only
+&apos; is displayed for editing, not stored yet.
+
+&apos; Only some control types are checked here, please
+&apos; add missing types needing special treatment.
+
+&apos; The programmer or user has to take care of adding a
+&apos; new primary key into the corresponding field control.
+
+&apos; event binding sub
+sub copyToNewEvent(evt as object)
+	copyRecordToNewRecord(thisComponent)
+end sub
+
+sub copyRecordToNewRecord(oDoc as object, optional sKeyfieldname as string)
+	dim aVal as Variant
+	dim ccount as integer
+	dim i as integer
+	
+	if IsMissing(sKeyfieldname) then sKeyfieldname = &quot;ID&quot;
+	oForm = oDoc.Drawpage.Forms(0)
+	ccount = oForm.count
+	redim aVal(ccount)
+
+&apos; Step 1 --&gt; get the current fields content (excluding key field for auto values)
+
+	&apos; loop over all controls
+	for i=0 to ccount-1
+		aControl = oForm.getByIndex(i)
+		&apos; only get controls storing database values
+		if HasUNOInterfaces(aControl, &quot;{@see com.sun.star.form.XBoundComponent}&quot;) then
+			&apos; read currently shown value
+			n = aControl.name
+			&apos; exclude primary key field
+			if (InStr(sKeyfieldname, n)=0) then
+				if aControl.supportsService(&quot;{@see com.sun.star.awt.UnoControlDateFieldModel}&quot;) then
+					aVal(i) = aControl.Date
+				elseif aControl.supportsService(&quot;{@see com.sun.star.awt.UnoControlTimeFieldModel}&quot;) then
+					aVal(i) = aControl.Time
+				elseif aControl.supportsService(&quot;{@see com.sun.star.awt.UnoControlListBoxModel}&quot;) then
+					aVal(i) = oDoc.currentController.getControl(aControl).SelectedItemPos
+				elseif aControl.supportsService(&quot;{@see com.sun.star.awt.UnoControlFormattedFieldModel}&quot;) then
+					aVal(i) = aControl.EffectiveValue
+				else
+					aVal(i) = aControl.Text
+				end if
+			end if
+		end if
+	next i
+
+&apos; Step 2 --&gt; make a new record in the form (only)
+	oForm.moveToInsertRow()
+
+&apos; Step 3 --&gt; copy in saved values
+
+	&apos; loop over controls again
+	for i=0 to ccount-1
+		aControl = oForm.getByIndex(i)
+		if HasUNOInterfaces(aControl, &quot;{@see com.sun.star.form.XBoundComponent}&quot;) then
+			&apos; get the value to set
+			n = aControl.name
+			&apos; exclude primary key field
+			if (InStr(sKeyfieldname, n)=0) then
+				if aControl.supportsService(&quot;{@see com.sun.star.awt.UnoControlDateFieldModel}&quot;) then
+					aControl.Date = aVal(i)
+				elseif aControl.supportsService(&quot;{@see com.sun.star.awt.UnoControlTimeFieldModel}&quot;) then
+					aControl.Time = aVal(i)
+				elseif aControl.supportsService(&quot;{@see com.sun.star.awt.UnoControlListBoxModel}&quot;) then
+					oDoc.currentController.getControl(aControl).SelectedItemPos(aVal(i))
+				elseif aControl.supportsService(&quot;{@see com.sun.star.awt.UnoControlFormattedFieldModel}&quot;) then
+					oDoc.currentController.getControl(aControl).setText(aVal(i))
+				else &apos; an EditField
+					aControl.Text = aVal(i)
+				end if
+				&apos; let the control store it&apos;s value into the bound field model
+				aControl.commit()
+			end if
+		end if
+	next i
+
+end sub
+</listing>
+</answer>
+
+<versions>
+	<version number="1.1.x" status="tested"/>
+	<version number="2.2.0" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="ms2" date="2007-09-24">Initial version</change>
+</changelog>
+
+</snippet>
+

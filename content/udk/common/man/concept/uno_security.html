@@ -1,0 +1,698 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+<TITLE>
+UNO Security
+</TITLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LINK="#444488" VLINK="#444488" BGCOLOR="#ffffff">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/">common</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/">man</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/concept/">concept</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      <A NAME="__Top__"></A>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+<COL WIDTH=75>
+<TR><TD BGCOLOR="#666699">
+      <H1 ALIGN=CENTER><A HREF="http://www.openoffice.org/">
+        <IMG SRC="../../../images/open_office_org_logo.gif" NAME="Grafik1" ALT="OpenOffice.org" ALIGN=RIGHT WIDTH=109 HEIGHT=54 BORDER=0>
+        </A><FONT COLOR="#ffffff">UNO Security</FONT></H1>
+    </TD></TR>
+
+</TABLE>
+<br>
+
+<TABLE BORDER=0 CELLPADDING=4 CELLSPACING=0>
+<TR><TD BGCOLOR="#666699">
+      <H3><FONT COLOR="#ffffff" SIZE=4>
+        Contents</FONT></H3>
+</TD></TR>
+
+  <TR>
+    <TD>
+      <p><a href="#intro">Introduction</a></p>
+      <p><a href="#api">Concept and API</a>
+      <ul>
+      <li><a href="#api_access">API access</a></li>
+      <li><a href="#checking_permissions">Checking Permissions</a>
+       <ul>
+       <li><a href="#filepermission">FilePermission</a></li>
+       <li><a href="#socketpermission">SocketPermission</a></li>
+       <li><a href="#runtimepermission">RuntimePermission</a></li>
+       <li><a href="#allpermission">AllPermission</a></li>
+       </ul>
+      </li>
+      <li><a href="#static_restrictions">Static Restrictions</a></li>
+      <li><a href="#dynamic_restrictions">Dynamic Restrictions</a></li>
+      <li><a href="#ac_switches">AccessController Switches</a></li>
+      </ul>
+      <p><a href="#overview">Overview</a></p>
+      <p><a href="#untrusted">Dealing with Untrusted Code</a></p>
+       <ul>
+       <li><a href="#untrusted_native">Untrusted Native Code</a></li>
+       <li><a href="#untrusted_scripted">Untrusted Scripted Code</a></li>
+       <li><a href="#untrusted_java">Untrusted Java Code</a></li>
+       <li><a href="#untrusted_remote">Untrusted Inter Process Code</a></li>
+       </ul>
+      <p><a href="#current_implementation">Current Implementation Details</a></p>
+       <ul>
+       <li><a href="#recurring_calls">Recurring Calls</a></li>
+       <li><a href="#performance_considerations">Performance Considerations</a></li>
+       <li><a href="#file_policy">File Policy Implementations</a></li>
+       </ul>
+      <p><a href="#todos">Things left to do...</a></p>
+    </TD>
+  </TR>
+
+<TR><TD BGCOLOR="#666699">
+  <H3><FONT COLOR="#ffffff" SIZE=4>
+  <a name="intro">Introduction</a></FONT></H3>
+</TD></TR>
+<TR><TD>
+   <p>
+In general, security concerns the following four topics [CORBA Security Specification]:
+<ul>
+   <li><p><b>Confidentiality:</b> Information is disclosed only to users authorized to
+       access it.</p></li>
+   <li><p><b>Integrity:</b> Information is modified only by users who have the
+	   right, only in authorized ways, and is transferred only between intended
+	   users in intended ways.</p></li>
+   <li><p><b>Accountability:</b> Users are accountable for their
+       security-relevant actions.</p></li>
+   <li><p><b>Availability:</b> Use of the system cannot be randomly or
+       maliciously denied to authorized users.</p></li>
+</ul>
+Among this very common understanding of security, there are two distinct topics when users want to access or modify resources, or execute a program:
+<p>
+<b>Authentification:</b> The process of validating a subject to ensure that the subject (for example John Doe) is who or what it claims to be.</p>
+<p><b>Authorization:</b> The process of granting permission to access data or execute functionality.
+</p>
+<p>
+A subject (for example the user who started an application or demands access on
+resources accessible via a WWW front end) has to be authenticated to an
+information system. Often, this first step associates the subject with a set of
+credentials, such as, user attributes, permissions, or different principals.
+A subject may be any entity, for example, a person or service. Once
+authenticated, a subject is populated with associated identities or principals.
+A subject may have many principals. For example, a person may have a name
+principal ("John Doe") and a social security number principal ("123-45-6789"),
+which distinguish it from other subjects.</p>
+<p>Authorization has to be done any time the user demands access to sensitive
+data or wants to execute sensitive code. Authorization is hence of a
+programmatic nature and is implemented by the specific service that is handling
+the demand (explicitly checked by base service, but implicitly checked from
+service users' perspective).  A common approach of authorization is handled by
+access control lists (ACL), that is, sets of permissions (positive) or denials
+(negative).
+</p>
+<img src="../images/sec_resource.jpg">
+<p>
+The next sections are about the UNO security API, covering authorization exclusively.  Authorization is a primary goal because it affects most of the client code, such as, doing permission checks.
+It is assumed that users have been authenticated previously using some
+mechanism.</p>
+<p>There was no new API defined that abstracted from a specific authentication mechanism, such as the Java Authentication and Authorization framework (JAAS).
+Although there is no defined API, you can find some draft interfaces and services in the udkapi cvs tree of the <code>com.sun.star.security.auth</code> package.
+
+</p>
+</td></tr>
+
+<TR><TD BGCOLOR="#666699">
+  <H3><FONT COLOR="#ffffff" SIZE=4>
+  <a name="api">Concept and API</a></FONT></H3>
+</TD></TR>
+<TR><TD>
+<p>The UNO API is closely related to the Java authorization API.  Permission
+semantics have been adopted.
+For details about java permissions, have a look at <a href="http://java.sun.com/j2se/1.4.2/docs/guide/security/permissions.html">
+Permissions in the Java 2 SDK</a>.</p>
+<p>There is only a difference when coming to dynamic restrictions which are
+implicitly handled by the Java AccessController (ac).  The Java ac implicitly
+checks permissions related to a PermissionDomain.  A PermissionsDomain includes
+a set of permissions related to a set of classes.  Java can manage this, but
+this feature is not practically  adaptable for compiled machine code.</p>
+<p>As a solution, these dynamic restrictions can be set explicitly using the
+UNO ac interface.  This will install thread/task local restrictions to be used
+upon permission checks.</p>
+
+<p><a name="api_access"><b>API Access</b></a></p>
+<p>Implementing programmatic security (client code), there is an ac singleton object in the component context given to every component.  The name of the object is</p>
+<table width="100%" bgcolor="#ffffaa"><tr><td><pre>
+/singletons/com.sun.star.security.theAccessController
+</pre></td></tr></table>
+<p>This object mainly exports the <code>com.sun.star.security.XAccessController</code> interface which has the following <a href="../../common/ref/com/sun/star/security/XAccessController.html">IDL definition</a>:</p>
+<table width="100%" bgcolor="#ffffaa"><tr><td><pre>
+module com {  module sun {  module star {  module security {
+
+interface XAccessController : com::sun::star::uno::XInterface
+{
+    void checkPermission(
+        [in] any perm )
+        raises (AccessControlException);
+
+    any doRestricted(
+        [in] XAction action,
+        [in] XAccessControlContext restriction )
+        raises (com::sun::star::uno::Exception);
+
+    any doPrivileged(
+        [in] XAction action,
+        [in] XAccessControlContext restriction )
+        raises (com::sun::star::uno::Exception);
+
+    XAccessControlContext getContext();
+};
+
+}; }; }; };
+</pre></td></tr></table>
+
+<p><a name="checking_permissions"><b>Checking Permissions</b></a></p>
+<p>The first method is commonly called by security-related services which need to check if an action is permitted.
+The actual permission takes the security policy, currently in effect, into account.
+In general, the <em>security policy in effect</em> has a dynamic and static part.
+The dynamic part uses restrictions modified by <code>doRestricted()</code> and <code>doPrivileged()</code> calls, while the static part takes user credentials into account (commonly persistent data).
+Currently, four different permission types are defined in IDL and implemented in the UDK ac (module <code>stoc/source/security</code>):
+<ul>
+
+<li><p><b><a name="filepermission" href="../../common/ref/com/sun/star/io/FilePermission.html">com.sun.star.io.FilePermission</a></b>:</p>
+<table width="100%" bgcolor="#ffffaa"><tr><td><pre>
+module com {  module sun {  module star {  module io {
+
+struct FilePermission
+{
+    string URL;
+    string Actions;
+};
+
+}; }; }; };
+</pre></td></tr></table>
+<p>This permission represents access to a file or directory.
+A FilePermission consists of a file url and a set of actions valid for that url.
+<p>
+    The path of the file url that ends in <code>"/*"</code> indicates all the files and
+    directories contained in that directory.  A path that ends with <code>"/-"</code>
+    indicates (recursively) all files and subdirectories contained in that
+    directory.  A file url string consisting of the special token <code>"&lt;&lt;ALL FILES&gt;&gt;"</code>
+    matches any file.
+    </p>
+    <p>Note: A file url string consisting of a single <code>"*"</code> indicates all the files
+    in the current directory, while a string consisting of a single <code>"-"</code> indicates
+    all the files in the current directory and (recursively) all files and
+    subdirectories contained in the current directory.
+    </p>
+    <p>The actions to be granted are a list of one or more comma-separated keywords.
+    The possible keywords are <code>"read"</code>, <code>"write"</code>,
+    <code>"execute"</code>, and <code>"delete"</code>.
+    Their meaning is defined as follows:</p>
+    <ul>
+    <li><code>read</code> -- read permission</li>
+    <li><code>write</code> -- write permission</li>
+    <li><code>execute</code> -- execute permission</li>
+    <li><code>delete</code> -- delete permission</li>
+    </ul>
+    <p>The actions string is processed case-insensitive.
+    </p>
+    
+    <p><em><b>Attention</b></em>:
+    Be careful when granting FilePermissions.  Think about the implications of
+    granting read and especially write access to various files and directories.
+    The <code>"&lt;&lt;ALL FILES&gt;&gt;"</code> permission with write action is especially dangerous.
+    This grants permission to write to the entire file system.
+    </p>
+</li>
+
+<li><p><b><a name="socketpermission" href="../../common/ref/com/sun/star/connection/SocketPermission.html">com.sun.star.connection.SocketPermission</a></b>:</p>
+<table width="100%" bgcolor="#ffffaa"><tr><td><pre>
+module com {  module sun {  module star {  module connection {
+
+struct SocketPermission
+{
+    string Host;
+    string Actions;
+};
+
+}; }; }; };
+</pre></td></tr></table>
+<p>This permission represents access to a network via sockets.
+    A SocketPermission consists of a host specification and a set of actions
+    specifying ways to connect to that host.  The host is specified as</p>
+    <pre>
+    host = (hostname | IPaddress)[:portrange]
+    portrange = portnumber | -portnumber | portnumber-[portnumber]
+    </pre>
+    <p>The host is expressed as a DNS name, as a numerical IP address, or as a
+    <code>"localhost"</code> (for the local machine).  The wildcard <code>"*"</code>
+     may be included once
+    in a DNS name host specification.  If it is included, it must be in the
+    leftmost position, as in <code>"*.sun.com"</code>.
+    </p>
+    <p>The port or portrange is optional.  A port specification of the form <code>"N-"</code>,
+    where <code>N</code> is a port number, signifies all ports numbered <code>N</code> and above,
+    while a specification of the form <code>"-N"</code> indicates all ports numbered
+    <code>N</code> and below.
+    
+    <p>
+    The possible ways to connect to the host are
+    <ul>
+    <li><code>accept</code></li>
+    <li><code>connect</code></li>
+    <li><code>listen</code></li>
+    <li><code>resolve</code></li>
+    </ul>
+    <p>The <code>"listen"</code> action is only meaningful when used with <code>"localhost"</code>.
+    The <code>"resolve"</code> (resolve host/ip name service lookups) action is implied when any of the other actions are present.
+    </p>
+    <p>As an example of the creation and meaning of SocketPermissions, note that if
+    the following permission:
+<pre>
+SocketPermission("foo.bar.com:7777", "connect,accept");
+</pre>
+    <p>is granted, it allows to connect to port 7777 on foo.bar.com, and to
+    accept connections on that port.
+    </p>
+    <p>Similarly, if the following permission:</p>
+<pre>
+SocketPermission("localhost:1024-", "accept,connect,listen");
+</pre>
+    <p>is granted, it allows that code to accept connections on, connect to, or listen
+    on any port between 1024 and 65535 on the local host.
+    </p>
+    
+    <p><em><b>Attention</b></em>:
+    Granting code permission to accept or make connections to remote hosts may be
+    dangerous because malevolent code can then more easily transfer and share
+    confidential data among parties who may not, otherwise, have access to the data.
+    </p>
+</li>
+
+<li><p><b><a name="runtimepermission" href="../../common/ref/com/sun/star/security/RuntimePermission.html">com.sun.star.security.RuntimePermission</a></b>:</p>
+<table width="100%" bgcolor="#ffffaa"><tr><td><pre>
+module com {  module sun {  module star {  module security {
+
+struct RuntimePermission
+{
+    string Name;
+};
+
+}; }; }; };
+</pre></td></tr></table>
+<p>This permission grants runtime access to some named functionality.  A RuntimePermission contains
+    a name (also referred to as a <em>target name</em>) but no actions list;
+    you either have the named permission or you don't.
+</p></li>
+
+<li><p><b><a name="allpermission" href="../../common/ref/com/sun/star/security/AllPermission.html">com.sun.star.security.AllPermission</a></b>:</p>
+<table width="100%" bgcolor="#ffffaa"><tr><td><pre>
+module com {  module sun {  module star {  module security {
+
+struct AllPermission
+{
+};
+
+}; }; }; };
+</pre></td></tr></table>
+<p>The AllPermission is a permission that implies all other permissions.</p>
+
+    <p><em><b>Attention</b></em>:
+    Granting AllPermission should be done with extreme care, as it implies all
+    other permissions.  Thus, it grants code the ability to run with security
+    disabled.  Extreme caution should be taken before granting such a
+    permission to code.  This permission should be used only during testing,
+    or in extremely rare cases where an application is completely trusted and
+    adding the necessary permissions to the policy is prohibitively cumbersome.
+    </p>
+</li>
+
+</ul>
+
+<p>When access is denied upon calling <code>checkPermission()</code>, an
+<code>AccessControlException</code> is thrown.  An
+<code>AccessControlException</code> signals a security violation.
+The <code>AccessControlException</code> is derived from
+<code>SecurityException</code> which is derived from
+<code>RuntimeException</code> and thus can be thrown upon any call on UNO
+interfaces, except for calls on <code>XInterface::acquire()</code> and
+<code>XInterface::release()</code>.</p>
+
+<table width="100%" bgcolor="#ffffaa"><tr><td><pre>
+module com {  module sun {  module star {  module uno {
+
+exception SecurityException : com::sun::star::uno::RuntimeException
+{
+};
+
+}; }; }; };
+
+module com {  module sun {  module star {  module security {  
+
+exception AccessControlException : com::sun::star::uno::SecurityException
+{
+    any LackingPermission;
+};
+
+}; }; }; };
+</pre></td></tr></table>
+
+<p><a name="static_restrictions"><b>Static Restrictions</b></a><br>
+A restriction is defined by a set of permissions.  It has to be assured that a demanded permission is implied by this set of permissions.
+Static restrictions are defined by a (commonly persistent) set of permissions granted to a user.  This has been done by some admin frontend in advance.  The effective set of permissions is provided by the
+<a href="../../common/ref/com/sun/star/security/Policy.html">Policy</a> service.
+There is a singleton object installed into the initial component context from which an ac implementation reads:</p>
+<table width="100%" bgcolor="#ffffaa"><tr><td><pre>
+/singletons/com.sun.star.security.thePolicy
+</pre></td></tr></table>
+<p>The service supports the interface
+<a href="../../common/ref/com/sun/star/security/XPolicy.html"><code>XPolicy</code></a>
+and reads out of some storage:</p>
+
+<table width="100%" bgcolor="#ffffaa"><tr><td><pre>
+module com {  module sun {  module star {  module security {
+
+interface XPolicy : com::sun::star::uno::XInterface
+{
+    sequence< any > getPermissions(
+        [in] string userId );
+    sequence< any > getDefaultPermissions();
+    void refresh();
+};
+
+service Policy
+{
+    interface XPolicy;
+};
+
+}; }; }; };
+</pre></td></tr></table>
+
+<p>Implementing the <code>XPolicy</code> interface, it is important to separate
+default permissions from user permissions.  That is, the ac implementation has
+to combine both to get the effective set of permissions.  Providing these
+permissions separately, the ac implementation has the opportunity to optimize
+permission sets, that is, it only needs to read (and convert) the default
+permissions once, for every user.</p>
+<!-- When refreshing the user policy, e.g. when some storage contexts were modified, the ac has to be notified.  Therefore, it is recommended that the policy supports the
+<a href="../../common/ref/com/sun/star/container/XContainer.html"><code>XContainer</code></a>
+interface.  The current ac implementation will support this soon (xxx todo).
+-->
+
+<p><a name="dynamic_restrictions"><b>Dynamic Restrictions</b></a><br>
+Dynamic restrictions apply to the <code>doPrivileged()</code> and <code>doRestricted()</code> calls of the <code>XAccessController</code> interface.
+These calls will directly modify a property of the
+<a href="uno_contexts.html#current_context">current context</a> which is called</p>
+<table width="100%" bgcolor="#ffffaa"><tr><td><pre>
+access-control.restriction
+</pre></td></tr></table>
+
+<p>This property is of type <code>XAccessControlContext</code> and taken into
+account additionally to the static permissions granted to the calling user.</p>
+<p>The <code>XAccessControlContext</code> has only one method:</p>
+
+<table width="100%" bgcolor="#ffffaa"><tr><td><pre>
+module com {  module sun {  module star {  module security {  
+
+interface XAccessControlContext : com::sun::star::uno::XInterface
+{
+    void checkPermission(
+        [in] any perm )
+        raises (AccessControlException);
+};
+
+}; }; }; };
+</pre></td></tr></table>
+
+<p>Users may implement this interface themselves to restrict or to get a snapshot of the currently effective security by calling <code>XAccessController::getContext()</code>.  This has to be done when raising new threads.  A child thread has to inherit an initial restriction context from its parent at the time of creation.</p>
+
+<p>When calling <code>XAccessController::doRestricted()</code> the ac
+implementation combines a previous restriction with the given one, thus the
+intersection of permissions of both contexts becomes effective.  It then
+installs this new restriction into the current context and calls the specified
+action.  In essence, when doing subsequent <code>doRestricted()</code> calls,
+you chain up several restrictions over several stack layers.</p>
+
+<p>When calling <code>XAccessController::doPrivileged()</code>, the ac
+implementation adds the given set of permission (defined by the ac context),
+installing an extended restriction.  If you pass a null-ref to
+<code>doPrivileged()</code>, then all permissions are implied (no dynamic
+restriction).  This feature may be sensible for basic service implementations
+which need privileges in a well-defined manner, a.k.a., <em>they know what they
+do</em>.</p>
+<img src="../images/sec_dynamic.jpg">
+
+<p><a name="ac_switches"><b>AccessController Switches</b></a><br>
+The ac can be run in several modes, thus influencing its runtime behavior.  When instantiating the ac service, it uses the component context' property</p>
+<table width="100%" bgcolor="#ffffaa"><tr><td><pre>
+/services/com.sun.star.security.AccessController/mode
+</pre></td></tr></table>
+<p>Currently, there are five modes:</p>
+<ul>
+   <li><code>"on"</code><br>
+       This (default) mode turns dynamic and static permission checks on.
+	   Dynamic restrictions are performed evaluating the current context's
+	   <code>access-control.restriction</code> property.  Static
+	   permissions are checked against the calling user's permissions
+	   provided by the policy service.  The current user id is determined
+	   using the current context's property
+	   <code>access-control.user-credentials.id</code>.  If neither the
+	   dynamic restriction nor the effective user's permissions grant a
+	   demanded permission, then an <code>AccessControlException</code> is
+	   thrown.</p></li>
+   <li><p><code>"single-user"</code><br>
+	   This mode turns dynamic and static permission checks on.  Dynamic
+	   restrictions are performed evaluating the current context's
+	   <code>access-control.restriction</code> property.  Static
+	   permissions are checked against the user's permissions provided by
+	   the policy service.  The user id is determined using the component
+	   context's property
+	   <code>/services/com.sun.star.security.AccessController/single-user-id</code>.
+	   If neither the dynamic restriction nor the effective user's
+	   permissions grant a demanded permission, then an
+	   <code>AccessControlException</code> is thrown.</p></li>
+   <li><p><code>"single-default-user"</code><br>
+       This mode turns dynamic and static permission checks on.  Dynamic
+	   restrictions are performed evaluating the current context's
+	   <code>access-control.restriction</code> property.  Static
+	   permissions are checked against the default permissions provided by
+	   the policy service.  If neither the dynamic restriction nor the
+	   default permission grant a demanded permission, then an
+	   <code>AccessControlException</code> is thrown.</p></li>
+   <li><p><code>"dynamic-only"</code><br>
+       This mode turns dynamic permission checks on, exclusively.  This is
+	   useful, if you cannot determine any specific user and don't want to
+	   build up a dummy policy granting default permissions.</p></li>
+</ul>
+
+</td></tr>
+
+<TR><TD BGCOLOR="#666699">
+  <H3><FONT COLOR="#ffffff" SIZE=4>
+  <a name="overview">Overview</a></FONT></H3>
+</TD></TR>
+<TR><TD>
+<p>
+<img src="../images/sec_overview.jpg">
+</p>
+</td></tr>
+
+<TR><TD BGCOLOR="#666699">
+  <H3><FONT COLOR="#ffffff" SIZE=4>
+  <a name="untrusted">Dealing with Untrusted Code</a></FONT></H3>
+</TD></TR>
+<TR><TD>
+Untrusted code should, in general, run in a sandbox, that is, a restricted environment.
+
+<p><a name="untrusted_native"><b>Untrusted Native Code</b></a><br>
+One cannot restrict native code modifying the current context, poke memory, thus influencing the security policy.  I think this is not a goal.
+
+<p><a name="untrusted_scripted"><b>Untrusted Scripted Code</b></a><br>
+Sandboxed script code, for example, a basic script, has to be restricted in the
+way that the underlying engine disallows modifying the following current
+context's access-control properties, i.e., all of:</p>
+
+<table width="100%" bgcolor="#ffffaa"><tr><td><pre>
+access-control.*
+</pre></td></tr></table>
+
+<p>as well as disallowing a call on the ac's <code>doPrivileged()</code>.
+These actions are security violations and have to be signalled via a
+<code>SecurityException</code>.</p>
+
+<p>In addition, it has to be ensured that the script cannot raise components
+exchanging the ac of the component context.  Therefore, the script engine has
+to proxy the service manager ensuring the ac property</p>
+
+<table width="100%" bgcolor="#ffffaa"><tr><td><pre>
+/singletons/com.sun.star.security.theAccessController
+</pre></td></tr></table>
+
+<p>is original, by doing security checks when
+<code>XSingleComponentFactory::createInstanceWithContext()</code> or
+<code> XSingleComponentFactory::createInstanceWithArgumentsAndContext()</code>
+is called.
+
+<p><a name="untrusted_java"><b>Untrusted Java Code</b></a><br>
+In general, the same applies for Java as for scripts.  In addition, the UNO policy has to be plugged under the Java AccessController restricting calls to the Java API.
+For example, imagine that the untrusted Java code opens a file using the Java core API.
+The Java AccessController has to control this access relying on its Java policy in effect.</p>
+<p>Another problem with integrating the Java and C++/UNO access controllers are
+dynamic restrictions, which is not yet solved.</p>
+
+<p><a name="untrusted_remote"><b>Untrusted Inter-Process Code</b></a><br>
+
+A remote user (inter-process user) is assumed to be authenticated when connected.
+The server code must ensure separating different users; it is not necessary that the client code needs to be trusted in terms of dynamic restrictions as demanded for untrusted scripted code.
+But it has to be ensured that the server-side ac implementation is always used when restricting server-side access, such as when permission checks have to be performed process-locally.
+<p>
+<img src="../images/sec_interprocess.jpg">
+</p>
+</td></tr>
+
+<TR><TD BGCOLOR="#666699">
+  <H3><FONT COLOR="#ffffff" SIZE=4>
+  <a name="current_implementation">Current Implementation Details</a></FONT></H3>
+</TD></TR>
+<TR><TD>
+<p>
+Upon bootstrapping the UNO core system getting an initial
+<a href="uno_contexts.html#component_context">component context</a>, the ac implementation of <code>stoc/source/security</code> (<code>sec.dll</code>/ <code>libsec.so</code>) is installed as a singleton.  This is most commonly done using some of cppuhelper's bootstrapping function, for example:
+<a href="../../cppuhelper/defaultBootstrap_InitialComponentContext.html"><code>defaultBootstrap_InitialComponentContext()</code></a>.
+You can specify some <a href="micro_deployment.html#Bootstrap_Arguments">bootstrap variables</a> mapping directly to the above mentioned AccessController mode:
+<ul>
+   <li><p><code>UNO_AC=("on" | "off" | "dynamic-only" | "single-user" |
+        "single-default-user")</code><br>
+        The general ac mode</p></li>
+	<li></p><code>UNO_AC_SERVICE=</code><em>service-name</em>
+	    <code>[optional]</code><br>
+        This overrides ac singleton service name to be used</p></li>
+	<li><p><code>UNO_AC_SINGLEUSER=(<em>UserId</em>|<em>&lt;nothing&gt;</em>)
+	    [optional]</code><br>
+        The initial context runs with this user id or with default policy.
+		In this case, the <code>UNO_AC</code> has to be set to
+		<code>"single-user"</code> or <code>"single-default-user"</code>.
+		</p></li>
+   <li><p><code>UNO_AC_USERCACHE_SIZE=<em>n</em></code><br>
+	   This value maps to the component context entry
+	   <code>/implementations/com.sun.star.security.comp.stoc.AccessController/user-cache-size</code>,
+	   denoting the number of user permission sets to be cached before
+	   calling the policy (lru cache).</p></li>
+   <li><p><code>UNO_AC_FILEPOLICY=<em>file-url</em></code><br>
+	   This value maps to the component context entry
+	   <code>/implementations/com.sun.star.security.comp.stoc.FilePolicy/file-name</code>
+	   denoting the file URL to read the user permission sets from.  The
+	   file policy service implementation of
+	   <code>stoc/source/security</code> is installed.</p></li>
+</ul>
+<p><a name="recurring_calls"><b>Recurring Calls</b></a></p>
+<p>When implementing an ac, there  is a specific issue concerning
+bootstrapping of the ac singleton.
+The ac is (to be) used in every service implementation code and has to cope with the situation that it is called recursively.
+This can occur when the ac implementation initially raises the policy singleton object which checks permissions.</p>
+<p>A (possible) solution for this is to let recurring
+<code>checkPermission()</code> pass unchecked.
+This assumes that one knows implementation details of the underlying policy,
+but one generally don't feel well allowing unchecked permission grants, even
+for a short time.</p>
+<p>A better (safer) solution for this problem is that you shift the time a
+permission is checked.
+Any recurring <code>checkPermission()</code> call will be passed unchecked, but the permission and user context is saved for later execution (when everything is initialized).
+For a clearer distinction that an access violation occurred during bootstrapping of the ac, this violation should not be notified using an <code>AccessControlException</code>, but a different <code>RuntimeException</code>, such as,  <code>DeploymentException</code> (yet to be specified) <!-- xxx todo -->.
+The only drawback of this solution is that an error notification is not sent as
+soon as possible.</p>
+<p>Marking a stack, one commonly uses thread-local storage (tls).
+When calling an unknown implementation (e.g., the policy singleton) a tls slot has to be marked, thus one can recognize a recursive call.
+When recognizing a recursive call, the demanded permission and calling user have to be queued, performing the check later and the call is passed.
+</p>
+<p><a name="performance_considerations"><b>Performance Considerations</b></a></p>
+<p>The ac implementation uses caching of user permission sets
+(<code>/services/com.sun.star.security.AccessController/cache-size</code>)
+for the reason that a permission description has to be parsed (e.g.,
+extracting port numbers).
+Parsing a permission is performed only once, so any ongoing permission check (when the chain of granted permissions is read) can be done once, then using the parsed permission description for checking. <!-- rh: Check that sense of last sentence is OK. -->
+</p>
+<p><a name="file_policy"><b>File Policy Implementation</b></a></p>
+<p>The file policy implementation of <code>stoc/source/security</code>
+(implementation name <code>com.sun.star.comp.stoc.FilePolicy</code> is a
+simple policy reading from policy files.</p>
+<p>The structure of those files is <!-- structure is -->very similar to those of
+<a href="http://java.sun.com/j2se/1.4/docs/guide/security/permissions.html">Java policy files</a>, e.g.:</p>
+
+<table width="100%" bgcolor="#ffffaa"><tr><td><pre>
+grant user "dbo" {
+permission com.sun.star.io.FilePermission
+    "file:///home/dbo/-", "read,write,execute,delete";
+};
+
+grant user "jbu" {
+permission com.sun.star.io.FilePermission
+    "file:///home/jbu/-", "read,write,execute,delete";
+};
+
+// permission granted to everyone
+grant {
+permission com.sun.star.io.FilePermission
+    "file:///tmp/-", "read,write,execute,delete";
+};
+</pre></td></tr></table>
+</td></tr>
+
+<TR><TD BGCOLOR="#666699">
+  <H3><FONT COLOR="#ffffff" SIZE=4>
+  <a name="todos">Things left to do...</a></FONT></H3>
+</TD></TR>
+<TR><TD>
+The following items are still on the to-do list:
+<ul>
+<li><p><b>[high priority]: </b><br>
+The main work left is reviewing all ac relevant code and inserting permission checks.
+In general, this concerns resource access, for example, file io and sockets.
+Memory and CPU resources cannot be limited effectively.
+More than the above described permission types may come, entering the API,
+ac, and policy implementation.</p>
+<p>It is commonly agreed that security checks are implemented on the component level (UNO available) rather than in the base libraries, such as, <code>sal</code>.
+Checking on component level is much more flexible, which may be needed to improve performance, but this may also lead to more forgotten checks.</p>
+<p>A list of all client code that has to be reviewed will be published
+<a href="../tasks/access_control_review.html">here</a>.
+If you find any ac relevant code that which needs be revisited, but you don't have cvs rights to do it, <a href="mailto:Daniel.Boelzle@sun.com">eMail me</a> so I can append it to the list and contact the module owners.
+</p></li>
+<li><p><b>[mid priority]: </b><br>
+At present, the current context is not inherited by child threads being raised, so the user credentials are not accessible by the ac.  This has to be solved by introducing new thread C++/UNO thread classes doing this implicitly by copying the following properties:
+<ul>
+<li>access-control.user-credentials.*</li>
+<li>access-control.restriction (initially the parent thread's context)</li>
+</ul>
+</li>
+<li><p><b>[low priority]: </b><br>
+The current context is not transferred via the URP-UNO interprocess bridge.  It has to be transferred by transferring the above properties with little lack of performance (i.e., configurable).
+</p></li>
+<li><p><b>[low priority]: </b><br>
+The Java ac has to be integrated with the C++/UNO ac to run <a href="#untrusted_java">untrusted Java code</a> using the core Java API.
+</p>
+</li>
+</ul>
+</td></tr>
+
+<tr><td bgcolor="#666699">
+<p align=left><font color="#ffffff"> Author: <a href="mailto:Daniel.Boelzle@sun.com">
+<font color="#ffffff">Daniel B&ouml;lzle</font></a><br>
+<i>Copyright 2002 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</i></font></p></td>
+</tr>
+</table>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

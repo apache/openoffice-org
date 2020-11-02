@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Writer.PageBreak.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2006/07/14 09:36:45 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Writer">
+
+<keywords>
+	<keyword>page break</keyword>
+	<keyword>new page</keyword>
+</keywords>
+
+<authors>
+	<author id="matthiasprem" initial="true" email="h0252896@wu-wien.ac.at">Matthias Prem</author>
+</authors>
+
+<question heading="Page Break">How can a page break be inserted?
+</question>
+
+<answer>
+<listing>/* InsertPageBreak.rex */
+/* Macro */
+
+/* get the script context, the document service and the XTextDocument */
+xScriptContext=uno.getScriptContext()
+oDoc=xScriptContext~getDocument
+xTextDoc=oDoc~{%see com.sun.star.text.XTextDocument%XTextDocument}
+
+/* create the cursor */
+xTextCursor=xTextDoc~getText~createTextCursor()
+xText=xTextDoc~getText()
+xTextDoc~getText~getEnd~setString(&quot;This text is on page number 1.&quot;)
+
+/* set cursor properties and define BreakType */
+xCursorProps=xTextCursor~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+xCursorProps~setPropertyValue(&quot;BreakType&quot;, bsf.getConstant(&quot;{%see com.sun.star.style.BreakType}&quot;, &quot;PAGE_AFTER&quot;))
+xTextDoc~getText~getEnd~setString(&quot;13&quot; ~d2c)
+
+/* set text on page 2 */
+xTextDoc~getText~getEnd~setString(&quot;This text is on page number 2.&quot;)
+
+::requires UNO.CLS</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="matthiasprem" date="2006-07-09">Initial version</change>
+</changelog>
+
+</snippet>

@@ -1,0 +1,177 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ui/">ui</a>&nbsp;&raquo;&nbsp;<a href="/ui/accessibility/">accessibility</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h2>Support of Assistive Technology</h2>
+
+<p>OpenOffice.org lets users create, modify, view, and print documents
+easily and intuitively by providing a graphical user interface (GUI).
+Accessibility is about enabling users who can not use such a graphical user
+interface do the same things.  This is done by using Assistive Technology to
+provide alternative user interfaces (UIs) that are suitable to such
+users.</p>
+
+<p>We could of course change the whole UI and replace it with an
+  altogether different one.  But that has two major drawbacks:
+<ul>
+<li>Two people with different abilities could not help each other
+  because their user interfaces had nothing or very little in
+  common.</li>
+<li>We would have to provide a special UI for every AT device.  The
+  vendor of such a device knows much better than we do, how the UI for
+  their device should look or sound like.</li>
+</ul>
+</p>
+
+<p>A much better solution is to use a generic representation of both
+document and existing GUI that grants AT devices full access to them.  The
+AT device vendors can then use this abstraction to provide an
+<em>additional</em> user interface.  This way both the graphical and the
+alternative user interface are available at the same time and thus people
+that use them can work together on the same document.</p>
+
+<p>For this generic representation we will support both the Java
+Accessibility API (JAA) as well as the Gnome Accessibility API with a
+two-layer architecture: The OpenOffice.org applications themselves implement
+our own UNO Accessibility API (UAA).  The UAA is independent from but
+influenced by the Accessibility APIs of Java and Gnome.  In the second layer
+the UNO Accessibility API is then bridged to the Java and Gnome
+Accessibility APIs.</p>
+
+
+
+<h3>UNO Accessibility API</h3> 
+<p>The UNO Accessibility API (UAA) is described in more detail 
+<a
+href="unoapi.html" 
+title="Description of the UNO Accessibility API">here</a>.  
+It defines a set of interfaces and services that are implemented by all UNO
+objects that belong to the GUI.  Corresponding to the tree hierarchy of
+graphical user interfaces the UAA represents the GUI as a tree of accessible
+objects which can be queried by AT about properties like names, roles,
+geometry, and color.</p>
+
+
+
+<h3>Bridging the UNO Accessibility API to Java and Gnome</h3>
+<p>Bridging the UNO Accessibility API to the Java Accessibility API (JAA) on
+Windows allows OpenOffice.org to utilize the work that Assistive Technology
+(AT) Tool vendors have already done to make Java applications accessible on
+that platform. While the Microsoft Accessibility API only covers a small
+subset of user interface objects like menus and such, the JAA of JDK 1.4
+features additional interface to describe also documents sufficiently.</p>
+
+<p>A similar bridge to the Gnome Accessibility API takes advantage of
+  already existing AT tools that use that API and that run under Solaris and Linux.</p>
+
+
+<h3>Document representation</h3>
+<p>All elements of an OpenOffice.org application that are visible on the
+  screen have to be represented by to UAA to be made accessible to the AT
+  and thus to the user.  For Java GUIs like menus,
+  buttons, and text fields accessibility implementations already exist.  The
+  OpenOffice.org widgets try to be consistent in their accessibility
+  behavior with their Java counterparts.</p>
+
+<p>For the central part of every application window, the document window in
+  which a document is visualized, a corresponding Java implementation does not
+  exist.  We thus had to define our own guidelines how to make document views
+  accessible.</p>
+
+<p>The <a href="docrep-guidelines.html" 
+title="Guidelines for document representation">guidelines of document
+representation</a> describe the general design principles of how to make
+  document views accessible and are independent from the application with
+  which the document is edited.</p>
+
+<p>However, the document representation differs for the different
+  OpenOffice.org applications.  You can find links to the descriptions of
+  the document representation for the individual applications below: <ul>
+  <li><b>Writer</b><br>
+	<a href="proposal-writer.html"
+	title="Proposal of the representation of writer documents">Proposal</a> of 
+	how to make Writer and Writer/Web accessible.</li>
+<li><b>Calc</b><br>
+	<a href="proposal-calc.html"
+	title="Proposal of the representation of calc documents">Proposal</a> of
+    how to make Calc accessible.</li>
+<li><b>Draw/Impress</b><br>
+	<a href="proposal-impress.html" 
+       title="Proposal of Draw/Impress Accessibility Design">Proposal</a> of
+    how to make Draw and Impress accessible.</li>
+<li><b>Chart</b><br>
+	<a href="proposal-chart.html" 
+       title="Proposal of Chart Accessibility Design">Proposal</a> of how to
+    make Chart accessible.</li>
+</ul>
+</p>
+
+<p>More concrete documentation can be found in the services of <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/text/module-ix.html" 
+title="Services of theUAA implementation used by the Writer">Writer</a>, 
+<a href="http://api.openoffice.org/docs/common/ref/com/sun/star/sheet/module-ix.html" 
+title="Services of the UAA implementation used by the Calc">Calc</a>, 
+<a href="http://api.openoffice.org/docs/common/ref/com/sun/star/drawing/module-ix.html" 
+title="Services of the UAA implementation used by Draw/Impress">Draw/Impress</a>,
+and <a href="http://api.openoffice.org/docs/common/ref/com/sun/star/chart/module-ix.html" 
+title="Services of the UAA implementation used by Chart">Chart</a>.</p>
+
+<h3>Testing and Debugging</h3>
+<p>There is a graphical test tool, the <a href="AWB.html" 
+title="Description of the AWB test tool">Accessibility Work Bench</a>, that
+  uses the UNO Accessibility API to retrieve the accessibility tree from
+  running OpenOffice.org applications.  It allows developers of the UAA to
+  see what information is available from the outside.</p>
+
+
+<h3>Details of API support</h3>
+<p>This sections describes the more technical details of supporting the
+accessibility APIs.</p>
+
+<p>The general strategy will be to extend the OpenOffice.org API by an
+accessibility section.  This accessibility API, which will be closely
+modeled after the Java and Gnome Accessibility API, can then be mapped
+easily on either of that two.</p>
+
+<p>Using our own OpenOffice.org Accessibility API as an intermediate layer
+  between the office and the accessibility APIs used by AT
+  devices has the advantage that we can easily support more then one
+  API and can react flexible to future changes in those APIs.</p>
+
+<p>We will exploit the fact that we already have an API, that gives
+access to all the details of OpenOffice.org documents.  This allows us to
+gather all code, that implements the OpenOffice.org Accessibility API, in
+one place, rather than to insert it at a very many places into
+existing source.
+</p>
+
+<p>Details about the UAA and its implementation can be found <a
+href="unoapi.html" 
+title="Description of the UNO Accessibility API">here</a>.</p>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

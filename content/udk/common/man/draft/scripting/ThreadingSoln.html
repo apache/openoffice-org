@@ -1,0 +1,288 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+  <title>Threading Solution</title>
+   
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/">common</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/">man</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/draft/">draft</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/draft/scripting/">scripting</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+ 
+<h2>Introduction</h2>
+     The goals of the threading solution research are:  <br>
+ 
+<ul>
+   <li>To establish how threading currently works in OpenOffice</li>
+   <li>To investigate issues related to running multiple scripts simultaneously 
+in OpenOffice</li>
+   <li>To suggest how IDEs would be able to attach to OpenOffice scripts
+    <br>
+   </li>
+ 
+</ul>
+ 
+<p>  <a name="contents"></a> </p>
+ 
+<h2>Contents</h2>
+    
+<ul>
+  <li><a href="#current_behaviour">Current Star Basic script threading behaviour</a>
+   </li>
+   <li><a href="#current_win_behaviour">Current Ms Basic script threading 
+behaviour</a> </li>
+   <li><a href="#event_handling">Event Handling</a> </li>
+   <li><a href="#options">Options for script threading behaviour</a> </li>
+   <li><a href="#issues">Issues with allowing one script per document</a>
+  </li>
+   <li><a href="#configuration">Configuration of threading behaviour</a>
+  </li>
+   <li><a href="#ide">Identifying script threads in a debugger</a> </li>
+   <li><a href="#solarmutex">SolarMutex</a> </li>
+ 
+</ul>
+   Also of interest are these initial thoughts on the thread management topic 
+posted to <a
+ href="http://udk.openoffice.org/common/man/draft/scripting/thread-management.html">openoffice.org</a>
+ 
+<hr>  <a name="current_behaviour"></a>  
+<h3>Current StarBasic script threading behaviour</h3>
+   
+<p> Run the macro from the "Macro" dialogbox. </p>
+ 
+<ul>
+  <li>No frozen document you can work on any documents </li>
+   <li>Macro running in background </li>
+   <li>No macro can be run </li>
+ 
+</ul>
+   Assign the macro to the "F10" key. Press that key.  
+<ul>
+  <li>Active document is frozen </li>
+   <li>Other document are not frozen </li>
+   <li>Can't run any macro on other document while the macro is still running 
+even from the "Macro" dialogbox. </li>
+ 
+</ul>
+   While the macro is running, if you open the "Macro" dialogbox, the macro 
+is paused  
+<ul>
+  <li>If you close the dialog box, the macro is resumed </li>
+   <li>If you decide to edit a macro, the macro is resumed and you can stop 
+the macro from the BASIC editor </li>
+   <li>If you switch to the BASIC editor and click on the stop button, the 
+macro will be stop but nothing in the UI will be updated until the "Macro" 
+dialogbox is closed (this seems to be a bug). </li>
+ 
+</ul>
+   
+<p> <a href="#contents">Contents</a> </p>
+ 
+<hr>  <a name="current_win_behaviour"></a>  
+<h3>Current Ms Basic script threading behaviour</h3>
+   
+<p> Run the macro from the "Macro" dialogbox. </p>
+ 
+<ul>
+  <li>All document are frozen </li>
+ 
+</ul>
+   Run the macro from the Ms Visual Basic editor.  
+<ul>
+  <li>All document are frozen </li>
+ 
+</ul>
+   Assign the macro to the "F10" key. Press that key.  
+<ul>
+  <li>All document are frozen </li>
+ 
+</ul>
+   Run a macro that will access Excel and change the cell values.  
+<ul>
+  <li>All word document are frozen </li>
+   <li>Excel is not frozen, macro is running and changing value and you can 
+change values. </li>
+ 
+</ul>
+   
+<p> <a href="#contents">Contents</a> </p>
+ 
+<hr>  <a name="event_handling"></a>  
+<h3>Event Handling</h3>
+   
+<p> The OpenOffice process has multiple threads. Any thread that calls Application::Yield 
+or Application::Reschedule dispatches GUI events. Dispatching GUI events requires
+the SolarMutex, so only one thread at a time can dispatch GUI events. In
+practice the "main" OpenOffice thread is the thread that dispatches most GUI
+events.  </p>
+ 
+<p> Events can be either synchronous or asynchronous. </p>
+ 
+<p> Synchronous events are handled immediately, that means that the functionality 
+bound to the event is invoked immediately from the call stack of the thread 
+where the event occurred. The thread is therefore blocked until the event has
+been handled. </p>
+ 
+<p> Asynchronous events are placed in a message queue by the thread handling 
+the event, and the thread is not blocked, it continues executing. The message 
+queue is serviced by any thread which calls Application::Yield or Application::Reschedule.
+ </p>
+ 
+<p> <a href="#contents">Contents</a> </p>
+ 
+<hr>  <a name="options"></a>  
+<h3>Options for script threading behaviour</h3>
+   
+<p> There are two possible threading models that we could use: </p>
+ 
+<ol>
+  <li>One script per OpenOffice process - this is the threading model currently 
+used by OpenOffice. </li>
+   <li>One script per OpenOffice document - this would allow more than one 
+script to be run at the same time, but only one script could be run per document 
+at a time. The thread running the script would have to grab a document lock 
+before invoking the script and release it when the script has completed.
+  </li>
+ 
+</ol>
+   
+<p> The best solution is to implement option 2, and add the possibility to 
+configure the threading behaviour so that it acts like option 1 if the user 
+wishes to use this behaviour (see Configuration section below). </p>
+ 
+<p> So, how do we implement option 2? From discussions with Mathias Bauer 
+and Joerg Budischweski they feel that OpenOffice should manage the spawning 
+of the threads which would invoke the scripts. In the case of synchronous 
+events the thread handling the event would spawn a thread in which it would 
+then invoke the script. In the case of asynchronous threads the thread which 
+had grabbed the event off the message queue would spawn a new thread when 
+it wanted to invoke a script. In other words the responsibility for managing 
+the per document script threads would lie with OpenOffice, not the scripting 
+framework. </p>
+ 
+<p> Changes needed: </p>
+ 
+<ul>
+  <li>The thread calling XFunction.invoke() (main thread for synchronous
+ events, message queue thread for asynchronous events) needs to spawn a 
+new thread and call XFunction.invoke() from there. </li>
+   <li>The document for which the XFunction is being invoked needs to be
+ locked for the duration of XFunction.invoke() (with a documentmutex of 
+some sort) so other XFunctions cannot be invoked for that document. The most
+difficult thing is that also every view that tries to modify a document must
+stick to this rule </li>
+ 
+</ul>
+   
+<p>See also: "Threading model for an office scripting framework" discussion 
+on	openoffice.udk.dev newsgroup </p>
+ 
+<p> <a href="#contents">Contents</a> </p>
+ 
+<hr>  <a name="issues"></a>  
+<h3>Issues with allowing one script per document</h3>
+   
+<p> Because of problems with thread safety in the OpenOffice API it is currently 
+unsafe to allow more than one thread to make API calls at the same time. For
+this reason there is a global SolarMutex which thread unsafe API implementations 
+automatically lock before executing any functionality, and unlock before returning.
+The thread calling the OpenOffice API is not aware of this SolarMutex. While
+the SolarMutex is grabbed, OpenOffice API calls from other threads will block
+until the SolarMutex becomes free. The OpenOffice UI will be frozen while
+the SolarMutex is locked.  If a script calls a OpenOffice API, the solarmutex
+will be grabbed until the API call returns which would temporarily freeze
+all document windows. These freezes may be an unacceptable annoyance to users
+and they may prefer that the UI be completely frozen for the duration of
+script execution rather than having it freeze unexpectedly. </p>
+ 
+<p> See also: "Office API and thread safety" discussion on	openoffice.framework.dev 
+newsgroup </p>
+ 
+<p> <a href="#contents">Contents</a> </p>
+ 
+<hr>  <a name="configuration"></a>  
+<h3>Configuration of threading behaviour</h3>
+   
+<p> The threading behaviour of Office should be configurable so that the user
+can switch on/off the one script per document behaviour as they wish. A radio
+box should be added to the Scripting pane of the Office options dialog with
+the options: </p>
+ 
+<p> Allow only one script to be run by OpenOffice at a time. <br>
+ Allow one script per document to be run by OpenOffice at a time </p>
+ 
+<p> <a href="#contents">Contents</a> </p>
+ 
+<hr>  <a name="ide"></a>  
+<h3>Identifying script threads in a debugger</h3>
+   
+<p> The issue here is how we can identify which thread in a OpenOffice process 
+is running the script we are interested in debugging. This is possible in 
+java using the java.lang.Thread.setName() method. The pairing of script name 
+and document name should be sufficient to uniquely identify the appropriate 
+thread. </p>
+ 
+<p> <a href="#contents">Contents</a> </p>
+ 
+<hr>  <a name="solarmutex"></a>  
+<h3>SolarMutex</h3>
+   
+<p> A problem could arise if a thread that does not possess the SolarMutex
+ tries to execute a script synchronously, because any API call in the script 
+can possibly acquire the SolarMutex. This may cause a deadlock, f.e. if the 
+thread possessing the SolarMutex waits for a resource that is locked by the 
+thread that tries to execute a script synchronously.  So we could add some 
+code here, that denies script execution, if it should be done synchronously 
+and the SolarMutex is locked. It's better to treat this as an error than taking
+the risk of getting a deadlock. <br>
+ ======<br>
+  suffice to say that for synchronous executions the thread owns the SolarMutex, 
+it doesn't need to be the "main" thread. <br>
+ ======<br>
+  Every not thread safe implementation of our API will acquire the SolarMutex 
+in any interface call before anything will be done inside the method. So the
+function object doesn't need to care for that <br>
+ ======<br>
+  the SolarMutex should be locked only inside the API calls (it will be anyway), 
+not by the function object (it mustn't, because it doesn't know if it is called
+synchronously or not!), the event handler or anybody else.  A big advantage
+of this is, that the SolarMutex will be freed between two API calls, giving
+the message queue a chance to allow for a minimum responsiveness of the office
+process. The script then will work in parallel to the event queue.   Only
+for synchronous execution we should try to (!) acquire the SolarMutex before
+executing the script as described above. If the try fails, script execution
+should be denied. I consider this to be a rare case, currently I can't imagine
+that any event that may cause a script execution will occur in a thread without
+the SolarMutex. But it's good to handle this case in an appropriate way.
+<br>
+ ======<br>
+  </p>
+ 
+<p> <a href="#contents">Contents</a> </p>
+ 
+<hr>  <br>
+ 
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

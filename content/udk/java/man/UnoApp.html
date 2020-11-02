@@ -1,0 +1,152 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<meta HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<title>The Java Uno Application (UnoApp)</title>
+	<meta NAME="KEYWORDS" CONTENT="sandbox">
+  
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LINK="#444488" VLINK="#444488" bgcolor="#eeeeff">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/java/">java</a>&nbsp;&raquo;&nbsp;<a href="/udk/java/man/">man</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      <A NAME="__Top__"></A>
+
+    <table WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+	  <col WIDTH=75>
+	  <tr>
+		<td bgcolor="#666699">
+          <h1 ALIGN=CENTER STYLE="margin-top: 0cm; text-decoration: none">
+	        <font COLOR="#ffffff" SIZE=6>The Java Uno Application (UnoApp)</font>
+		  </h1>
+		</td>
+	  </tr>
+    </table>
+
+	
+<P> The generic java UNO application eleminates the need to write java UNO applications. 
+  It allows to instance any java UNO or binary UNO service, it is reachable via 
+  java class or an applicat.rdb. Even more advanced scenarios with exported or 
+  imported objects are possible. The UnoApp is the java counterpart to the uno 
+  executable used for binary UNO. Before executing UnoApp the Java archive files 
+  jut.jar, sandbox.jar, ridl.jar and jurt.jar should be available in the class 
+  path.
+<p> For example, to instantiate a ServiceManager only the service name has to 
+  be given:
+<table width="100%" bgcolor=#ffffcc>
+  <tbody> 
+  <tr> 
+    <td height="11"> 
+      <pre>java com.sun.star.tools.uno.UnoApp -s com.sun.star.lang.ServiceManager</pre>
+    </td>
+  </tr>
+  </tbody> 
+</table>
+<p>Slightly more complicate is the import of an OO service manager: <br>
+<table width="100%" bgcolor=#ffffcc>
+  <tbody> 
+  <tr> 
+    <td height="11"> 
+      <pre>java com.sun.star.tools.uno.UnoApp 
+     -u "uno:socket,host=myhost,port=5678;urp;StarOffice.ServiceManager"</pre>
+    </td>
+  </tr>
+  </tbody> 
+</table>
+<p>The <a href="http://whiteboard.openoffice.org/Inspector/index.html">Instance 
+  Inspector</a> could be instantiated as follows (Windows):<br>
+<table width="100%" bgcolor=#ffffcc>
+  <tbody> 
+  <tr> 
+    <td height="11"> 
+      <pre>java com.sun.star.tools.uno.UnoApp 
+     -smgr -c\ InstanceInspector 
+     -s com.sun.star.beans.InstanceInspector 
+     -- -u\ uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager</pre>
+    </td>
+  </tr>
+  </tbody> 
+</table>
+<p>In general the parameters are the following, a service manager to use, a service 
+  name or an import clause and optional arguments for the service which are passed 
+  via <a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XInitialization.html">XInitialization</a>. 
+  From this it follows that the service should implement the method <i>initialize</i> 
+  with all planned arguments.
+<p>UnoApp can be called with different options:<br>
+
+<p>usage: UnoApp [option]*
+<table width="606" border="1">
+  <tr bgcolor="#FFFFCC"> 
+    <td height="2"><b>Option</b></td>
+    <td height="2"><b>Description</b></td>
+  </tr>
+  <tr> 
+    <td height="2">-c</td>
+    <td height="2">creates a XMultiServiceFactory out of the given component (via 
+      url or as classname, e.g. -c InstanceInspector)</td>
+  </tr>
+  <tr bgcolor="#FFFFCC"> 
+    <td height="2">--singleaccept</td>
+    <td height="2">if the object is to be exported, only export it once</td>
+  </tr>
+  <tr> 
+    <td height="2">-u</td>
+    <td height="2">import an object via the given url (e.g. -u uno:socket,host=localhost,port=2343;urp;StarOffice.ServiceManager)</td>
+  </tr>
+  <tr bgcolor="#FFFFCC"> 
+    <td height="2">-s</td>
+    <td height="2">the service to instantiate (e.g. -s com.sun.star.beans.InstanceInspector)</td>
+  </tr>
+  <tr> 
+    <td height="2">-r</td>
+    <td height="2">create a XMultiServiceFactory out of the registry file (e.g. 
+      -r applicat.rdb)</td>
+  </tr>
+  <tr bgcolor="#FFFFCC"> 
+    <td height="2">--</td>
+    <td height="2">objects given to this option are passed via XInitialization 
+      to the result object (e.g. -- -u\ uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager)</td>
+  </tr>
+  <tr> 
+    <td height="2">-tr</td>
+    <td height="2">create a XMultiServiceFactory out of two registry files (e.g. 
+      -tr applicat.rdb user.rdb</td>
+  </tr>
+  <tr bgcolor="#FFFFCC"> 
+    <td height="2">-h</td>
+    <td height="2">shows all options with description</td>
+  </tr>
+  <tr> 
+    <td height="2">-smgr &quot;object[,object]*&quot;</td>
+    <td height="2">merges the given factorys into the result object factory</td>
+  </tr>
+</table>
+<p><br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

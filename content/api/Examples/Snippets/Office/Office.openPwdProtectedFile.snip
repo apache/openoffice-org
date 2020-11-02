@@ -1,0 +1,70 @@
+<?xml version="1.0" ?>
+
+<!-- 
+$RCSfile: Office.openPwdProtectedFile.snip,v $
+
+last change: $Revision: 1.2 $ $Author: tomsontom $ $Date: 2004/08/04 08:21:47 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+ -->
+
+<snippet language="Java" application="Office">
+
+<keywords>
+        <keyword>password proctected</keyword>
+        <keyword>open file</keyword>
+        <keyword>password dialog</keyword>
+</keywords>
+
+<authors>
+    <author id="tomsontom" initial="true" email="tom.schindl@bestsolution.at">Tom Schindl</author>
+</authors>
+
+<question heading="Open Password protected file and displaying Pwd-Dialog">
+How do I open a password protected OO-Document and display the Password dialog
+</question>
+
+<answer>
+<p>
+You have to provide an InteractionHandler, which shows the password dialog. You can create such handler by your own .. or 
+use our global one, which implements every interaction we know. (Andreas Schl&#252;ns &lt;andreas.schluens@sun.com&gt;)
+</p>
+
+<listing>
+XInteractionHandler xHandler = (XInteractionHandler)UnoRuntime.queryInterface( XInteractionHandler.class, xSMGR.createInstance("com.sun.star.task.InteractionHandler"));
+
+PropertyValue[] lArgs    = new PropertyValue[1];
+lArgs[0] = new PropertyValue();
+lArgs[0].Name  = "InteractionHandler";
+lArgs[0].Value = xHandler;
+
+xDoc = xDesktop.loadComponentFromURL(sURL, sTarget, nSearchFlags, lArgs);
+</listing>
+</answer>
+
+<changelog>
+    <change author-id="tomsontom" date="2004-06-11">Intial version</change>
+</changelog>
+
+</snippet>

@@ -1,0 +1,184 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>meeting minutes</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="AUTHOR" CONTENT="Oliver Specht">
+	<META NAME="CREATED" CONTENT="20010919;11155683">
+	<META NAME="CHANGEDBY" CONTENT="Oliver Specht">
+	<META NAME="CHANGED" CONTENT="20010919;11502368">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ui/">ui</a>&nbsp;&raquo;&nbsp;<a href="/ui/protocols/">protocols</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<TABLE WIDTH=100% BORDER=2 BORDERCOLOR="#000000" CELLPADDING=5 CELLSPACING=0 FRAME=HSIDES RULES=NONE STYLE="page-break-before: always; page-break-inside: avoid">
+	<COL WIDTH=57*>
+	<COL WIDTH=199*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=22% BGCOLOR="#e6e6e6">
+				<P ALIGN=LEFT>Date</P>
+			</TH>
+			<TD WIDTH=78% SDVAL="35665" SDNUM="5127;0;@">
+				<P ALIGN=LEFT>September 13<SUP>th</SUP> 2001</P>
+			</TD>
+		</TR>
+	</THEAD>
+</TABLE>
+<P><BR><BR>
+</P>
+<H1>Weekly User Interface meeting 
+</H1>
+<H1>TODOs</H1>
+<TABLE WIDTH=100% BORDER=2 BORDERCOLOR="#000000" CELLPADDING=5 CELLSPACING=0 FRAME=BELOW RULES=ROWS STYLE="page-break-inside: avoid">
+	<COL WIDTH=148*>
+	<COL WIDTH=54*>
+	<COL WIDTH=54*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=58% BGCOLOR="#cccccc">
+				<P ALIGN=LEFT>Previous week's TODOs</P>
+			</TH>
+			<TH WIDTH=21% BGCOLOR="#cccccc">
+				<P ALIGN=LEFT>Responsible</P>
+			</TH>
+			<TH WIDTH=21% BGCOLOR="#cccccc">
+				<P ALIGN=LEFT>Status</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=58%>
+				<P>Create a team section on staroffice-doc and on OOo</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>OS</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>In progress</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=58%>
+				<P>Determine and publish responsibilities 
+				</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>OS</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>In progress</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=58% BGCOLOR="#cccccc">
+				<P>New TODOs</P>
+			</TD>
+			<TD WIDTH=21% BGCOLOR="#cccccc">
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=21% BGCOLOR="#cccccc">
+				<P><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=58%>
+				<P>assemble list of UI components/classes/dependencies</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>OS</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=58%>
+				<P>check if common UI code can/should be moved from
+				SfxApplication to OfficeApplication</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>FS</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P><BR>
+				</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR><BR>
+</P>
+<H1>Location of the new UI project(s)</H1>
+<P>A lot of the common UI classes uses specialized SfxPoolItems which
+are located in SVX. This means that the new UI project(s) need to be
+located above SVX. On the long term, this dependency should be
+removed, but at the moment having it would ease the migration.</P>
+<P>OTOH, the projects should be below OFFMGR, which would be a main
+client of the functionallity.</P>
+<H1>Configuration</H1>
+<P>It seems desirable to have a separation of configuration data, to
+distinguish between framework UI data and application UI data. At the
+moment, this is no primary goal for feasibility reasons.</P>
+<H1>Customizeable UI</H1>
+<P>On the long term, SO should have customizeable UI in a sense (at
+least) that vendors can replace dialogs, menus, toolboxes etc. with
+their own implementations. For this, the question rose where the line
+between exchangeable and not-exchangeable components should be draw.
+For instance, it seems difficult to allow to exchange single
+tab-pages in common dialoges. This would make the interface of such
+components very complex (and probably expensive).</P>
+<P>Instead, it seems reasonable to claim that (only) dialogs as a
+whole are exchangeable. For this, such a dialog component would
+simply work on an object which can be passed (e.g. the shape which's
+properties are to be changed), this way keeping the interface rather
+simple. Our &#147;default implementations&#148; then would have the
+full power of all the common helpers (SfxItemSet etc.), without the
+need to model this in UNO.</P>
+<H1>Taking an inventory</H1>
+<P>As not everybody has a clear perception about the amount of
+classes/helpers which are now in the responsibilities of the UI team
+(especially FS complained), OS is to assemble of list of them,
+including dependencies to the different projects which at the moment
+contain common UI (TODO).</P>
+<P>After this, the splitting/regrouping of all this code can be
+discussed, including questions about which components should be
+loaded on demand etc.</P>
+<H1>Preferred application class</H1>
+<P>In the course of the upcoming changes, we should have a clear
+responsibility for the application UI. At the moment, the
+SfxApplication (sfx2) as well as the OfficeApplication (offmgr) both
+take a part of them. To have a clear distinction between framework
+and office UI, it seems desired to move the latter to the
+OfficeApplication. FS will discuss this idea with MBA and see if
+there are any objections from the framework side.</P>
+<P>Remark: All initials for names should be
+interpreted as &lt;Initial&gt;@openoffice.org</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

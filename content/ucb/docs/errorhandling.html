@@ -1,0 +1,540 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>UCB Commands - Error Handling (Draft)</title>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta http-equiv="CONTENT-TYPE" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.78 [en] (Windows NT 5.0; U) [Netscape]">
+   <meta name="AUTHOR" content="Kai Sommerfeld">
+   <meta name="CREATED" content="20010528;10585075">
+   <meta name="CHANGEDBY" content="Kai Sommerfeld">
+   <meta name="CHANGED" content="20010608;9152226">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ucb/">ucb</a>&nbsp;&raquo;&nbsp;<a href="/ucb/docs/">docs</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+&nbsp;
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4 WIDTH="100%" STYLE="page-break-before: always" >
+<tr>
+<td BGCOLOR="#666699">
+<center>
+<h1 STYLE="margin-top: 0cm; text-decoration: none">
+<a href="http://www.openoffice.org/"><img SRC="../images/open_office_org_logo.gif" NAME="Graphic1" ALT="OpenOffice.org" NOSAVE BORDER=0 height=53 width=126 align=RIGHT></a><font color="#FFFFFF"><font size=+3>
+UCB Commands - Error Handling Concept &amp; Specification</font></font></h1></center>
+</td>
+</tr>
+</table>
+
+<hr SIZE=3 NOSHADE>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4 WIDTH="100%" STYLE="page-break-before: always" >
+<tr>
+<td WIDTH="100%" BGCOLOR="#666699">
+<h3 STYLE="margin-top: 0cm; text-decoration: none">
+<font color="#FFFFFF"><font size=+1>General Error Handling Concept</font></font></h3>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="100%">Every UCB Content supports a set of commands. A UCB client
+calls
+<b>css::ucb::XCommandProcessor::execute(...)</b> if it wants the
+content to execute a command. Errors occurring while executing a command
+are managed using exceptions.
+<p>Any exceptions can be used by a UCP implementation to interact with
+a UCB client. For example, if a file should be written to disk (using UCB's
+<i>insert</i>
+command) and another file with the same name already exists, an exception
+could be used to query the user whether he wants to overwrite the existing
+file. If the user confirms, the file will be overwritten, if he rejects,
+the insert command will be aborted.
+<p>Exceptions generally should be handed over to an
+<b>css::task::XInteractionHandler</b>
+implementation, which generally was obtained from a command's environment
+(<b>css::ucb::XCommandEnvironment</b>. If no Interaction handler is available
+or if the Interaction Handler did not handle the request, the exception
+must be thrown directly. This will always aborts the command. Using an
+Interaction Handler has the advantage, that additional data can be supplied
+to the command implementation without the need to abort and to retry the
+command (after supplying the missing data). The data supplied to the requesting
+code either may lead in continuing or aborting the command.
+<p>A <b>css::task::XInteractionHandler</b> handles <b>css::task::XInteractionRequest</b>s.
+An Interaction Request contains an exception (the request) and a number
+of <b>css::task::XInteractionContinuation</b>s, which define the responses
+that can be used to "answer" the request. There are some standard continuations
+defined, which are namely
+<b>css::task::XInteractionAbort</b>, <b>css::task::XInteractionRetry</b>,
+<b>css::task::XInteractionApprove</b>
+and
+<b>css::task::XInteractionDisapprove</b>. For example, for a GUI Interaction
+Handler these continuations could be assigned to buttons in a message box
+(Approve equals "Yes" button, Disapprove equals "No" button, ...). The
+Interaction Handler code does some work dependent on the kind of request
+and the possible continuations (like displaying a login dialog and supplying
+the data entered to the authentication request),
+<i>selects</i> one of
+the continuations provided and returns. The code that called the Interaction
+Handler now can act according to the kind of continuation that was previously
+selected. Not every Interaction Handler implementation must be able to
+handle all requests. If an Interaction Handler cannot handle a request,
+no continuation will be selected after the call to XInteractionHandler::handle(
+... ). In this case the code that called the Interaction Handler must act
+as if no handler were available and throw the exception that was previously
+passed to the Interaction Handler.
+<p>For exceptions located in the module <b>com::sun::star::ucb</b>, the
+member <i>Context</i> (which is introduced by the base class of all UNO
+exceptions � css::uno::Exception) should be filled with the command processor
+(<b>css::ucb::XCommandProcessor</b> implementation) that executes the command.
+<p>The following pseudo code illustrates how to proceed with an error:
+<br>&nbsp;
+<table BORDER CELLSPACING=0 CELLPADDING=4 WIDTH="100%" BORDERCOLOR="#000000" >
+<tr>
+<td VALIGN=TOP>
+<pre><font face="Courier, monospace"><font size=-1>// Create the exception to propagate...
+xxxxException aEx( ... );
+
+xxxxContinuation aCont;</font></font></pre>
+
+<pre>// Obtain Interaction Handler
+<font face="Courier, monospace"><font size=-1>uno::Reference&lt; task::XInteractionHandler > xIH = ...
+
+bool bSelection = false;
+if ( xIH.is() )
+{
+&nbsp;&nbsp;&nbsp; // IH available. Create Interaction Request.
+&nbsp;&nbsp;&nbsp; xxxxRequest aReq = ...( aEx, ... );
+
+&nbsp;&nbsp;&nbsp; // Pass over the request to the IH.
+&nbsp;&nbsp;&nbsp; xIH.handle( aReq );
+
+&nbsp;&nbsp;&nbsp; // Get selected continuation
+&nbsp;&nbsp;&nbsp; aCont = aReq.getSelection();
+
+&nbsp;&nbsp;&nbsp; // Was IH able to handle the request?
+&nbsp;&nbsp;&nbsp; if ( aCont.is() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bSelection = true;
+}
+
+// Act according to bSelection and aCont
+bool bSuccess = ...;
+
+if ( !bSuccess )
+{
+&nbsp;&nbsp;&nbsp; if ( !bSelection )
+&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // No IH or IH did not handle exception.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw aEx;
+&nbsp;&nbsp;&nbsp; }</font></font></pre>
+
+<pre>&nbsp;&nbsp;&nbsp; // IH handled the selection.
+<font face="Courier, monospace"><font size=-1>&nbsp;&nbsp;&nbsp; throw ucb::CommandFailedException( aEx );
+}
+
+// Continue...</font></font></pre>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="100%" BGCOLOR="#666699">
+<h3 STYLE="margin-top: 0cm; text-decoration: none">
+<font color="#FFFFFF"><font size=+1>Exception Specifications for the Well-Known
+UCB Commands</font></font></h3>
+</td>
+</tr>
+
+<tr>
+<td WIDTH="100%">There is a number of predefined exceptions for the well-known
+UCB Commands. Every new command introduced by a UCB Content implementation
+can also introduce new exceptions. If these exceptions are interactive,
+there is the problem, that any existing Interaction Handlers most possibly
+won't be able to handle them. Thus reusing existing interactive exceptions
+should be the way of choice whenever possible.
+<p>The implementation of a command should use the predefined exception
+for the appropriate error condition whenever possible. But It can use any
+other exceptions, for example, if there is no matching predefined exception
+for a concrete error condition.
+<br>&nbsp;
+<h3>
+All commands</h3>
+The following exceptions can be thrown by all UCB Commands:
+<br>&nbsp;
+<table BORDER CELLSPACING=3 CELLPADDING=4 WIDTH="100%" >
+<tr VALIGN=TOP>
+<th>Exception</th>
+
+<th>Description</th>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::UnsupportedCommandException</td>
+
+<td>Thrown if the requested command is not supported by a content.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::lang::IllegalArgumentException</td>
+
+<td>Thrown if the data type of the given command's argument does not match
+the command's definition.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::InteractiveAugmentedIOException</td>
+
+<td>Used to indicate IO errors (exception contains an css::ucb::IOErrorCode)</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb:InteractiveNetworkResolveNameException</td>
+
+<td></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb:InteractiveNetworkConnectException</td>
+
+<td></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb:InteractiveNetworkReadException</td>
+
+<td></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb:InteractiveNetworkWriteException</td>
+
+<td></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb:InteractiveNetworkGeneralException</td>
+
+<td></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb:InteractiveNetworkOffLineException</td>
+
+<td></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::AuthenticationRequest</td>
+
+<td>Used to collect missing authentication information. An implementation
+of css::ucb::XInteractionSupplyAuthentication (that will be filled by the
+Interaction Handler with the missing data) should be supplied with the
+continuations.</td>
+</tr>
+</table>
+
+<p>Exceptions, that are never passed to an Interaction Handler:
+<br>&nbsp;
+<table BORDER CELLSPACING=3 CELLPADDING=4 WIDTH="100%" >
+<tr VALIGN=TOP>
+<th>Exception</th>
+
+<th>Description</th>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::CommandFailedException</td>
+
+<td>Thrown if the execution of the command failed (but only after communication
+with an Interaction Handler). This exception contains the "original" exception
+that was passed to the Interaction Handler.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::CommandAbortedException</td>
+
+<td>Thrown if the execution of the command was ended by calling css::ucb::XCommandProcessor::abort().</td>
+</tr>
+
+<tr>
+<td>css::ucb::DuplicateCommandIdentifierException</td>
+
+<td>Thrown if two threads passed the same (non-zero) command identifier
+to css::ucb::XCommandProcessor::execute().</td>
+</tr>
+</table>
+
+<h3>
+getCommandInfo</h3>
+No special exceptions defined.
+<h3>
+getPropertySetInfo</h3>
+No special exceptions defined.
+<h3>
+getPropertyValues</h3>
+No special exceptions defined. Note that most error handling (except command
+name and parameter checking ) is done using the css::sdbc::XRow implementation
+returned by this command.
+<h3>
+setPropertyValues</h3>
+<b>Note that setPropertyValues does not throw an exception in the case
+that one or more of the requested property values cannot be set!</b> The
+implementation should set as much property values as possible. This command
+returns a <b>sequence&lt; any ></b> which has exactly the same number of
+elements like the number of properties to set. Every sequence element contains
+the status for a property. The first sequence elements corresponds to the
+first element in the sequence of
+<b>css::beans::PropertyValue</b>s passed
+as command argument and so on. The exceptions will never be passed to an
+Interaction Handler by the implementation of the setPropertyValues command.
+<p>An <b>any</b> containing:
+<ul>
+<li>
+<b>No value</b> indicates, that the property value was set successfully.</li>
+
+<li>
+<b>css::beans::UnknownPropertyException</b> indicates, that the property
+is not known to the content implementation.</li>
+
+<li>
+<b>css::beans::IllegalTypeException</b> indicates, that the data type of
+the property value is not acceptable.</li>
+
+<li>
+<b>css::lang::IllegalAccessException</b> indicates, that the property is
+constant (css::beans::PropertyAttribute::READONLY is set).</li>
+
+<li>
+<b>css::lang::IllegalArgumentException</b> indicates, that the property
+value is not acceptable. For instance, setting an empty title may be illegal.</li>
+
+<li>
+<b>Any other execption derived from css::uno::Exception</b> indicates,
+that the value was not set successfully. For example, this can be a css::ucb::InteractiveAugmentedIOException
+transporting the error code css::ucb::IOErrorCode::ACCESS_DENIED.</li>
+</ul>
+If the value to set is equal to the current value, no exception must be
+added to the returned sequence
+<h3>
+open</h3>
+
+<table BORDER CELLSPACING=3 CELLPADDING=4 WIDTH="100%" >
+<tr VALIGN=TOP>
+<th>Exception</th>
+
+<th>Description</th>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::UnsupportedOpenModeException</td>
+
+<td>Used to indicate that the requested css::ucb::OpenMode is not supported.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::UnsupportedDataSinkException</td>
+
+<td>Used to indicate that the type of data sink supplied is not supported.</td>
+</tr>
+</table>
+
+<h3>
+delete</h3>
+No special exceptions defined.
+<h3>
+insert</h3>
+<table BORDER CELLSPACING=3 CELLPADDING=4 WIDTH="100%" >
+<tr VALIGN=TOP>
+<th>Exception</th>
+
+<th>Description</th>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::MissingPropertiesException</td>
+
+<td>Used if one or more properties were not set that are needed to make
+the content persistent (like the name for a newly created file). The exception
+transports a list of property names.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::MissingInputStreamException</td>
+
+<td>Used if no css::io::XInputStream was given with the command argument,
+but is required.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::UnsupportedNameClashException</td>
+
+<td>Used if the parameter <i>ReplaceExisting</i> of the command's argument
+was set to <i>false</i> and the implementation is unable to determine whether
+there are existing data. The member <i>NameClash</i> of the exception must
+be set to <i>NameClash::ERROR</i>. 
+<br>Must also be thrown in case the requested nameclash is just not yet 
+implemented (a missing feature, so to speak).</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::NameClashException</td>
+
+<td>Used if the parameter <i>ReplaceExisting</i> of the command's argument
+was set to <i>false</i> and there exists a resource with a clashing name
+in the target folder of the operation.</td>
+</tr>
+</table>
+
+<h3>
+transfer</h3>
+<table BORDER CELLSPACING=3 CELLPADDING=4 WIDTH="100%" >
+<tr VALIGN=TOP>
+<th>Exception</th>
+
+<th>Description</th>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::InteractiveBadTransferURLException</td>
+
+<td>Used if the Source URL given with the command's argument is not supported
+by the command's implementation. For example, an FTP-UCP needs not be able
+to handle other URLs then FTP-URLs.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::UnsupportedNameClashException</td>
+
+<td>Used if the nameclash directive specified in parameter <i>NameClash</i>
+of command's argument is not supported. For example, if the <i>NameClash</i>
+was set to <i>NameClash::ERROR,</i> to <i>NameClash::RENAME</i> or to <i>NameClash::ASK,</i>
+the implementation must be able determine whether there are existing data.&nbsp;
+<br>This exception must also used if <i>NameClash::RENAME</i> was specified
+and the implementation is unable to create a valid new name after a suitable
+number of tries.
+<br>It must also be thrown in case the requested nameclash is just not yet 
+implemented (a missing feature, so to speak).</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::NameClashException</td>
+
+<td>Used if the parameter <i>NameClash</i> of the command's argument was
+set to <i>NameClash::ERROR</i> and there exists a resource with a clashing
+name in the target folder of the operation.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::NameClashResolveRequest</td>
+
+<td>If the parameter <i>NameClash</i> of the command's argument was set
+to <i>NameClashh::ASK</i> this interaction request can be used to obtain
+a new name. Implementations of css::ucb::XInteractionSupplyName and css::ucb::XInteractionReplaceExistingData
+(that will be filled by the Interaction Handler with the missing data)
+should be supplied with the continuations.</td>
+</tr>
+</table>
+
+<h3>
+globalTransfer</h3>
+<table BORDER CELLSPACING=3 CELLPADDING=4 WIDTH="100%" >
+<tr VALIGN=TOP>
+<th>Exception</th>
+
+<th>Description</th>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::UnsupportedNameClashException</td>
+
+<td>Used if the nameclash directive specified in parameter <i>NameClash</i>
+of command's argument is not supported. For example, if the <i>NameClash</i>
+was set to <i>NameClash::ERROR,</i> to <i>NameClash::RENAME</i> or to <i>NameClash::ASK,</i>
+the implementation must be able determine whether there are existing data.&nbsp;
+<br>This exception must also used if <i>NameClash::RENAME</i> was specified
+and the implementation is unable to create a valid new name after a suitable
+number of tries.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::NameClashException</td>
+
+<td>Used if the parameter <i>NameClash</i> of the command's argument was
+set to <i>NameClash::ERROR</i> and there exists a resource with a clashing
+name in the target folder of the operation.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>css::ucb::NameClashResolveRequest</td>
+
+<td>If the parameter <i>NameClash</i> of the command's argument was set
+to <i>NameClashh::ASK</i> this interaction request can be used to obtain
+a new name. Implementations of css::ucb::XInteractionSupplyName and css::ucb::XInteractionReplaceExistingData
+(that will be filled by the Interaction Handler with the missing data)
+should be supplied with the continuations.</td>
+</tr>
+</table>
+
+<h3>
+search</h3>
+Not yet specified. Will be done later. (No implementations yet.)
+<h3>
+update</h3>
+Not yet specified. Will be done later. (No implementations yet.)
+<h3>
+synchronize</h3>
+Not yet specified. Will be done later. (No implementations yet.)
+<h3>
+close</h3>
+Not yet specified. Will be done later. (No implementations yet.)
+<h3>
+undelete</h3>
+Not yet specified. Will be done later. (No implementations yet.)</td>
+</tr>
+
+<tr>
+<td WIDTH="100%">
+<hr SIZE=1 NOSHADE></td>
+</tr>
+
+<tr>
+<td WIDTH="100%">
+<hr SIZE=1 NOSHADE></td>
+</tr>
+
+<tr>
+<td WIDTH="100%" BGCOLOR="#666699"><font color="#FFFFFF">Author: <a href="mailto:kai.sommerfeld@germany.sun.com">Kai
+Sommerfeld</a> ($Date: 2007/05/26 10:33:56 $)</font>
+<br><i><font color="#FFFFFF">Copyright 2001 OpenOffice.org Foundation.
+All Rights Reserved.</font></i></td>
+</tr>
+
+<tr>
+<td WIDTH="100%">
+<hr SIZE=1 NOSHADE></td>
+</tr>
+</table>
+
+<hr SIZE=3 NOSHADE>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

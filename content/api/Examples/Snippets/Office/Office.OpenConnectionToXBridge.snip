@@ -1,0 +1,203 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.OpenConnectionToXBridge.snip,v $
+last change: $Revision: 1.2 $ $Author: tomsontom $ $Date: 2005/06/08 14:43:28 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="Java" application="Office">
+
+<keywords>
+	<keyword>xBridge</keyword>
+	<keyword>System.exit</keyword>
+</keywords>
+
+<authors>
+	<author id="" initial="false" email="davidd@ri3k.com">David Dankwerth</author>
+	<author id="" initial="false" email="guy@ri3k.com">Guy Schohet</author>
+</authors>
+
+<question heading="Open connection and close without System.exit(0)">How to open connection to xBride that i can dispose
+
+<p>I open connection to openoffice using the UNO api, but dont want to run</p>
+<p>System.exit(0) to exit the program ( because it runs in a servlet for example)</p>
+</question>
+
+<answer>
+<p>In order for the program to exit, the connection must be disposed,</p>
+<p>in order to dispose the connection you must have a direct reference</p>
+<p>to the Bridge.</p>
+<p>using   :</p>
+<p>XComponentContext xComponentContext =</p>
+<p>      com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );</p>
+<p>as most the examples do, does not give you direct reference to the bridge instance</p>
+<p></p>
+<listing>import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiComponentFactory;
+
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.uno.UnoRuntime;
+
+import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.XStorable;
+
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.PropertyValue;
+
+import com.sun.star.bridge.XBridgeFactory;
+import com.sun.star.bridge.XBridge;
+
+import com.sun.star.connection.XConnector;
+import com.sun.star.connection.XConnection;
+
+
+   public class sample
+   {
+           private XBridge bridge = null ;
+           private XComponentContext xRemoteContext = null;
+           private com.sun.star.frame.XComponentLoader officeComponentLoader;
+           private  XMultiComponentFactory xRemoteServiceManager = null;
+           private String con ;
+           /** 
+             * main
+             */
+           public static void main(String[] args)
+                throws Exception
+           {
+                   sample s = new sample(args) ;
+                   s.useConnection() ;
+                   // here you do your thing
+                   s.release();
+                   
+           }
+           /* constructor */
+           public sample(String[] args)
+           {
+                   if (args.length != 2)
+                   {
+                           System.out.println(&quot;Give me java sample host port&quot;);
+                           System.exit(-1);
+                   }
+                   else
+                           con = &quot;socket,host=&quot;+args[0]+&quot;,port=&quot;+args[1];
+                   
+           }
+           /**
+           * open connection to openoffice
+           */
+            public  void useConnection() throws java.lang.Exception {
+                try {
+                        XComponentContext _ctx =
+                                com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );
+                        
+                        xRemoteContext = _ctx ;
+                                
+                        Object x = xRemoteContext.getServiceManager().createInstanceWithContext(
+                                &quot;com.sun.star.connection.Connector&quot;, xRemoteContext );
+        
+                        XConnector xConnector = (XConnector )
+                                UnoRuntime.queryInterface(XConnector.class, x);
+                        XConnection connection = xConnector.connect( con);
+                        if (connection == null)
+                                System.out.println(&quot;Connection is null&quot;);
+                        x = xRemoteContext.getServiceManager().createInstanceWithContext(
+                                &quot;com.sun.star.bridge.BridgeFactory&quot;, xRemoteContext);
+                        XBridgeFactory xBridgeFactory = (XBridgeFactory) UnoRuntime.queryInterface(
+                                XBridgeFactory.class , x );
+                        if (xBridgeFactory== null)
+                                System.out.println(&quot;bridge factoriy is null&quot;);
+                        // this is the bridge that you will dispose        
+                        bridge = xBridgeFactory.createBridge( &quot;&quot; , &quot;urp&quot;, connection , null );
+                        XComponent xComponent = (XComponent) UnoRuntime.queryInterface(
+                                XComponent.class, bridge );
+                        // get the remote instance                         
+                        x = bridge.getInstance( &quot;StarOffice.ServiceManager&quot;);
+                        // Query the initial object for its main factory interface
+                        xRemoteServiceManager = ( XMultiComponentFactory )
+                                UnoRuntime.queryInterface( XMultiComponentFactory.class, x );
+                       // retrieve the component context (it&apos;s not yet exported from the office)
+                       // Query for the XPropertySet interface.
+                       XPropertySet xProperySet = ( XPropertySet )
+                                UnoRuntime.queryInterface( XPropertySet.class, xRemoteServiceManager );
+                            
+                       // Get the default context from the office server.
+                       Object oDefaultContext =
+                                xProperySet.getPropertyValue( &quot;DefaultContext&quot; );
+                            
+                       // Query for the interface XComponentContext.
+                       XComponentContext xOfficeComponentContext =
+                                ( XComponentContext ) UnoRuntime.queryInterface(
+                                    XComponentContext.class, oDefaultContext );
+                       // now create the desktop service
+                       // NOTE: use the office component context here !
+                       Object oDesktop = xRemoteServiceManager.createInstanceWithContext(
+                        &quot;com.sun.star.frame.Desktop&quot;, xOfficeComponentContext );
+        
+                        officeComponentLoader = ( XComponentLoader )
+                                UnoRuntime.queryInterface( XComponentLoader.class, oDesktop );
+        
+                        
+        
+                    String available = (null !=officeComponentLoader ? &quot;available&quot; : &quot;not available&quot;);
+                    System.out.println( &quot;remote ServiceManager is &quot; + available );
+                }
+                catch( com.sun.star.lang.DisposedException e ) { //works from Patch 1
+                    xRemoteContext = null;
+                    throw e;
+                }          
+            }
+        
+               /**
+                * when all the work is done, call release to dispose of the bridge
+                * and your program can exit normaly, without forcing a System.exit
+                */
+                public void release()
+                throws Exception
+               {
+                    XComponent xcomponent =
+                    ( XComponent ) UnoRuntime.queryInterface( XComponent.class,
+                    bridge );
+                    // Closing the bridge
+                    xcomponent.dispose();
+                    
+                }
+   }
+</listing>
+</answer>
+
+<versions>
+	<version number="1.1.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="" date="2005-06-08">changed the title and the fact that it wasnt a full sample, now it compiles and allows you to &quot;add your thing&quot;</change>
+</changelog>
+
+</snippet>
+

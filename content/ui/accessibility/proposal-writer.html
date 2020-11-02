@@ -1,0 +1,232 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ui/">ui</a>&nbsp;&raquo;&nbsp;<a href="/ui/accessibility/">accessibility</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H2 CLASS="western">Writer Accessibility</H2>
+<P CLASS="western">Proposal</P>
+<P CLASS="western">by Michael Brauer (<A HREF="mailto:michael.brauer@sun.com">michael.brauer@sun.com</A>)
+</P>
+<P CLASS="western">last modification on <SDFIELD TYPE=DATETIME SDVAL="37236.6217534722" SDNUM="1033;1033;MMMM D, YYYY">December 11, 2001</SDFIELD></P>
+<H3 CLASS="western">1. Introduction</H3>
+<P CLASS="western">This paper contains a proposal how
+StarOffice/OpenOffice.org Writer (and Writer/Web) documents can be
+made accessible by using the UNO Accessibility API (UAA). 
+</P>
+<P CLASS="western">As stated in the <A HREF="http://ui.openoffice.org/accessibility/docrep-guidelines.html">guidelines
+of document representation</A>, the accessible objects tree for
+Writer documents represents the current view of the document as it
+does for any other application, too. 
+</P>
+<P CLASS="western">It is obvious that the most important accessible
+objects are the ones that contain the document's text, or to be more
+precise, support the AccessibleEditableText service. A  real
+difficulty however results from the fact that the text that is
+visible on the screen might in fact be part of very different parts
+of the document. If a document for instance contains headers and
+footers for pages, text from a footer, a header and text from the the
+body region of two different pages might be visible simultaneously.
+And things might become more complex if columns, text-boxes and
+footnotes get involved.</P>
+<P CLASS="western">Beside text that might be contained in very
+different objects, the view of a Writer document might also contain
+tables, images, drawings and OLE objects.</P>
+<P CLASS="western">This draft first gives an overview of the
+accessible object tree for Writer documents, followed by some
+explanations what reasons led to the structure. After that, a
+detailed specification follows.</P>
+<H3 CLASS="western">1. Overview</H3>
+<P CLASS="western">The root accessible object  (i.e. the one of the
+window that contains view of the Writer document) has a child object 
+for 
+</P>
+<UL>
+	<LI><P CLASS="western">the body text of the document (i.e. the text
+	that is distributed to the pages of a text document), except for the
+	very rare cases where no body text is visible at all;</P>
+	<LI><P CLASS="western">every page header and every page footer that
+	is visible;</P>
+	<LI><P CLASS="western">every footnote and endnote that is visible;
+	and</P>
+	<LI><P CLASS="western">every text-box, image, OLE object and drawing
+	that is visible;</P>
+</UL>
+<P CLASS="western">Teseobjects are called <EM>area objects</EM>
+within this proposal.</P>
+<P CLASS="western">There is neither an object for pages nor for
+columns. This especially means that there is exactly one object for
+body text that is visible currently, even if the text appears on
+different pages.</P>
+<P CLASS="western">With the exception of  text-boxes, images, OLE
+objects and drawings the only service area objects support is
+AccessibleContext. This especially means  that there is no
+AccessibleComponent service available and therefor no geometrical
+information. 
+</P>
+<P CLASS="western">Text-boxes, images, OLE objects and drawings
+however do support the AccessibleComponent service. They are children
+of the root object, regardless whether they in fact are bound to a
+page, a paragraph, etc.</P>
+<P CLASS="western">With the exception of images, OLE objects and
+drawings, area objects have children that are either paragraph
+fragment objects or table fragment object.</P>
+<P CLASS="western">A <EM>paragraph fragment object</EM> supports the
+AccessibleEditableText and AccessibleComponent services<A CLASS="sdfootnoteanc" NAME="sdfootnote1anc" HREF="#sdfootnote1sym"><SUP>1</SUP></A>.
+It either represents the text of a paragraph or the text of a part of
+a paragraph, if the paragraph contains page or column breaks. In the
+later case it represents exactly the paragraph's text that is
+displayed at certain page or within a certain column. In other words,
+a single paragraph might be represented by more than one paragraph
+fragment object if and only if contains page or column breaks. But a
+paragraph fragment object never contains text from more than one
+paragraphs.</P>
+<P CLASS="western">A <EM>table fragment object</EM> supports the
+AccessibleTable service. It represents the fragment of a table that
+is displayed on one page or in one column. The table cell objects
+themselves have paragraph fragment objects as children again.</P>
+<P CLASS="western">All area objects contain children only for
+paragraphs and tables (or fragments of them) that are at least
+partially visible. If a page header for instance contains two
+paragraphs, but only one of them is visible, then the page header's
+area object has one child only<A CLASS="sdfootnoteanc" NAME="sdfootnote2anc" HREF="#sdfootnote2sym"><SUP>2</SUP></A>.</P>
+<P CLASS="western">Paragraph as well as table fragment objects that
+are partially visible contain their off-screen parts, too. This means
+that a paragraph fragment object contains text that is not displayed
+currently and a table fragment object contains cells that are not
+displayed currently.</P>
+<H3 CLASS="western">2. Design Influences</H3>
+<P CLASS="western">This section describes some concepts and issues
+that influenced the accessible object context tree described in the
+previous section.</P>
+<H4 CLASS="western">Text Flows</H4>
+<P CLASS="western">As said above, the text that is shown in the view
+of a Writer document might in fact be contained in different
+unrelated parts of a document. Within this proposal, these parts are
+called <EM>text flows</EM>. The following text flows exist:</P>
+<UL>
+	<LI><P CLASS="western">page headers</P>
+	<LI><P CLASS="western">page footers</P>
+	<LI><P CLASS="western">foot- and endnotes</P>
+	<LI><P CLASS="western">text boxes</P>
+	<LI><P CLASS="western">table cells</P>
+	<LI><P CLASS="western">text contained in drawings</P>
+	<LI><P CLASS="western">body text i.e. the text that is distributed
+	to the page's body regions.</P>
+</UL>
+<P CLASS="western">On the screen, the different text flows can be
+distinguished by gaps or lines between them, or by other hints like
+background colors. For the accessibility API a simple way to
+distinguish them should exist, too. This for instance enables voice
+tools to read the body text of a document without mixing it up with
+headers, footers, footnotes and so on.</P>
+<P CLASS="western">An appropriate way to get a differentiation
+between text flows seems to be the parent/child relation the 
+XAccessibleContext interface offers. This requires that</P>
+<UL>
+	<LI><P CLASS="western">a single object that supports the
+	AccessibleEditableText service must not represent text from
+	different text flows.</P>
+	<LI><P CLASS="western">A single object that supports the
+	AccessibleContext service does not have children that represent text
+	from different text flow.</P>
+</UL>
+<P CLASS="western">The area objects exactly make use of these
+parent/child relation to differ between text flows. To get a unique
+access to the text flow's text is seems to be reasonable to use area
+objects even if if they contain one child only.</P>
+<H4 CLASS="western">Pages And Columns</H4>
+<P CLASS="western">If a document is not displayed in the Online
+Layout mode,  then its body text flow is distributed to several
+pages. On the screen, the different pages are visualized by a gray
+bars between them. 
+</P>
+<P CLASS="western">There seems to be no requirement for having an
+accessible object for pages itself. But in many cases, it also seems
+not to be convenient that text that is accessible by a single
+AccessibleEditableText service contains a page break, that is,
+represents text from two different pages. This is the case if the
+page before the page break contains a footer and/or footnotes, or if
+the page behind the page break contains a header.  If the 
+AccessibleEditableText for the body text would represent the text of
+both pages, then its bounding box would overlap with the ones of the
+headers, footers or footnotes.</P>
+<P CLASS="western">Moreover it does not seem to be convenient that an
+AccessibleEditableText represents text of different columns. The
+simple reason for this is that an  AccessibleEditableText  that
+contains text of more than one column would require more than one
+bounding box.</P>
+<P CLASS="western">Like for pages, there also seems to be no
+requirement for having an accessible object for columns themselves.</P>
+<H4 CLASS="western">Paragraphs</H4>
+<P CLASS="western">The third thing that has to taken into account
+when defining the accessible object tree are paragraphs. On the one
+hand, paragraphs divide text into fragments at reasonable positions.
+On the other hand, and that's more important, they assign certain
+semantics to text, like being a heading or an item of a bullet list.
+These semantics put a structure at the document that is at least
+helpful for navigation in a document. Therefor it seems to be
+reasonable to not have text of more than one paragraph within one
+accessible object, and to include the structural information a
+paragraph carries into either the object's description or role.</P>
+<P CLASS="western">The opposite however does not hold. A paragraph's
+text has to be distributed to more than one object if the paragraph
+contains a page or column break. Therefor there will be accessible
+objects for paragraph portions in fact, the paragraph fragment
+objects.</P>
+<P CLASS="western">Though the guidelines state that text can be
+splitted into on- and off-screen parts, it seems not to be convenient
+to do that for paragraph portions. This means that text that is not
+visible on the scroll might be accessible through an
+AccessibleEditableText service, provided that also some text of the
+same service is displayed. There are two reasons for that, that both
+have to do with the fact the each paragraph fragment object  also
+supports the AccessibleComponent service that gives access to its
+screen coordinates. First of all, that's the same behavior has for
+any other accessible object that supports the AccessibleCpmponet
+service. Secondly, and more important, hiding the non visible text
+fragments would have the result that a simple scroll action might
+change the objects text. 
+</P>
+<H3 CLASS="western">3. Details</H3>
+<P CLASS="western"><EM>To be continued ...</EM></P>
+<DIV ID="sdfootnote1">
+	<P CLASS="sdfootnote-western"><A CLASS="sdfootnotesym" NAME="sdfootnote1sym" HREF="#sdfootnote1anc">1</A>Editor's
+	note: There is a open issue with read-only and generated text within
+	paragraphs, like fields and generated hyphens. Therefor it might be
+	necessary that the paragraph fragment objects do not support
+	AccessibleEditableText themselves, but have children that either
+	support AccessibleText or AcessibleEditableText.</P>
+</DIV>
+<DIV ID="sdfootnote2">
+	<P CLASS="sdfootnote-western"><A CLASS="sdfootnotesym" NAME="sdfootnote2sym" HREF="#sdfootnote2anc">2</A>That's
+	in fact the reason these objects are called header area objects
+	instead of header objects. They do not represent a header, but an
+	area on the screen there a header is displayed.</P>
+</DIV>
+</BODY>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

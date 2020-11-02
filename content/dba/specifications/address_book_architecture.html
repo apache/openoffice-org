@@ -1,0 +1,1123 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>Architecture Overview OpenOffice.org Address Book Integration</title>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/dba/">dba</a>&nbsp;&raquo;&nbsp;<a href="/dba/specifications/">specifications</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h1><a name="mozTocId548490" class="mozTocH1"></a>Architecture Overview
+OpenOffice.org Address Book Integration</h1>
+<ol id="mozToc">
+<!--mozToc h1 1 h2 2 h3 3 h4 4 h5 5 h6 6--><li><a href="#mozTocId548490">Architecture
+Overview OpenOffice.org Address Book Integration</a>
+    <ol>
+      <li><a href="#mozTocId858361">Introduction</a></li>
+      <li><a href="#mozTocId175483"> Background</a></li>
+      <li><a href="#mozTocId347884">Glossary</a></li>
+      <li><a href="#mozTocId900549">Supported Address Books</a></li>
+      <li><a href="#mozTocId785983">Architecture</a></li>
+      <li><a href="#mozTocId689331">References</a></li>
+      <li><a href="#mozTocId343804">Appendix - Mozilla files included
+in OpenOffice.org distribution</a><br>
+      </li>
+    </ol>
+  </li>
+</ol>
+<h2><a name="mozTocId858361" class="mozTocH2"></a>Introduction</h2>
+This document aims to provide an overview of the technologies related
+to the integration of the address-book feature into OpenOffice.org and
+Mozilla, a summary of the address-book types supported and their
+respective underlying API's, and an architecture diagram that shows the
+shared and unique parts distributed with OpenOffice.org and Mozilla. An
+appendix lists the Mozilla files installed automatically by
+OpenOffice.org, including platform variations.<br>
+<br>
+Note: The abbreviation AB in this document is used as a shorthand for
+"address-book".<br>
+<h2><a name="mozTocId175483" class="mozTocH2"></a><br>
+Background</h2>
+<p><a href="http://www.openoffice.org/"><b>OpenOffice.org</b></a> 			has
+it's own open database access API called <b>SDBC</b> (<b>S</b>un 			<b>D</b>ata<b>B</b>ase<b>C</b>onnectivity)
+which is modeled on 			the architecture of Java's JDBC. SDBC supports
+several databases 			and database-like API's via an extensible provider
+architecture; 			ODBC 3.0, JDBC, ADO, dBase and CSV are among the
+databases and 			database management systems supported. Each SDBC
+provider is 			implemented as a <b>UNO</b> component; UNO is <a
+ href="http://udk.openoffice.org/common/man/uno.html">OpenOffice.org's
+			component technology</a>.</p>
+			
+<p style="margin-bottom: 0.1cm;"><b>Mail</b> 			applications such as
+Mozilla Messenger and Microsoft Outlook often 			have a local
+address-book (contacts) database, as well as 			enterprise LDAP-based
+directory access which is often used as a 			shared address-book.
+Mozilla extensions are implemented as XPCOM 			components; XPCOM is
+Mozilla's <a href="http://www.mozilla.org/projects/xpcom/">cross-platform
+			("XP") component (object model) technology</a>.</p>
+			
+<h2><a name="mozTocId347884" class="mozTocH2"></a>Glossary</h2>
+<ul>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>Mozilla</b> 				- the
+open-source project and distribution of the Netscape 				browser</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>AbZilla</b> 				- the
+address-book project for Mozilla</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>XPCOM</b> 				- an abbreviation
+of "cross-platform component object 				model", XPCOM is Mozilla's
+in-process component middleware 				technology</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>UNO</b> 				- OpenOffice.org's
+distributed cross-platform component object 				model</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>SDBC</b> 				- <b>S</b>un <b>D</b>ata<b>B</b>ase<b>C</b>onnectivity</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>JDBC</b> 				- Java's extensible
+database API</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>Outlook</b> 				- the
+full-function licensed version of the Microsoft Outlook 				Express mail
+client, including group-calendaring and peer-to-peer 				workflow</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>Outlook 				Express</b> - a
+cut-down mail client based on Microsoft Outlook 				and bundled with
+Microsoft Internet Explorer; replaces the MS 				Mail client</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>WAB</b> 				- MS <b>W</b>indows <b>A</b>ddress<b>B</b>ook
+files (.wab)</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>PAB</b> 				- MS Exchange&reg; <b>P</b>ersonal<b>A</b>ddress<b>B</b>ook</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>CSV</b> 				- <b>C</b>omma-<b>S</b>eparated<b>V</b>alues,
+a generic exchange 				format for table or other repeating lists of
+attribute values</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>COM</b> 				- Common Object
+Model, Microsoft's simple object component 				technology</p>
+				</li>
+  <li>
+    <p><b>MAPI</b> - 				a traditional C API for full-function
+messaging, calendaring and 				address-book</p>
+  </li>
+</ul>
+<h2><a name="mozTocId900549" class="mozTocH2"></a>Supported Address
+Books</h2>
+Several address-book types are supported. Each source is accessed via
+an XPCOM provider component, but this in turn uses a specific
+address-book API as shown in the following table. The address-books
+shown in bold are available on all Mozilla platforms, the other
+address-books are only supported on Windows.<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellspacing="0"
+ cellpadding="0">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;" width="120">Mail
+Client<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold; width: 400px;">Address
+Book Type<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">API<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;" width="120">Any<br>
+      </td>
+      <td style="vertical-align: top;">LDAP<br>
+      </td>
+      <td style="vertical-align: top;">Mozilla's LDAP XPCOM component<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;" width="120">Mozilla<br>
+      </td>
+      <td style="vertical-align: top;">Local address book<br>
+      </td>
+      <td style="vertical-align: top;">Mozilla address-book XPCOM
+component<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;" width="120">Outlook<br>
+      </td>
+      <td style="vertical-align: top;">Outlook Personal Address Book
+(PAB)<br>
+      </td>
+      <td style="vertical-align: top;">MAPI<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;" width="120">Outlook Express / MS
+Mail<br>
+      </td>
+      <td style="vertical-align: top;">Windows Address Book (WAB)<br>
+      </td>
+      <td style="vertical-align: top;">WAB API<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<h2><a name="mozTocId785983" class="mozTocH2"></a>Architecture</h2>
+<p>As noted above, it 			was decided to provide open address-book
+access for both Mozilla's 			mail client and OpenOffice.org SDBC using a
+common set of 			components. Since the integration of new features into
+Mozilla is 			achieved using XPCOM, it was decided to develop an adaptor
+for 			Outlook and Outlook Express address-books and expose the adaptor
+			using an XPCOM API, and also to support LDAP address-books via an
+			existing XPCOM LDAP component.</p>
+			
+<p>OpenOffice.org 			makes extensive use of it's own UNO object
+component technology. 			Similar to the address-book <b>XPCOM</b>
+component-based provider 			architecture devised for Mozilla, the SDBC
+architecture supports 			providers for many different data sources with
+each new source 			having its own adaptor <b>UNO</b> component. To
+integrate the 			AbZilla address-book components into OpenOffice.org, an
+			address-book data-source must be exposed via a UNO component.</p>
+			
+<p>The architecture 			chosen was to implement the address-book
+providers principally 			using XPCOM to achieve Mozilla integration.
+These XPCOM interfaces 			are then wrapped with a private C++ API which
+is in turn exposed 			to OpenOffice.org via a UNO interface adaptor.
+This architecture 			is summarized in the following diagram:</p>
+			<img src="ab_architecture.gif" title="" alt="architecture overview"
+ style="width: 623px; height: 705px;"><br>
+<p align="center" style="margin-bottom: 0cm;">Figure 			1: <b>OpenOffice.org
+and Mozila, on a common address-book 			architecture</b></p>
+			
+<p><br>
+<br>
+			</p>
+			
+<p>OpenOffice.org 			ships two <b>libraries</b> that expose the Mozilla
+address-book 			functionality to OpenOffice.org's SDBC framework:</p>
+			
+<ul>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>libmozab2.so</b> 				which
+implements a UNO-based SDBC provider and uses a (private) 				C++ API
+provided by libmozabdrv2.so</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>libmozabdrv2.so</b> 				which
+exposes a (private) C++ API and uses the AbZila 				address-book
+XPCOM-based components (and indirectly uses XPCOM 				and it's
+dependencies)</p>
+			</li>
+</ul>
+			
+<p>Since the PAB, WAB 			Moz-AB and Moz-LDAP address-book providers
+expose XPCOM API's, the 			core XPCOM infrastructure and related
+dependencies are required to 			use them.</p>
+			
+<p>For OpenOffice.org 			to make use of the AbZilla XPCOM-based
+address-book components, 			OpenOffice.org now ships with a total 50
+Mozilla files, 			comprising:</p>
+			
+<ul>
+  <li>
+    <p style="margin-bottom: 0.2cm;">the 				essential libraries that
+implement Mozilla's XPCOM technology</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;">configuration 				files</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;">some 				other dependent libraries
+including JavaScript to access XPCOM's 				configuration</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;">the 				library containing the
+four specific address-book related XPCOM 				components (PAB, WAB,
+Mozilla AB, and Mozilla LDAP)</p>
+			</li>
+</ul>
+			
+<p>The Mozilla 			libraries shipped with OpenOffice.org are not
+entirely built from 			the normal Mozilla CVS trunk as some required bug
+fixes developed 			by the project team have not yet been accepted into
+the standard 			Mozilla build. These fixes are listed within a summary
+bug report 			at <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=8239">http://www.openoffice.org/issues/show_bug.cgi?id=8239</a>.
+			If these fixes were integrated into Mozilla, it would be possible
+			for OpenOffice.org to use the dependent files from a standard
+			Mozilla installation by pointing a Mozilla environment variable at
+			the Mozilla distribution, but as Mozilla is not completely bundled
+			nor can it be assumed to be pre-installed, the Mozilla
+			dependencies are distrbuted with (and installed by) 			OpenOffice.org.</p>
+			
+<h2><a name="mozTocId689331" class="mozTocH2"></a>References</h2>
+<ul>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>AbZilla</b>, 				the Mozilla
+address-book project - <a href="http://abzilla.mozdev.org/">http://abzilla.mozdev.org</a>
+								</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>SDBC</b>, 				OpenOffice.org's
+database access framework - 				http:<a
+ href="http://staroffice-doc.germany.sun.com:8080/">//dba.openoffice.org/</a>
+								</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>XPCOM</b>, 				Mozilla's object
+component technology - 				<a
+ href="http://www.mozilla.org/projects/xpcom">http://www.mozilla.org/projects/xpcom</a>
+								</p>
+				</li>
+  <li>
+    <p style="margin-bottom: 0.2cm;"><b>UNO</b>, 				OpenOffice.org's
+object component technology - 				http:<a
+ href="http://staroffice-doc.germany.sun.com:8080/">//udk.openoffice.org/</a>
+								</p>
+				</li>
+  <li>
+    <p><b>MAPI</b>, 				Windows Messaging API - 				<a
+ href="http://msdn.microsoft.com/library/?url=/library/en-us/mapi/html/_mapi1book_legal_information_2.asp?frame=true">http://msdn.microsoft.com/library/?url=/library/en-us/mapi/html/_mapi1book_legal_information_2.asp?frame=true</a>
+								</p>
+			</li>
+</ul>
+<p> 			</p>
+<h2><a name="mozTocId343804" class="mozTocH2"></a>Appendix - Mozilla
+files included in OpenOffice.org distribution</h2>
+<br>
+<table cellpadding="0" cellspacing="0" ID="Table1">
+  <tbody>
+	<tr>
+		<td colspan="2" width="7%"> <b>Size (bytes, on Solaris)</b> 		</td>
+		<td width="21%"> <b>Filename</b> 		</td>
+		<td colspan="2" width="8%"> <b>Solaris (Sparc and Intel)</b> 		</td>
+		<td colspan="2" width="8%"> <b>Linux</b> 		</td>
+		<td width="8%"> <b>Win32</b> 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="222898" sdnum="1031;"> 222898 		</td>
+		<td width="21%"> component.reg 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	 	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/addrbook.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	 	<tr>
+		<td colspan="2" width="7%" sdval="1247464" sdnum="1031;"> 1247464 		</td>
+		<td width="21%"> components/libaddrbook.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="633624" sdnum="1031;"> 633624 		</td>
+		<td width="21%"> components/libmork.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="186160" sdnum="1031;"> 186160 		</td>
+		<td width="21%"> components/libmozldap.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="1957760" sdnum="1031;"> 1957760 		</td>
+		<td width="21%"> components/libnecko.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="195712" sdnum="1031;"> 195712 		</td>
+		<td width="21%"> components/libpref.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="221204" sdnum="1031;"> 221204 		</td>
+		<td width="21%"> components/libprofile.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="513568" sdnum="1031;"> 513568 		</td>
+		<td width="21%"> components/librdf.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="75776" sdnum="1031;"> 75776 		</td>
+		<td width="21%"> components/libstrres.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="271228" sdnum="1031;"> 271228 		</td>
+		<td width="21%"> components/libuconv.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="193132" sdnum="1031;"> 193132 		</td>
+		<td width="21%"> components/libucvcn.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="123644" sdnum="1031;"> 123644 		</td>
+		<td width="21%"> components/libucvibm.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="264368" sdnum="1031;"> 264368 		</td>
+		<td width="21%"> components/libucvja.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="202092" sdnum="1031;"> 202092 		</td>
+		<td width="21%"> components/libucvko.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="753456" sdnum="1031;"> 753456 		</td>
+		<td width="21%"> components/libucvlatin.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="187316" sdnum="1031;"> 187316 		</td>
+		<td width="21%"> components/libucvtw.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="257652" sdnum="1031;"> 257652 		</td>
+		<td width="21%"> components/libucvtw2.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="82180" sdnum="1031;"> 82180 		</td>
+		<td width="21%"> components/libunicharutil.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="303864" sdnum="1031;"> 303864 		</td>
+		<td width="21%"> components/liburiloader.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="112548" sdnum="1031;"> 112548 		</td>
+		<td width="21%"> components/libvcard.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="744852" sdnum="1031;"> 744852 		</td>
+		<td width="21%"> components/libxpconnect.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/mork.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/mozldap.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/necko.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="524" sdnum="1031;"> 524 		</td>
+		<td width="21%"> components/necko_dns.xpt 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/profile.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/rdf.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/strres.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/ucharuti.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/uconv.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/ucvcn.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/ucvibm.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/ucvja.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/ucvko.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/ucvlatin.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/ucvtw.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/ucvtw2.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/urildr.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 	<br>
+      </td>
+		<td width="21%"> components/vcard.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/xpc3250.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="2212" sdnum="1031;"> 2212 		</td>
+		<td width="21%"> components/xpcom_base.xpt 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="5103" sdnum="1031;"> 5103 		</td>
+		<td width="21%"> components/xpcom_components.xpt 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="7890" sdnum="1031;"> 7890 		</td>
+		<td width="21%"> components/xpcom_ds.xpt 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="7806" sdnum="1031;"> 7806 		</td>
+		<td width="21%"> components/xpcom_io.xpt 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/xpcom_thread.xpt 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="2513" sdnum="1031;"> 2513 		</td>
+		<td width="21%"> components/xpcom_threads.xpt 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="1560" sdnum="1031;"> 1560 		</td>
+		<td width="21%"> components/xpcom_xpti.xpt 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> components/xppref32.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="8698" sdnum="1031;"> 8698 		</td>
+		<td width="21%"> components/xpti.dat 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="8698" sdnum="1031;"> 8698 		</td>
+		<td width="21%"> components/xptitemp.dat 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="32621" sdnum="1031;"> 32621 		</td>
+		<td width="21%"> defaults/pref/all.js 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="2096" sdnum="1031;"> 2096 		</td>
+		<td width="21%"> defaults/pref/config.js 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="3590" sdnum="1031;"> 3590 		</td>
+		<td width="21%"> defaults/pref/editor.js 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="2668" sdnum="1031;"> 2668 		</td>
+		<td width="21%"> defaults/pref/initpref.js 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="2039" sdnum="1031;"> 2039 		</td>
+		<td width="21%"> defaults/pref/inspector.js 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="20741" sdnum="1031;"> 20741 		</td>
+		<td width="21%"> defaults/pref/mailnews.js 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> defaults/pref/mdn.js 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="1373" sdnum="1031;"> 1373 		</td>
+		<td width="21%"> defaults/pref/security-prefs.js 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="14394" sdnum="1031;"> 14394 		</td>
+		<td width="21%"> defaults/pref/unix.js 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> defaults/pref/winpref.js 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="219" sdnum="1031;"> 219 		</td>
+		<td width="21%"> defaults/pref/xpinstall.js 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> js3250.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="352592" sdnum="1031;"> 352592 		</td>
+		<td width="21%"> libldap50.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="745248" sdnum="1031;"> 745248 		</td>
+		<td width="21%"> libmozjs.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 	<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="103388" sdnum="1031;"> 103388 		</td>
+		<td width="21%"> libmozz.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="654092" sdnum="1031;"> 654092 		</td>
+		<td width="21%"> libmsgbaseutil.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="370240" sdnum="1031;"> 370240 		</td>
+		<td width="21%"> libnspr4.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="36592" sdnum="1031;"> 36592 		</td>
+		<td width="21%"> libplc4.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="14432" sdnum="1031;"> 14432 		</td>
+		<td width="21%"> libplds4.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="29284" sdnum="1031;"> 29284 		</td>
+		<td width="21%"> libprldap50.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="2221260" sdnum="1031;"> 2221260 		</td>
+		<td width="21%"> libxpcom.so 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> mozreg.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 	<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> msgbsutl.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 	<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> nsldap32v50.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> nsldappr32v50.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> nspr4.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> nsreg.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> plc4.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> plds4.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%" sdval="10244" sdnum="1031;"> 10244 		</td>
+		<td width="21%"> res/charsetalias.properties 		</td>
+		<td colspan="2" width="8%"> + 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> - 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> xpcom.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="2" width="7%"> 		<br>
+      </td>
+		<td width="21%"> zlib.dll 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td colspan="2" width="8%"> - 		</td>
+		<td width="8%"> + 		</td>
+		<td width="48%"> 		<br>
+      </td>
+	</tr>
+  </tbody>
+</table>
+<br>
+<hr style="width: 100%; height: 2px;">
+<div style="text-align: right;">Author: <a
+ href="mailto:ColmS@openoffice.org">Colm Smyth</a><br>
+Last Modified: $Date: 2003/12/16 07:41:48 $<br>
+Copyright &copy; 2002 OpenOffice.org<br>
+</div>
+<font color="#ffffff"></font>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

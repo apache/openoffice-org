@@ -1,0 +1,329 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>The creation and retrieving of auto increment values</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Ocke Janssen">
+	<META NAME="CREATED" CONTENT="20020710;8345700">
+	<META NAME="CHANGEDBY" CONTENT="Ocke Janssen">
+	<META NAME="CHANGED" CONTENT="20020729;8060399">
+	<STYLE>
+	<!--
+		@page { margin: 2cm }
+		TD P { margin-bottom: 0.21cm }
+		H1 { margin-bottom: 0.21cm }
+		H1.western { font-family: "Albany", sans-serif; font-size: 16pt }
+		H1.cjk { font-size: 16pt }
+		H1.ctl { font-size: 16pt }
+		P { margin-bottom: 0.21cm }
+		H2 { margin-bottom: 0.21cm }
+		H2.western { font-family: "Albany", sans-serif; font-size: 14pt; font-style: italic }
+		H2.cjk { font-size: 14pt; font-style: italic }
+		H2.ctl { font-size: 14pt; font-style: italic }
+		H3 { margin-bottom: 0.21cm }
+		H3.western { font-family: "Albany", sans-serif }
+		H4 { margin-bottom: 0.21cm }
+		H4.western { font-family: "Albany", sans-serif; font-size: 11pt; font-style: italic }
+		H4.cjk { font-size: 11pt; font-style: italic }
+		H4.ctl { font-size: 11pt; font-style: italic }
+		TH P { margin-bottom: 0.21cm; font-style: italic }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="en-US">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/dba/">dba</a>&nbsp;&raquo;&nbsp;<a href="/dba/specifications/">specifications</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1 CLASS="western" ALIGN=CENTER>The creation and retrieving of auto
+increment values</H1>
+<P><BR><BR>
+</P>
+<P>Version History</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=128*>
+	<COL WIDTH=128*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=50%>
+				<P>What/When</P>
+			</TH>
+			<TH WIDTH=50%>
+				<P>Who</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Draft---July 18, 2002</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Ocke Janssen</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>GUI string review---July 25, 2002</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Elizabeth Matthis</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>GUI change---July 26, 2002</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Ocke Janssen</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Final--- July 26, 2002fill in date 
+				</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Ocke Janssen</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<H1 CLASS="western"><BR><BR>
+</H1>
+<H2 CLASS="western">Problem description</H2>
+<P>At the moment it is not possible to create auto increment columns
+and to retrieve the value of an auto increment column when a new row
+was inserted. 
+</P>
+<H4 CLASS="western">Creation of auto increment columns</H4>
+<P>Due to the fact that there exists no standard way on defining auto
+increment columns when creating a new table, a general approach is
+not possible. For example: MySQL identifies an auto increment
+definition of a column with the key word &ldquo;auto_increment&rdquo;,
+the MS SQL Server on the other side uses the keyword &ldquo;increment(1,1)&rdquo;
+to identify the auto increment column. 
+</P>
+<H4 CLASS="western">Retrieving of auto increment column's values</H4>
+<P>The retrieving of an auto increment column's value, when inserting
+a new row, is already defined in the JDBC API 3.0. There the
+statement supports an additional method which returns a result set to
+access the new inserted auto increment column's value. This result
+set also supports meta data. To check if the statement supports this
+mechanism, the database meta data is extended by new support method
+which simply returns true or false.</P>
+<H2 CLASS="western">Solution</H2>
+<P>To allow a general approach of defining/retrieving auto increment
+columns/values, the user must have the possibility to define a
+statement which should be appended at the column definition when
+creating a table or should be called when fetching the new value of
+the auto increment column.</P>
+<H4 CLASS="western">Creation of auto increment columns</H4>
+<P>When creating tables for any kind of database, the current
+handling at the moment is that we use a general SDBCX layer for all
+database drivers which do not support the layer by their self. In
+other words the user has to take no action when the database driver
+supports already the SDBCX layer. For the case that the driver
+doesn't support the SDBCX layer and the user creates a new table, the
+generated SQL statement may look like this:</P>
+<P>CREATE TABLE &ldquo;table1&rdquo; (&ldquo;id&rdquo; INTEGER)</P>
+<P>The &ldquo;CREATE TABLE&rdquo; statement doesn't support any auto
+increment features, so that it isn't possible to create such columns.
+For MySQL this statement for an auto increment column looks like
+this:</P>
+<P>CREATE TABLE &ldquo;table1&rdquo; (&ldquo;id&rdquo; INTEGER
+AUTO_INCREMENT)</P>
+<P>Like this examples shows the user must have the opportunity to add
+the missing part of the statement to the &ldquo;CREATE TABLE&rdquo;
+statement. This can be done in two different ways which mustn't
+exclude each other.</P>
+<OL>
+	<LI><P>The data source stores in their info property an additional
+	string which should be appended to the column part when creating an
+	auto increment column. To allow the user to insert this string the
+	data source administration dialog could be extended by a simple text
+	field and may be an additional checkbox which enables this text
+	field.</P>
+	<LI><P>The table design offers an additional field on the column
+	properties area when an auto increment type was selected. This field
+	can be used by the user to define a string which should be appended
+	to the &ldquo;CREATE TABLE&rdquo; statement. 
+	</P>
+	<LI><P>The points 1. and 2. are both used and under point 2, the
+	string which the user inserted under point 1 will be displayed in
+	the extra field.</P>
+</OL>
+<P>The 3<SUP>rd</SUP> approach would be the one which allows the user
+the most flexibility to get a predefined string which he could change
+if necessary. The best place to store the value for the data source
+would be the data source administration dialog. To be more precise
+this would be implemented for the JDBC and the ODBC drivers (they
+don't support the SDBCX layer). All other drivers support the SDBCX
+layer.</P>
+<H4 CLASS="western">Retrieving of auto increment column's values</H4>
+<P>As mentioned in the problem description JDBC 3.0 already defines
+methods to accomplish the task but it is not possible just to forward
+this to the used drivers. Many drivers as also APIs like ODBC don't
+support this feature. To fit near all databases, a method has to be
+implemented that allows to fetch the new inserted auto increment
+value. Many databases support a special SQL statement which allows to
+fetch this value. Mostly these statements are database specific and
+not SQL conform. So a similar approach as for the creation of auto
+increment columns should be chosen. The data source should also store
+a SQL string which allows to fetch the auto increment values. This
+string will then be executed by the statement when asked for the auto
+increment values after inserting a new row. To be compatible as
+possible to any kind of database the SQL string, stored in the data
+source, must fulfill some additional specifications to be valid for
+different tables. In other words, the SQL string must contain some
+keywords like $column1 or $table1 which will be replaced with the
+auto increment column name or with the used table. A general string
+could already be inserted into the data source dialog which is not
+the best solution but works for a lot of drivers:</P>
+<P>&ldquo;select count($column1)+1 from $table1&rdquo;</P>
+<P>If the supporting of this feature should be disabled the string
+could be cleared by the user or an additional checkbox must be
+inserted into to the dialog to enable or disable this feature. When
+this feature is enabled the database meta data object implemented by
+the driver will return false when asking the general support method
+for the feature &ldquo;AutoRetrievingEnabled&rdquo; otherwise true.
+When true was returned the statement object implemented by the driver
+allows the creation of a result set to fetch the auto increment
+values.</P>
+<H2 CLASS="western" STYLE="page-break-before: always">Data source
+administration dialog</H2>
+<P><IMG SRC="AutoIncrementValues_html_m243b4459.gif" NAME="Graphic1" ALIGN=LEFT WIDTH=643 HEIGHT=391 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=85*>
+	<COL WIDTH=85*>
+	<COL WIDTH=85*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=33%>
+				<P>English</P>
+			</TH>
+			<TH WIDTH=33%>
+				<P>German</P>
+			</TH>
+			<TH WIDTH=33%>
+				<P>Comment</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=33%>
+				<P>~Retrieve generated values</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P>Generierte Werte ~ber&uuml;cksichtigen</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P>Checkbox to enable this feature</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=33%>
+				<P>~Auto-increment statement</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P>~Auto-Increment-Ausdruck</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P>FixedText which contains the statement which should be
+				appended after each column definition</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=33%>
+				<P>~Query of generated values</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P>Abfrage der generierten ~Werte</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P>FixedText which contains the statement which will be called
+				after an &ldquo;INSERT&rdquo; statement</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">Table design</H3>
+<P><IMG SRC="AutoIncrementValues_html_2f28066b.gif" NAME="Graphic2" ALIGN=LEFT WIDTH=642 HEIGHT=372 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=85*>
+	<COL WIDTH=85*>
+	<COL WIDTH=85*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=33%>
+				<P>English</P>
+			</TH>
+			<TH WIDTH=33%>
+				<P>German</P>
+			</TH>
+			<TH WIDTH=33%>
+				<P>Comment</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=33%>
+				<P>Auto-increment statement</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P>~Auto-Increment-Ausdruck</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P>FixedText which contains the same value as the 2<SUP>nd</SUP>
+				FixedText in data source administration dialog</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=33%>
+				<P>Enter an SQL statement for the auto-increment field.\n\nThis
+				statement will be directly transferred to the database when the
+				table is created.</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P>Geben Sie hier einen SQL Ausdruck f&uuml;r das
+				Auto-Increment-Feld an.\n\nDieser Ausdruck wird beim Erzeugen der
+				Tabelle direkt an die Datenbank &uuml;bertragen.</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P>HelpText for this field which appears in the left side control</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

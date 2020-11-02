@@ -1,0 +1,370 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+    <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+    <TITLE>URIs in UDK</TITLE>
+<style type="text/css">
+<!--
+h1 { text-align:center; margin-top: 0.2cm; text-decoration: none; color: #ffffff; font-size: 6; margin-top: 0.2cm}
+h2 { margin-top: 0.2cm; margin-bottom=0.1cm; color: #ffffff; background-color: #666699 }
+li {margin-bottom: 0.2cm;}
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm;}
+dt {margin-bottom: 0.2cm;}
+-->
+</style>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/cpp/">cpp</a>&nbsp;&raquo;&nbsp;<a href="/udk/cpp/man/">man</a>&nbsp;&raquo;&nbsp;<a href="/udk/cpp/man/spec/">spec</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="4" bgcolor=#666699 summary=header>
+    <TR>
+        <td>
+            <h1> URIs in UDK </h1>
+		<td></td>
+			<a href="http://www.openoffice.org"><img src="../../../images/open_office_org_logo.gif" alt="OpenOffice.org" align="right" border="0"></a>
+        </TD>
+    </TR>
+</TABLE>
+
+
+<P>This text describes how Uniform Resource Identifiers (URIs, see
+<A href="http://www.ietf.org/rfc/rfc2396.txt">RFC&nbsp;2396</A>) are used within
+the UDK and within OpenOffice.org in general.  URIs encompass both the widely
+known Uniform Resource Locators (URLs) and the lesser known Uniform Resource
+Names (URNs), but if you only know the term URL and neither URI nor URN, that's
+just fine, as the discussion here in fact centers around only a few URL
+schemes.</P>
+
+<H2>Used URL Schemes</H2>
+
+<P>Currently, the UDK only uses two URL schemes directly: file URLs and uno
+URLs.  File URLs are defined in
+<A href="http://www.ietf.org/rfc/rfc1738.txt">RFC&nbsp;1738</A>, but that
+definition leaves the semantics somewhat open.  The OpenOffice.org code chose to
+use a certain interpretation of file URLs (described in this text), but that
+interpretation can be incompatible with the interpretations used by other
+programs.</P>
+
+<P>Uno URLs follow a private scheme that is explained in the document <A HREF="../../../common/man/spec/uno-url.html"><CITE>UNO-Url</CITE></A>.
+
+<P>Other URL schemes (http, ftp, etc.) are used within OpenOffice.org (mainly
+through the class <CODE>INetURLObject</CODE> in the <CODE>tools</CODE> project),
+and many of them suffer from the same problems as file URLs (see below).</P>
+
+<H2>File URL Basics</H2>
+
+<P>A file URL consists of encoded data, interspersed with some delimiting
+characters.  Considering the file URL<P>
+
+<PRE>
+<CODE>file://<VAR>host</VAR>/<VAR>seg<SUB>1</SUB></VAR>/<VAR>seg<SUB>2</SUB></VAR>/<VAR>&hellip;</VAR>/<VAR>seg<SUB>n</SUB></VAR></CODE>
+</PRE>
+
+<P>the <CODE><VAR>host</VAR></CODE> and <CODE><VAR>seg<SUB>1</SUB></VAR></CODE>,
+<CODE><VAR>seg<SUB>2</SUB></VAR></CODE>, &hellip;,
+<CODE><VAR>seg<SUB>n</SUB></VAR></CODE> parts are the encoded data, and the
+rest (the <CODE>file://</CODE> and the single slashes) are syntactic delimiters.
+The encoded data in the <CODE><VAR>seg<SUB>i</SUB></VAR></CODE> parts are
+sequences of bytes, written using ASCII characters (that represent the numeric
+values of the ASCII characters themselves) and <DFN>escape sequences</DFN> (a
+<CODE>%</CODE> followed by two hexadecimal digits, representing any numeric
+value in the range 0&ndash;255).  (The encoded data in the optional
+<CODE><VAR>host</VAR></CODE> part follows other rules.)</P>
+
+<P>File URLs are used to locate files on a certain machine, that is, they
+somehow have to encode (platform-dependent) file system paths as used on that
+machine in their <CODE><VAR>seg<SUB>i</SUB></VAR></CODE> parts.  The problem is
+that there is no global specification of exactly how file URLs encode file
+system paths.</P>
+
+<P>The strategy chosen by the OpenOffice.org code maps from file system paths
+(as used in some operating system's interfaces) to file URLs in two steps.  In
+the first step (which is platform dependent), a hierarchical file system path is
+translated into a sequence of segments, represented in Unicode.  In the second
+step (which is platform independent), those segments are translated into
+sequences of bytes, using UTF-8, and then concatenated into URLs (encoding the
+individual bytes as single ASCII characters or as escape sequences).</P>
+
+<P>As an example, consider the Windows file system path</P>
+
+<PRE>
+<CODE>C:\directory\other dir\file.txt</CODE>
+</PRE>
+
+<P>This is first translated into the four segments <CODE>C:</CODE>,
+<CODE>directory</CODE>, <CODE>other dir</CODE>, and <CODE>file.txt</CODE> (all
+represented using Unicode).  Using UTF-8, these segments are then translated
+into the corresponding byte sequences (represented here as sequences of
+hexadecimal numbers):</P>
+
+<UL>
+    <LI>43 3A <EM>(<CODE>C:</CODE>)</EM>
+    <LI>64 69 72 65 63 74 6F 72 79 <EM>(<CODE>directory</CODE>)</EM>
+    <LI>6F 74 68 65 72 20 64 69 72 <EM>(<CODE>other dir</CODE>)</EM>
+    <LI>66 69 6C 65 2E 74 78 74 <EM>(<CODE>file.txt</CODE>)</EM>
+</UL>
+
+<P>Then, these byte sequences are combined into a single file URL (adding the
+necessary syntactic delimiters), namely</P>
+
+<PRE>
+<CODE>file:///C:/directory/other%20dir/file.txt</CODE>
+</PRE>
+
+<P>Nothing exciting here (all the bytes from the four sequences are represented
+as the corresponding ASCII characters, except for the space in <CODE>other
+dir</CODE>, which is illegal in URLs and is thus escaped as
+<CODE>%20</CODE>).</P>
+
+<P>Similarly, a Unix file system path</P>
+
+<PRE>
+<CODE>/directory/other dir/file.txt</CODE>
+</PRE>
+
+<P>is translated into the URL</P>
+
+<PRE>
+<CODE>file:///directory/other%20dir/file.txt</CODE>
+</PRE>
+
+<H2>Non-ASCII Characters</H2>
+
+<P>On many platforms, file system paths can contain non-ASCII characters.  This
+is typically handled within the operating system by naming files with byte
+strings, and letting the user choose a character encoding (via a locale) that
+specifies how these byte strings are to be interpreted.</P>
+
+<P>Consider the Unix file system path <CODE>/str&auml;nge</CODE> (assuming the
+user's locale is such that it contains an &auml; in the supported character
+repertoire).  Again, translation into a file URL is done in two steps:  First,
+the path is split into the single segment <CODE>str&auml;nge</CODE> (represented
+as a Unicode string; some platform-dependent &ldquo;magic&rdquo; is needed to
+convert from the operation system's representation to this Unicode
+representation).  Second, that segment is translated into the (hexadecimal) byte
+sequence 73 74 72 C3 A4 6E 67 65, and the URL <CODE>file:///str%C3%A4nge</CODE>
+is constructed from that byte sequence.</P>
+
+<P>Other programs may handle file URLs differently, in that they directly use
+the operating system's byte strings (interpreted in a locale chosen by the user)
+within the file URL, without going via Unicode and UTF-8.  For example, if the
+user had chosen a ISO 8859-1 locale, the Unix file system path
+<CODE>/str&auml;nge</CODE> (possibly represented as the hexadecimal byte string
+2F 73 74 72 E4 6E 67 65 by the operating system) would correspond to the URL
+<CODE>file:///str%E4nge</CODE>.</P>
+
+<P>If the OpenOffice.org code wants to exchange file URLs with such other
+programs, the URLs have to be converted back and forth at the interfaces, to
+avoid any misunderstandings.  This problem is typically not noticed when the
+file system paths contain only ASCII characters, as these are always represented
+the same within file URLs.</P>
+
+<P>Both approaches (&ldquo;UTF-8 URLs&rdquo; and &ldquo;locale dependent
+URLs&rdquo;) have pros and cons, but the main benefit of the OpenOffice.org
+(i.e., UTF-8 URLs) approach seems to be the stability of how a file URL locates
+a specific file, regardless of context.  Imagine a text processor application
+that lets you include URLs as hyperlinks within your documents, and imagine that
+application used locale dependent URLs.  When creating a document, a user has
+specified locale&nbsp;<VAR>X</VAR> for his operating system, and a file URL
+included in the document is therefore encoded using the conventions of
+locale&nbsp;<VAR>X</VAR>.  Now, the user switches to locale&nbsp;<VAR>Y</VAR>
+and re-opens the document:  The hyperlink is no longer guaranteed to point to
+the same file, as the file URL is not encoded using the conventions of
+locale&nbsp;<VAR>Y</VAR>.</P>
+
+<P>Also, with the UTF-8 URLs approach, code that handles file URLs can often be
+made simpler and platform-independent.  A typical scenario is a text edit field
+allowing the user to enter a (file) URL.  Many users are not familiar with the
+nitty details of URLs, and will type in things like
+<CODE>file:///str&auml;nge</CODE>.  Even though this is not a valid URL (since
+an <CODE>&auml;</CODE> is not allowed within a URL), it would be nice if the
+application were forgiving and would handle that input as locating the file
+<CODE>/str&auml;nge</CODE>.  With the UTF-8 URLs approach, this is easy, as the
+text edit can silently convert the input into the correct URL
+<CODE>file:///str%C3%A4nge</CODE>.  With the locale dependent URLs approach,
+this would be more difficult, as the text edit would have to know which locale
+is in use, to convert the input into something like
+<CODE>file:///str%E4nge</CODE>, but only in case the ISO 8859-1 locale was
+used.</P>
+
+<P>Note that these problems of interpreting non-ASCII characters are not
+restricted to file URLs.  Other URL schemes that do not explicitly state what
+character encoding to use (like http and ftp URLs) have similar problems.  As
+Richard Gillam puts it in his book <CITE>Unicode Demystified</CITE>
+(Addison-Wesley, 2003):</P>
+<BLOCKQUOTE>
+    <P>The industry is converging around always treating escape sequences in
+    URLs as referring to UTF-8 code units.  That is, the industry is leaning
+    toward always interpreting <CODE>R%c3%a9sum%c3%a9.html</CODE> to mean
+    <CODE>R&eacute;sum&eacute;.html</CODE> (and always representing
+    <CODE>R&eacute;sum&eacute;.html</CODE> as
+    <CODE>R%c3%a9sum%c3%a9.html</CODE>).  If everyone agreed on this system,
+    then you could use illegal URL characters (such as the accented &eacute; in
+    our example) in URL references in other kinds of documents (such as HTML or
+    XML files) and know that a universally understood method of transforming
+    them into a legal URL existed.  Web browsers or other software could do the
+    reverse, displaying URLs that include escape sequences by using the
+    characters the escape sequences represent (at least in the cases where they
+    represent non-ASCII characters) and allowing you to type them in that
+    way.</P>
+</BLOCKQUOTE>
+
+<H2>The UTF-8 URLs Approach</H2>
+
+<P>There are a number of problems specific to the UTF-8 URLs approach:</P>
+
+<P>First, the UTF-8 URLs approach has an additional step compared to the locale
+dependent URLs approach, namely the translation between a system specific
+representation of some textual entity and a Unicode representation of that
+entity.  In the one direction, a problem might occur when a certain entity
+represented in the system specific way cannot be represented in Unicode (e.g.,
+because it contains characters that are not present in the Unicode repertoire).
+Given that Unicode was specifically designed to encompass the repertoires of all
+legacy character encodings in use today, chances for such a problem should be
+close to zero.  In the other direction, different Unicode strings could
+translate to the same system specific representation (e.g., because two
+different Unicode characters are mapped to the same character in the system
+specific encoding).  This leads to two different URLs locating the same
+resource, something that should not be considered much of a problem, since it is
+already a wide-spread phenomenon (think about file URLs differing in the use of
+upper and lower case letters on a case-insensitive file system, or think about
+file systems that support links).</P>
+
+<P>Another problem stems from the fact that Unicode allows a single
+&ldquo;conceptual character&rdquo; (as interpreted by a user, e.g., the
+character &ldquo;&auml;&rdquo;) to be represented in different ways.  For
+example, the conceptual character &ldquo;&auml;&rdquo; can be represented as
+either the single code point</P>
+
+<UL>
+    <LI>U+00E4 LATIN SMALL LETTER A WITH DIARESIS
+</UL>
+
+<P>or as a sequence of the two code points</P>
+
+<UL>
+    <LI>U+0061 LATIN SMALL LETTER A
+    <LI>U+0308 COMBINING DIARESIS
+</UL>
+
+<P>(a so-called &ldquo;combining character sequence&rdquo;).  Both
+representations should be considered equivalent, so that the two URLs
+<CODE>file:///str%C3%A4nge</CODE> (containing a UTF-8 encoded U+00E4) and
+<CODE>file:///stra%CC%88nge</CODE> (containing a U+0061 represented as
+ASCII&nbsp;<CODE>a</CODE> followed by a UTF-8 encoded U+0308) should probably be
+considered equivalent also, and should both denote a file named
+<CODE>str&auml;nge</CODE>.  In current versions of OpenOffice.org
+(&ldquo;SRC644&rdquo;), loading a file named <CODE>str&auml;nge</CODE> on
+Windows&nbsp;XP works with the former URL, but fails with the latter.</P>
+
+<P>Two solutions for this problem seem possible:  One solution would be to
+enhance the (platform dependent) code that maps from Unicode to a system
+specific character encoding so that it handles combining character sequences
+correctly.  Another solution is to require all URLs to use only one form of
+Unicode strings (i.e., to use a <DFN>normalization form</DFN>), which would make
+this problem go away.  The obvious choice is to use
+<A href="http://www.unicode.org/unicode/reports/tr15/">Unicode Normalization
+Form&nbsp;C</A>, as is also recommended by the W3C's
+<A href="http://www.w3.org/TR/charmod/"><CITE>Character Model for the World Wide
+Web 1.0</CITE></A>.  Using that solution, only <CODE>file:///str%C3%A4nge</CODE>
+would be a valid URL to access the file <CODE>str&auml;nge</CODE>, while the URL
+<CODE>file:///stra%CC%88nge</CODE> would be ruled out as invalid.</P>
+
+<P>Following the approach of requiring URLs to use a normalization form, a new
+problem might show up:  Consider an operating system that allows files to be
+named using some Unicode encoding (any of the UTF-<VAR>n</VAR> encoding
+forms/schemes), but that is uncompliant enough to allow two different files to
+have names that a Unicode-compliant system should consider equivalent (e.g., a
+file named <CODE>str&auml;nge</CODE> written using U+00E4 and another file named
+<CODE>str&auml;nge</CODE> written using U+0061 followed by U+0308).  Now, the
+requirement to always use normalized Unicode strings within file URLs makes it
+impossible to access one of the two files with a URL.  (This is another
+manifestation of the problem already described above, that an entity represented
+in the system specific way cannot be presented in Unicode&mdash;or, more
+specifically, in some Unicode normalization form.  Above, that problem was said
+to be ignorable; here, one can only hope for Unicode-compliant operating systems
+that do not allow two different files to have equivalent names.)</P>
+
+<H2>Drive Letters</H2>
+
+<P>In Windows, as well as in related systems like DOS and OS/2, file system
+paths start with a <DFN>drive letter</DFN>, followed by a colon (e.g., the
+<CODE>C:</CODE> in <CODE>C:\directory\file.txt</CODE>).  That drive letter
+(together with the following colon) makes up the first segment of file URLs on
+these systems (as in <CODE>file:///C:/directory/file.txt</CODE>).  However,
+historically also a vertical bar has been used instead of the colon, as in
+<CODE>file:///C|/directory/file.txt</CODE> (note that the vertical bar is not
+escaped as <CODE>%7C</CODE> in this special case, even though it is an illegal
+character).</P>
+
+<P>The OpenOffice.org code can handle both cases of file URLs (with either a
+colon or a vertical bar), but URLs generated by the code always follow the
+&ldquo;standard&rdquo; convention of using a colon.</P>
+
+<H2>Hosts</H2>
+
+<P>The file URL scheme allows for an optional <CODE><VAR>host</VAR></CODE>
+component after the <CODE>file://</CODE> prefix.  Specifying
+<CODE>localhost</CODE> (in any combination of upper and lower case letters) is
+the same as leaving that component empty: the URL locates a file system path on
+the current machine.</P>
+
+<P>The intended use for this <CODE><VAR>host</VAR></CODE> component was to
+specify the DNS name (or IPv4/IPv6 address) of a machine, to indicate that the
+URL locates a file system path on that machine.  The problem is that there is no
+protocol that details how such a remote file should be accessed, so
+interpretation of file URLs containing a <CODE><VAR>host</VAR></CODE> component
+was left unspecified.</P>
+
+<P>On Unix, the OpenOffice.org code does not support file URLs with a
+<CODE><VAR>host</VAR></CODE> component.  Windows, on the other hand, knows the
+concept of <DFN>UNC paths</DFN>, file system paths containing the name of a
+remote machine:</P>
+
+<PRE>
+<CODE>\\somewhere\somedir\file.txt</CODE>
+</PRE>
+
+<P>The machine names used in UNC paths (<CODE>somewhere</CODE> in the above
+example) have another structure than DNS names, so, strictly speaking, they
+could not be used in the <CODE><VAR>host</VAR></CODE> component of file URLs.
+Nevertheless, many applications on Windows, including the OpenOffice.org code,
+follow the convention of allowing UNC machine names within file URLs.  This
+means that the above UNC path corresponds with the URL</P>
+
+<PRE>
+<CODE>file://somewhere/somedir/file.txt</CODE>
+</PRE>
+
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="4" summary=footer>
+    <TR>
+        <TD BGCOLOR="#666699">
+            <P><FONT COLOR="White">Author: <A HREF="mailto:stephan.bergmann@sun.com"><FONT COLOR="White">Stephan Bergmann</FONT></A> (Last modification $Date: 2004/12/08 12:03:50 $).<br/>
+			Copyright 2002 <A HREF="http://www.openoffice.org"><FONT COLOR="White">OpenOffice.org</FONT></A> Foundation.  All Rights Reserved.</FONT></P>
+        </TD>
+    </TR>
+</TABLE>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

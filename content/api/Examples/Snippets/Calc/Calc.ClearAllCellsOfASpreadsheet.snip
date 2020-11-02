@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Calc.ClearAllCellsOfASpreadsheet.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2008/10/20 11:29:26 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Calc">
+
+<keywords>
+	<keyword>clear</keyword>
+	<keyword>delete</keyword>
+	<keyword>cells</keyword>
+	<keyword>cell</keyword>
+	<keyword>spreadsheet</keyword>
+</keywords>
+
+<authors>
+	<author id="1" initial="true" email="" copyright="Josef Frysak">Josef Frysak</author>
+</authors>
+
+<question heading="Clear all cells of a spreadsheet">How to delete the whole spreadtsheet?
+</question>
+
+<answer>
+<p>Use the &quot;XUsedAreaCursor&quot; interface of the &quot;SheetCellCursor&quot; to select all</p>
+<p>cells with content. Finally use the &quot;XSheetOperation&quot; interface of the</p>
+<p>cursor to delete the selected cells.</p>
+<p>For further details see http://wi.wu-wien.ac.at/rgf/diplomarbeiten/BakkStuff/2008/200809_Frysak/200809_Frysak_Automating_OOo_ooRexx_Nutshells.pdf.</p>
+<listing>-- try to get a script context, will be .nil, if script was not invoked by OOo
+x_ScriptContext = uno.getScriptContext()
+if (x_ScriptContext &lt;&gt; .nil) then
+do
+   -- invoked by OOo as a macro
+
+   -- get context
+   x_ComponentContext = x_ScriptContext~getComponentContext
+   -- get desktop (an XDesktop)
+   x_Desktop  = x_ScriptContext~getDesktop
+   -- get current document
+   x_Document = x_ScriptContext~getDocument
+end
+else  
+do
+   -- called from outside of OOo, create a connection
+
+   -- connect to Open Office and get component context
+   x_ComponentContext = UNO.connect()
+   -- create a desktop service and its interface
+   service = &quot;{%see com.sun.star.frame.Desktop}&quot;
+   s_Desktop = x_ComponentContext~getServiceManager~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}~createInstance(service)
+   x_Desktop = s_Desktop~{%see com.sun.star.frame.XDesktop%XDesktop}
+   -- get the last active document
+   x_Document = x_Desktop~getCurrentComponent()  
+end
+
+
+
+
+-- first get the currently selected sheet
+x_Model = x_Document~{%see com.sun.star.frame.XModel%XModel}
+s_CurrentController = x_Model~getCurrentController()
+x_View = s_CurrentController~{%see com.sun.star.sheet.XSpreadsheetView%XSpreadsheetView}
+x_Spreadsheet = x_View~getActiveSheet()
+
+-- now create a virtual cursor on this sheet
+-- with UsedAreaCursor Interface we just select the region with filled cells
+x_SheetCellCursor = x_Spreadsheet~createCursor()
+x_UsedAreaCursor = x_SheetCellCursor~{%see com.sun.star.sheet.XUsedAreaCursor%XUsedAreaCursor}
+x_UsedAreaCursor~gotoStartOfUsedArea(.false)
+x_UsedAreaCursor~gotoEndOfUsedArea(.true)
+
+-- finally delete all cells and their properties in region
+x_SheetOp = x_SheetCellCursor~{%see com.sun.star.sheet.XSheetOperation%XSheetOperation}
+x_SheetOp~clearContents(1+2+4+8+16+32+64+128+256+512)
+
+::requires UNO.CLS</listing>
+</answer>
+
+<versions>
+	<version number="2.4.1" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="1" date="2008-10-12">Initial version</change>
+</changelog>
+
+</snippet>

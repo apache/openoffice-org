@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.ResizeExternalImage.snip,v $
+last change: $Revision: 1.2 $ $Author: tomsontom $ $Date: 2006/02/13 14:20:38 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="OOBasic" application="Office">
+
+<keywords>
+	<keyword>resize</keyword>
+	<keyword>image</keyword>
+</keywords>
+
+<authors>
+	<author id="ddorange" initial="true" email="ddorange@free.fr" copyright="LGPL">Dorange-Pattoret Didier</author>
+</authors>
+
+<question heading="resize an external image">
+How can I resize an external from inside my OpenOffice without using any external programm.
+</question>
+
+<answer>
+<listing>Sub Essai
+ResizeExternalImageByWidth(&quot;/home/didier/tmp4/about.bmp&quot;,&quot;/home/didier/tmp4/about_1616.bmp&quot;,16)
+End sub
+
+
+Sub ResizeExternalImageByWidth(sURLImage,sURLImageResized as String, iWidth as Integer)
+   rem open a sdraw hidden document
+   Dim mFileProperties(0) As New {@see com.sun.star.beans.PropertyValue}
+   Dim Proportion as Single
+   mFileProperties(0).Name=&quot;Hidden&quot;
+   mFileProperties(0).Value=True
+   oDesktop=createUnoService(&quot;{@see com.sun.star.frame.Desktop}&quot;)
+   monDocument = oDesktop.LoadComponentFromURL(&quot;private:factory/sdraw&quot;,&quot;_blank&quot;,0,mFileProperties())
+   maPage = monDocument.DrawPages(0)
+   rem insert in the drawpage the image resized at 1000
+   ImageL = monDocument.createInstance(&quot;{@see com.sun.star.drawing.GraphicObjectShape}&quot;)
+   ImageL.GraphicURL = ConvertToURL(sURLImage)
+   maPage.add(ImageL)
+   resizeImageByWidth(ImageL,1000)
+   rem resizing the drawpage
+   Proportion = ImageL.Size.Height/ImageL.Size.Width
+   maPage.Width = 1000
+   maPage.Height = ArrondiEntier(1000*Proportion)
+   rem set export data
+   Dim aFilterData (1) as new {@see com.sun.star.beans.PropertyValue}
+      aFilterData(0).Name  = &quot;PixelWidth&quot;        &apos;
+     aFilterData(0).Value = iWidth
+      aFilterData(1).Name  = &quot;PixelHeight&quot;
+      aFilterData(1).Value = ArrondiEntier(iWidth*Proportion)
+      rem export drawpage
+      Export( maPage,sURLImageResized , aFilterData() )
+      On error resume Next
+      monDocument.Close(True)
+      On error goto 0
+   End Sub
+
+Function ArrondiEntier(Nombre as Single) as Integer
+If Nombre-Int(Nombre) &lt; 0.5 Then
+ArrondiEntier = Int(Nombre)
+Else
+ArrondiEntier = Int(Nombre)+1
+Endif
+End Function
+
+
+
+Sub Export( xObject, sFileUrl As String, aFilterData )
+  xExporter = createUnoService( &quot;{@see com.sun.star.drawing.GraphicExportFilter}&quot; )
+  xExporter.SetSourceDocument( xObject )
+  Dim aArgs (2) as new {@see com.sun.star.beans.PropertyValue}
+  Dim aURL as new {@see com.sun.star.util:URL}
+   sFileUrl = ConvertToURL(sFileUrl)
+  aArgs(0).Name  = &quot;FilterName&quot;
+  aArgs(0).Value = &quot;bmp&quot;
+  aArgs(1).Name  = &quot;URL&quot;
+  aArgs(1).Value = sFileUrl
+  aArgs(2).Name  = &quot;FilterData&quot;
+  aArgs(2).Value = aFilterData
+  xExporter.filter( aArgs() )
+End Sub
+
+Sub resizeImageByWidth(uneImage As Object, largeur As Long)
+   Dim leBitMap As Object, Proportion As Double
+   Dim Taille1 As New {@see com.sun.star.awt.Size}
+   LeBitmap = uneImage.GraphicObjectFillBitmap
+   Taille1 = LeBitMap.Size &apos; taille in pixels !
+   Proportion = Taille1.Height / Taille1.Width
+   Taille1.Width = largeur &apos; largeur en 1/100 de mm
+   Taille1.Height = Taille1.Width * Proportion
+   uneImage.Size = Taille1
+End Sub
+</listing>
+</answer>
+
+<versions>
+        <version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

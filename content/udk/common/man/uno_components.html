@@ -1,0 +1,204 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1"/>
+	<TITLE>C++ UNO Components</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)"/>
+	<META NAME="CLASSIFICATION" CONTENT="C++ UNO Components"/>
+	<META NAME="KEYWORDS" CONTENT="C++,UNO,Components"/>
+<style type="text/css">
+	<!--
+h1 { text-align:center; margin-top: 0.2cm; text-decoration: none; color: #ffffff; font-size: 6; margin-top: 0.2cm}
+h2 { margin-top: 0.2cm; margin-bottom=0.1cm; color: #ffffff;
+     background-color: #666699 }
+li {margin-bottom: 0.2cm;}
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm;}
+dt {margin-bottom: 0.2cm;}
+-->
+</style>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/">common</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/">man</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 BGCOLOR="#666699"
+    summary=Header>
+	<TR>
+		<TD>
+			<h1> C++ UNO Components </h1>
+		</td><td>
+			<a href="http://www.openoffice.org/"><img src="../../images/open_office_org_logo.gif" name="Grafik1" alt="OpenOffice.org" align=right width=109 height=54 border=0/></A>
+		</TD>
+	</TR>
+</TABLE>
+
+<h2> Contents </h2>
+<blockquote>
+			<A HREF="#Overview">Overview</A><br/>
+			<A HREF="#Cpp_Components">C++ Components</A><br/>
+</blockquote>
+
+<h2><A NAME="Overview"></A> Overview </h2>
+
+<P>UNO components, normally, provide an implementation of one or
+			more services. A service description is written in idl. A service
+			describes the interaction of different interfaces to support a
+			special functionality. An idl description of a service specifies a
+			set of interfaces which supports the expected functionality. It
+			can also contain references to other services which are needed for
+			this service. A service could be implemented by more than one
+			component. At this time, the component which is registered last,
+			will be used as the default implementation for the supported
+			services of this component.
+			</P>
+			
+      <P>It is also possible to register or revoke components at runtime. For 
+        this it is necessary to use a registration service (<A HREF="http://api.openoffice.org/common/ref/com/sun/star/registry/ImplementationRegistration.html">com.sun.star.registry.ImplementationRegistration</A>) 
+        to register external components in the runtime environment of the office 
+        suite. It should be possible to use almost any programming language to implement 
+        a component, since only two things are necessary: first, an appropriate language 
+        binding for the programming language used, and second, an appropriate 
+        loader service for components implemented in this language. </P>
+
+<h2><A NAME="Cpp_Components"></A> C++ Components </h2>
+	
+<P>C++ UNO components are usually implemented as shared libraries. Such a shared 
+        library must provide a special interface which contains 4 exported 
+        &quot;C&quot; functions. These functions are searched by the appropriate loader 
+        service (&quot;com.sun.star.loader.SharedLibrary&quot;) to register the 
+        component or to instantiate an object providing the service. </P>
+      <P>The exported &quot;C&quot; functions are: </P>
+
+      <blockquote>
+        <p><B>component_getDescriptionFunc<br/>
+          </B><B>component_getImplementationEnvironmentFunc<br/>
+          </B><B>component_writeInfo<br/>
+          </B><B>component_getFactory</B> </p>
+      </blockquote>
+      <DL>
+        <DT> <B>component_getDescriptionFunc</B></DT>
+        <DD> <I>Syntax: </I> </DD>
+        <DD> <CODE>extern &quot;C&quot; const sal_Char* SAL_CALL component_getDescriptionFunc(void); 
+          </CODE> </DD>
+        <DD> <FONT COLOR="#000000">This function is optional but should be supported. 
+          The function should return an XML formatted string describing the contents 
+          of the component. This function could be generated from a general XML 
+          component description. Such a description contains information about 
+          the name, the supported services, the needed services, the needed types, 
+          and so on. For more details, see </FONT><A HREF="component_description.html"><FONT COLOR="#000000">XML 
+          Component Description</FONT></A><FONT COLOR="#000000">. Any component 
+          should provide such an XML description. </FONT> </DD>
+        <DT> <B>component_getImplementationEnvironmentFunc</B></DT>
+        <DD> <I>Syntax:</I> </DD>
+        <DD> <CODE>extern &quot;C&quot; void SAL_CALL component_getImplementationEnvironmentFunc(const 
+          sal_Char** ppEnvTypeName, uno_Environment** ppEnv ); </CODE> </DD>
+        <DD> Function to determine the <!-- used --> implementation environment of the component. This 
+          function shows the runtime environment how to use the <B><I>void*</I></B> 
+          parameters of <B>component_writeInfoFunc</B> and <B>component_getFactoryFunc</B>. 
+          A component, implemented in C++, uses the C++ environment. The UNO runtime 
+          must map the <B><I>void*</I></B> parameters from the C++ environment to 
+          the current environment. If the environment is NOT session specific,  
+          i.e., it needs no additional context, then this function should return the 
+          environment type name and leave ppEnv (0). </DD>
+        <DT> <B>component_writeInfo</B></DT>
+        <DD> Syntax: </DD>
+        <DD> <CODE>extern &quot;C&quot; sal_Bool SAL_CALL component_writeInfoFunc(void* 
+          pServiceManager, void* pRegistryKey ); </CODE> </DD>
+        <DD STYLE="margin-bottom: 0.5cm"> Function to write component specific 
+          data in a reserved section in the registry, at least, the supported services 
+          of the component. <B>pRegistryKey</B> refers to a reserved section in 
+          the registry. Any component should have a unique implementation name 
+          to specify their own subsection under this key. <B>pServiceManager</B> 
+          specifies the current service manager. The service manager could be 
+          used at this time to get information from other services which are 
+          important for this component (this parameter is seldom used).</DD>
+      </DL>
+
+      <BLOCKQUOTE STYLE="margin-left: 4cm; margin-right: 4cm"><FONT COLOR="#000000">Structure 
+        of an implementation section: </FONT> </BLOCKQUOTE>
+
+      <PRE STYLE="margin-left: 2cm; margin-right: 2cm; margin-bottom: 0.1cm"><FONT COLOR="#000000"><FONT FACE="Courier"><FONT SIZE=2>/IMPLEMENTATIONS/&lt;implementation_name&gt;/UNO/SERVICES/&lt;service_name1&gt;[/attribute_subkeys]</FONT></FONT></FONT>
+<FONT COLOR="#000000"><FONT FACE="Courier"><FONT SIZE=2>                                                   /&lt;service_name2&gt;...</FONT></FONT></FONT>
+<FONT COLOR="#000000"><FONT FACE="Courier"><FONT SIZE=2>                                                    ...</FONT></FONT></FONT>
+<FONT COLOR="#000000"><FONT FACE="Courier"><FONT SIZE=2>                                     [/REGISTRY_LINKS]</FONT></FONT></FONT>
+<FONT COLOR="#000000"><FONT FACE="Courier"><FONT SIZE=2>                                          (AsciiListValue)</FONT></FONT></FONT>
+<FONT COLOR="#000000"><FONT FACE="Courier"><FONT SIZE=2>                                          &lt;registry_link1&gt;</FONT></FONT></FONT>
+<FONT COLOR="#000000"><FONT FACE="Courier"><FONT SIZE=2>                                          &lt;registry_link2&gt;</FONT></FONT></FONT>
+<FONT COLOR="#000000"><FONT FACE="Courier"><FONT SIZE=2>                                           ...</FONT></FONT></FONT>
+<FONT COLOR="#000000"><FONT FACE="Courier"><FONT SIZE=2>                                     [/DATA]</FONT></FONT></FONT></PRE>
+
+<BLOCKQUOTE STYLE="margin-left: 4cm; margin-right: 4cm"><FONT COLOR="#000000">Under 
+        the reserved key &quot;.../UNO/SERVICES&quot; there could be one or more services
+				specified as a subkey with the name of the service.  
+        Each service key could also have subkeys to specify service-specific attributes. 
+        &quot;.../REGISTRY_LINKS&quot; specifies also a reserved key which is 
+        interpreted by the registration service. This key must have an ASCII list 
+        value. The values of these lists, specifies links which are created by the 
+        registration service. The notation of such a link name shows where the 
+        link is created and where the target is. If the link name begins with 
+        '/' the link will be created under the rootkey, if not the link will be 
+        created relative to the &lt;implementation_name&gt;. If the linkname contains  
+        a unique '%', then the part after the '%' is used as the link target; otherwise, 
+        the link target is the &lt;implementation_name&gt;. If a link target is 
+        specified, it is always relative to the &lt;implementation_name&gt;. To specify one's 
+        own service specific data, it is useful to create a special &quot;.../DATA&quot; 
+        section. </FONT> </BLOCKQUOTE>
+      <DL> 
+        <DT><B>component_getFactory</B></DT>
+        <DD> <I>Syntax: </I> </DD>
+        <DD> <CODE>extern &quot;C&quot; void* SAL_CALL component_getFactoryFunc(const 
+          sal_Char* pImplName, void* pServiceManager, void* pRegistryKey ); </CODE> 
+        </DD>
+        <DD> This Function returns a factory to create component instances. The first 
+          time a component instance will be created, this function is called and 
+          the returned factory is registered in the service manager. <B>pImplName</B> 
+          specifies the name of the implementation which the factory will create. 
+          It is possible to have more than one implementation in a shared library. 
+          <B>pServiceManager</B> points to the current service manager. This service 
+          manager should be given to the factory and later to any instances, so 
+          that all instances created in the environment of this service manager 
+          use this one. <B>pRegistryKey</B> points to the implementation key 
+          specified by <B>pImplName</B>. This key should also be given to the 
+          factory and later to every instance when there are component specific 
+          data in the implementation section, that will later be used. </DD>
+        <DT> <B>Example</B></DT>
+
+        <DD> <FONT COLOR="#000000">Under </FONT><A HREF="../../cpp/man/component_tutorial.html"><FONT COLOR="#000000">Component 
+          Tutorial</FONT></A><FONT COLOR="#000000">, you will find a simple example of 
+          how to create a C++ UNO component. You will also find typical implementations 
+          of the C-functions which are necessary to support the C++ component 
+          interface. </FONT> </DD>
+      </DL>
+
+<table summary=footer width=100% bgcolor=#666699>
+	<TR>
+		<TD>
+			<FONT COLOR="#ffffff">
+			Author: <A HREF="mailto:juergen.schmidt@germany.sun.com"><FONT COLOR="#ffffff">J&uuml;rgen Schmidt</FONT></A> ($Date: 2004/11/30 13:11:29 $)<br/>
+			<I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I></FONT>
+		</TD>
+	</TR>
+</TABLE>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

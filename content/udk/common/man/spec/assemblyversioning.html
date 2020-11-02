@@ -1,0 +1,270 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>Version of Assemblies</TITLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="en-US" DIR="LTR">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/">common</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/">man</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/spec/">spec</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+Author: Joachim Lingner<br>
+
+<H1>Important Change</H1>
+Because of the problem mentioned in Microsoft's knowledge base article 
+<a href="http://support.microsoft.com/kb/905238/en-us">905238 </a>
+we will increase the assembly versions for every new major and minor 
+version of OOo. 
+
+<H1>Notes</H1>
+<p>For OOo 2.4.1 the version for policy.1.0.cli_basetypes.dll was changed from 
+9.0.0.0 to 9.1.0.0. This was done because a bug, possibly in .NET Framwork 1.1,
+caused the test program (cli_ure/qa/versioning) to fail, when the version
+was 10.0.0.0. or greater (11.0.0.0 etc.).
+It failed, however, only when StarOffice was updated. A
+stand-alone installation always worked. 
+</p>
+<p>
+The tests also failed with many updated respin versions of StarOffice. In all cases
+.NET failed to find the latest policy assembly. For example, when version 6 and 13 of 
+policy.1.0.cli_ure.dll where installed, then the framwork chose the older version.
+Here is an overview of the tests. Tested where different respin version with an update 11:
+</p>
+<pre>
+StarOffice     Test 
+version	       result
+(respin)       update u11
+----------------------------
+final           ok
+u1 		ok
+u2              failed 
+u3              failed
+u4              failed
+u5              failed
+u6              failed
+u7              failed
+u8              ok
+u9              ok
+u10             ok		
+</pre>
+<p>
+It is possible that those respin versions which failed the test will also not 
+work with older updates. For example, I tested a StarOffice u4 with the updates
+8,9 and 10. The tests failed with all three offices.
+</p>
+<p>
+When the runtests.exe was configured
+to use the .NET Framework 2.0 then it worked with all updated offices.
+To configure runtests to use another runtime one has to provide config file
+(runtests.exe.config), which contains for example:
+</p>
+<pre>
+&lt;configuration&gt;
+ &lt;startup&gt;
+   &lt;supportedRuntime version="v2.0.50727" /&gt;
+ &lt;/startup&gt;
+&lt;/configuration&gt;
+</pre>
+
+<p>
+Note that the configuration file is only necessary if .NET Framework 1.1 AND
+.NET Framework 2.0 are installed. The easiest way to enforce the use of the latest
+framework is to simple uninstall .NET Framework 1.1.
+</p>
+<p>
+As of StarOffice 9 (OOo 3.0) this problem will not exist anymore, since that office
+requires at least a .NET Framework 2.0.
+</p>
+
+<H1>Versioning for assemblies of CLI-UNO Binding</H1>
+<P>This documents gives some background
+about the versioning applied to the assemblies which are part of the
+CLI-UNO binding. 
+</P>
+<P>
+The assemblies have all a strong names.
+Hence the .NET runtime will strictly enforce versioning rules. That
+is, a client application can only run with the assemblies it was
+build with. The exception is, that users could change the application
+or machine config file and redirect the version of the respective
+assembly, or OOo installs policy assemblies.</P>
+
+<P>
+For this document we assume that the
+reader has good knowledge of shared assemblies and policy assemblies.</P>
+
+<H1>Versioning Scheme</H1>
+<P>The version of an assembly consists of
+four parts:</P>
+<P>major.minor.build.revision</P>
+
+<P>The meaning of every part can be freely
+interpreted by developers. There is no need to use the parts exactly
+as their names indicate.</P>
+<P>For our assemblies we will use this
+convention:</P>
+
+<UL>
+	<LI>major:  expresses a major change</LI>
+	<LI>minor: expresses a minor incompatible change</LI>
+	<LI>build: expresses a compatible change.</LI>
+	<LI>revision: expresses a compatible change.</LI>
+</UL>
+
+<P>For incompatible changes we will
+increase the major part of the assembly.  The minor will remain
+unchanged, except for some urgent reasons. 
+</P>
+<P>The CLI-UNO assemblies should not
+become incompatible very often. In fact, we will try to keep them
+compatible as long as possible, so as not to break existing
+application. 
+</P>
+<P>Usually we will increase the &ldquo;build&rdquo;
+as a result of bug fixes or new compatible features. 
+</P>
+<P>The &ldquo;revision&rdquo; will remain
+unchanged, except for some urgent reasons. 
+</P>
+<P>Although a version could change everytime an assembly was modified,
+we will try to change the version only once between two official releases.
+For example, say OOo2.0 will be shipped based on 680m130. In m131 a bug
+will be fixed (compatibly). Then the version will be increased. Even
+if other bugs will be fixed (compatibly) in the following milestones,
+the version will remain unchanged. In the next official release, the
+version will be the one from m131. If, however, the assembly will be
+altered incompatibly, then the version must be increased again. But
+the following compatible or incompatible changes, will not affect the
+version of the forthcoming release. For example, in m132 an
+incompatibility will be introduced and the version will be increased
+again (major or minor). The next release will be based on m140. All
+other changes between 132 and 140 will not cause the version to
+change.</P>
+
+<strong>Developers, please notice that you should build your CLI client applications 
+always with the final version, such as OOo2, OOo3, etc. If, for an example, the application 
+was build with assemblies from OOo2.0.1, then users with OOo2 cannot use it.</strong>
+
+
+<H1>Compatible Changes and Policy Assemblies</H1>
+<P>Compatible changes are often caused by
+bug fixes. Because of the versioning rules of .NET (application runs
+only with the assembly it has been build with), client applications
+cannot benefit from the bug fixes without manual adaptations by the
+user.  Because many users do not have the necessary knowledge,
+OpenOffice.org will provide publisher policy assemblies.  By
+installing the policy assemblies we will ensure, that applications
+use the latest (compatible) assemblies of the CLI-UNO binding.</P>
+
+<P>A policy assembly applies only for a
+particular assembly with a determined major and minor version. For
+example, policy.1.1.cli_types.dll  only applies for version 1.1.x.x
+of cli_types.dll. This has some implications because the .NET
+framework does not support a chaining mechanism for policy
+assemblies. For example, let us assume there is a cli_types.dll with
+these versions:</P>
+<P>1.1 <br>
+1.2<br>
+1.3<br>
+
+<P>Because the newer versions are
+backwards compatible one could deploy these policy assemblies:<br>
+policy.1.1.cli_types.dll:   
+oldVersion: 1.1.0.0   newVersion: 1.2.0.0<br>
+policy.1.2.cli_types.dll:   
+oldVersion: 1.2.0.0   newVersion: 1.3.0.0</P>
+</P>
+<P>One could expect that an application
+that was build with version 1.1 of cli_types.dll uses version 1.3.
+But this is not the case. The application uses version 1.2. The
+version part in the name of the policy assembly corresponds to the
+macro.minor part of the assembly for which it provides the
+redirection. If one wanted applications, which were build with v1.1
+to use v1.3, then one would have to provide  a new policy assembly:</P>
+
+<P>policy.1.1.cli_types.dll:   
+oldVersion: 1.1.0.0   newVersion: 1.3.0.0</P>
+
+<P>If we would allow that the minor part
+of the version could be used to indicate a compatible change,  then
+one would have to provide a policy assembly for every minor. For
+example, let us again assume that the following versions of
+cli_types.dll are compatible (they are backwards compatible to the
+previous version):</P>
+<P>1.1, 1.2, 1.3, 1.4</P>
+<P>And we assume that there are
+applications, which have been build with one of these versions. In
+order to have them all use the latest version 1.4, one would have to
+ship three policy assemblies:</P>
+<P>policy.1.1.cli_types.dll:   
+oldVersion: 1.1.0.0   newVersion: 1.4.0.0<br>
+policy.1.2.cli_types.dll:   
+oldVersion: 1.2.0.0   newVersion: 1.4.0.0<br>
+policy.1.3.cli_types.dll:   
+oldVersion: 1.3.0.0   newVersion: 1.4.0.0<br>
+
+<P>And this would have to be done for all
+assemblies of CLI-UNO binding. Therefore, only the build and revision
+part of the version are used for compatible changes. Then it is
+sufficient to ship only one policy assembly for each assembly. Policy
+assemblies have also a version. If there are several policy
+assemblies installed, which all target the same assembly, then the
+.NET runtime uses the policy with the latest version.</P>
+
+
+<H2>Compatible Changes in cli_types.dll </H2>
+Changes to unpublished types (declared in unoidl WITHOUT the keyword &quot;published&quot;) 
+are always regarded as compatible changes even 
+if they have been changed incompatibly. This is possible because client programs
+must not use unpublished types. It is also necessary because changes to unpublished 
+types may occur in every new version or product update. To declare the change
+to be incompatible would prevent client code to run with the respective version of the 
+office.
+
+
+<H1>Versioning of Policy Assemblies</H1>
+<P>Policy assemblies must have a version the same as ordinary
+assemblies. By providing a version one can have different policy
+assemblies for one assembly. The .NET runtime will use the policy
+assembly with the latest version.</P>
+<P>Policy assemblies are only used if there is a new version of an
+assembly which is still backwards compatible. With our versioning
+scheme this would apply to assemblies of the same name where the
+major and minor part of the version are equal. For example, if there
+are multiple versions of cli_types.dll: 1.1.0.0, 1.1.1.0, 1.1.2.0,
+then there could be a policy.1.1.cli_types.dll 
+<br>
+version 1.0.0.0, redirecting from 1.1.0.0 to 1.1.1.0<br>
+version 2.0.0.0, redirecting from 1.1.0.0-1.1.1.0 to 1.1.2.0<br>
+</P>
+
+<P>We will simply increase the major part unless there are urgent
+reasons to use the other parts of the version. Please notice that the
+name of the policy assembly already contains the major.minor version
+parts of the related assembly.</P>
+
+
+<hr>
+Last changed: $Date: 2008/05/07 13:22:48 $
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

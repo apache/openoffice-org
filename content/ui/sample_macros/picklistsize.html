@@ -1,0 +1,65 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Frank Sch&ouml;nheit">
+	<META NAME="CREATED" CONTENT="20020521;17590645">
+	<META NAME="CHANGEDBY" CONTENT="Frank Sch&ouml;nheit">
+	<META NAME="CHANGED" CONTENT="20020521;18322198">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="en-US">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ui/">ui</a>&nbsp;&raquo;&nbsp;<a href="/ui/sample_macros/">sample_macros</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<PRE><FONT COLOR="#c0c0c0">REM  *****  BASIC  *****</FONT>
+
+<FONT COLOR="#008000"><FONT COLOR="#000080">Option</FONT> <FONT COLOR="#000080">Explicit</FONT></FONT>
+
+<FONT COLOR="#008000"><FONT COLOR="#000080">Sub</FONT> Main</FONT>
+<FONT COLOR="#008000">        ChangePickListSize( <FONT COLOR="#ff0000">10</FONT> )</FONT>
+<FONT COLOR="#008000"><FONT COLOR="#000080">End</FONT> <FONT COLOR="#000080">Sub</FONT></FONT>
+
+<FONT COLOR="#008000"><FONT COLOR="#000080">Sub</FONT> ChangePickListSize( nSize <FONT COLOR="#000080">as</FONT> <FONT COLOR="#000080">Integer</FONT> )</FONT>
+<FONT COLOR="#008000">        <FONT COLOR="#c0c0c0">' access the global configuration provider</FONT></FONT>
+<FONT COLOR="#008000">        <FONT COLOR="#000080">Dim </FONT>aConfigProvider <FONT COLOR="#000080">As</FONT> Object</FONT>
+<FONT COLOR="#008000">        aConfigProvider = createUnoService( <FONT COLOR="#ff0000">&quot;com.sun.star.configuration.ConfigurationProvider&quot;</FONT> )</FONT>
+<FONT COLOR="#008000">        </FONT>
+<FONT COLOR="#008000">        <FONT COLOR="#c0c0c0">' create an access object for the history node</FONT></FONT>
+<FONT COLOR="#008000">        <FONT COLOR="#000080">Dim</FONT> aHistorySettings <FONT COLOR="#000080">As</FONT> Object</FONT>
+<FONT COLOR="#008000">        <FONT COLOR="#000080">Dim</FONT> aParams(<FONT COLOR="#ff0000">0</FONT>) <FONT COLOR="#000080">As</FONT> <FONT COLOR="#000080">new</FONT> com.sun.star.beans.PropertyValue</FONT>
+<FONT COLOR="#008000">        aParams(<FONT COLOR="#ff0000">0</FONT>).Name = <FONT COLOR="#ff0000">&quot;nodepath&quot;</FONT></FONT>
+<FONT COLOR="#008000">        aParams(<FONT COLOR="#ff0000">0</FONT>).Value = <FONT COLOR="#ff0000">&quot;/org.openoffice.Office.Common/History&quot;</FONT></FONT>
+<FONT COLOR="#008000">        aHistorySettings = aConfigProvider.createInstanceWithArguments( _</FONT>
+<FONT COLOR="#008000">                <FONT COLOR="#ff0000">&quot;com.sun.star.configuration.ConfigurationUpdateAccess&quot;</FONT>, _</FONT>
+<FONT COLOR="#008000">                aParams() )</FONT>
+<FONT COLOR="#008000">        </FONT>
+<FONT COLOR="#008000">        <FONT COLOR="#c0c0c0">' set the pick list size</FONT></FONT>
+<FONT COLOR="#008000">        aHistorySettings.replaceByName( <FONT COLOR="#ff0000">&quot;PickListSize&quot;</FONT>, nSize )</FONT>
+<FONT COLOR="#008000">        </FONT>
+<FONT COLOR="#008000">        <FONT COLOR="#c0c0c0">' commit the changes done</FONT></FONT>
+<FONT COLOR="#008000">        aHistorySettings.commitChanges</FONT>
+<FONT COLOR="#008000"><FONT COLOR="#000080">End</FONT> <FONT COLOR="#000080">Sub</FONT></FONT></PRE>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

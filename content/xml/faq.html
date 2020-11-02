@@ -1,0 +1,318 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>OpenOffice.org XML file format FAQ</title>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/xml/">xml</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+	<p><strong>Note:</strong>This FAQ is for the OpenOffice.org XML file format only. OASIS OpenDocument/ISO/IEC 26300 FAQs are available at <a href="http://www.oasis-open.org/committees/office/faq.php">OASIS</a> and <a href="http://opendocument.xml.org/faq">opendocument.xml.org</a>.<p>
+<a name="top"></a><p><img alt="" src="http://www.openoffice.org/branding/images/start_blue_bar.gif">&nbsp;&nbsp;<font size="-1"><b>MOST FREQUENTLY ASKED QUESTIONS: QUESTIONS</b></font>&nbsp;&nbsp;<img alt="" src="http://www.openoffice.org/branding/images/end_blue_bar.gif"></p><ol>
+
+ <li><a href="#1">
+    Which OpenOffice.org application uses XML-based file formats?
+  </a></li>
+
+ <li><a href="#2">
+    What are the default file extensions for XML-based documents?
+  </a></li>
+
+ <li><a href="#3">
+    What is all that binary goo I see in your files?
+  </a></li>
+
+ <li><a href="#4">
+    What package format do you use, and what do I find inside?    
+  </a></li>
+
+ <li><a href="#5">
+    How can I put additional information into an XML file?
+  </a></li>
+
+ <li><a href="#6">
+    But I really, really want plain XML. No compression, no binary
+    data, no nothing. Just plain XML. Can I have that, please?
+  </a></li>
+
+ <li><a href="#7">
+    Why are so many styles written out?
+  </a></li>
+
+ <li><a href="#8">
+    How are embedded images and binary data handled?
+  </a></li>
+
+ <li><a href="#9">
+    Why didn't you use XHTML, XSL-FO, SVG, etc. ?
+  </a></li>
+
+ <li><a href="#10">
+    Can I write an XML translation from or into  ...?
+  </a></li>
+
+ <li><a href="#11">
+    I found a bug. What do I do?
+  </a></li>
+
+ <li><a href="#12">
+    Hey, I like your XML format. How can I help?
+  </a></li>
+
+ <li><a href="#13">
+    But what about ...? And why isn't
+    my favorite question in here?
+  </a></li>
+
+ 
+
+</ol><p><img alt="" src="http://www.openoffice.org/branding/images/start_blue_bar.gif">&nbsp;&nbsp;<font size="-1"><b>MOST FREQUENTLY ASKED QUESTIONS: ANSWERS</b></font>&nbsp;&nbsp;<img alt="" src="http://www.openoffice.org/branding/images/end_blue_bar.gif"></p>
+
+ <ol><a name="1"></a><li value="1"><b>
+    Which OpenOffice.org application uses XML-based file formats?
+  </b><p><answer>
+    All OpenOffice.org applications use XML-based file formats. All
+    applications (except Math) use the same format as defined in our <a href="xml_specification.pdf">specification</a>. 
+    The Math component uses our package structure and format (see
+    below), but uses <a href="http://www.w3.org/Math/">MathML</a>
+    inside the package.
+  </answer></p><br></li></ol><a href="#top">Back to top</a><hr noshade="noshade" size="1" align="left"><br>
+
+ <ol><a name="2"></a><li value="2"><b>
+    What are the default file extensions for XML-based documents?
+  </b><answer>
+    <table summary="OpenOffice.org XML file types">
+     <tr> <th>Writer</th> <td>sxw</td> </tr>
+     <tr> <th>Calc</th> <td>sxc</td> </tr>
+     <tr> <th>Draw</th> <td>sxd</td> </tr>
+     <tr> <th>Impress</th> <td>sxi</td> </tr>
+     <tr> <th>Math</th> <td>sxm</td> </tr>
+     <tr> <th>Writer<br>global document</th> <td>sxg</td> </tr>
+    </table>
+    <p>XML is also used in other OpenOffice.org files
+    (e.g. configuration) which are not covered in the <tt>xmloff</tt> 
+    project.</p>
+  </answer><br></li></ol><a href="#top">Back to top</a><hr noshade="noshade" size="1" align="left"><br>
+
+ <ol><a name="3"></a><li value="3"><b>
+    What is all that binary goo I see in your files?
+  </b><answer>
+    <p>Our documents use packages that contain the XML data alongside
+    binary data such as images. The packages use the well known ZIP format. 
+    Just open an sxw/sxc/... file with a ZIP-tool of your choice, and 
+    you get access to the unadulterated XML.</p>
+    <p>The document meta data (in the meta.xml stream) is not
+    compressed. This allows for easy searching and extraction of the
+    meta data.</p>
+    <p> For more information on our packages, see the next question. </p>
+  </answer><br></li></ol><a href="#top">Back to top</a><hr noshade="noshade" size="1" align="left"><br>
+
+ <ol><a name="4"></a><li value="4"><b>
+    What package format do you use, and what do I find inside?    
+  </b><answer>
+
+    <p>We use the well-known ZIP file format as a package format. In
+    addition, we store an XML-based manifest file that describes the
+    package content and may supply additional information about the
+    included files (e.g. encryption method). Since we use ZIP, most
+    archive programs can already handle our files.</p>
+
+    <p>Inside the package, you generally find several streams that
+    make up the full office document. These are: </p>
+
+    <table>
+     <tr> 
+      <th>meta.xml</th> 
+      <td>information about the document (author, time of last save, ...)</td>
+     </tr>
+     <tr>
+      <th>styles.xml</th>
+      <td>styles that are used in the document</td>
+     </tr>
+     <tr>
+      <th>content.xml</th>
+      <td>main document content (text, tables, graphical elements)</td>
+     </tr>
+     <tr>
+      <th>settings.xml</th>
+      <td>document and view settings (such as magnification level and 
+          selected printer); these are usually application specific </td>
+     </tr>
+     <tr>
+      <th>META-INF/manifest.xml</th>
+      <td>provides additional information about the other files (such
+      as MIME type or encryption method)</td>
+     </tr>
+     <tr>
+      <th>Pictures/</th>
+      <td>directory containing images (in their native, binary formats)</td>
+     </tr>
+     <tr>
+      <th>Dialogs/</th>
+      <td>directory containing dialogs used by document macros</td>
+     </tr>
+     <tr>
+      <th>Basic/</th>
+      <td>directory containing StarBasic macros</td>
+     </tr>
+     <tr>
+      <th>Obj.../</th>
+      <td>directories containing embedded objects, such as charts;
+      each directory contains one such object, stored in its native format.
+      For OpenOffice.org objects that is its XML representation, for other
+      objects it's usually a binary format.</td>
+     </tr>
+    </table>
+
+    <p>For more information on why we chose ZIP, please read <a href="package.html">package.html</a>. For more information on the
+    ZIP format itself, please look <a href="http://www.wotsit.org/">here</a>.</p>
+  </answer><br></li></ol><a href="#top">Back to top</a><hr noshade="noshade" size="1" align="left"><br>
+
+ <ol><a name="5"></a><li value="5"><b>
+    How can I put additional information into an XML file?
+  </b><answer>
+    <p><em>Alien</em> attributes, i.e. attributes not defined in the
+    OpenOffice.org DTD, will be preserved if they are attached to
+    <code>&lt;style:properties&gt;</code> elements in style
+    definitions. All other alien content will be discarded by the
+    OpenOffice.org import filters.</p>
+    <p>Since you can attach styles to arbitrary text ranges, you can
+    use this mechanism to attach your information to arbitrary text
+    ranges, too.</p>
+    <p><strong>Note:</strong> The above mechanism seems to only work
+    in Writer. The issue is under investigation.</p>
+    <p>It is planned that you can also put additional files with your
+    own content into the packages. However, this doesn't work yet.</p>
+  </answer><br></li></ol><a href="#top">Back to top</a><hr noshade="noshade" size="1" align="left"><br>
+
+ <ol><a name="6"></a><li value="6"><b>
+    But I really, really want plain XML. No compression, no binary
+    data, no nothing. Just plain XML. Can I have that, please?
+  </b><answer>
+    <p>For purposes of import and export, we provide <a href="http://udk.openoffice.org/">UNO</a>-based services that
+    allow you to import or export XML data through the SAX
+    interface. A documentation of this technique is available <a href="filter/">here</a>.</p>
+    <p>Also, it is planned to allow plain XML files (without packages)
+    to be read and written. However, this is not implemented yet.</p>
+  </answer><br></li></ol><a href="#top">Back to top</a><hr noshade="noshade" size="1" align="left"><br>
+
+ <ol><a name="7"></a><li value="7"><b>
+    Why are so many styles written out?
+  </b><answer>
+    <p>In general, styles that are used in the document or that have been
+    modified by the user are written to disk. The former is necessary
+    to render the document correctly. The latter is preserved because
+    if a user edited those styles, he/she is likely to use them later
+    on. Therefore, those styles should not be discarded, even though
+    they do not contribute to the document in its current form and
+    shape.</p>
+    <p>If styles that meet neither of these criteria are written, then
+    this is may be considered a bug. The Draw, Impress, and Calc
+    applications currently show this behavior. </p>
+  </answer><br></li></ol><a href="#top">Back to top</a><hr noshade="noshade" size="1" align="left"><br>
+
+ <ol><a name="8"></a><li value="8"><b>
+    How are embedded images and binary data handled?
+  </b><p><answer>
+    Images and embedded objects are stored in their native formats
+    into the ZIP-based package format.
+  </answer></p><br></li></ol><a href="#top">Back to top</a><hr noshade="noshade" size="1" align="left"><br>
+
+ <ol><a name="9"></a><li value="9"><b>
+    Why didn't you use XHTML, XSL-FO, SVG, etc. ?
+  </b><answer>
+    <p>Those formats are not used because they do not have a
+    suitable level of presentation for office documents. When we found an
+    established format (like the ones mentioned above) contains
+    concepts that are used in OpenOffice.org as well, then we
+    generally adopted their representation for those concepts in our
+    XML format. We hope this will ease transformation between the
+    formats.</p>
+
+<!--
+    <p>As an example for the unsuitable level of presentation consider
+    text fields: A text field contains a string of text that gets
+    automatically for this consider text fields: Text fields are
+    special regions of text strings that are automatically updated by
+    the application. The text fields must be preserved, of course, so
+    the application can continue to update them. While the above
+    formats easily accomodate the text field output (after all, it's
+    just a string of text), they can only be represented by some sort
+    of extension to the basic format. Since these sort of issues
+    occur quite a lot, it seemed more prudent to create an own format.</p>
+-->
+
+  </answer><br></li></ol><a href="#top">Back to top</a><hr noshade="noshade" size="1" align="left"><br>
+
+ <ol><a name="10"></a><li value="10"><b>
+    Can I write an XML translation from or into  ...?
+  </b><answer>
+    <p>You are absolutely welcome to write transformation from our
+    XML-based file format into and from anything you see fit.</p>
+  </answer><br></li></ol><a href="#top">Back to top</a><hr noshade="noshade" size="1" align="left"><br>
+
+ <ol><a name="11"></a><li value="11"><b>
+    I found a bug. What do I do?
+  </b><answer>
+    <p>Report it using <a href="http://www.openoffice.org/issues/enter_bug.cgi">IssueZilla</a>. Try
+    to give a detailed description of what went wrong. Don't forget to
+    include the document in which the error occurred. (After submission
+    of the bug, choose "create attachment".)</p>
+    <p><strong>DON'T BE SHY ABOUT REPORTING BUGS!</strong> All of us
+    are interested in stable and bug-free applications, and bug
+    reports from our users are a very important means towards that
+    end. Bug reports help all of us. If you don't report your
+    findings, we can't fix them, and so they will cause problems for
+    users as well.</p>
+  </answer><br></li></ol><a href="#top">Back to top</a><hr noshade="noshade" size="1" align="left"><br>
+
+ <ol><a name="12"></a><li value="12"><b>
+    Hey, I like your XML format. How can I help?
+  </b><p><answer>
+    There are many things you can do to help.
+    <ol>
+     <li>You can spread the word, e.g. by telling your friends and
+     co-workers about OpenOffice.org.</li>
+     <li>You can use the OpenOffice.org applications and report any
+     bugs you find.</li>
+     <li>You can program transformation from our format into others
+     (and vice versa).</li>
+     <li>You can implement one of the suggestions on the todo list on our homepage. </li>
+    </ol>
+  </answer></p><br></li></ol><a href="#top">Back to top</a><hr noshade="noshade" size="1" align="left"><br>
+
+ <ol><a name="13"></a><li value="13"><b>
+    But what about ...? And why isn't
+    my favorite question in here?
+  </b><p><answer>
+    If your question is not answered here, ask it on our mailing
+    list. You can view the archives <a href="http://xml.openoffice.org/xml-dev/">here</a>. Instructions
+    for joining the list are on our <a href="http://xml.openoffice.org">project homepage</a>.
+  </answer></p><br></li></ol><a href="#top">Back to top</a><hr noshade="noshade" size="1" align="left"><br>
+
+ 
+
+<p><small>FAQ maintained by <a href="mailto:dvo@openoffice.org">dvo</a>.</small></p>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

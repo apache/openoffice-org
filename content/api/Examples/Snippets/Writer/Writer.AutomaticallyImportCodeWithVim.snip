@@ -1,0 +1,213 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Writer.AutomaticallyImportCodeWithVim.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2008/10/20 11:29:27 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Writer">
+
+<keywords>
+	<keyword>import</keyword>
+	<keyword>vim</keyword>
+	<keyword>code</keyword>
+	<keyword>formatted</keyword>
+	<keyword>text</keyword>
+</keywords>
+
+<authors>
+	<author id="1" initial="true" email="" copyright="Josef Frysak">Josef Frysak</author>
+</authors>
+
+<question heading="Automatically import code with Vim">How to import code text formatted by Vim?
+</question>
+
+<answer>
+<p>At first, let the user select a file to import. Then call Vim to make the</p>
+<p>text file a HTML file. Finally get the current text cursor and get its</p>
+<p>&quot;XDocumentInsertable&quot; interface to import the html file at the current</p>
+<p>position.</p>
+<p>If there is the need to change the paragraphs background as well, create</p>
+<p>a new paragraph style named code. There is also a snippet showing how</p>
+<p>to create such a paragraph style automatically.</p>
+<p>For further details see http://wi.wu-wien.ac.at/rgf/diplomarbeiten/BakkStuff/2008/200809_Frysak/200809_Frysak_Automating_OOo_ooRexx_Nutshells.pdf.</p>
+<p></p>
+<p>To use the example, you must install Vim and its graphical interface GVim.</p>
+<p>Furthermore the installationpath must be added to the system path</p>
+<p>variable to allow this example to find Vim and GVim.</p>
+<p>Additionally your document should contain a paragraph style named &quot;code&quot;</p>
+<p>(without &quot;&quot;) to define the background and so on.</p>
+<p></p>
+<listing>-- try to get a script context, will be .nil, if script was not invoked by OOo
+x_ScriptContext = uno.getScriptContext()
+if (x_ScriptContext &lt;&gt; .nil) then
+do
+   -- invoked by OOo as a macro
+
+   -- get context
+   x_ComponentContext = x_ScriptContext~getComponentContext
+   -- get desktop (an XDesktop)
+   x_Desktop  = x_ScriptContext~getDesktop
+   -- get current document
+   x_Document = x_ScriptContext~getDocument
+end
+else  
+do
+   -- called from outside of OOo, create a connection
+
+   -- connect to Open Office and get component context
+   x_ComponentContext = UNO.connect()
+   -- create a desktop service and its interface
+   service = &quot;{%see com.sun.star.frame.Desktop}&quot;
+   s_Desktop = x_ComponentContext~getServiceManager~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}~createInstance(service)
+   x_Desktop = s_Desktop~{%see com.sun.star.frame.XDesktop%XDesktop}
+   -- get the last active document
+   x_Document = x_Desktop~getCurrentComponent()  
+end
+
+
+
+
+-- first check if paragraph style &quot;code&quot; is present 
+x_StyleFamiliesSupplier = x_Document~{%see com.sun.star.style.XStyleFamiliesSupplier%XStyleFamiliesSupplier}
+x_StyleFamilies = x_StyleFamiliesSupplier~getStyleFamilies()
+s_StyleFamily = x_StyleFamilies~getByName(&quot;ParagraphStyles&quot;)
+x_NameAccess = s_StyleFamily~{%see com.sun.star.container.XNameAccess%XNameAccess}
+
+if \ x_NameAccess~hasByName(&quot;code&quot;) then
+do
+   -- if style is not present
+   .bsf.dialog~messageBox(&apos;Paragraph Style &quot;code&quot; does not exist!&apos;, &quot;ERROR&quot;, &quot;error&quot;)
+end
+else
+do
+   -- if style is present:
+   -- ask for filename using the file dialog
+   x_MultiServiceFactory = x_ComponentContext~getServiceManager()~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+   s_FileDialog = x_MultiServiceFactory~createInstance(&quot;{%see com.sun.star.ui.dialogs.OfficeFilePicker}&quot;)
+   x_FileDialog = s_FileDialog~{%see com.sun.star.ui.dialogs.XFilePicker%XFilePicker}
+   x_FileDialogFilters = s_FileDialog~{%see com.sun.star.ui.dialogs.XFilterManager%XFilterManager}
+
+   -- adding some file extensions to the dialog
+   x_FileDialogFilters~appendFilter(&quot;OORexx *.rex&quot;, &quot;*.rex&quot;)
+   x_FileDialogFilters~appendFilter(&quot;C++ *.cpp&quot;, &quot;*.cpp&quot;)
+   x_FileDialogFilters~appendFilter(&quot;All *.*&quot;, &quot;*.*&quot;)
+
+   -- Better name for our dialog:
+   x_FileDialog~setTitle(&quot;Select Code File&quot;)
+
+   -- selecting more than one file at once dissalowed (to allow it use 1)
+   x_FileDialog~setMultiSelectionMode(0)
+
+   -- run dialog
+   filechoosen = x_FileDialog~execute()
+   if ( filechoosen ) then
+   do
+      -- if dialog button ok pressed read filename
+      file = x_FileDialog~getFiles()
+      codefileurl = file[1]
+      codefile = uno.convertFromUrl(codefileurl)
+
+      -- set up gvim command
+      command = &apos;gvim &apos; || codefile || &apos; -n -c &quot;runtime! syntax/2html.vim&quot; -c wq -c q&apos;
+
+      -- find out which operating system is present and set up the shell execution
+      /* Normally ooRexx is able to determine the operating system itself. But calling
+         the macro with rexxj or inside Open Office disables this ability.*/
+      if .uno~path.separator=&quot;;&quot; then
+      do
+         -- Windows
+         ADDRESS CMD
+      end
+      else
+      do
+         -- Linux
+         shell=value(&quot;SHELL&quot;,,&quot;ENVIRONMENT&quot;) -- get type of shell
+         shell=substr(shell, shell~lastpos(&quot;/&quot;)+1) -- get shell name
+         ADDRESS VALUE shell           -- set shell as command shell
+      end
+
+      -- execute command
+      command
+  
+      htmlfileurl = codefileurl || &quot;.html&quot;
+
+      -- import html file at cursor postion
+      x_TextDocument = x_Document~{%see com.sun.star.text.XTextDocument%XTextDocument}
+      x_Text = x_TextDocument~getText
+
+      s_CurrentController = x_TextDocument~getCurrentController()
+      x_TextViewCursorSupplier = s_CurrentController~{%see com.sun.star.text.XTextViewCursorSupplier%XTextViewCursorSupplier}
+      x_CurrentCursor = x_TextViewCursorSupplier~getViewCursor()
+
+      x_TextCursor = x_Text~createTextCursorByRange(x_CurrentCursor~getStart())
+
+      -- html insertion interface
+      x_DocumentInsertable = x_TextCursor~{%see com.sun.star.document.XDocumentInsertable%XDocumentInsertable}
+
+      -- current cursor position (and paragraph style)     
+      x_CursorPropertySet = x_TextCursor~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+      oldstyle = x_CursorPropertySet~getPropertyValue(&quot;ParaStyleName&quot;)
+
+      -- change pararaph style
+      x_CursorPropertySet~setPropertyValue(&quot;ParaStyleName&quot;, &quot;code&quot;)
+
+      -- now insert the html file
+
+      /*
+      Create a property array.
+      Parameter 2 means it has a capacity of two elements
+      (if parameter is set to 0 it is not .nil!, but an empty java array).
+      */
+
+      properties = uno.CreateArray(.UNO~PROPERTYVALUE, 1)
+
+      properties[1] = uno.createProperty(&quot;FilterName&quot;, &quot;HTML (StarWriter)&quot;)
+
+      x_DocumentInsertable~insertDocumentFromURL(htmlfileurl, properties)
+
+      -- create new paragraph and return to old style
+      x_Text~insertControlCharacter(x_TextCursor, 5, .false)
+      x_CursorPropertySet~setPropertyValue(&quot;ParaStyleName&quot;, oldstyle)
+   end
+end
+
+::requires UNO.CLS</listing>
+</answer>
+
+<versions>
+	<version number="2.4.1" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="Linux"/>
+<operating-system name="Win32"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="1" date="2008-10-14">Initial version</change>
+</changelog>
+
+</snippet>

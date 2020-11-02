@@ -1,0 +1,1285 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1" />
+	<TITLE>The OLE Bridge</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)" />
+	<META NAME="AUTHOR" CONTENT="Joachim Lingner" />
+	<META NAME="CREATED" CONTENT="20001019;16275729" />
+	<META NAME="CHANGEDBY" CONTENT="Joachim Lingner" />
+	<META NAME="CHANGED" CONTENT="20001026;12595911" />
+	<STYLE type=text/css>
+	<!--
+		P { margin-bottom: 0.02in }
+		H1 { margin-bottom: 0.04in; font-family: "Arial", sans-serif; font-size: 20pt; color:#ffffff; text-align: center }
+		h2 { margin-bottom: 0.02in; font-family: "Arial", sans-serif; font-size: 14pt; color:#ffffff; background-color: #666699; padding-top: 0.2cm; padding-bottom: 0.2cm }
+		TD P { margin-bottom: 0.08in }
+		TH P { margin-bottom: 0.08in; font-style: italic }
+		P.source { margin-bottom: 0in; font-family: "Courier New", monospace; font-size: 10pt }
+		CODE { font-size: 11pt }
+		pre { background-color: #fffff0;}
+		li { margin-bottom: 0.2cm; }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/">common</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/">man</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/spec/">spec</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<table border=0 cellPadding=12 bgColor=#666699 width=100% summary=header>
+<TR>
+  <TD>
+      <h1>The Ole Bridge</h1>
+	  </td><td width=200>
+	  <A
+            href="http://www.openoffice.org/"><IMG align=right alt=OpenOffice
+            border=0 name=Grafik1
+            src="../../../images/open_office_org_logo.gif" /></A>
+  </td>
+</tr>
+</table>
+
+<h2> Contents </h2>
+<ol>
+<li><a href="#a1">Introduction </a>
+<li><a href="#a2">Requirements </a>
+<li><a href="#a3">Parts of the bridge</a>
+<li><a href="#a4">Mapping of types</a>
+<li><a href="#a8">Using the bridge </a>
+<li><a href="#a5">Creation of types </a>
+<li><a href="#a6">JScript issues </a>
+<li><a href="#a7">Value Objects </a>
+<li><a href="#a9">Limitation of the dispatch objects</a>
+<li><a href="#a10">Implementing COM objects with UNO interfaces</a>
+</ol>
+
+<h2><a name="a1"> 1 Introduction </a></h2>
+
+<P>The  OLE bridge is a means to allow UNO
+objects to be accessed in a COM environment, that is to say a COM
+client can calls an UNO server without having do deal with UNO
+specific details. Conversely an UNO object can use COM objects and
+does not have to know anything about COM.
+
+<P>The bridge can be incorporated by
+different languages as long as the languages support OLE. So far the
+bridge has proved to work reliable with C++ and JScript. VBScript and
+Visual Basic still needs some testing and as for all other eligible
+languages they require testing from the ground up.
+<P> As the name "OLE" bridge implies the bridge deals with OLE objects
+  and not with COM objects generally. That means that only "dispatch objects"
+  can be mapped to UNO and UNO objects are only mapped to dispatch objects.
+</p>
+
+<h2><a name="a2"> 2 Requirements </a></h2>
+
+<p>
+First of all the system must be able to
+run both object models. As for COM, it runs on all Windows 95/98,
+Windows 3.51, Windows 2000 and Windows ME operating systems. There
+are also ports to Macintosh and Unix and since November 1999 there is
+a reference implementation for UNIX developed by the Open Group. UNO
+is available whenever the UDK is installed on a machine or indirectly
+when an Office is installed. As for the latter, the setup needs to be
+run to ensure that the initial UNO object is properly registered  at
+the system's registry. Simply copying the executables and
+libraries won't do.</p>
+
+<p>The bridge depends on some additional services. These are</p>
+<P STYLE="margin-bottom: 0in">com.sun.star.script.Invocation,<br/>
+com.sun.star.script.InvocationAdapterFactory,<br/>
+com.sun.star.script.Converter<br/>
+com.sun.star.reflection.CoreReflection,<br/>
+com.sun.star.beans.Introspection.</P>
+
+<h2><a name="a3"> 3 Parts of the Bridge </a></h2>
+
+<p>
+In contrast to other language bindings
+the OLE bridge is based on services. The following paragraphs give an
+overview of  the functionalities which are provided by them.
+</P>
+
+<h3>3.1 Service com.sun.star.bridge.OleBridgeSupplier2</h3>
+<P>Implementation name: com.sun.star.comp.ole.OleConverter2</P>
+
+<P>The service is able to bridge elements
+of one environment to elements of another environment. This feature
+is provided by exposing the interface
+<a href="http://api.openoffice.org/common/ref/com/sun/star/bridge/XBridgeSupplier2.html">
+com.sun.star.bridge.XBridgeSupplier2</a> which looks like
+</p>
+<pre>
+module com {  module sun {  module star {  module bridge {
+
+[ uik(5F97D2F0-50F8-11d4-83240050-04526AB4),
+	ident(&quot;XBridgeSupplier2&quot;, 1.0 ) ]
+interface XBridgeSupplier2: com::sun::star::uno::XInterface
+{
+    any createBridge( [in] any aModelDepObject,
+	              [in] sequence&lt; byte &gt; aProcessId,
+		      [in] short nSourceModelType,
+		      [in] short nDestModelType )
+	raises(	com::sun::star::lang::IllegalArgumentException );
+
+}; }; }; };
+</pre>
+
+
+<P STYLE="margin-bottom: 0in">As the parameter nSourceModelType and
+nDestModelType suggest this interface allows the bridging of element
+of very different models. The constant group <a href="http://api.openoffice.org/common/ref/com/sun/star/bridge/ModelDependent.html">
+ModelDependent</a> specifies
+the values which can be used with that interface.</P>
+
+<pre>
+module com {  module sun {  module star {  module bridge {
+constants ModelDependent
+{
+    const short UNO = 1;
+    const short OLE = 2;
+    const short JAVA = 3;
+    const short CORBA = 4;
+};
+}; }; }; };
+</pre>
+
+<P STYLE="margin-bottom: 0in">When using OleBridgeSupplier2 then only
+the constants UNO and OLE will have effect. The parameter
+aModelDepObject contains the element that is to be bridged and the
+return value contains the bridged element.
+</P>
+
+<h3>3.2 Service: com.sun.star.bridge.OleBridgeSupplierVar1</h3>
+
+<p>Implementation name:  com.sun.star.comp.ole.OleConverterVar1
+
+<P>The name OleBridgeSupplierVar1 is
+admittedly badly chosen and rather nondescript. Anyway, the "Var1"
+indicates that the service is a variation of the OleBridgeSupplier
+service. And in fact the functionality is the same but the way it is
+achieved is partly different. OleConverterVar1 was developed to
+optimize performance in a remote client server environment. A
+scenario could look like this:</p>
+
+<p>A remote UNO object object is to
+be converted into an OLE object. Because the bridge can only handle
+UNO objects which expose XInvocation it utilizes the
+com.sun.star.script.Invocation service that creates an invocation
+object out of every UNO object or struct. Invocation has to
+introspect the respective object which is very expensive in terms of
+function calls. Now consider Invocation to reside on the client and
+the actual object on a remote server. Obviously there would be a
+great many network round trips causing a negative performance impact.
+
+<p>OleBridgeSupplier2 is just doing that and hence it is
+inappropriate for this scenario. OleBridgeSupplierVar1 on the other
+hand allows the remote creation of Invocation. Since Invocation and
+the object now reside in the same process the process of creating
+invocation objects is a lot more efficient.</P>
+
+<P>Another issue concerns the way of how
+the bridge realizes the IDispatch interface for UNO wrapper objects.
+An UNO wrapper is an object that contains an UNO object and it
+implements IDispatch so that the wrapper can be used in an OLE
+environment. Calls on the wrapper's IDispatch are mapped to calls on
+the XInvocation of the wrapped object.</p>
+
+<p>OLE objects are used
+through their IDispatch interface. A function call or accessing a
+property is twofold. First IDispatch::GetIDsOfNames is called which
+basicly takes the function or property name and returns an id
+(DISPID). With the id at hand the IDispatch::Invoke can be called. The
+Invoke implementation knows by way of the DISPID exactly what
+function or property it has been called for.
+</P>
+<P>The OleBridgeSupplier2 UNO wrapper
+checks in GetIDsOfNames whether the object exists or not before it
+issues a DISPID. The caller knows immediately if the function or
+property exists. This check is not carried out by
+OleBridgeSupplierVar1 because it would cause at least one remote call
+(remember the object is remote). DISPIDs are blindly passed out
+whenever GetIDsOfNames is being called for a new name. If the DISPID
+produces an error during the Invoke call then the name is cached, so
+that the next time GetIDsOfNames is being called the caller receives
+an appropriate error code.</P>
+
+<P>The OleBridgeSupplierVar1 UNO wrapper has to do
+  some more work in IDispatch::Invoke because it has not obtained any type information
+  yet about the meaning of the current call. The wFlags parameter of IDispatch::Invoke
+  can e.g. consist of a combination of DISPATCH_METHOD and DISPATCH_PROPERTYPUT.
+  In this case the wrapper tries first to call a method on the wrapped UNO object
+  and when this fails it tries to access a property. Moreover after a call to
+  XInvocation failed the wrapper checks whether the name is correct by calling
+  XExactName::getExactName that is provided by the invocation object. During the
+  Invoke call information are gathered which are cached so that whenever the same
+  call is made again the cached information are used to fasten up the process.</P>
+
+<h3>3.3 com.sun.star.bridge.OleApplicationRegistration</h3>
+
+<P>Implementation name: com.sun.star.comp.ole.OleServer</P>
+
+<P>This service registers a COM class factory when the service is
+being instantiated and deregisteres it when the service is being
+destroyed. The class factory constructs an UNO multi service factory
+within the OLE environment. Services created by this factory are
+always created in that environment. That means that someone who is
+using the COM class factory as starting point for an application
+which incorporates UNO rarely has to deal with the OLE bridge
+themselves.</p>
+
+<p>The multi service factory which is mapped into the
+COM environment is the same factory which is passed into the
+component_getFactory function of the housing DLL.
+</P>
+
+<h3>3.4 com.sun.star.bridge.OleObjectFactory</h3>
+
+<P>Implementation name: com.sun.star.comp.ole.OleClient</P>
+
+<P>The OleObjectFactory represents itself as multi service factory by
+exposing the XMultiServiceFactory interface. It is used to create COM
+objects. The COM components are specified by their programmatic
+identifier (ProgId). The COM objects are created in the UNO
+environment, meaning they are wrapped by objects which implement
+XInvocation and map calls to IDispatch.</P>
+
+<P>To map an OLE object into the UNO environment you could create
+the object through any COM mechanism (e.g. CoCreateInstance) and
+then convert it by means of the service OleBridgeSupplier2. Actually
+the OleObjectFactory does not do otherwise.</P>
+
+<h2><a name="a4"> 4 Mapping of Types </a></h2>
+
+<P>The bridge maps data from UNO to OLE automation types and vice
+versa. Because the bridge can be used from different languages there
+are also some language specific issues to be considered; e.g. JScript
+has no out parameters. The problem is that the bridge cannot tell
+what language makes use of it, since on the binary level the
+communication between interfaces complies with the COM
+specification, regardless of the language. For more information about
+JScript and the issues involved see <a href=#a5>chapter 6</a>.</P>
+
+<P>The table 1 summarizes the possible conversions from  OLE
+Automation types to UNO types. (The names in italic letters are not
+idl types)</P>
+
+<TABLE WIDTH=72%  CELLPADDING=4 CELLSPACING=1 summary="OLE to UNO conversions">
+  <COL WIDTH=128* /> <COL WIDTH=128* /> <THEAD bgcolor=#eeeeee>
+  <TR>
+
+    <TH> OLE Automation (idl types) </TH>
+    <TH> UNO (idl types) </TH>
+	</TR>
+	</THEAD>
+	<TBODY bgcolor=#eeeeff>
+	<TR>
+    <TD> boolean </TD>
+    <TD> boolean </TD>
+	</TR>
+	<TR>
+    <TD> unsigned char </TD>
+    <TD> byte </TD>
+	</TR>
+	<TR>
+    <TD> [1] double </TD>
+    <TD> double, float </TD>
+	</TR>
+	<TR>
+    <TD> float </TD>
+    <TD> float </TD>
+	</TR>
+	<TR>
+    <TD> short </TD>
+    <TD> short </TD>
+	</TR>
+	<TR>
+    <TD> [1] long </TD>
+    <TD> long, short, byte </TD>
+	</TR>
+	<TR>
+    <TD> BSTR </TD>
+    <TD> string </TD>
+	</TR>
+	<TR>
+    <TD> SCODE </TD>
+    <TD> unsigned long </TD>
+	</TR>
+	<TR>
+    <TD> IUnknown* </TD>
+    <TD> com.sun.star.script.XInvocation </TD>
+	</TR>
+	<TR>
+    <TD> [2] IDispatch* </TD>
+    <TD> com.sun.star.script.XInvocation<br/>
+		<I>interface type, original type.</I><br/>
+		sequence&lt;<I>type</I>&gt;,<br/>
+		out parameter,<br/>
+        in/out parameter
+			</TD>
+	</TR>
+	<TR>
+    <TD> [3] SAFEARRAY(<I>type</I>) </TD>
+    <TD> sequence&lt;<I>type</I>&gt; </TD>
+	</TR>
+	<TR>
+    <TD> [4] <I>type</I> </TD>
+    <TD> any </TD>
+	</TR>
+</TBODY>
+</TABLE>
+
+<ol>
+<li>JScript does not use the types float, char and short. If the
+target UNO function takes one of those types then an appropriate
+conversion occurs.</li>
+
+<li><p>The default behaviour of the conversion routine is that
+dispatch objects are converted into invocation objects (objects
+implementing XInvocation). The actual COM object is wrapped by an UNO
+object that implements XInvocation. Calls on XInvocation are mapped
+to calls on IDispatch.</p>
+<p>If a dispatch object is actually a wrapped
+UNO object then the original UNO object is extracted. Consider the
+following JScript (COM environment) code:</p>
+
+<Pre>
+// obj is an uno object
+var obj2= obj.getSomeObject();
+//obj2 is an UNO object which is encapsulated by an UNO wrapper
+obj.putSomeObject( obj2);
+</Pre>
+
+<p>
+When obj2 is passed back into the UNO environment then "obj" receives
+the original UNO object instead of a COM wrapper object.
+
+<P>When an UNO object in a COM environment receives an dispatch
+object in an IDispatch::Invoke call then it acquires type information
+about the parameter. The information contains the type what the
+dispatch object should represent in the UNO environment. If an
+interface other than XInvocation is expected than that specific
+interface is created by way of the service
+com.sun.star.script.InvocationAdapterFactory.
+</P>
+<P>In JScript one uses Array objects for out or in/out parameters (see <a href="#a6">JScript issues
+ </a>). Those objects are dispatch objects which are converted into the expected
+  type. Besides, the Array objects are of course used for arrays. If so then
+  they are converted into a Sequence with the proper element type.</P>
+<P>A mapped COM object can only be successfully used through XInvocation if it
+  provides type information through IDispatch::GetTypeInfo.</P>
+
+<li>A SAFEARRAY is converted to sequence&lt;<I>type</I>&gt; where type is the
+  respective UNO type. If the SAFEARRAY has more than one dimension then the anys
+  contain sequences of sequences and so forth; e.g. sequence&lt;sequence&lt;long&gt;&gt;.</P>
+<li>Whenever an UNO function requires an any parameter then the caller in the
+  COM environment is not obliged to pass a VARIANT (actually VT_VARIANT | VT_BYREF).
+<p>Instead the actual type can be put into the respective VARIANT argument (DISPPARAMS::rgvarg).</p>
+  If the bridge receives an VT_DISPATCH then it depends of the type information
+  of the target UNO function or property what the dispatch object will be converted
+  into (see [2], <a href="#a6">JScript issues</a>).
+</P>
+</ol>
+<P>Table 2 shows the conversions from UNO types to OLE Automation
+types.</P>
+<TABLE WIDTH=77% CELLPADDING=4 CELLSPACING=1 STYLE="page-break-after: avoid" summary="UNO OLE conversions">
+  <COL WIDTH=128* /> <COL WIDTH=128* /> <THEAD bgcolor=#eeeeee>
+  <TR>
+    <TH> UNO </TH>
+    <TH> OLE Automation </TH>
+   </TR>
+	</THEAD>
+	<TBODY bgcolor=#eeeeff>
+	<TR>
+    <TD> boolean </TD>
+    <TD> boolean </TD>
+	</TR>
+	<TR>
+    <TD> byte </TD>
+    <TD> unsigned char </TD>
+	</TR>
+	<TR>
+    <TD> double </TD>
+    <TD> double </TD>
+	</TR>
+	<TR>
+    <TD> float </TD>
+    <TD> float </TD>
+	</TR>
+	<TR>
+    <TD> short </TD>
+    <TD> short </TD>
+	</TR>
+	<TR>
+    <TD> unsigned short </TD>
+    <TD> short </TD>
+	</TR>
+	<TR>
+    <TD> long </TD>
+    <TD> long </TD>
+	</TR>
+	<TR>
+    <TD> unsigned long </TD>
+    <TD> long </TD>
+	</TR>
+	<TR>
+    <TD> string </TD>
+    <TD> BSTR </TD>
+	</TR>
+	<TR>
+    <TD> <I>interfaces</I> </TD>
+    <TD> IDispatch* </TD>
+	</TR>
+	<TR>
+    <TD> [1] sequence&lt;<I>type</I>&gt; </TD>
+    <TD> SAFEARRAY(<I>type</I>),<br/>
+	     SAFEARRAY(VARIANT) </TD>
+	</TR>
+	<TR>
+    <TD> struct </TD>
+    <TD> IDispatch* </TD>
+	</TR>
+	<TR>
+    <TD> enum </TD>
+    <TD> long </TD>
+	</TR>
+	<TR>
+    <TD> char </TD>
+    <TD> short </TD>
+	</TR>
+	<TR>
+    <TD> [2] <I>type</I> </TD>
+    <TD> VARIANT </TD>
+	</TR>
+	</TBODY>
+</TABLE>
+
+<ol>
+<li>A Sequence which has as element
+type of a sequence could be regarded as two-dimensional array. The
+difference is that the element sequences could have varying lengths
+whereas the elements of a certain dimension of a  multidimensional
+array have the same length. To reflect that, sequences are converted
+into one-dimensional SAFEARRAYs with VARIANT elements which in turn
+can contain SAFEARRAYs. This conversion works fine with COM objects
+which expect those arrays, e.g. COM objects which implement UNO
+interfaces (see <a href="#a10">chapter 10</a>). But quite often this will not
+be the
+case and if a function argument is a SAFEARRAY of a certain element
+type and dimension then exactly this argument has to be provided.
+
+<p>Whenever the bridge determines that a COM object does not
+implement UNO interfaces then it converts a Sequence into a SAFEARRAY
+as described by the type information provided through the object's
+IDispatch interface.
+</P>
+<P>In case IDispatch::Invoke expects an
+argument of type SAFEARRAY(VARIANT) then the UNO clients can provide
+sequence&lt;any&gt; or just sequence&lt;<I>type</I>&gt;, where <I>type
+</I>means the actual UNO type.</P>
+<li>The XBridgeSupplier2::createInstance function returns an any that
+contains the converted element. If the target environment is OLE than
+the any contains an unsigned long that is actually a VARIANT*. The
+VARIANT then contains the converted element  and has never the
+VT_BYREF bit set. Hence it cannot contain another VARIANT.
+</P>
+<P>When a client uses the COM object in an
+UNO environment (through XInvocation) and calls a function that
+requires a VARIANT argument, then the bridge  creates the arguments
+for IDispatch::Invoke as needed.  In this case DISPPARAMS::rgvarg
+would contain a VARIANT with VARTYPE::vt= VT_VARIANT | VT_BYREF. To
+do this the bridge must use type information which is provided
+through IDispatch::Invoke.
+</P>
+</ol>
+
+<h2><a name="a8"> 5 Using the bridge </a></h2>
+
+<p>
+The bridge is automatically used when someone access the
+  Office through the COM mechanism. This is done by creating the service manager
+  component, that has the ProgId <font face="Courier New, monospace">&quot;com.sun.star.ServiceManager&quot;.
+  </font>The service manager can then be used to create additional UNO services.
+  There is no explicit mapping from COM to UNO or vice versa necessary. All objects
+  which have been obtained directly or indirectly from the service manager are
+  already COM objects.
+<p>The ServiceManager implements the <a
+href="http://api.openoffice.org/common/ref/com/sun/star/lang/XMultiServiceFactory.html">
+  XMultiServiceFactory</a> interface, that is used to create UNO services. Bear
+  in mind though, that ServiceManager is a COM object and hence it is to be accessed
+  through the IDispatch interface.</p>
+<p>Example C++:</p>
+
+<pre>
+// create the service manager of OpenOffice
+IDispatch* pdispFactory= NULL;
+CLSID clsFactory= {0x82154420,0x0FBF,0x11d4,{0x83, 0x13,0x00,0x50,0x04,0x52,0x6A,0xB4}};
+hr= CoCreateInstance( clsFactory, NULL, CLSCTX_ALL, __uuidof(IDispatch), (void**)&amp;pdispFactory);
+// create the CoreReflection service
+OLECHAR* funcName= L&quot;createInstance&quot;;
+DISPID id;
+pdispFactory-&gt;GetIDsOfNames( IID_NULL, &amp;funcName, 1, LOCALE_USER_DEFAULT, &amp;id);
+
+VARIANT param1;
+VariantInit( &amp;param1);
+param1.vt= VT_BSTR;
+param1.bstrVal=   SysAllocString( L&quot;com.sun.star.reflection.CoreReflection&quot;);
+DISPPARAMS dispparams= { &amp;param1, 0, 1, 0}; VARIANT result;
+VariantInit( &amp;result);
+hr= pdispFactory-&gt;Invoke( id, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD,
+			  &amp;dispparams, &amp;result, NULL, 0);
+IDispatch* pdispCoreReflection= result.pdispVal;
+pdispCoreReflection-&gt;AddRef();
+// do something with the CoreReflection service
+</pre>
+
+<p> Example JScript:</p>
+
+<pre>
+var factory= new ActiveAObject("com.sun.star.ServiceManager");
+var coreReflection= factory.createInstance("com.sun.star.reflection.CoreReflection");
+// do something with the CoreReflection service
+</pre>
+
+<p>Irrespective of the Office you can map every COM
+  or UNO elements directly by using the com.sun.star.bridge.OleBridgeSupplier2
+  service. The code to convert an UNO service could look like this:</p>
+
+<pre>
+// convert the service xIntServiceX to a dispatch object
+Any any;
+IDispatch* pdisp= NULL;
+any &lt;&lt;= xIntServiceX;
+sal_uInt8 arId[16];
+rtl_getGlobalProcessId( arId);
+Any target= xSuppl-&gt;createBridge( any, Sequence&lt;sal_Int8&gt;( (sal_Int8*)arId, 16), UNO, OLE);
+if (target.getValueTypeClass() == TypeClass_UNSIGNED_LONG) 
+{
+    VARIANT* pVariant = *(VARIANT**)target.getValue();
+    pdisp= pVariant-&gt;pdispVal;
+    pdisp-&gt;AddRef()
+    VariantClear(pVariant);
+    CoTaskMemFree(pVariant);
+}
+
+// do something with pdisp (IDispatch*)
+</pre>
+
+<p> COM objects can be converted as long as they support IDispatch:
+
+<pre>
+// create the COM object
+hr= CoCreateInstance( COMPONENTS_CLSID, NULL,CLSCTX_ALL,
+		      IID_Unknown, (void**) &amp;punk);
+
+// create the service factory
+Reference&lt;XInterface&gt;
+xint= createRegistryServiceFactory( OUString(L&quot;applicat.rdb&quot;));
+Reference&lt;XMultiServiceFactory&gt; factory=
+	Reference&lt;XMultiServiceFactory&gt;( xint, UNO_QUERY);
+
+// create the bridge service
+Reference&lt; XInterface &gt; xIntSupplier= mgr-&gt;createInstance(
+				OUString(L&quot;com.sun.star.bridge.OleBridgeSupplier2&quot;));
+Reference&lt; XBridgeSupplier2 &gt; xSuppl( xIntSupplier, UNO_QUERY);
+
+Any any;
+Variant var;
+VariantInit( &amp;var);
+var.vt= VT_UNKNOWN;
+var.punkVal= punk;
+any &lt;&lt;= ( sal_uInt32)&amp;var;
+sal_uInt8 arId[16];
+rtl_getGlobalProcessId( arId);
+Any target= xSuppl-&gt;createBridge( any, Sequence&lt;sal_Int8&gt;(
+				 (sal_Int8*)arId, 16), OLE, UNO );
+Reference&lt;XInvocation&gt; theObject;
+target&gt;&gt;= theObject;
+
+// theObject contains now the mapped COM object
+</pre>
+
+<p>Apart from objects one can map all the data types
+  as shown in table 1 and table 2.</p>
+
+<p>A "specialization" of the OleBridgeSupplier2
+  service is the OleObjectFactory service. It does basically what the above source
+  sample does; just mapping a COM object to XInvocation.</p>
+
+<h2><a name="a5"> 6 Creation of types </a></h2>
+
+<P>The creation of types of one environment within the same environment
+  is not an issue but it looks different if this is done in another environment.
+  Usually it is not necessary at all because types of one environment are automatically
+  mapped to types of the other environment. In other words, one creates a value
+  of a type which is native to the current environment and passes it to an object
+  function, where the object stems from the other environment. The bridge automatically
+  converts the type if necessary. This even works for UNO interfaces on COM side
+  (see <a href="#a10">chapter 10</a>). But it is a different matter with UNO structs. When a struct
+  is mapped from UNO to COM then it is encapsulated by an dispatch object and
+  when this object is passed back to UNO then the original struct is extracted.
+  If an UNO object function takes a struct as argument, then it it not possible
+  to create a dispatch object and pass it as the respective argument. This functionality
+  has not been implemented yet. Instead there are two ways of creating structs
+  in the COM environment. First one can make use of the com.sun.star.CoreReflection
+  service:</P>
+
+<pre>
+// create the service manager of OpenOffice
+IDispatch* pdispFactory= NULL;
+CLSID clsFactory= {0x82154420,0x0FBF,0x11d4,{0x83, 0x13,0x00,0x50,0x04,0x52,0x6A,0xB4}};
+hr= CoCreateInstance( clsFactory, NULL, CLSCTX_ALL, __uuidof(IDispatch), (void**)&amp;pdispFactory);
+
+// create the CoreReflection service
+OLECHAR* funcName= L&quot;createInstance&quot;;
+DISPID id;
+pdispFactory-&gt;GetIDsOfNames( IID_NULL, &amp;funcName, 1, LOCALE_USER_DEFAULT, &amp;id);
+
+VARIANT param1;
+VariantInit( &amp;param1);
+param1.vt= VT_BSTR;
+param1.bstrVal=   SysAllocString( L&quot;com.sun.star.reflection.CoreReflection&quot;);
+DISPPARAMS dispparams= { &amp;param1, 0, 1, 0}; VARIANT result;
+VariantInit( &amp;result);
+hr= pdispFactory-&gt;Invoke( id, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD,
+			  &amp;dispparams, &amp;result, NULL, 0);
+IDispatch* pdispCoreReflection= result.pdispVal;
+pdispCoreReflection-&gt;AddRef();
+VariantClear( &amp;result);
+
+// create the struct's idl class object
+OLECHAR* strforName= L&quot;forName&quot;;
+hr= pdispCoreReflection-&gt;GetIDsOfNames( IID_NULL, &amp;strforName, 1, LOCALE_USER_DEFAULT, &amp;id);
+VariantClear( &amp;param1);
+param1.vt= VT_BSTR;
+param1.bstrVal= SysAllocString(L&quot;com.sun.star.beans.PropertyValue&quot;);
+hr= pdispCoreReflection-&gt;Invoke( id, IID_NULL, LOCALE_USER_DEFAULT,
+				DISPATCH_METHOD, &amp;dispparams, &amp;result, NULL, 0);
+
+IDispatch* pdispClass= result.pdispVal;
+pdispClass-&gt;AddRef();
+VariantClear( &amp;result);
+
+// create the struct
+OLECHAR* strcreateObject= L&quot;createObject&quot;;
+hr= pdispClass-&gt;GetIDsOfNames( IID_NULL,&amp;strcreateObject, 1, LOCALE_USER_DEFAULT, &amp;id)
+
+IDispatch* pdispPropertyValue= NULL;
+VariantClear( &amp;param1);
+param1.vt= VT_DISPATCH | VT_BYREF;
+param1.ppdispVal= &amp;pdispPropertyValue;
+hr= pdispClass-&gt;Invoke( id, IID_NULL, LOCALE_USER_DEFAULT,
+		DISPATCH_METHOD, &amp;dispparams, NULL, NULL, 0);
+
+// do something with the struct pdispPropertyValue
+
+
+pdispPropertyValue-&gt;Release();
+pdispClass-&gt;Release();
+pdispCoreReflection-&gt;Release();
+pdispFactory-&gt;Release();
+</pre>
+
+<p>A simpler way is to use the _GetStruct function which every UNO
+object in a COM environment provides.
+</p>
+
+<pre>
+// object be some UNO object in a  COM environment
+OLECHAR* strstructFunc= L&quot;_GetStruct&quot;;
+hr= object-&gt;GetIDsOfNames( IID_NULL, &amp;strstructFunc, 1, LOCALE_USER_DEFAULT, &amp;id);
+
+VariantClear(&amp;result);
+VariantClear( &amp;param1);
+param1.vt= VT_BSTR;
+param1.bstrVal= SysAllocString(
+L&quot;com.sun.star.beans.PropertyValue&quot;);
+hr= object-&gt;Invoke( id, IID_NULL,LOCALE_USER_DEFAULT, DISPATCH_METHOD,
+			&amp;dispparams, &amp;result, NULL, 0);
+
+IDispatch* pdispPropertyValue= result.pdispVal;
+pdispPropertyValue-&gt;AddRef();
+
+// do something with the struct pdispPropertyValue
+</pre>
+
+<h2><a name="a6"> 7 JScript issues </a></h2>
+
+<P>
+JScript does not offer
+arrays in a way as C or C++ do. Instead it provides the Array object
+which acts as array but is actually a dispatch object. Therefore an
+UNO object in the COM environment receives an dispatch object when it
+is used in JScript and an Array object has been passed into a
+function of that object.
+</p>
+
+<pre>
+// JScript
+var param= new Array(1,2,3);
+// object is an UNO object
+object.function( param);
+</pre>
+
+<P>JScript does not has out or in/out parameter. To create those
+parameters we use Array objects. The value on index 0 (actually
+property "0") contains the out- value after return of the
+function.
+</p>
+
+<pre>
+var out= new Array();
+object.functionOut(out);
+var value= out[0];
+</pre>
+
+<P>If an in/out parameter is needed then the in-value is set at index[0].</P>
+
+<pre>
+var inout= new Array();
+inout[0]=123;
+object.functionInOut( inout);
+var value= inout[0];
+</pre>
+
+<P>Whenever the bridge has to convert a dispatch object
+  then it first has to find out what the object actually represents (object,
+  array, out parameter, in/out parameter) to do an appropriate conversion. This
+  is done by acquiring type information, which itself is not problematic but in
+  a remote environment it causes additional network traffic.To avoid this one
+  could use Value Objects (see <a href="#a6">chapter 7</a>). Such an object can be used in place
+  of every other parameter in a COM environment. The script programmer sets the
+  type and value of this object, so that the bridge implementation knows what
+  the value actually stands for. </P>
+
+<P>JScript always uses doubles whenever it
+encounters floating point values. When a UNO function is called which
+actually takes a float as parameter, then the bridge does a
+conversion by using the Windows function VariantChangeType. This
+could cause a change of the value depending on the format of the
+number used in the script.</p>
+
+<p>When a UNO function returns a float or
+has a float as out-parameter then the conversion is put off to
+JScript. The results of this conversion most certainly does not match
+the expected value. In a test a UNO function has been called with the
+number1.234567 where the function expected a float. The function then
+returned that value as float. JScript receives in this case a  value
+of 1.2345670461654663.</P>
+
+<P>A similar situation exist with integer values. JScript
+  exclusively uses 32 bit integer values. The bridge tries to convert to a smaller
+  type if necessary. This works fine as long as the numbers used in JScript correspond
+  to the value range of the parameter type of the respective UNO function argument.</P>
+
+<h2><a name="a7"> 8 Value Objects </a></h2>
+
+<h3>8.1 Motivation</h3>
+
+<P>An UNO object used in JavaScript is wrapped by an object that is COM compatible
+  in that it exposes <CODE>IDispatch</CODE>. Such wrapper may be referred to as
+  uno wrapper in this document. Every access on a uno wrapper within Java Script
+  causes ultimately a call to <CODE>IDispatch::GetIDsOfNames </CODE>and on success
+  <CODE>IDispatch::Invoke</CODE> is called. The parameters are passed as <CODE>VARIANT</CODE>
+  s and are converted into <CODE>Any</CODE> s and a <CODE>Sequence</CODE>, in
+  and in/out parameter are treated much differently in the process. The problem
+  now is how to recognise the kind of the parameter because they are all represented
+  by <CODE>IDispatch</CODE> objects (<CODE>VT_DISPATCH</CODE>). To solve this
+  problem every time an <CODE>IDispatch</CODE> is to be converted it is checked
+  what kind of parameter this parameter is expected to be and the conversion goes
+  accordingly. For this it is necessary to acquire type information that is usually
+  provided by the office application. In a remote scenario several network round trips
+  would be required to deliver those information to the client. To prevent a severe
+  performance impact it is desirable to dispense with type information. "ValueObjects"
+  are a means to come close to that requirement.</P>
+
+<h3>8.2 The Value Object</h3>
+<P>A ValueObject is an object that acts as a value of a certain type and can be
+  passed to UNO functions instead of the actual parameter. A ValueObject is passed
+  to the wrapper as <CODE>IDispatch</CODE>. The uno wrapper queries every <CODE>IDispatch</CODE>
+  parameter for the <CODE>IJScriptValueObject</CODE> interface and if that interface
+  is being returned than the wrapper has a means to find out the exact type by
+  using that interface and is not dependent on type information provided by the
+  office application. ValueObjects and other parameters can be used interchangeably.</p>
+<h3>8.3 Creation</h3>
+<P>Every UNO object used by JavaScript is capable of delivering
+ValueObjects. To obtain one imply call _GetValueObject:</P>
+
+<Pre>
+// object is some uno wrapper object
+var valueObject= object._GetValueObject();
+</pre>
+
+<h3>8.4 The Interface of the Value Object</h3>
+<P>A Value Object is actually an instance of class <CODE>JScriptValue</CODE> that
+  implements <CODE>IDispatch</CODE> and <CODE>IJScriptValueObject</CODE>. The
+  <CODE>IJScriptValueObject</CODE> looks like:</P>
+
+<pre>
+MIDL_INTERFACE(&quot;e40a2331-3bc1-11d4-8321-005004526ab4&quot;)
+IJScriptValueObject: public IUnknown
+{
+    STDMETHOD( Set)( VARIANT type,  VARIANT value)= 0;
+    STDMETHOD( Get)( /*out*/ VARIANT *val)= 0;
+    STDMETHOD( InitOutParam)()= 0;
+    STDMETHOD( InitInOutParam)( VARIANT type, VARIANT value)= 0;
+    STDMETHOD( IsOutParam)( /*out*/ VARIANT_BOOL* flag)= 0;
+    STDMETHOD( IsInOutParam)( /*out*/VARIANT_BOOL * flag)= 0;
+    STDMETHOD( GetValue)( /*out*/ BSTR* type,/*out*/ VARIANT *value)= 0;
+};
+</pre>
+
+<P><code>IJScriptValueObject::Set</code>: Sets
+a value and specifies its type. The param "<CODE>type</CODE>"
+specifies the type by a string and the parameter "<CODE>value</CODE>"
+contains the value. Usable in JavaScript.</P>
+<P><code>IJScriptValueObject::Get: </code>Delivers
+the value that is contained in the ValueObject. Usable in JavaScript.</P>
+<P><code>IJScriptValueObject::InitOutParam: </code>Stipulates
+the ValueObject to represent an out parameter. Usable in JavaScript.</P>
+
+<P><code>IJScriptValueObject::InitInOutParam:
+</code>Stipulates the ValueObject to
+represent an in/out parameter. Usable in JavaScript.</P>
+<P><code>IJScriptValueObject::IsOutParam:
+</code>Returns a boolean (as out
+parameter)indicating whether the ValueObject acts as out parameter or
+not. A return value of true means the object is an out parameter. Not
+for use in JavaScript.</P>
+<P><code>IJScriptValueObject::IsInOutParam: </code>Returns a boolean
+(as out parameter) indicating whether the ValueObject acts as
+in/out parameter or not. A return value of true means the objects is
+an in/out parameter. Not for use in JavaScript.</P>
+<p><code>IJScriptVal</code>v<code>ueObject::GetValue: </code> Returns the type
+and value of the ValueObject as out parameter. Not for use in JavaScript. As
+seen in the above function descriptions only <CODE>Get</CODE>,
+<CODE>Set</CODE>, <CODE>InitInOutParam</CODE>
+and <CODE>InitOutParam</CODE> can be used in JavaScript. To be more exact these
+functions are exposed by <CODE>IDispatch</CODE>.
+
+<h3>8.5 Supported Types</h3>
+
+<P>When setting the ValueObject to a value the type is determined by
+a string that is passed as first parameter in the Set function. The
+table below shows what strings are currently accepted (column name).</P>
+
+<TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=1 summary="Table of supported types">
+  <COL WIDTH=85* /> <COL WIDTH=85* /> <COL WIDTH=85* /> <THEAD bgcolor=#eeeeee>
+  <TR>
+    <TH> Name </TH>
+    <TH> Type </TH>
+    <TH> TypeClass </TH>
+  </TR>
+  </THEAD> <TBODY bgcolor=#eeeeff>
+  <TR>
+    <TD> char </TD>
+    <TD> sal_Unicode </TD>
+    <TD> TypeClass_CHAR </TD>
+  </TR>
+  <TR>
+    <TD> boolean </TD>
+    <TD> sal_Bool </TD>
+    <TD> TypeClass_BOOL </TD>
+  </TR>
+  <TR>
+    <TD> byte </TD>
+    <TD> sal_Int8 </TD>
+    <TD> TypeClass_BYTE </TD>
+  </TR>
+  <TR>
+    <TD> short </TD>
+    <TD> sal_Int16 </TD>
+    <TD> TypeClass_SHORT </TD>
+  </TR>
+  <TR>
+    <TD> unsigned short </TD>
+    <TD> sal_uInt16 </TD>
+    <TD> TypeClass_UNSIGNED_SHORT </TD>
+  </TR>
+  <TR>
+    <TD> long </TD>
+    <TD> sal_Int32 </TD>
+    <TD> TypeClass_LONG </TD>
+  </TR>
+  <TR>
+    <TD> unsigned long </TD>
+    <TD> sal_uInt32 </TD>
+    <TD> TypeClass_UNSIGNED_LONG </TD>
+  </TR>
+  <TR>
+    <TD> string </TD>
+    <TD> OUString </TD>
+    <TD> TypeClass_STRING </TD>
+  </TR>
+  <TR>
+    <TD> float </TD>
+    <TD> float </TD>
+    <TD> TypeClass_FLOAT </TD>
+  </TR>
+  <TR>
+    <TD> double </TD>
+    <TD> double </TD>
+    <TD> TypeClass_DOUBLE </TD>
+  </TR>
+  <TR>
+    <TD> any </TD>
+    <TD> Any </TD>
+    <TD> TypeClass_ANY </TD>
+  </TR>
+  <TR>
+    <TD> object </TD>
+    <TD> XInterface </TD>
+    <TD> TypeClass_INTERFACE </TD>
+  </TR>
+  </TBODY>
+</TABLE>
+
+<P>Sequences are represented by prepending &quot;[]&quot;, e.g. []char, [][]byte,
+  [][][]object, etc.</P>
+
+<h3>8.6 Usage</h3>
+<OL>
+	<LI><P>Sequence:
+
+
+<pre>
+// object is an UNO object
+var value= object._GetValueObject();
+var array= new Array(1,2,3);
+value.Set(&quot;[]short&quot;,array);
+object.function( value);
+</pre>
+
+<p>The array could also contain ValueObjects if necessary:</p>
+
+<pre>
+var value1= object._GetValueObject();
+var value2= object._GetValueObject();
+value1.Set(&quot;short&quot;, 100);
+value2.Set(&quot;short&quot;, 111);
+var array= new Array();
+array[0]= value1;
+array[1]= value2;
+var allValue= object._GetValueObject();
+allValue.Set(&quot;[]short&quot;, array);
+object.function( allValue);
+</pre>
+
+<LI><P>Out parameter:
+
+<pre>
+// object is an UNO object
+var value= object._GetValueObject();
+value.InitOutParam();
+object.functionOut( value);
+var out= value.Get();
+</pre>
+
+	<LI><P>In / out parameter:
+
+<pre>
+// object is an UNO object
+var value= object._GetValueObject();
+value.InitInOutParam(&quot;long&quot;, 123);
+object.functionInOut( value);
+var out= value.Get();
+</Pre>
+
+</OL>
+
+<h2><a name="a9"> 9 Limitations of the dispatch objects </a></h2>
+
+<P>
+The dispatch objects provided by the bridge do not support type
+information. IDispatch::GetTypeInfoCount and IDispatch::GetTypeInfo
+return  E_NOTIMPL. Moreover there are no COM type libraries available
+and the dispatch objects do not implement IProvideClassInfo as well.
+<P>
+IDispatch::GetIDsOfName has to be called for every name separately.
+That this one cannot query the ids for several names at a time.
+<P>
+IDispatch::Invoke does not support named arguments nor the
+<I>pExcepInfo and puArgErr  </I>parameter.</P>
+
+<h2><a name="a10"> 10 Implementing COM objects with UNO interfaces </a></h2>
+
+<h3>10.1 Intention</h3>
+<P>It is desirable to be able to build COM components which implement
+UNO interfaces. Those components could be employed as listeners (COM:
+event sinks), for numerous broadcasters (COM: event source).</P>
+
+<h3>10.2 Terms and Conventions</h3>
+<P>When speaking of implementing UNO interfaces in COM components, we
+do not imply  the use of interfaces in terms of abstract C++ classes.
+Instead the components have  to implement IDispatch and dispatch
+method calls to functions that have the same names as the respective
+UNO interface functions.</P>
+<P>Basically all interfaces can be implemented as long as the data
+type used in the UNO interfaces can be mapped to OLE automation
+types. The mappings are shown in Table 3. One exception is the
+XInvocation interface. Because it is itself a scripting interface, it
+does not make sense to employ it within a COM component. Assuming
+that someone wants to build a COM component that represents some UNO
+XInvocation implementation then the properties and functions are to
+be directly implemented. That is, IDispatch::Invoke dispatches
+directly to those properties and methods.</P>
+<P>XInterface does not need to be implemented.</P>
+<P>Because the <CODE>queryInterface</CODE> mechanism
+  does not work for COM components with implemented UNO interface, they have to
+  supply a means to proclaim those interfaces. This is achieved by the property
+  &quot;<CODE>_implementedInterfaces</CODE>&quot; that holds an array of strings
+  which contain the fully qualified interface names. The property is not needed
+  when only one interface is supported.</p>
+
+<h3>10.3 Components in C++</h3>
+
+<P>To build a component with C++ one can write the component from
+scratch or use some kind of framework, where Microsoft's ATL comes
+in handy. 
+<p>A basic rule with implementing <CODE>IDispatch</CODE>
+is that all parameters (meaning the actual arguments to the function
+that is called in turn) are converted into the types that the
+component expects. Although the OLE Bridge does not just pass
+arguments with the type VT_VARIANT |VT_BYREF but instead the actual
+type (see mapping table) it is still good practice to convert
+parameters within the IDispatch::Invoke implementation.
+</P>
+<P>When using ATL there is no need to bother about this as long as
+one uses a dual interface. Then the parameters correspond to the
+types as shown in table ...</p>
+<p>A COM component is free to support as
+many UNO interfaces as it needs to but an ATL component just needs to
+implement one dual interface. All UNO interface functions have to be
+put in that dual. In fact there is no other way because ATL can only
+expose one <CODE>IDispatch</CODE>.</P>
+
+<TABLE WIDTH=100% CELLPADDING=4 CELLSPACING=1 summary="OLE to UNO type map">
+  <COL WIDTH=128* /> <COL WIDTH=128* /> <THEAD bgcolor=#eeeeee>
+  <TR>
+    <TH> UNO Type Class </TH>
+    <TH> OLE Automation Type as  VARTYPE </TH>
+  </TR>
+	</THEAD>
+	<TBODY bgcolor=#eeeeff>
+
+  <TR>
+    <TD> INTERFACE </TD>
+    <TD> VT_DISPATCH (IDispatch*) </TD>
+	</TR>
+
+  <TR>
+    <TD> STRUCT </TD>
+    <TD> VT_DISPATCH (IDispatch*) </TD>
+	</TR>
+
+  <TR>
+    <TD> ENUM </TD>
+    <TD> VT_I4 (long) </TD>
+	</TR>
+
+  <TR>
+    <TD> BOOLEAN </TD>
+    <TD> VT_BOOL (VARIANT_BOOL) </TD>
+	</TR>
+
+  <TR>
+    <TD> STRING </TD>
+    <TD> VT_BSTR (BSTR) </TD>
+	</TR>
+
+  <TR>
+    <TD> FLOAT </TD>
+    <TD> VT_R4 (float) </TD>
+	</TR>
+
+  <TR>
+    <TD> DOUBLE </TD>
+    <TD> VT_R8 (double) </TD>
+	</TR>
+
+  <TR>
+    <TD> CHAR </TD>
+
+    <TD> VT_I2 (short) </TD>
+	</TR>
+
+  <TR>
+    <TD> BYTE </TD>
+
+    <TD> VT_UI1 (unsigned char) </TD>
+	</TR>
+
+  <TR>
+    <TD> SHORT </TD>
+    <TD> VT_I2 (short) </TD>
+	</TR>
+
+  <TR>
+    <TD> UNSIGNED_SHORT </TD>
+    <TD> VT_I2 (short) </TD>
+	</TR>
+
+  <TR>
+    <TD> LONG </TD>
+    <TD> VT_I4 (long) </TD>
+	</TR>
+
+  <TR>
+    <TD> UNSIGNED_LONG </TD>
+    <TD> VT_I4 (long) </TD>
+	</TR>
+
+  <TR>
+    <TD> SEQUENCE </TD>
+    <TD> VT_ARRAY |  VT_VARIANT </TD>
+	</TR>
+
+  <TR>
+    <TD> ANY </TD>
+    <TD> VT_VARIANT </TD>
+	</TR>
+	</TBODY>
+</TABLE>
+
+<P STYLE="margin-top: 0.08in"><FONT SIZE=2><I>Table 3</I></FONT></P>
+
+<P>Whenever out or in/out parameter are used then the VARTYPEs above are or'd
+  with VT_BYREF.</P>
+<P>E.g. there is an UNO interface with this idl description:
+</p>
+
+<pre>
+interface XSimple : public com.sun.star.uno.XInterface
+{
+    void func1( [in] long val, [out] long outVal);
+    void func2( [in] sequence&lt; long &gt; val, [out] sequence&lt; long &gt; outVal);
+};
+</pre>
+
+<P>The MS IDL description (for an ATL
+component with a dual interface) would look like:
+</p>
+
+<pre>
+[
+    object,
+    uuid(xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx),
+    dual,
+    helpstring(&quot;ISimple Interface&quot;),
+    pointer_default(unique)
+]
+interface ISimple : IDispatch
+{
+    [id(1), helpstring(&quot;method func1&quot;)]
+		HRESULT func1( [in] long val, [out] long* outVal);
+    [id(2), helpstring(&quot;method func2&quot;)]
+		HRESULT func2([in] SAFEARRAY(VARIANT) val,
+			[out] SAFEARRAY(VARIANT) * outVal);
+};
+</pre>
+
+<p>
+The property  looks like this:
+</p>
+
+<pre>
+[propget, id(4), helpstring(&quot;property_implementedInterfaces&quot;)]
+	HRESULT	_implementedInterfaces([out, retval] SAFEARRAY(BSTR) *pVal);
+</pre>
+
+<h3>10.4 Components in JScript</h3>
+
+<P>In JScript one does not have to deal with types. Nevertheless it
+is important to know   how arrays, in/out and out parameter are used
+because the usage is rather different.
+</P>
+<P>For in/out and out parameter an object with a property   &quot;0&quot;
+is passed.
+
+<pre>
+function inoutFunction( val )
+{
+    var value= val[0];
+    val[0]= 123;
+}
+
+function outFunction( val)
+{
+    val[0]= 123;
+}
+</pre>
+
+<p>An Array is passed as out parameter:</p>
+
+<pre>
+function outArray( val )
+{
+    val[0]= new Array( 1,2,3);
+}
+</pre>
+
+<p>If a JScript object should implement several interfaces than the
+object has to have the property &quot;_<CODE>implementedInterfaces</CODE>&quot;.
+Additionally a JScript has to support the property &quot;_environment&quot;
+which must have the value &quot;JScript&quot;.
+</p>
+
+<pre>
+function AnObject()
+{
+    this._environment= &quot;JScript&quot;;
+    this._implementedInterfaces= new Array( &quot;XSimple1&quot;,
+				&quot;XSimple2&quot;,&quot;XSimple3&quot;);
+
+// the interface functions
+this.simple1Func= simple1Func;
+this.simple2Func= simple2Func;
+this.simple3Func= simple3Func;
+}
+// XSimple1
+function simpleFunc()
+{
+	...
+}
+// XSimple2
+function simple2Func()
+{
+	...
+}
+// XSimple3
+function simple3Func()
+{
+    ...
+}
+</pre>
+
+<table width=100% cellpadding=4 bgcolor=#666699 summary=footer>
+<tr>
+<TD>
+<FONT color=#ffffff>Author: <A href="mailto:joachim.lingner@germany.sun.com">
+<FONT color=#ffffff>Joachim Lingner</FONT></A>
+($Date: 2004/11/27 13:07:07 $)<br/>
+<I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I></FONT>
+</td></tr></table>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

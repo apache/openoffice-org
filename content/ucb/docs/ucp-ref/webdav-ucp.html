@@ -1,0 +1,359 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>The WebDAV Provider</title>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="AUTHOR" CONTENT="Kai Sommerfeld">
+	<META NAME="CREATED" CONTENT="20000714;12280562">
+	<META NAME="CHANGEDBY" CONTENT="Kai Sommerfeld">
+	<META NAME="CHANGED" CONTENT="20010516;12043631">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm; margin: 2cm }
+		H1 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 16pt }
+		TH P { margin-bottom: 0.21cm; font-style: italic }
+		TD P { margin-bottom: 0.21cm }
+		H2 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 14pt; font-style: italic }
+		P { margin-bottom: 0.21cm }
+		P.sdfootnote { margin-left: 0.5cm; text-indent: -0.5cm; margin-bottom: 0cm; font-size: 10pt }
+		A.sdfootnoteanc { font-size: 57% }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ucb/">ucb</a>&nbsp;&raquo;&nbsp;<a href="/ucb/docs/">docs</a>&nbsp;&raquo;&nbsp;<a href="/ucb/docs/ucp-ref/">ucp-ref</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1>The WebDAV Provider</H1>
+<H2>Preface</H2>
+<P>The WebDAV<A CLASS="sdfootnoteanc" NAME="sdfootnote1anc" HREF="#sdfootnote1sym"><SUP>1</SUP></A>
+Content Provider (DCP) implements a Content Provider for the
+Universal Content Broker (UCB). It provides access to WebDAV and
+standard HTTP servers. The DCP communicates with the server using the
+WebDAV protocol which is an extention to the HTTP protocol or using
+the plain HTTP protocol in case the server is not WebDAV enabled. 
+</P>
+<H2>DCP Contents</H2>
+<P>The DCP provides two types of content: a <B>Folder</B> or <B>Document</B>
+which corresponds to a collection or non-collection (nodes and leafs)
+in WebDAV respectively.</P>
+<OL>
+	<LI><P>A DCP Folder is a container for other DCP Folders or
+	Documents.</P>
+	<LI><P>A DCP Document is a container for Document data/content<SPAN STYLE="font-weight: medium">.
+	The data/content may be anything, a WebDAV server, like an HTTP
+	server, does not necessarily mandate what type of data/content may
+	be contained within Documents. The type of data/content is defined
+	by the <I><FONT FACE="Courier, monospace">MediaType</FONT></I>
+	property which is different from the content type returned from the
+	<FONT FACE="Courier, monospace">getContentType</FONT> method.</SPAN>
+	The <I><FONT FACE="Courier, monospace">MediaType</FONT></I> property
+	is mapped to the equivalent WebDAV property and the WebDAV server
+	calculates the value.</P>
+</OL>
+<P><IMG SRC="webdav-contents.gif" NAME="Graphic1" ALIGN=LEFT WIDTH=446 HEIGHT=199 BORDER=0><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<H2><BR><BR>
+</H2>
+<H2><BR><BR>
+</H2>
+<H2><BR><BR>
+</H2>
+<H2><BR><BR>
+</H2>
+<H2>Creation Of New DCP Contents</H2>
+<P>DCP Folders implement the interface <FONT FACE="Courier, monospace">XContentCreator</FONT>.
+DCP Documents and DCP Folders support the command&#132;<I><FONT FACE="Courier, monospace">insert</FONT></I>.
+To create a new child of a DCP Folder:</P>
+<OL>
+	<LI><P>Let the parent folder create a new content by calling its
+	<FONT FACE="Courier, monospace">createNewContent</FONT> method. The
+	content type to use for new folders is
+	<B>application/vnd.sun.star.webdav-collection</B><SPAN STYLE="font-weight: medium">.
+	To create a new document, use the type string
+	</SPAN><B>application/http-content</B><SPAN STYLE="font-weight: medium">.</SPAN></P>
+	<LI><P STYLE="font-weight: medium">Set a title at the new
+	folder/document. ( Let the new child execute a <FONT FACE="Courier, monospace">setPropertyValues</FONT>
+	&#150; command, which sets at least the property&#132;<I><FONT FACE="Courier, monospace">Title</FONT></I>
+	to a non-empty value ).</P>
+	<LI><P><SPAN STYLE="font-weight: medium">Let the new child ( not the
+	parent! ) execute the command &#132;<I><FONT FACE="Courier, monospace">insert</FONT></I>&#147;.
+	This will commit the creation process and persist the newly created
+	content on the WebDAV server</SPAN></P>
+</OL>
+<H2>Authentication</H2>
+<P>DAV resources that require authentication can be accessed using
+the interaction handler mechanism of the UCB. This means, the DAV
+content will call an interaction handler supplied by the client in
+order to let it handle an authentication request. The implementation
+of the interaction handler should be able to collect the user name /
+password from somewhere (i.e. Login Dialog ) and can supply this data
+as an interaction response.</P>
+<H2>Property Handling</H2>
+<P>In addition to the manadatory UCB properties, the DCP supports
+reading and writing all DAV &quot;live&quot; and &quot;dead&quot;
+properties. Some DAV &quot;live&quot; properties are mapped
+additionally to UCB properties and vice versa (i.e. <I>DAV:creationdate</I>
+is mapped to <I>DateCreated</I><SPAN STYLE="font-style: normal">)</SPAN>.
+Adding and removing dead properties is also supported by the
+implementation of  the XPropertyContainer interface of  a DCP
+Content.</P>
+<P><B>Property Values:</B></P>
+<P STYLE="font-weight: medium">The DCP cannot determine the semantics
+of unknown properties. Thus the values of such properties will always
+be presented as plain text ( as they were returned from the server).</P>
+<P><B>Namespaces:</B></P>
+<P>The following namespaces are well-known to the DCP:</P>
+<UL>
+	<LI><P>DAV:</P>
+	<LI><P><A HREF="http://apache.org/dav/props/">http://apache.org/dav/props/</A></P>
+</UL>
+<P>Properties with these namespaces can be addresssed using a UCB
+property name which is the concatenation of namespace and name (i.e.
+DAV:getcontentlength)</P>
+<P>Dead proprties with namespaces that are not well-known to the DCP
+can be addressed using a special UCB property name string, that
+contains both the namespace and the property name. Such a special
+property name string must look as follows:</P>
+<P><B>&lt;prop:the_propname xmlns:prop=&quot;the_namespace&quot;&gt; </B>
+</P>
+<P STYLE="font-weight: medium">The DCP internally applies the
+namespace &quot;<A HREF="http://ucb.openoffice.org/dav/props/">http://ucb.openoffice.org/dav/props/</A>&quot;
+to all UCB property names:</P>
+<UL>
+	<LI><P STYLE="font-weight: medium">that  are not predefined by the
+	UCB API.</P>
+	<LI><P STYLE="font-weight: medium">that do not start with a
+	well-known namespace.</P>
+	<LI><P STYLE="font-weight: medium">that do not use the special
+	property name string to encode namespace and name.</P>
+</UL>
+<P>For example, a client can do an addProperty( ....
+&quot;MyAdditionalProperty&quot; ... ). The resulting DAV property
+will have the name &quot;MyAdditionalProperty&quot;, its namespace
+will be &quot;<A HREF="http://ucb.openoffice.org/dav/props/">http://ucb.openoffice.org/dav/props/</A>&quot;.
+However, the DCP client will never see that namespace. He can always
+use the &quot;simple&quot; name &quot;MyAdditionalProperty&quot;.</P>
+<P STYLE="font-weight: medium"><BR><BR>
+</P>
+<P><B>DAV / UCB Property Mapping:</B></P>
+<TABLE WIDTH=350 BORDER=1 CELLPADDING=4 CELLSPACING=3>
+	<COL WIDTH=164>
+	<COL WIDTH=159>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TD WIDTH=164>
+				<P STYLE="font-weight: medium">DAV:creationdate</P>
+			</TD>
+			<TD WIDTH=159>
+				<P STYLE="font-weight: medium">DateCreated</P>
+			</TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=164>
+				<P STYLE="font-weight: medium">DAV:getlastmodified</P>
+			</TD>
+			<TD WIDTH=159>
+				<P STYLE="font-weight: medium">DateModified</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=164>
+				<P STYLE="font-weight: medium">DAV:getcontenttype</P>
+			</TD>
+			<TD WIDTH=159>
+				<P STYLE="font-weight: medium">MediaType</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=164>
+				<P STYLE="font-weight: medium">DAV:getcontentlength</P>
+			</TD>
+			<TD WIDTH=159>
+				<P STYLE="font-weight: medium">Size</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=164>
+				<P STYLE="font-weight: medium">DAV:resourcetype</P>
+			</TD>
+			<TD WIDTH=159>
+				<P STYLE="font-weight: medium">(used to set IsFolder, IsDocument,
+				ContentType)</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P STYLE="font-weight: medium"> 
+</P>
+<H2>URL Scheme for DCP Contents</H2>
+<P>Each DCP content has an identifier corresponding to the following
+scheme:</P>
+<P>vnd.sun.star.webdav://host:port/&lt;path&gt;</P>
+<P>where &lt;path&gt; is a hierarchical path of the form</P>
+<P>&lt;name&gt;/&lt;name&gt;/.../&lt;name&gt;</P>
+<P>where &lt;name&gt; is a string encoded according to the URL
+conventions.</P>
+<P><B>It is also possible to use standard HTTP-URLs. </B><SPAN STYLE="font-weight: medium">In
+this case the implementation will determine by itself, if the
+requested resource is DAV enabled.</SPAN></P>
+<P><BR><BR>
+</P>
+<P><B>Examples:</B></P>
+<P><B>vnd.sun.star.webdav://localhost/davhome/</B></P>
+<P><B>vnd.sun.star.webdav://davserver.com/Documents/report.sdw</B></P>
+<P><B>http://davserver.com/Documents/report.sdw</B></P>
+<P><BR><BR>
+</P>
+<P STYLE="font-weight: medium">Note the that WebDAV URL namespace
+model is the same as the HTTP URL namespace model.</P>
+<P><BR><BR>
+</P>
+<H2 STYLE="page-break-before: always">Appendix</H2>
+<P>The following table gives an overview of the different DCP
+contents.</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=35*>
+	<COL WIDTH=48*>
+	<COL WIDTH=71*>
+	<COL WIDTH=51*>
+	<COL WIDTH=51*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=14%>
+				<P><BR>
+				</P>
+			</TH>
+			<TH WIDTH=19%>
+				<P>UCB Type</P>
+				<P>(returned by XContent::getContentType )</P>
+			</TH>
+			<TH WIDTH=28%>
+				<P>Properties</P>
+			</TH>
+			<TH WIDTH=20%>
+				<P>Commands</P>
+			</TH>
+			<TH WIDTH=20%>
+				<P>Interfaces</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=14%>
+				<P>Document</P>
+			</TD>
+			<TD WIDTH=19%>
+				<P>application/http-content</P>
+			</TD>
+			<TD WIDTH=28%>
+				<P>[readonly] ContentType</P>
+				<P>[readonly] DateCreated</P>
+				<P>[readonly] DateModified</P>
+				<P>[readonly] IsDocument</P>
+				<P>[readonly] IsFolder</P>
+				<P>[readonly] MediaType</P>
+				<P>[readonly] Size</P>
+				<P>Title</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>getCommandInfo</P>
+				<P>getPropertySetInfo</P>
+				<P>getPropertyValues</P>
+				<P>setPropertyValues</P>
+				<P>insert</P>
+				<P>delete</P>
+				<P>open</P>
+				<P><BR><BR>
+				</P>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>lang::<B>XTypeProvider</B>,</P>
+				<P>lang::<B>XServiceInfo</B></P>
+				<P>lang::<B>XComponent</B></P>
+				<P>ucb::<B>XContent</B></P>
+				<P>ucb::<B>XCommandProcessor</B></P>
+				<P>beans::<B>XPropertiesChangeNotifier</B></P>
+				<P>beans::<B>XPropertyContainer</B></P>
+				<P>beans::<B>XPropertySetInfoChangeNotifier</B></P>
+				<P>ucb::<B>XCommandInfoChangeNotifier</B></P>
+				<P>container::<B>XChild</B></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=14%>
+				<P>Folder</P>
+			</TD>
+			<TD WIDTH=19%>
+				<P>application/vnd.sun.star.webdav-collection</P>
+			</TD>
+			<TD WIDTH=28%>
+				<P>[readonly] ContentType</P>
+				<P>[readonly] DateCreated</P>
+				<P>[readonly] DateModified</P>
+				<P>[readonly] IsDocument</P>
+				<P>[readonly] IsFolder</P>
+				<P>[readonly] MediaType</P>
+				<P>[readonly] Size</P>
+				<P>Title 
+				</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>getCommandInfo</P>
+				<P>getPropertySetInfo</P>
+				<P>getPropertyValues</P>
+				<P>setPropertyValues</P>
+				<P>insert</P>
+				<P>delete</P>
+				<P>open</P>
+				<P>transfer</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P><B>same as DCP Folder</B>, plus 
+				</P>
+				<P>ucb::<B>XContentCreator</B></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<DIV ID="sdfootnote1">
+	<P CLASS="sdfootnote" STYLE="margin-bottom: 0.5cm"><A CLASS="sdfootnotesym" NAME="sdfootnote1sym" HREF="#sdfootnote1anc">1</A>Refer
+	to <A HREF="http://www.webdav.org/">http://www.webdav.org</A> and
+	<A HREF="http://www.fileangel.org/docs/DAV_2min.htm">http://www.fileangel.org/docs/DAV_2min.html</A>
+	for an overview.</P>
+</DIV>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

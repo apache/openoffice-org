@@ -1,0 +1,502 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>How to write a UNO component in Java</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="CLASSIFICATION" CONTENT="Writing a simple UNO component">
+	<META NAME="KEYWORDS" CONTENT="UNO,component">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LINK="#444488" VLINK="#444488" BGCOLOR="#eeeeff">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/java/">java</a>&nbsp;&raquo;&nbsp;<a href="/udk/java/man/">man</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=75>
+	<TR>
+		<TD BGCOLOR="#666699">
+			
+      <H1 ALIGN=CENTER STYLE="margin-top: 0cm; text-decoration: none"><A HREF="http://www.openoffice.org/"><IMG SRC="../../images/open_office_org_logo.gif" NAME="Grafik1" ALT="OpenOffice" ALIGN=RIGHT WIDTH=109 HEIGHT=54 BORDER=0></A><FONT COLOR="#ffffff"><FONT SIZE=6>How 
+        to write a UNO component in Java</FONT></FONT></H1>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 noshade>
+<TABLE WIDTH=68% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+  <COL WIDTH=194*> <COL WIDTH=31*> <COL WIDTH=31*> 
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100% BGCOLOR="#666699"> 
+      <H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><FONT COLOR="#ffffff"><FONT SIZE=4>Contents</FONT></FONT></H3>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100% height="123"> 
+      <p><a href="#Introduction">Introduction</a><br>
+        <a href="#Component">Writing a component</a><br>
+        <a href="#IDL">The UNO Base Interface and IDL</a><br>
+        <a href="#Register"></a><a href="#Register"></a><a href="#Factory">Getting 
+        a factory for the component</a><br>
+        <a href="#Register">Register the component</a><br>
+        <a href="#SeveralServices">Support several services</a><br>
+        <a href="#Build">How to build a component</a><br>
+	<a href="#Deployment">Deployment hints</a></p>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100% BGCOLOR="#666699"> 
+      <H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><FONT COLOR="#ffffff"><font color="#ffffff"><font size=4><a name="Introduction"></a><font color="#ffffff"></font></font></font><FONT SIZE=4>Introduction</FONT></FONT></H3>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100% height="58"> 
+      <P STYLE="margin-bottom: 0cm">In this tutorial the implementation of an 
+        <a href="http://udk.openoffice.org/">UNO</a> component in the programming 
+        language Java is treated. To the better comprehensibility this tutorial 
+        is based on a component for the examination of an object of the <a href="http://api.openoffice.org/">OpenOffice 
+        API</a> (<a href="http://whiteboard.openoffice.org/Inspector/index.html">Instance 
+        Inspector</a>). Components like the Instance Inspector should be accessible 
+        as beans which you can incorporate into your programs. Actually components 
+        implement OpenOffice API services which are an abstract concept providing 
+        certain interfaces and properties. You can receive further information 
+        for the creation of UNO components in the programming language C++ under 
+        the following HTTP address: <a href="http://udk.openoffice.org/cpp/man/component_tutorial.html">http://udk.openoffice.org/cpp/man/component_tutorial.html</a></P>
+    </TD>
+  </TR>
+  <tr> 
+    <td colspan=3 width=100% bgcolor="#666699"> 
+      <h3 align=LEFT style="margin-top: 0cm; text-decoration: none"><font color="#ffffff"><font size=4><a name="Component"></a><font color="#ffffff"></font>Writing 
+        a component</font></font></h3>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3 width=100% height="580"> 
+      <p style="margin-bottom: 0cm">In general a component can be devided into 
+        two main parts and therefore into two classes:</p>
+      <ul>
+        <li>The component as a concrete implementation of the service description: 
+          in order to provide the functional specification all required interfaces 
+          have to be implemented.</li>
+        <li>The factory and the service info: The factory instantiates the component 
+          on demand. It must be an implemetation of the interface <i>com.sun.star.lang.XSingleServiceFactory</i>.</li>
+      </ul>
+      <p>The necessary classes could be nested as follows: </p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="18"> 
+            <pre>
+
+public class InstanceInspector {<br>  static private final boolean DEBUG = false;
+
+  static public class _InstanceInspector implements XInstanceInspector, 
+                                                    XInitialization, 
+                                                    XTypeProvider {
+    static private final String __serviceName = &quot;org.OpenOffice.InstanceInspector&quot;;
+    private XMultiServiceFactory _xMultiServiceFactory;
+    ...
+ 
+    public _InstanceInspector(XMultiServiceFactory xMultiServiceFactory) {
+         _xMultiServiceFactory = xMultiServiceFactory;
+    }
+    
+    public void inspect(java.lang.Object a) throws com.sun.star.uno.RuntimeException {
+      ...
+    }
+    ...
+  }
+  ...
+}</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p>The class <i>InstanceInspector</i> should provide two methods which are 
+        called by the Java Loader. One method (<i><a href="#Factory">__getServiceFactory()</a></i>) 
+        returns a <i><a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XSingleServiceFactory.html">XSingleServiceFactory</a></i> 
+        for creating the component. The other method (<i><a href="#Register">__writeRegistryServiceInfo()</a></i>) 
+        writes the service information into the given registry key.</p>
+      <p>The local class <i>_InstanceInspector</i> implements three interfaces 
+        and is responsible for the concrete implementation of the service description 
+        (method <i>inspect()</i>).</p>
+    </td>
+  </tr>
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100% BGCOLOR="#666699"> 
+      <H3><A NAME="IDL"></A><font color="#ffffff">The UNO Base Interface and IDL</font></H3>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100% height="427"> 
+      <P STYLE="margin-bottom: 0cm">An interface is a collection of methods that 
+        provide a certain functionality. In order to provide a language-independent 
+        programming environment, all interfaces must be described in an interface 
+        definition language (IDL). As a rule, UNO interfaces are specified in 
+        the <a href="http://www.openoffice.org/project/udk/common/man/idl_syntax.html">UNO 
+        IDL</a> and must be derived from a mandatory base interface (<a href="http://api.openoffice.org/common/ref/com/sun/star/uno/XInterface.html">com.sun.star.uno.XInterface</a>). 
+        This base interface provides three methods: queryInterface(), acquire(), 
+        and release(). Because UNO supports multiple interfaces, the queryInterface() 
+        method is necessary for navigating between the different interfaces (comparable 
+        to COM). The acquire() and release() methods handle the life cycle of 
+        UNO objects (global reference counting). Cyclic references are handled 
+        by the <a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XComponent.html">com.sun.star.lang.XComponent 
+        interface</a>. Error handling is based on exceptions. </P>
+      <P STYLE="margin-bottom: 0cm">IDL's similarity with the common programming 
+        language C++ is remarkable, however IDL contains exclusively syntax for 
+        data description and no statements. </P>
+      <P STYLE="margin-bottom: 0cm">The UNO IDL file for the Instance Inspector 
+        could look as follows:</P>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="222"> 
+            <pre>
+
+<font color="#000000">#include &lt;com/sun/star/uno/XInterface.idl&gt; <br>module org { 
+  module OpenOffice { 
+    interface XInstanceInspector: com::sun::star::uno::XInterface { <br>      void inspect( [in] any aInstance );<br>    };
+  };
+};
+</font></pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <P STYLE="margin-bottom: 0cm">The IDL compiler <a href="http://udk.openoffice.org/common/man/tools.html#idlc">idlc</a> 
+        transforms interface definitions written in IDL into urd files (Uno Reflection 
+        Data). The urd files are then going to be merged into the type library 
+        (rdb).</P>
+      <P STYLE="margin-bottom: 0cm">For more details on building a component you 
+        should take a look at the section <a href="#Build">How to build a component</a> 
+        or the document <a href="http://udk.openoffice.org/java/man/map_idl_to_java.html#Mapping%20of%20interface">Mapping 
+        of UNO IDL to Java</a>.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100% BGCOLOR="#666699"> 
+      <H3><A NAME="Factory"></A><FONT COLOR="#ffffff"><FONT FACE="Times New Roman, serif"><FONT SIZE=4><b>Getting 
+        a factory for the component</b></FONT></FONT></FONT></H3>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100% height="387"> 
+      <P STYLE="margin-bottom: 0cm">The Service Manager is the central location 
+        where components are instantiated. It comes with a list of all available 
+        services registered. If a component is requested the Service Manager searches 
+        its list for a given service, in order to get the assigned factory. The 
+        Java Loader extracts the factory of a component with the aid of a static 
+        method called <i>__getServiceFactory</i>. This method should be implemented 
+        to return a customized factory for the component. Otherwise the Java Loader 
+        will return a default factory.</P>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="18"> 
+            <pre>
+
+// Gives a factory for creating the service. 
+// This method is called by the JavaLoader 
+public static XSingleServiceFactory __getServiceFactory(String implName,
+                                                        XMultiServiceFactory multiFactory,
+                                                        XRegistryKey regKey) { 
+  XSingleServiceFactory xSingleServiceFactory = null;         
+  if (implName.equals(_InstanceInspector.class.getName()) ) 
+    xSingleServiceFactory = FactoryHelper.getServiceFactory(_InstanceInspector.class,
+                                                            _InstanceInspector.__serviceName,
+                                                            multiFactory,
+                                                            regKey); 
+  return xSingleServiceFactory; 
+} </pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p>A special class <i>FactoryHelper</i> provides methods for implementing 
+        components. This class has default implementations for getting the service 
+        factory (method <i>__getServiceFactory</i>) and for writing the service 
+        info into the registry (method <i>writeRegistryServiceInfo</i>). Please note,
+	if you implement the service as inner class, then it must be a static inner
+	class. If not, then the constructors of the inner class expect an instance of
+	the outer class as first parameter. However, the FactoryHelper class cannot
+	provide one.</p>
+      <p>The field <i>__serviceName</i> in your class should specifiy the name 
+        of your service.</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="32"> 
+            <pre>
+
+static private final String __serviceName = &quot;org.OpenOffice.InstanceInspector&quot;;</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p>If the property is not specified the default factory sets the components 
+        name (class name) as the service name.</p>
+    </TD>
+  </TR>
+  <tr> 
+    <td colspan=3 width=100% bgcolor="#666699"> 
+      <h3><a name="Register"></a><font color="#ffffff"><font face="Times New Roman, serif"><font size=4><b>Register 
+        the component</b></font></font></font></h3>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3 width=100% height="129"> 
+      <p style="margin-bottom: 0cm">Every component should be registered with 
+        its implementation name for the service. Therefore the method <i>__writeRegistryServiceInfo</i> 
+        is responsible for writing the service information into the registry. Registration tools,such
+	as regcomp.exe, need to know what java class contains that method. This information has to be
+	placed into the manifest file. The entry has this format: <br>
+	RegistrationClassName: TheNameOfTheClass <br>
+	</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="18"> 
+            <pre>
+
+// Writes the service information into the given registry key.
+// This method is called by the JavaLoader
+public static boolean __writeRegistryServiceInfo(XRegistryKey regKey)          {
+  return FactoryHelper.writeRegistryServiceInfo(_InstanceInspector.class.getName(),
+                                                _InstanceInspector.__serviceName,
+                                                regKey);
+}</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3 width=100% bgcolor="#666699"> 
+      <h3><a name="SeveralServices"></a><font color="#ffffff"><font face="Times New Roman, serif"><font size=4><b>Supporting 
+        several services</b></font></font></font></h3>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3 width=100% height="109"> 
+      <p style="margin-bottom: 0cm">If the component should support more than 
+        one service all these services should be specified in the field <i>__serviceName</i>.</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="18"> 
+            <pre>
+
+static private final String[] __serviceName = { &quot;com.sun.star.X&quot;, &quot;com.sun.star.Y&quot; };</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p>Furthermore the component should be able to access the service manager. 
+        In order to set the service manager at the component the default factory 
+        uses the optional method <i>__setServiceManager</i>.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3 width=100% bgcolor="#666699"> 
+      <h3><a name="Build"></a><font color="#ffffff"><font face="Times New Roman, serif"><font size=4><b>How 
+        to build a component</b></font></font></font></h3>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3 width=100% height="468"> 
+      <p style="margin-bottom: 0cm">The following steps describe the build process 
+        by the example of the <a href="http://whiteboard.openoffice.org/Inspector/index.html">Instance 
+        Inspector</a> with the operating system Windows. First you should set 
+        the necessary variables. Perhaps you should adapt also the following commands 
+        to other operating systems requirements.</p>
+      <p style="margin-bottom: 0cm">The idl compiler <a href="http://udk.openoffice.org/common/man/tools.html#idlc">idlc</a> 
+        transforms the interface definitions written in idl into an urd file:</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="18"> 
+            <pre>
+
+idlc -I%ODKPATH%\idl .\XInstanceInspector.idl
+</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p>The urd file is then going to be merged into the type library (rdb):</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="18"> 
+            <pre>
+
+regmerge .\Types.rdb /UCR .\XInstanceInspector.urd</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p><a href="http://udk.openoffice.org/common/man/tools.html#regmerge">Regmerge</a> 
+        is a small tool to merge different registry files under a specified key 
+        into another registry file:</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="18"> 
+            <pre>
+
+regmerge %OFFICEPROGRAMPATH%\applicat.rdb / .\Types.rdb</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p>The <a href="http://udk.openoffice.org/common/man/tools.html#javamaker">javamaker</a> 
+        generates the appropriate java file for each idl type:</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="18"> 
+            <pre>
+
+javamaker -Torg.OpenOffice.XInstanceInspector -BUCR .\Types.rdb 
+                                                  %ODKPATH%\windows\bin\applicat.rdb</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p>Compile the java files:</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="18"> 
+            <pre>
+
+javac -g -deprecation -classpath %OFFICEPROGRAMPATH%\classes\ridl.jar;
+                                 %OFFICEPROGRAMPATH%\classes\jurt.jar;
+                                 %OFFICEPROGRAMPATH%\classes\unoil.jar 
+                                 .\org\OpenOffice\XInstanceInspector.java 
+                                 .\InstanceInspector.java</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p>Use the existing manifest file 'Manifest' and archive all the java files 
+        into 'InstanceInspector.jar':<br>
+      </p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="18"> 
+            <pre>
+
+jar -cvfm .\InstanceInspector.jar .\Manifest 
+          .\org\OpenOffice\XInstanceInspector.class
+          .\InstanceInspector.class 
+          .\InstanceInspector$_InstanceInspector.class 
+          .\InstanceInspector$1.class 
+          .\InstanceInspector$2.class 
+          .\InstanceInspector$3.class 
+          .\InstanceInspector$4.class</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p>Registering the service, id est the jar-file:<br>
+      </p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="18"> 
+            <pre>
+
+java -classpath %OFFICEPROGRAMPATH%\classes\unoil.jar;
+                %OFFICEPROGRAMPATH%\classes\sandbox.jar;
+                %OFFICEPROGRAMPATH%\classes\jut.jar;
+                %OFFICEPROGRAMPATH%\classes\java_uno.jar;
+                %OFFICEPROGRAMPATH%\classes\ridl.jar;
+                %OFFICEPROGRAMPATH%\classes\jurt.jar;
+                %OFFICEPROGRAMPATH%\classes\juh.jar 
+                com.sun.star.tools.uno.RegComp %OFFICEPROGRAMPATH%\applicat.rdb register 
+                &quot;file:///e:/Trash/InstanceInspector.jar&quot; com.sun.star.loader.Java2</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+    </td>
+  </tr>
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100% height="16"> 
+      <P>&nbsp; </P>
+    </TD>
+  </TR>
+  </TR>
+    <tr> 
+    <td colspan=3 width=100% bgcolor="#666699"> 
+      <h3><a name="Deployment"></a><font color="#ffffff"><font face="Times New Roman, serif"><font size=4><b> 
+        Deployment hints</b></font></font></font></h3>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3 width= 100%>
+    All interfaces, which are used by the component, have to be known to the Java Virtual Machine. 
+    The standard interfaces are contained in the ridl.jar file. That jar is always in the classpath
+    and hence the VM can locate the interface classes. <br />
+    If you define your own interfaces, then you usually do not want to put them into the ridljar
+    (builds ridl.jar) project from the beginning. Instead you probably like to keep them in the jar
+    file of your component, or in a separate class or jar file during development. If the latter is
+    the case, then you must make sure that the interfaces are in the classpath during registration
+    and when running your component. This can be achieved by editing the SytemClasspath entry (office_dir\user\config\java.ini, or javarc) or
+    the user classpath in the options dialog (tools menu, StarOffice/Security). <br />
+    Also, do not forget to merge the interface with the applicat.rdb.
+</td>
+</tr>
+    <TR> 
+    <TD COLSPAN=3 WIDTH=100%> 
+      <HR SIZE=1 noshade>
+    </TD>
+  <TR> 
+    <TD WIDTH=50% BGCOLOR="#666699"> 
+      <P ALIGN=LEFT><FONT COLOR="#ffffff"> Author: <A HREF="mailto:Bertram.Nolte@germany.sun.com"><FONT COLOR="#ffffff">Bertram 
+        Nolte</FONT></A> ( 
+        <!-- #BeginDate format:IS1m -->2002-01-11  10:29<!-- #EndDate -->
+        )<BR>
+        <I>Copyright 2002 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, 
+        CA 94303 USA.</I></FONT> </P>
+    </TD>
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100%> 
+      <HR SIZE=1 noshade>
+    </TD>
+  </TR>
+</TABLE>
+<HR SIZE=3 noshade>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

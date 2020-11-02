@@ -1,0 +1,406 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>JURT (Java Uno RunTime)</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="CLASSIFICATION" CONTENT="Writing a simple UNO component">
+	<META NAME="KEYWORDS" CONTENT="UNO,component">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LINK="#444488" VLINK="#444488" BGCOLOR="#eeeeff">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/java/">java</a>&nbsp;&raquo;&nbsp;<a href="/udk/java/man/">man</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=75>
+	<TR>
+		
+    <TD BGCOLOR="#666699"> 
+      <H1 ALIGN=CENTER STYLE="margin-top: 0cm; text-decoration: none"><A HREF="http://www.openoffice.org/"><IMG SRC="../../images/open_office_org_logo.gif" NAME="Grafik1" ALT="OpenOffice" ALIGN=RIGHT WIDTH=109 HEIGHT=54 BORDER=0></A><font color="#ffffff" size=6>JURT 
+        (Java Uno RunTime)</font><FONT COLOR="#ffffff"></FONT></H1>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 noshade>
+<TABLE BORDER=0 CELLPADDING=4 CELLSPACING=0 WIDTH=100%>
+  <COL WIDTH=194*> <COL WIDTH=31*> <COL WIDTH=31*> 
+  <TR> 
+    <TD COLSPAN=3 BGCOLOR="#666699"> 
+      <H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><FONT COLOR="#ffffff"><FONT SIZE=4>Contents</FONT></FONT></H3>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3> 
+      <p><a href="#Introduction">Introduction</a><br>
+        <a href="#Introduction">Documentation</a><br>
+        <a href="#BaseFunctionality"></a><a href="#BaseServices">Base services</a><br>
+        <a href="#BaseFunctionality">Base functionality</a><br>
+        <a href="#Register"></a><a href="#Register"></a><a href="#Integration">Java 
+        integration </a><br>
+        <a href="#RemoteAPI">Remote API</a><br>
+        <a href="#WritingProtocols">How to write a protocol with the remote API</a><br>
+        <a href="#WritingBridges">How to write a bridge with the remote API</a></p>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 BGCOLOR="#666699"> 
+      <H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><FONT COLOR="#ffffff"><font color="#ffffff"><font size=4><a name="Introduction"></a><font color="#ffffff"></font></font></font><FONT SIZE=4>Introduction</FONT></FONT></H3>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 height="47"> 
+      <P STYLE="margin-bottom: 0cm">JURT is the core of Java-UNO and the Java 
+        UNO language binding. It includes base functionality for accessing bridges/mappings 
+        and environments. Also some basic components are placed here (like components 
+        placed in stoc for binary uno).<br>
+        Since JURT is still in a development process, so far in the documentation 
+        (<a href="../ref/overview-tree.html">hierarchy</a> for all packages) 
+        only already final classes were considered. Therefore, you should visit 
+        this Internet page after a certain time interval again. </P>
+      </TD>
+  </TR>
+  <tr> 
+    <td colspan=3 bgcolor="#666699"> 
+      <h3 align=LEFT style="margin-top: 0cm; text-decoration: none"><font color="#ffffff"><font size=4><a name="BaseServices"></a>Base 
+        services</font></font></h3>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3 height="180"> 
+      <p>JURT provides the following services: 
+      <table border="1">
+        <tr> 
+          <td><b>Service</b></td>
+          <td><b>Description</b></td>
+        </tr>
+        <tr bgcolor="#FFFFCC"> 
+          <td><a href=../ref/com/sun/star/comp/bridgefactory/package-tree.html>BridgeFactory</a></td>
+          <td>Allows to create new or access existing interprocess bridges.</td>
+        </tr>
+        <tr> 
+          <td><a href=../ref/com/sun/star/comp/servicemanager/package-tree.html>ServiceManager</a></td>
+          <td>Provides a collection of implementations for services.</td>
+        </tr>
+        <tr bgcolor="#FFFFCC"> 
+          <td><a href=../ref/com/sun/star/comp/loader/package-tree.html>JavaLoader</a></td>
+          <td>Makes it possible to access the services implemented in a Java class 
+            file.</td>
+        </tr>
+        <tr> 
+          <td><a href="../ref/com/sun/star/comp/helper/package-tree.html">Helper</a></td>
+          <td>Allows to bootstrap a servicemanager with the jurt base components 
+            registered. </td>
+        </tr>
+        <tr bgcolor="#FFFFCC"> 
+          <td><a href="../ref/com/sun/star/comp/security/package-tree.html">Security</a> 
+            / <a href="../ref/com/sun/star/comp/security/auth/login/package-tree.html">Login</a></td>
+          <td>Access control, login context</td>
+        </tr>
+        <tr> 
+          <td><a href=../ref/com/sun/star/comp/urlresolver/package-tree.html>UnoUrlResolver</a></td>
+          <td>Provides the ability to access outer processes, resolving them by 
+            their name.</td>
+        </tr>
+        <tr bgcolor="#FFFFCC"> 
+          <td><a href="../ref/com/sun/star/comp/connections/package-tree.html">Acceptor/Connector</a></td>
+          <td>The base connector and acceptor services are defined to delegate 
+            to custom services.</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <TR> 
+    <TD COLSPAN=3 BGCOLOR="#666699"> 
+      <H3><A NAME="BaseFunctionality"></A><font color="#ffffff">Base functionality</font></H3>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 height="529">Base functionality of JURT is provided by the following 
+      classes. 
+      <table border="1" width="637">
+        <tr> 
+          <td><b>Class</b></td>
+          <td><b>Description</b></td>
+        </tr>
+        <tr> 
+          <td><a href="../ref/com/sun/star/uno/Ascii.html">Ascii</a></td>
+          <td>The Ascii class represents the IDL build in type ascii.</td>
+        </tr>
+        <tr bgcolor="#FFFFCC"> 
+          <td><a href="../ref/com/sun/star/uno/AsciiString.html">AsciiString</a></td>
+          <td>The AsciiString class represents the IDL build in type asciistring. 
+          </td>
+        </tr>
+        <tr> 
+          <td>BridgeTurner</td>
+          <td>This class inverts the direction of a given bridge. It is needed, 
+            if a bridge of only one direction is available.</td>
+        </tr>
+        <tr bgcolor="#FFFFCC"> 
+          <td><a href="../ref/com/sun/star/uno/IBridge.html">IBridge</a></td>
+          <td>This is abstract interface for Bridges. Bridges are able to map 
+            one object from one environment to another and vice versa.</td>
+        </tr>
+        <tr> 
+          <td><a href="../ref/com/sun/star/uno/IEnvironment.html">IEnvironment</a></td>
+          <td>This is the interface which environments have to implement. With 
+            this interface objects can be registered and revoked from an environment. 
+            This is class is derived from the binary UNO runtime environment.</td>
+        </tr>
+        <tr bgcolor="#FFFFCC"> 
+          <td><a href="../ref/com/sun/star/uno/IMapping.html">IMapping</a></td>
+          <td>With a mapping objets can be mapped from one environment to another. 
+            This interface exits for api compatibility reasons with binary UNO.</td>
+        </tr>
+        <tr> 
+          <td><a href="../ref/com/sun/star/uno/IQueryInterface.html">IQueryInterface</a></td>
+          <td>This is the delegator interface for objects implementing interfaces 
+            for an underlying object. Call are delegated through the UnoRuntime 
+            to this interface.</td>
+        </tr>
+        <tr bgcolor="#FFFFCC"> 
+          <td height="20"> 
+            <p><a href="../ref/com/sun/star/uno/MappingException.html">MappingException</a></p>
+          </td>
+          <td height="20">The mapping Exception.</td>
+        </tr>
+        <tr> 
+          <td>MappingWrapper</td>
+          <td>This class wraps an IBridge to be a Mapping.</td>
+        </tr>
+        <tr bgcolor="#FFFFCC"> 
+          <td><a href="../ref/com/sun/star/uno/UnoRuntime.html">UnoRuntime</a></td>
+          <td>The UnoRuntime class is the central class needed for implementing 
+            or using UNO components in Java. 
+            <p>The Methods queryInterface and isSame delegate calls to the implementing 
+              objects and are used instead of casts and identity comparisons.<br>
+            </p>
+            <p>The other methods are used for managing bridges, which enable a 
+              user to map objects out to or into java.</p>
+          </td>
+        </tr>
+      </table>
+      
+      
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 BGCOLOR="#666699"> 
+      <H3><A NAME="Integration"></A><FONT COLOR="#ffffff"><FONT FACE="Times New Roman, serif"><FONT SIZE=4><b>Java 
+        integration</b></FONT></FONT></FONT></H3>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3> 
+      <p>How to write integration stuff with the pure runtime? 
+      <p>In the following important classes of the Java Runtime are described. 
+        Would you kindly note that these classes are still in a further development 
+        process. Therefore the following Java classes can be subject to important 
+        modifications (com.sun.star.lib.uno.*). 
+      <p> Java integration classes: 
+      <table width="606" border="1">
+        <tr bgcolor="#FFFFCC"> 
+          <td height="2"><b>Class</b></td>
+          <td height="2"><b>Description</b></td>
+        </tr>
+        <tr> 
+          <td height="2">IRequester</td>
+          <td height="2">Through this interface proxies delegate their method 
+            calls.</td>
+        </tr>
+        <tr bgcolor="#FFFFCC"> 
+          <td height="49">Proxy</td>
+          <td height="49"> The purpose of this class is to provide a ProxyFactory. 
+            Proxies are needed to integrate objects of other environments seamsless 
+            into Java. A proxy delegates all method calls to provided object.</td>
+        </tr>
+      </table>
+      
+    </TD>
+  </TR>
+  <tr> 
+    <td colspan=3 bgcolor="#666699"> 
+      <h3><a name="RemoteAPI"></a><font color="#ffffff"><font face="Times New Roman, serif"><font size=4><b>Remote 
+        API</b></font></font></font></h3>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3 height="718"> 
+      <p>Similarly as the classes described above also the remote API is in the 
+        development. Therefore the following Java classes can be subject to important 
+        modifications (com.sun.star.lib.uno.*). </p>
+      <table width="606" border="1">
+        <tr> 
+          <td height="2" bgcolor="#FFFFCC"><b>Class</b></td>
+          <td height="2" bgcolor="#FFFFCC"><b>Description</b></td>
+        </tr>
+        <tr> 
+          <td height="2">IProtocol</td>
+          <td height="2">This interface provides an abstraction for protocols 
+            for remote bridges.</td>
+        </tr>
+        <tr> 
+          <td height="2" bgcolor="#FFFFCC">Protocol</td>
+          <td height="2" bgcolor="#FFFFCC">This class implements the complete 
+            IIOP protocol from corba. The functionality is reachable through the 
+            IProtocol interface.</td>
+        </tr>
+        <tr> 
+          <td height="2">IMarshal</td>
+          <td height="2">This interface provides an abstraction for protocols 
+            for remote bridges.</td>
+        </tr>
+        <tr> 
+          <td height="2" bgcolor="#FFFFCC">IUnmarshal</td>
+          <td height="2" bgcolor="#FFFFCC">This interface provides an abstraction 
+            for protocols for remote bridges.</td>
+        </tr>
+        <tr> 
+          <td height="2">IReceiver</td>
+          <td height="2">This interface is an abstraction for giving back a reply 
+            for a request.</td>
+        </tr>
+        <tr> 
+          <td height="2" bgcolor="#FFFFCC">Job</td>
+          <td height="2" bgcolor="#FFFFCC">The Job is an abstraction for tasks 
+            which have to be done remotely because of a method invocation.</td>
+        </tr>
+        <tr> 
+          <td height="2">IMessage</td>
+          <td height="2">The purpose of this class is to be an abstraction for 
+            messages for remote communication.</td>
+        </tr>
+        <tr> 
+          <td height="2" bgcolor="#FFFFCC">IThreadPool</td>
+          <td height="2" bgcolor="#FFFFCC">This interface is an abstraction of 
+            the various threadpool implementations.</td>
+        </tr>
+        <tr> 
+          <td height="2">ThreadID</td>
+          <td height="2">This is the global thread id.</td>
+        </tr>
+        <tr> 
+          <td height="2" bgcolor="#FFFFCC">ThreadPool</td>
+          <td height="2" bgcolor="#FFFFCC">This class delegates to a specific 
+            thread pool, which has to implement IThreadPool threadpool implementations.</td>
+        </tr>
+        <tr> 
+          <td height="2">IThreadPoolFactory</td>
+          <td height="2">This class delegates to a specific thread pool, which 
+            has to implement IThreadPool threadpool implementations.</td>
+        </tr>
+        <tr> 
+          <td height="2" bgcolor="#FFFFCC">JavaThreadPool</td>
+          <td height="2" bgcolor="#FFFFCC">This class implements a java thread 
+            pool.</td>
+        </tr>
+        <tr> 
+          <td height="2">JavaThreadPoolFactory</td>
+          <td height="2">&nbsp;</td>
+        </tr>
+        <tr> 
+          <td height="2" bgcolor="#FFFFCC">JobQueue</td>
+          <td height="2" bgcolor="#FFFFCC">The JobQueue implements a queue for 
+            jobs. For every jobs thread id exists a job queue which is registered 
+            at the ThreadPool. A JobQueue is splitted in a sync job queue and 
+            an async job queue. The sync job queue is the registerd queue, it 
+            delegates async jobs (put by putjob) into the async queue, which is 
+            only known by the sync queue.</td>
+        </tr>
+        <tr> 
+          <td height="2">NativeThreadPool</td>
+          <td height="2">This class wrapps the native uno thread pool.</td>
+        </tr>
+        <tr> 
+          <td height="2" bgcolor="#FFFFCC">NativeThreadPoolWrapper</td>
+          <td height="2" bgcolor="#FFFFCC">This class wrapps the native uno thread 
+            pool.</td>
+        </tr>
+        <tr> 
+          <td height="2">ThreadPoolFactory</td>
+          <td height="2">This class delegates to a specific thread pool, which 
+            has to implement IThreadPool threadpool implementations.</td>
+        </tr>
+        <tr> 
+          <td height="2" bgcolor="#FFFFCC">remote_environment</td>
+          <td height="2" bgcolor="#FFFFCC">&nbsp;</td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3 bgcolor="#666699"> 
+      <h3><a name="WritingProtocols"></a><font color="#ffffff"><font face="Times New Roman, serif"><font size=4><b>How 
+        to write a protocol with the remote API?</b></font></font></font></h3>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3 height="47"> 
+      <p> The <a href="http://udk.openoffice.org/common/man/spec/urp.html">UNO 
+        Remote Protocol </a>is used to transmit UNO calls via process-boundaries 
+        (comparable to iiop in CORBA). This protocol was primarily designed to 
+        minimize the amount of transferred data for a series of oneway calls. 
+        The protocol does not make any assumptions about how the data is transferred. 
+      </td>
+  </tr>
+  <tr> 
+    <td colspan=3 bgcolor="#666699"> 
+      <h3><a name="WritingBridges"></a><font color="#ffffff"><font face="Times New Roman, serif"><font size=4><b>How 
+        to write a bridge with the remote API?</b></font></font></font></h3>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3> 
+      <p style="margin-bottom: 0cm">The class <i>java_remote_bridge</i> implements 
+        a remote bridge. Therefore various interfaces are implemented. The protocol 
+        to use is passed by name, the bridge then looks for it under <i>com.sun.star.lib.uno.protocols</i>. 
+      </p>
+      </td>
+  </tr>
+  <TR> 
+    <TD COLSPAN=3> 
+      <P>&nbsp; </P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3> 
+      <HR SIZE=1 noshade>
+    </TD>
+  </TR>
+  <TR> 
+    <TD BGCOLOR="#666699"> 
+      <P ALIGN=LEFT><FONT COLOR="#ffffff"> Author: <A HREF="mailto:Bertram.Nolte@germany.sun.com"><FONT COLOR="#ffffff">Bertram 
+        Nolte</FONT></A> (Tue 12 Jun 2001 12:12:51)<BR>
+        <I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I></FONT> 
+      </P>
+    </TD>
+  <TR> 
+    <TD COLSPAN=3> 
+      <HR SIZE=1 noshade>
+    </TD>
+  </TR>
+</TABLE>
+<HR SIZE=3 noshade>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

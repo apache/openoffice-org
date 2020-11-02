@@ -1,0 +1,195 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+  <title>Binding &amp; the Binding UI</title>
+                         
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1" />
+       <base
+ href="http://cdelab18.ireland/twiki/bin/view/Projectdocs/BindingUISpike" />
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body bgcolor="#ffffff">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/">common</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/">man</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/draft/">draft</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/draft/scripting/">scripting</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+        
+<h2>Binding and the Binding UI</h2>
+     
+<h3>Information about binding and the binding UI</h3>
+    <i><b> Loading of macros</b></i>  
+<p>  The loading of macros is done through a BasicManager       (basic/source/basmgr/basmgr.cxx). 
+Each document has a    BasicManager associated with it, and the application 
+has a BasicManager has well.  Each BasicManager has a stream, which is the 
+content of the  macros from their context (i.e. application or document). 
+Macros have their own URL within Star/OpenOffice.org which is of the form
+macro://&lt;path&gt;/&lt;library&gt;.&lt;module&gt;.&lt;method&gt; 
+  </p>
+ 
+<p>  <i><b>Populating Dialogs</b></i> </p>
+ 
+<p>           For populating the dialogs, the SfxConfigGroupListBox_Impl 
+          (sfx2/source/dialog/cfg.cxx) queries the application's        
+   BasicManager for a list of macros and then queries every open        
+   document's BasicManager for their associated macros. The           SfxConfigGroupListBox_Impl 
+builds up a list of macros, which it             populates the dialog box 
+with.     </p>
+ 
+<p>  <i><b>Assignment of Macros to Events</b></i> </p>
+ 
+<p>           Assignment of a macro to an event is done by the           
+AssignDeleteHdl_Impl in _SfxMacroTabPage            (sfx2/source/dialog/macropg.cxx), 
+when the "Assign" button is            pressed, it deletes any already assign 
+macros to the event. Then             assigns the new macro to the event. 
+An assignment is just an            event id with a macro name attached to 
+it.   </p>
+ 
+<p>  <i>Comments from Mathias Bauer in italics (and similar in the following 
+sections).</i> </p>
+ 
+<p>  <i> This is the "old" view. Our new API describes events by names, but 
+the    dialog still uses the old API, and there is some code that mediates 
+  between both APIs. The configuration dialogs will be replaced   completely 
+later, so we didn't want to invest here. Forget about the   event Ids. </i></p>
+ 
+<p> <i> The "real" assignment inside the document and the way this is stored 
+  uses the com::sun::star::document::XEventSupplier and   com::sun::star::document::XEventBroadcaster 
+API where an office   document supports the event supplier interface, that 
+provides a   container to bind events (described by a name) to a script (only 
+  StarBasic in the current implementation). More about that see below. </i> 
+ </p>
+ 
+<p><i><b>Execution of Macros</b></i></p>
+ 
+<p> The various document types, e.g. SwXTextDocument, are subclasses  of the
+SfxBaseModel. When an event is generated, it gets passed  (how?) to the Notify
+method of the SfxBaseModel. This does ??,  and makes a call to postEventImpl, 
+passing in an SfxEventHint. </p>
+ 
+<p><i> As already mentioned the SFX still contains a lot of code using the old 
+API,   so the document based events are still created as SfxEventHints by 
+the  SFX representation of the document, the subclass of SfxObjectShell. 
+ The model object is a listener to this object, and so it gets notified 
+(the SfxBroadcaster/SfxListener pair implementation is used for that).  Then 
+the model itself broadcasts the event, but now it uses the event  name, not 
+the Id it got from the SfxObjectShell as a part of the  SfxEventHint. So every
+listener that is registered using the new, UNO  based API (and not the C++
+class SfxListener) is notified also.   </i></p>
+ 
+<p> <i>There is one special listener that always registers for event  notifications. 
+This listener makes a lookup in a table to find a macro  that is bound to 
+the event in question, and if it finds one, it calls  the macro.</i>    </p>
+ 
+<p> The postEvent_Impl gets the InterfaceContainer   (::cppu::OInterfaceContainerHelper),
+and gets an     InterfaceIterator (::cppu::OInterfaceIteratorHelper) from
+it. It   then calls notifyEvent on each of the XEventListeners returned  
+by the iterator.    </p>
+<p><i>Exactly. This is the "real" event handling, take all the previous  
+stuff as mutable implementation detail, because at the end it's not important
+how the model gets notified that an event wants to be notified!</i><br/>
+</p>
+<p>    In various methods on the SfxObjectShell we see direct calls to  
+the SfxApplication::NotifyEvent method with various   SfxEventHints such
+as SFX_EVENT_LOADFINISHED (defined in   svtools?) . Also seen in methods
+on SfxViewFrame. The   SfxObjectShell source also shows a number of Broadcast
+calls.   This is a method inherited from the SfxBroadcaster. Do these   have
+some significance?    </p>
+<p><i>   Partly. Every document based events that is created inside an SFX
+   based document is broadcasted by calling SfxApplication::NotifyEvent.
+   This method uses SfxEventConfiguration::ExecuteEvent that did the   whole
+job in SO5. "The whole job" means that it called both globally   and document
+specific bound macros.    In SO6/OOo we replaced the binding mechanism for
+documents by a new   API as mentioned above. So this part of the "job" was
+removed from the   SfxEventconfiguration, as you can see in the code: this
+method quits   the job, if the document itself has a bound macro. This macro
+will be   called by the process described above. The MacroTable of the document
+  is only used for the dialog (it is part of the mediating code   mentioned
+above), not for the event binding evaluation.      If the document has no
+specific binding, the method proceeds with   global bindings. We still need
+this, because we don't have a global   event broadcaster and configuration,
+so here we use the old MacroTable   stored for the application.    SfxApplication::NotifyEvent
+also uses the passed document to force it   to a broadcast the event, and
+that's the way our model gets notified   and triggers the notification of
+its own listeners as described above.    But the SfxObjectShell does some
+more internal broadcasts that are   only internal communications between
+the document and its views. So   these "Broadcast" calls are not related
+to the configurable events.</i><br/>
+</p>
+<p>    When the SfxApplication::NotifyEvent is called, the SfxEventHint  
+is queried for the SfxObjectShell. If the shell is a document   preview the
+method returns. Otherwise it makes a call to    </p>
+<p><i>   Previews don't have UI and events. They are just a view. We use
+a   complete document to make a preview, so it's necessary to do some   magic
+in the code.</i><br/>
+</p>
+<p>    SfxEventConfiguration::ExecuteEvent. After this call the event   is
+broadcast (either synchronously or asynchronously using the   SfxEventAsyncer_Impl).
+     When ExecuteEvent is called on an SfxEventConfiguration, it   returns
+if the doc is a preview. The next check I really don't    understand, but
+it returns if that's the case.&nbsp;</p>
+<p><i>It's the check for a document binding as mentioned above, because  
+bindings at the document are handled by the new API.</i><br/>
+</p>
+<p>Otherwise, it attempts to get the macro from the SfxEventConfiguration_Impl's
+macro table (SvxMacroTableDtor). If it finds the macro, then what  
+happens depends on whether the macro is being called synchronously. If
+it is synchronous, then skip the next   paragraph and it calls ExecuteMacro
+on the results of a static   call to GetOrCreate on SfxMacroConfig, otherwise
+it creates a   new SfxAsyncEvent_Impl.       The SfxAsyncEvent_Impl contains
+a Notify method &amp; a Timer to   deal with the possibility that another
+StarBasic macro might be   running (it waits until this is done). When the
+timer handler   (TimeHdl via macro hackery) is called it gets from the  
+ SfxApplication the SfxMacroConfig and calls ExecuteMacro.      The ExecuteMacro
+method does some checking to ensure that the    macro is a StarBasic macro,
+and sets up some args before calling   Call. This is turn calls Call on an
+SbMethod. From there on   we're in StarBasic-land!         </p>
+<p><i><b>
+Problems coming from the discussion</b></i>  </p>
+ 
+<ul>
+   <li>Binding UI uses a C++ API which is language dependant on StarBasic</li>
+   <li>Intermediary code between C++ API and UNO-based API for binding and
+ execution</li>
+   <li>No global broadcaster</li>
+</ul>
+<br/>
+
+<h3>Tasks to be completed by the scripting teams</h3>
+<b>(suggestions coming from discussion of "Binding and the Binding  UI" on
+the dev@framework.openoffice.org started on the 17<sup>th</sup> of  June
+2002</b>)<br/>
+     
+<ol>
+   <li>finish the scripting API for calling, accessing scripts </li>
+   <li>script containers </li>
+   <li>storage - preference to access storage is through a URL like
+       macro://&lt;path or doc&gt;/&lt;library&gt;.&lt;module&gt;.&lt;method&gt;</li>
+   <li>IDE interface </li>
+   <li>later implement prototypes </li>
+   <li> Specification for the Binding UI</li>
+   <li>UNO-Based Binding UI (With help from UI Team)</li>
+   <li>Throw out  remaining C++ API code and replace with a UNO-based API
+       for binding and invocation</li>
+   <li>Implement a "global" broadcaster </li>
+</ol>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

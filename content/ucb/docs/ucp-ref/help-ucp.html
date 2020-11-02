@@ -1,0 +1,356 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>The Help Content Provider</title>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="CREATED" CONTENT="20010424;10314885">
+	<META NAME="CHANGEDBY" CONTENT="Kai Sommerfeld">
+	<META NAME="CHANGED" CONTENT="20010503;10153113">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm; margin: 2cm }
+		H1 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 16pt }
+		TD P { margin-bottom: 0.21cm }
+		H2 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 14pt; font-style: italic }
+		P { margin-bottom: 0.21cm }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ucb/">ucb</a>&nbsp;&raquo;&nbsp;<a href="/ucb/docs/">docs</a>&nbsp;&raquo;&nbsp;<a href="/ucb/docs/ucp-ref/">ucp-ref</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1>The Help Content Provider</H1>
+<H2><I>Preface</I></H2>
+<P STYLE="margin-bottom: 0cm">Currently, the Help Content Provider
+has the following responsibilities:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<OL>
+	<LI><P STYLE="margin-bottom: 0cm">It is the interface to a search
+	engine, which allows fulltext search and searching in more specific
+	scopes like headers. The range of accessible scopes depends on the
+	indexing process and is currently not changeable after setup.</P>
+	<LI><P STYLE="margin-bottom: 0cm">It delivers a keyword index to its
+	clients.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Minor: It gives its clients the
+	modules, for which help is available.</P>
+</OL>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The actual help content has media type
+&quot;text/html&quot;, with some images of type &quot;image/gif&quot;
+embedded. The content is generated on the fly from packed xml-files,
+which have to be transformed according to a xsl-transformation to
+produce the resulting XHTML. There is a cascading style sheet, used
+for formatting the XHTML files of media type &quot;text/css&quot;.</P>
+<H2>Provided content</H2>
+<P>The above mentioned responsibilities are fulfilled by providing
+different kinds of content-objects to the client, namely a Root
+Content, giving general information about the installed help-files, a
+Module Content, serving as the interface to all search functionality,
+and Picture Contents and XHTML Contents, providing the actual content
+of the transformed help files and pictures. These contents are more
+specifically described below. 
+</P>
+<H2><I>URL - scheme</I></H2>
+<P STYLE="margin-bottom: 0cm">The interface of the Help Content
+Provider is the usual one:</P>
+<P STYLE="margin-bottom: 0cm">One has to create a
+(X)ContentIdentifier from an URL in string form, and in turn a
+(X)Content with the help of the (X)ContentIdentifier. This (X)Content
+object has various properties and is able to execute a number of
+named commands, both listings dependent from the URL.</P>
+<P STYLE="margin-bottom: 0cm">The URL string encodes in a rather
+obvious way the information about the requested content and should
+have the following form ( given as a regular expression ):</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace">URL
+         = scheme delimiter path? query? anchor?</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace">scheme
+      = &quot;vnd.sun.star.help&quot;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace">delimiter
+   = &quot;://&quot; | &quot;:/&quot;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace">path
+        = module ( &quot;/&quot; id )?</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace">query
+       = &quot;?&quot; key-value-list?</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace">keyvaluelist
+= keyvalue ( &quot;&amp;&quot; keyvalue )?</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace">keyvalue
+    = key &quot;=&quot; value // See below for optional and mandatory
+keys and values</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace">anchor
+      = &quot;#&quot; anchor-name</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Currently, to have a more fault
+tolerant system, some enveloping set of this is allowed, but without
+carrying more information.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Examples:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><B>vnd.sun.star.help://?System=WIN&amp;Language=de</B></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><B>vnd.sun.star.help://swriter?System=WIN&amp;Language=de&amp;Query=text&amp;HitCount=120&amp;Scope=Heading</B></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><B>vnd.sun.star.help://portal/4711?System=UNIX&amp;Language=en<SUP>_</SUP>US&amp;HelpPrefix=http%3A%2F%2Fportal%2Fportal</B></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Some information should/must be given
+in every URL, namely the value of the keys &quot;System&quot;/&quot;Language&quot;.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">&quot;System&quot; may be one of
+&quot;UNIX&quot;,&quot;WIN&quot;,&quot;OS2&quot; and &quot;MAC&quot;.
+This key parametrizes the xsl-transformation applied to the
+help-files ( their content changes according to this parameter ) and
+is mandatory only for helpcontents delivering XHTML-files. This may
+change in the future.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">&quot;Language&quot; is coded as
+ISO639-language code, optionally followed by &quot;-&quot; and
+ISO3166-country code. Only the language code part of &quot;Language&quot;
+is used and determines directly the directory, where relative to the
+installation path the help files are found. In the following the term
+&quot;help-directory&quot; is used to determine the directory named
+&quot;help&quot; in the office/portal installation. The term
+&quot;help-installation-directory&quot; is used to denote the
+particular language dependent subdirectory of the help-directory,
+which contains the actual help-files as a packed jar-file, the index,
+configuration files and some other stuff not directly used by the
+help content provider.</P>
+<H2><I>Properties and Commands</I></H2>
+<P STYLE="margin-bottom: 0cm">Every content is able to execute the
+following commands ( not constrained to a particular URL-scheme )</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">com::sun::star::ucb::XCommandInfo
+getCommandInfo( void )</P>
+<P STYLE="margin-bottom: 0cm">com::sun::star::beans::XPropertySetInfo
+getPropertySetInfo( void )</P>
+<P STYLE="margin-bottom: 0cm">com::sun::star::sdbc::XRow
+getPropertyValues( sequence&lt; com::sun::star::beans::Property &gt;
+)</P>
+<P STYLE="margin-bottom: 0cm">void setPropertyValues( sequence&lt;
+com::sun::star::beans::PropertyValue &gt; )</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">These commands mainly repeat the
+information given in the following.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">It is most appropriate to explain for
+the given URL-examples the available properties and commands:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><U>A: Root Content</U> 
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Sample URL:
+<B>vnd.sun.star.help://?System=WIN&amp;Language=de</B></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><B>Properties:</B></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Title string &quot;root&quot; 
+</P>
+<P STYLE="margin-bottom: 0cm">IsFolder boolean true</P>
+<P STYLE="margin-bottom: 0cm">IsDocument boolean true</P>
+<P STYLE="margin-bottom: 0cm">ContentType string
+&quot;application/vnd.sun.star.help&quot; 
+</P>
+<P STYLE="margin-bottom: 0cm">MediaType string &quot;text/css&quot;</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><B>Commands:</B></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">XDynamicResultSet open(
+OpenCommandArgument2 )</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Return value of this command contains
+the modules available in the particular installation for the
+requested language. The modules are currently determined by looking
+for the files in the help-installation-directory matching &quot;*.db&quot;
+( with the exception of the file &quot;picture.db&quot; ). Quite
+generally, a module corresponds to a particular application, namely,
+if the writer-application is installed, there should be a module
+&quot;vnd.sun.star.help://swriter&quot; and so on.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The written XOutputStream, or the set
+XInputStream ( set at XActiveDataSink ) make the cascading style
+sheet available, used to format the XHTML-files. Physically, the
+stream contains the content of the file &quot;custom.css&quot; in the
+help-directory of the office/portal-installation.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Only the key &quot;Language&quot; is
+used, any other key may be set, but is ignored.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><U>B: Module Content</U></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><SPAN STYLE="text-decoration: none">Sample
+URL:
+</SPAN><B>vnd.sun.star.help://swriter?System=WIN&amp;Language=de&amp;Query=text&amp;HitCount=120&amp;Scope=Heading</B></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><B>Properties:</B></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Title string determined from
+configuration file in help-installation-directory</P>
+<P STYLE="margin-bottom: 0cm">IsFolder boolean true</P>
+<P STYLE="margin-bottom: 0cm">IsDocument boolean false</P>
+<P STYLE="margin-bottom: 0cm">ContentType string
+&quot;application/vnd.sun.star.help&quot; 
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">KeywordList sequence&lt; string &gt; 
+</P>
+<P STYLE="margin-bottom: 0cm">KeywordRef sequence&lt; sequence&lt;
+string &gt; &gt;</P>
+<P STYLE="margin-bottom: 0cm">KeywordAnchorForRef sequence&lt;
+sequence&lt; string &gt; &gt;</P>
+<P STYLE="margin-bottom: 0cm">KeywordTitleForRef sequence&lt;
+sequence&lt; string &gt; &gt;</P>
+<P STYLE="margin-bottom: 0cm">SearchScopes sequence&lt; string &gt;</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The help files contain specially marked
+key-words. The alphabetically sorted list of key-words is contained
+in the property &quot;KeywordList&quot;.</P>
+<P STYLE="margin-bottom: 0cm">Suppose now you are looking for
+key-word &quot;KeywordList[i]&quot;, where &quot;i&quot; is an
+integer. The help-module, in which this key-word should be found is
+determined by the module-part of the content-URL, &quot;swriter&quot;
+in our example. Now KeywordRef[i] contains a list of document-ids,
+where the document belonging to that id contains the key-word: string
+docid = KeywordRef[i][j]; The place in the XHTML-document, to which
+this particular key-word refers, is marked by an html-anchor-element:
+&lt;A name=&quot;anchor&quot;/&gt; Here &quot;anchor&quot; is given
+by string anchor = KeywordAnchorForRef[i][j].</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">So, for our example, the URL of the j
+document in the swriter-module containing the key-word Keyword[i] can
+be determined as
+<B>vnd.sun.star.help://swriter/docid?System=WIN&amp;Language=de#anchor
+</B>The value of keys &quot;HitCount&quot;, &quot;Query&quot; and key
+&quot;Scope&quot; are unimportant with regards to the  key-words.
+Finally, the title of the resulting document can be determined
+directly, without having</P>
+<P STYLE="margin-bottom: 0cm">to instantiate the content, by the
+value of &quot;KeywordTitleForRef[i][j]&quot;.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The module contents are also the
+interface to the search engine. To this end a number of additional
+keys in the URL are necessary, namely the keys</P>
+<P STYLE="margin-bottom: 0cm">&quot;HitCount&quot;, &quot;Query&quot;
+and &quot;Scope&quot;. The value of &quot;Scope&quot; should be one
+of the strings given by the property &quot;SearchScopes&quot;,
+currently either &quot;Heading&quot; or &quot;FullText&quot;. Leaving
+the key undefined defaults to fulltext-search, setting it to
+&quot;Heading&quot; means search in document titles only. There may
+be any number of &quot;Query&quot;-key definitions in the URL. Many
+&quot;Query&quot;-keys determine a query searching first for
+documents containing all values, than searching for those containing
+only subsets of all values. The requested number of results is
+determined by the value of the key &quot;HitCount&quot;, the actual
+returned number may be smaller. The interface to the results returned
+by the search engine is given by an XDynamicResultSet, which in turn
+is return value of</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><B>Commands:</B></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">XDynamicResultSet open(
+OpenCommandArgument2 ),</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><U>C: XHTML Contents, Picture Contents</U></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><SPAN STYLE="text-decoration: none"><SPAN STYLE="font-weight: medium">Sample
+URL:</SPAN><B>
+</B></SPAN><B>vnd.sun.star.help://portal/4711?System=UNIX&amp;Language=en<SUP>_</SUP>US&amp;HelpPrefix=http%3A%2F%2Fportal%2Fportal%2F</B></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><B>Properties</B>:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Title string determined from database</P>
+<P STYLE="margin-bottom: 0cm">IsFolder boolean false</P>
+<P STYLE="margin-bottom: 0cm">IsDocument boolean true</P>
+<P STYLE="margin-bottom: 0cm">ContentType string
+&quot;application/vnd.sun.star.help&quot; 
+</P>
+<P STYLE="margin-bottom: 0cm">MediaType string &quot;text/html&quot;
+or &quot;image/gif&quot;</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The MediaType &quot;image/gif&quot;
+corresponds to an URL, which contains as module part &quot;picture&quot;
+( as opposed to &quot;portal&quot; in the example ).</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><B>Commands:</B></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">void open( OpenCommandArgument2 )</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Returns the transformed XHTML-content,
+or the gif-content of a PictureContent.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">There is one special document for every
+module, namely those named &quot;start&quot; ( replace &quot;4711&quot;
+by &quot;start&quot; in our example ). It identifies the main help
+page for every module.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">There is an additional key named
+&quot;HelpPrefix&quot;.If set, every link in a generated document
+pointing to another help-document ( either xhmtl- or image-document )
+is first encoded and then prefixed by the URL-decoded form of the
+value of this key. This key is only used by Sun OneWebtop.</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
