@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=iso-8859-1"
+ http-equiv="CONTENT-TYPE">
+  <title>openoffice.org : graphics : chart project</title>
+  <meta content="StarOffice 7  (Linux)" name="GENERATOR">
+  <meta content="20031211;14111000" name="CREATED">
+  <meta content="20031215;15083400" name="CHANGED">
+</head>
+<body dir="ltr" lang="en-US">
+<h2><a name="mozTocId380621" class="mozTocH2"></a>New SVG export filter
+(Technology Preview)</h2>
+<p><b>Feedback to:</b> <a href="mailto:Kai.Ahrens@Sun.COM">Kai Ahrens</a></p>
+<ul id="mozToc">
+<!--mozToc h1 1 h2 2 h3 3 h4 4 h5 5 h6 6--><li><a href="#mozTocId380621">New
+SVG export filter (Technology Preview)</a>
+    <ul>
+      <li>
+        <ul>
+          <li><a href="#mozTocId11539">Introduction</a></li>
+          <li><a href="#mozTocId237397">Features</a>
+            <ul>
+              <li><a href="#mozTocId91148">What works so far</a></li>
+              <li><a href="#mozTocId235063">What doesn't work so far</a></li>
+              <li><a href="#mozTocId801769">What is planned next</a></li>
+            </ul>
+          </li>
+          <li><a href="#mozTocId522209">Installation</a></li>
+          <li><a href="#mozTocId155665">Usage</a>
+            <ul>
+              <li><a href="#mozTocId737281">Using the filter from
+within the application (UI)</a></li>
+              <li><a href="#mozTocId265090">Using the filter via API</a></li>
+            </ul>
+          </li>
+          <li><a href="#mozTocId51393">Source Code</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<h3><a name="mozTocId11539" class="mozTocH3"></a>Introduction</h3>
+<p>Based on the fact that the current SVG export filter available in
+OpenOffice has some drawbacks and lacks a proper design internally, I
+created a new filter module from ground up, that should be able to
+fulfill the needs we have in this area. Needs in this area are
+extracted from community feedback, customer requests and issues we
+currently have with the 'old' SVG export filter implementation.</p>
+<p><b><font color="#ff0000">Important</font>: The current release of
+the new filter module is just meant to be a 'Technology Preview',
+that offers only basic functionality. It is in no way a complete
+product and shouldn't be used for production purposes. Please use
+this release at your own risk.</b><br>
+</p>
+<h3><a name="mozTocId237397" class="mozTocH3"></a>Features</h3>
+<p>The goal for this first release was to offer at least the same
+functionality as we currently have with the old filter, but with
+support for the export of multiple pages within one SVG file. The
+whole code currently available was written from scratch and should
+give us a 'Proof Of Concept' with the current release. It will be the
+basis for future releases and will be improved constantly. A concrete
+release schedule is currently not available. </p>
+<h4><a name="mozTocId91148" class="mozTocH4"></a>What works so far</h4>
+<ul>
+  <li>
+    <p style=""><i>Support of latest available official specification
+(SVG 1.1)</i></p>
+  </li>
+  <li>
+    <p style=""><i>Aspect ratio is preserved<br>
+    </i>PreserveAspectRatio attribute is set to xMidyMid</p>
+  </li>
+  <li>
+    <p><i>Usage of descriptive identifiers for several kinds of
+document objects<br>
+    </i>Slides/Master Slides as well as drawing objects and group
+objects get a description element within the SVG output, so that the
+document structure is kind of preserved. Named objects are also
+possible in this context</p>
+  </li>
+  <li>
+    <p><i>Separation of master slides and normal slides in one file</i>
+    </p>
+  </li>
+  <li>
+    <p><i>Support of multiple slides within one SVG file</i><br>
+The user should be able to travel through slides within a SVG viewer
+like Adobe's SVG Viewer or BATIK by just clicking the mouse. This
+feature has been realized by adding ECMA scripting to the SVG output.</p>
+  </li>
+  <li>
+    <p style=""><i>Embedding of fonts<br>
+    </i>Fonts are now embedded, so that the output should be the same
+on different systems, even if the document font isn't available on the
+specific target system. </p>
+  </li>
+  <li>
+    <p><i>Exporting only single pages or all pages via API</i></p>
+  </li>
+</ul>
+<h4><a name="mozTocId235063" class="mozTocH4"></a>What doesn't work so
+far</h4>
+<ul>
+  <li>
+    <p style=""><i>Textual bullets are not working very well, with
+different results on Unix and Windows from time to time</i></p>
+  </li>
+  <li>
+    <p style=""><i>Shadow text and hollow text is not working<br>
+    </i>These attributes are not supported by the SVG specification, so
+that we'll have to fake this for correct results.</p>
+  </li>
+  <li>
+    <p style=""><i>No single or page range export via UI<br>
+    </i>All pages are exported by default, you can't change the default
+via UserInterface to just export single pages</p>
+  </li>
+  <li>
+    <p style=""><i>Many other things</i></p>
+  </li>
+</ul>
+<h4><a name="mozTocId801769" class="mozTocH4"></a>What is planned next</h4>
+<ul>
+  <li>
+    <p><i>Creation of an export dialog to support export of single
+pages and page ranges for example</i></p>
+  </li>
+  <li>
+    <p><i>Implementing support for different shapes like rects,
+ellipses and bezier curves instead of creating just simple polygons</i></p>
+  </li>
+  <li>
+    <p><i>Better font support</i></p>
+  </li>
+  <li>
+    <p><i>Better support of native SVG filling and stroking</i></p>
+  </li>
+  <li>
+    <p><i>Animations</i></p>
+  </li>
+  <li>
+    <p><i>Sound</i><br>
+    </p>
+  </li>
+</ul>
+<h3><a name="mozTocId522209" class="mozTocH3"></a>Installation</h3>
+<ul>
+  <li>
+    <p>Install an OpenOffice.org1.1 or newer if you have not done so
+already.</p>
+  </li>
+  <li>
+    <p><a href="svgexport.zip">Download</a> the package that contains
+the new version of the filter.</p>
+  </li>
+  <li>
+    <p>Copy the zip file in <code>OpenOffice1.1/user/uno_packages</code>
+folder (Note: USE the zip file as a whole, DO NOT extract it). </p>
+  </li>
+  <li>
+    <p>Open up a shell and switch to the OpenOffice1.1/program
+directory and start the pkgchk tool. On success, no output is given. </p>
+  </li>
+  <li>
+    <p>Alternatively, you can install the filter for all users of a
+OpenOffice.org network installation by placing the file into the <code>OpenOffice1.1/share/uno_packages</code>
+and starting <br>
+pkgchk --shared </p>
+  </li>
+  <li>
+    <p>You can uninstall the package by deleting the file in the
+uno_packages directory and starting pkgchk again.<br>
+    </p>
+  </li>
+</ul>
+<h3><a name="mozTocId155665" class="mozTocH3"></a>Usage</h3>
+<h4><a name="mozTocId737281" class="mozTocH4"></a>Using the filter from
+within the application (UI)</h4>
+<p>After successful installation you should have a new filter entry
+inside the 'File=&gt;Export' dialog available. The new filter is
+called <b>SVG &#8211; Scalable Vector Graphics (new)</b>. The old SVG
+filter is still available.</p>
+<p style="">As stated above, there's no export
+dialog available at the moment, so that all pages get exported in
+every case. This will be changed as soon as a filter dialog will be
+available.</p>
+<h4><a name="mozTocId265090" class="mozTocH4"></a>Using the filter via
+API</h4>
+<p>You can use the filter via API in a very easy way. The <a
+ href="SVGExportTest.java">Java
+code</a> gives you an example of how to do this.</p>
+<p>The following properties are supported so far:</p>
+<ul>
+  <li>
+    <p><i>OutputStream (interface ::com::sun::star::io::XOutputStream)</i><br>
+You can set the XoutputStream interface that should be used to export
+into the underlying stream</p>
+  </li>
+  <li>
+    <p><i>FileName (String)</i><br>
+As an alternative to the OutputStream, you can set the FileName
+property. In this case an output stream is created internally to write
+to the specified URL</p>
+  </li>
+  <li>
+    <p><i>PagePos (Integer)</i><br>
+You can specify which page to export here. Values between 0 and
+(PageCount-1) export the specified page, all other values export all
+pages. Default is -1.<br>
+    </p>
+  </li>
+</ul>
+<h3><a name="mozTocId51393" class="mozTocH3"></a>Source Code</h3>
+<p>The source code for the new SVG export filter can be found inside
+the <b>Framework</b> project <b>filter </b>module. Please checkout
+this module and change directory to <b>filter/source/svg </b>to find
+the related code. Revisions for the current release are tagged with
+OOO_SVG_FILTER_0_1_0 and can be checked out with standard CVS
+commands.</p>
+</body>
+</html>
