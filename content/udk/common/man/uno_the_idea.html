@@ -1,0 +1,292 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    <title>null</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/">common</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/">man</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252"/>
+	<TITLE>The Idea of Universal Network Object Technology (UNO)</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)"/>
+	<META NAME="CREATED" CONTENT="20001010;19410735"/>
+	<META NAME="CHANGEDBY" CONTENT="Hans-Peter Burow"/>
+	<META NAME="CHANGED" CONTENT="20020122;10012841"/>
+	<META NAME="CLASSIFICATION" CONTENT="The Idea of Universal Network Object Technology (UNO)"/>
+	<META NAME="KEYWORDS" CONTENT="UNO"/>
+<style type="text/css">
+<!--
+h1 { text-align:center; margin-top: 0.2cm; text-decoration: none; color: #ffffff; font-size: 6; margin-top: 0.2cm}
+h2 { margin-top: 0.2cm; margin-bottom=0.1cm; color: #ffffff; background-color: #666699 }
+li {margin-bottom: 0.2cm;}
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm;}
+dt {margin-bottom: 0.2cm;}
+-->
+</style>
+</HEAD>
+<body>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 bgcolor=#666699 summary=header>
+	<TR>
+		<td>
+			<h1> The Idea of Universal Network Object Technology </h1>
+		</td><td>
+			<a href="http://www.openoffice.org/"><img src="../../images/open_office_org_logo.gif" name="Grafik1" alt="OpenOffice" align=right width=109 height=54 border=0/></a>
+		</TD>
+	</TR>
+</TABLE>
+
+<h2> Contents </h2>
+
+<blockquote>
+			<P><A HREF="#Introduction">Introduction</A><br/>
+			<A HREF="#General_solution">General solution</A><br/>
+			<A HREF="#The_Idea">The Idea</A><br/>
+			<A HREF="#Why_our_own_object_model">Why our own object model?</A>
+			</P>
+</blockquote>
+
+<h2><a name="Introduction"></a> Introduction </h2>
+
+<p>Before explaining the concepts behind UNO, some
+			problems that occurred in a C++ based, openoffice.org development
+			effort, need to be presented.</P>
+
+<ol>
+<LI>There are a number of base projects (Tools, Streams, Visual Class Library,
+				Framework, etc.) The higher projects, such as the word processor, calc, etc., use the
+				classes of these base projects. After a change of some of these classes, 
+				for example, a new member or virtual method is added, the entire office suite
+				needs to be rebuilt. This takes two days, if no problems occur.
+
+<LI>The API of the base project, with a few exceptions, is not well documented.
+The base projects grow with the requirements of the higher projects.
+
+<LI>The projects dependencies are complicated and difficult to understand.
+Before making changes to an API we need to know, exactly, which projects are
+affected.
+
+<LI>StarOffice has a complex build environment.
+	This made it very difficult for third parties to write components
+	which could be integrated into the office suite.
+
+<LI>StarOffice components could not be used outside of StarOffice.
+
+<LI>There was a requirement to integrate components from other object models
+like CORBA, COM/DCOM, or Java into StarOffice.  In addition, it was desirable
+to have StarOffice components be first class components in other component
+models.
+			</OL>
+
+<h2><a name="General_solution"></a> General solution </h2>
+
+<P>There is a general approach to solve the above
+			problems; therefore, the question of &ldquo;why should we use UNO&rdquo;, will
+			be answered in this section.</P>
+
+<ol>
+
+<LI>There is a mechanism which enables a new method to be added to
+				an existing class: this is done with interface technology. Only
+				interfaces are exposed to other projects. To add a new method, you
+				only have to add a new interface. So, new methods can be added to an
+				existing old class, and then the other projects can use these new
+				features. There is a migration path to the new API.
+
+<LI>Use of an IDL-language to describe our interfaces
+				and the functionality of components. To do this on an abstract
+				level, normally, the documentation is better and the API is not
+				implementation dependent.
+
+<LI>To reduce the build dependencies of a specific
+				component only interfaces are used to communicate with other
+				components and the base libraries. In this case, the dependencies
+				are flat.
+
+<LI>Provide infrastructure to add components to a existing product or to the
+system.
+
+<LI>Reduce the dependencies of components, if possible.
+
+<LI>To communicate between different component models we have to create a
+bridge from UNO to the other component model.
+
+</OL>
+			<P>Here is why we are not using an existing component model: First,
+			we cannot use Java Beans because it is not abstract, it is only
+			usable in Java itself. Second, CORBA wouldn't be the right choice
+			because there exists no specification for binary compatibility in
+			one process and the communication between two components must be
+			handled through the IIOP protocol. Third, COM/DCOM does not support
+			exception handling, which is necessary to integrate smoothly into
+			languages with native exception handling, such as C++, Java, etc.</P>
+
+<h2><a name="The_Idea"></a> The Idea </h2>
+
+			<P>First, we need to distinguish the difference between the
+			Universal Component Environment (UCE) and UNO. UCE defines an
+			environment in which components can be embedded and defines the
+			API which must be supported by a component. The points 5 and 6, above, are
+			solved with this technology. So, the UCE is on top of UNO. The
+			construction of the UCE is documented in <A HREF="empty.html">uce.html.</A></P>
+
+			<H4>The ideas of UNO are as follows:</H4>
+
+			<OL>
+				<LI>A binary specification of the memory layout of the IDL
+				types. This specification is machine dependent, so it can be
+				implemented directly, in many languages.
+
+				<LI>Each object lives in an environment. Objects share this
+				environment with other objects, which are compatible. This means
+				the same compiler version, the same java virtual machine or something
+				else. <!-- rh: The preceding sentence is not clear --> The only access to an object from another environment is to
+				generate a proxy in your own environment. This can be
+				accomplished by a bridge.
+
+				<LI>To reduce the number of bridges, we define one environment
+				called the Binary UNO Environment. It is recommended to provide a
+				bridge to this environment. If you want to access an object, normally,
+				you have two bridges. The first, from your environment to the
+				Binary UNO Environment, and the second, from the Binary UNO
+				Environment to the destination environment. For every new
+				environment it is only necessary to implement one bridge.<br/>
+				You
+				can implement bridges between any two environments, but do this
+				only for performance reasons.
+
+				<LI>Provide a UNO runtime library which organizes access to
+				the bridges and the environments. With the UNO runtime library, it is
+				simple to access an object from another environment, presuming 
+				that the bridges are installed.
+
+				<LI>The important concept is, that all calls to an object in
+				the Binary UNO Environment are dispatched through one function.
+				This is the Dynamic Dispatch Function. All calls contain a full
+				description of the method, which means: method name, argument
+				types, return type, exceptions, and additional information.<br/>
+				It
+				is very simple to create a bridge to an interpreter, remote, or an
+				environment which has a well specified API to call object methods,
+				for example, Java.
+			</OL>
+
+<h2> How does this ideas solve the problems? </h2>
+
+			<P>I explain the special solution with UNO and use the stated 
+			points from the general solution.</P>
+			<OL>
+				<LI>UNO has one base interface called
+				<A HREF="http://api.openoffice.org/common/ref/com/sun/star/uno/XInterface.html"><I>com.sun.star.uno.XInterface</I></A>.
+				This interface provides a method called <I>queryInterface</I>.
+				With this method you can get other interfaces. In this way, it is
+				possible to extend an existing class. In UNO terminology, we speak
+				of components instead of classes. Look into the document
+				<A HREF="../empty.html">xinterface.html</A> for detailed
+				information about <I>com.sun.star.uno.XInterface.</I>
+
+<LI>An UNO IDL compiler is provided. The language is similar
+				to CORBA's IDL. An extension of our language was a special tag
+				called <I>service</I>. In a service, you can specify the
+				interfaces, properties, and the interaction between the interfaces
+				of a component.
+
+				<LI>We implement components in UNO only with dependencies to
+				interfaces, or to our base libraries, VOS, SAL, and OSL. We generate
+				the declaration files in the project of the component itself; so
+				there are only dependencies to the base libraries, the binary
+				type repository, and the tool that generates the declarations.
+
+				<LI>The Universal Component Environment provides an API to get
+				the dependencies from a component. This solution is documented
+				in the <A HREF="empty.html">UCE</A> document.
+
+				<LI><p>The other solutions are nice to have, but this is the
+				fundamental solution done in UNO. First, the <A HREF="../reference/Cppu/index.html">UNO
+				runtime library</A> provides access to the environment in which
+				the component is written (e.g., <I>uno_getEnvironment(..., &ldquo;msci&rdquo;,
+				0 )</I>). A component <B>need not </B>know it's environment until
+				it is accessed from another environment. Next, the UNO runtime
+				library provides access to the <A HREF="bridge.html">bridge</A>
+				between two environments (e.g., <I>uno_getMapping(..., &ldquo;msci&rdquo;,
+				&ldquo;java&rdquo;)</I>). So from the user side, it is very simple
+				and normally this is done in a loader like a shared library
+				loader. The loader is part of the Universal Component
+				Environment.</p>
+
+<p>On the other side, there is the implementation of
+				the bridge between two environments. The bridge should create a
+				stub very efficiently, and the transformation of the calls from one environment
+				to another must be fast. To save disk space and avoid
+				the administration of marshaling code, the bridge creates stub
+				objects only from a type repository. The type repository contains
+				all type information that is necessary. For example, these are the
+				methods of an interfaces, the members of structures, and so on.
+				The access to the type repository is also provided by the UNO
+				runtime library.</p>
+The point that makes the transformation
+				between two environment fast is the binary UNO specification. The
+				transformation, from one environment to the binary UNO
+				specification and to the target environment, should be fast. There
+				are two other ways to speed up the transformation: First, if two
+				components lie in the same environment, the communication between
+				them is direct (e.g., a virtual method call in c++) and no
+				translation is necessary. Second, you can provide a direct bridge
+				between two environments, so the transformation to the binary UNO
+				specification is avoided.
+			</OL>
+
+<h2><A NAME="Why_our_own_object_model"></A> Why our own object model? </h2>
+
+			<P>The main reason is that the other object models don't provide
+			the full functionality. The COM/DCOM model does not provide
+			exception handling.</p>
+
+<p>CORBA is normally used for remote communication and there is no local
+standard API between objects.</p>
+
+<p>Java RMI is only useful in a Java environment. So we
+			can't use an existing standard to implement the object model we
+			want to use. But if you look at our object model, then you see
+			that we use the IIOP protocol in the remote case, and we use
+			reference counting like COM to determine the lifetime of the
+			interfaces.</P>
+
+<table width=100% bgcolor=#666699 summary=footer>
+	<TR>
+		<TD>
+<FONT COLOR="#ffffff">Author:
+			<A HREF="mailto:joerg.budischewski@sun.com"><FONT COLOR="#ffffff">J&ouml;rg
+			Budischewski</FONT></A> ($Date: 2004/12/05 13:27:08 $)<br/><I>Copyright
+			2002 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA
+			94303 USA.</I></FONT>
+		</TD>
+	</TR>
+</TABLE>
+</BODY>
+</HTML>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

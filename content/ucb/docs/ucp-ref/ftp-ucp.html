@@ -1,0 +1,243 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>The FTP Content Provider</title>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="AUTHOR" CONTENT="Kai Sommerfeld">
+	<META NAME="CREATED" CONTENT="20000714;12280562">
+	<META NAME="CHANGEDBY" CONTENT="Kai Sommerfeld">
+	<META NAME="CHANGED" CONTENT="20010503;9550514">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm; margin: 2cm }
+		H1 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 16pt }
+		TH P { margin-bottom: 0.21cm; font-style: italic }
+		TD P { margin-bottom: 0.21cm }
+		H2 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 14pt; font-style: italic }
+		P { margin-bottom: 0.21cm }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ucb/">ucb</a>&nbsp;&raquo;&nbsp;<a href="/ucb/docs/">docs</a>&nbsp;&raquo;&nbsp;<a href="/ucb/docs/ucp-ref/">ucp-ref</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1>The FTP Content Provider</H1>
+<H2>Preface</H2>
+<P>The FTP Content Provider implements a Content Provider for the
+Universal Content Broker (UCB). It provides access to the contents
+(folders and documents) made available by FTP servers.</P>
+<H2>FTP Contents</H2>
+<P>The FTP Content Provider provides two different types of
+contents: <B>Folders</B><SPAN STYLE="font-weight: medium">
+and </SPAN><B>Documents.</B></P>
+<OL>
+	<LI><P>An FTP Folder is a content which represents a directory on an
+	FTP server. An FTP Folder never has a content stream, but it can
+	have both FTP Folders and FTP Documents as children.</P>
+	<LI><P>An FTP Document is a content which represents a single file
+	on an FTP server. An FTP Document always has a content stream and
+	never has children.</P>
+</OL>
+<H2><BR CLEAR=LEFT>Creation
+of New FTP Contents</H2>
+<P>FTP Folders implement the interface
+XContentCreator. FTP Folders and FTP Documents support the command
+'insert.' That way, all FTP Folders can create new
+FTP Folders and FTP Documents. To create a new child of an FTP Folder:</P>
+<OL>
+	<LI><P>Let the folder create a new content by calling its
+	createNewContent-method. The content type to use for new folders is
+	<B>application/vnd.sun.staroffice.ftp-folder.</B><SPAN STYLE="font-weight: medium">
+	To create a new document, use the type string
+	</SPAN><B>application/vnd.sun.staroffice.ftp-file.</B></P>
+	<LI><P STYLE="font-weight: medium">Set a title at the new folder or
+	document. (Let the new child execute a setPropertyValues-command
+	that sets at least the property 'Title' to a non-empty value).</P>
+	<LI><P><SPAN STYLE="font-weight: medium">Let the new child (not the
+	parent!) execute the command 'insert.' This will commit the creation
+	process. For documents, you need to supply an XInputStream (whose
+	contents will be transfered to the FTP server) with the command's
+	parameters</SPAN>.</P>
+</OL>
+<H2>URL Scheme for FTP Contents</H2>
+<P>Each FTP content has an identifier corresponding to the following
+scheme (see also RFCs 1738, 2234, 2396, and 2732):</P>
+<P><FONT FACE="Courier New, monospace">ftp-URL = &quot;ftp://&quot;
+login *(&quot;/&quot; segment)</FONT></P>
+<P><FONT FACE="Courier New, monospace">login = [user [&quot;:&quot;
+password] &quot;@&quot;] hostport</FONT></P>
+<P><FONT FACE="Courier New, monospace">user = *(escaped / unreserved
+/ &quot;$&quot; / &quot;&amp;&quot; / &quot;+&quot; / &quot;,&quot; /
+&quot;;&quot; / &quot;=&quot;)</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace">password
+= *(escaped / unreserved / &quot;$&quot; / &quot;&amp;&quot; / &quot;+&quot;
+/ &quot;,&quot; / &quot;;&quot;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace">/
+&quot;=&quot;)</FONT></P>
+<P><FONT FACE="Courier New, monospace">hostport = host [&quot;:&quot;
+port]</FONT></P>
+<P><FONT FACE="Courier New, monospace">host = incomplete-hostname /
+hostname / IPv4address</FONT></P>
+<P><FONT FACE="Courier New, monospace">incomplete-hostname =
+*(domainlabel &quot;.&quot;) domainlabel</FONT></P>
+<P><FONT FACE="Courier New, monospace">hostname = *(domainlabel &quot;.&quot;)
+toplabel [&quot;.&quot;]</FONT></P>
+<P><FONT FACE="Courier New, monospace">domainlabel = alphanum
+[*(alphanum / &quot;-&quot;) alphanum]</FONT></P>
+<P><FONT FACE="Courier New, monospace">toplabel = ALPHA [*(alphanum /
+&quot;-&quot;) alphanum]</FONT></P>
+<P><FONT FACE="Courier New, monospace">IPv4address = 1*3DIGIT &quot;.&quot;
+1*3DIGIT &quot;.&quot; 1*3DIGIT &quot;.&quot; 1*3DIGIT</FONT></P>
+<P><FONT FACE="Courier New, monospace">port = *DIGIT</FONT></P>
+<P><FONT FACE="Courier New, monospace">segment = *pchar</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace">pchar
+= escaped / unreserved / &quot;$&quot; / &quot;&amp;&quot; / &quot;+&quot;
+/ &quot;,&quot; / &quot;:&quot; / &quot;=&quot;</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace">/
+&quot;@&quot;</FONT></P>
+<P><FONT FACE="Courier New, monospace">escaped = &quot;%&quot; HEXDIG
+HEXDIG</FONT></P>
+<P><FONT FACE="Courier New, monospace">unreserved = alphanum / mark</FONT></P>
+<P><FONT FACE="Courier New, monospace">alphanum = ALPHA / DIGIT</FONT></P>
+<P><FONT FACE="Courier New, monospace">mark = &quot;!&quot; / &quot;'&quot;
+/ &quot;(&quot; / &quot;)&quot; / &quot;*&quot; / &quot;-&quot; / &quot;.&quot;
+/ &quot;_&quot; / &quot;~&quot;</FONT></P>
+<P>FTP Folders and FTP Documents have a login part followed
+by one or more (nonempty) segments that <B><SPAN STYLE="font-style: normal">might
+be followed by a slash.</SPAN></B>
+<P>Examples:</P>
+<P><B>ftp://username@ftp.host/ </B><SPAN STYLE="font-weight: medium">The
+root-directory of user 'username' on the FTP server 'ftp.host.'</SPAN></P>
+<P STYLE="font-weight: medium"><B>ftp://ftp.host/pub/doc1.txt</B> A
+document on an anonymous FTP account.</P>
+<P STYLE="font-weight: medium"><B>ftp://username:password@ftp.host/secret-documents/</B>
+A folder within the account of user 'username,' with the password specified
+directly in the URL (works, but is not recommended).</P>
+<H2>Appendix</H2>
+<P>The following table gives an overview of the different FTP
+contents.</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=32*>
+	<COL WIDTH=55*>
+	<COL WIDTH=67*>
+	<COL WIDTH=51*>
+	<COL WIDTH=51*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=12%>
+				<P><BR>
+				</P>
+			</TH>
+			<TH WIDTH=21%>
+				<P>UCB Type</P>
+				<P>(returned by XContent::getContentType )</P>
+			</TH>
+			<TH WIDTH=26%>
+				<P>Properties</P>
+			</TH>
+			<TH WIDTH=20%>
+				<P>Commands</P>
+			</TH>
+			<TH WIDTH=20%>
+				<P>Interfaces</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=12%>
+				<P>Folder</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>application/vnd.sun.staroffice.ftp-folder</P>
+			</TD>
+			<TD WIDTH=26%>
+				<P>[readonly] ContentType</P>
+				<P>[readonly] IsDocument</P>
+				<P>[readonly] IsFolder</P>
+				<P>Title</P>
+				<P>[readonly] DateCreated</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>getCommandInfo</P>
+				<P>getPropertySetInfo</P>
+				<P>getPropertyValues</P>
+				<P>setPropertyValues</P>
+				<P>insert</P>
+				<P>delete</P>
+				<P>open</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>lang::<B>XTypeProvider</B></P>
+				<P>lang::<B>XServiceInfo</B></P>
+				<P>lang::<B>XComponent</B></P>
+				<P>ucb::<B>XContent</B></P>
+				<P>ucb::<B>XCommandProcessor</B></P>
+				<P>beans::<B>XPropertiesChangeNotifier</B></P>
+				<P>beans::<B>XPropertyContainer</B></P>
+				<P>beans::<B>XPropertySetInfoChangeNotifier</B></P>
+				<P>ucb::<B>XCommandInfoChangeNotifier</B></P>
+				<P>ucb::<B>XContentCreator</B></P>
+				<P>container::<B>XChild</B></P>
+				<P><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=12%>
+				<P>Document</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>application/vnd.sun.staroffice.ftp-file</P>
+			</TD>
+			<TD WIDTH=26%>
+				<P>[readonly] ContentType</P>
+				<P>[readonly] IsDocument</P>
+				<P>[readonly] IsFolder</P>
+				<P>Title</P>
+				<P>[readonly] DateCreated</P>
+				<P>[readonly] DateModified</P>
+				<P>[readonly] IsReadOnly</P>
+				<P>[readonly] Size</P>
+				<P>MediaType</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>getCommandInfo</P>
+				<P>getPropertySetInfo</P>
+				<P>getPropertyValues</P>
+				<P>setPropertyValues</P>
+				<P>insert</P>
+				<P>delete</P>
+				<P>open</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>same as FTP Folder</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Draw.Line.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2007/08/13 13:03:24 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Draw">
+
+<keywords>
+	<keyword>line</keyword>
+	<keyword>line colour</keyword>
+	<keyword>linestyle</keyword>
+</keywords>
+
+<authors>
+	<author id="" initial="false" email="">Nicole Scholz</author>
+</authors>
+
+<question heading="line">How can I draw lines and change the linestyle?
+</question>
+
+<answer>
+<p>In this example 3 lines are created and the LineStyle is set.</p>
+<listing>/* Retrieve the Desktop object, we need its XComponentLoader interface to load a new document */
+oDesktop         = UNO.createDesktop()    -- get the UNO Desktop service object
+xComponentLoader = oDesktop~{%see com.sun.star.frame.XDesktop%XDesktop}~{%see com.sun.star.frame.XComponentLoader%XComponentLoader}  -- get componentLoader interface
+
+/* open the blank file */
+url = &quot;private:factory/sdraw&quot;
+xDrawComponent = xComponentLoader~loadComponentFromURL(url, &quot;_blank&quot;, 0, -
+                                                       .UNO~noProps)
+/* need document&apos;s factory to be able to insert created objects */
+xDocumentFactory = xDrawComponent~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+
+/* get draw page by index */
+xDrawPage = xDrawComponent~{%see com.sun.star.drawing.XDrawPagesSupplier%XDrawPagesSupplier}~getDrawPages~getByIndex(0)~{%see com.sun.star.drawing.XDrawPage%XDrawPage}
+
+/* create a line and add it to the shape */
+Line = xDocumentFactory~createInstance(&quot;{%see com.sun.star.drawing.LineShape}&quot;)~{%see com.sun.star.drawing.XShape%xShape}
+Line~setPosition(.bsf~new(&quot;{%see com.sun.star.awt.Point}&quot;, 1000, 2000))
+Line~setSize(.bsf~new(&quot;{%see com.sun.star.awt.Size}&quot;, 15000, 0))
+xDrawPage~add(Line)
+xShapeProps = Line~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+xShapeProps~setPropertyValue(&quot;LineStyle&quot;, -
+	bsf.getConstant(&quot;{%see com.sun.star.drawing.LineStyle}&quot;, &quot;DASH&quot;)) -- set line style dash
+
+/* create a line and add it to the shape */
+xLine = xDocumentFactory~createInstance(&quot;{%see com.sun.star.drawing.LineShape}&quot;)~{%see com.sun.star.drawing.XShape%xShape}
+xLine~setPosition(.bsf~new(&quot;{%see com.sun.star.awt.Point}&quot;, 1000, 5000))
+xLine~setSize(.bsf~new(&quot;{%see com.sun.star.awt.Size}&quot;, 15000, 1000))
+xDrawPage~add(xLine)
+
+/* create a line and add it to the shape */
+xLine1 = xDocumentFactory~createInstance(&quot;{%see com.sun.star.drawing.LineShape}&quot;)~{%see com.sun.star.drawing.XShape%xShape}
+xLine1~setPosition(.bsf~new(&quot;{%see com.sun.star.awt.Point}&quot;, 1000, 10000))
+xLine1~setSize(.bsf~new(&quot;{%see com.sun.star.awt.Size}&quot;, 15000, 0))
+xDrawPage~add(xLine1)
+
+/* colour the 2nd and the 3rd line green */
+call syssleep 1
+xShapeProps = xLine~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+xShapeProps~setPropertyValue(&quot;LineColor&quot;, box(&quot;int&quot;, &quot;228B22&quot;x ~c2d)) -- paint the line green
+xShapeProps~setPropertyValue(&quot;LineWidth&quot;, box(&quot;int&quot;, &quot;500&quot;)) -- set line width 5 millimeter
+
+xShapeProps1 = xLine1~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+xShapeProps1~setPropertyValue(&quot;LineColor&quot;, box(&quot;int&quot;, &quot;228B22&quot;x ~c2d)) -- paint the line green
+xShapeProps1~setPropertyValue(&quot;LineWidth&quot;, box(&quot;int&quot;, &quot;500&quot;)) -- set line width 5 millimeter
+
+/* set the 3rd line transparent */
+call syssleep 1
+xShapeProps1~setPropertyValue(&quot;LineTransparence&quot;, box(&quot;int&quot;, &quot;80&quot;)) -- set transparency 80 per cent
+
+::requires UNO.cls    -- get UNO support</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

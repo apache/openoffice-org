@@ -1,0 +1,708 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>OpenOffice.org filters using the XML based file format</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="AUTHOR" CONTENT="Daniel Vogelheim">
+	<META NAME="CREATED" CONTENT="20010131;13260648">
+	<META NAME="CHANGEDBY" CONTENT="Daniel Vogelheim">
+	<META NAME="CHANGED" CONTENT="20010212;21041181">
+	<STYLE>
+	<!--
+		@page { margin: 2cm }
+		P { margin-bottom: 0.21cm; text-align: justify; page-break-before: auto }
+		H1 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 16pt }
+		H2 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 14pt; font-style: italic }
+		TD P { margin-bottom: 0.21cm; text-align: justify; page-break-before: auto }
+		TH P { margin-bottom: 0.21cm; font-style: italic; page-break-before: auto }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/xml/">xml</a>&nbsp;&raquo;&nbsp;<a href="/xml/filter/">filter</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<P ALIGN=LEFT STYLE="margin-top: 0.42cm; page-break-after: avoid"><FONT FACE="Arial, sans-serif"><FONT SIZE=4>OpenOffice.org
+filters using the XML based file format</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><B>Abstract</B>: This document explains the implementation of
+OpenOffice.org import and export filter components, focusing on
+filter components based on the OpenOffice.org XML file format. It is
+intended as a brief introduction to developers that want to implement
+OpenOffice.org filters for foreign file formats.</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<DIV ID="Inhaltsverzeichnis1">
+	<DIV ID="Inhaltsverzeichnis1_Head">
+		<P ALIGN=LEFT STYLE="margin-top: 0.42cm; page-break-after: avoid"><FONT FACE="Arial, sans-serif"><FONT SIZE=4 STYLE="font-size: 16pt"><B>Table
+		Of Contents</B></FONT></FONT></P>
+	</DIV>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0cm; page-break-before: auto"><A HREF="#1.Preliminaries|outline">1
+	 Preliminaries</A></P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0cm; page-break-before: auto"><A HREF="#2.TheInnardsofanOpenOffice.orgFilterComponent|outline">2
+	 The Innards of an OpenOffice.org Filter Component</A></P>
+	<P ALIGN=LEFT STYLE="margin-left: 0.5cm; margin-bottom: 0cm; page-break-before: auto">
+	<A HREF="#2.1.TheBigPicture|outline">2.1  The Big Picture</A></P>
+	<P ALIGN=LEFT STYLE="margin-left: 0.5cm; margin-bottom: 0cm; page-break-before: auto">
+	<A HREF="#2.2.WhereXMLComesIn...|outline">2.2  Where XML Comes In...</A></P>
+	<P ALIGN=LEFT STYLE="margin-left: 0.5cm; margin-bottom: 0cm; page-break-before: auto">
+	<A HREF="#2.3.Waiter,theExportPlease!|outline">2.3  Waiter, the
+	Export Please!</A></P>
+	<P ALIGN=LEFT STYLE="margin-left: 0.5cm; margin-bottom: 0cm; page-break-before: auto">
+	<A HREF="#2.4.ASecondLookattheFilterWrapper|outline">2.4  A Second
+	Look at the Filter Wrapper</A></P>
+	<P ALIGN=LEFT STYLE="margin-left: 0.5cm; margin-bottom: 0cm; page-break-before: auto">
+	<A HREF="#2.5.TheServices|outline">2.5  The Services</A></P>
+	<P ALIGN=LEFT STYLE="margin-left: 0.5cm; margin-bottom: 0cm; page-break-before: auto">
+	<A HREF="#2.6.Interfaces|outline">2.6  Interfaces</A></P>
+	<P ALIGN=LEFT STYLE="margin-left: 0.5cm; margin-bottom: 0cm; page-break-before: auto">
+	<A HREF="#2.7.Built-inComponents|outline">2.7  Built-in Components</A></P>
+	<P ALIGN=LEFT STYLE="margin-left: 0.5cm; margin-bottom: 0cm; page-break-before: auto">
+	<A HREF="#2.8.RegisteringaNewFilterWiththeApplication|outline">2.8 
+	Registering a New Filter With the Application</A></P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0cm; page-break-before: auto"><A HREF="#3.Codeexamples|outline">3
+	 Code examples</A></P>
+	<P ALIGN=LEFT STYLE="margin-left: 0.5cm; margin-bottom: 0cm; page-break-before: auto">
+	<A HREF="#3.1.TheFilterWrapper:InstantiatingtheXMLFilters|outline">3.1
+	 The Filter Wrapper: Instantiating the XML Filters</A></P>
+	<P ALIGN=LEFT STYLE="margin-left: 0.5cm; margin-bottom: 0cm; page-break-before: auto">
+	<A HREF="#3.2.ExportingthroughtheXMLfilter|outline">3.2  Exporting
+	through the XML filter</A></P>
+	<P ALIGN=LEFT STYLE="margin-left: 0.5cm; margin-bottom: 0cm; page-break-before: auto">
+	<A HREF="#3.3.Import:WritingintotheXMLFilter|outline">3.3  Import:
+	Writing into the XML Filter</A></P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0cm; page-break-before: auto"><A HREF="#4.Appendix|outline">4
+	 Appendix</A></P>
+	<P ALIGN=LEFT STYLE="margin-left: 0.5cm; margin-bottom: 0cm; page-break-before: auto">
+	<A HREF="#4.1.OthersUses|outline">4.1  Others Uses</A></P>
+	<P ALIGN=LEFT STYLE="margin-left: 0.5cm; margin-bottom: 0cm; page-break-before: auto">
+	<A HREF="#4.2.Resources|outline">4.2  Resources</A></P>
+</DIV>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<H1><A NAME="1.Preliminaries|outline"></A>1Preliminaries</H1>
+<P>They are several ways to get information into or out of
+OpenOffice.org: You can</P>
+<OL>
+	<LI><P>link against the application core,</P>
+	<LI><P>use the OpenOffice.org API,</P>
+	<LI><P>use the XML file format.</P>
+</OL>
+<P>Each of these ways has unique advantages and disadvantages, that I
+will briefly summarize:</P>
+<P>Using the core data structure and linking against the application
+core is the traditional way to implement filters in OpenOffice.org.
+The advantages this method offers are efficiency and direct access to
+the document. However, the core implementation provides a very
+implementation centric view of the applications. Additionally, there
+are a number of technical disadvantages: Every change in the core
+data structures or objects will have to be followed-up by
+corresponding changes in code that use them. Hence filters need to be
+recompiled to match the binary layout of the application core
+objects. While these things are manageable (albeit cumbersome) for
+closed source applications, this method is expected to create a
+maintenance nightmare if application and filter are developed
+separately, as is customary in open sources applications.
+Simultaneous delivery of a new application build and the
+corresponding filters developed by outside parties looks challenging.</P>
+<P>Using the OpenOffice.org API (based on UNO) is a much better way,
+since it solves the technical problems indicated in the last
+paragraph. The UNO component technology insulates the filter from
+binary layout (and other compiler and version dependent issues).
+Additionally, the API is expected to be more stable than the core
+interfaces, and it even provides a shallow level of abstraction from
+the core applications. In fact, the native XML filter implementations
+largely make use of this strategy and are based on the OpenOffice.org
+API.</P>
+<P>The third (and possibly surprising choice) is to import and export
+documents using the XML based file format. UNO-based XML import and
+export components feature all of the advantages of the previous
+method, but additionally provides the filter implementer with a
+clean, structured, and fully documented view of the document. As a
+significant difficulty in conversion between formats is the
+conceptual mapping from the one format to the other, a clean,
+well-structured view of the document may turn out to be beneficial.</P>
+<H1><A NAME="2.TheInnardsofanOpenOffice.orgFilterComponent|outline"></A>
+2The Innards of an OpenOffice.org Filter Component</H1>
+<P>First, we will try to get an overview of the import and export
+process using UNO components. Let's first attempt to gain a view
+of...</P>
+<H2><A NAME="2.1.TheBigPicture|outline"></A>2.1The Big Picture</H2>
+<P>An in-memory OpenOffice.org document is represented by it's
+document model. On disk, the same document is represented as a file.
+An import component must turn the latter into the former as shown by
+the diagram (Illustration 1).</P>
+<P><SPAN ID="Rahmen1" STYLE="float: left; width: 12.9cm; height: 3.21cm; border: none; padding: 0cm; background: #ffffff">
+	<P ALIGN=LEFT STYLE="margin-top: 0.21cm; page-break-before: auto"><IMG SRC="sveo1eo2.gif" NAME="Objekt1" ALIGN=LEFT WIDTH=488 HEIGHT=121><BR CLEAR=LEFT><FONT SIZE=2><I>Illustration
+	1: a generic import filter</I></FONT></P>
+</SPAN><BR CLEAR=LEFT></P><P>If you make use of UNO, this diagram can be
+turned into programming reality quite easily. The three entities in
+the diagram, (the file, the model, and the filter) all have direct
+counterparts in UNO services. The services themselves may consist of
+several interfaces that finally map into C++ or Java classes. The
+following diagram annotates the entities with their corresponding
+services and interfaces:
+</P>
+<P><SPAN ID="Rahmen2" STYLE="float: left; width: 12.9cm; height: 4.97cm; border: none; padding: 0cm; background: #ffffff">
+	<P ALIGN=LEFT STYLE="margin-top: 0.21cm; page-break-before: auto"><IMG SRC="sveo1eo3.gif" NAME="Objekt2" ALIGN=LEFT WIDTH=488 HEIGHT=188><BR CLEAR=LEFT><FONT SIZE=2><I>Illustration
+	2: services and interfaces used by an import filter</I></FONT></P>
+</SPAN><BR CLEAR=LEFT></P><P>In Illustration 2 (and all following
+illustrations) the gray part marks the part a filter implementer will
+have to program, while the white parts are already built into
+OpenOffice.org.</P>
+<P>If the implementer decides to make use of the OpenOffice.org API
+directly, this diagram is the proper starting point: The filter
+writer must create a class that implements the <CODE>ImportFilter</CODE>
+service. To achieve this, the the <CODE>InputStream</CODE> must be
+obtained from the <CODE>MediaDescriptor</CODE>. The incoming data can
+then be interpreted, and the OpenOffice.org document can be
+constructed by calling the appropriate methods of the document model.
+(The available methods of course depend on the kind of document, as
+described by the document service.)</P>
+<H2><A NAME="2.2.WhereXMLComesIn...|outline"></A>2.2Where XML Comes
+In...</H2>
+<P>If the advantages of an XML based import or export are desired,
+the filter implementer may make use of the existing XML import and
+export components. This way, the import logic does not need to deal
+with the document model itself, but rather generates the document in
+its OpenOffice.org XML file format representation. Done in a naive
+way, such a filter component would generate the XML, write it to
+file, and then call the built-in XML import to read it again. Since
+the XML import is based on the SAX API however, a better way exists:
+The import logic calls the SAX API. Since the XML reader component
+implements the SAX API, the document thus gets translated from the
+foreign format into its XML representation and then into the document
+model without the need to use temporary files, or even to render and
+subsequently parse an XML character stream.</P>
+<P><SPAN ID="Rahmen3" STYLE="float: left; width: 12.9cm; height: 4.1cm; border: none; padding: 0cm; background: #ffffff">
+	<P ALIGN=LEFT STYLE="margin-top: 0.21cm; page-break-before: auto"><IMG SRC="sveo1eo4.gif" NAME="Objekt3" ALIGN=LEFT WIDTH=488 HEIGHT=155><BR CLEAR=LEFT><FONT SIZE=2><I>Illustration
+	3: an XML-based import filter</I></FONT></P>
+</SPAN><BR CLEAR=LEFT></P><P>The link between the XML based import filter
+and the XML reader is the SAX <CODE>XDocumentHandler</CODE>
+interface. Using this model, the filter implementer has to implement
+a class that takes a <CODE>MediaDescriptor</CODE>, reads the
+corresponding file, and calls the <CODE>XDocumentHandler</CODE>
+methods to generate the XML representation. Additionally, a filter
+component (labelled &quot;Filter Wrapper&quot; in the diagram) needs
+to be written that instantiates XML import component and the
+self-written import filter.</P>
+<H2><A NAME="2.3.Waiter,theExportPlease!|outline"></A>2.3Waiter, the
+Export Please!</H2>
+<P>The export into a foreign format may of course be implemented in
+the same fashion. Instead of the <CODE>ImportFilter</CODE>
+service, the component now implements the <CODE>ExportFilter</CODE>
+service. An XML-based export filter would implement the document
+handler interface itself, and write the resulting document in the
+proper format into the location indicated by the <CODE>MediaDescriptor</CODE>.
+For an XML-based export filter, the schematic looks like this:</P>
+<P><SPAN ID="Rahmen4" STYLE="float: left; width: 12.9cm; height: 3.21cm; border: none; padding: 0cm; background: #ffffff">
+	<P ALIGN=LEFT STYLE="margin-top: 0.21cm; page-break-before: auto"><IMG SRC="sveo1eo5.gif" NAME="Objekt4" ALIGN=LEFT WIDTH=488 HEIGHT=121><BR CLEAR=LEFT><FONT SIZE=2><I>Illustration
+	4: an XML-based export filter</I></FONT></P>
+</SPAN><BR CLEAR=LEFT><BR><BR>
+</P>
+<H2><A NAME="2.4.ASecondLookattheFilterWrapper|outline"></A>2.4A
+Second Look at the Filter Wrapper</H2>
+<P>How do the built-in XML export or import components cooperate with
+the self-programmed filter? As was briefly mentioned above, the 
+export filter services consist of two major interfaces: <CODE>XImporter</CODE>
+or <CODE>XExporter</CODE> for import and export, respectively, and
+<CODE>XFilter</CODE> for both filter types. The former interface
+passes in the actual document to be imported to or exported from,
+while the <CODE>XFilter</CODE> interfaces triggers the filtering
+process and passes in the <CODE>MediaDescriptor</CODE> which
+describes the source or target document.</P>
+<P>In the case of an XML-based filter, this functionality gets
+distributed to two components. For the import, the built-in XML
+import component implements the <CODE>XImporter</CODE> interface as
+well as <CODE>XDocumentHandler</CODE>. The XML-based filter
+component should implement the <CODE>XFilter</CODE> interface, and
+additionally provide a way to set an <CODE>XDocumentHandler</CODE>.
+The filter wrapper then needs to instantiate both components and
+connect them by setting the built-in XML import as the document
+handler of the XML-based filter. The wrapper can then delegate the
+<CODE>XImporter</CODE> calls to the XML import and the <CODE>XFilter</CODE>
+calls to the XML-based filter, thereby implementing the filter
+<CODE>ImportFilter</CODE> service.</P>
+<P>The export case is slightly more complicated. The additional
+problem is that the filter(&#133;) call of the <CODE>XFilter</CODE>
+interface provides the <CODE>MediaDescriptor</CODE> and
+simultaneously controls the filter process. However, in the desired
+setup for an XML-based export filter, the built-in XML export
+controls the filtering process, but the XML-based filter handles the
+file output, and hence needs the <CODE>MediaDescriptor</CODE>.
+Therefore the filter wrapper has to operate as follows: First it has
+to instantiate the XML-based export filter. This filter has to
+implement the <CODE>XDocumentHandler</CODE> interface. Then it has to
+instantiate the XML export, which at instantiation time expects the
+document handler as a parameter. The filter wrapper delegates calls
+to both the <CODE>XFilter</CODE> and the <CODE>XExporter</CODE>
+interface to the XML export. For calls to the filter method of
+<CODE>XFilter</CODE>, it additionally has to pass the
+<CODE>MediaDescriptor</CODE> on to the XML-based export filter.
+The means by which this should happen is left to the implementer.</P>
+<H2><A NAME="2.5.TheServices|outline"></A>2.5The Services</H2>
+<P>We should now have a closer look at the involved services:</P>
+<P>The service <CODE><A HREF="http://api.openoffice.org/common/ref/com/sun/star/document/ImportFilter.html">com.sun.star.document.ImportFilter</A></CODE>
+describes a generic import filter. The core of the service is
+provided by the interfaces <CODE>XImporter</CODE> and <CODE>XFilter</CODE>
+(see below). <CODE>XImporter</CODE> supplies the filter object with
+the target document (in form of an <CODE>XComponent</CODE>). The
+<CODE>XFilter</CODE> is used to actually start the filtering process,
+supplying the <CODE>MediaDescriptor</CODE> for the source file as a
+parameter. Additionally, the <CODE>ImportFilter</CODE> service
+supports <CODE>XInitialization</CODE> and <CODE>XPropertySet</CODE>
+interfaces. The <CODE>XInitialization</CODE> interface serves to pass
+parameters to the filter at initialization time, while the
+<CODE>XPropertySet</CODE> can be used to get information from and
+about the filter component. It is generally read-only.</P>
+<P>The twin of the <CODE>ImportFilter</CODE> is the service
+<CODE><A HREF="http://api.openoffice.org/common/ref/com/sun/star/document/ExportFilter.html">com.sun.star.document.ExportFilter</A></CODE>.
+The main interfaces are <CODE>XExporter</CODE> and <CODE>XFilter</CODE>.
+The <CODE>XExporter</CODE> supplies the filter with the source
+document, whereas the <CODE>XFilter</CODE> starts the filter process.
+The <CODE>MediaDescriptor</CODE> that gets passed into the
+<CODE>XFilter</CODE> describes the output file. The <CODE>ExportFilter</CODE>
+supports the <CODE>XInitialization</CODE> and
+<CODE>XPropertySet</CODE> interfaces, just like the <CODE>ImportFilter</CODE>.</P>
+<P>The <CODE><A HREF="http://api.openoffice.org/common/ref/com/sun/star/document/MediaDescriptor.html">com.sun.star.document.MediaDescriptor</A></CODE>
+finally collects all information about a source or target file to be
+imported from or exported to. It contains meta information (such as
+the file name), as well as an <CODE>InputStream</CODE> which can be
+used to actually manipulate the file. <EM>Caveat</EM>: Objects
+obtained from the <CODE>MediaDescriptor</CODE> may not be referenced
+or otherwise held longer beyond the <CODE>filter(<CODE>&#133;</CODE>)</CODE>
+method call. Doing so (e.g., keeping a reference to the <CODE>InputStream</CODE>
+obtained from the <CODE>MediaDescriptor</CODE> prevents the
+<CODE>InputStream</CODE> from being closed.)</P>
+<P>The document model cannot be described by a single service, as it
+obviously has to vary greatly, depending on the type of document (e.g.,
+text or spreadsheet.) An example for a document model service is the
+<CODE><A HREF="http://api.openoffice.org/common/ref/com/sun/star/text/AdvancedTextDocument.html">com.sun.star.text.AdvancedTextDocument</A></CODE>
+service. What is important in this context, is that all document model
+services support the <CODE>XComponent</CODE> interface.</P>
+<H2><A NAME="2.6.Interfaces|outline"></A>2.6Interfaces</H2>
+<P>The <CODE><A HREF="http://api.openoffice.org/common/ref/com/sun/star/xml/sax/XDocumentHandler.html">com.sun.star.document.X</A><A HREF="http://api.openoffice.org/common/ref/com/sun/star/document/XFilter.html">Filter</A></CODE>
+interface features only two methods: <CODE>filter(&#133;)</CODE> and
+<CODE>cancel()</CODE>. The former starts the filtering process based
+for the given <CODE>MediaDescriptor</CODE>, while the latter cancels
+an ongoing filter process. <CODE>XFilter</CODE> must be implemented
+for both, import and export filters.</P>
+<P>The interface <CODE><A HREF="http://api.openoffice.org/common/ref/com/sun/star/xml/sax/XDocumentHandler.html">com.sun.star.document.X</A><A HREF="http://api.openoffice.org/common/ref/com/sun/star/document/XImporter.html">Importer</A></CODE>
+is used for setting up an import before the <CODE>filter(<CODE>&#133;</CODE>)</CODE>
+method from the <CODE>XFilter</CODE> interface is called. The
+<CODE>XImporter</CODE> supplies the document with its (empty) target
+document, i.e., the document whose content is about to be read from
+file.</P>
+<P>The <CODE><A HREF="http://api.openoffice.org/common/ref/com/sun/star/xml/sax/XDocumentHandler.html">com.sun.star.document.X</A><A HREF="http://api.openoffice.org/common/ref/com/sun/star/document/XExporter.html">Exporter</A></CODE>
+is structured identically to the <CODE>XImporter</CODE> interface. It
+is used to set the target document, i.e., the document whose content
+should be written to file.</P>
+<P>The <CODE><A HREF="http://api.openoffice.org/common/ref/com/sun/star/xml/sax/XDocumentHandler.html">com.sun.star.xml.sax.XDocumentHandler</A></CODE>
+is the core interface for handling XML data in OpenOffice.org. It is
+part of the SAX interface. It has methods for all parts of XML
+documents, like start or end of elements or runs of characters. The
+<CODE>XDocumentHandler</CODE> interface is used for both, incoming
+and outgoing XML data, thus allowing chaining of components handling
+XML. A component that processes XML data should implement the
+<CODE>XDocumentHandler</CODE> interface. A component that will
+generate XML data should call the methods of an <CODE>XDocumentHandler</CODE>
+to output the events. The <CODE><A HREF="http://api.openoffice.org/common/ref/com/sun/star/xml/sax/XExtendedDocumentHandler.html">XExtendedDocumentHandler</A></CODE>,
+being derived from <CODE>XDocumentHandler</CODE>, provides
+an extended version that can also handle comments. If the extended
+functionality is desired, the <CODE>XDocumentHandler</CODE> should be
+queried for the <CODE>XExtendedDocumentHandler</CODE> at
+runtime. However, implementers should make sure their components
+never rely on the presence of extended <CODE>XExtendedDocumentHandler</CODE>,
+but rather make sure they could also work with the plain
+<CODE>XDocumentHandler</CODE>. Since all vital parts of XML can be
+handled through <CODE>XDocumentHandler</CODE>, this should not pose
+much of a problem.</P>
+<P>The interface <CODE><A HREF="http://api.openoffice.org/common/ref/com/sun/star/lang/XComponent.html">com.sun.star.lang.XComponent</A></CODE>
+is the parent interface for all document models. Actual documents
+derive from this model to provide model specific functionality, such
+as <CODE><A HREF="http://api.openoffice.org/common/ref/com/sun/star/text/XTextDocument.html">XTextDocument</A></CODE>.
+A filter will have to query at runtime whether it can handle the
+supplied <CODE>XModel</CODE>.</P>
+<P>Initialization of components can be supported through the
+<CODE><A HREF="http://api.openoffice.org/common/ref/com/sun/star/lang/XInitialization.html">com.sun.star.lang.XInitialization</A></CODE>
+interface.</P>
+<P>Properties of the filters can be queried using the
+<CODE><A HREF="http://api.openoffice.org/common/ref/com/sun/star/beans/XPropertySet.html">com.sun.star.beans.XPropertySet</A></CODE>
+interface. The names of the supported properties are part of the
+service description. In general, <CODE>XPropertySet</CODE>
+implementations support both reading and writing, but the intended
+use for filter components is to be read-only.</P>
+<P><BR><BR>
+</P>
+<H2><A NAME="2.7.Built-inComponents|outline"></A>2.7Built-in
+Components</H2>
+<P>All of OpenOffice.org's applications have built-in XML import and
+export components. The component names are summarized in the
+following table:</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=30*>
+	<COL WIDTH=112*>
+	<COL WIDTH=114*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=12%>
+				<P>Application</P>
+			</TH>
+			<TH WIDTH=44%>
+				<P>XML import</P>
+			</TH>
+			<TH WIDTH=44%>
+				<P>XML export</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=12%>
+				<P>Writer</P>
+			</TD>
+			<TD WIDTH=44%>
+				<P>com.sun.star.comp.Writer.XMLExporter</P>
+			</TD>
+			<TD WIDTH=44%>
+				<P>com.sun.star.comp.Writer.XMLImporter</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=12%>
+				<P>Calc</P>
+			</TD>
+			<TD WIDTH=44%>
+				<P>com.sun.star.comp.Calc.XMLExporter</P>
+			</TD>
+			<TD WIDTH=44%>
+				<P>com.sun.star.comp.Calc.XMLImporter</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=12%>
+				<P>Chart</P>
+			</TD>
+			<TD WIDTH=44%>
+				<P>com.sun.star.comp.Chart.XMLExporter</P>
+			</TD>
+			<TD WIDTH=44%>
+				<P>com.sun.star.comp.Chart.XMLImporter</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=12%>
+				<P>Impress</P>
+			</TD>
+			<TD WIDTH=44%>
+				<P>com.sun.star.comp.Impress.XMLExporter</P>
+			</TD>
+			<TD WIDTH=44%>
+				<P>com.sun.star.comp.Impress.XMLImporter</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=12%>
+				<P>Draw</P>
+			</TD>
+			<TD WIDTH=44%>
+				<P>com.sun.star.comp.Draw.XMLExporter</P>
+			</TD>
+			<TD WIDTH=44%>
+				<P>com.sun.star.comp.Draw.XMLImporter</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P>Additionally, the XML reader and writer components should be
+mentioned, even though they have not been discussed in the previous
+chapters. These two components implement the XML reader (or parser)
+and writer (or unparser) components used by OpenOffice.org for
+writing all it's XML files. They implement (XML writer) or use (XML
+parser) the <CODE>XDocumentHandler</CODE> interface. In some sense
+they could be considered XML-based filters, since they read or write
+character streams and turn them into SAX function calls. Their names
+are <CODE>com.sun.star.xml.sax.Writer</CODE> and
+<CODE>com.sun.star.xml.sax.Parser</CODE>, respectively.</P>
+<H2><A NAME="2.8.RegisteringaNewFilterWiththeApplication|outline"></A>
+2.8Registering a New Filter With the Application</H2>
+<P>There is a final, crucial step that will not be covered here:
+Registering a filter with the application. The registration process
+will make sure that the application knows the filter, and also knows
+which files the filter can be applied to. The filter registration is
+described <A HREF="http://framework.openoffice.org/documentation/filters/index.html">here</A>.
+</P>
+<H1><A NAME="3.Codeexamples|outline"></A>3Code examples</H1>
+<P>This chapter is intended to give brief code examples for the
+crucial steps in creating XML-based import or export filters. We'll
+start with the filter wrapper, followed by short examples for
+importing into and export from the XML filters.</P>
+<H2><A NAME="3.1.TheFilterWrapper:InstantiatingtheXMLFilters|outline"></A>
+3.1The Filter Wrapper: Instantiating the XML Filters</H2>
+<P>The filter wrapper needs to instantiate the built-in XML import or
+export components. The following code snippet will demonstrate this
+for an XML-based export filter.</P>
+<PRE>
+<CODE>using namespace ::com::sun::star;</CODE>
+
+<CODE>// Instantiate the XML export filter</CODE>
+
+<CODE>// Prerequisites: </CODE>
+<CODE>// 1) a service factory, </CODE>
+<CODE>// 2) a document handler, </CODE>
+<CODE>// 3) a string with the service name.</CODE>
+
+<CODE>// Obtain the service factory</CODE>
+<CODE>uno::Reference&lt; lang::XMultiServiceFactory &gt; xServiceFactory = &#133;;</CODE>
+
+<CODE>// Obtain (or create) the XML-based output filter. It has to implement</CODE>
+<CODE>// the XDocumentHandler interface, so the export component can write to it.</CODE>
+<CODE>uno::Reference&lt; xml::sax::XDocumentHandler &gt; xHandler = &#133; &lt;your filter&gt; <CODE>&#133;</CODE>; </CODE>
+
+<CODE>// Prepare arguments passed to the XML export filter:</CODE>
+<CODE>// The XML-based filter in form of an XdocumentHandler.</CODE>
+<CODE>// Arguments are passed by a sequence of Any. </CODE>
+<CODE>// Our sequence will contain only 1 element.</CODE>
+<CODE>uno::Sequence&lt;uno::Any&gt; aArgs(1);</CODE>
+<CODE>aArgs[0] &lt;&lt;= xHandler;</CODE>
+
+<CODE>// Instantiate the exporter from the factory.</CODE>
+<CODE>::rtl::OUString sService =</CODE>
+<CODE>    ::rtl::OUString::createFromAscii(&quot;com.sun.star.comp.Writer.XMLExporter&quot;);</CODE>
+
+<CODE>uno::Reference&lt; document::XExporter &gt; xExporter(</CODE>
+<CODE>   xServiceFactory-&gt;createInstanceWithArguments(sService),	aArgs ),</CODE>
+<CODE>   uno::UNO_QUERY );</CODE>
+<CODE>ASSERT( xExporter.is(), &quot;can' instantiate XML exporter&quot; );</CODE>
+
+<CODE>// Now we have the two components in xHandler and xExporter and can start </CODE>
+<CODE>// calling the XFilter and XExporter methods. Note that the xHandler needs</CODE>
+<CODE>// to be informed about its MediaDescriptor.</CODE></PRE><H2>
+<A NAME="3.2.ExportingthroughtheXMLfilter|outline"></A>3.2Exporting
+through the XML filter</H2>
+<P>The following code snippet could be located in a filter wrapper
+for an XML-based export filter. The following two methods implement
+the gist of a filter wrapper for an XML-based export. They are really
+simple because the filter wrapper doesn't really do much of its own.
+It only delegates to it's two components.</P>
+<PRE><CODE>using namespace ::com::sun::star;</CODE>
+
+<CODE>void SAL_CALL &lt;filter wrapper&gt;::setSourceDocument( </CODE>
+<CODE>	const uno::Reference&lt;lang::XComponent&gt;&amp; xComponent )</CODE>
+<CODE>{</CODE>
+<CODE>    // delegate to XExporter of the built-in XML export</CODE>
+<CODE>    xExporter-&gt;setSourceDocument( xComponent );</CODE>
+<CODE>}</CODE>
+
+<CODE>sal_Bool SAL_CALL &lt;filter wrapper&gt;::filter( </CODE>
+<CODE>    const uno::Sequence&lt;beans::PropertyValue&gt;&amp; aDescriptor )</CODE>
+<CODE>    throw(uno::RuntimeException)</CODE>
+<CODE>{</CODE>
+<CODE>    // set MediaDescriptor at XML-based export filter</CODE>
+<CODE>    ...</CODE>
+
+<CODE>    // get access to XFilter interface of XML export</CODE>
+<CODE>    uno::Reference&lt;document::XFilter&gt; xFilter(xExporter, uno::UNO_QUERY);</CODE>
+<CODE>    xFilter-&gt;filter(aDescriptor);</CODE>
+<CODE>}</CODE>
+</PRE><H2>
+<A NAME="3.3.Import:WritingintotheXMLFilter|outline"></A>3.3Import:
+Writing into the XML Filter</H2>
+<P>The next example should detail how an import filter would
+communicate with the XML import component. Basically, it only needs
+to call the <CODE>XDocumentHandler</CODE> methods. The following code
+implements the notorious &quot;Hello World!&quot; program as an
+OpenOffice.org import filter.</P>
+<PRE>
+using namespace ::com::sun::star;
+
+// instantiate the XML import component 
+::rtl::OUString sService =
+    ::rtl::OUString::createFromAscii(&quot;com.sun.star.comp.Writer.XMLImporter&quot;)
+uno::Reference&lt;xml::sax::XDocumentHandler&gt; xImport(
+    xServiceFactory-&gt;createInstance(sService), uno::UNO_QUERY );
+ASSERT( xImport.is(), &quot;can't instantiate XML import&quot; );
+
+// OK. Now we have the import. Let's make a real simple document.
+
+// a few comments:
+// 1. We will use string constants from xmloff/xmlkywd.hxx
+// 2. For convenience, we'll use a globally shared attribute list from the 
+//    xmloff project (xmloff/attrlist.hxx)
+// 3. In a real project, we would pre-construct our OUString, rather than use
+//    the slow createFromAscii(&#133;) method every time.
+
+// We will write the following document: (the unavoidable 'Hello World!')
+// &lt;office:document 
+//      office:class=&quot;text&quot; 
+//      xmlns:office=&quot;http://openoffice.org/2000/office&quot; 
+//      xmlns:text=&quot;http://openoffice.org/2000/text&quot; &gt;
+//   &lt;office:body&gt;
+//     &lt;text:p&gt;Hello World!&lt;/text:p&gt;
+//   &lt;/office:body&gt;
+// &lt;/office:document&gt;
+
+SvXMLAttributeList aAttrList;
+
+xHandler-&gt;startDocument();
+
+// our first element: first build up the attribute list, then start the element
+// DON'T FORGET TO ADD THE NAMESPACES!
+aAttrList.AddAttribute(
+    ::rtl::OUString::createFromAscii(&quot;xmlns:office&quot;), 
+    ::rtl::OUString::createFromAscii(&quot;CDATA&quot;), 
+    ::rtl::OUString::createFromAscii(&quot;http://openoffice.org/2000/office&quot;) );
+aAttrList.AddAttribute(
+    ::rtl::OUString::createFromAscii(&quot;xmlns:text&quot;), 
+    ::rtl::OUString::createFromAscii(&quot;CDATA&quot;), 
+    ::rtl::OUString::createFromAscii(&quot;http://openoffice.org/2000/text&quot;) );
+aAttrList.AddAttribute(
+    ::rtl::OUString::createFromAscii(&quot;office:class&quot;), 
+    ::rtl::OUString::createFromAscii(&quot;CDATA&quot;), 
+        ::rtl::OUString::createFromAscii(&quot;text&quot;) );
+xHandler-&gt;startElement(
+    ::rtl::OUString::createFromAscii(&quot;office:document&quot;),
+    aAttrList );
+
+// body element (no attributes)
+aAttrList.clear();
+xHandler-&gt;startElement(
+    ::rtl::OUString::createFromAscii(&quot;office:body&quot;),
+    aAtrList );
+
+// paragraph element (no attributes)
+aAttrList.clear();
+xHandler-&gt;startElement(
+    ::rtl::OUString::createFromAscii(&quot;text:p&quot;),
+    aAtrList );
+
+// write text
+xHandler-&gt;characters(
+    ::rtl::OUString::createFromAscii(&quot;Hello World!&quot;) );
+
+// close paragraph
+xHandler-&gt;startElement(
+    ::rtl::OUString::createFromAscii(&quot;text:p&quot;),
+
+// close body
+xHandler-&gt;endElement(
+    ::rtl::OUString::createFromAscii(&quot;office:body&quot;) );
+
+// close document element
+xHandler-&gt;endElement(
+    ::rtl::OUString::createFromAscii(&quot;office:document&quot;) );
+
+// close document
+xHandler-&gt;endDocument();
+</PRE><H1>
+<A NAME="4.Appendix|outline"></A>4Appendix</H1>
+<H2><A NAME="4.1.OthersUses|outline"></A>4.1 Other Uses</H2>
+<P>This chapter briefly mentions a few other uses of XML-based filter
+components that provide additional value and versatility.</P>
+<P>In some circumstances, it may be desirable to have standalone
+format conversion tools. This would, for example, enable batch
+conversion of legacy documents. The XML-based filter components allow
+us to do that with little extra effort. Let us recall that an
+XML-based import filter uses OpenOffice.org's built-in XML import to
+generate the document. It calls the (generic) <CODE>XDocumentHandler</CODE>
+interface after it has been supplied with the <CODE>XDocumentHandler</CODE>
+implementation by the filter wrapper. Now if the filter wrapper
+instead supplies the XML-based import filter with the XML writer
+component (which implements the <CODE>XDocumentHandler</CODE>
+interface as well), then the XML writer component will output the XML
+as a character stream to disk. Thus we have created the desired
+standalone conversion utility by only implementing a new filter
+wrapper!</P>
+<P><SPAN ID="Rahmen5" STYLE="float: left; width: 12.56cm; height: 3.17cm; border: none; padding: 0cm; background: #ffffff">
+	<P ALIGN=LEFT STYLE="margin-top: 0.21cm; page-break-before: auto"><IMG SRC="sveo1eo6.gif" NAME="Objekt5" ALIGN=LEFT WIDTH=475 HEIGHT=120><BR CLEAR=LEFT><FONT SIZE=2><I>Illustration
+	5: a standalone file format conversion utility</I></FONT></P>
+</SPAN><BR CLEAR=LEFT></P><P>A different possible use is the chaining of
+XML-based filters. Suppose the foreign file format in question is
+also based on XML. Now it doesn't make sense to re-implement the XML
+parser inside that component, so it seems natural to use the existing
+parser (or unparser) component. This way, our import (or export)
+filter would have to implement the <CODE>XDocumentHandler</CODE>
+interface for its input, and also use an <CODE>XDocumentHandler</CODE>
+interface for its output. The resulting implementation is sketched in
+Illustration 6. Note that such XML to XML filters could be chained
+arbitrarily.</P>
+<P><SPAN ID="Rahmen6" STYLE="float: left; width: 14.2cm; height: 3.54cm; border: none; padding: 0cm; background: #ffffff">
+	<P ALIGN=LEFT STYLE="margin-top: 0.21cm; page-break-before: auto"><IMG SRC="sveo1eo7.gif" NAME="Objekt6" ALIGN=LEFT WIDTH=527 HEIGHT=134><BR CLEAR=LEFT><FONT SIZE=2><I>Illustration
+	6: a filter chain with one element</I></FONT></P>
+</SPAN><BR CLEAR=LEFT></P><P>Note that, if the other application is also an
+OpenSource application, it could use UNO component technology as
+well, and thus use the very same filter components for its own import
+and export. A filter converting from the foreign XML into
+OpenOffice.org XML would be an import filter for OpenOffice.org, and
+simultaneously an export filter for the other application.
+</P>
+<P>As OpenOffice.org is being developed further, it becomes likely
+that eventually changes to the file format will have to be made. It
+is mandatory to supply users with the ability to read and write the
+old formats of course. This could indeed be handled by an XML to XML
+transformation, with one format being the old OpenOffice.org XML
+format, and the other being the new format.</P>
+<P>Note that such a filter could also be used by users of the older
+versions to read and write documents in the new format! Additionally,
+it could be chained between other XML-based import or export filters,
+allowing users to utilize import and export filters for versions
+other than their own. Essentially, this would achieve a decoupling of
+application, filter, and file format version. The opportunities this
+opens up are quite amazing: If a new file format is implemented,
+users would not be forced to upgrade their application to make use of
+the new filter. Also, users of newer application versions could still
+use filters developed for the older format. 
+</P>
+<H2><A NAME="4.2.Resources|outline"></A>4.2Resources</H2>
+<P>The following resources may provide additional information:</P>
+<UL>
+	<LI><P ALIGN=LEFT>Tutorial &quot;How to register a component&quot;:
+	<A HREF="http://framework.openoffice.org/documentation/filters/index.html">http://framework.openoffice.org/documentation/filters/index.html</A></P>
+	<LI><P ALIGN=LEFT>XML file format specification:
+	<A HREF="http://xml.openoffice.org/xml_specification.pdf">http://xml.openoffice.org/xml_specification.pdf</A></P>
+	<LI><P ALIGN=LEFT>Tutorial &quot;A Component in C++&quot;:
+	<A HREF="http://udk.openoffice.org/cpp/man/component_tutorial.html">http://udk.openoffice.org/cpp/man/component_tutorial.html</A></P>
+	<LI><P ALIGN=LEFT>OpenOffice.org API Reference:
+	<A HREF="http://api.openoffice.org/common/ref/">http://api.openoffice.org/common/ref/</A></P>
+	<LI><P ALIGN=LEFT>OpenOffice.org XML Homepage:
+	<A HREF="http://xml.openoffice.org/">http://xml.openoffice.org</A></P>
+	<LI><P ALIGN=LEFT>OpenOffice.org Framework Homepage:
+	<A HREF="http://framework.openoffice.org/">http://framework.openoffice.org</A></P>
+	<LI><P ALIGN=LEFT>OpenOffice.org API Homepage:
+	<A HREF="http://api.openoffice.org/">http://api.openoffice.org/</A></P>
+	<LI><P ALIGN=LEFT>OpenOffice.org UNO Homepage:
+	<A HREF="http://udk.openoffice.org/">http://udk.openoffice.org/</A></P>
+</UL>
+<HR>
+<P>The <A HREF="http://xml.openoffice.org/">xmloff</A> development
+team <BR>Summarized by <A HREF="mailto:dvo@openoffice.org">dvo</A></P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

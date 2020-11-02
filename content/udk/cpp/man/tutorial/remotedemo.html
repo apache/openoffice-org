@@ -1,0 +1,176 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1"/>
+	<TITLE>Remote communication demo</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)"/>
+	<META NAME="CLASSIFICATION" CONTENT="Remote communication demo"/>
+	<META NAME="KEYWORDS" CONTENT="UNO,Remote communication demo"/>
+   <style type="text/css">
+<!--
+li {margin-bottom: 0.2cm;}
+h1 {color:#ffffff;font-size:20pt;font-weight:bold;font-family:Arial,sans-serif;
+    margin-top: 0.2cm; margin-bottom: 0.2cm}
+h2 {color:#ffffff;font-size:16pt;font-family:Arial,sans-serif;
+    padding-left: 0.1cm; padding-top: 0.2cm; padding-bottom: 0.2cm;
+    margin-right: 0.1cm;
+    background-color: #666699; width: 100%}
+-->
+</style>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LINK="#444488" VLINK="#444488">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/cpp/">cpp</a>&nbsp;&raquo;&nbsp;<a href="/udk/cpp/man/">man</a>&nbsp;&raquo;&nbsp;<a href="/udk/cpp/man/tutorial/">tutorial</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 bgcolor=#666699 summary="Title">
+	<TR>
+		<td>
+			<H1 ALIGN=center> Remote communication demo</H1>
+		</td><td>
+			<A HREF="http://www.openoffice.org/"><IMG SRC="../../../images/open_office_org_logo.gif" NAME="Grafik1" ALT="OpenOffice.org" ALIGN=right BORDER=0 /></A>
+		</TD>
+	</TR>
+</TABLE>
+
+<h2>Contents</h2>
+	<blockquote>
+			<A HREF="#Overview">Overview</A><br/>
+			<A HREF="#Usage">Usage</A><br/>
+			<A HREF="#Description">Description</a>
+	</blockquote>
+
+<h2><a name="Overview"></a> Overview </h2>
+
+<P>This demo shows how to establish an interprocess bridge to a
+OpenOffice.org and creates four new office documents.  (see also the
+<A HREF="../../../common/man/spec/remotebridge.html">
+interprocess-bridge documentation</A> ).
+The source code of the example can be found in udk/remotebridges/examples .</P>
+
+<h2><a name="Usage"></a>Usage</h2>
+
+<p>The demo consists of a UNO-component that supports the
+<a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XMain.html">
+<code>com.sun.star.lang.XMain</code></a> interface. The component can be started
+using the uno.exe tool, which can be found in the binary output tree (it is
+not installed with OpenOffice.org).</p>
+
+<ol>
+	<li> Install an OpenOffice.org
+	<li> Before program start, please open the
+     <code>share/config/registry/instance/org/openoffice/Setup.xml</code> file.
+	 You need to modify the tag <code>ooSetupConnectionURL</code>.
+	 Here's an example:
+<pre>
+   &lt;ooSetupConnectionURL cfg:type="string" &gt;socket,host=localhost,port=2002;urp;StarOffice.NamingService&lt;/ooSetupConnectionURL&gt;
+</pre>
+	  Alternatively you can start the office with the following command line :
+<pre>
+   soffice "-accept=socket,host=localhost,port=2002;urp;StarOffice.NamingService"
+</pre>
+   <p>You can find a list of command line parameters in the
+   <a href="http://framework.openoffice.org/servlets/ProjectDocumentView?documentID=280">
+   framework project</a> documentation.
+   
+    
+	<li> After starting the OpenOffice.org, confirm that the port is listening
+	     with `netstat -a | fgrep 2002`.</li>
+	<li> Install the binary output tree of the current build.
+	<li> Checkout (top-level) the api/odk module from openoffice.org.
+	<li> Build the api/odk/examples/cpp/officeclient directory (formerly api/odk/examples/officeclient).
+	<li> Make the api/odk/wntmsci3/bin (on unix api/odk/unxsols3/lib)
+	     your current directory.
+	<li> Copy from the binary output tree the file wntmsci3/bin/applicat.rdb to
+		 the current directory. (wntmsci3 is dependant on your operating system
+		 for LInux use unxlngi4.pro)</li>
+	<li> Now execute the following :
+	     <p>Windows : <br/>
+	     <code>uno -l officeclientsample.dll -c com.sun.star.comp.odk.example.OfficeClientSample -r applicat.rdb  -- uno:socket,host=localhost,port=2002;urp;StarOffice.NamingService</code></p>
+	     <p>Unix : <br/>
+	     <code>uno -l libofficeclientsample.so -c com.sun.star.comp.odk.example.OfficeClientSample -r applicat.rdb -- 'uno:socket,host=localhost,port=2002;urp;StarOffice.NamingService'</code></p>
+ </ol>
+
+<p>The component now is instantiated by the uno.exe tool and connects to the
+office. Please press any key when asked to do so. You should get the following
+output on the shell:</p>
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4 WIDTH="100%" STYLE="page-break-before: always">
+<tr>
+<td COLSPAN="3" WIDTH="100%" BGCOLOR="#FFFFC0">
+<pre>
+OStorePageBIOS::verify(): close pending.
+Connecting ....
+Creating Socket. Family: 2 Type: 1 Protocol: 0
+got the remote NamingService
+press any key to open a new writer document ...
+
+
+pasting some text into the writer document
+press any key to close the document
+
+press any key to open a new draw document ...
+
+press any key to close the document
+
+press any key to open a new schedule document ...
+
+press any key to close the document
+
+press any key to open a new calc document ...
+
+press any key to close the document
+</pre>
+</td>
+</tr>
+</table>   
+	
+<h2><a name="Description"></a> Description </h2>
+
+<p>The demo is implemented as component to show the usage of uno-exe. The
+advantage (compared to writing your own executable, which is also possible) is,
+that you do not have to care about the UNO bootstrapping.</p>
+
+<p>The component first takes care, that all necessary shared libraries are
+registered (registerServices) method. Afterwards it uses the <code>
+com.sun.star.bridge.UnoUrlResolver</code> service to establish an
+interprocess-bridge to the office.</p>
+
+<p> Then it retrieves the remote servicemanager and further on the
+<code>com.sun.star.frame.Desktop</code> service (which is a oneinstance
+service).</p>
+
+		<p> Now it queries for the XComponentLoader interface and opens the
+		    four empty documents on demand.
+	
+<table summary="Footer">
+	<TR>
+		<TD BGCOLOR="#666699">
+			<P><FONT COLOR="#ffffff">
+			Author: <A HREF="mailto:joerg.budischewski@germany.sun.com"><FONT COLOR="#ffffff">J&ouml;rg Budischewski</FONT></A> ($Date: 2004/11/17 11:44:59 $)<br/>
+			<I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I></FONT>
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

@@ -1,0 +1,278 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>Parameter Name Substitution</title>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/dba/">dba</a>&nbsp;&raquo;&nbsp;<a href="/dba/howto/">howto</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h1>Parameter Name Substitution for ODBC data sources</h1>
+<span style="font-size:xx-large;font-weight:bold">Note:</span> <em>The below information
+is outdated, it applies only to OpenOffice.org versions prior to 2.0.</em>
+<h2>The Problem</h2>
+When working with parametrized statements, OpenOffice.org usually uses
+named parameters such as in "<span style="font-family: monospace;">SELECT
+* FROM &lt;table&gt; WHERE &lt;field&gt; = :param</span>" Here "<span
+ style="font-family: monospace;">:param</span>" is a so-called <span
+ style="font-style: italic;">named parameter</span>. However, some
+databases do not allow such named parameters, but only unnamed ones. The
+statement then would be "<span style="font-family: monospace;">SELECT *
+FROM &lt;table&gt; WHERE &lt;field&gt; = ?</span>". Such databases
+usually reject statements with named parameters.<br>
+<h2>The Solution</h2>
+The OpenOffice.org ODBC-SDBC bridge (more sloppy: OOo's ODBC driver)
+features substituting named parameters with unnamed ones before sending
+statements to the system driver.<br>
+<br>
+Parameter name substitution can be enabled on a per-data-source basis.
+For this, the "Info" property of a <a
+ href="http://api.openoffice.org/docs/common/ref/com/sun/star/sdb/DataSource.html">data
+source</a> should contain a name-value-pair with<br>
+<span style="font-family: monospace;">Name</span>: <span
+ style="font-family: monospace;">ParameterNameSubstituion</span><br>
+<span style="font-family: monospace;">Value</span>: <span
+ style="font-family: monospace;">TRUE</span><br>
+<br>
+Unfortunately, there is no user interface, yet, for doing so. There is
+an <a href="http://www.openoffice.org/issues/show_bug.cgi?id=2794">issuezilla
+bug requesting this UI</a>, but as long as it's not fixed, you could
+use the Basic macro provided below, which adds the setting for a data
+source of your choice.<br>
+<br>
+Note that in OpenOffice.org 1.0.x, this feature is available for ODBC
+drivers only. In later versions (notably in the upcoming 1.1, but also
+in the intermediate developer snapshots), it has been implemented for
+JDBC drivers, too.
+<h2>The Macro</h2>
+The following macro enables parameter name substitution for a data
+source of your choice. You can also download this macro in the <a
+ href="../downloads/">downloads section</a>.<br>
+<br>
+<span style="font-family: monospace; color: rgb(102, 102, 102);">REM&nbsp;
+*****&nbsp; BASIC&nbsp; *****</span><br style="font-family: monospace;">
+<br style="font-family: monospace;">
+<span style="font-family: monospace;"><span
+ style="color: rgb(0, 0, 128);">Option Explicit</span><br>
+<br>
+<span style="color: rgb(0, 0, 128);">Sub</span> <span
+ style="color: rgb(0, 128, 0);">Main</span><br>
+&nbsp;&nbsp; &nbsp;<span style="color: rgb(0, 0, 128);">Dim</span> <span
+ style="color: rgb(0, 128, 0);">sDataSourceName</span> <span
+ style="color: rgb(0, 0, 128);">as String</span><br>
+&nbsp;&nbsp; &nbsp;<span style="color: rgb(0, 128, 0);">sDataSourceName</span>
+= <span style="color: rgb(0, 128, 0);">InputBox</span>( <span
+ style="color: rgb(255, 0, 0);">"Please enter the name of the data
+source:"</span> )<br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 128, 0);">EnableParameterNameSubstitution</span>(<span
+ style="color: rgb(0, 128, 0);">sDataSourceName</span> )<br>
+<span style="color: rgb(0, 0, 128);">End Sub</span><br>
+<br>
+<span style="color: rgb(0, 0, 128);">Sub</span> <span
+ style="color: rgb(0, 128, 0);">EnableParameterNameSubstitution</span>( <span
+ style="color: rgb(0, 128, 0);">sDataSourceName</span> <span
+ style="color: rgb(0, 0, 128);">as String</span> )<br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(102, 102, 102);">' the data
+source context (ehm - the service name is historical :)</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">Dim</span> <span
+ style="color: rgb(0, 128, 0);">aContext</span> <span
+ style="color: rgb(0, 0, 128);">as Object</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 128, 0);">aContext</span>
+= <span style="color: rgb(0, 128, 0);">createUnoService</span>( <span
+ style="color: rgb(255, 0, 0);">"com.sun.star.sdb.DatabaseContext"</span>
+)<br>
+<br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">If</span> ( <span
+ style="color: rgb(0, 0, 128);">Not</span> <span
+ style="color: rgb(0, 128, 0);">aContext</span>.<span
+ style="color: rgb(0, 128, 0);">hasByName</span>( <span
+ style="color: rgb(0, 128, 0);">sDataSourceName</span> ) ) <span
+ style="color: rgb(0, 0, 128);">Then</span><br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; <span
+ style="color: rgb(0, 128, 0);">MsgBox</span> <span
+ style="color: rgb(255, 0, 0);">"There is no data source named "</span>
++ <span style="color: rgb(0, 128, 0);">sDataSourceName</span> + <span
+ style="color: rgb(255, 0, 0);">"!"</span><br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; <span
+ style="color: rgb(0, 0, 128);">Exit Sub</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">End If</span><br>
+<br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(102, 102, 102);">' the data
+source</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">Dim</span> <span
+ style="color: rgb(0, 128, 0);">aDataSource</span> <span
+ style="color: rgb(0, 0, 128);">as Object</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 128, 0);">aDataSource</span>
+= <span style="color: rgb(0, 128, 0);">aContext</span>.<span
+ style="color: rgb(0, 128, 0);">getByName</span>( <span
+ style="color: rgb(0, 128, 0);">sDataSourceName</span> )<br>
+<br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(102, 102, 102);">' append
+the new ParameterNameSubstitution flag</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">Dim</span> <span
+ style="color: rgb(0, 128, 0);">bFlag</span> <span
+ style="color: rgb(0, 0, 128);">as Boolean</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 128, 0);">bFlag</span> = <span
+ style="color: rgb(0, 128, 0);">TRUE</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">Dim</span> <span
+ style="color: rgb(0, 128, 0);">aInfo</span> <span
+ style="color: rgb(0, 0, 128);">as Variant</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 128, 0);">aInfo</span> = <span
+ style="color: rgb(0, 128, 0);">aDataSource</span>.<span
+ style="color: rgb(0, 128, 0);">Info</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 128, 0);">aInfo</span> = <span
+ style="color: rgb(0, 128, 0);">AddInfo</span>( <span
+ style="color: rgb(0, 128, 0);">aInfo</span>, <span
+ style="color: rgb(255, 0, 0);">"ParameterNameSubstitution"</span>, <span
+ style="color: rgb(0, 128, 0);">bFlag</span> )<br>
+<br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(102, 102, 102);">' and
+write back</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 128, 0);">aDataSource</span>.<span
+ style="color: rgb(0, 128, 0);">Info</span> = <span
+ style="color: rgb(0, 128, 0);">aInfo</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(102, 102, 102);">' flush
+(not really necessary, but to be on the safe side :)</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 128, 0);">aDataSource</span>.<span
+ style="color: rgb(0, 128, 0);">flush</span><br>
+<span style="color: rgb(0, 0, 128);">End Sub</span><br>
+<br>
+<span style="color: rgb(0, 0, 128);">Function</span> <span
+ style="color: rgb(0, 128, 0);">AddInfo</span>( <span
+ style="color: rgb(0, 128, 0);">aOldInfo</span>() <span
+ style="color: rgb(0, 0, 128);">as new</span> <span
+ style="color: rgb(0, 128, 0);">com.sun.star.beans.PropertyValue</span>,<span
+ style="color: rgb(0, 128, 0);">sSettingsName</span> <span
+ style="color: rgb(0, 0, 128);">as String</span>, <span
+ style="color: rgb(0, 128, 0);">aSettingsValue</span> <span
+ style="color: rgb(0, 0, 128);">as Variant</span> ) <span
+ style="color: rgb(0, 0, 128);">as Variant</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">Dim</span> <span
+ style="color: rgb(0, 128, 0);">nLower</span> <span
+ style="color: rgb(0, 0, 128);">as Integer</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">Dim</span> <span
+ style="color: rgb(0, 128, 0);">nUpper</span> <span
+ style="color: rgb(0, 0, 128);">as Integer</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 128, 0);">nLower</span> = <span
+ style="color: rgb(0, 128, 0);">LBound</span>( <span
+ style="color: rgb(0, 128, 0);">aOldInfo</span>() )<br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 128, 0);">nUpper</span> = <span
+ style="color: rgb(0, 128, 0);">UBound</span>( <span
+ style="color: rgb(0, 128, 0);">aOldInfo</span>() )<br>
+<br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(102, 102, 102);">' look if
+the setting is already present</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">Dim</span> <span
+ style="color: rgb(0, 128, 0);">bNeedAdd</span> <span
+ style="color: rgb(0, 0, 128);">as Boolean</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 128, 0);">bNeedAdd</span>
+= <span style="color: rgb(0, 128, 0);">TRUE</span><br>
+<br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">Dim</span> <span
+ style="color: rgb(0, 128, 0);">i</span> <span
+ style="color: rgb(0, 0, 128);">As Integer</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">For</span> <span
+ style="color: rgb(0, 128, 0);">i</span> = <span
+ style="color: rgb(0, 128, 0);">nLower</span> <span
+ style="color: rgb(0, 0, 128);">To</span> <span
+ style="color: rgb(0, 128, 0);">nUpper</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+ style="color: rgb(0, 0, 128);">If</span> ( <span
+ style="color: rgb(0, 128, 0);">aOldInfo</span>( <span
+ style="color: rgb(0, 128, 0);">i</span> ).<span
+ style="color: rgb(0, 0, 128);">Name</span> = <span
+ style="color: rgb(0, 128, 0);">sSettingsName</span> ) <span
+ style="color: rgb(0, 0, 128);">Then</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+ style="color: rgb(0, 128, 0);">aOldInfo</span>( <span
+ style="color: rgb(0, 128, 0);">i</span> ).<span
+ style="color: rgb(0, 128, 0);">Value</span> = <span
+ style="color: rgb(0, 128, 0);">aSettingsValue</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+ style="color: rgb(0, 128, 0);">bNeedAdd</span> = <span
+ style="color: rgb(0, 128, 0);">FALSE</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+ style="color: rgb(0, 0, 128);">End If</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">Next</span> i<br>
+<br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(102, 102, 102);">' allocate
+the new array</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">Dim</span> <span
+ style="color: rgb(0, 128, 0);">nNewSize</span> <span
+ style="color: rgb(0, 0, 128);">as Integer</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 128, 0);">nNewSize</span>
+= ( <span style="color: rgb(0, 128, 0);">nUpper</span> - <span
+ style="color: rgb(0, 128, 0);">nLower</span> )<br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">If</span> <span
+ style="color: rgb(0, 128, 0);">bNeedAdd</span> <span
+ style="color: rgb(0, 0, 128);">Then</span> <span
+ style="color: rgb(0, 128, 0);">nNewSize</span> = <span
+ style="color: rgb(0, 128, 0);">nNewSize</span> + <span
+ style="color: rgb(255, 0, 0);">1</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">Dim</span> <span
+ style="color: rgb(0, 128, 0);">aNewInfo</span>( <span
+ style="color: rgb(0, 128, 0);">nNewSize</span> ) <span
+ style="color: rgb(0, 0, 128);">as new</span> <span
+ style="color: rgb(0, 128, 0);">com.sun.star.beans.PropertyValue</span><br>
+<br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(102, 102, 102);">' copy the
+elements (a simply copy does not work in Basic)</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">For</span> <span
+ style="color: rgb(0, 128, 0);">i</span> = <span
+ style="color: rgb(0, 128, 0);">nLower</span> <span
+ style="color: rgb(0, 0, 128);">To</span> <span
+ style="color: rgb(0, 128, 0);">nUpper</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+ style="color: rgb(0, 128, 0);">aNewInfo</span>( <span
+ style="color: rgb(0, 128, 0);">i</span> ) = <span
+ style="color: rgb(0, 128, 0);">aOldInfo</span>( <span
+ style="color: rgb(0, 128, 0);">i</span> )<br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">Next</span> i<br>
+<br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(102, 102, 102);">' append
+the new setting, if necessary</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">If</span> ( <span
+ style="color: rgb(0, 128, 0);">bNeedAdd</span> ) <span
+ style="color: rgb(0, 0, 128);">Then</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+ style="color: rgb(0, 128, 0);">aNewInfo</span>( <span
+ style="color: rgb(0, 128, 0);">nUpper</span> + <span
+ style="color: rgb(255, 0, 0);">1</span> ).<span
+ style="color: rgb(0, 0, 128);">Name</span> = <span
+ style="color: rgb(0, 128, 0);">sSettingsName</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+ style="color: rgb(0, 128, 0);">aNewInfo</span>( <span
+ style="color: rgb(0, 128, 0);">nUpper</span> + <span
+ style="color: rgb(255, 0, 0);">1</span> ).<span
+ style="color: rgb(0, 128, 0);">Value</span> = <span
+ style="color: rgb(0, 128, 0);">aSettingsValue</span><br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 128);">End If</span><br>
+<br>
+&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 128, 0);">AddInfo</span>
+= <span style="color: rgb(0, 128, 0);">aNewInfo</span>()<br>
+<span style="color: rgb(0, 0, 128);">End Function</span></span>
+<h2></h2>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

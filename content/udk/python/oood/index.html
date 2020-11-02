@@ -1,0 +1,356 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>oood.py - a simple daemon for OpenOffice.org</title>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/python/">python</a>&nbsp;&raquo;&nbsp;<a href="/udk/python/oood/">oood</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h1>oood.py - A simple daemon for OpenOffice.org</h1>
+
+<p>oood.py is a daemon, which controls a pool of 'anonymous' office instances
+(workers).
+<p>
+The workers can be used as backend for Java/python/C++ batch
+processes for document conversion, mail merges, etc. You don't need to rewrite your current scripts,
+a client connects to a daemon-controlled office just as if would connect to a normal office. Up to
+now, I only checked the functionality for batch clients, for server clients (e.g. a tomcat or zope),
+there may be some problems, you should simply try it.
+
+<p>The daemon ensures, that only one client at a time is connected to one OpenOffice instance
+(because one OOo instance in general can't cope with more than one scripter). Workers
+get restarted after a certain amount of uses or after office crashes.
+
+<p>A client can connect to a daemon as if it would connect to a normal 'non-daemoned' office,
+so you don't need to adapt your scripts.
+
+<p> oood.py has been implemented in pure python, but it
+uses some office components. This should make it easy to modify the daemon
+to your needs if desired.
+
+<p>
+Download: <a href="oood-0.1.0.zip">oood-0.1.0.zip</a> (less than 10k): 
+<h1> State </h1>
+The daemon comes in version 0.1.0. It is in a alpha state, it has
+currently only be tested on Linux x86. It may run on other Unix
+platforms, but it is definitely known <strong>not to run on windows</strong>. Simply try
+out to check if it is useful for you (after carefully reading this manual).
+
+<p>
+The daemon and this document is targeted at experienced OOo script developers.
+	
+<h1> Security</h1>
+The daemon and its usage is in general <strong>INSECURE</strong>. Everyone, who can connect
+to the daemon can use the underlying office instances and thus
+has full access to the machine (with the daemon's user rights) and
+via socket communication to other machines accessible via sockets
+from the worker machine.
+
+All worker instances run under the same (= the daemon's userid) meaning
+that a menace user may spy other worker office instances.
+
+<p>
+
+However, some simple limitations can be done.
+<ul>
+<li> Limiting the access to the daemon.<br/>
+  You can use the connection string to limit the  access to a certain network interface.
+  E.g. using
+
+  socket,host=localhost,port=2002;urp
+
+  means, that the daemon (and the underlying office instances) can only be accessed
+  from the same machine, where the daemon is running on.
+
+  One may easily extend the daemon source to limit access e.g. to certain hosts.
+
+  There is no user administration.
+  
+<li> User rights <br/>
+  Create a special user for running the office instances. Limit the
+  user's rights to the absolute minimum.
+</ul>
+
+You should use this solution only in a trustworthy environments.
+
+<h1>Installation</h1>
+
+<h2> Office installation</h2>
+It is assumed, that you use an office from the 1.1.x series.
+The office daemon works on an arbitrary number of office user installations, which
+must have been created from the same network installation with a single system user.
+
+Ideally you create a new system user (e.g. oood) therefor, but if you just
+want to try it out, you can use your normal system user.
+
+(The following description is more or less copied from a mail by J. Barfurth
+in dev@api.openoffice.org).
+
+First do a new multi-user installation ( start
+
+$ setup -net
+
+) from the downloaded installation set.
+
+Afterwards, create multiple single user installations by starting
+<p>
+(use 01 instead of XX)
+<p>
+
+$ setup -d /home/oood/ooo1.1_srvXX
+
+<p>
+from within the office/program directory. 
+After the setup run, edit ~/.sversionrc file and replace
+"OpenOffice.org 1.1.0" with "OpenOffice.org 1.1.0_srvXX". .
+
+Repeat these steps with XX = 02, 03, ... . You need as many installations
+as you expect concurrent users. You may also start with a low number
+and add instances later on.
+
+Afterwards, your .sversionrc file should look like
+
+<pre>
+[Versions]
+OpenOffice.org 1.1 srv01=file:///home/oood/ooo1.1_srv01
+OpenOffice.org 1.1 srv02=file:///home/oood/ooo1.1_srv02
+OpenOffice.org 1.1 srv03=file:///home/oood/ooo1.1_srv03
+</pre>
+
+<h2> Daemon installation</h2>
+Switch to the OpenOffice.org's program directory and
+extract the oood-0.1.0.zip file. Open the oood-0.1.0/oood-config.xml file
+in a text editor and add the paths of every worker instances with a
+
+&lt;user-installation url="file:///home/oood/ooo1.1_srv01" /&gt;
+
+tag. For a start, just add one or two instances to see how the daemon is working.
+All other settings in oood-config.xml can be left untouched. The meaning
+of the other settings are documented in the comments.
+
+<h1>Daemon administration</h1>
+<h2>Starting</h2>
+The daemon must be started with OpenOffice.org's python from within the OOo's program
+directory.
+<p>
+
+
+$ ./python oood-0.1.0/oood.py -c oood-0.1.0/oood-config.xml run
+
+</p>
+You get the log on the stdout blocking the shell. Depending on the number of
+workers you have configured, it may
+take quite a while to start. When you get a
+
+<p>
+Accepting on &lt;your-connection-string&gt;
+</p>
+
+the daemon is ready to serve requests.
+
+<h2>Stopping</h2>
+
+From a different shell, start 
+<p>
+$ ./python oood-0.1.0/bin/oood.py -c oood-0.1.0/config/oood-config.xml stop
+
+<p>
+
+Signals the daemon to terminate all running workers and itself.
+
+The daemon can only be stopped this way after a successful startup.
+
+<h2>Requesting status information</h2>
+<p>
+$ ./python oood-0.1.0/oood.py -c oood-0.1.0/oood-config.xml status
+<p>
+Gives you a list of workers and their state.
+
+<h1> Usage patterns </h1>
+You can now connect to the daemon with an arbitrary (Java, C++, python)
+client program in exactly the same way as you connect to a normal
+OpenOffice.org.
+
+<p>The daemon delegates your request to one of its worker offices. For the
+time of usage, this worker office is exclusively used by your client program.
+The end of usage is detected by the daemon through a breakdown
+of the interprocess bridge (which occurs, when the last
+reference is gone, the client explicitly disposes the remote bridge or
+the client process terminates).
+
+<h1> Performance</h1>
+All requests to the office are tunneled through the daemon process. This
+means an additional load on the server machine and a performance overhead
+for every request. This is typically neglectable when your call frequency
+is low (say less than 10 Calls/s), but becomes a significant overhead
+for higher call frequencies.
+
+<h1>Logging</h1>
+<h2> Log level</h2>
+<p>There is 3 log levels.</p>
+
+<table border="3" summary="Log levels">
+<tr><td>SERIOUS</td><td>Only startup information and errors get written into the log</td></tr>
+<tr><td>INFO</td><td>information about every connect and disconnect get logged (default)</td></tr>
+<tr><td>DETAIL</td><td>Log level mostly sensible for debugging</td></tr>
+</table>
+
+<p>Level INFO includes SERIOUS, DETAIL includes INFO and HIGH.</p>
+
+<h2> Log format </h2>
+Every line, that gets logged, has the following format
+
+<pre>
+current-time [loglevel] : Logtext
+</pre>
+
+The numbers in curly brackets (e.g. {2/5}) in the logtext signals
+the free/total number of worker processes in the pool .
+
+<h2> Startup log </h2>
+A typical startup log looks as follows ( on INFO loglevel)
+<pre>
+
+Wed Nov 26 19:11:19 2003 [SERIOUS]: Started on pid 674
+Wed Nov 26 19:11:19 2003 [INFO   ]: Starting office workers ...
+Wed Nov 26 19:11:19 2003 [INFO   ]: Worker-0:&lt;oood.OfficeProcess
+       file:///home/joergl/OpenOffice.org1.1.0_instance-0;
+              pid=692;connectStr=pipe,name=oood-instance-0,usage=0&gt; started
+Wed Nov 26 19:11:59 2003 [INFO   ]: {2/2} WorkerAll instances started
+Wed Nov 26 19:11:59 2003 [SERIOUS]: Accepting on socket,host=localhost,port=2002;urp
+
+</pre>
+First line gives the pid of the daemon process (in case
+you want to terminate the process during startup). Then follows for
+every worker process, that gets started a line showing the used
+home directory and connection string.
+
+<h2> Working log </h2>
+Below you can see a typical log of a single connect attempt:
+<pre>
+Wed Nov 26 19:24:02 2003 [INFO  ]: {1/2} -&gt; Worker-0(1 uses) serves localhost:32770
+Wed Nov 26 19:24:13 2003 [INFO  ]: localhost:32770 disconnects from Worker-0(1 uses) (used for  10.7s) 
+Wed Nov 26 19:24:13 2003 [INFO  ]: {2/2} &lt;- Worker-0(1 uses) reenters pool
+
+</pre>
+
+First line states that out of the pool Worker-0 1is used to serve the incoming
+request from localhost:32770. The {1/2} indicates, that there one free worker
+left is in the pool.
+
+Second line states, that the interprocess bridge between the daemon
+and the requesting process has broken down. Additionally,
+the number of uses and the duration of the last use in seconds is shown.
+
+In case, the number of uses is less than the max-usage-count-per-instance,
+the process is simply added to the pool of available offices again (as it
+documented by the third line. The {2/2} states, that there are now exactly
+two workers in the pool again.
+
+In case the max-usage-count-per-instance is exceeded, this worker instance is automatically
+terminated and a fresh instance is restarted. This shall tide up memory leaks.
+
+When there is no free worker left anymore and a client request comes in,
+the request is rejected and a line like the following gets logged:
+<pre>
+Sat May 22 22:28:46 2004 [SERIOUS]: {0/2} localhost:32776 rejected
+</pre>
+
+The client script simply gets a empty reference instead of the requested object.
+<p>
+<font size="-2">
+Note: Preferably it would receive a RuntimeException with an appropriate
+message, but a bug somewhere around pyuno, the scripting components
+and the remote bridge currently prevents this (the daemons crashes
+quite fast).
+</font>
+
+<h2> Termination log </h2>
+Once daemon termination has been initiated, the log should look like the following:
+<pre>
+Sat May 22 22:33:00 2004 [SERIOUS]: Accepting on socket,host=localhost,port=2002;urp stopped, waiting for shutdownthread
+Sat May 22 22:33:00 2004 [INFO   ]: Admin thread terminating
+Sat May 22 22:33:00 2004 [INFO   ]: terminating Worker-0(1 uses)
+Sat May 22 22:33:00 2004 [INFO   ]: Worker-0(1 uses) terminated
+Sat May 22 22:33:00 2004 [INFO   ]: terminating Worker-1(1 uses)
+Sat May 22 22:33:00 2004 [INFO   ]: Worker-1(1 uses) terminated
+Sat May 22 22:33:00 2004 [SERIOUS]: Terminating normally
+</pre>
+<h1> Robustness </h1>
+Robustness and stability is certainly a key feature of a daemon. The following
+situations are currently handled:
+
+<ul>
+<li> Running out of workers <br/>
+In case all worker instances are busy and the pool is empty, every new
+connection attempt is rejected, the client receives an empty reference
+instead of the servicemanager or componentcontext object.
+
+<p>
+<font size="-2">
+Note: Preferably it would receive a RuntimeException with an appropriate
+message, but a bug somewhere around pyuno, the scripting components
+and the remote bridge currently prevents this (the daemons crashes
+quite fast).
+</font>
+
+<p>
+The connection attempt gets logged appropriately.
+<li> A worker office crashes or deadlocks <br/>
+Before a worker reenters the pool, it is checked, whether
+it is still responsive and it checks whether a deadlock
+with the solarmutex blocks the whole office. In case
+such a situation occurred, the worker is killed and a fresh
+instance is started and added again to the pool.
+
+<p>
+The check is currently quite rudimentary, it may
+be improved in future.
+</li>
+
+<li> Worker processes are restarted after a certain amount of client uses. This ensures,
+that an ill office instance will die sooner or later.
+</li>
+
+<li> Note: In case the daemon itself crashes (I am currently not aware of such a situation),
+           the worker instances don't
+           terminate, an admin needs to kill the instances by hand and restart the daemon.
+</li>
+
+</ul>
+
+<h1> License </h1>
+As you are used to when using OOo, this program is LGPL.
+
+<h1> Feedback</h1>
+Please give feedback through dev@api.openoffice.org mailing list.
+
+
+<h1> Author </h1>
+The daemon has been developed by <a href="mailto:JoergBudi@gmx.de">Joerg Budischewski</a>.
+I'd very much welcome patches for an improved daemon and would even very much welcome someone
+taking over maintenance for the daemon.
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

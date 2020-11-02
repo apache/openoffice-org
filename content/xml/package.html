@@ -1,0 +1,827 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>XML Packages</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="CREATED" CONTENT="20010801;20531125">
+	<META NAME="CHANGEDBY" CONTENT="Daniel Vogelheim">
+	<META NAME="CHANGED" CONTENT="20010801;20534064">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/xml/">xml</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1>XML Packages</H1>
+<H2>Purpose of this document</H2>
+<P>At the end of September, I (<I>dvo</I>) have asked the
+openoffice.org community for help on the problem of embedding binary
+content in XML documents. This page is intended to summarize the
+discussion and provide a solid foundation that will guide our
+implementation efforts. 
+</P>
+<P>We will first restate the problem. Then follows a summary of the
+requirements that have been stated in the <A HREF="http://www.openoffice.org/www-discuss/">discuss</A>
+and <A HREF="http://xml.openoffice.org/xml-dev/">xml-dev</A> mailing
+lists. The candidate solutions mentioned on the mailing lists are
+then examined in light of these requirements. Finally, a conclusion
+is presented. 
+</P>
+<H3>A few definitions</H3>
+<P>To clarify the following discussion, a definition of a few terms
+for use within this document may be in order: 
+</P>
+<DL>
+	<DT STYLE="margin-bottom: 0.5cm">document 
+	</DT><DD STYLE="margin-bottom: 0.5cm">
+	A document comprises everything a user considers to part of his
+	text, spreadsheet or presentation. In general this will include
+	several images or OLE objects in addition to the main content. 
+	</DD><DD STYLE="margin-bottom: 0.5cm">
+	If images are linked into the document, they are not considered part
+	of it. Whether an image is linked or embedded into the document is
+	determined by the user. Due to limitations in the current OLE
+	handling, OLE objects must always be embedded. 
+	</DD><DT STYLE="margin-bottom: 0.5cm">
+	file 
+	</DT><DD STYLE="margin-bottom: 0.5cm">
+	A file is a sequence of bytes as stored in the operating system's
+	file system. This fairly obvious definition serves to distinguish
+	between the logical view (the document) and the physical view (the
+	file). 
+	</DD><DT STYLE="margin-bottom: 0.5cm">
+	<EM>b</EM>inary <EM>l</EM>arge <EM>ob</EM>ject, BLOB 
+	</DT><DD STYLE="margin-bottom: 0.5cm">
+	A BLOB contains binary data that has no structured content that
+	could reasonably be encoded as XML data. Usually, BLOBs will be data
+	in established binary formats such as GIF, JPEG, or OLE data
+	streams. 
+	</DD><DT STYLE="margin-bottom: 0.5cm">
+	subdocument 
+	</DT><DD STYLE="margin-bottom: 0.5cm">
+	A subdocument refers to an individual component of the document.
+	Each binary large object (BLOB) is one subdocument, as is the main
+	document content encoded as XML. 
+	</DD><DT STYLE="margin-bottom: 0.5cm">
+	main document content 
+	</DT><DD STYLE="margin-bottom: 0.5cm">
+	The main document content refers to the subdocument that best
+	represents the document as a whole. For example, if an OpenOffice
+	Writer document consists of an XML subdocument containing the text
+	body, and several image subdocument, then the XML subdocument would
+	form the main document content. 
+	</DD></DL>
+<H2>
+The Problem</H2>
+<P>OpenOffice and the next generation of StarOffice by default use an
+XML based file format (but the user may choose to save in a different
+format). Therefore this project differs from many others, as this is
+an XML based file format intended to be truly a format for the
+masses. The requirements for a native file format are different
+(usually more demanding) than those for an interchange format. 
+</P>
+<P>XML is meant for structured content and has no native support for
+binary objects (BLOBs) such as images, OLE objects or other media
+types. Since embedding of binary objects is needed for office
+documents, a way to handle XML and binary data in the same document
+must be provided. 
+</P>
+<P>One solution may be to simply store the XML data in a file and
+link to image data in separate files, much like in HTML documents.
+While linking files at the user's request should be possible, this is
+in general not considered adequate for office documents. A document
+should be stored in a single file to make external handling of the
+document (e.g. copying the document) possible. Therefore, binary
+content must be stored in the same file as the XML content, requiring
+either a <EM>package</EM> format or a means to encode binary content
+in XML. For the sake of simplicity, we will refer to all solutions
+that store XML and BLOB data in a single file as packages. 
+</P>
+<H2>The Requirements</H2>
+<P>The following requirements have been identified for the package
+format: 
+</P>
+<H3>A. Efficient Operation</H3>
+<P>Users have traditionally required efficient operation, especially
+for basic functionality such as loading or saving of documents. It is
+our experience that independent loading (or saving) of subdocuments
+is the key to efficient handling of large documents. Additionally,
+users require that disk space is used efficiently. This leads us to
+require the document format to support: 
+</P>
+<OL>
+	<LI><P STYLE="margin-bottom: 0cm">small file sizes 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">on-demand loading (i.e.,
+	independent loading of subdocuments) 
+	</P>
+	<LI><P>independent saving of subdocuments 
+	</P>
+</OL>
+<P>These requirements are strongly supported by ten years of
+experience at StarOffice. Failing to meet these requirements has
+repeatedly resulted in dissatisfaction and significant protests from
+the user base. 
+</P>
+<P><B>Note</B> on independent saving of subdocuments: Previous
+versions of StarOffice have gotten significant benefit from copying
+subdocuments on the file system level rather than reading and then
+writing subdocuments through the <A HREF="http://ucb.openoffice.org/">UCB</A>.
+This should be supported by the package format. Saving modified
+subdocuments into an existing (compound) document may provide further
+benefits. 
+</P>
+<H3>B. Compatibility with Existing Tools</H3>
+<P>A primary motivation for creating an XML based file format is the
+ability to process, create and manipulate StarOffice documents with
+external tools. To deserve the label &quot;open&quot; document
+format, these tools should be standard and widely available. As far
+as possible, this should apply to both, the document and the
+individual subdocuments (if applicable). In particular, the main
+document content (using XML) should be accessible to standard XML
+tools. 
+</P>
+<P>This leads us to state three subrequirements: 
+</P>
+<OL>
+	<LI><P STYLE="margin-bottom: 0cm">Subdocuments should be usable with
+	standard tools. In particular, XML subdocuments should be usable
+	with standard XML tools, e.g. XSLT transformations. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">The document should be accessible
+	with standard tools, making it possible to insert, modify and
+	extract subdocuments, e.g. similar to zip or other popular
+	archivers. 
+	</P>
+	<LI><P>The document should be accessible with ASCII-based tools,
+	e.g. the Windows file find function. 
+	</P>
+</OL>
+<P><B>Note:</B> During discussion on openoffice.org mailing lists
+several people preferred requirement number 1 to be extended to the
+complete document. This would essentially require the document format
+to be XML as well, with subdocuments (including BLOBS) being embedded
+within the XML structure. 
+</P>
+<P><B>Note:</B> Since XML is based on Unicode, ASCII based tools
+cannot generally be assumed to work on XML files. Thus, no solution
+will be able to fully support the third requirement. If UTF-8
+encoding is used, ASCII-based tools will work at least for those
+languages that can be properly represented in ASCII, like English or
+Latin. 
+</P>
+<P><B>Note:</B> Compression interferes with some of the requirements
+above. The discussion on the mailing list has clearly proven that
+those requirements are very important to some users. To support these
+users, 
+</P>
+<OL>
+	<LI><P STYLE="margin-bottom: 0cm">compression should be made
+	optional, and 
+	</P>
+	<LI><P>an additional implementation that writes pure XML (and saves
+	binary data into separate files) should be created. 
+	</P>
+</OL>
+<P>Formats supporting compression on a per subdocument basis would
+have an additional advantage in this respect. Also, this would allow
+a subdocument with e.g. meta information (title, keywords, etc.) to
+be stored uncompressed, making it more easily accessible. 
+</P>
+<H3>C. Security</H3>
+<P>An additional advantage that may be gained through the use of a
+package is easy support for document security. We can distinguish
+between two security considerations: 
+</P>
+<OL>
+	<LI><P STYLE="margin-bottom: 0cm">privacy: be able to encrypt
+	(partial) documents 
+	</P>
+	<LI><P>integrity: be able to verify origin of (partial) documents 
+	</P>
+</OL>
+<P><B>Note:</B> These requirements are of fairly low priority. 
+</P>
+<H3>D. Additional Issues</H3>
+<OL>
+	<LI><P>A package structure supporting documents and subdocuments
+	makes it easy to add additional information to a document, even if
+	the reference implementation does not understand it. For example, in
+	situations where a certain transformation is used very often, the
+	transformation result may be stored in the package as well. 
+	</P>
+	<LI><P>The current implementation is based on the SAX API. XML
+	filters (transformations) also using the SAX API can be pipelined,
+	e.g. they can import (or export) data into (or from) OpenOffice by
+	going directly through the API, rather than going through a file. 
+	</P>
+</OL>
+<H2>The Contenders</H2>
+<P>On the openoffice.org mailing lists, the following possible
+solutions were suggested: 
+</P>
+<OL>
+	<LI><P STYLE="margin-bottom: 0cm">ZIP or JAR files 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">XML with binary data being
+	ASCII-encoded within special tags (e.g. base64) 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">MIME files 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">.tgz files 
+	</P>
+	<LI><P>BONOBO libefs 
+	</P>
+</OL>
+<P><B>Note:</B> The participants quickly focused on two choices: JAR
+and XML 
+</P>
+<P><B>Note:</B> ZIP and JAR files are identical for most intents and
+purposes. JAR differs from the older ZIP in the file ending, as well
+as in additional meta information stored in a directory called
+META-INF. JAR files can be accessed using unmodified ZIP tools. 
+</P>
+<H2>Examination of the contenders</H2>
+<P>This chapter gives an overview of how well the various contenders
+met the specified requirements. It was my (<I>dvo</I>) impression
+that most people would agree on the suitability of the various
+contenders for the various requirements. The disagreement was mainly
+between the importance of the requirements. 
+</P>
+<P>In particular one group valued accessibility with XML tools (B1)
+very high and consequently would speak for XML with base64 encoding,
+while most others would prefer ZIP/JAR. 
+</P>
+<H3>ZIP / JAR</H3>
+<P>Tools to create and manipulate ZIP files are widely available on
+all platforms. The manifest file used with JAR files is usually
+considered optional and may even be created using a text editor.
+Access to subdocuments requires unzipping the required subdocuments
+first. ASCII based tools will in general not work on the package,
+although (at the user's request) individual subdocuments could be
+stored uncompressed, thus making them available to ASCII based tools.</P>
+<P>Since ZIP files have an index, efficient on-demand loading of
+subdocuments can be achieved. Subdocuments can be copied from one
+package to another without uncompressing and compressing them first.
+With some hackery for on-demand saving, only those files following
+the newly-written subdocuments need to be written. Due to (optional)
+compression, files can be small, although not quite as small as .tgz
+files. 
+</P>
+<P><B>Note:</B> As requested on the mailing list, the JAR manifest
+file should be replaced by an XML-based manifest file. The older JAR
+manifest may be supported for compatibility reasons. This is to be
+determined. 
+</P>
+<CENTER>
+	<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2>
+		<TR>
+			<TD></TD>
+			<TH COLSPAN=3>
+				<P>Efficiency</P>
+			</TH>
+			<TH COLSPAN=3>
+				<P>Standard Tools</P>
+			</TH>
+		</TR>
+		<TR>
+			<TD></TD>
+			<TH>
+				<P>size</P>
+			</TH>
+			<TH>
+				<P>load</P>
+			</TH>
+			<TH>
+				<P>save</P>
+			</TH>
+			<TH>
+				<P>XML</P>
+			</TH>
+			<TH>
+				<P>document</P>
+			</TH>
+			<TH>
+				<P>ASCII</P>
+			</TH>
+		</TR>
+		<TR>
+			<TH>
+				<P>ZIP / JAR</P>
+			</TH>
+			<TD>
+				<P ALIGN=CENTER>+</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>+</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>0</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>0</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>++</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>0</P>
+			</TD>
+		</TR>
+	</TABLE>
+</CENTER>
+<H3>XML + base64</H3>
+<P>This suggestion is to use plain XML documents and embed binary
+content as base64 encoded ASCII in special elements. 
+</P>
+<P>Tools to generate or manipulate subdocuments in this format are
+not commonly available, but could be written with reasonable effort.
+Usability of the main document content with XML tools is, of course,
+excellent. ASCII based tools should work with no problems (except for
+the already mentioned UTF encodings). 
+</P>
+<P>Without an index, on-demand loading is not possible, neither is
+on-demand saving. Files are not compressed and binary subdocuments
+are even expand by 33% due to the base64 encoding. 
+</P>
+<P><B>Note:</B> In the discussion lists, several remedies to allow
+on-demand reading were suggested. Either the inclusion of indices in
+the XML file, or placing the binary data at the end of the file. The
+former was considered to be non-XML (as it relies on the physical
+layout of the XML data) and useless, since any standard XML tool
+would not update the index and thus OpenOffice couldn't rely on it.
+The latter can not be done with standard (e.g. SAX-based) parsers, as
+they are used in the current implementation. The SAX API is necessary
+for the filter pipelining mentioned in the requirements section, so
+forgoing SAX may have significant drawbacks. 
+</P>
+<CENTER>
+	<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2>
+		<TR>
+			<TD></TD>
+			<TH COLSPAN=3>
+				<P>Efficiency</P>
+			</TH>
+			<TH COLSPAN=3>
+				<P>Standard Tools</P>
+			</TH>
+		</TR>
+		<TR>
+			<TD></TD>
+			<TH>
+				<P>size</P>
+			</TH>
+			<TH>
+				<P>load</P>
+			</TH>
+			<TH>
+				<P>save</P>
+			</TH>
+			<TH>
+				<P>XML</P>
+			</TH>
+			<TH>
+				<P>document</P>
+			</TH>
+			<TH>
+				<P>ASCII</P>
+			</TH>
+		</TR>
+		<TR>
+			<TH>
+				<P>XML + base64</P>
+			</TH>
+			<TD>
+				<P ALIGN=CENTER>--</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>-</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>-</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>++</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>0</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>+</P>
+			</TD>
+		</TR>
+	</TABLE>
+</CENTER>
+<H3>MIME</H3>
+<P>MIME is the established packaging format for emails. As is
+required for SMTP compatibility, it is ASCII-based (7bit ASCII).
+Non-Mailer tools to manipulate MIME files are rare. 
+</P>
+<P>Being an ASCII based format, accessibility to ASCII based tools is
+excellent. However, the encoding of non-ASCII characters is solved
+differently than in XML. Tools to manipulate MIME files (outside of
+mail programs) are not readily available, but could be written with
+reasonable effort. Access with XML tools requires unpacking first,
+but as said before the tools to do so are not currently available. 
+</P>
+<P>MIME has no index of subdocuments, making on-demand loading
+difficult. For saving of individual subdocuments, a reasoning similar
+to ZIP files applies. However, copying subdocuments requires
+accessing them, which is slow on MIME due to the lack of an index.
+Since no compression is used, files get fairly large. In addition,
+binary documents are usually encoded in base64, enlarging them by
+33%. 
+</P>
+<CENTER>
+	<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2>
+		<TR>
+			<TD></TD>
+			<TH COLSPAN=3>
+				<P>Efficiency</P>
+			</TH>
+			<TH COLSPAN=3>
+				<P>Standard Tools</P>
+			</TH>
+		</TR>
+		<TR>
+			<TD></TD>
+			<TH>
+				<P>size</P>
+			</TH>
+			<TH>
+				<P>load</P>
+			</TH>
+			<TH>
+				<P>save</P>
+			</TH>
+			<TH>
+				<P>XML</P>
+			</TH>
+			<TH>
+				<P>document</P>
+			</TH>
+			<TH>
+				<P>ASCII 
+				</P>
+			</TH>
+		</TR>
+		<TR>
+			<TH>
+				<P>MIME</P>
+			</TH>
+			<TD>
+				<P ALIGN=CENTER>--</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>-</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>-</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>-</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>0</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>+</P>
+			</TD>
+		</TR>
+	</TABLE>
+</CENTER>
+<H3>.tgz</H3>
+<P>The .tgz format (tar files compressed with gzip) is the most
+popular archiving format on the UNIX platform. Tools to manipulate
+.tgz files exist on most other platforms as well. As participants on
+the mailing lists mentioned, it is used as package format for
+KOffice. 
+</P>
+<P>.tgz operates according to the compress-after-packaging principle.
+in general, this results in very good compression ratios. However,
+the same principle causes on-demand loading of subdocument to be
+severely inefficient: Not only is it impossible to quickly determine
+the start position of subdocuments, it is also impossible to start
+reading subdocuments once the start position is known because the
+state of the uncompression tables cannot easily be reconstructed. For
+the same reason, changing a subdocument or even copying subdocuments
+is inefficient. 
+</P>
+<P>Availability of tools for manipulating .tgz files is good, and
+even very good on UNIX platforms. Accessibility to subdocuments
+requires unpacking the subdocuments first, which is slow because the
+document must be uncompressed from the start. 
+</P>
+<CENTER>
+	<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2>
+		<TR>
+			<TD></TD>
+			<TH COLSPAN=3>
+				<P>Efficiency</P>
+			</TH>
+			<TH COLSPAN=3>
+				<P>Standard Tools</P>
+			</TH>
+		</TR>
+		<TR>
+			<TD></TD>
+			<TH>
+				<P>size</P>
+			</TH>
+			<TH>
+				<P>load</P>
+			</TH>
+			<TH>
+				<P>save</P>
+			</TH>
+			<TH>
+				<P>XML</P>
+			</TH>
+			<TH>
+				<P>document</P>
+			</TH>
+			<TH>
+				<P>ASCII</P>
+			</TH>
+		</TR>
+		<TR>
+			<TH>
+				<P>.tgz</P>
+			</TH>
+			<TD>
+				<P ALIGN=CENTER>++</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>--</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>--</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>0</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>+</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>0</P>
+			</TD>
+		</TR>
+	</TABLE>
+</CENTER>
+<H3>Comparison Table</H3>
+<CENTER>
+	<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2>
+		<TR>
+			<TD></TD>
+			<TH COLSPAN=3>
+				<P>Efficiency</P>
+			</TH>
+			<TH COLSPAN=3>
+				<P>Standard Tools</P>
+			</TH>
+		</TR>
+		<TR>
+			<TD></TD>
+			<TH>
+				<P>size</P>
+			</TH>
+			<TH>
+				<P>load</P>
+			</TH>
+			<TH>
+				<P>save</P>
+			</TH>
+			<TH>
+				<P>XML</P>
+			</TH>
+			<TH>
+				<P>document</P>
+			</TH>
+			<TH>
+				<P>ASCII [6]</P>
+			</TH>
+		</TR>
+		<TR>
+			<TH>
+				<P>ZIP / JAR</P>
+			</TH>
+			<TD>
+				<P ALIGN=CENTER>+</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>+</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>0 [1]</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>0 [2]</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>++</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>0 [2]</P>
+			</TD>
+		</TR>
+		<TR>
+			<TH>
+				<P>XML + base64</P>
+			</TH>
+			<TD>
+				<P ALIGN=CENTER>--</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>- [3]</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>-</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>++</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>0 [4]</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>+</P>
+			</TD>
+		</TR>
+		<TR>
+			<TH>
+				<P>MIME</P>
+			</TH>
+			<TD>
+				<P ALIGN=CENTER>--</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>-</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>- [1]</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>- [2]</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>0 [4]</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>+</P>
+			</TD>
+		</TR>
+		<TR>
+			<TH>
+				<P>.tgz</P>
+			</TH>
+			<TD>
+				<P ALIGN=CENTER>++</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>--</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>--</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>0 [2]</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>+ [5]</P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER>0 [2]</P>
+			</TD>
+		</TR>
+	</TABLE>
+</CENTER>
+<P ALIGN=CENTER>++&nbsp;=&nbsp;very good, +&nbsp;=&nbsp;good,
+0&nbsp;=&nbsp;medium, -&nbsp;=&nbsp;bad, --&nbsp;=&nbsp;very bad</P>
+<P>Remarks:</P>
+<OL>
+	<LI><P STYLE="margin-bottom: 0cm">Copying subdocuments is possible.
+	With some hackery, (repeated) partial updates can be supported. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Requires unpackaging (or
+	package-aware tools), so score depends on availability of tools and
+	their efficiency 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">On-demand loading may be
+	implemented at the expense of being unable to use standard XML
+	parser APIs (e.g. SAX). 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Tools can be written with
+	reasonable effort but don't currently exist; at least not on many
+	platforms. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Very good on Unix, good on other
+	platforms. 
+	</P>
+	<LI><P>Due to XML being Unicode-based, ASCII-based tools probably
+	don't work in many circumstances, independent of the document
+	format. 
+	</P>
+</OL>
+<H3>libefs 
+</H3>
+<P>Additionally, the BONOBO libefs was suggested. Since this was not
+much discussed in the mailing lists, I (<I>dvo</I>) tried to find out
+about libefs from the web. This was my impression: 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">libefs was created to solve a
+	problem very similar to ours. It is designed to be an ambitious
+	file-system-in-a-file solution. If it works out the way its
+	developers imagine, it will be technically superior to the other
+	proposals discussed here. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">The page didn't mention any ports,
+	thus making it a UNIX solution only. This prohibits its use in a
+	cross-platform application like OpenOffice. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">No external tools to manipulate
+	libefs files exist. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">The page I consulted referred to
+	it as &quot;very much a work-in-progress&quot;, meaning that
+	currently it is not suitable for a consumer product. 
+	</P>
+	<LI><P>The libefs documentation was a bit unclear on the
+	relationship between libefs API and libefs implementation (meaning:
+	file format(s)). If it is mainly an API, it would compete with the
+	current <A HREF="http://ucb.openoffice.org/">UCB</A> architecture. 
+	</P>
+</UL>
+<H3>Security</H3>
+<P>Documents could of course be encrypted for all candidate formats.
+All formats could encrypt subdocuments as well, except for
+XML+base64, which would make it impossible to encrypt the main
+document content without encrypting the binaries as well. In .tgz,
+subdocument encryption could adversely affect compression, since the
+entire file is compressed at once. 
+</P>
+<P>The same applies to file integrity verification. JAR is very
+appealing in this regard, as it has already the full infrastructure
+for subdocument and document integrity verification in place. 
+</P>
+<H2>The Conclusion</H2>
+<P>The JAR file format seems to provide the best balance among the
+stated requirements. Unlike all other formats, it does not have any
+real weakness in regard to any of the requirements, and quite a lot
+of advantages. 
+</P>
+<P>If one values accessibility with standard XML tools very high, XML
++ base64 seems a logical choice. While this is one of the
+requirements for OpenOffice, the xmloff development team does not
+follow the opinion that this single requirement significantly exceeds
+all other requirements in importance. To accommodate this user base,
+an additional pure XML file format with external subdocuments should
+be created. 
+</P>
+<H3>Remaining Issues</H3>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Decide on meta information and
+	manifest file format. 
+	</P>
+	<LI><P>Implement a UCB that allows pure XML documents. 
+	</P>
+</UL>
+<H3>Further Reading</H3>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Most of these topics have been
+	discussed in detail on the openoffice.org <A HREF="http://www.openoffice.org/www-discuss/">discuss</A>
+	and <A HREF="http://xml.openoffice.org/xml-dev/">xml-dev</A> mailing
+	lists. The archives should provide more information. 
+	</P>
+	<LI><P>Details of ZIP and many other file formats are described on
+	<A HREF="http://www.wotsit.org/">www.wotsit.org</A>. 
+	</P>
+</UL>
+<HR>
+<P><FONT SIZE=2>The <A HREF="http://xml.openoffice.org/">xmloff</A>
+development team <BR>Summarized by <A HREF="mailto:dvo@openoffice.org">dvo</A>
+</FONT>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

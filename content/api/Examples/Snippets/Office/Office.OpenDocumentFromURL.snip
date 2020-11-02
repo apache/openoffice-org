@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.OpenDocumentFromURL.snip,v $
+last change: $Revision: 1.2 $ $Author: tomsontom $ $Date: 2006/12/11 10:22:53 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="Java" application="Office">
+
+<keywords>
+	<keyword>open</keyword>
+	<keyword>document</keyword>
+</keywords>
+
+<authors>
+	<author id="tobiaskrais" initial="false" email="tuxmail-spam@bats.ch" copyright="GPL">Tobias Krais (www.design-to-use.de)</author>
+</authors>
+
+<question heading="Open Document from URL">How to open a document?
+</question>
+
+<answer>
+<listing>import {%see com.sun.star.beans.PropertyValue};
+import {%see com.sun.star.frame.XComponentLoader};
+import {%see com.sun.star.lang.XComponent};
+import {%see com.sun.star.uno.UnoRuntime};
+
+/**
+ * A specified document is loaded. 
+ * 
+ * @param source_File
+ * @return
+ */
+public void openDocument(String source_File) {
+	// Query the XComponentLoader interface from the desktop Object.
+	// See this snippet how to get the desktop Object: {%internal ../Office/Office.BootstrapOpenOffice.snip}
+	XComponentLoader xComponentLoader = (XComponentLoader)
+	UnoRuntime.queryInterface(XComponentLoader.class, desktop);
+
+	PropertyValue[] myProperties = new PropertyValue[1];
+	myProperties[0] = new PropertyValue();
+	myProperties[0].Name = &quot;Hidden&quot;;
+	// for open document and do not show user interface use &quot;true&quot;
+	myProperties[0].Value = new Boolean(false);
+
+	// Load a given document
+	try	{
+		XComponent xComponent = xComponentLoader.loadComponentFromURL(
+				createUNOFileURL(source_File),  // For createUNOFileURL see: {%internal ../Office/Office.CreateUNOCompatibleURL.snip}
+				&quot;_blank&quot;,                       // New windos
+				0,                              // Is ignored
+				myProperties);            // Special properties
+	}
+	catch(Exception e) {
+	}
+}</listing>
+</answer>
+
+<versions>
+	<version number="1.1.x" status="tested"/>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="tobiaskrais" date="2006-12-11">Added Snippet linking features</change>
+	<change author-id="tobiaskrais" date="2006-03-27">Initial version</change>
+</changelog>
+
+</snippet>
+

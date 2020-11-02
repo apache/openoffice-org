@@ -1,0 +1,199 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>Register new driver types for OpenOffice UI</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="CREATED" CONTENT="20030129;8365681">
+	<META NAME="CHANGED" CONTENT="20030129;9555296">
+	<META NAME="KEYWORDS" CONTENT="Driver">
+	<STYLE>
+	<!--
+		A:visited { color: #444488 }
+		A:link { color: #444488 }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="de-DE" LINK="#444488" VLINK="#444488" BGCOLOR="#eeeeff">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/dba/">dba</a>&nbsp;&raquo;&nbsp;<a href="/dba/howto/">howto</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 STYLE="page-break-before: always">
+	<COL WIDTH=75>
+	<TR>
+		<TD BGCOLOR="#666699">
+			<H1 ALIGN=CENTER><A HREF="http://www.openoffice.org/"><IMG SRC="../images/open_office_org_logo.gif" NAME="Grafik1" ALT="OpenOffice" ALIGN=RIGHT WIDTH=109 HEIGHT=54 BORDER=0></A><FONT COLOR="#ffffff"><FONT FACE="Arial"><FONT SIZE=5>How to register a new database driver <BR>into
+			OpenOffice UI?</FONT></FONT></FONT></H1>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 NOSHADE>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT><FONT COLOR="#ffffff"><FONT SIZE=4>Contents</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<DL>
+				<DT><A HREF="#background">The Problem</A><BR><A HREF="#chap1">The
+				Solution</A><A HREF="#installation"><BR></A><A HREF="#chap2">The
+				Macro</A></DT></DL>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H2 ALIGN=LEFT><FONT COLOR="#ffffff"><FONT FACE="Arial"><FONT SIZE=4><I>The
+			Problem</I></FONT></FONT></FONT></H2>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P>You may want to use a new database driver for your database in OpenOffice but OpenOffice doesn't know it.</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H2><FONT COLOR="#ffffff"><FONT FACE="Arial, sans-serif"><FONT SIZE=4><I>The
+			Solution</I></FONT></FONT></FONT></H2>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P>The OpenOffice.org UI supports the extension of database drivers through a configuration entry.</P>
+			Two steps have to be done before you can use your new driver with OpenOffice. 
+			<BR>The first step is to copy the new driver in the folder $office/user/uno_packages. 
+			After that you have to run the command $office/program/pkgchk. This command register the new driver.
+			In the future it will be possible to run only the pkgchk program to register the driver and to insert the configuration entry.
+			<BR>The second step is to adjust the macro and run it to insert a configuration entry.
+			<P>Three names have to be set in the macro:</P>
+			<TABLE WIDTH=100% BORDER=1 CELLPADDING=4 CELLSPACING=0>
+				<COL WIDTH=53*>
+				<COL WIDTH=203*>
+				<TR VALIGN=TOP>
+					<TD WIDTH=21%>
+						<B>DriverPageDisplayName</B>
+					</TD>
+					<TD WIDTH=79%>
+						<P>This name will be used for the Tabpage of the new database driver.</P>
+					</TD>
+				</TR>
+				<TR VALIGN=TOP>
+					<TD WIDTH=21%>
+						<B>DriverTypeDisplayName</B>
+					</TD>
+					<TD WIDTH=79%>
+						<P>This name will be used in the database type listbox on the general tabpage in the data source administration dialog.</P>
+					</TD>
+				</TR>
+				<TR VALIGN=TOP>
+					<TD WIDTH=21%>
+						<B>DriverDsnPrefix</B>
+					</TD>
+					<TD WIDTH=79%>
+						<P>This name will be the prefix for the URL of the new database driver. <B>This name has to end with a colon.<B></P>
+					</TD>
+				</TR>
+				<TR VALIGN=TOP>
+					<TD WIDTH=21%>
+						<B>Extension</B>
+					</TD>
+					<TD WIDTH=79%>
+						<P>The file extension, which match to this type. Only set when it is file based driver.</P>
+					</TD>
+				</TR>
+			</TABLE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3><FONT COLOR="#ffffff"><FONT FACE="Arial, sans-serif"><FONT SIZE=4><I>The
+			Macro</I></FONT></FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<PRE>REM  *****  BASIC  *****
+
+Sub Main
+	' access the global configuration provider
+	Dim aConfigProvider As Object
+	aConfigProvider = createUnoService( "com.sun.star.configuration.ConfigurationProvider" )
+
+	' create an access object for the driver settings key
+	Dim aDriverSettings As Object
+	Dim aParams(0) As new com.sun.star.beans.PropertyValue
+	aParams(0).Name = "nodepath"
+	aParams(0).Value = "/org.openoffice.Office.DataAccess/UserDefinedDriverSettings"
+	aDriverSettings = aConfigProvider.createInstanceWithArguments( _
+	"com.sun.star.configuration.ConfigurationUpdateAccess", _
+	aParams() )
+
+	aDrv = aDriverSettings.createInstance()
+
+	aDrv.DriverPageDisplayName ="Ocke's own private Driver page"
+	aDrv.DriverTypeDisplayName = "Neo_1" ' this name will be displayed in the Type listbox on the general tabpage
+	aDrv.DriverDsnPrefix ="sdbc:matrix:"    ' this name will be the prefix of the URL
+	aDrv.Extension = "*.OJ" ' will be used by the fileopen dialog
+
+	' create an access object for the mozilla preferences node
+
+	aDriverSettings.insertByName( "Neo_1",aDrv ) ' just a name to make it distinct
+
+
+	' commit the changes done
+	aDriverSettings.commitChanges
+End Sub
+</PRE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<P ALIGN=LEFT><FONT COLOR="#ffffff">Auhor: <A HREF="mailto:oj@openoffice.org"><FONT COLOR="#ffffff">Ocke
+			Janssen </FONT></A><A HREF="mailto:ibo@system-entwicklung.de"><BR></A>Last
+			Modified: $Date: 2004/10/15 08:12:12 $<BR><I>Copyright &copy; 2001
+			OpenOffice.org</I></FONT></P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 NOSHADE>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

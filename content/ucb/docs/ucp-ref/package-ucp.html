@@ -1,0 +1,261 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>The Package Content Provider</title>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="AUTHOR" CONTENT="Kai Sommerfeld">
+	<META NAME="CREATED" CONTENT="20000714;12280562">
+	<META NAME="CHANGEDBY" CONTENT="Kai Sommerfeld">
+	<META NAME="CHANGED" CONTENT="20010516;11055191">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm; margin: 2cm }
+		H1 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 16pt }
+		TH P { margin-bottom: 0.21cm; font-style: italic }
+		TD P { margin-bottom: 0.21cm }
+		H2 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 14pt; font-style: italic }
+		P { margin-bottom: 0.21cm }
+		A.sdfootnoteanc { font-size: 57% }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ucb/">ucb</a>&nbsp;&raquo;&nbsp;<a href="/ucb/docs/">docs</a>&nbsp;&raquo;&nbsp;<a href="/ucb/docs/ucp-ref/">ucp-ref</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1>The Package Content Provider</H1>
+<H2>Preface</H2>
+<P>The Package Content Provider ( PCP ) implements a Content Provider
+for the Universal Content Broker (UCB). It provides access to the
+content of ZIP/JAR archive files. Possibly it will be extended to
+support other packages ( like OLE storages ) in the future.</P>
+<H2>PCP Contents</H2>
+<P>The PCP provides two different types of contents: <B>Stream </B><SPAN STYLE="font-weight: medium">and
+</SPAN><B>Folder</B>.</P>
+<OL>
+	<LI><P>A PCP Stream is a content which represents a file inside a
+	package. It is always contained in a PCP Folder. A PCP Stream has no
+	children.</P>
+	<LI><P>A PCP Folder is a container for other PCP Folders and PCP
+	Streams.</P>
+</OL>
+<H2><IMG SRC="package-contents.gif" NAME="Object1" ALIGN=LEFT WIDTH=533 HEIGHT=276 BORDER=0><BR CLEAR=LEFT>Creation
+Of New PCP Contents</H2>
+<P>PCP Folders implement the interface XContentCreator. PCP Streams
+and PCP Folders support the command &#132;insert&#147;. That's why
+all PCP Folders can create new PCP Folders and PCP Streams. To create
+a new child of a PCP Folder:</P>
+<OL>
+	<LI><P>Let the parent folder create a new content by calling its
+	createNewContent-method. The content type to use for new folders is
+	<B>application/vnd.sun.star.pkg-folder</B><SPAN STYLE="font-weight: medium">.
+	To create a new stream, use the type string
+	</SPAN><B>application/vnd.sun.star.pkg-stream</B><SPAN STYLE="font-weight: medium">.</SPAN></P>
+	<LI><P STYLE="font-weight: medium">Set a title at the new
+	folder/stream. ( Let the new child execute a setPropertyValues &#150;
+	command, which sets at least the property &#132;Title&#147; to a
+	non-empty value ).</P>
+	<LI><P STYLE="font-weight: medium">Let the new child ( not the
+	parent! ) execute the command &#132;insert&#147;. This will commit
+	the creation process. For Streams, you need to supply the
+	implementation of an XInputStream with the command's parameters,
+	that provides access to the stream data. 
+	</P>
+</OL>
+<P><BR><BR>
+</P>
+<P STYLE="font-weight: medium">Another, <B>more convenient way for
+creating streams</B> is simply to assemble the URL for the new
+content ( last part of the path will become the title of the new
+stream ) and to obtain a Content object for that URL from the UCB.
+Then let the content execute the command &quot;insert&quot;. The
+command will fail, if you set the command's parameter
+&quot;ReplaceExisting&quot; to false and there is already a stream
+with the title given by the content's URL.</P>
+<H2>URL Scheme for PCP Contents</H2>
+<P>Each PCP content has an identifier corresponding to the following
+scheme:</P>
+<P><FONT FACE="Courier New, monospace">package-URL =
+&quot;vnd.sun.star.pkg://&quot; orig-URL [ abs-path ]</FONT></P>
+<P><FONT FACE="Courier New, monospace">abs-path = &quot;/&quot;
+path-segments</FONT></P>
+<P><FONT FACE="Courier New, monospace">path-segements = segment *(
+&quot;/&quot; segment )</FONT></P>
+<P><FONT FACE="Courier New, monospace">segment = pchar</FONT></P>
+<P><FONT FACE="Courier New, monospace">pchar = unreserved | escaped |
+&quot;:&quot; | &quot;@&quot; | &quot;&amp;&quot; | &quot;=&quot; |
+&quot;+&quot; | &quot;$&quot; | &quot;,&quot;</FONT></P>
+<P><FONT FACE="Courier New, monospace">unreserved = alphanum | mark</FONT></P>
+<P><FONT FACE="Courier New, monospace">mark = &quot;-&quot; | &quot;_&quot;
+| &quot;.&quot; | &quot;!&quot; | &quot;~&quot; | &quot;*&quot; | &quot;'&quot;
+| &quot;(&quot; | &quot;)&quot;</FONT></P>
+<P><FONT FACE="Courier New, monospace">escaped = &quot;%&quot; hex
+hex</FONT></P>
+<P><FONT FACE="Courier New, monospace">orig-URL = 1 *( unreserved |
+escaped | &quot;$&quot; | &quot;,&quot; | &quot;;&quot; | &quot;:&quot;
+| &quot;@&quot; | &quot;&amp;&quot; | &quot;&amp;&quot; | &quot;=&quot;
+| &quot;+&quot;</FONT></P>
+<P><B>Examples:</B></P>
+<P><SPAN STYLE="font-weight: medium"><B>vnd.sun.star.pkg://file:%2F%2F%2Fe:%2Fmy.xsw/
+</B>( The root folder of the package located at <A HREF="../../../../../my.xsw">file:///e:/my.xsw</A>
+)</SPAN></P>
+<P><SPAN STYLE="font-weight: medium"><B>vnd.sun.star.pkg://file:%2F%2F%2Fe:%2Fmy.xsw/Content</B>
+( The folder/stream named &quot;Content&quot; that is contained in
+the root folder of the located at <A HREF="../../../../../my.xsw">file:///e:/my.xsw</A>
+)</SPAN></P>
+<P><SPAN STYLE="font-weight: medium"><B>vnd.sun.star.pkg://file:%2F%2F%2Fe:%2Fmy.xsw/Content%20A</B>
+( The folder/stream named &quot;Content A&quot; that is contained in
+the root folder of the located at <A HREF="../../../../../my.xsw">file:///e:/my.xsw</A>
+)</SPAN></P>
+<H2 STYLE="page-break-before: always">Appendix</H2>
+<P>The following table gives an overview of the different PCP
+contents.</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=23*>
+	<COL WIDTH=64*>
+	<COL WIDTH=67*>
+	<COL WIDTH=51*>
+	<COL WIDTH=51*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=9%>
+				<P><BR>
+				</P>
+			</TH>
+			<TH WIDTH=25%>
+				<P>UCB Type</P>
+				<P>(returned by XContent::getContentType )</P>
+			</TH>
+			<TH WIDTH=26%>
+				<P>Properties</P>
+			</TH>
+			<TH WIDTH=20%>
+				<P>Commands</P>
+			</TH>
+			<TH WIDTH=20%>
+				<P>Interfaces</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=9%>
+				<P>Stream</P>
+			</TD>
+			<TD WIDTH=25%>
+				<P>application/vnd.sun.star.pkg-stream</P>
+			</TD>
+			<TD WIDTH=26%>
+				<P>[readonly] ContentType</P>
+				<P>[readonly] IsDocument</P>
+				<P>[readonly] IsFolder</P>
+				<P>MediaType</P>
+				<P>[readonly] Size</P>
+				<P>Title</P>
+				<P>Compressed<A CLASS="sdfootnoteanc" NAME="sdfootnote1anc" HREF="#sdfootnote1sym"><SUP>1</SUP></A></P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>getCommandInfo</P>
+				<P>getPropertySetInfo</P>
+				<P>getPropertyValues</P>
+				<P>setPropertyValues</P>
+				<P>insert</P>
+				<P>delete</P>
+				<P>open</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>lang::<B>XTypeProvider</B>,</P>
+				<P>lang::<B>XServiceInfo</B>,</P>
+				<P>lang::<B>XComponent</B>,</P>
+				<P>ucb::<B>XContent</B>,</P>
+				<P>ucb::<B>XCommandProcessor</B>,</P>
+				<P>beans::<B>XPropertiesChangeNotifier</B>,</P>
+				<P>beans::<B>XPropertyContainer</B>,</P>
+				<P>beans::<B>XPropertySetInfoChangeNotifier</B>,</P>
+				<P>ucb::<B>XCommandInfoChangeNotifier</B>,</P>
+				<P>container::<B>XChild</B></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=9%>
+				<P>Folder</P>
+			</TD>
+			<TD WIDTH=25%>
+				<P>application/vnd.sun.star.pkg-folder</P>
+			</TD>
+			<TD WIDTH=26%>
+				<P>[readonly] ContentType</P>
+				<P>[readonly] IsDocument</P>
+				<P>[readonly] IsFolder</P>
+				<P>MediaType</P>
+				<P>[readonly] Size</P>
+				<P>Title 
+				</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>getCommandInfo</P>
+				<P>getPropertySetInfo</P>
+				<P>getPropertyValues</P>
+				<P>setPropertyValues</P>
+				<P>insert</P>
+				<P>delete</P>
+				<P>open</P>
+				<P>transfer<A CLASS="sdfootnoteanc" NAME="sdfootnote2anc" HREF="#sdfootnote2sym"><SUP>2</SUP></A></P>
+				<P>flush<A CLASS="sdfootnoteanc" NAME="sdfootnote3anc" HREF="#sdfootnote3sym"><SUP>3</SUP></A></P>
+			</TD>
+			<TD WIDTH=20%>
+				<P><B>same as PCP Stream</B></P>
+				<P>plus ucb::<B>XContentCreator</B></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR><BR>
+</P>
+<DIV ID="sdfootnote1">
+	<P STYLE="font-weight: medium"><A CLASS="sdfootnotesym" NAME="sdfootnote1sym" HREF="#sdfootnote1anc">1</A>The
+	property &quot;Compressed&quot; is introduced by package streams. It
+	allows you to explecitly state whether you want a stream to be
+	compressed or not. The default value of this property will be
+	determined according to the value suggested by the underlying
+	packager implementation.</P>
+</DIV>
+<DIV ID="sdfootnote2">
+	<P STYLE="font-weight: medium"><A CLASS="sdfootnotesym" NAME="sdfootnote2sym" HREF="#sdfootnote2anc">2</A>The
+	&#132;transfer&#147; command only transfers PCP-folders/-streams to
+	other PCP folders. It does not handle contents with a URL scheme
+	other then the PCP-URL-scheme.</P>
+</DIV>
+<DIV ID="sdfootnote3">
+	<P STYLE="font-weight: medium"><A CLASS="sdfootnotesym" NAME="sdfootnote3sym" HREF="#sdfootnote3anc">3</A>&quot;flush&quot;
+	is a command introduced by the PCP Folder. It takes a void-argument
+	and returns void. This command is used to write unsaved changes to
+	the underlying package file. Note that the current implementation of
+	PCP <B>contents never flush automatically</B>! Operations, which
+	require a flush to get persistent, are: &quot;setPropertyValues(
+	Title | MediaType ) &quot;, &quot;delete&quot;, &quot;insert&quot;.</P>
+</DIV>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

@@ -1,0 +1,480 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+                                                       
+  <meta http-equiv="Content-Type" content="text/html;CHARSET=iso-8859-1">
+                 <!-- udk.openoffice.org --><title>Design Document</title>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body link="#6666cc" alink="#cc3333" bgcolor="#ffffff" marginwidth="0" marginheight="0" leftmargin="0" topmargin="0">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/">common</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/">man</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/draft/">draft</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/draft/scripting/">scripting</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/draft/scripting/DesignDoc/">DesignDoc</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      <hr>&nbsp;
+ <basefont size="-1" face="Arial, Helvetica, sans-serif"> 
+<table border="0" cellspacing="8" cellpadding="5" width="100%">
+   <tbody>
+     <tr valign="top">
+       <td valign="top" width="100%" id="bodycol" bgcolor="#ffffff">    
+  
+      <h1 align="center">Language Independent Scripting Framework</h1>
+       
+      <h2 align="center">Design Document - Last update: 16th August 2002</h2>
+         This document should only be read after having read the <a href="http://udk.openoffice.org/common/man/draft/scripting/ArchDoc.20020618.sxw">
+      Architecture  Document</a>
+      . This document contains:<br>
+       
+      <ul>
+         <li><a href="#Diagrams">Class &amp; Object Interaction Diagrams</a></li><li><a href="#Binding">Binding storage sequence diagrams</a>
+         <br>
+        </li>
+
+         <li><a href="#OOIDE">OpenOffice - IDE Integration Interaction Diagrams</a>
+           <br>
+         </li>
+         <li><a href="#Proposed_file_structure_for_scripting">Proposed File
+    structure for scripting</a>
+         </li>
+         <li><a href="#Language-Specific__Logical_Script_names">Language-specific 
+   &amp; Logical ScriptNames</a>
+         </li>
+         <li><a href="#Deployment_DTD">DTD &amp; sample XML for Deployment</a>
+         </li>
+         <li><a href="#DTD_for_Script_Registry">DTD &amp; sample XML for
+Script   Registry</a>
+         </li>
+         <li><a href="#deployinterface">Deployment Interfaces</a>&nbsp;</li><li><a href="#Storage">Script storage interfaces</a><br>
+        </li>
+
+         <li><a href="#IDLFiles">Links to the IDL Files</a>
+         </li>
+       
+      </ul>
+       <br>
+       
+      <hr>       
+      <h3><a name="Diagrams"></a>
+      Class &amp; Object Interaction Diagrams</h3>
+       <img src="BindingObject.png">
+       <br>
+            Binding Object Class Diagram(<a href="BindingObject.dia">source</a>
+      ).         <br>
+       
+      <hr><img src="BindingSequence.png">
+       <br>
+            Binding Object Interaction Diagram(<a href="BindingSequence.dia">
+    source</a>
+      ).          <br>
+       
+      <hr>&nbsp;
+       <br><img src="ScriptInvocation.png">
+       <br>
+            Script Invocation Interaction Diagram(<a href="ScriptInvocation.dia">
+      source</a>
+      ).         <br>
+       
+      <hr><img src="ScriptInvocationClassDiagram.gif">
+       <br>
+            Script Invocation Class Diagram(<a href="ScriptInvocationClassDiagram.dia">
+      source</a>
+      ).        <br>
+       
+      <hr><br>
+      <h3><a name="Binding"></a>Binding storage sequence diagrams</h3>
+      <h3><img src="BindingActions.png">
+
+       </h3>
+
+            Actions available on Bindings( <a href="BindingActions.dia">source</a>
+      ).          <br>
+            XBinding represents a binding, this is an event (string) and
+script    (string)   pair. XBindingStore is the interface for access the
+binding storage   of a  certain document or the application. It provides
+store, remove and  query functionality of binding objects implementing the
+XBinding interface.         <br>
+       
+      <hr><img src="BindingActions2.png">
+       <br>
+            Query available on Bindings(<a href="BindingActions2.dia">source</a>
+      ).          <br>
+       
+      <hr width="100%" size="2">       
+      <h3><a name="OOIDE"></a>
+ OpenOffice - IDE Integration Interaction Diagrams</h3>
+       <img src="Source-Edit.png" alt="Editing a Script in an IDE" width="762" height="646">
+       
+      <p>&nbsp;Editing a script in an IDE(<a href="Source-Edit.dia">source</a>
+ )</p>
+       Context:                
+      <ul>
+         <li>all the GUI used for binding and parcel management is implemented
+   in  OpenOffice and it is embedded into the IDE using the  OpenOffice Bean</li>
+         <li>a temporary area of the filesystem is used to transfer files,
+ parcels   selected by the user in the above  OpenOffice GUI into the IDE
+(this should  be transparent to the user)</li>
+       
+      </ul>
+    When a file is selected to be edited or a new  file is created roughly
+ the dialog taking place is: -  OpenOffice checks if the IDE is running,
+if  not it starts it<br>
+       
+      <ul>
+         <li>  OpenOffice moves the selected content (from the document)
+into   the temporary area and notifies the IDE that the content is there</li>
+         <li> the IDE loads the content from the temporary area</li>
+         <li>user edits, saves (maybe builds)</li>
+         <li>at save the IDE notifies   OpenOffice that the content is again 
+ available in the temporary  area </li>
+         <li> OpenOffice (C&amp;C module) moves the content back into the 
+document</li>
+       
+      </ul>
+     Transferred content will most likely have to be a complete build  environment 
+ rather than one file only. Transfer can be optimized to transfer  only changed 
+ files rather than all the files. When a file is displayed all  the corresponding 
+ build environment has to be transferred to facilitate build,  run and debug.<br>
+       <br>
+       
+      <hr width="100%" size="2"><img src="SO-IDE-debug.png" alt="Debugging a OpenOffice Script in an IDE" width="959" height="668">
+  <br>
+       <br>
+ Debugging a script in an IDE(<a href="SO-IDE-debug.dia">source</a>
+ )<br>
+       <br>
+ This diagram describes how OpenOffice and the IDE interact to facilitate
+debugging. When the user starts up the IDE the debugging connection (e.g.
+debugger from IDE attaching to the OpenOffice JVM) should be established.
+This is the time to check whether individual runtimes or OpenOffice have
+to be restarted in order to facilitate debugging from the IDE.<br>
+       <br>
+ The dialog protocol is this:        
+      <ol>
+         <li>OpenOffice tries to start the IDE</li>
+         <li>OpenOffice checks whether the runtime is running and is debug 
+enabled (if not then the runtime or OpenOffice has to be restarted</li>
+         <li>OpenOffice starts the IDE </li>
+         <li>when IDE signals that it is ready OpenOffice sends the parameters 
+needed for debugger attachment (host, port etc) </li>
+         <li>the user sets breakpoints in the IDE </li>
+         <li>at this point the user will invoke the script, this will be
+either from the IDE or from OpenOffice; if it is from the IDE then the IDE
+has to request an invocation from OpenOffice, if it is from OpenOffice then
+nothing has to be done (a user action will invoke the script)</li>
+         <li>after invocation the runtime will pause waiting for the debugger 
+(from the IDE) to attach, a message has to be sent to the IDE to start the 
+debugger</li>
+         <li>the IDE debugger will attach to the runtime in OpenOffice </li>
+       
+      </ol>
+  This protocol is somewhat Java specific, it might need changes for other 
+runtimes.<br>
+       <br>
+       
+      <hr width="100%" size="2"><br>
+       <img src="Exception-IDE.png" alt="Debugging Exceptions from OpenOffice in an IDE" width="1110" height="805">
+       <br>
+       <br>
+ Debugging a script exception in an IDE(<a href="Exception-IDE.dia">source</a>
+ )<br>
+       <br>
+ Exception handling is a variation of the code editing and debug enabling 
+diagrams. The diagram describes the dialog between OpenOffice and the IDE 
+when the IDE has not been started yet so the attachment to the OpenOffice
+ JVM from the IDE has to be done.  <br>
+       <br>
+ The dialog is the following:        
+      <ol>
+         <li>after invocation of a script when an exception is caught by
+the script runtime check if the IDE is already running, if not and OpenOffice 
+is not running with debugger attachment enabled to the JVM then OpenOffice 
+has to be restarted</li>
+         <li>if OpenOffice has been restarted then it is the user's responsibility 
+to get the script invoked again</li>
+         <li>if the IDE was not running then it is started and the source 
+is loaded as described in the Edit diagram</li>
+         <li>after this the debugger from the IDE attaches to the OpenOffice 
+JVM as described in the debug enabling diagram</li>
+         <li>the user can evaluate variables at this point</li>
+         <li>changing and saving the code at this point happens as already 
+described in the Edit diagram</li>
+       
+      </ol>
+       <br>
+       
+      <hr>       
+      <h3><a name="Proposed_file_structure_for_scripting"></a>
+      Proposed file  structure for scripting</h3>
+          The file structure for the application and the document will be 
+the   same,  the only difference is the structure for the document will stored 
+ in the document zip file.  The file structure is as follows             
+                                             
+      <pre>scripting/<br>          |<br>          +- java/<br>          |<br>          +- basic/<br>          |<br>          +- otherLanguage/<br></pre> 
+         under the language specific folder                             
+                                    &nbsp;each script parcel has a separate
+folder. The file and folder structure in a script parcel is arbitrary, it
+depends on how the developer organizes files and folders of&nbsp;       
+  the parcel. <br>
+      <br>
+A registry file exists at the script level in the directory structure
+   that  identifies the scripts that are installed (in either the document
+ or  application)  or other metadata associated with the script.        
+                                                  
+      <hr><br>
+       
+      <h3><a name="Language-Specific__Logical_Script_names"></a>
+      Language-Specific &amp; Logical Script names</h3>
+       <u>Generic script name:</u><br>
+       script://&lt;sname&gt;/[&lt;qtype&gt;['?'&lt;query&gt;]]<br>
+       <br>
+       ;	name of a script functionality<br>
+       sname =: &lt;name&gt;<br>
+       ;	query type<br>
+       qtype =: &lt;name&gt;<br>
+       ;	query<br>
+       query =: &lt;qelm&gt;(','&lt;qelm&gt;)*<br>
+       ;	query element<br>
+       qelm  =: &lt;word&gt;'='&lt;name&gt;<br>
+       <br>
+       <br>
+       <u>Language specific script name:</u><br>
+       script:///&lt;lname&gt;'?'&lt;lpart&gt;<br>
+       <br>
+       ;	language runtime name<br>
+       lname =: &lt;name&gt;<br>
+       ;	language specific portion of name<br>
+       lpart =: sequence of any printable characters<br>
+       <br>
+       <br>
+       name  =: &lt;word&gt;('.'&lt;word&gt;)*<br>
+       word  =: &lt;alpha&gt;(['-'|'_'](&lt;alpha&gt;|&lt;digit&gt;))*<br>
+       alpha =: an alphabetical character as in rfc2396-1.6<br>
+       digit =: a digit character as in rfc2396-1.6<br>
+       
+      <hr width="100%" size="2">       
+      <h3><a name="Deployment_DTD"></a>
+       Deployment DTD</h3>
+        &lt;?xml version="1.0" encoding="UTF-8"?&gt; <br>
+        &lt;!ELEMENT script (logicalname, languagename, dependencies, description?,
+    delivery)&gt;<br>
+        &lt;!ELEMENT bundle (script+)&gt;<br>
+        &lt;!ELEMENT logicalname EMPTY&gt;<br>
+        &lt;!ELEMENT languagename EMPTY&gt;<br>
+        &lt;!ELEMENT dependencies (dependfile+)&gt;<br>
+        &lt;!ELEMENT description (#PCDATA)&gt;<br>
+        &lt;!ELEMENT delivery (deliverfile+)&gt;<br>
+        &lt;!ELEMENT deliverfile EMPTY&gt;<br>
+        &lt;!ELEMENT dependfile EMPTY&gt;<br>
+        &lt;!ATTLIST script<br>
+           language CDATA #REQUIRED<br>
+           deploymentdir CDATA #REQUIRED<br>
+        &gt;<br>
+        &lt;!ATTLIST logicalname<br>
+           value CDATA #REQUIRED<br>
+        &gt;<br>
+        &lt;!ATTLIST languagename<br>
+           value CDATA #REQUIRED<br>
+           location CDATA #REQUIRED<br>
+        &gt;<br>
+        &lt;!ATTLIST dependfile<br>
+           name CDATA #REQUIRED<br>
+           isdeliverable (yes | no) #REQUIRED<br>
+        &gt;<br>
+        &lt;!ATTLIST deliverfile<br>
+           name CDATA #REQUIRED<br>
+           type (binary | data | source | resource) #REQUIRED<br>
+        &gt;<br>
+       <br>
+       
+      <h3>Sample deployment XML</h3>
+        &lt;?xml version="1.0" encoding="UTF-8"?&gt;<br>
+        &lt;!DOCTYPE bundle SYSTEM "deployment.dtd"&gt;<br>
+        &lt;bundle&gt;<br>
+           &lt;script language="Java" deploymentdir="calc.convert.EuroConvert"&gt;<br>
+              &lt;logicalname value="calc.convert.EuroConvert"/&gt;<br>
+              &lt;languagename value="com.sun.star.calc.EuroConvert"<br>
+            location="convert.jar"/&gt;<br>
+              &lt;dependencies&gt;<br>
+                 &lt;dependfile name="data/currenices.txt" isdeliverable="yes"/&gt;<br>
+              &lt;/dependencies&gt;<br>
+              &lt;delivery&gt;<br>
+                 &lt;deliverfile name="convert.jar" type="binary"/&gt;<br>
+                 &lt;deliverfile name="currencies.txt" type="resource"/&gt;<br>
+              &lt;/delivery&gt;<br>
+           &lt;/script&gt;<br>
+        &lt;/bundle&gt;<br>
+       
+      <hr>       
+      <h3><a name="DTD_for_Script_Registry"></a>
+      DTD for Script Registry</h3>
+        &lt;?xml version="1.0" encoding="UTF-8"?&gt; <br>
+        &lt;!ELEMENT script (logicalname, languagename, description, properties,<br>
+        dependencies)&gt;<br>
+        &lt;!ELEMENT logicalname EMPTY&gt;<br>
+        &lt;!ELEMENT languagename EMPTY&gt;<br>
+        &lt;!ELEMENT description (#PCDATA)&gt;<br>
+        &lt;!ELEMENT properties (#PCDATA)&gt;<br>
+        &lt;!ELEMENT dependencies (file)&gt;<br>
+        &lt;!ELEMENT file EMPTY&gt;<br>
+        &lt;!ATTLIST script<br>
+           language CDATA #REQUIRED<br>
+           rootdir CDATA #REQUIRED<br>
+        &gt;<br>
+        &lt;!ATTLIST logicalname<br>
+           value CDATA #REQUIRED<br>
+        &gt;<br>
+        &lt;!ATTLIST languagename<br>
+           value CDATA #REQUIRED<br>
+           location CDATA #REQUIRED<br>
+        &gt;<br>
+        &lt;!ATTLIST file<br>
+           name CDATA #REQUIRED<br>
+        &gt;<br>
+       
+      <h3>Sample XML for Script Registry</h3>
+        &lt;?xml version="1.0" encoding="UTF-8"?&gt;<br>
+        &lt;!DOCTYPE script SYSTEM "registry.dtd"&gt;<br>
+        &lt;script language="Java" rootdir="calc.convert.EuroConvert"&gt;<br>
+           &lt;logicalname value="calc.convert.EuroConvert"/&gt;<br>
+           &lt;languagename value="com.sun.star.calc.EuroConvert"<br>
+          location="convert.jar"/&gt;<br>
+           &lt;description&gt;A Euro Converter&lt;/description&gt;<br>
+           &lt;properties&gt;Other properties&lt;/properties&gt;<br>
+           &lt;dependencies&gt;<br>
+              &lt;file name="data/currencies.txt"/&gt;<br>
+           &lt;/dependencies&gt;<br>
+        &lt;/script&gt;<br>
+       
+      <hr width="100%" size="2">       
+      <h3><a name="deployinterface"></a>
+ Deployment Interfaces</h3>
+       <a href="XParcel.idl">XParcel</a> 
+  Interface access to a parcel file hierarchy by retrieving the hierarchy
+ and adding/removing content (using w3c standard urls with wildcards in them
+ to add/remove a number of files/folders). The parcel name can also be retrieved.
+The interface XParcel is implemented by the Parcel service.<br>
+       <br>
+       <a href="XParcelStore.idl"> XParcelStore</a>
+  provides access to parcels installed into a document or the application 
+context. Complete parcel packages (archived as zip) can be installed. Parcels 
+can be created (to fill with content through the XParcel interface) and parcels 
+can be removed. A list of all the installed parcels can also be obtained.<br>
+       <br>
+       
+      
+      <hr>
+      <h3><a name="Storage"></a>Script storage interfaces</h3>
+
+      The toplevel storage service is ScriptingStorage. Every document and
+the application has one ScriptingStorage component that provides access to
+the scripts stored in that context. ScriptingStorage implements several interfaces:<br>
+      <br>
+      <ul>
+        <li>XScriptAccessManager: provides access to script related data encapsulated in the ScriptInfo component</li>
+        <li>XScriptImplAccess: resolves logical script names to language specific script names</li>
+        <li>XNamingAccess: provide access to the logical naming of scripts
+(it is designed to provide various views, a hierarchical one will be implemented)</li>
+        <li>XBindingStore: provide access to the binding storage (described above)</li>
+        <li>XParcelStore: provide access to the parcel storage (described above)</li>
+      </ul>
+ScriptInfo is a service providing access to information related to one script. It contains two interfaces:<br>
+      <ul>
+        <li>XScriptInfo: provides access to script metadata</li>
+        <li>XScriptStore: provides support for implementation of data persistence by the script<br>
+        </li>
+      </ul>
+
+<hr>       
+      <h3><a name="IDLFiles"></a>
+      IDL Files</h3>
+                                              The following are the proposed
+  interfaces.  In some cases, these are just placeholders and need further
+ work.                                                   
+      
+      <p><a href="CannotResolveScriptNameException.idl">CannotResolveScriptNameException.idl</a>
+       <br>
+       <a href="ScriptInfoAccessException.idl">ScriptInfoAccessException.idl</a>
+       <br>
+       <a href="ScriptRuntime.idl">ScriptRuntime.idl</a>
+       <br>
+       <a href="ScriptRuntimeException.idl">ScriptRuntimeException.idl</a>
+       <br>
+       <a href="ScriptRuntimeManager.idl">ScriptRuntimeManager.idl</a>
+       <br>
+       <a href="ScriptStorage.idl">ScriptStorage.idl</a>
+       <br>
+       <a href="XBinding.idl">XBinding.idl</a>
+       <br>
+       <a href="XBindingStore.idl">XBindingStore.idl</a>
+       <br>
+       <a href="XFunction.idl">XFunction.idl</a>
+       <br>
+       <a href="XFunctionProvider.idl">XFunctionProvider.idl</a>
+       <br>
+       <a href="XNameNode.idl">XNameNode.idl</a>
+       <br>
+       <a href="XScriptAccessManager.idl">XNamingAccess.idl<br>
+       </a>
+      <a href="XParcel.idl">XParcel.idl<br>
+ XParcelStore.idl<br>
+       </a>
+      <a href="XScriptAccessManager.idl"> XScriptAccessManager.idl      
+      </a>
+      <br>
+       <a href="XScriptContext.idl">XScriptContext.idl</a>
+       <br>
+       <a href="XScriptImplAccess.idl">XScriptImplAccess.idl</a>
+       <br>
+       <a href="XScriptInvocation.idl">XScriptInvocation.idl</a>
+       <br>
+       <a href="XScriptStore.idl">XScriptStore.idl</a>
+       <br>
+       <a href="XScriptURI.idl">XScriptURI.idl</a>
+       <br>
+       <a href="ScriptURI.idl">ScriptURI.idl</a>
+       <br>
+       <a href="XScriptNameResolver.idl">XScriptNameResolver.idl</a>&nbsp;<br>
+<a href="XScriptStore.idl">XScriptInfo.idl<br>
+XScriptStore.idl</a>&nbsp;<br>
+      <a href="ScriptInfo.idl">ScriptInfo.idl</a><br>
+      <a href="Parcel.idl">Parcel.idl</a>
+       <br>
+       </p>
+
+       <b><br>
+       <br>
+       </b><br>
+       </td>
+     </tr>
+   
+  </tbody> 
+</table>
+ <!-- end footer --><br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ 
+<br>
+<br>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

@@ -1,0 +1,233 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>SQL functions for file based database drivers</title>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/dba/">dba</a>&nbsp;&raquo;&nbsp;<a href="/dba/specifications/">specifications</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<div style="text-align: center;"><font size="+3">SQL Functions for file
+based database drivers<br>
+</font></div>
+<div style="text-align: center;"><font size="+1"><span
+ style="font-style: italic; font-weight: bold;">Feature Specification<br>
+</span></font>
+<div style="text-align: left;">
+<h3><font size="+1">Content</font></h3>
+&nbsp;<a href="#abstract">Abstract</a><br>
+&nbsp;<a href="#functional">Functional Description</a><br>
+<h3><a name="abstract"></a>Abstract</h3>
+The current file based database drivers in OOo 1.0-1.1 (dBase, flat
+file, and spreadsheet) dosn't support any SQL functions. Neither string,
+date nor numeric functions. In the new version OOo 2.0 these drivers
+will support the following functions.<br>
+<h3><a name="functional"></a>Functional description</h3>
+<h1><font face="arial, sans-serif"><font size="2">String functions</font></font></h1>
+<ul>
+  <li>
+    <p><font face="arial, sans-serif"><font size="2">UCASE(str)<br>
+UPPER(str)<br>
+Returns the string str with all characters changed to uppercase
+according to the ascii </font></font><font size="2"><font
+ face="arial, sans-serif">character set </font></font><font
+ face="arial, sans-serif"><font size="2">mapping.<br>
+    </font></font></p>
+  </li>
+  <li>
+    <p><font size="2"><font face="arial, sans-serif">LCASE(str)<br>
+LOWER(str)<br>
+Returns the string str with all characters changed to lowercase
+according to the ascii character set mapping.<br>
+    </font></font></p>
+  </li>
+  <li>
+    <p><font face="arial, sans-serif"><font size="2">ASCII(str)<br>
+Returns the ASCII code value of the leftmost character of the string
+str. Returns 0 if str is the empty string. Returns NULL if str is NULL:</font></font></p>
+  </li>
+  <li><font face="arial, sans-serif"><font size="2">LENGTH(str)<br>
+OCTET_LENGTH(str)<br>
+CHAR_LENGTH(str)<br>
+CHARACTER_LENGTH(str)<br>
+Returns the length of the string str:</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">CHAR(N,...)<br>
+CHAR() interprets the arguments as integers and returns a string
+consisting of the characters given by the ASCII code values of those
+integers. NULL values are skipped:</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">CONCAT(str1,str2,...)<br>
+Returns the string that results from concatenating the arguments.
+Returns NULL if any argument is NULL. May have more than 2 arguments. A
+numeric argument is converted to the equivalent string form.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">LOCATE(substr,str)<br>
+Returns the position of the first occurrence of substring substr in
+string str. Returns 0 if substr is not in str.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">SUBSTRING(str,pos)<br>
+Returns a substring from string str starting at position pos.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">SUBSTRING(str,pos,len)<br>
+SUBSTRING(str FROM pos FOR len)<br>
+Returns a substring len characters long from string str, starting at
+position pos. The variant form that uses FROM is SQL-92 syntax.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">LTRIM(str)<br>
+Returns the string str with leading space characters removed.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">RTRIM(str)<br>
+Returns the string str with trailing space characters removed.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">SPACE(N)<br>
+Returns a string consisting of N space characters.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">REPLACE(str,from_str,to_str)<br>
+Returns the string str with all occurrences of the string from_str
+replaced by the string to_str.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">REPEAT(str,count)<br>
+Returns a string consisting of the string str repeated count times. If
+count &lt;= 0, returns an empty string. Returns NULL if str or count are
+NULL.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">INSERT(str,pos,len,newstr)<br>
+Returns the string str, with the substring beginning at position pos
+and len characters long replaced by the string newstr.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">LEFT(str,len)<br>
+Returns the leftmost len characters from the string str.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">RIGHT(str,len)<br>
+Returns the rightmost len characters from the string str.</font></font></li>
+</ul>
+<h1><font face="arial, sans-serif"><font size="2">Numeric fucntions</font></font></h1>
+<ul>
+  <li><font face="arial, sans-serif"><font size="2">ABS(X)<br>
+Returns the absolute value of X.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">SIGN(X)<br>
+Returns the sign of the argument as -1, 0, or 1, depending on whether X
+is negative, zero, or positive.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">MOD(N,M)<br>
+Modulo (like the % operator in C). Returns the remainder of N divided
+by M.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">FLOOR(X)<br>
+Returns the largest integer value not greater than X.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">CEILING(X)<br>
+Returns the smallest integer value not less than X.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">ROUND(X)<br>
+ROUND(X,D)<br>
+Returns the argument X, rounded to the nearest integer. With two
+arguments rounded to a number to D decimals.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">EXP(X)<br>
+Returns the value of e (the base of natural logarithms) raised to the
+power of X.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">LN(X)<br>
+Returns the natural logarithm of X.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">LOG(X)<br>
+LOG(B,X)<br>
+If called with one parameter, this function returns the natural
+logarithm of X. If called with two parameters, this function returns the
+logarithm of X for an arbitary base B.<br>
+    </font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">LOG10(X)<br>
+Returns the base-10 logarithm of X.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">POWER(X,Y)<br>
+Returns the value of X raised to the power of Y.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">SQRT(X)<br>
+Returns the non-negative square root of X.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">PI()<br>
+Returns the value of PI.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">COS(X)<br>
+Returns the cosine of X, where X is given in radians.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">SIN(X)<br>
+Returns the sine of X, where X is given in radians.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">TAN(X)<br>
+Returns the tangent of X, where X is given in radians.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">ACOS(X)<br>
+Returns the arc cosine of X, that is, the value whose cosine is X.
+Returns NULL if X is not in the range -1 to 1.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">ASIN(X)<br>
+Returns the arc sine of X, that is, the value whose sine is X. Returns
+NULL if X is not in the range -1 to 1.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">ATAN(X)<br>
+Returns the arc tangent of X, that is, the value whose tangent is X.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">ATAN2(Y,X)<br>
+Returns the arc tangent of the two variables X and Y. It is similar to
+calculating the arc tangent of Y / X, except that the signs of both
+arguments are used to determine the quadrant of the result.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">DEGREES(X)<br>
+Returns the argument X, converted from radians to degrees.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">RADIANS(X)<br>
+Returns the argument X, converted from degrees to radians.</font></font></li>
+</ul>
+<h1><font face="arial, sans-serif"><font size="2">DateTime functions</font></font></h1>
+<ul>
+  <li><font face="arial, sans-serif"><font size="2">DAYOFWEEK(date)<br>
+Returns the weekday index for date (1 = Sunday, 2 = Monday, ... 7 =
+Saturday). These index values correspond to the ODBC standard.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">DAYOFMONTH(date)<br>
+Returns the day of the month for date, in the range 1 to 31.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">DAYOFYEAR(date)<br>
+Returns the day of the year for date, in the range 1 to 366.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">MONTH(date)<br>
+Returns the month for date, in the range 1 to 12.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">DAYNAME(date)<br>
+Returns the name of the weekday for date.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">MONTHNAME(date)<br>
+Returns the name of the month for date.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">QUARTER(date)<br>
+Returns the quarter of the year for date, in the range 1 to 4.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">WEEK(date)<br>
+WEEK(date,first)<br>
+With a single argument, returns the week for date, in the range 0 to 53
+(yes, there may be the beginnings of a week 53), for locations where
+Sunday is the first day of the week. The two-argument form of WEEK()
+allows you to specify whether the week starts on Sunday or Monday and
+whether the return value should be in the range 0-53 or 1-52. Here is a
+table for how the second argument works:<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; Value &nbsp;&nbsp;&nbsp; Meaning<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; 0 &nbsp;&nbsp;&nbsp; Week starts on Sunday and return
+value is in range 0-53<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; 1 &nbsp;&nbsp;&nbsp; Week starts on Monday and return
+value is in range 0-53</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">YEAR(date)<br>
+Returns the year for date.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">HOUR(time)<br>
+Returns the hour for time, in the range 0 to 23.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">MINUTE(time)<br>
+Returns the minute for time, in the range 0 to 59.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">SECOND(time)<br>
+Returns the second for time, in the range 0 to 59.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">CURDATE()<br>
+Returns today's date as a value in 'YYYY-MM-DD' or YYYYMMDD format,
+depending on whether the function is used in a string or numeric context.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">CURTIME()<br>
+Returns the current time as a value in 'HH:MM:SS' or HHMMSS format,
+depending on whether the function is used in a string or numeric context.</font></font></li>
+  <li><font face="arial, sans-serif"><font size="2">NOW()<br>
+Returns the current date and time as a value in 'YYYY-MM-DD HH:MM:SS'
+or YYYYMMDDHHMMSS format, depending on whether the function is used in a
+string or numeric context.</font></font></li>
+</ul>
+<br>
+<hr style="width: 100%; height: 1px;"> Author: Ocke.Janssen<br>
+Last Modified: $Date: 2003/07/08 07:21:39 $<br>
+<span style="font-style: italic;">Copyright &COPY; 2003 OpenOffice.org</span><br>
+<font size="+1"><span style="font-style: italic; font-weight: bold;"></span></font></div>
+</div>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

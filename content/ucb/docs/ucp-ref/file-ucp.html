@@ -1,0 +1,251 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>The File Content Provider</title>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Kai Sommerfeld">
+	<META NAME="CREATED" CONTENT="20000714;12280562">
+	<META NAME="CHANGEDBY" CONTENT="Andreas Bille">
+	<META NAME="CHANGED" CONTENT="20020426;15221435">
+	<STYLE>
+	<!--
+		@page { margin: 2cm }
+		TD P { margin-bottom: 0.21cm }
+		H1 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 16pt }
+		P { margin-bottom: 0.21cm }
+		H2 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 14pt; font-style: italic }
+		H3 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif }
+		TH P { margin-bottom: 0.21cm; font-style: italic }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="en-US">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ucb/">ucb</a>&nbsp;&raquo;&nbsp;<a href="/ucb/docs/">docs</a>&nbsp;&raquo;&nbsp;<a href="/ucb/docs/ucp-ref/">ucp-ref</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1>The File Content Provider</H1>
+<H2>Preface</H2>
+<P>The File Content Provider (FCP), a Content Provider for the
+Universal ContentBroker (UCB), provides access to the local file
+system. It does this by providing file content objects, which
+represent either a directory or a file in the local file system. The
+FCP is able to restrict access to the file system to a number of
+directories shown to the client under configurable aliases.</P>
+<H2>File Contents</H2>
+<P>The FCP provides content representing either a <B>Directory</B> or
+<B>File</B> in the local file system.</P>
+<OL>
+	<LI><P>A directory contains other directories or files.</P>
+	<LI><P>A file is a container for document data/content. The FCP is
+	not able to determine the <I><FONT FACE="Courier, monospace">MediaType</FONT></I>
+	property of a file content.</P>
+</OL>
+<H2>Creation Of New File Contents</H2>
+<P>A content representing directories implements the interface
+<FONT FACE="Courier, monospace">XContentCreator</FONT>. A file
+content object supports the command &bdquo;<I><FONT FACE="Courier, monospace">in<FONT FACE="Courier, monospace">s</FONT>ert.</FONT></I>
+To create a new directory/file in a directory:</P>
+<OL>
+	<LI><P>Let the parent directory create a new content by calling its
+	<FONT FACE="Courier, monospace">createNewContent</FONT> method. The
+	content type to use for new folders is
+	<B>application/vnd.sun.staroffice.fsys-folder</B>. To create a new
+	file, use the type string <B>application/vnd.sun.staroffice.fsys-file</B>.
+	As return value you get a new file content object.</P>
+	<LI><P STYLE="font-weight: medium">Set a title at the new file
+	content object. ( Let the new child execute a <FONT FACE="Courier, monospace">setPropertyValues</FONT>
+	&ndash; command, which sets at least the property&bdquo;<I><FONT FACE="Courier, monospace">Title</FONT></I>
+	to a non-empty value ).</P>
+	<LI><P>Let the new file content object ( not the parent! ) execute
+	the command &bdquo;<I><FONT FACE="Courier, monospace">insert</FONT></I>&ldquo;.
+	This will create the corresponding physical file or directory. For
+	files, you need to supply the implementation of an <FONT FACE="Courier, monospace">XInputStream</FONT>
+	with the command's parameters, that provides access to the stream
+	data.</P>
+</OL>
+<H2>URL Schemes for File Contents</H2>
+<H3>The 'file' URL Scheme</H3>
+<P>Each file content has an identifier corresponding to the following
+scheme:</P>
+<P>file:///&lt;path&gt;</P>
+<P>where &lt;path&gt; is a hierarchical path of the form</P>
+<P>&lt;name1&gt;/&lt;name&gt;/.../&lt;name&gt;.</P>
+<P><B>The first part of &lt;path&gt; ( &lt;name1&gt; ) need not
+denote a physically existing directory, </B>but may be re-mapped to
+such a directory. If this is done, the FCP refuses file access for
+any URL whose &lt;name1&gt;-part is not an element of a predefined
+list of alias names.</P>
+<H3>The 'vnd.sun.star.wfs' URL Scheme</H3>
+<P>In the Sun ONE Webtop, the server side file system is addressed
+with vnd.sun.star.wfs URLs (wfs stands for <I>Webtop File System</I>),
+while the file URL scheme is reserved for a potential client side
+file system.</P>
+<P>In that scenario, a trick is used to completely hide the
+vnd.sun.star.wfs URL scheme from the FCP (i.e., the server side FCP
+internally works with file URLs, just like any other FCP): There is a
+special Remote Access Content Provider (RAP) between the UCB and the
+FCP. That RAP, among other things, can route requests to another UCP
+and rewrite URLs &quot;on the fly.&quot; This feature is used here,
+so that the client of the UCB works with vnd.sun.star.wfs URLs and
+the FCP remains unmodified and works with file URLs, with a RAP in
+between that maps between those two URL schemes:</P>
+<P><IMG SRC="wfs.gif" NAME="Object1" ALIGN=LEFT WIDTH=533 HEIGHT=116 BORDER=0><BR CLEAR=LEFT>Except
+for the different scheme name, the syntax of the vnd.sun.star.wfs URL
+scheme is exactly the same as that of the file URL scheme.</P>
+<H2 STYLE="page-break-before: always">Appendix</H2>
+<P>The following table gives an overview of the different properties
+of file contents and the supported commands and interfaces.</P>
+<P><BR><BR>
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=20*>
+	<COL WIDTH=41*>
+	<COL WIDTH=63*>
+	<COL WIDTH=59*>
+	<COL WIDTH=72*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=8%>
+				<P><BR>
+				</P>
+			</TH>
+			<TH WIDTH=16%>
+				<P>UCB Type</P>
+				<P>(returned by XContent::getContentType )</P>
+			</TH>
+			<TH WIDTH=25%>
+				<P>Properties</P>
+			</TH>
+			<TH WIDTH=23%>
+				<P>Commands</P>
+			</TH>
+			<TH WIDTH=28%>
+				<P>Interfaces</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=8%>
+				<P>File</P>
+			</TD>
+			<TD WIDTH=16%>
+				<P>application/vnd.sun.staroffice.fsys-file</P>
+			</TD>
+			<TD WIDTH=25%>
+				<P>[readonly] ContentType</P>
+				<P>DateModified</P>
+				<P>[readonly] IsDocument</P>
+				<P>[readonly] IsFolder</P>
+				<P>Size</P>
+				<P>Title</P>
+				<P>IsReadOnly</P>
+				<P>IsVolume</P>
+				<P>IsRemoveable</P>
+				<P>IsRemote</P>
+				<P>IsCompactDisc</P>
+				<P>IsFloppy</P>
+				<P>IsHidden</P>
+			</TD>
+			<TD WIDTH=23%>
+				<P>getCommandInfo</P>
+				<P>getPropertySetInfo</P>
+				<P>getPropertyValues</P>
+				<P>setPropertyValues</P>
+				<P>insert</P>
+				<P>delete</P>
+				<P>open</P>
+				<P>transfer</P>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=28%>
+				<P>lang::<B>XServiceInfo</B></P>
+				<P>lang::<B>XComponent</B></P>
+				<P>ucb::<B>XContent</B></P>
+				<P>ucb::<B>XCommandProcessor</B></P>
+				<P>beans::<B>XPropertiesChangeNotifier</B></P>
+				<P>beans::<B>XPropertyContainer</B></P>
+				<P>beans::<B>XPropertySetInfoChangeNotifier</B></P>
+				<P>ucb::<B>XCommandInfoChangeNotifier</B></P>
+				<P>container::<B>XChild</B></P>
+				<P>ucb::<B>XContentCreator</B></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=8%>
+				<P>Directory</P>
+			</TD>
+			<TD WIDTH=16%>
+				<P>application/vnd.sun.staroffice.fsys-folder</P>
+			</TD>
+			<TD WIDTH=25%>
+				<P>[readonly] ContentType</P>
+				<P>DateModified</P>
+				<P>[readonly] IsDocument</P>
+				<P>[readonly] IsFolder</P>
+				<P>Size</P>
+				<P>Title</P>
+				<P>IsReadOnly</P>
+				<P>IsVolume</P>
+				<P>IsRemoveable</P>
+				<P>IsRemote</P>
+				<P>IsCompactDisc</P>
+				<P>IsFloppy</P>
+				<P>IsHidden</P>
+			</TD>
+			<TD WIDTH=23%>
+				<P>getCommandInfo</P>
+				<P>getPropertySetInfo</P>
+				<P>getPropertyValues</P>
+				<P>setPropertyValues</P>
+				<P>insert</P>
+				<P>delete</P>
+				<P>open</P>
+				<P><BR><BR>
+				</P>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=28%>
+				<P>lang::<B>XServiceInfo</B></P>
+				<P>lang::<B>XComponent</B></P>
+				<P>ucb::<B>XContent</B></P>
+				<P>ucb::<B>XCommandProcessor</B></P>
+				<P>beans::<B>XPropertiesChangeNotifier</B></P>
+				<P>beans::<B>XPropertyContainer</B></P>
+				<P>beans::<B>XPropertySetInfoChangeNotifier</B></P>
+				<P>ucb::<B>XCommandInfoChangeNotifier</B></P>
+				<P>container::<B>XChild</B></P>
+				<P><BR>
+				</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

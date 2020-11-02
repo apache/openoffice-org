@@ -1,0 +1,390 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>Interface XSpriteCanvas</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/api/">api</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/">docs</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/">common</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/ref/">ref</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/ref/com/">com</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/ref/com/sun/">sun</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/ref/com/sun/star/">star</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/ref/com/sun/star/rendering/">rendering</a></div>
+    </div>
+    <div id="clear"></div>
+      <!--#include virtual="/api/leftnav.html" -->
+      
+    <div id="content">
+      
+      
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XSpriteCanvas-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">rendering</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XSpriteCanvas</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Base Interfaces</b></dt>
+<dd><pre style="font-family:monospace;"><strong>XSpriteCanvas</strong>
+&#x2517 <a href="XBitmapCanvas.html">XBitmapCanvas</a>
+   &#x2517 <a href="XCanvas.html">XCanvas</a>
+
+</pre></dd>
+<dd><a name/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="crosstitle">
+<tr>
+<td class="imsum_left"><a href="XBitmapCanvas.html">XBitmapCanvas</a></td>
+<td class="imsum_right"><dl>
+<dt>(referenced interface's summary:)</dt>
+<dd>This is a specialization of the canvas interface for bitmapped
+ canvases.</dd>
+</dl>
+</td>
+</tr>
+</table>
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>Specialization of a XBitmapCanvas, where moving, animated objects
+ (called sprites) are supported.</dd>
+<dd><p>
+
+ @attention The screen output of canvas drawing operations is
+ undefined, unless XSpriteCanvas::updateScreen() is called. This is
+ because a sprite canvas might choose to employ double buffering to
+ reduce animation flicker, and cannot know the instant suitable to
+ display the newly rendered canvas content. When using external
+ double-buffering via XBufferController on a sprite canvas, the
+ implementation takes care of this issue, and in this case is able
+ to render correctly even without explicit updateScreen() calls
+ (because there's a defined moment in time where content display
+ can happen, namely the XBufferController::showBuffer()) call. If
+ you don't need sprite functionality, and don't want the
+ updateScreen hassle, simply use the XBitmapCanvas.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#createSpriteFromAnimation">createSpriteFromAnimation</a></td>
+<td class="imsum_right">Create a sprite object from the specified animation
+ sequence. A sprite is a back-buffered object with its own,
+ independent animation.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#createSpriteFromBitmaps">createSpriteFromBitmaps</a></td>
+<td class="imsum_right">Create a sprite object from the specified animation
+ sequence.
+
+ A sprite is a back-buffered object with its own,
+ independent animation.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#createCustomSprite">createCustomSprite</a></td>
+<td class="imsum_right">Create a custom, user-handles-it-all sprite object.
+
+ A sprite is a back-buffered object with its own, independent
+ animation.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#createClonedSprite">createClonedSprite</a></td>
+<td class="imsum_right">Create a cloned version of an already existing sprite
+ object.
+
+ The cloned sprite always shows the same content as its
+ original. Furthermore, cloned copies of a hidden original are
+ never visible, although cloned copies of a visible original
+ can of course be invisible.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#updateScreen">updateScreen</a></td>
+<td class="imsum_right">Tells the sprite canvas to now update the screen
+ representation.
+
+ Required to display rendered changes to the canvas, and
+ updates to stopped animations and XCustomSprites in
+ general. This method will return only after the screen update
+ is done, or earlier if an error happened.&nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="createSpriteFromAnimation" class="membertitle">createSpriteFromAnimation</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XAnimatedSprite.html">XAnimatedSprite</a></td>
+</tr>
+<tr>
+<td valign="top"><b>createSpriteFromAnimation</b>(</td>
+<td valign="top">[in] <a href="XAnimation.html">XAnimation</a></td>
+<td valign="bottom">&nbsp;animation )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Create a sprite object from the specified animation
+ sequence. A sprite is a back-buffered object with its own,
+ independent animation.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="createSpriteFromBitmaps" class="membertitle">createSpriteFromBitmaps</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XAnimatedSprite.html">XAnimatedSprite</a></td>
+</tr>
+<tr>
+<td valign="top"><b>createSpriteFromBitmaps</b>(</td>
+<td valign="top">[in] sequence&lt; <a href="XBitmap.html">XBitmap</a> &gt;</td>
+<td valign="bottom">&nbsp;animationBitmaps,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] byte</td>
+<td valign="bottom">&nbsp;interpolationMode )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a>,<br>
+<a href="VolatileContentDestroyedException.html">VolatileContentDestroyedException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Create a sprite object from the specified animation
+ sequence.
+
+ A sprite is a back-buffered object with its own,
+ independent animation.
+
+ </dd>
+<dt><b>Parameter animationBitmaps</b></dt>
+<dd>Sequence of bitmaps. The bitmaps don't need to have the same
+ size, but they are all rendered with their left, top edges
+ aligned.
+
+ </dd>
+<dt><b>Parameter interpolationMode</b></dt>
+<dd>Value of <a href="InterpolationMode.html">InterpolationMode</a>, to determine whether
+ and how to interpolate between the provided bitmaps, if
+ animation runs fast enough.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd><a href="VolatileContentDestroyedException.html">VolatileContentDestroyedException</a>
+ if at least one of the bitmap is volatile, and its content has been destroyed by the system.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="createCustomSprite" class="membertitle">createCustomSprite</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XCustomSprite.html">XCustomSprite</a></td>
+</tr>
+<tr>
+<td valign="top"><b>createCustomSprite</b>(</td>
+<td valign="top">[in] ::com::sun::star::<a href="../geometry/module-ix.html">geometry</a>::<a href="../geometry/RealSize2D.html">RealSize2D</a></td>
+<td valign="bottom">&nbsp;spriteSize )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Create a custom, user-handles-it-all sprite object.
+
+ A sprite is a back-buffered object with its own, independent
+ animation.
+
+ </dd>
+<dt><b>Parameter spriteSize</b></dt>
+<dd>The required size of the sprite in device
+ coordinates. Everything that is rendered outside this area
+ might be clipped on output. Both components of the size must
+ be greater than zero.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>an interface to a custom sprite object.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="createClonedSprite" class="membertitle">createClonedSprite</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XSprite.html">XSprite</a></td>
+</tr>
+<tr>
+<td valign="top"><b>createClonedSprite</b>(</td>
+<td valign="top">[in] <a href="XSprite.html">XSprite</a></td>
+<td valign="bottom">&nbsp;original )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Create a cloned version of an already existing sprite
+ object.
+
+ The cloned sprite always shows the same content as its
+ original. Furthermore, cloned copies of a hidden original are
+ never visible, although cloned copies of a visible original
+ can of course be invisible.
+
+ </dd>
+<dt><b>Parameter original</b></dt>
+<dd>The original sprite to copy the content from. This sprite must
+ have been created by the same XSpriteCanvas instance as this
+ method is called on. Other sprite instances will generate an
+ IllegalArgumentException.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>an interface to a sprite object.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="updateScreen" class="membertitle">updateScreen</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>updateScreen</b>(</td>
+<td valign="top">[in] boolean</td>
+<td valign="bottom">&nbsp;bUpdateAll );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Tells the sprite canvas to now update the screen
+ representation.
+
+ Required to display rendered changes to the canvas, and
+ updates to stopped animations and XCustomSprites in
+ general. This method will return only after the screen update
+ is done, or earlier if an error happened.</dd>
+<dd><p>
+
+ If double buffering is enabled via XBufferController, no
+ explicit call of updateScreen() is necessary, since the
+ XBufferController methods will automatically notify all
+ associated XSpriteCanvas instances.<p>
+
+ </dd>
+<dt><b>Parameter bUpdateAll</b></dt>
+<dd>When <b>true</b>, update the whole screen. When <b>false</b>,
+ implementation is permitted to restrict update to areas the
+ canvas itself changed (e.g. because of render operations, or
+ changes on the sprites). The former is useful for updates
+ after window expose events. the latter for animation display.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd><b>true</b>, if the screen update was successfully
+ performed
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

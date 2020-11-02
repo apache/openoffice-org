@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.HowtoAccesToTheContentOfASequence.snip,v $
+last change: $Revision: 1.2 $ $Author: tomsontom $ $Date: 2005/09/15 12:36:09 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="Cpp" application="Office">
+
+<keywords>
+	<keyword>Sequence</keyword>
+	<keyword>Sequences</keyword>
+	<keyword>c++</keyword>
+	<keyword>cpp</keyword>
+	<keyword>getAvailableServiceNames</keyword>
+</keywords>
+
+<authors>
+	<author id="pagalmes" initial="true" email="pagalmes@starxpert.fr" copyright="StarXpert">Pierre-Andr&#233;  Galmes</author>
+</authors>
+
+<question heading="Howto acces to the content of a Sequence ?">Howto acces to the content of a Sequence ?
+
+<p>A function returns a Sequence&lt;class T&gt;. Is there any function</p>
+<p>associated with the class to acces its data ?</p>
+</question>
+
+<answer>
+<p>In fact, Sequences are manipulated like array.</p>
+<listing>/*  Copyright (C) 2005  - StarXpert - http://www.starxpert.fr */
+
+#include &lt;iostream&gt;
+#include &lt;exception&gt;
+#include &lt;rtl/ustring.hxx&gt;
+
+#include &lt;cppuhelper/bootstrap.hxx&gt;
+#include &lt;com/sun/star/bridge/XUnoUrlResolver.hpp&gt;
+#include &lt;com/sun/star/lang/XMultiServiceFactory.hpp&gt;
+
+using namespace std;
+using namespace ::rtl;
+
+
+main()
+{
+
+[...]
+
+// Returns a sequence of OUString.
+Sequence&lt; ::rtl::OUString &gt; sq =
+rxOfficeServiceManager-&gt;getAvailableServiceNames();
+
+// Returns he number of objects in the sequence.
+sq.getLength(); 
+
+// Access the content of the sequence.
+OUString a = sq[1];
+OUString b = sq[801]; // sq.getLength() - 1
+
+}</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+	<version number="1.1.x" status="untested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="pagalmes" date="2005-09-13">added #include directives</change>
+	<change author-id="pagalmes" date="2005-09-13">Initial version</change>
+</changelog>
+
+</snippet>

@@ -1,0 +1,145 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    <title>null</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/">common</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/">man</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/spec/">spec</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1" />
+	<TITLE>Acceptor / Connector services</TITLE>
+	<META NAME="CLASSIFICATION" CONTENT="Acceptor / Connector services" />
+	<META NAME="KEYWORDS" CONTENT="UNO,Acceptor,Connector services" />
+	<style type="text/css">
+<!--
+h1 { text-align:center; margin-top: 0cm; text-decoration: none; color: #ffffff; font-size: 6; margin-top: 0.2cm}
+h2 { margin-top: 0.2cm; margin-bottom: 0.2cm; color: #ffffff; font-size: 4;
+    background-color: #666699 }
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm;}
+dt {margin-bottom: 0.2cm;}
+-->
+</style>
+
+</HEAD>
+<body>
+<TABLE BORDER=0 CELLPADDING=4 CELLSPACING=0 bgcolor="#666699" width=100%>
+	<TR>
+	     <td>
+			<h1> Acceptor / Connector services </h1>
+		</td>
+		<td>
+			<A HREF="http://www.openoffice.org/">
+			<IMG SRC="../../../images/open_office_org_logo.gif" NAME="Grafik1"
+			ALT="OpenOffice.org" ALIGN=right BORDER=0 /></A>
+		</TD>
+	</TR>
+</TABLE>
+
+<h2>Contents</h2>
+<blockquote>
+			<A HREF="#Overview">Overview </A><br/>
+			<A HREF="#Description">Description</A><br/>
+			<A href="#Connection">Adding connection types</a></p>
+</blockquote>
+
+<h2><A NAME="Overview "></A> Overview </h2>
+
+<P>The services <CODE>com.sun.star.io.Acceptor</CODE>
+			and <CODE>com.sun.star.io.Connector</CODE>
+			allow for establishing a bytestream connection between two processes.
+			After establishing the connection, there is no longer a difference between the 
+			client and the server.</P>
+			<P>Connections may be used, for example, by a remote bridge.</P>
+
+<h2><A NAME="Description"></A> Description </h2>
+
+			<P>The acceptor-service (or server) allows listening on a resource
+			for clients to connect. The connector-service (or client) allows for
+			connecting to a "listening resource". Both services
+			support socket and pipe connections. Pipes work only on the same
+			computer, as they use shared memory for data transfer. Sockets work
+			in a tcp/ip network environment. The string, for the connect/accept
+			calls, has the following format:</P>
+			<pre>     <CODE>&lt;kind of connection&gt;,&lt;parametername1&gt;=&lt;value1&gt;,...</CODE>
+			</pre>
+			<P>for example:</P>
+
+<pre>
+       socket,host=localhost,port=2000
+</pre>
+			<DL>
+				<DT>Supported are the following:</DT>
+				<DT>Kinds of connection:</DT>
+				<DD>
+				- socket : TCP/IP-sockets
+				</DD><DD>
+				- pipe :
+				</DD>
+				<DT>
+				Parameters for <I>socket-connection</I>:
+				</DT>
+				<DD>
+				- host: networkname of the computer
+				</DD><DD>
+				- port : TCP/IP-Port to listen on</DD>
+				<DD>
+				- tcpNoDelay : socket-tcpNoDelay-flag<br/>
+				           can be set to 1 or 0. Should be 1 for
+					       a UNO connection, as it may otherwise come
+					       two 200 ms delays under certain circumstances.
+					       Defaults to the system default (in general 0).</DD>
+			</DL>
+			<DL>
+				<DT>Parameters for a <I>pipe-connection</I>:</DT>
+				<DD>
+				- name : the name of the pipe</DD>
+			</DL>
+			<P>The connector component may be reused to initiate connections
+			to multiple processes. The acceptor component may only be used to
+			listen on one resource. Subsequent calls to the accept method must
+			pass the same connection description string.</P>
+
+<h2><A NAME="Connection"></A> Adding connection types </h2>
+
+<p>You can add your own connection type by implementing a service with the
+name com.sun.star.connection.Connector.&lt;connection-type&gt; and
+com.sun.star.connection.Acceptor.&lt;acceptor-type&gt; , where connection-type
+is the name to be used, instead of socket.</p>
+
+<table width=100% bgcolor=#666699>	
+	<TR>
+		<TD>
+			<FONT COLOR="#ffffff">
+			Author: <A HREF="mailto:joerg.budischewski@germany.sun.com"><FONT COLOR="#ffffff">J&ouml;rg Budischewski</FONT></A> ($Date: 2004/11/27 08:53:24 $)<br/>
+			<I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I></FONT>
+		</TD>
+	</TR>
+</TABLE>
+</BODY>
+</HTML>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

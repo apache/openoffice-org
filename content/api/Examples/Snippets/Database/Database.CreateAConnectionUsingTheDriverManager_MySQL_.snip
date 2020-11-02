@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Database.CreateAConnectionUsingTheDriverManager_MySQL_.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2007/03/12 08:42:46 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Database">
+
+<keywords>
+</keywords>
+
+<authors>
+</authors>
+
+<question heading="create a connection using the DriverManager (MySQL)">How can a connection to a datasource, which is NOT registerd in the DatabaseContext be created? 
+</question>
+
+<answer>
+<listing>/* get the service manager */
+xContext = UNO.connect()
+xMcf = xContext~getServiceManager
+
+/* retrieve the DriverManager and get its XDriverManager interface */
+xDriverManager = xMcf~createInstanceWithContext(-
+	&quot;{%see com.sun.star.sdbc.DriverManager}&quot;,xContext)~{%see com.sun.star.sdbc.XDriverManager%XDriverManager}
+
+/* first create the database URL */
+url = &quot;jdbc:mysql://localhost:3306/test&quot;
+
+/* create property values for user and password */
+props = bsf.createArray(.UNO~propertyValue,3)
+props[1] = .UNO~PropertyValue~new
+props[1]~Name = &quot;user&quot;
+props[1]~Value = &quot;stefan&quot;
+props[2] = .UNO~PropertyValue~new
+props[2]~Name = &quot;password&quot;
+props[2]~Value = &quot;apple&quot;
+props[3] = .UNO~PropertyValue~new
+props[3]~Name = &quot;JavaDriverClass&quot;
+props[3]~Value = &quot;com.mysql.jdbc.Driver&quot;
+
+/* create the connection to mysql */
+xConnection = xDriverManager~getConnectionWithInfo(url, props)	
+
+say &quot;Connection created by the DriverManager!&quot;
+
+/* get the XClosable interface and close the connection */
+xCloseable = xConnection~{%see com.sun.star.sdbc.XCloseable%XCloseable}~close
+say &quot;Connection closed!&quot;
+
+::requires UNO.cls -- get UNO support</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

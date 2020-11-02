@@ -1,0 +1,1281 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+   <title>A guide to C++ UNO</title>
+   <style type="text/css">
+<!--
+li {margin-bottom: 0.2cm;}
+h1 {color:#ffffff;font-size:20pt;font-weight:bold;font-family:Arial,sans-serif;
+    margin-top: 0.2cm; margin-bottom: 0.2cm}
+h2 {color:#ffffff;font-size:16pt;font-family:Arial,sans-serif;
+    padding-left: 0.1cm; padding-top: 0.2cm; padding-bottom: 0.2cm;
+    margin-right: 0.1cm;
+    background-color: #666699; width: 100%}
+-->
+</style>
+
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/cpp/">cpp</a>&nbsp;&raquo;&nbsp;<a href="/udk/cpp/man/">man</a>&nbsp;&raquo;&nbsp;<a href="/udk/cpp/man/tutorial/">tutorial</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<table BORDER=0 CELLSPACING=0 bgcolor=#666699 width=100%>
+<tr>
+<td align=center>
+<h1>A Guide to C++ UNO</h1>
+</td>
+<td align=right>
+<a href="http://www.openoffice.org/">
+<img SRC="../../../images/open_office_org_logo.gif" NAME="Grafik1" ALT="OpenOffice.org" BORDER=0 align=right/></a>
+</td>
+</tr>
+</table>
+<!-- ***************************************
+     * Contents
+     *************************************** -->
+<h2>Contents</h2>
+<blockquote>
+<p><a href="#overview">Overview</a>
+<br/><a href="#library_overview">Shared library overview </a>
+<br/><a href="#sal">System abstraction layer (sal)</a>
+<br/><a href="#mapping">C++ mapping of IDL-types</a>
+<br/><a href="#cppuhelper">The cppuhelper module</a>
+<br/><a href="#contexts">UNO contexts</a>
+<br/><a href="#components">C++ components</a>
+<br/><a href="#common_patterns">Common programming patterns</a>
+</blockquote>
+
+<!-- ***************************************
+     * Overview
+     *************************************** -->
+<h2> <a NAME="overview"></a>Overview</h2>
+<p> This document gives an introduction to the C++ mapping of UNO.
+You should have read the <em><a href="../../../common/man/concept/unointro.html">
+A guide to language independent UNO</a></em>, before reading with this
+document.  It is a good idea to look at the relevant source code after reading
+this document.  Some C++ components which follow the the concepts explained
+below can be found in the stoc, io or remotebridges modules, for example.</p>
+
+<p>TODO :</p>
+<ul>
+<li>Documentation of the exported symbols in the Components section</li>
+</ul>
+
+<!-- ***************************************
+     * Library overview
+     *************************************** -->
+<h2> <a NAME="library_overview"></a>Shared library overview</h2>
+<img src="../images/udk_baselibraries.gif" align=middle alt="UDK base libraries"/>
+
+<p>In the above diagram the (C) means C-linkage, (C++) means C++ linkage. For
+all libraries you will need a C++ compiler to build.</p>
+
+<p>
+The base for all UDK-libraries is the sal-library, that contains all system abstractions
+and does not contain any UNO-specific data. The most commonly used C-functions can
+be accessed via C++ inline wrappers. This allows to call the functions from
+any other programming language.
+
+The salhelper-library offers additional base functionality, that could be implemented inline.
+
+<p>
+The cppu ( = C Plus Plus Uno) library  is the core uno library.
+It offers methods to access the UNO type library and allows to generically create, copy and compare
+values of UNO data types. Additionally all bridges (= mappings + environments)  are administered
+here.
+
+<p>msci_uno, sunpro5_uno and urp_uno are only examples for language binding
+libraries (MS VC++ 6, sunpro5 solaris).</p>
+
+<p> The cppuhelper library is a C++ library, that contains some important base
+classes for components (see <a href="#cppuhelper">below</a>).  C++ components
+are usually linked against cppuhelper.</p>
+
+
+<!-- ***************************************
+     * System abstraction layer
+     *************************************** -->
+<h2> <a NAME="sal"></a>System abstraction layer (sal)</h2>
+
+<p>The <em>sal</em>-library offers operating system dependent services behind
+one interface. The aim is to minimize, or eliminate,  operating system
+dependent #ifdefs in libraries above sal.  Further more basic features such as
+strings are implemented in sal.  Sal exports only C-symbols, there are inline
+C++ wrappers for convenience where it is sensible.</p>
+
+<h4> File access</h4>
+<a href="../../ref/sal/c_FileBase.html"><code>osl::FileBase</code></a><br/>
+<a href="../../ref/sal/c_VolumeInfo.html"><code>osl::VolumeInfo</code></a><br/>
+<a href="../../ref/sal/c_FileStatus.html"><code>osl::FileStatus</code></a><br/>
+<a href="../../ref/sal/c_File.html"><code>osl::File</code></a><br/>
+<a href="../../ref/sal/c_DirectoryItem.html"><code>osl::DirectoryItem</code></a><br/>
+<a href="../../ref/sal/c_Directory.html"><code>osl::Directory</code></a><br/>
+
+
+<h4> Thread safe refcounting </h4>
+<code>osl_incrementInterlockedCount</code> and <code>osl_decrementInterlockedCount</code>
+allow to modify a thread safe 4 byte counter.
+
+<h4> Threads and thread synchronization </h4>
+<a href="../../ref/sal/c_Mutex.html"><code>::osl::Mutex</code></a><br/>
+<a href="../../ref/sal/c_Condition.html"><code>::osl::Condition</code></a><br/>
+<a href="../../ref/sal/c_Semaphore.html"><code>::osl::Semaphore</code></a><br/>
+<a href="../../ref/sal/c_Thread.html"><code>::osl::Thread</code></a>(docu not yet available)
+
+<h4> Interprocess communication </h4>
+<a href="../../ref/sal/c_Socket.html"><code>::osl::Socket</code></a>(docu not yet available)<br/>
+<a href="../../ref/sal/c_Pipe.html"><code>::osl::Pipe</code></a>(docu not yet available)<br/>
+
+
+<h4> Strings </h4>
+The string classes in sal (
+<a href="../../ref/sal/c_OUString.html"><code>rtl::OUString</code></a>
+for Unicode-strings and
+<a href="../../ref/sal/c_OString.html"><code>rtl::OString</code></a> for byte strings) are C++ wrapper for refcounted
+immutable <a href="../../ref/sal/f_ustring.h.html">C-strings</a>.
+
+The <a href="../../ref/sal/c_OUStringBuffer.html"><code>rtl::OUStringBuffer</code></a> and
+<a href="../../ref/sal/c_OStringBuffer.html"><code>rtl::OStringBuffer</code></a> allow efficient
+concatenation of strings.
+
+
+<h4> Byte sequence </h4>
+The
+<a href="../../ref/sal/c_ByteSequence.html"><code>::rtl::ByteSequence</code></a>
+is a C++ wrapper around
+<a href="../../ref/sal/f_byteseq.h.html">C-functions</a>
+for a refcounted piece of memory. The <code>ByteSequence</code> is binary compatible to
+<code>com::sun::star::uno::Sequence< sal_Int8></code>, both can be cast into each other.
+
+
+<!-- ***************************************
+     * C++ mapping of IDL-types
+     *************************************** -->
+<h2> <a NAME="mapping"></a>C++ mapping of IDL-types</h2>
+
+<p>The binary specification for the IDL to C++ mapping can be found
+<a href="../spec/cpp_spec.html">here</a>, where some typical use cases of the
+C++ mapping are shown.</p>
+
+<h4> Interface references </h4>
+Interface references, see
+<a href="../../ref/Cppu/c_Reference.html"><code>com::sun::star::uno::Reference</code></a>-template,
+are used to hold interfaces. The reference constructor (ctor) acquires
+(increases the refcount by one) the interface and the destructor releases the
+interface.
+
+<p> Example 1 :
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+<font color="red">using namespace</font> ::com::sun::star::uno;
+
+{
+    <font color="green">// refcount of pSimpleUnoObject is zero</font>
+    OWeakObject *pSimpleUnoObject = <font color="red">new</font> ::cppu::OWeakObject();
+
+    <font color="green">// ctor calls acquire, increases refcount</font>
+    Reference< XInterface > reference( (XInterface *) pSimpleUnoObject );
+
+    <font color="green">// destructor of reference calls release, refcount drops to zero,
+    // release does a delete this, the object is destroyed;</font>
+}
+</pre>
+</td>
+</tr>
+</table>
+<p>
+<a href="../../ref/Cppuhelper/c_OWeakObject.html"><code>cppu::OWeakObject</code></a>
+is a very simple uno-object, that is often used as a base class for other
+UNO-objects, as explained
+<a href="#oweakobject">below</a>.
+Here it is only important to know, that it correctly implements
+XInterface. The above code has no resource leak, it is perfectly OK
+(though certainly not very useful).</p>
+
+<p> Example 2:
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+<font color="red">using namespace</font> ::rtl;
+<font color="red">using namespace</font> ::com::sun::star::lang;
+<font color="red">using namespace</font> ::com::sun::star::uno;
+<font color="red">using namespace</font> ::com::sun::star::io;
+{
+<font color="green">    // get service manager of component context
+    // ( how the context is bootstrapped, is explained below ).</font>
+    Reference < XMultiComponentFactory > rServiceManager = xContext->getServiceManager();
+
+<font color="green">    // create the Pipe service</font>
+    Reference< XInterface > r = rServiceManager->createInstanceWithContext(
+                  OUString::createFromAscii( "com.sun.star.io.Pipe" ), xContext );
+    assert( r.is() ); // the service must exist
+		  		  
+<font color="green">    // ask the XInterface-reference for the XInputStream interface</font>
+    Reference< XInputStream > rInputStream( r , UNO_QUERY );
+    assert( rInputStream.is() ); // the service must support XInputStream
+    
+<font color="green">    // ask the XInterface-reference for the XOutputStream interface</font>
+    Reference< XOutputStream > rOutputStream( r , UNO_QUERY );
+    assert( rOutputStream.is() ) // test service must support XOutputStream
+
+    [.... do some calls on the references]
+
+<font color="green">    // each references calls release when it is destructed.
+    // The last release destroys the object.</font>
+}
+</pre>
+</td>
+</tr>
+</table>
+<p>In the first line, an initial component context (factory context) is bootstrapped (see
+<a href="#component_context">below</a>
+, how this can be done).
+The second line retrieves the bootstrapped service manager of the context.
+The next line creates the service
+<a href="http://api.openoffice.org/common/ref/com/sun/star/io/Pipe.html">
+<em> com.sun.star.io.Pipe </em> </a>
+and returns a reference
+to XInterface (Note: the <code>operator -&gt;()</code> simply returns the unacquired
+interface pointer).
+This service supports
+<a href="http://api.openoffice.org/common/ref/com/sun/star/io/XInputStream.html">XInputStream</a>
+and
+<a href="http://api.openoffice.org/common/ref/com/sun/star/io/XOutputStream.html">XOutputStream</a>
+, the next lines retrieve these interfaces.
+The used reference constructor (the magic <code>UNO_QUERY</code> is an
+element of a dummy enum, that allows to have
+a 2nd constructor which takes an interface reference as an argument) performs a
+<code>queryInterface</code>
+on <code>r</code> for the interface (here XInputStream and XOutputStream), the results
+are stored within the references.</p>
+
+<h4><a name="weak_references"></a> Weak references </h4>
+
+<p>In general every uno object allows to hold weak references on it (see
+<a href="#oweakobject">OWeakObject</a>).
+Weak references allow to retrieve a hard interface reference if the object has
+been not destroyed before.</p>
+
+<p>Example
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+<font color="red">class</font> A
+{
+<font color="red">private:</font>
+   WeakReference< XInputStream > m_wrStream;
+   <font color="red">void</font> set( <font color="red">const</font> Reference< XInputStream > &amp;r )
+   {
+<font color="green">      // store to weak reference</font>
+      m_wrStream = r;
+   }
+   Reference< XInputStream > get()
+   {
+<font color="green">       // try to make the weak reference hard</font>
+       Reference< XIntputStream > r = m_wrStream;
+
+<font color="green">       // Note : r.is() may be true or not, depending on whether
+       //        the object has been destroyed before.</font>
+       return r;
+   }
+};
+</pre>
+</td>
+</tr>
+</table>
+
+<h4> Sequence </h4>
+<p>For every type in UNO exists another type, the sequence < type >. In C++,
+this is managed by the <a href="../../ref/Cppu/c_Sequence.html"><code> Sequence
+</code></a> template, which is a wrapper around a refcounted C-struct. The
+sequence follows a copy on modify strategy (if the refcount is larger than 1,
+the sequence is copy-constructed). The sequence can only be used with
+UNO-types, because it needs a <code>getCppuType</code> for the element type (
+which are generated by the build environment).</p>
+
+<p>Some basic examples how to use the template</p>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+{
+<font color="green">    // create an integer sequence with 3 elements,
+    // elements are defaulted to zero.</font>
+        Sequence< sal_Int32 > seqInt( 3 );
+
+<font color="green">    // get a read write pointer (this method checks for
+    // the refcount and does a copy on demand).
+    // however, if you know, that the refcount is one
+    // ( as in this case, the sequence has just been
+    // constructed), you could avoid the check
+    // (which is a C-call overhead)
+    // by writing sal_Int32 *pArray =
+    //                 (sal_Int32*) seqInt.getConstArray();</font>
+	sal_Int32 *pArray = seqInt.getArray();
+
+<font color="green">	// modify the members</font>
+	pArray[0] = 4;
+	pArray[1] = 5;
+	pArray[2] = 3;
+}
+
+{
+    sal_Int32 sourceArray[3] = {3,5,3};
+
+<font color="green">    // result is the same as above, but initialises from a buffer.</font>
+    Sequence< sal_Int32 > seqInt( sourceArray , 3 );
+}
+	
+{
+<font color="green">
+    // construct a sequence of Property structs,
+    // the structs are default constructed</font>
+    Sequence< Property > seqProperty(2);
+	seqProperty.getArray()[0].Name = OUString::createFromAscii( "A" );
+	seqProperty.getArray()[0].Handle = 0;
+	seqProperty.getArray()[1].Name = OUString::createFromAscii( "B" );
+	seqProperty.getArray()[1].Handle = 1;
+
+<font color="green">	// copy construct the sequence (The refcount is raised)</font>
+	Sequence< Property > seqProperty2 = seqProperty;
+	
+<font color="green">	// access a sequence</font>
+	for( sal_Int32 i = 0 ; i < seqProperty.getLength() ; i ++ )
+	{
+<font color="green">	    // Please NOTE : seqProperty.getArray() would also work, but  
+	    //               it is very expensive, because a
+	    //               unnecessary copy construction
+	    //               of the sequence takes place.</font>
+	    printf( "%d\n" , seqProperty.getConstArray()[i] );
+	}
+}
+
+</pre>
+</td>
+</tr>
+</table>
+
+<h4> Any </h4>
+<p>The<a href="../../ref/Cppu/c_Any.html"><code>Any</code></a> is a generic
+container, that stores a type and a value. Here are some basic examples, how to
+you use the Any :</p>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+{
+   sal_Int32 i = 5;
+   OUString string = OUString::createFromAscii( "demo" );
+
+   Any aInt,aString;
+
+<font color="green">   // put an sal_Int32 into an any</font>
+   aInt &lt;&lt;= i;
+
+<font color="green">   // put a string into an any</font>
+   aString &lt;&lt;= string;
+   
+
+<font color="green">   // extract an int out of an any</font>
+   sal_Int32 i2;
+   if( aInt &gt;&gt;= i2 )
+   {
+       printf( "int successfully extracted %d!\n"  , i2 );
+   }
+
+<font color="green">   // the any does no conversion from string to int during extraction,
+   // use the typeconverter service for theses purposes.</font>
+   if( !( aString &gt;&gt;= i2 ) )
+   {
+       printf( "string could not be converted to an int\n" );
+   }
+}
+</pre>
+</td>
+</tr>
+</table>
+
+<h4> Exception </h4>
+<p>UNO exceptions can simply be thrown like C++ exceptions. Example :</p>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+
+<font color="red">void</font> ArbitraryService::doSomething( <font color="red">const</font> Any &amp;a )
+                             <font color="green">throws</font>( IllegalArgumentException )
+{   
+   sal_Int32 i;
+   if( ! (a &gt;&gt;= i ) )
+   {
+<font color="green">      // a int was specified to be in the any</font>
+      IllegalArgumentException exception;
+      exception.Message = OUString::createFromAscii(
+                                      "unexpected type in any" );
+      exception.ArgumentPosition = 0;
+      <font color="red">throw</font> exception;
+   }
+}
+</pre>
+</td>
+</tr>
+</table>
+
+
+
+<!-- ***************************************
+     * The cppuhelper module
+     *************************************** -->
+<h2> <a NAME="cppuhelper"></a>The cppuhelper module</h2>
+
+<p>cppuhelper contains important base classes for UNO-objects, a bootstrap
+mechanism for the initial component context (factory context) and some other
+objects.  The cppuhelper and salhelper libraries are the only C++-linkage
+libraries within the UDK.</p>
+
+<h4><a name="oweakobject"></a> Weak object </h4>
+
+The
+<a href="../../ref/Cppuhelper/c_OWeakObject.html"><code>cppu::OWeakObject</code></a>
+     is the suggested minimum base class that every uno object should support.
+     (see cppuhelper/weak.hxx). It implements a basic refcounting object and allows others to
+     hold the object weak (see <a href="weak_references">weak references</a>).
+<p> Example of an uno-object, that uses OWeakObject as base class.
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+<font color="red">class</font> OFileWriter : <font color="green">public</font> OWeakObject, public XOutputStream
+{
+<font color="red">public:</font>
+    OFileWriter( char *pcFile ) : m_f( fopen( pcFile , "w" ) )
+          {}
+<font color="red">public:</font>  <font color="green">// XInterface implementation</font>
+<font color="red">    virtual</font> Any SAL_CALL queryInterface(
+                <font color="red">const</font> ::com::sun::star::uno::Type&amp; aType ) <font color="red">throw</font>()
+    {   
+	Any a = ::cppu::queryInterface(
+	             aType, static_cast< XOutputStream * >( this ) );
+
+	if( a.hasValue() )
+	{
+	    return a;
+	}
+	
+	return OWeakObject::queryInterface( aType );
+    }
+    <font color="red">virtual void</font> SAL_CALL acquire()
+     	{ OWeakObject::acquire(); }
+    <font color="red">virtual void</font> SAL_CALL release()
+    	{ OWeakObject::release(); }
+
+<font color="red">public:</font><font color="green"> // XOutputStream implementation</font>
+<font color="red">    virtual void</font> SAL_CALL writeBytes(
+                <font color="red">const</font> Sequence< sal_Int8 >&amp; aData) <font color="red">throw</font>  ()
+    {
+	fwrite( aData.getConstArray() , 1 , aData.getLength() , m_f );
+    }
+<font color="red">    virtual void</font> SAL_CALL flush(void) <font color="red">throw</font>  ()
+    {
+	fflush( m_f );
+    }
+
+<font color="red">    virtual void</font> SAL_CALL closeOutput(void) <font color="red">throw</font> ()
+    {
+        fclose( m_f );
+    }
+<font color="red">private:</font>
+    FILE *m_f;
+};
+</pre>
+</td>
+</tr>
+</table>
+<p>The class implements an
+<a href="http://api.openoffice.org/common/ref/com/sun/star/io/XOutputStream.html">XOutputStream</a>
+using stdc library.
+The constructor creates a file and stores the file handle in a class member.</p>
+
+<p> The task of queryInterface is to return the correct interface reference for the requested
+type, therefore it must cast the <code>this</code>-pointer to the correct interface pointer.
+The task is simplified by the global queryInterface-template-method, which compares the requested
+type with the cast this-pointers. If they match, an <em>any</em> with the
+correct reference is returned,
+otherwise an empty (void) any is returned. If the latter case is true, the call is delegated
+to OWeakObject's queryInterface.
+
+<p> acquire and release are delegated to OWeakObject to resolve ambiguities.
+
+<p> The following three methods simply implement the XOutputStream interface. Note that
+    error checking has been omitted to simplify the code (this is certainly a very poor
+    XOutputSteam implementation).
+<p> The methods have been implemented inline to shorten the source. There is certainly no
+    advantage in inlining virtual methods and should not be done in general.
+
+<p> The object is not scriptable because it does not support the
+<a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XTypeProvider.html">XTypeProvider</a>
+-interface.
+    
+    
+<h4> The Component helper</h4>
+<p>
+<a href="../../ref/Cppuhelper/c_OComponentHelper.html"><code>cppu::OComponentHelper</code></a>
+     is the suggested base class for UNO-objects that must
+     support the
+<a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XComponent.html">XComponent</a>
+     interface. The implementation(see cppuhelper/weak.hxx )
+     takes care of event listener
+     administration and ensures correctly notifying all listeners in both possible
+     cases (refcount drops to zero or <code>dispose</code> is called).
+     OComponentHelper is derived from OWeakObject.</p>
+
+<h4> The implementation helper</h4>
+<p>The so called <em>implementation helpers</em> are an excellent template
+variation of the above base classes. The use can be best explained with a
+sample :</p>
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+<font color="red">class</font> OFileWriter : <font color="red">public</font> WeakImplHelper1< XOutputStream >
+{
+<font color="red">public:</font>
+    OFileWriter( char *pcFile ) : m_f( fopen( pcFile , "w" ) )
+          {}
+
+<font color="red">public:</font> <font color="green">// XOutputStream implementation</font>
+<font color="red">    virtual void</font> SAL_CALL writeBytes(const Sequence< sal_Int8 >&amp; aData) <font color="red">throw</font>  ()
+    {
+	fwrite( aData.getConstArray() , 1 , aData.getLength() , m_f );
+    }
+<font color="red">    virtual void</font> SAL_CALL flush() <font color="red">throw</font>  ()
+    {
+	fflush( m_f );
+    }
+
+<font color="red">    virtual void</font> SAL_CALL closeOutput() <font color="red">throw</font>  ()
+    {
+        fclose( m_f );
+    }
+<font color="red">private:</font>
+    FILE *m_f;
+};
+</pre>
+</td>
+</tr>
+</table>
+<p>The implementation helper templates fulfill two tasks:</p>
+    <ul>
+       <li> correct queryInterface implementation (using the template parameter
+            and their base classes as possible interfaces to query for).
+       <li> correct XTypeProvider implementation, so that the object
+            is accessible by scripting languages.
+    </ul>
+
+    The helper exists in 4 variations
+    <ul>
+       <li> WeakImplHelper : base class is OWeakObject
+       <li> WeakComponentImplHelper : base class is OWeakObject,
+                                      implements the same stuff as OComponentHelper
+       <li> WeakAggImplHelper : base class is OWeakAggObject
+       <li> WeakAggComponentImplHelper :  base class is OWeakAggObject,
+                                      implements the same stuff as OComponentHelper
+    </ul>
+    Add the number of interfaces, you wish to implement, to the helper name (
+    something like va_arg for templates would be really cool).
+    The implementation helper have the disadvantage, that the code is not debugable (because
+    most of the code is implemented in macros), they have the advantage, that the error prone
+    queryInterface and XTypeProvider implementation are not done by every application developer
+    again and again (this saves really lots of debugging sessions). So using the implementation
+    helper is the proposed way to implement UNO-objects.
+
+<p> There are, nevertheless, situations where you can't use the implementation
+helper (for example if you must implement more than 10 interfaces or if you
+have to provide a more complex query interface).</p>
+
+<h4> Weak aggregation object </h4>
+<p>Deriving from 
+<a href="../../ref/Cppuhelper/c_OWeakAggObject.html"><code>cppu::OWeakAggObject</code></a>
+makes your object able to be
+<a href="../../../common/man/concept/unointro.html#aggregation">aggregated</a>.</p>
+
+<h4> The propertyset helper</h4>
+    Use
+    <a href="../../ref/Cppuhelper/c_OPropertySetHelper.html"><code>::cppu::OPropertySetHelper
+    </code></a>
+    as base class, if you want to implement XPropertySet interface. [...] to be continued.
+    There is no implementation helper variant for OPropertySetHelper.
+
+<h4> The factory helper</h4>
+   The factory helpers allows to create factories for objects.
+   See <a href="#exported_symbols">exported symbols</a> for a use
+   case for them.
+   <br/>
+   <br/>
+
+<h2> <a NAME="contexts"></a>UNO contexts</h2>
+
+<h4><a name="component_context"></a>
+Bootstrapping the initial component context (factory context) </h4>
+
+<p>The initial startup of the UNO system requires some sophisticated bootstrapping to
+get an initial component context (including a service manager) to proceed service
+instantiation. The context provides you a service manager instance.<br/>
+The cppuhelper function below can be called to bootstrap an initial component context
+with service manager upon a given registry. This includes insertion of initial the
+following service factories:
+<ul>
+<li>(registry) service manager</li>
+<li>shared lib loader</li>
+<li>simple registry</li>
+<li>nested registry</li>
+<li>implementation registration</li>
+<li>registry typedescription provider</li>
+<li>typedescription manager</li>
+</ul>
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+cppuhelper/bootstrap.hxx:
+
+Reference< XComponentContext > SAL_CALL bootstrap_InitialComponentContext(
+    Reference< registry::XSimpleRegistry > const &amp; xRegistry,
+    OUString <font color="red">const</font> &amp; rBootstrapPath = OUString() )
+    SAL_THROW( (Exception) );
+</pre>
+</td>
+</tr>
+</table>
+<br/>
+The function reads out all <code>/SINGLETONS</code> entries out of the registry and inserts
+entries into the component context.
+The typedescription manager singleton is raised to deliver types to the cppu core typelib, too.<br/>
+To handle registries in a flexible way, there are two helper functions to get a
+simple registry and nested registry implementation:
+<br/><br/>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+cppuhelper/bootstrap.hxx:
+
+Reference< registry::XSimpleRegistry > SAL_CALL createSimpleRegistry(
+    <font color="red">const</font> OUString &amp; rBootstrapPath = OUString() )
+    SAL_THROW( () );
+
+Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
+    <font color="red">const</font> OUString &amp; rBootstrapPath = OUString() )
+    SAL_THROW( () );
+</pre>
+</td>
+</tr>
+</table>
+<br/>
+
+There is also another function to bootstrap the UNO system reading reading out of environment
+variables the way it is presented
+<a href="xxxtodo_insert_default_boostrapping_description_here">here</a>.
+
+<br/><br/>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+cppuhelper/bootstrap.hxx:
+
+Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext()
+    SAL_THROW( (Exception) );
+</pre>
+</td>
+</tr>
+</table>
+<br/>
+The context holds arbitrary values which are recommended to be prefixed by the implementation
+name of the component that acknowledges a value, e.g. if you want to set the cache size
+of the <code>stoc</code> typedescription manager, set:
+<code>com.sun.star.comp.stoc.TypeDescriptionManager.CacheSize</code> to <i>n</i>.
+All API singletons are directly accessible by their name.<br/>
+When closing down the application, you have to manually dispose the component context, which
+disposes all singleton objects including the service manager.
+This has to be done, because
+the context holds a hard reference to its service manager as well as the service manager
+its default context (property <code>"DefaultContext"</code>).
+By default each new component context wrapping an existing one (delegating unknown
+property requests to it) should add itself as event listener to dispose itself
+when the previous one is disposed (that is chaining).
+<br/><br/>
+Alternatively, you can call the existing functions in <code>servicefactory.hxx</code>
+to bootstrap a service manager instance.
+But when closing down, it is mandatory to dispose the component context
+(service manager's <code>"DefaultContext"</code> property).<br/>
+<br/>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+<font color="green">    // get initial context</font>
+    Reference< XComponentContext > xContext( defaultBootstrap_InitialComponentContext() );
+    OSL_ASSERT( xContext.is() );
+    
+<font color="green">    // retrieve typedescription manager singleton</font>
+    Reference< XHierarchicalNameAccess > xTDMgr;
+    OSL_VERIFY( xContext->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.reflection.TypeDescriptionManager") ) ) >>= xTDMgr );
+	
+<font color="green">    // easier: retrieve service manager singleton</font>
+    Reference< XMultiComponentFactory > xSMgr( xContext->getServiceManager() );
+<font color="green">    /* same as:
+    Reference< XMultiComponentFactory > xSMgr;
+    OSL_VERIFY( xContext->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.lang.ServiceManager") ) ) >>= xSMgr );
+    */
+    
+    // launch new typedescription manager instance with modified cache size,
+    // NOTICE: knowing the context cache size key is implementation detail
+    // of the raised component.  Caching is no concept of the implementation
+    // and can thus be ignored by the implementation!
+    
+    // look at cppuhelper/component_context.hxx:</font>
+    Contextentry_Init aEntry;
+    aEntry.bLateInitService = false;
+    aEntry.name = OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.stoc.TypeDescriptionManager.CacheSize") );
+    aEntry.value = makeAny( (sal_Int32)0xdb0 );
+<font color="green">    // create new context overriding cache size, rest is delegated to previous context</font>
+    Reference< XComponentContext > xNewContext( createComponentContext(
+        &amp;aEntry, 1, xContext );
+    Reference< XInterface > xNewTDMgr( xSMgr-&gt;createInstanceWithContext(
+        OUString( RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.reflection.TypeDescriptionManager") ), xNewContext ) );
+
+    ...
+
+    Reference< XComponent > xComp( xContext, UNO_QUERY );
+    OSL_ASSERT( xComp.is() );
+    xComp-&gt;dispose();
+</pre>
+</td>
+</tr>
+</table>
+
+<br/>
+
+<h4><a name="current_context"></a> Setting/ Retrieving the Current Context </h4>
+
+The <a href="../../../common/man/concept/uno_contexts.html#current_context">current (task/ thread) context</a>
+has to be manually set when launching a new thread.
+There is a pair of functions setting and getting the context in <code>uno/current_context.h</code>
+and <code>uno/current_context.hxx</code>:<br/><br/>
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+uno/current_context.h:
+
+sal_Bool SAL_CALL uno_getCurrentContext(
+<font color="red">    void</font> ** ppCurrentContext,
+    rtl_uString * pEnvTypeName, void * pEnvContext )
+    SAL_THROW_EXTERN_C();
+
+sal_Bool SAL_CALL uno_setCurrentContext(
+<font color="red">    void</font> * pCurrentContext,
+    rtl_uString * pEnvTypeName, void * pEnvContext )
+    SAL_THROW_EXTERN_C();
+
+
+uno/current_context.hxx:
+
+<font color="red">namespace</font> com { <font color="red">namespace</font> sun { <font color="red">namespace</font> star { <font color="red">namespace</font> uno {
+
+inline Reference< XCurrentContext > SAL_CALL getCurrentContext()
+    SAL_THROW( () );
+inline bool SAL_CALL setCurrentContext( Reference< XCurrentContext > const &amp; xContext )
+    SAL_THROW( () );
+
+} } } }
+
+
+IDL interface:
+
+module com { module sun { module star { module uno {
+
+interface XCurrentContext : com::sun::star::uno::XInterface
+{ 
+    any getValueByName( [in] string Name );
+};
+
+}; }; }; };
+</pre>
+</td>
+</tr>
+</table>
+<br/>
+
+The first pair of functions is independent of the callers UNO environment while the second
+is defining inline functions for a C++ caller (more convenient).
+You should take care with what is handled in this thread/task-local container.
+<br/>
+<br/>
+
+
+<!-- ***************************************
+     * Components
+     *************************************** -->
+<h2> <a NAME="components"></a>C++ components</h2>
+C++ components are implemented in shared libraries (or modules in OpenOffice.org). The implementation
+of a sample component is documented <a href="../component_tutorial.html">here</a>.
+Each module must
+support some C-symbols, which the shared-library-loader uses as entry points to access
+the components. 
+
+<h4><a name="exported_symbols"></a> Exported symbols </h4>
+<p>Each module must export 4 C functions to make the
+components available.</p>
+<p>TODO: List the header files required to export these symbols</p>
+
+<ol>
+<li>component_getImplementationEnvironmentFunc<br/>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+/**************************************************************
+ * Function to determine the environment of the implementation.
+ * If the environment is NOT session specific
+ * (needs no additional context), then this function
+ * should return the environment type name and leave ppEnv (0).
+ *
+ * @param  ppEnvTypeName environment type name;
+ *                       string must be constant
+ * @param  ppEnv	 function returns its environment
+ *                       if the environment is session specific,
+ *                       i.e. has special context
+ */
+typedef void
+  (SAL_CALL * component_getImplementationEnvironmentFunc)(
+     const sal_Char ** ppEnvTypeName,uno_Environment ** ppEnv);
+</pre>
+</td>
+</tr>
+</table>
+The loader uses this function to determine the native environment of the component.
+In general, the component simply returns the compiler environment name. This enables us
+to use modules compiled by different compilers in the same process, assuming that
+a C++ to UNO bridge exists for each compiler.
+
+<li>component_getDescriptionFunc<br/>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+/************************************************************
+ * Optional function to retrieve a component description.
+ *
+ * @return an XML formatted string containing a short
+ *         component description
+ */
+typedef const sal_Char *
+             (SAL_CALL * component_getDescriptionFunc)(void);
+</pre>
+</td>
+</tr>
+</table>
+The function must return a string that contains the XML-description of the component. This
+allows generic tools (testtools, implementation repository browsers, etc.) to collect
+information about the module.
+
+<li>component_writeInfoFunc<br/>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+/**********************************************************
+ * Writes component registry info, at least writing the
+ * supported service names.
+ *
+ * @param		pServiceManager	a service manager
+ *			(the type is XMultiServiceFactory
+ *                      to be used by the environment
+ *                      returned by
+ *                      component_getImplementationEnvironment)
+ * @param		pRegistryKey	a registry key
+ *			(the type is XRegistryKey to be used
+ *                      by the environment returned by
+ *                      component_getImplementationEnvironment)
+ * @return		true if everything went fine
+ */
+typedef sal_Bool (SAL_CALL * component_writeInfoFunc)(
+	void * pServiceManager, void * pRegistryKey );
+</pre>
+</td>
+</tr>
+</table>
+This function is called by the service <em>com.sun.star.registry.ImplementationRegistration</em>.
+It passes an XMultiServiceFactory and an XRegistryKey interface pointer, which are already
+mapped into the modules environment. The function can now register all implementations and
+services into this registry key.
+
+<li>component_getFactoryFunc<br/>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+/*********************************************************
+ * Retrieves a factory to create component instances.
+ *
+ * @param pImplName	desired implementation name
+ * @param pServiceManager a service manager
+ *			(the type is XMultiServiceFactory
+ *                      to be used by the environment
+ *                      returned by
+ *                      component_getImplementationEnvironment)
+ * @param pRegistryKey	a registry key
+ *			(the type is XRegistryKey to be used
+ *                      by the environment returned by
+ *                      component_getImplementationEnvironment)
+ * @return		acquired component factory
+ *			(the type is XInterface to be used by the
+ *                      environment returned by
+ *                      component_getImplementationEnvironment)
+ */
+typedef void * (SAL_CALL * component_getFactoryFunc)(
+	const sal_Char * pImplName,
+	void * pServiceManager, void * pRegistryKey );
+</pre>
+</td>
+</tr>
+</table>
+<p>This function is usually called the first time a component needs to be
+instantiated.  The function should return an acquired XInterface
+interface-pointer for the requested implementation name.</p>
+</ol>
+
+<p>Example  (the implementation of the service is not shown here):</p>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+
+#define IMPLEMENTATION_NAME "com.sun.star.comp.io.stm.Pipe"
+const sal_Char SERVICE_NAME[] = "com.sun.star.io.Pipe";
+Sequence< OUString > pipe_getSupportedServiceNames()
+{
+   Sequence< OUString > seqNames(1);
+   seqNames.getArray()[0] =
+         OUString::createFromAscii( SERVICE_NAME );
+   return seqNames;
+}
+
+Reference< XInterface > SAL_CALL pipe_CreateInstance(
+   const Reference< XComponentContext > &amp; xContext )
+{
+    return Reference < XInterface >(
+              ( OWeakObject * ) new OPipe(xContext) );
+}
+
+
+extern "C"
+{
+
+void SAL_CALL component_getImplementationEnvironment(
+	const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+{
+	*ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+//==================================================================
+sal_Bool SAL_CALL component_writeInfo(
+             void * pServiceManager, void * pRegistryKey )
+{
+   if (pRegistryKey)
+   {
+       Reference< XRegistryKey > xNewKey(
+	   reinterpret_cast< XRegistryKey * >( pRegistryKey )-&gt;createKey(
+		OUString::createFromAscii(
+		      "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
+			
+	const Sequence< OUString > &amp; rSNL = pipe_getSupportedServiceNames();
+	const OUString * pArray = rSNL.getConstArray();
+	for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
+		xNewKey-&gt;createKey( pArray[nPos] );
+			
+	return sal_True;
+   }
+   return sal_False;
+}
+//===================================================================
+void * SAL_CALL component_getFactory(
+	const sal_Char * pImplName,
+	void * pServiceManager, void * pRegistryKey )
+{
+   void * pRet = 0;
+
+   if (pServiceManager &amp;&amp;
+       rtl_str_compare( pImplName, IMPLEMENTATION_NAME ) == 0)
+   {
+	Reference< XSingleComponentFactory > xFactory( createSingleComponentFactory(
+	   reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+	   OUString::createFromAscii( IMPLEMENTATION_NAME ),
+	   pipe_CreateInstance, pipe_getSupportedServiceNames() ) );
+
+	if (xFactory.is())
+	{
+	    xFactory-&gt;acquire();
+	    pRet = xFactory.get();
+        }
+   }
+
+   return pRet;
+}
+}
+</pre>
+</td>
+</tr>
+</table>
+<p>TODO: This is quite a lot of code. Let's roughly step through it. [...]
+
+
+<h4> Singletons / MultiInstance </h4>
+<p>
+Every component has to be implemented as multi-instance, i.e. upon loading the library
+they can use the cppuhelper <code>createSingleComponentFactory()</code> as outlined
+above.
+The old functions <code>createSingleFactory()</code> etc. are deprecated and should
+be changed.
+One-instance components (using <code>createOneInstanceFactory</code>) are deprecated, too.
+The component implementation should not decide by itself whether it is one-instance.
+Instead of this, a component should explicitly retrieve shared objects (singletons) via its
+context. All singleton key name (context key names) are to specified in IDL,
+for example:
+</p>
+      <table width="100%" bgcolor="#ffffc0">
+        <tr> 
+          <td> 
+            <pre>
+module com { module sun { module star { module reflection {
+
+singleton TypeDescriptionManager
+{
+    service com::sun::star::reflection::TypeDescriptionManager;
+};
+
+}; }; }; };
+</pre>
+          </td>
+        </tr>
+      </table>
+
+<h4> Independent components </h4>
+A component is called independent if it is only linked against UDK libraries. The aim is
+to have an application that only uses independent components. The only external thing they
+need is a service manager to instantiate other components.
+
+<h4> Component registration </h4>
+In general, every application has a registry (in OpenOffice,
+it is called <em> applicat.rdb </em>). The applicat.rdb contains the definition of all types
+used in the application and information how to instantiate a
+component. This information is written into the rdb by the component itself using
+the above <code>component_writeInfo</code> function.
+
+<p> The service <code> com.sun.star.registry.ImplementationRegistration</code>
+can be used to register a shared library. The service exports the interface
+
+<a href="http://api.openoffice.org/common/ref/com/sun/star/registry/XImplementationRegistration.html">
+<code>com.sun.star.registry.XImplementationRegistration</code></a>, which offers
+the registerImplementation-method. The library name, the
+service name of the loader (in general <code>com.sun.star.loader.SharedLibrary</code>) and
+a reference to a XRegistryKey interface (where the data shall be written to) must all be passed to the method. 
+If an empty reference is passed, the service uses the registry of the servicemanager.
+
+<p> There exists a command line tool for registration (<code>regcomp</code>), that does
+    this (just call the tool without parameters to see its usage).
+
+<p> After the registration, the service is accessible directly through the servicemanager.
+
+<p> Note that if you have created new UNO-types in IDL, the types must also be merged into the
+    applications registry (use the <code>regmerge</code> tool for this purpose).
+
+<!-- ***************************************
+     * Common programming patterns
+     *************************************** -->
+<h2><a NAME="common_patterns"></a>Common programming patterns</h2>
+
+<ul>
+  <li> Threads and members<br/>
+	   <p>Access to members in unguarded sections are in general not thread
+	   safe.  Thus the following code and may crash (where m_xFoo is a
+	   reference to an UNO object).</p>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+NOT THREAD SAFE :
+       MyComponent::do()
+       {
+           if( m_xFoo.is() )
+                  m_xFoo-&gt;doSomething();
+       }
+
+THREAD SAFE :
+       MyComponent::do()
+       {
+           Reference &lt; XFoo &gt; xFoo;
+	   {
+	       MutexGuard guard( m_mutex );
+	       xFoo = m_xFoo;
+	   }
+           if( xFoo.is() )
+                  xFoo-&gt;doSomething();
+       }
+</pre>
+</td>
+</tr>
+</table>
+	 <p>Between the check of m_xFoo.is() and the call m_xFoo-&gt;doSomething(),
+	 the reference may be cleared by another thread or during the call of
+	 m_xFoo-&gt;doSomething() may be cleared, which can lead to the destruction
+	 of the UNO-object.</p>
+     <p>
+     The reference assignment is not thread safe, as it is not an atomic operation
+     (the reference might be cleared by another thread, before the current thread reaches
+       the osl_incrementInterlockedCount() function). Therefor each member access must be guarded.
+     <p>
+     Note that this holds also for other refcounted objects such as strings, sequences, etc.
+     <p>
+     This certainly implies performance overhead of locking a mutex. If you
+     know, that a certain member can never be changed, it is correct not to guard access
+     to this member. But keep in mind that your code should also be stable to small modifications.
+	 If you don't need the performance in that piece of code, you should always
+	 choose the safer method.
+     Code must be in first place correct and in second place fast.
+       
+  <li> Initialize static objects on demand <br/>
+	<p>If there is need for a static object, do not initialize it before main.
+	   This is a serious performance hit at application startup. Use wrapper
+	   functions to access static data instead, so that they are initialized on
+	   demand.</p>
+       
+  <li> Thread safe initializing static data <br/>
+	<p>Initialization of non atomic static data, that is not initialized before
+	   main (see above) must be guarded. To make this efficient, do the
+	   following.</p>
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4>
+<tr>
+<td BGCOLOR="#FFFFC0">
+<pre>
+Mutex * getInitMutex()
+{
+<font color="red">   static </font>Mutex *pInitMutex = 0;
+   if( ! pInitMutex )
+   {
+       ::osl::Guard guard( ::osl::Mutex::getGlobalMutex() );
+       if( ! pInitMutex )
+       {
+           <font color="red">static</font> ::osl::Mutex initMutex;
+	   pInitMutex = &amp;initMutex;
+       }
+   }
+<font color="red">   return</font> pInitMutex;
+}
+
+
+MyStaticData *getMyStaticDataImpl()
+{
+<font color="red">   static</font> MyStaticData staticData;
+   return &amp;staticData;
+}
+
+<font color="red">static</font> g_pMyStaticData * =0;
+inline MyStaticData *getMyStaticData()
+{
+   if( ! g_pMyStaticData )
+   {
+       ::osl::Guard guard( getInitMutex() );
+       if( ! g_pMyStaticData )
+       {
+           g_pMyStaticData = getMyStaticDataImpl();
+       }
+   }
+   <font color="red">return</font> g_pMyStaticData;
+}
+</pre>
+</td>
+</tr>
+</table>
+<p>This looks a bit more complicated than it really is, lets step through it. The aim is to retrieve
+a pointer to the static data (here MyStaticData) as fast as possible (the first access can
+be slower, because these are only one time costs), so getMyStaticData is
+inline. If the data has been initialized before, then access is very fast (in fact a check to
+zero overhead, no function call).</p>
+
+<p>The construction of the static data should not be an inline function,
+because the current
+version of gcc on the Mac has problems with static data in inline functions.
+
+<p> The mutex used to guard the initialization is also constructed in this
+    example. The construction of the mutex is guarded by the ::osl::Mutex::getGlobalMutex(),
+    one of the rare objects constructed before main.
+    Why not use the global mutex directly for guarding ? The answer is that it can be done, if
+    and ONLY if the constructor of MyStaticData does not call something you do not know. If 
+    the constructor does a UNO-call, which is bridged to another process, the reply for this
+    call is dispatched in a different thread and this thread needs to initialize some static data
+    of its own, then you have a deadlock (too many debugging sessions have been spent on this...!)
+
+<li> <p>DON'T USE MACROS </p>
+    <p>There are a lot of different opinions on this topic, but I want to stress this topic
+    here : Do not use macros if there are other solutions (inline functions,
+    inline template functions, const vars, etc.).
+
+    Using macros generally has the following drawbacks:</p>
+    <ul>
+      <li> It is not type safe. The compiler does fewer checks, which results in finding
+           bugs at runtime instead of finding them at compile time.
+      <li> The debugger does not know the symbols (e.g. strings, constants).
+      <li> If code is executed within macros, it is not debuggable.
+      <li> The code gets very difficult to read.
+    </ul>
+    <p><b>Code is read much more often read than it is written.</b></p>
+</ul>
+
+<!-- ****************************************
+     * Footer
+     **************************************** -->
+<table width=100%>
+<tr>
+<td BGCOLOR="#666699"><font color="#FFFFFF">Author: <a href="mailto:joerg.budischewski@germany.sun.com"><font color=#ffffff>Joerg
+Budischewski</font></a> ($Date: 2004/11/17 11:04:33 $)
+<br/><I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I></font></td>
+</tr>
+</table>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

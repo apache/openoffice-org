@@ -1,0 +1,771 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Sascha Ballach">
+	<META NAME="CREATED" CONTENT="20010601;9311185">
+	<META NAME="CHANGEDBY" CONTENT="Daniel Vogelheim">
+	<META NAME="CHANGED" CONTENT="20010725;18030177">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/xml/">xml</a>&nbsp;&raquo;&nbsp;<a href="/xml/optimization/">optimization</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1 ALIGN=CENTER>Loose list of possible optimizations in the xml
+module</H1>
+<P ALIGN=LEFT>This is a loose list of optimizations items, which the
+guys which work on the xml project find out. This list expands if any
+one found more items. The status tells what happens with this items.
+If an item is implemented, then the status change and the build
+version is add.</P>
+<P ALIGN=LEFT>Here are also all items listed which have to do in
+modules like sw, sc, graphics and so to optimize e.g. the save and
+load performance of the new fileformat.</P>
+<P ALIGN=LEFT>If anybody find also some items, where we may change
+the code then he can write a mail to me
+(<A HREF="mailto:sascha.ballach@germany.sun.com">Sascha.Ballach@germany.sun.com</A>)or
+add a task into the <A HREF="http://xml.openoffice.org/project_issues.html">IssueZilla</A>.</P>
+<P ALIGN=LEFT><A HREF="current_optimization_status.html">Here</A> can
+anybody see the current state of our optimizations and the current
+problems.</P>
+<P ALIGN=LEFT><A HREF="current_optimization_status.sxc">Here</A> is
+the complete overview as OpenOffice.org 6.0 file.</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0 FRAME=VOID RULES=GROUPS>
+	<COLGROUP>
+		<COL WIDTH=13*>
+		<COL WIDTH=20*>
+	</COLGROUP>
+	<COLGROUP>
+		<COL WIDTH=28*>
+	</COLGROUP>
+	<COLGROUP>
+		<COL WIDTH=36*>
+	</COLGROUP>
+	<COLGROUP>
+		<COL WIDTH=159*>
+	</COLGROUP>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH COLSPAN=2 WIDTH=13%>
+				<P>Status</P>
+			</TH>
+			<TH WIDTH=11%>
+				<P>Module</P>
+			</TH>
+			<TH WIDTH=14%>
+				<P>Type</P>
+			</TH>
+			<TH WIDTH=62%>
+				<P>Description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR BGCOLOR="#e6e6e6" VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>D</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>ALL</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>At the moment is the <CODE>getPropertyStates</CODE> method
+				implemented as a loop which calls the <CODE>getPropertyState</CODE>
+				method for every Property. So the Property has to be searched
+				again and again. Therefor this method needs a lot of string
+				compares. We have to use a better implementation which use, that
+				the <CODE>getPropertyStates</CODE> method gets the PropertyNames
+				in alphabetical order.</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>P</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>ALL</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>We have to implement a XMultiPropertySet interface and use it
+				instead of the XPropertySet interface to get and set the style
+				properties. (Done in some modules)</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#e6e6e6" VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>P</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>ALL</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Code/Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>Don�t export XML tokens as character pointer in an own object
+				file. This expand the size of each DLL which use any of these XML
+				tokens. This can change to a <CODE>GetToken(nId)</CODE> and
+				<CODE>IsToken(nId)</CODE>.</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>D</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>SC</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>Remember the style names of the cells so they have not to get
+				again. (save spreadsheet document)</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#e6e6e6" VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>D</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>SC</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>Collect all cells and his styles and merge the cells to ranges
+				and set the styles on this ranges. (load spreadsheet document)</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>D</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>SC</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>Remember all API objects which are used again and again, so
+				they have not to create so often.</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#e6e6e6" VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>D</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>SC</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>Find a better way to find out whether a cell contains a
+				annotation or not.</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>D</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>SC</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>The method <CODE>getFormula()</CODE> change in every document
+				which is not English the language to get the English formula.
+				This is not necessary.</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#e6e6e6" VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>I</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>ALL</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Code</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>Some Attributes contains the old virtual <CODE>importXML</CODE>
+				and <CODE>exportXML</CODE> methods. These can remove, because the
+				XML attribute export is changed</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>I</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>ALL</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>Use MultipropertySet in the API for PageDescriptor�s</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#e6e6e6" VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>I</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>XML</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>The package component has two major performance problems:</P>
+				<OL>
+					<LI><P>When saving, all zip file data is written to a buffer in
+					memory which is then passed to the UCB to be written to disk. If
+					there are multiple OLE objects, this could be crippling. Data
+					should be written to disk, buffered.</P>
+					<LI><P>When loading, whole streams are read into memory at once
+					and are then read from memory. They should be uncompressed and
+					written to temporary files and be read from there instead</P>
+				</OL>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>P</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>SW</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>The XML load/save creates every time a DrawModel
+				(SwDoc::MakeDrawModel). This must change, so its only created if
+				its needed.</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#e6e6e6" VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>D</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>SC</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>On save and load of edit cells the method <CODE>GetTextForwarder()</CODE>
+				makes to much to often. This is not necessary. On every creation
+				of a new API Object like XTextRange, XTextCursor and so on on the
+				same cell creates a new object and set all the properties and so
+				on. The method should remember the created object and give this
+				again and again.</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>C</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>SC</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>On save of a document the method <CODE>GetOutputStringImpl</CODE>
+				ask for the numberformat on every cell. On documents with more
+				languages this needs very long, because the language is every
+				time changed. The calling method knows the numberformat, but
+				there is no way to give this to the method with the API.</P>
+				<P>This optimization is changed to a optimization of the
+				<CODE>ChangeIntl</CODE> method and the use of an English
+				NumberFormatter to ask whether a string cell use a NumberFormat.</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#e6e6e6" VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>D</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>SC</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>Extend the API to get all formated ranges with one call. This
+				means to make a possibility to get all formated ranges with the
+				same format as XCellRanges object. So we have to ask for the
+				autostyle only one time.</P>
+				<P>The same should be possible while loading a document. Here we
+				need a possibility to create a XCellRanges object and give them
+				all ranges with the same format and then set the format on all
+				this ranges in one time.</P>
+				<P>Finally we have to use this extensions.</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>I</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>SC</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>Use a English NumberFormatter to reduce the calls of the
+				<CODE>ChangeIntl<CODE> method.</CODE></CODE></P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#e6e6e6" VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>I</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>SC</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>We have also to optimize the <CODE>GetTextForwarder</CODE>
+				method for the saving of the PageStyles.</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>I</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P>&nbsp;</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>XML</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>The <CODE>GetKeyByAttrName</CODE> method should be optimized
+				so the string will be created only once and then the string
+				should be cached. This increase the performance, because the same
+				strings are used very often.</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#e6e6e6" VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>P</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>XML</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>Creating the <CODE>PropertySetMapper</CODE>s takes a long
+				time, mainly due to string creation. This can be sped up by
+				storing the string length in the maps.</P>
+				<P><I>dvo: As it turns out, the string length doesn't help a
+				whole lot. Copying the string from sal_Char* to sal_Unicode* and
+				the corresponding malloc seems to take most of the time. So I'm
+				afraid there's nothing we can do about this.</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>I</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>XML</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P>When loading/saving small documents, reading/setting the
+				document settings takes a long time. In the writer, reading the
+				document settings takes about as long as importing 200
+				paragraphs. This should be investigated.</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#e6e6e6" VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>I</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>XML</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P ALIGN=LEFT>The NumberFormatter takes quite long to find the
+				first data style for a particular language. Thus, exporting the
+				first textfield that uses a number format takes about as long as
+				exporting 25 paragraphs.</P>
+				<P ALIGN=LEFT><I>dvo: I can't think of any way to avoid this,
+				though.</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>P</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>XML</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P ALIGN=LEFT>The NumberFormatsSupplier is always obtained from
+				the document, even though it is not used. That takes quite some
+				time in small documents that don't use it.</P>
+				<P ALIGN=LEFT><I>dvo: creating the NumberFormatsSupplier
+				on-demand fixes the problem. However, this requires an
+				incompatible build, so it is not checked in yet.</I></P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#e6e6e6" VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>I</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>XML</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P ALIGN=LEFT>Resetting existing styles to default takes a long
+				time during import. (use <CODE>XMultiPropertsStates</CODE>
+				interface). Currently this uses getPropertySet and then sets them
+				to default one-by-one.</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>P</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>XML/Writer</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P ALIGN=LEFT>All styles for a style family are obtained from the
+				document through an <CODE>XIndexAccess</CODE>, which is then used
+				to iterate over all styles. The current Writer implementation for
+				that is really, really slow (probably true for the other apps as
+				well, but I haven't checked).</P>
+				<P ALIGN=LEFT><I>dvo: I have tried replacing the XIndexAccess
+				with an XNameAccess. This speeds obtaining all styles up from
+				280ms to 10ms, which is almost a factor of 30. However, I'm not
+				sure if other apps have the same performance characteristics.
+				Also, a properly implemented getByIndex should resolve this
+				issues, too. Therefore, I will not commit this 'fix'.</I></P>
+				<P ALIGN=LEFT><I>dvo: I submitted a performance bug about this
+				(#90251#)</I></P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#e6e6e6" VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>D</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>Writer</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P ALIGN=LEFT>The conversion between UI names and
+				internationalized names is slow.</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>I</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>Writer</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P ALIGN=LEFT>The IsPhysical property with styles is much slower
+				than most other properties.</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#e6e6e6" VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>I</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>XML / Writer</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P ALIGN=LEFT>In exportTextContentEnumeration, determining which
+				(relevant) service is implemented by the current XTextContent is
+				quite slow. For a simple document with 14 text content objects
+				(which run twice through the method) the total time needed to
+				determine the service takes as much time as exporting 80 simple
+				paragraphs.</P>
+				<P ALIGN=LEFT><I>dvo: A more radical approach to this problem
+				would be to give an XTextContent a required property which
+				returns this type as a string or an integer key. However, this
+				would require a modified TextContent service.</I></P>
+				<P ALIGN=LEFT><I>dvo: Most of the time seems to be spent in
+				asking a shape whether it happens to be of some type of service.
+				The way the interfaces are, there aren't too many way to speed up
+				the shape implementation. Simply asking the shape early solves
+				this problem nicely. For the 'einfach' Test-Dokument, checking
+				for shapes early reduces time for the entire
+				exportTextContentEnumeration by 10%.</I></P>
+				<P ALIGN=LEFT><I>dvo: I submitted a performance Bug #90240# about
+				this.</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>I</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>Writer</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P ALIGN=LEFT>The 'FileLink' property of text sections is
+				implemented fairly slow.</P>
+			</TD>
+		</TR>
+		<TR BGCOLOR="#e6e6e6" VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>D</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>XML</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P ALIGN=LEFT>The FilterPropertyInfo_mpl::AddProperty method is
+				quite slow because it used an (albeit hacked-up) version of
+				insertion sort.</P>
+				<P ALIGN=LEFT><I>dvo: Using STL sort during GetApiNames() speeds
+				up the operation by about 30%.</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=5%>
+				<P>C</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=11%>
+				<P>XML</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Runtime</P>
+			</TD>
+			<TD WIDTH=62%>
+				<P ALIGN=LEFT>Importing a single control is about as slow as
+				importing 150 simple paragraphs.</P>
+				<P ALIGN=LEFT><I>dvo: The time is spent in loading several DLLs
+				required for the controls. This is probably unavoidable. The
+				second control is quite speedy.</I></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P>Last change: 07/25/2001</P>
+<P><B>Agenda</B>:</P>
+<P STYLE="margin-bottom: 0.01cm">Status Symbols:</P>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=0 CELLSPACING=0>
+	<COL WIDTH=16*>
+	<COL WIDTH=240*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=6%>
+			<P>I</P>
+		</TD>
+		<TD WIDTH=94%>
+			<P>Idea 
+			</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=6%>
+			<P>D</P>
+		</TD>
+		<TD WIDTH=94%>
+			<P>Done</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=6%>
+			<P>P</P>
+		</TD>
+		<TD WIDTH=94%>
+			<P>in Progress</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=6%>
+			<P>C</P>
+		</TD>
+		<TD WIDTH=94%>
+			<P>Cancelled</P>
+		</TD>
+	</TR>
+</TABLE>
+<P STYLE="margin-bottom: 0.01cm"><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

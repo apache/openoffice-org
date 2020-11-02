@@ -1,0 +1,253 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    <title>null</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/">common</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/">man</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252"/>
+	<TITLE>Overview: Universal Network Objects (UNO)</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)"/>
+	<META NAME="CREATED" CONTENT="20001010;19542253"/>
+	<META NAME="CHANGEDBY" CONTENT="Hans-Peter Burow"/>
+	<META NAME="CHANGED" CONTENT="20020122;10014478"/>
+	<META NAME="CLASSIFICATION" CONTENT="Overview Universal Network Objects (UNO)"/>
+	<META NAME="KEYWORDS" CONTENT="UNO,Overview"/>
+<style type="text/css">
+<!--
+h1 { text-align:center; margin-top: 0.2cm; text-decoration: none; color: #ffffff; font-size: 6; margin-top: 0.2cm}
+h2 { margin-top: 0.2cm; margin-bottom=0.1cm; color: #ffffff; background-color: #666699 }
+li {margin-bottom: 0.2cm;}
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm;}
+dt {margin-bottom: 0.2cm;}
+-->
+</style>
+</HEAD>
+<body>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 BGCOLOR="#666699"
+    summary=header>
+	<TR>
+		<TD>
+			<H1> Overview: Universal Network Objects (UNO) </H1>
+		</TD>
+	</TR>
+</TABLE>
+
+<h2> Overview </h2>
+
+			<P>UNO is a component model that offers inter-operability between
+			different programming languages, different objects models,
+			different machine architectures, and different processes; either in a
+			LAN or via the Internet. 
+			</P>
+			<P>The <A HREF="#applications">StarOffice and Sun ONE Webtop</A>
+			products have proven the usability of UNO in complex real world
+			applications. Developers that want to use, extend, or modify the
+			functionality of one of the products will do this using UNO. 
+			</P>
+			<P>UNO is not limited to the above applications. The base
+			libraries of UNO are independent of StarOffice and can be used as
+			a framework for other applications. 
+			</P>
+			<P>UNO is freely available (it is distributed under <a href="http://openoffice.apache.org/license.html">ALv2</a>) and currently supports Java, C and C++ (on windows, Linux,
+			and Solaris). A bridge for COM OLE Automation already exists. 
+			</P>
+			<P>UNO is developed by the OpenOffice.org community including the Sun
+			Microsystems development labs.<!-- ******************************************************
+* TECHNICAL DETAILS
+******************************************************
+ -->
+						</P>
+<h2><a name="tech_details"></A> Some technical details </h2>
+
+<P>UNO is interface based, as are COM and CORBA. Components implement
+			interfaces compliant to their interface specification. Multiple
+			components communicate only via their interfaces. This allows 
+			implementing one component in a different language or to move an
+			implementation to another machine, without modifying the other's
+			components. This gives you huge flexibility and preserves earlier
+			invested efforts. 
+			</P>
+			<P STYLE="margin-bottom: 0cm">Each component lives in a <STRONG>U</STRONG>no
+			<STRONG>R</STRONG>untime <STRONG>E</STRONG>nvironment (<STRONG>URE</STRONG>).
+			A URE is identified by the implementation language (e.g., C++,
+			Java, <SPAN LANG="en-US">Perl</SPAN>, ...) and the current
+			process. There is no performance overhead for components, that are
+			instantiated within the same URE, e.g., in C++, a call from
+			component A to B is just a virtual call. The calls between
+			components from different UREs are bridged by UNO. 
+			</P>
+
+<center><img src="images/component_environments.gif" name="Grafik1" align=middle width=511 height=294 border=0 alt="Connecting Environments"/></center>
+
+			<P>In general, calls are bridged through a single <EM>dispatch</EM>
+			method. This method is, in general, easy to implement for 
+			interprocess bridges or bridges to interpreting languages. There
+			is <STRONG>no generated code</STRONG> for stubs or<SPAN LANG="en-US">
+			proxies. </SPAN>All necessary conversions are done by the generic
+			dispatch method. The information about the method signature is
+			retrieved dynamically from a <STRONG>type library</STRONG>. This
+			type library is reused by every bridge, so only the number of
+			entries in the type library grows with a growing number of types.
+			This reduces build time and memory consumption at runtime;
+			nevertheless, bridging is as fast as generated code. 
+			</P>
+			<P>UNO-interfaces are specified in IDL. All UNO-interfaces must be
+			derived from a superinterface, that offers acquire, release, and a
+			queryInterface method (comparable to COM). The lifetime of
+			UNO-objects is controlled by <STRONG>global reference counting</STRONG>.
+			<STRONG>Exceptions</STRONG> are used for error handling. 
+			</P>
+			<P>UNO guarantees <STRONG>object identity</STRONG>, <STRONG>thread
+			identity</STRONG>, and the <STRONG>sequence of calls</STRONG>. 
+			</P>
+			<UL>
+				<li>object identity<br/>
+				Two interfaces' references can be compared for equality. UNO
+				guarantees, that the result is correct, no matter whether the
+				result is true or false. 
+
+				<li>thread identity<br/>
+				In UNO every
+				thread is named by a globally unique thread identifier. A thread
+				leaving the process via an interprocess bridge is identified when
+				entering the process, again, some callstack levels higher. The same
+				thread will execute the new call thus guaranteeing that any
+				thread dependent resources stay the same (such as thread local
+				storage, lock of mutexes, etc.).
+
+				<li>sequence of calls<br/>
+				UNO allows declaring a method oneway
+				(or asynchron). Multiple, oneway calls are guaranteed to be
+				executed in the same sequence as they were called. 
+
+			</UL>
+			<P>A sequence of oneway calls can be<SPAN LANG="en-US">
+			transferred </SPAN>and executed extremely fast via an interprocess
+			connection. The UNO interprocess protocol is optimized for low
+			bandwidth connections. 
+			</P>
+			<P>Have a look a this document, <A HREF="concept/unointro.html">Uno Intro</A>,
+			for further technical information.<!-- **************************************************************************
+* A P P L I C A T I O N S   B U I L T   O N   U N O
+**************************************************************************
+ -->
+						</P>
+
+<h2><a name="applications"></a> Applications built on UNO </h2>
+
+<P>This chapter discusses some actual use cases of UNO and the benefits
+the applications derived from UNO.</P>
+
+<h3>StarOffice (or OpenOffice.org)</h3>
+
+			<P>StarOffice is a fully featured office productivity suite. 
+			</P>
+			<P>StarOffice mainly uses the C++ -in-process functionality of
+			UNO. Before UNO, the StarOffice development suffered very much from
+			incompatible changes (e.g., adding a new virtual method or a new
+			member to a class) in one of the base libraries. This forced a
+			complete rebuild of the product, which roughly consumed 2 days and
+			was done only once a week. These incompatible updates were be
+			reduced considerably by using UNO, and as a result the whole work became
+			more efficient. Please have a look at this document, 
+			<A HREF="uno_the_idea.html">Uno the Idea</A>, for a more complete explanation. 
+			</P>
+			<P>Java components in StarOffice (e.g., the pgp-integration) use
+			the Java-C++ bridge to access the StarOffice API. External
+			developers can easily integrate their desired<SPAN LANG="en-US">
+			functionality </SPAN>in StarOffice using this bridge. 
+			</P>
+			<P>External developers can use the UNO-interprocess bridge to
+			access StarOffice-API from a different process for remote office
+			control. 
+			</P>
+
+<h3>Sun ONE Webtop</h3>
+
+			<P>Sun ONE Webtop is a highly distributed application. It provides
+			a fully featured office productivity suite via the Internet.
+			Office documents can be accessed via various clients
+			(WebBrowser-Plugins, PDAs, HTML-Clients, etc.).</P>
+			<P>UNO is used in the communication between the WebBrowser-Plugin
+			and the office application server. All outputdevice-calls (e.g.,
+			DrawRect, DrawLine, and SetColor) necessary to paint a scene are
+			transmitted via the Internet connection (the necessary performance
+			is reached by declaring those calls oneway).</P>
+			<P>UNO is used to bridge between <STRONG>Java Server Pages</STRONG>
+			(running within the webserver) and the Universal Content Broker (a
+			C++ process that is responsible for data access).<!-- ******************************************************
+* OTHER COMPONENT MODELS
+******************************************************
+ -->
+						</P>
+
+<h2><a name="other_models"></a> UNO, COM, CORBA, and Java RMI </h2>
+
+			<P>It is often asked, why a new component model (UNO) has been
+			developed, instead of using already existing ones (such as
+			COM/DCOM, CORBA, or Java RMI). The main reason is that the other
+			object models don't provide the functionality needed for
+			applications such as StarOffice or Sun ONE Webtop. 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0cm">COM/DCOM does not allow for use
+				of exceptions, which is of eminent important for advanced error
+				handling. 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm">CORBA is only a standard for
+				remote communication, there is only very poor support for in
+				process<SPAN LANG="en-US"> communication </SPAN>(IIOP in
+				process), which is too slow for most applications. See also the 
+				<A HREF="comparison_uno_corba.html">CORBA-UNO comparison document</A>
+								</P>
+				<LI><P>Java RMI is only useful within a Java environment, but there
+				is a need for a technology for bridging between different
+				languages. 
+				</P>
+			</UL>
+			<P>Additionally, the code generation needed, e.g., in COM or CORBA,
+			results in huge libraries if there are many types. For each new
+			bridge, new generated glue code would be necessary, which becomes
+			too difficult to handle. 
+			</P>
+
+<table summary=footer width=100% bgcolor=#666699>
+	<TR>
+		<td>
+			<FONT COLOR="#ffffff"><SPAN LANG="en-US">Author</SPAN>: <A HREF="mailto:joerg.budischewski@sun.com"><FONT COLOR="#ffffff">J&ouml;rg
+			Budischewski</FONT></A> ($Date: 2004/12/05 12:54:40 $)<br/><i>Copyright
+			2002 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA
+			94303 USA.</i></font>
+		</TD>
+	</TR>
+</TABLE>
+</BODY>
+</HTML>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

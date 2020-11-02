@@ -1,0 +1,291 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+     <title>OOo scripting framework and python</title>
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/python/">python</a>&nbsp;&raquo;&nbsp;<a href="/udk/python/scriptingframework/">scriptingframework</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<a href="../python-bridge.html">Pyuno</a> supports the OOo scripting framework, that
+is first shipped with OOo 2.0
+(precisely since OOo 1.9.m79 or OOo 2.0 beta).
+The current support is limited to the 'core' framework, meaning that execution and
+assigning of macros via the standard Tools/Macro dialog works fine,
+but editing and debugging macros is not
+integrated in OpenOffice.org's UI (simply because of the lack of development
+resources). Use your favourite text editor to create and modify python scripts. 
+
+
+<h1>Script locations</h1>
+Scripts to be excuted in OpenOffice.org can be stored within the
+following locations:
+<p>
+<center><img src="macro_run_dlg.PNG"/></center>
+
+<ul>
+
+<li>OpenOffice.org's user directory
+<p>
+This is the standard place for self written python scripts.
+The script files are simply stored within the file system. On windows,
+the directory can typically be found in
+
+<table>
+<tr>
+<td>windows</td>
+<td><strong>C:\Documents and Settings\&lt;current-user\&gt;Application Data\OpenOffice.org 2.0\user\Scripts\python</strong></td>
+</tr>
+<tr>
+<td> unix</td>
+<td><strong> ~/.openoffice.org.2.0/user/Scripts/python</strong></td>
+</tr>
+</table>
+Note, that the last <strong>python</strong> subdirectory may need to be created
+initially. Make sure, the python is completly written lowercase. You can add arbitrary deeply
+nested subdirectories, the names of these directories are reflected in the UI.
+
+<p> <strong> Example:</strong>
+The <a href="dynamicDialog.py">dynamicDialog.py</a> file can simply be placed in the above
+directory. Afterwards, open the Tools/Macros/Run macro dialog and navigate to the position
+shown in the above picture. Click on <i>Run</i> to execute the python script, which
+opens another dialog with a push button and a label field. Clicking the button will increase
+the number within the label field. The dialog can be closed by pressing ESC.
+
+<li>OpenOffice.org's share directory
+<p>
+Scripts that shall be shared throughout all users of a concrete
+OpenOffice.org installation can be stored with the share directory. 
+All
+default scripts coming with OpenOffice.org are located here. In general,
+this directory should not be used for script deployment (see later
+uno-packages).
+<p>
+
+The script files are simply stored within the file system. The
+directory can typically be found in 
+<table>
+<tr>
+<td>windows</td>
+<td><strong>C:\Program Files\OpenOffice.org 2.0\share\Scripts\python</strong></td>
+</tr>
+<tr>
+<td> unix</td>
+<td><strong> ~/.openoffice.org.2.0/user/Scripts/python</strong></td>
+</tr>
+</table>
+
+<li>Embedded within an OpenOffice.org's document
+<p>
+An OpenOffice.org document is a zip-File, which contains different files.
+Python scripts within documents are stored in Scripts/python subdirectory.
+<p>
+If you want to ship your self written python scripts within a document,
+
+you should first develop your scripts in the (above mentioned) user directory and
+then finally move the scripts into the document with your favourite zip tool. However,
+note that you <strong>must reassign</strong> every binding you did before to the
+script instances in the document. Ideally, you move away the scripts from the user
+directory and do a regression test on the document's functionality.
+
+<p>
+After moving the script files into the document, you have to add some lines
+(<strong>boldly printed</strong>) to the
+<i>META-INF/manifest.xml</i> file:
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "Manifest.dtd"&gt;
+&lt;manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest"&gt;
+ &lt;manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="/"/&gt;
+ &lt;manifest:file-entry manifest:media-type="application/vnd.sun.xml.ui.configuration" manifest:full-path="Configurations2/"/&gt;
+ &lt;manifest:file-entry manifest:media-type="" manifest:full-path="Pictures/"/&gt;
+ &lt;manifest:file-entry manifest:media-type="text/xml" manifest:full-path="content.xml"/&gt;
+ &lt;manifest:file-entry :media-type="text/xml" manifest:full-path="styles.xml"/&gt;
+ &lt;manifest:file-entry manifest:media-type="text/xml" manifest:full-path="meta.xml"/&gt;
+ &lt;manifest:file-entry manifest:media-type="" manifest:full-path="Thumbnails/thumbnail.png"/&gt;
+ &lt;manifest:file-entry manifest:media-type="" manifest:full-path="Thumbnails/"/&gt;
+ &lt;manifest:file-entry manifest:media-type="text/xml" manifest:full-path="settings.xml"/&gt;
+<strong> &lt;manifest:file-entry manifest:media-type="" manifest:full-path="Scripts/python/push_me.py"/&gt;
+ &lt;manifest:file-entry manifest:media-type="application/binary" manifest:full-path="Scripts/python/"/&gt;
+ &lt;manifest:file-entry manifest:media-type="application/binary" manifest:full-path="Scripts/"/&gt;</strong>
+&lt;/manifest:manifest&gt;
+</pre></td></tr></table>
+
+When you open the document afterwards, the OpenOffice.org's UI should warn you about script content within the
+document (when this is not the case, you either have switched off the warning in the options or you did
+something wrong).
+
+<p>
+<strong>Example:</strong>To see how it works, download <a href="push_me_python4.odt">push_me_python4.odt</a>. The
+document contains a push button and a multi line edit control. Pressing the button adds a new line with the current
+time stamp to the multi line edit control.
+
+
+</li>
+<li>Embedded within a uno-package in OpenOffice.org's user directory (read only)
+<p>Often, distributing scripts in documents is not what you want (for instance when you
+want to modify the application itself or you want to use the same scripts with multiple
+documents ). Therefor you can place your scripts simply within uno-packages.
+
+<p>A uno-package is a zip-file. Its name <strong>must</strong> end with <i>.pkg</i>, otherwise it does not work.
+file, where you must define the subdirectory (required!) that shall contain scripts. For instance the sample
+<a href="pyhello2.uno.pkg">pyhello2.uno.pkg</a> has the following file structure:
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+META-INF/
+META-INF/manifest.xml
+package/
+package/hallo.py
+</pre></td></tr></table>
+
+The <i>hallo.py</i> contains the scripts. How to write scripts is explained <a href="#coding">below</a>. However,
+in order to make a script work within a uno package, you <strong>must</strong> add some dummy code.
+<table width="100%" bgcolor="silver"><tr><td><pre>
+# ... here is the python script code
+
+# this must be added to every script file (the
+# name org.openoffice.script.DummyImplementationForPythonScripts should be changed to something
+# different (must be unique within an office installation !)
+# --- faked component, dummy to allow registration with unopkg, no functionality expected
+import unohelper
+g_ImplementationHelper = unohelper.ImplementationHelper()
+g_ImplementationHelper.addImplementation( \
+	None,"org.openoffice.script.DummyImplementationForPythonScripts", \
+    ("org.openoffice.script.DummyServiceForPythonScripts",),)
+</pre></td></tr></table>
+By default, every .py-file is interpreted as a <a href="../python-bridge.html#components">UNO component</a>. Not
+having the above lines within the .py file would raise errors during deployment.
+<p>
+
+The directory name (here package) can be choosen freely.
+A uno-package with a python script <strong>must</strong> contain a META-INF/manifest.xml, which needs to
+point to the freely chosen directory name.
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "Manifest.dtd"&gt;
+&lt;manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest"&gt;
+&lt;manifest:file-entry manifest:media-type="application/vnd.sun.star.framework-script" manifest:full-path="<strong>package</strong>"/&gt;
+&lt;/manifest:manifest&gt;
+</pre></td></tr></table>
+
+Every user can add packages via the package manager (Tools/Package manager). Note, that
+content within the package is by design <strong>readonly</strong>, it is really a pure
+deployment, not a development mechanism. This might be the reason, why scripts in packages
+cannot be viewed via Tools/Macros/Organize macros/Python dialog.
+</li>
+
+<li>Embedded within a uno-package in OpenOffice.org's share directory (read only)
+<p> Packages can be added by an administrator to a complete OpenOffice.org installation, so that every
+user can use run the macros located within the package. This can be done with the <i>unopkg</i> tool.
+</li>
+</ul>
+
+<h1 id="coding">Script coding</h1>
+A python script within the OpenOffice.org's scripting framework is a function
+(introduced by the def keyword) within a .py file. For execution via the
+Tools/Macros/Run macro dialog, the script must have an empty argument list.
+For typical event listeners, the function must have exactly one argument
+(the event). In general, the number of arguments depend on the context
+where the function shall be used. 
+
+Since OOo 2.4, you can use both unix and windows linefeeds, in earlier
+versions you must use use unix line feeds.
+
+<p>A single .py file
+may contain an arbitrary number of function definitions. 
+By default, all function definitions are exported ( = shown in the macro
+selection dialog). As this may become tedious, exports can be limited to
+a smaller set of functions by having a global variable named 
+<i>g_exportedScripts</i>, which is a tuple of function definitions.
+
+<p>Up to OOo2.4, .py files can only import python
+modules, which are within the python PYTHONPATH, by default this is just the
+python runtime and the uno bridge files. This means, that it cannot reference
+other python macro files. Since OOo2.4, you can use the mechanism
+described <a href="../python-bridge.html#multiple_source_files"> here</a>. Note
+that the main script file is reloaded after every change while the source files in
+PYHTHONPATH get loaded only once and changes won't have any effect until office restart.
+
+<p>Before executing the source code within the module, the global variable
+<i>XSCRIPTCONTEXT</i> is inserted as global variable within the module (this variable
+also exists e.g. for javascript and beanshell, it is offered here for consistency reasons).
+It has three members (<i>Document</i>,<i>Desktop</i> and <i>ComponentContext</i>).
+
+<p>The comment of a function (introduced and ended by three &quot;) is shown as description
+in the macros' selection dialog.
+
+<p>The compiled python script files are not added to sys.modules. There may exist multiple
+instances of the same module at the same time.
+
+<p>Example:
+<table width="100%" bgcolor="silver"><tr><td><pre>
+# HelloWorld python script for the scripting framework
+
+def HelloWorldPython( ):
+    """Prints the string 'Hello World(in Python)' into the current document"""
+    #get the doc from the scripting context which is made available to all scripts
+    model = XSCRIPTCONTEXT.getDocument()
+    text = model.Text
+    cursor = text.createTextCursor()
+    text.insertString( cursor, "Hello World(in Python)", 0 )
+</pre></td></tr></table>
+
+
+
+
+<h1>Error handling and debugging</h1>
+Errors during compilation or execution of the scripts are passed as exceptions to the scripting framework
+where possible. The scripting framework in general opens a popup box and displays the message
+of the thrown exception.
+<p>However, sometimes this is not possible and an error gets silently ignored. The user realizes these
+errors, when
+<ul>
+<li>his python script file does not appear where it is expected to be
+<li>the name of the script file appears, but it does not contain any scripts
+<li>only part of the script gets executed.
+</ul>
+You can get to know these problems by changing some flags in the OpenOffice.org 2.0/program/pythonscript.py
+file :
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+# Configuration ----------------------------------------------------
+LogLevel.use = LogLevel.NONE                # alternavly use LogLevel.ERROR or LogLevel.DEBUG
+LOG_STDOUT = False                          # True, writes to stdout
+                                            # False, writes to user/Scripts/python/log.txt
+ENABLE_EDIT_DIALOG=False                    # offers a minimal editor for editing.
+</pre></td></tr></table>
+
+<p>Attaching a python debugger is currently not supported.
+
+<h1>Credits</h1>
+The python binding of the scripting framework is developed and maintained by Joerg Budischewski in his spare time.
+Many, many thanks to Tomas O'Connor from Sun for his great support and his code additions to the framework which
+made this binding possible. Please put low level questions about
+the binding to <a href="mailto:dev@udk.openoffice.org">dev@udk.openoffice.org</a>. Questions about the
+OpenOffice.org's API should be put to <a href="mailto:dev@api.openoffice.org">dev@api.openoffice.org</a>.
+
+<h1>License</h1>
+This document is available under <a href="http://www.openoffice.org/licenses/PDL.html">PDL</a> (Public Documentation License).
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

@@ -1,0 +1,300 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+    <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1"/>
+    <TITLE>Text Conversion Functions</TITLE>
+<style type="text/css">
+<!--
+h1 { text-align:center; margin-top: 0.2cm; text-decoration: none; color: #ffffff; font-size: 6; margin-top: 0.2cm}
+h2 { margin-top: 0.2cm; margin-bottom=0.1cm; color: #ffffff; background-color: #666699 }
+li {margin-bottom: 0.2cm;}
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm;}
+dt {margin-bottom: 0.2cm;}
+-->
+</style>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/cpp/">cpp</a>&nbsp;&raquo;&nbsp;<a href="/udk/cpp/man/">man</a>&nbsp;&raquo;&nbsp;<a href="/udk/cpp/man/spec/">spec</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="4" bgcolor=#666699
+   summary=header>
+    <TR>
+        <TD>
+            <h1> Text Conversion Functions </h1>
+		</td><td>
+			<a href="http://www.openoffice.org"><img src="../../../images/open_office_org_logo.gif" alt="OpenOffice.org" align="right" BORDER="0"/></a>
+        </TD>
+    </TR>
+</TABLE>
+
+<P>This text describes the functions <CODE>rtl_convertTextToUnicode()</CODE>
+and <CODE>rtl_convertUnicodeToText()</CODE>, the meaning of all the
+accompanying <CODE>RTL_TEXTTOUNICODE_FLAGS_<VAR>XXX</VAR></CODE>,
+<CODE>RTL_TEXTTOUNICODE_INFO_<VAR>XXX</VAR></CODE>,
+<CODE>RTL_UNICODETOTEXT_FLAGS_<VAR>XXX</VAR></CODE> and
+<CODE>RTL_UNICODETOTEXT_INFO_<VAR>XXX</VAR></CODE> flags, and the conversion
+context conventions.</P>
+
+<H2>Conversion Context</H2>
+
+<P>It is valid to pass a null pointer instead of an
+<CODE>rtl_TextToUnicodeContext</CODE> or <CODE>rtl_UnicodeToTextContext</CODE>
+to the conversion functions.  In that case, the functions behave as if they
+received an initial context, as obtained by
+<CODE>rtl_createTextToUnicodeContext()</CODE>,
+<CODE>rtl_resetTextToUnicodeContext()</CODE>,
+<CODE>rtl_createUnicodeToTextContext()</CODE>, or
+<CODE>rtl_resetUnicodeToTextContext()</CODE>, and simply do not return any
+context information (which is effectively lost).  This implies that you should
+always specify the <CODE>FLAGS_FLUSH</CODE> flag when using a null context,
+for otherwise it is not possible in general to find out whether the input
+buffer has been completely converted.</P>
+
+<H2>Handling of Undefined Codes</H2>
+
+<P>An <DFN>undefined code</DFN> is any of the following:
+<UL>
+    <LI>A code from the source encoding that is valid (see
+    <A HREF="#invalid">&ldquo;invalid code&rdquo;</A>), but not (yet) assigned
+    a character.  Examples are <CODE>0xA5</CODE> in ISO 8859-3,
+    <CODE>0xA2A1</CODE> in EUC-CN, and <CODE>0x167F</CODE> in Unicode.</LI>
+
+    <LI>A code from the source encoding that is assigned a character that
+    cannot be mapped to the destination encoding.  Examples are
+    <CODE>0x0100</CODE> in Unicode, which cannot be mapped to ISO 8859-1; and
+    <CODE>0xA698</CODE> in HangulTalk, which cannot be mapped to
+    Unicode.</LI>
+
+    <LI>A code from the source encoding that is reserved for private use, and
+    thus cannot be mapped to the destination encoding.  (Even if the
+    destination encoding also has private-use codes, a higher-level protocol
+    would be needed to map between these private-use areas.)</LI>
+</UL>
+
+<P>In the text-to-Unicode direction, the conversion functions distinguish
+between single-byte and multi-byte undefined codes (<CODE>0xA5</CODE> in
+ISO 8859-3 and <CODE>0x80</CODE> in GB-18030 are single-byte undefined codes,
+while <CODE>0xA2A1</CODE> in EUC-CN and <CODE>0xFE39FE39</CODE> in GB-18030
+are multi-byte undefined codes.)</P>
+
+<P>When encountering an undefined code, the conversion functions allow any of
+the following behaviours (which are mutually exclusive):
+<DL>
+    <DT><CODE>FLAGS_UNDEFINED_ERROR</CODE></DT>
+    <DT><CODE>FLAGS_MBUNDEFINED_ERROR</CODE></DT>
+    <DD>Read past the undefined code in the input buffer, set both the
+    <CODE>INFO_UNDEFINED</CODE> or <CODE>INFO_MBUNDEFINED</CODE> and the
+    <CODE>INFO_ERROR</CODE> flags, and immediately quit the conversion
+    (ignoring any <CODE>FLAGS_FLUSH</CODE> flag).</DD>
+
+    <DT><CODE>FLAGS_UNDEFINED_IGNORE</CODE></DT>
+    <DT><CODE>FLAGS_MBUNDEFINED_IGNORE</CODE></DT>
+    <DD>Read past the undefined code in the input buffer, set the
+    <CODE>INFO_UNDEFINED</CODE> or <CODE>INFO_MBUNDEFINED</CODE> flag, and
+    continue with the conversion.</DD>
+
+    <DT><CODE>FLAGS_UNDEFINED_MAPTOPRIVATE</CODE></DT>
+    <DD>If there is not enough space left in the output buffer,
+    <A HREF="#exhausted">act accordingly</A>.  Otherwise, read past the
+    undefined code in the input buffer, set the <CODE>INFO_UNDEFINED</CODE>
+    flag, write <CODE>U+F1<VAR>xx</VAR></CODE> into the output buffer (where
+    <CODE><VAR>xx</VAR></CODE> is the single-byte undefined code), and
+    continue with the conversion.</DD>
+
+    <DT><CODE>FLAGS_UNDEFINED_0</CODE></DT>
+    <DD>If there is not enough space left in the output buffer,
+    <A HREF="#exhausted">act accordingly</A>.  Otherwise, read past the
+    undefined code in the input buffer, set the <CODE>INFO_UNDEFINED</CODE>
+    flag, write an (appropriately encoded) ASCII <CODE>NUL</CODE> character
+    (<CODE>0x00</CODE>) into the output buffer, and continue with the
+    conversion.</DD>
+
+    <DT><CODE>FLAGS_UNDEFINED_QUESTIONMARK</CODE></DT>
+    <DD>If there is not enough space left in the output buffer,
+    <A HREF="#exhausted">act accordingly</A>.  Otherwise, read past the
+    undefined code in the input buffer, set the <CODE>INFO_UNDEFINED</CODE>
+    flag, write an (appropriately encoded) ASCII &ldquo;<CODE>?</CODE>&rdquo;
+    character (<CODE>0x3F</CODE>) into the output buffer, and continue with
+    the conversion.</DD>
+
+    <DT><CODE>FLAGS_UNDEFINED_UNDERLINE</CODE></DT>
+    <DD>If there is not enough space left in the output buffer,
+    <A HREF="#exhausted">act accordingly</A>.  Otherwise, read past the
+    undefined code in the input buffer, set the <CODE>INFO_UNDEFINED</CODE>
+    flag, write an (appropriately encoded) ASCII &ldquo;<CODE>_</CODE>&rdquo;
+    character (<CODE>0x5F</CODE>) into the output buffer, and continue with
+    the conversion.</DD>
+
+    <DT><CODE>FLAGS_UNDEFINED_DEFAULT</CODE></DT>
+    <DD>If there is not enough space left in the output buffer,
+    <A HREF="#exhausted">act accordingly</A>.  Otherwise, read past the
+    undefined code in the input buffer, set the <CODE>INFO_UNDEFINED</CODE>
+    flag, write some output-encoding&ndash;specific character (currently
+    <CODE>U+FFFD</CODE> for Unicode and &ldquo;<CODE>?</CODE>&rdquo; for all
+    other encodings) into the output buffer, and continue with the
+    conversion.</DD>
+</DL>
+
+<P>In the Unicode-to-text direction, the conversion functions also allow any
+of the following extra flags (of which an arbitrary number can be specified).
+In all cases, the usual checks for an <A HREF="#exhausted">exhausted output
+buffer</A> are made, and otherwise the <CODE>INFO_UNDEFINED</CODE> flag is
+set.
+<DL>
+    <DT><CODE>FLAGS_UNDEFINED_REPLACE</CODE></DT>
+    <DD>Some Unicode characters that have no direct mapping to the destination
+    encoding are mapped to similar single characters in the destination
+    encoding.  For example, <CODE>U+00A0</CODE> <SMALL>(NO-BREAK
+    SPACE)</SMALL> could be mapped to <CODE>0x20</CODE> <SMALL>(SPACE)</SMALL>
+    in ASCII.  Expect this to be poorly supported by the current
+    implementation.</DD>
+
+    <DT><CODE>FLAGS_UNDEFINED_REPLACESTR</CODE></DT>
+    <DD>Some Unicode characters that have no direct mapping to the destination
+    encoding are mapped to similar strings of characters in the destination
+    encoding.  For example, <CODE>U+00A9</CODE> <SMALL>(COPYRIGHT
+    SIGN)</SMALL> could be mapped to the three-character string
+    &ldquo;<CODE>(C)</CODE>&rdquo; in ASCII.  Expect this to be poorly
+    supported by the current implementation.</DD>
+
+    <DT><CODE>FLAGS_PRIVATE_MAPTO0</CODE></DT>
+    <DD>Private-use characters (<CODE>U+E000</CODE>&ndash;<CODE>U+F8FF</CODE>,
+    <CODE>U+F0000</CODE>&ndash;<CODE>U+FFFFD</CODE>, and
+    <CODE>U+100000</CODE>&ndash;<CODE>U+10FFFD</CODE>) are mapped to an
+    (appropriately encoded) ASCII <CODE>NUL</CODE> character
+    (<CODE>0x00</CODE>) in the output buffer.</DD>
+
+    <DT><CODE>FLAGS_NONSPACING_IGNORE</CODE></DT>
+    <DD>Certain non-spacing characters, like <CODE>U+200B</CODE> <SMALL>(ZERO
+    WIDTH SPACE)</SMALL> and <CODE>U+FEFF</CODE> <SMALL>(ZERO WIDTH NO-BREAK
+    SPACE)</SMALL>, are ignored.  Expect some uncertainty in the current
+    implementation as to which characters are affected.</DD>
+
+    <DT><CODE>FLAGS_CONTROL_IGNORE</CODE></DT>
+    <DD>Control characters (<CODE>U+0000</CODE>&ndash;<CODE>U+001F</CODE> and
+    <CODE>U+007F</CODE>&ndash;<CODE>U+009F</CODE>) are ignored.</DD>
+
+    <DT><CODE>FLAGS_PRIVATE_IGNORE</CODE></DT>
+    <dd>Private-use characters (<CODE>U+E000</CODE>&ndash;<CODE>U+F8FF</CODE>,
+    <CODE>U+F0000</CODE>&ndash;<CODE>U+FFFFD</CODE>, and
+    <CODE>U+100000</CODE>&ndash;<CODE>U+10FFFD</CODE>) are ignored.</DD>
+</DL>
+
+<P>There is also a <CODE>FLAGS_NOCOMPOSITE</CODE> flag, of which I am not sure
+what it should be used for.</P>
+
+<H2>Handling of Invalid Codes</H2>
+
+<P>An <A NAME="invalid"><DFN>invalid code</DFN></A> is a string of one or more
+units in the input buffer that is not valid according to the input encoding:
+<UL>
+    <LI>It is not valid because it may never appear in the input encoding
+    (e.g., <CODE>0x80</CODE> in ASCII, or <CODE>0xFF</CODE> in GB-18030).</LI>
+
+    <LI>It is not valid because it is only the prefix of a valid string of
+    units, with further units missing (e.g., the single high-surrogate
+    <CODE>0xD800</CODE> in Unicode, with a following low-surrogate missing, or
+    <CODE>0xA1</CODE> in EUC-CN, with a second byte in the range
+    <CODE>0xA1</CODE>&ndash;<CODE>0xFE</CODE> missing).</LI>
+</UL>
+
+<P>Invalid codes of the second category (that are potentially prefixes of
+valid strings) are handled specially at the end of the input buffer.  If the
+<CODE>FLAGS_FLUSH</CODE> flag is specified, they are handled like all other
+invalid codes.  Otherwise, the <CODE>INFO_SRCBUFFERTOSMALL</CODE> flag is set
+to indicate that the input buffer possibly ended in the middle of an input
+character (and the prefix is either not yet read, or is stored in the
+conversion context, or is partly read and partly stored in the conversion
+context).</P>
+
+<P>When encountering an invalid code (other than the special cases at the end
+of the input buffer), the conversion functions allow any of the following
+behaviours (which are mutually exclusive):
+<DL>
+    <DT><CODE>FLAGS_INVALID_ERROR</CODE></DT>
+    <DD>Read past the invalid code in the input buffer, set both the
+    <CODE>INFO_INVALID</CODE> and the <CODE>INFO_ERROR</CODE> flags, and
+    immediately quit the conversion (ignoring any <CODE>FLAGS_FLUSH</CODE>
+    flag).</DD>
+
+    <DT><CODE>FLAGS_INVALID_IGNORE</CODE></DT>
+    <DD>Read past the invalid code in the input buffer, set the
+    <CODE>INFO_INVALID</CODE> flag, and continue with the conversion.</DD>
+
+    <DT><CODE>FLAGS_INVALID_0</CODE></DT>
+    <DD>If there is not enough space left in the output buffer,
+    <A HREF="#exhausted">act accordingly</A>.  Otherwise, read past the
+    invalid code in the input buffer, set the <CODE>INFO_INVALID</CODE> flag,
+    write an (appropriately encoded) ASCII <CODE>NUL</CODE> character
+    (<CODE>0x00</CODE>) into the output buffer, and continue with the
+    conversion.</DD>
+
+    <DT><CODE>FLAGS_INVALID_QUESTIONMARK</CODE></DT>
+    <DD>If there is not enough space left in the output buffer,
+    <A HREF="#exhausted">act accordingly</A>.  Otherwise, read past the
+    invalid code in the input buffer, set the <CODE>INFO_INVALID</CODE> flag,
+    write an (appropriately encoded) ASCII &ldquo;<CODE>?</CODE>&rdquo;
+    character (<CODE>0x3F</CODE>) into the output buffer, and continue with
+    the conversion.</DD>
+
+    <DT><CODE>FLAGS_INVALID_UNDERLINE</CODE></DT>
+    <DD>If there is not enough space left in the output buffer,
+    <A HREF="#exhausted">act accordingly</A>.  Otherwise, read past the
+    invalid code in the input buffer, set the <CODE>INFO_INVALID</CODE> flag,
+    write an (appropriately encoded) ASCII &ldquo;<CODE>_</CODE>&rdquo;
+    character (<CODE>0x5F</CODE>) into the output buffer, and continue with
+    the conversion.</DD>
+
+    <DT><CODE>FLAGS_INVALID_DEFAULT</CODE></DT>
+    <DD>If there is not enough space left in the output buffer,
+    <A HREF="#exhausted">act accordingly</A>.  Otherwise, read past the
+    invalid code in the input buffer, set the <CODE>INFO_INVALID</CODE> flag,
+    write some output-encoding&ndash;specific character (currently
+    <CODE>U+FFFD</CODE> for Unicode and &ldquo;<CODE>?</CODE>&rdquo; for all
+    other encodings) into the output buffer, and continue with the
+    conversion.</DD>
+</DL>
+
+<H2><A NAME="exhausted">Handling of Destination Buffer Exhaustion</A></H2>
+
+<P>If, in the course of conversion, there is not enough space left in the
+output buffer (either for a normal character mapping or for a special mapping
+of undefined or invalid codes), the <CODE>INFO_DESTBUFFERTOSMALL</CODE> flag
+is set, and the conversion is quit immediately (ignoring any
+<CODE>FLAGS_FLUSH</CODE> flag).  It is unspecified whether the input units
+that would overflow the output buffer are already read (and stored in the
+conversion context) or not, but the number of processed input buffer units
+returned by the conversion function will be correct in either case.</P>
+
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="4" summary=footer>
+    <TR>
+        <TD BGCOLOR="#666699">
+            <FONT COLOR="White">Author: <A HREF="mailto:stephan.bergmann@sun.com"><FONT COLOR="White">Stephan Bergmann</FONT></A> (Last modification $Date: 2004/12/08 14:22:01 $).<br/>
+			Copyright 2001 <A HREF="http://www.openoffice.org"><FONT COLOR="White">OpenOffice.org</FONT></A> Foundation.  All Rights Reserved.</FONT>
+        </TD>
+    </TR>
+</TABLE>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

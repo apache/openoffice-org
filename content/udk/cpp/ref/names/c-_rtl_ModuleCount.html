@@ -1,0 +1,123 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>struct _rtl_ModuleCount</title>
+<style>	h1 { font-size:20pt; margin-top:3pt; margin-bottom:7pt; }
+	h2 { font-family:"Arial"; font-size:16pt; margin-top:3pt; margin-bottom:5pt; }
+	h3 { font-size:13pt; margin-top:2pt; margin-bottom:3pt; }
+	h4 { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }
+	dl { margin-top:1pt; margin-bottom:1pt; }
+	dl.member { margin-top:1pt; margin-bottom:1pt; background-color:#eeeeff; }
+	dt { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }
+	dt.member { font-size:13pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }
+	dt.simple { font-size:10pt; font-weight:normal; margin-top:2pt; margin-bottom:1pt; }
+	dd { font-size:10pt; margin-top:1pt; margin-bottom:1pt; }
+	dd.member { font-size:10pt; margin-top:1pt; margin-bottom:1pt; background-color:#ffffff; }
+	p  { font-size:10pt; margin-top:3pt; margin-bottom:1pt; }
+	pre { font-family: Times, serif; font-size:10pt; margin-top:1pt; margin-bottom:1pt; }
+	tr { font-size:10pt; }
+	td { font-size:10pt; }
+</style>
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body bgcolor="#ffffff">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/cpp/">cpp</a>&nbsp;&raquo;&nbsp;<a href="/udk/cpp/ref/">ref</a>&nbsp;&raquo;&nbsp;<a href="/udk/cpp/ref/names/">names</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<a name="_top_"> </a>
+<table border="0" cellpadding="1" cellspacing="0">
+<tr align="center" valign="top">
+<td bgcolor="#eeeeff">&nbsp;<a href="../index.html" alt><font family="Arial" color="#000000" size="+1"><b>Overview</b></font></a>&nbsp;</td>
+<td bgcolor="#eeeeff">&nbsp;<a href="index.html" alt><font family="Arial" color="#000000" size="+1"><b>Namespace</b></font></a>&nbsp;</td>
+<td bgcolor="#2222ad">&nbsp;<font family="Arial" color="#ffffff" size="+1"><b>Class</b></font>&nbsp;</td>
+<td bgcolor="#eeeeff">&nbsp;<a href="../index-files/index-1.html" alt><font family="Arial" color="#000000" size="+1"><b>Index</b></font></a>&nbsp;</td>
+<td bgcolor="#eeeeff">&nbsp;<a href="../help.html" alt><font family="Arial" color="#000000" size="+1"><b>Help</b></font></a>&nbsp;</td>
+</tr>
+</table>
+<table cellpadding="0" cellspacing="3"></table>
+<hr>
+<a href="../names/index.html" alt="Global Namespace in C++"><font size="+1"><b>::</b></font></a> <div align="center" style="background-color:#ccccff; line-height:26pt;"><h2>struct _rtl_ModuleCount</h2>
+</div><hr>
+<dl>
+<dt>Base Classes</dt>
+<dd>None.</dd>
+</dl>
+<dl>
+<dt>Known Derived Classes</dt>
+<dd>None.</dd>
+</dl>
+<br>
+<table border cellspacing="0">
+<tr>
+<td bgcolor="#eeeeff" width="25%" style="font-family:Arial; font-size:8pt; font-weight:bold;">virtual</td>
+<td bgcolor="#eeeeff" width="25%" style="font-family:Arial; font-size:8pt; font-weight:bold;">abstract</td>
+<td bgcolor="#eeeeff" width="25%" style="font-family:Arial; font-size:8pt; font-weight:bold;">interface</td>
+<td bgcolor="#eeeeff" width="25%" style="font-family:Arial; font-size:8pt; font-weight:bold;">template</td>
+</tr>
+<tr>
+<td style="font-family:Arial; font-size:8pt;">NO</td>
+<td style="font-family:Arial; font-size:8pt;">NO</td>
+<td style="font-family:Arial; font-size:8pt;">NO</td>
+<td style="font-family:Arial; font-size:8pt;">NO</td>
+</tr>
+</table>
+<dl>
+<dt>Description</dt>
+<dd>Pointers to <code>rtl_ModuleCount</code> are passed as arguments to the default factory creator
+functions: <code>createSingleComponentFactory</code>, <code>createSingleFactory</code>,
+<code>createOneInstanceFactory</code>.
+The factory implementation is calling <code>rtl_ModuleCount.acquire</code> when it is being 
+constructed and it is calling <code>rtl_ModuleCount.release</code>. The implementations of
+<code>acquire</code>
+and <code>release</code> should influence the return value of <code>component_canUnload</code>
+in a way that it
+returns <code>sal_False</code> after <code>acquire</code> has been called. That is the module will not be unloaded
+once a default factory has been created. A call to <code>release</code> may cause 
+<code>component_canUnload</code> to return <code>sal_False</code>, but only if there are
+no object alive which 
+originated from the module. These objects are factory instances and the service instances
+which have been created by these factories.
+<p>
+It is not necessary to synchronize <code>acquire</code> and <code>release</code> as a whole.
+Simply sychronize the 
+access to a counter variable, e.g. the <code>rtl_moduleCount_release</code> implementation:
+<pre>
+extern "C" void rtl_moduleCount_acquire(rtl_ModuleCount * that )
+{
+    rtl_StandardModuleCount* pMod= (rtl_StandardModuleCount*)that;
+    osl_incrementInterlockedCount( &pMod->counter);
+}
+</pre>
+The SAL library offers functions that can be used for <code>acquire</code> and <code>release</code>. See struct 
+<code>_rtl_StandardModuleCount</code>.
+</dd>
+</dl>
+<dl>
+<dt>File</dt>
+<dd>unload.h</dd>
+</dl>
+<hr>
+<a href="#_top_" class="objchapter">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright 2002 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</p>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

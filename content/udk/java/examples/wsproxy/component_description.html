@@ -1,0 +1,748 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<meta content=
+"HTML Tidy for Linux/x86 (vers 1st January 2003), see www.w3.org"
+name="generator">
+<meta http-equiv="CONTENT-TYPE" content=
+"text/html; charset=us-ascii">
+<title>OpenOffice.org UNO Web Service Proxy</title>
+<meta name="GENERATOR" content="OpenOffice.org 643 (Linux)">
+<meta name="CREATED" content="20021220;14062100">
+<meta name="CHANGED" content="20030106;10153600">
+<meta name="author" content="Jan Tietjens">
+<meta name="description" content=
+"Web services are more and more emerging. Some examples are Google and Amazon which are providing a Web service interface for their traditional services, like searching the Web or querying the online bookstore. These interfaces could now be reached by UNO and StarBasic over the UNO Web service proxy. The access with StarBasic is very convenient because of special features of the StarBasic-UNO language binding, as you can see in the given examples.">
+<meta name="keywords" content=
+"Web service, Web services, webservice, webservices, UNO, proxy, proxies, JAXRPC, JWSDP, Java, Web, service, developer, pack, DII, dynamic, serializer, deserializer, generic, StarOffice, OpenOffice.org">
+<meta http-equiv="language" content="en">
+<style type="text/css">
+        <!--
+                @page { size: 21cm 29.7cm; margin: 2cm }
+                H1 { margin-top: 0cm; color: #ffffff; page-break-before: auto; page-break-after: auto }
+                H1.western { font-family: "Times", serif; font-size: 13pt }
+        -->
+</style>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body lang="en-US">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/java/">java</a>&nbsp;&raquo;&nbsp;<a href="/udk/java/examples/">examples</a>&nbsp;&raquo;&nbsp;<a href="/udk/java/examples/wsproxy/">wsproxy</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<table width="100%" border="0" cellpadding="4" cellspacing="0"
+style="page-break-before: always" summary="table structered document">
+<col width="3*">
+<col width="82*">
+<col width="82*">
+<col width="82*">
+<col width="3*">
+<col width="3*">
+<tr>
+<td colspan="6" width="100%" bgcolor="#666699">
+<h1 class="western" align="center" style="text-decoration: none">
+<font color="#ffffff"><font size="6">UNO Web Service
+Proxy</font></font></h1></td></tr>
+<tr>
+<td colspan="6" width="100%" valign="top">
+<hr size="3" noshade></td></tr>
+<tr>
+<td rowspan="80" width="1%" valign="top"></td>
+<td colspan="4" width="98%">
+<div id="Table_of_Contents1"><br>
+<div id="Table_of_Contents1_Head">
+<p style="margin-top: 0.42cm; page-break-after: avoid">
+      <font face="Albany, sans-serif"><font size="4" style=
+      "font-size: 16pt"><b>Table of
+      Contents</b></font></font></p></div>
+<p style="margin-bottom: 0cm">1.<a href=
+"#ToCIntro">Introduction</a></p>
+<p style="margin-bottom: 0cm">2.<a href=
+"#ToCArch">Architecture</a></p>
+<p style="margin-bottom: 0cm">3.<a href="#ToCTypeMapping">Type
+Mapping</a></p>
+<p style="margin-bottom: 0cm">4.<a href="#ToCToDo">To Do</a></p>
+<p style="margin-bottom: 0cm">5.<a href="#ToCDownload">Download/
+Installing Instructions</a></p>
+<p>6.<a href="#ToCSource">Source Code</a></p>
+<p>7.<a href="#ToCReferences">References</a></p></div></td>
+<td rowspan="66" width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="4" width="98%" bgcolor="#666699">
+<h1 class="western"><a name="ToCIntro"></a>1.
+Introduction</h1></td></tr>
+<tr>
+<td colspan="4" width="98%">
+<p><a name="JWSDP1"></a>Web services are more and more emerging.
+Some examples are Google and Amazon which are providing a Web
+service interface for their traditional services, like searching
+the Web or querying the online bookstore. These interfaces could
+now be reached by UNO and StarBasic over the UNO Web service proxy.
+The access with StarBasic is very convenient because of special
+features of the StarBasic-UNO language binding, as you can see in
+the given examples.</p>
+<p>The component is developed in Java and uses the
+Java<sup>TM</sup> Web Services Developer Pack (JWSDP)&nbsp;1.0_01
+[<a href="#JWSDP">JWSDP</a>]. It adds more functionality in terms
+of dynamically invoking Web services. Thus one could provide at any
+time a Web service description defined with the Web Service
+Description Language (WSDL) and one could access its
+interfaces.</p></td></tr>
+<tr>
+<td colspan="4" width="98%" bgcolor="#666699">
+<h1 class="western"><a name="ToCArch"></a>2.
+Architecture</h1></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<p><a name="applications2"></a>The main entry point is the
+<b>ProxyFactory</b>, which is a realization of the UNO interface
+com.sun.star.webservices.proxy.<b>XProxyFactory</b> . A WSDL
+[<a href="#CHRI01">CHRI01</a>] must be provided for instantiating
+the <b>ProxyFactory</b>, thus the <b>ProxyFactory</b> could consume
+the WSDL for getting extended reflection and type information. Each
+Web service -based on WSDL- consists of a number of services. In
+turn each service holds ports. Thus a caller receives an object
+from the class <b>InvocationProxy</b>, which is a mapping of the
+requested port inside a service. After this step the caller could
+call the methods of the Web service through the
+<b>InvocationProxy</b>.</p>
+<p><img src="./UNO_ProxyFac_InvocationProxy.jpg" name="Graphic1"
+align="left" width="480" height="224" border="0" alt="ProxyFactory generates the InvocationProxy" ></p>
+<br clear="left">
+<br>
+<p><a name="GOOG021"></a> The following examples are given in
+StarBasic code. The examples are working with the
+Google<sup>TM</sup> Web APIs service [<a href=
+"#GOOG02">GOOG02</a>]. You need to register at <a href=
+"http://www.google.com/apis"><font color=
+"#000080">http://www.google.com/apis</font></a> in order to be able
+to get access.</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%" bgcolor="#FFFFCC">
+<p><font color="#808080">'<span style="background: #ffffcc">Getting
+the UNO service</span></font><span style="background: #ffffcc"><br>
+proxyFac =
+createUNOService("com.sun.star.webservices.proxy.ProxyFactory")<br>
+<br>
+<font color="#808080">' Initializing of the ProxyFactory by
+providing the WSDL:</font><br>
+proxyFac.initialize(Array("</span><a href=
+"http://api.google.com/GoogleSearch.wsdl"><span style=
+"background: #ffffcc">http://api.google.com/GoogleSearch.wsdl</span></a><span style="background: #ffffcc">
+"))<br>
+<br>
+'<font color="#808080">Getting the proxy for the Web service by
+providing the<br>
+ 'serviceNamespace, serviceName, portNamespace and the portName
+respectively.<br>
+'All parameters, except the namespaces which is the targetNamespace
+of the WSDL,<br>
+ 'are specified in the service description part of the
+WSDL.</font><br>
+proxy = proxyFac.getProxy("urn:GoogleSearch",
+"GoogleSearchService", "urn:GoogleSearch",
+"GoogleSearchPort")</span></p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<p align="center"><font size="2" style="font-size: 11pt">Basic
+example for the initializing of the <b>ProxyFactory</b> and the
+<b>InvocationProxy</b></font></p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<p>Because the <b>InvocationProxy</b> implements the
+<b>XInvocation</b> interface, in Basic the call of a Web service is
+looking like an ordinary call of a function:</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%" bgcolor="#FFFFCC">
+<p><font color="#808080">' The Web service returns an
+XPropertySet.<br>
+' One could call the methods specified in the message description
+section of the WSDL.<br>
+ ' GOOGLE_KEY is in this example a key which was received from
+google. (http://www.google.com/apis)</font><br>
+propertySet = proxy.doGoogleSearch(GOOGLE_KEY, "Peace" , 0, 10,
+false, "", false, "","latin1", "latin1")</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<p align="center"><font size="2" style="font-size: 11pt">Example
+for calling the Web service and receiving the return
+value</font></p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<p>If the Web service is returning a complex data type, it is
+returned by the component as an <b>XPropertySet</b>. Thus one could
+easily access the members of the complex type, by referring to the
+names of the members.</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%" bgcolor="#FFFFCC">
+<p><font color="#808080">'This shows all the properties of this
+XPropertySet</font><br>
+msgbox propertySet.dbg_Properties<br>
+<br>
+<font color="#808080">'resultSet is an array of
+XPropertySet's</font><br>
+resultSet = propertySet.resultElements<br>
+<br>
+<font color="#808080">'This for loop shows a snippet of the search
+result</font><br>
+for i= 0 to UBound(resultSet)<br>
+msgbox resultSet(i).snippet<br>
+next i</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<p align="center"><font size="2" style="font-size: 11pt">Example of
+processing the received <b>XPropertySet</b></font></p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<p>If the user of the component needs to provide a complex type,
+one could first create the complex type by calling the method
+createComplex on the <b>ProxyFactory</b>. One must provide the full
+qualified name, by including the XML namespace and the localname
+[<a href="#BRAY99">BRAY99</a>] for this complex data type. Both ,
+the namepace and the localname are part of the WSDL. The method
+returns again an <b>XPropertySet</b>, where the user could access
+the member of the <b>PropertySet</b>. The names of the members are
+the corresponding names of the complex data type given in the
+WSDL.</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%" bgcolor="#FFFFCC">
+<p>&lt;complexType name="MyBean"&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;sequence&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;element name="b"
+type="string"/&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;element name="a"
+type="soap-enc:int"/&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;/sequence&gt;<br>
+&lt;/complexType&gt;</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<p align="center"><font size="2" style="font-size: 11pt">XML
+example for a complex data type</font></p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%" bgcolor="#666699">
+<h1 class="western"><a name="ToCTypeMapping"></a>3. Type
+Mapping</h1></td>
+<td width="1%" valign="top" bgcolor="#666699"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<p align="left"><span id="Frame1" style=
+"float: left; width: 15.18cm; height: 4.87cm; border: none; padding: 0cm; background: #ffffff">
+</span></p>
+<p style="margin-top: 0.21cm"><span id="Frame2" style=
+"float: left; width: 15.18cm; height: 4.87cm; border: none; padding: 0cm; background: #ffffff">
+<img src="./uno2proxy2jwsdp.jpg" name="Graphic2" align="right"
+width="100%" border="0" alt="Involved modules"><br clear="right"></span></p>
+<br>
+<br>
+<br>
+<br></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<p align="left">The illustration above shows all the involved
+components. Because there exists no equal types in every component
+(UNO, JWSDP or SOAP) for the simple and complex types of a Web
+service, a type mapping is needed. The following table describes
+the type mapping between the XML types, transfered with SOAP, the
+JWSDP and the UNO/StarBasic types.</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%"></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%" bgcolor="#9999CC">
+<p align="left"><b>XML schema data types<sup>*</sup></b></p></td>
+<td width="32%" bgcolor="#9999CC">
+<p align="left"><b>JWSDP</b></p></td>
+<td width="32%" bgcolor="#9999CC">
+<p align="left"><b>UNO</b></p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%">
+<p align="left">xsd:string</p></td>
+<td width="32%">
+<p align="left">java.lang.String</p></td>
+<td width="32%">
+<p align="left">string</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">xsd:integer</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">java.math.BigInteger</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left"><i>-not supported-</i></p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%">
+<p align="left">xsd:int</p></td>
+<td width="32%">
+<p align="left">int</p></td>
+<td width="32%">
+<p align="left">long</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">xsd:long</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">long</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">hypher</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%">
+<p align="left">xsd:shor</p></td>
+<td width="32%">
+<p align="left">short</p></td>
+<td width="32%">
+<p align="left">short</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">xsd:decimal</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">java.math.BigDecimal</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left"><i>-not supported-</i></p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%">
+<p align="left">xsd:float</p></td>
+<td width="32%">
+<p align="left">float</p></td>
+<td width="32%">
+<p align="left">float</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">xsd:double</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">double</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">double</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%">
+<p align="left">xsd:boolean</p></td>
+<td width="32%">
+<p align="left">boolean</p></td>
+<td width="32%">
+<p align="left">boolean</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">xsd:byte</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">byte</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">byte</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%">
+<p align="left">xsd:QName</p></td>
+<td width="32%">
+<p align="left">javax.xml.namespace.QName</p></td>
+<td width="32%">
+<p align="left"><i>-not supported-</i></p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">xsd:dateTime</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">java.util.Calendar</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left"><i>-not supported-</i></p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%">
+<p align="left">xsd:base64Binary</p></td>
+<td width="32%">
+<p align="left">byte[]</p></td>
+<td width="32%">
+<p align="left">sequence&lt;byte&gt;</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">xsd:hexBinary</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">byte[]</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">sequence&lt;byte&gt;</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%">
+<p align="left">soapenc:string</p></td>
+<td width="32%">
+<p align="left">java.lang.String</p></td>
+<td width="32%">
+<p align="left">string</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">soapenc:boolean</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">java.lang.Boolean</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">boolean</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%">
+<p align="left">soapenc:float</p></td>
+<td width="32%">
+<p align="left">java.lang.Float</p></td>
+<td width="32%">
+<p align="left">float</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">soapenc:double</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">java.lang.Double</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">double</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%">
+<p align="left">soapenc:decimal</p></td>
+<td width="32%">
+<p align="left">java.math.BigDecimal</p></td>
+<td width="32%">
+<p align="left"><i>-not supported-</i></p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">soapenc:int</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">java.lang.Integer</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">long</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%">
+<p align="left">soapenc:short</p></td>
+<td width="32%">
+<p align="left">java.lang.Short</p></td>
+<td width="32%">
+<p align="left">short</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">soapenc:byte</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">java.lang.Byte</p></td>
+<td width="32%" bgcolor="#CCCCFF">
+<p align="left">byte</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td width="32%">
+<p align="left">soapenc:base64</p></td>
+<td width="32%">
+<p align="left">byte[]</p></td>
+<td width="32%">
+<p align="left">sequence&lt;byte&gt;</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<p align="left">* XML schema data types as specified in the XML
+Schema specifications, Part 1 [<a href="#SCHEMA1">SCHEMA1</a>] and
+Part 2 [<a href="#SCHEMA2">SCHEMA2</a>], and SOAP 1.1 encoding
+specification [<a href="#SOAP11">SOAP1.1</a>].</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%"></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="4" width="98%" bgcolor="#666699">
+<h1 class="western"><a name="ToCToDo"></a>4. To Do</h1></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<ul>
+<li>
+<p>Writing a sophisticated basic demo which uses the
+component.</p></li>
+<li>
+<p>Adding support anonymous complex types, which could occur in a
+WSDL, inside element tags.</p></li></ul></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%" bgcolor="#FFFFCC">
+<p>&lt;xsd:element name="GetFedACHCities"&gt;<br>
+&nbsp;&nbsp;&nbsp;xsd:complexType&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsd:sequence&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsd:element
+minOccurs="0" maxOccurs="1" name="state" type="xsd:string"/&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xsd:sequence&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;/xsd:complexType&gt;<br>
+&lt;/xsd:element&gt;</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<p align="center"><font size="2" style="font-size: 11pt">Example of
+an anonymous complex type inside element tags</font></p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<ul>
+<li>
+<p>In/ Out parameters are not yet implemented.</p>
+<br></li></ul></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%" bgcolor="#666699">
+<h1 class="western"><a name="ToCDownload"></a>5. Download/
+Installing Instructions</h1></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<p>You need -at least- the developer build 643C of OpenOffice.org
+and the requirements defined by the <a href="#JWSDP">JWSDP</a>.</p>
+<ol>
+<li>
+<p>Download and install the Java<span style=
+"background: transparent"><sup>TM</sup></span> Web Services
+Developer Pack&nbsp;1.0_01 [<a href="#JWSDP">JWSDP</a>].</p></li>
+<li>
+<p><a href="WebServiceProxy.zip">Download</a> the
+      <span style="text-decoration: none"><font color="#000000">UNO
+      Web service proxy</font></span>(58k) component.</p></li>
+<li>
+<p>Optional: <a href=
+"UNO_Web_Service_Proxy_Example.sxw">Download</a> the UNO Web
+service proxy example. Please read the instructions inside the
+document.</p></li>
+<li>
+<p>For UNIX users: Add the following path to your SystemClasspath
+property inside the javarc (&lt;office_dir&gt;/user/config/javarc)
+:</p></li></ol></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%" bgcolor="#FFFFCC">
+<div  style="margin-left: 2em">
+
+<p><span style=
+"background: transparent">
+&lt;your-jwsdp-installation-path&gt;/common/lib/jaxp-api.jar: &lt;your-jwsdp-installation-path&gt;/common/endorsed/dom.jar: &lt;your-jwsdp-installation-path&gt;/common/endorsed/sax.jar: &lt;your-jwsdp-installation-path&gt;/common/endorsed/xalan.jar: &lt;your-jwsdp-installation-path&gt;/common/endorsed/xercesImpl.jar: &lt;your-jwsdp-installation-path&gt;/common/endorsed/xsltc.jar: &lt;your-jwsdp-installation-path&gt;/common/lib/saaj-api.jar: &lt;your-jwsdp-installation-path&gt;/common/lib/saaj-ri.jar: &lt;your-jwsdp-installation-path&gt;/common/lib/activation.jar: &lt;your-jwsdp-installation-path&gt;/common/lib/commons-logging.jar: &lt;your-jwsdp-installation-path&gt;/common/lib/dom4j.jar: &lt;your-jwsdp-installation-path&gt;/common/lib/mail.jar: &lt;your-jwsdp-installation-path&gt;/common/lib/jaxrpc-api.jar: &lt;your-jwsdp-installation-path&gt;/common/lib/jaxrpc-ri.jar
+</span></p></div></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<div style="margin-left: 2em">
+<p>Please replace &lt;your-jwsdp-installation-path&gt; with the
+installation path of the JWSDP and be sure that there are <u>no
+spaces after the colons!</u></p></div></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<div style="margin-left: 2em">
+<p>For Windows users: Add the following path to your
+SystemClasspath property inside java.ini
+(&lt;office_dir&gt;\user\config\java.ini) :</p></div></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%" bgcolor="#FFFFCC">
+<div style="margin-left: 2em">
+<p><span style=
+"background: transparent">
+&lt;your-jwsdp-installation-path&gt;\common\lib\jaxp-api.jar; &lt;your-jwsdp-installation-path&gt;\common\endorsed\dom.jar; &lt;your-jwsdp-installation-path&gt;\common\endorsed\sax.jar; &lt;your-jwsdp-installation-path&gt;\common\endorsed\xalan.jar; &lt;your-jwsdp-installation-path&gt;\common\endorsed\xercesImpl.jar; &lt;your-jwsdp-installation-path&gt;\common\endorsed\xsltc.jar; &lt;your-jwsdp-installation-path&gt;\common\lib\saaj-api.jar; &lt;your-jwsdp-installation-path&gt;\common\lib\saaj-ri.jar; &lt;your-jwsdp-installation-path&gt;\common\lib\activation.jar; &lt;your-jwsdp-installation-path&gt;\common\lib\commons-logging.jar; &lt;your-jwsdp-installation-path&gt;\common\lib\dom4j.jar; &lt;your-jwsdp-installation-path&gt;\common\lib\mail.jar; &lt;your-jwsdp-installation-path&gt;\common\lib\jaxrpc-api.jar; &lt;your-jwsdp-installation-path&gt;\common\lib\jaxrpc-ri.jar
+</span></p></div></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<ol start="4">
+<li style="list-style: none">
+<p>Please replace &lt;your-jwsdp-installation-path&gt; with the
+installation path of the JWSDP and be sure that there are <u>no
+spaces after the semicolons!</u></p></li>
+<li>
+<p>For UNIX users: Additionally you have to add some classes to the
+Xbootclasspath, please add the following line at the end of your
+javarc file.</p></li></ol></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%" bgcolor="#FFFFCC">
+<div style="margin-left: 2em">
+<p>-Xbootclasspath/p:
+&lt;your-jwsdp-installation-path&gt;/common/endorsed/xercesImpl.jar:
+&lt;your-jwsdp-installation-path&gt;/common/endorsed/dom.jar:
+&lt;your-jwsdp-installation-path&gt;/common/endorsed/sax.jar:
+&lt;your-jwsdp-installation-path&gt;/common/endorsed/xalan.jar:
+&lt;your-jwsdp-installation-path&gt;/common/endorsed/xsltc.jar</p></div></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<div style="margin-left: 2em">
+<p>For Windows users: Please add the following line at the end of
+your java.ini file:</p></div></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%" bgcolor="#FFFFCC">
+<div style="margin-left: 2em">
+<p>-Xbootclasspath/p:
+&lt;your-jwsdp-installation-path&gt;\common\endorsed\xercesImpl.jar;
+&lt;your-jwsdp-installation-path&gt;\common\endorsed\dom.jar;
+&lt;your-jwsdp-installation-path&gt;\common\endorsed\sax.jar;
+&lt;your-jwsdp-installation-path&gt;\common\endorsed\xalan.jar;
+&lt;your-jwsdp-installation-path&gt;\common\endorsed\xsltc.jar</p></div></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<ol start="5">
+<li style="list-style: none">
+<p>Again, replace &lt;your-jwsdp-installation-path&gt; with the
+installation path of the JWSDP .<br>
+This step is needed because of a bug in OpenOffice.org 643C. In
+future versions of OpenOffice.org this step may be omitted and the
+path should then be added to the SystemClasspath property.</p></li>
+<li>
+<p>Install the component with the pkgchk tool.</p>
+<p>UNIX users type:</p></li></ol></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%" bgcolor="#FFFFCC">
+<div style="margin-left: 2em">
+<p>&lt;office_dir&gt;/program/pkgchk
+WebServiceProxy.zip</p></div></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<div style="margin-left: 2em">
+<p>Windows users please type:</p></div></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%" bgcolor="#FFFFCC">
+<div style="margin-left: 2em">
+<p>&lt;office_dir&gt;\program\pkgchk
+WebServiceProxy.zip</p></div></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%"><br>
+<p>Now you could test the installation of the component by typing
+the following lines of code inside a StarBasic module:</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%" bgcolor="#FFFFCC">
+<p>proxyFac =
+createUNOService("com.sun.star.webservices.proxy.ProxyFactory")</p>
+<p>msgbox proxyFac.dbg_supportedinterfaces</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<p>If there appears a message box with all the supported interfaces
+of the ProxyFactory you have successfully installed the component.
+Congratulations!</p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%" bgcolor="#666699">
+<h1 class="western"><a name="ToCSource"></a> 6. Source
+Code</h1></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<p>If you are interested in the source of this project, please
+refer to: <a href=
+"http://udk.openoffice.org/source/browse/udk/soap/proxy/src/">http://udk.openoffice.org/source/browse/udk/soap/proxy/src/</a></p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%" bgcolor="#666699">
+<h1 class="western"><a name="ToCReferences"></a><a name=
+"applications"></a> 7. References</h1></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="3" width="96%">
+<p><a name="Namespaces"></a><a name="BRAY99"></a>[BRAY99]<br>
+Bray, T., Hollander, D., &amp; Layman, M. (January 14, 1999).
+<i>Namespaces in XML</i>. (W3C Recommendation). Retrieved Dec. 13,
+2002 from<br>
+<a href=
+"http://www.w3.org/TR/1999/REC-xml-names-19990114">http://www.w3.org/TR/1999/REC-xml-names-19990114</a></p>
+<p><a name="CHRI01"></a>[CHRI01]<br>
+Christensen, E., Curbera, F., Meredith, G., &amp; Weerawarana, S.
+(March 15, 2001). <i>Web Services Description Language (WSDL)
+1.1</i>. (W3C Note). Retrieved Dec. 13, 2002 from <a href=
+"http://www.w3.org/TR/2001/NOTE-wsdl-20010315">http://www.w3.org/TR/2001/NOTE-wsdl-20010315</a></p>
+<p align="left"><a name="GOOG02"></a>[GOOG02]<br>
+WSDL description of the Google Web APIs. (August 16, 2002).
+Retrieved Dec. 06, 2002 from<br>
+<a href=
+"http://api.google.com/GoogleSearch.wsdl">http://api.google.com/GoogleSearch.wsdl</a></p>
+<p>[JAXRP02]<br>
+Sharma, R. (June&nbsp;11. 2002). <i>Java<sup>TM</sup> API for
+XML-based RPC. JAX-RPC 1.0</i>. Retrieved Dec.&nbsp;20. 2002
+from<br>
+<a href=
+"http://java.sun.com/xml/downloads/jaxrpc.html">http://java.sun.com/xml/downloads/jaxrpc.html</a></p>
+<p><a name="JWSDP"></a>[JWSDP]<br>
+Java<span style="background: transparent"><sup>TM</sup></span> Web
+Services Developer Pack v.1.0_01. Retrieved Aug. 22, 2002 from<br>
+<a href=
+"http://java.sun.com/webservices/webservicespack.html">http://java.sun.com/webservices/webservicespack.html</a></p>
+<p align="left"><a name="SCHEMA1"></a>[SCHEMA1]<br>
+W3C XML Schema Working Group. (May&nbsp;2, 2001). <i>Schema Part 1:
+Structures.</i> (W3C Recommendation). Retrieved Dec.&nbsp;30. 2002
+from<br>
+<a href=
+"http://www.w3.org/TR/2001/REC-xmlschema-1-20010502/">http://www.w3.org/TR/2001/REC-xmlschema-1-20010502/</a></p>
+<p align="left"><a name="SCHEMA2"></a>[SCHEMA2]<br>
+W3C XML Schema Working Group. (May&nbsp;2, 2001). <i>XML Schema
+Part 2: Datatypes.</i> (W3C Recommendation). Retrieved
+Dec.&nbsp;30. 2002 from<br>
+<a href=
+"http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/">http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/</a></p>
+<p align="left"><a name="SOAP11"></a>[SOAP1.1]<br>
+Box, D., Ehnebuske, D., Kakivaya, G., Layman, A., Mendelsohn, N.,
+Nielsen, H. F., et al. (May&nbsp;08. 2000). <i>Simple Object Access
+Protocol (SOAP) 1.1</i>. (W3C Note). Retrieved Dec.&nbsp;30. 2002
+from <a href=
+"http://www.w3.org/TR/2000/NOTE-SOAP-20000508">http://www.w3.org/TR/2000/NOTE-SOAP-20000508</a></p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="4" width="98%">
+<hr size="1" noshade></td></tr>
+<tr>
+<td colspan="4" width="96%" bgcolor="#666699">
+<p><font color="#ffffff">Author: Jan Tietjens ($Date:
+2002/12/27$)<br>
+<i>Copyright 2002 Sun Microsystems, Inc., 901 San Antonio Road,
+Palo Alto, CA 94303 USA.</i></font></p></td>
+<td width="1%" valign="top"></td></tr>
+<tr>
+<td colspan="4" width="98%">
+<hr size="1" noshade></td></tr></table>
+<p>Thank's to <a href="http://www.digits.com">WebCounter</a> for
+counting the visitors of the page.</p>
+<a><br>
+<br>
+<img src="http://counter.digits.com/wc/-h/openoffice_org_web_service_proxy"
+align="middle" width="60" height="20" border="0" hspace="4" vspace="2" alt="hiden counter"><br></a>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

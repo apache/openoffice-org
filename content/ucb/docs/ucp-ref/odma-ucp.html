@@ -1,0 +1,320 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>The ODMA Provider</title>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Ocke Janssen">
+	<META NAME="CREATED" CONTENT="20020304;14253800">
+	<META NAME="CHANGEDBY" CONTENT="Ocke Janssen">
+	<META NAME="CHANGED" CONTENT="20020322;13284473">
+	<STYLE>
+	<!--
+		@page { margin: 2cm }
+		P { margin-bottom: 0.21cm }
+		H1 { margin-bottom: 0.21cm }
+		H1.western { font-family: "Albany", sans-serif; font-size: 16pt }
+		H1.cjk { font-size: 16pt }
+		H1.ctl { font-size: 16pt }
+		H2 { margin-bottom: 0.21cm }
+		H2.western { font-family: "Albany", sans-serif; font-size: 14pt; font-style: italic }
+		H2.cjk { font-size: 14pt; font-style: italic }
+		H2.ctl { font-size: 14pt; font-style: italic }
+		TD P { margin-bottom: 0.21cm }
+		TH P { margin-bottom: 0.21cm; font-style: italic }
+		P.code-western { margin-bottom: 0.1cm; font-size: 8pt }
+		P.code-cjk { margin-bottom: 0.1cm }
+		P.code-ctl { margin-bottom: 0.1cm }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="de-DE">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ucb/">ucb</a>&nbsp;&raquo;&nbsp;<a href="/ucb/docs/">docs</a>&nbsp;&raquo;&nbsp;<a href="/ucb/docs/ucp-ref/">ucp-ref</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1 CLASS="western">The ODMA Provider</H1>
+<H2 CLASS="western">Preface</H2>
+<P>The ODMA Content Provider (OCP) implements a Content Provider for
+the Universal Content Broker (UCB). It provides access to a document
+structure stored in a Document Management System (DMS).</P>
+<H2 CLASS="western">OCP Content</H2>
+<P>The OCP Content provides two types of content; the document and
+the <B>Root Folder</B>.</P>
+<OL>
+	<LI><P>The document Content corresponds to a document stored in the
+	DMS.</P>
+	<LI><P>The Root Folder exists at any time and is used to show all
+	documents avaible at that time. All other OCP contents are children
+	of this folder. The OCP Root Folder can only contain OCP Documents.
+	It has the URL &bdquo;<B>vnd.sun.star.odma:/</B>&ldquo;.</P>
+</OL>
+<H2 CLASS="western"><SPAN ID="Frame1" STYLE="float: left; width: 7cm; height: 5.5cm; border: none; padding: 0cm; background: #ffffff">
+	<P STYLE="margin-top: 0.21cm"><IMG SRC="./odma-ucp.gif" NAME="Graphic1" ALIGN=LEFT WIDTH=100% BORDER=0><BR CLEAR=LEFT><BR><BR>
+	</P>
+</SPAN><BR CLEAR=LEFT>Creation of new OCP Contents
+</H2>
+<P>OCP Folders implement the interface XContentCreator. OCP Root
+Folder supports the command &bdquo;insert&ldquo;. That's why the OCP
+Root Folder can create new OCP Streams. To create a new OCP Streams:</P>
+<OL>
+	<LI><P>Let the root folder create a new content by calling its
+	createNewContent-method. The content type to use for new streams is
+	<B>application/vnd.sun.star.odma</B>.</P>
+	<LI><P STYLE="font-weight: medium">Set a title at the new stream. (
+	Let the new child execute a setPropertyValues &ndash; command, which
+	sets at least the property &bdquo;Title&ldquo; to a non-empty value
+	).</P>
+	<LI><P STYLE="font-weight: medium">Other properties which may be set
+	are 
+	</P>
+</OL>
+<UL>
+	<LI><P STYLE="font-weight: medium">Author,</P>
+	<LI><P STYLE="font-weight: medium">Subject and</P>
+	<LI><P STYLE="font-weight: medium">Keywords</P>
+</UL>
+<OL START=4>
+	<LI><P STYLE="font-weight: medium">Let the new child ( not the
+	parent! ) execute the command &bdquo;transfer&ldquo;. This will
+	commit the creation process. You need to supply the implementation
+	of an XInputStream with the command's parameters, that provides
+	access to the stream data. 
+	</P>
+</OL>
+<H2 CLASS="western">URL Scheme for OCP Contents</H2>
+<P>Each OCP content has an identifier corresponding to the following
+scheme:</P>
+<P>vnd.sun.star.odma:/&lt;name&gt;</P>
+<P>where &lt;name&gt; is the DocumentID given by the DMS.</P>
+<P STYLE="font-weight: medium">Examples:</P>
+<P><B>vnd.sun.star.odma:/ </B><SPAN STYLE="font-weight: medium">( The
+URL of the OCP Root Folder )</SPAN></P>
+<P STYLE="font-weight: medium"><B>vnd.sun.star.odma:/</B> a document
+id given by the DMS</P>
+<P><B>vnd.sun.star.odma:/</B><SPAN STYLE="font-weight: medium">::ODMA\DMS_ID\DM_SPECIFIC_INFO</SPAN></P>
+<H2 CLASS="western">Appendix</H2>
+<P STYLE="font-weight: medium">The following table gives an overview
+of the different OCP contents.</P>
+<P STYLE="font-weight: medium"><BR><BR>
+</P>
+<TABLE WIDTH=642 BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=48>
+	<COL WIDTH=168>
+	<COL WIDTH=120>
+	<COL WIDTH=128>
+	<COL WIDTH=136>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=48>
+				<P><BR>
+				</P>
+			</TH>
+			<TH WIDTH=168>
+				<P>UCB Type</P>
+				<P>(returned by XContent::getContentType )</P>
+			</TH>
+			<TH WIDTH=120>
+				<P>Properties</P>
+			</TH>
+			<TH WIDTH=128>
+				<P>Commands</P>
+			</TH>
+			<TH WIDTH=136>
+				<P>Interfaces</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=48>
+				<P>Document</P>
+			</TD>
+			<TD WIDTH=168>
+				<P ALIGN=LEFT STYLE="font-style: normal; font-weight: medium">application/vnd.sun.star.odma</P>
+			</TD>
+			<TD WIDTH=120>
+				<P>[readonly] ContentType</P>
+				<P>[readonly] DateCreated</P>
+				<P>[readonly] DateModified</P>
+				<P>[readonly] IsDocument</P>
+				<P>[readonly] IsFolder</P>
+				<P STYLE="font-style: normal; font-weight: medium">Title</P>
+				<P ALIGN=LEFT STYLE="font-style: normal; font-weight: medium">Author</P>
+				<P ALIGN=LEFT STYLE="font-style: normal; font-weight: medium">Subject</P>
+				<P ALIGN=LEFT STYLE="font-style: normal; font-weight: medium">Keywords</P>
+			</TD>
+			<TD WIDTH=128>
+				<P>getCommandInfo</P>
+				<P>getPropertySetInfo</P>
+				<P>getPropertyValues</P>
+				<P>setPropertyValues</P>
+				<P>delete</P>
+				<P>open</P>
+				<P>close</P>
+				<P ALIGN=LEFT STYLE="font-style: normal; font-weight: medium"><BR>
+				</P>
+			</TD>
+			<TD WIDTH=136>
+				<P>lang::<B>XTypeProvider</B>,</P>
+				<P>lang::<B>XServiceInfo</B></P>
+				<P>lang::<B>XComponent</B></P>
+				<P>ucb::<B>XContent</B></P>
+				<P>ucb::<B>XCommandProcessor</B></P>
+				<P>beans::<B>XPropertiesChangeNotifier</B></P>
+				<P>beans::<B>XPropertyContainer</B></P>
+				<P>beans::<B>XPropertySetInfoChangeNotifier</B></P>
+				<P>ucb::<B>XCommandInfoChangeNotifier</B></P>
+				<P>container::<B>XChild</B></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TH WIDTH=48>
+				<P ALIGN=LEFT STYLE="font-style: normal; font-weight: medium">Root
+				Folder</P>
+			</TH>
+			<TD WIDTH=168>
+				<P ALIGN=LEFT STYLE="font-style: normal; font-weight: medium">application/vnd.sun.star.odma</P>
+			</TD>
+			<TD WIDTH=120>
+				<P>[readonly] ContentType</P>
+				<P>[readonly] DateCreated</P>
+				<P>[readonly] DateModified</P>
+				<P>[readonly] IsDocument</P>
+				<P ALIGN=LEFT STYLE="font-style: normal; font-weight: medium">[readonly]
+				IsFolder</P>
+			</TD>
+			<TD WIDTH=128>
+				<P>getCommandInfo</P>
+				<P>getPropertySetInfo</P>
+				<P>getPropertyValues</P>
+				<P>setPropertyValues</P>
+				<P>transfer</P>
+				<P>delete</P>
+				<P>open</P>
+				<P ALIGN=LEFT STYLE="font-style: normal; font-weight: medium">close</P>
+			</TD>
+			<TD WIDTH=136>
+				<P><B>same as OCP Folder</B>, plus 
+				</P>
+				<P>ucb::<B>XContentCreator</B></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR><BR>
+</P>
+<P>More information about ODMA can be found at
+<A HREF="http://www.infonuovo.com/odma/">www.infonuovo.com/odma/</A></P>
+<P>To enable ODMA the following basic macro has to executed to insert
+the settings needed in the Configuration.</P>
+<pre>
+EM  *****  BASIC  *****
+
+' Option Explicit
+
+Sub RegisterUcpOdma
+	Dim aConfigProvider As Object
+	Dim aConfiguration As Object
+	Dim aFilters as Object
+	Dim aNewNode as Object
+	Dim nResponse as Integer
+	Dim bAddNode as Boolean
+
+	' access the global configuration provider
+	aConfigProvider = createUnoService( "com.sun.star.configuration.ConfigurationProvider" )
+	
+	' create an access object for TypeDetection module
+	Dim aParams(0) As new com.sun.star.beans.PropertyValue
+	aParams(0).Name = "nodepath"
+	aParams(0).Value = "/org.openoffice.ucb.Configuration"
+	aConfiguration = aConfigProvider.createInstanceWithArguments( _
+		"com.sun.star.configuration.ConfigurationUpdateAccess", _
+		aParams() )
+
+	' open the set node for the types
+	aContentProviders = aConfiguration.getByName( "ContentProviders" )
+	aContentProvidersDataPrimaryKeys = aContentProviders.getByName( "Local" )
+	aSecondaryKeys = aContentProvidersDataPrimaryKeys.getByName( "SecondaryKeys" )
+	aContentProvidersDataSecondaryKeys = aSecondaryKeys.getByName( "Office" )
+	aProviderData =  aContentProvidersDataSecondaryKeys.getByName( "ProviderData" )
+
+	' existence check
+	bAddNode = TRUE
+	dim xx() as string
+	xx() = aProviderData.getElementNames
+	for i=LBOUND(xx) to UBOUND(xx)
+		aContentProviderData = aProviderData.getByName( xx(i) )
+		if ( aContentProviderData.ServiceName = "com.sun.star.ucb.OdmaContentProvider" ) Then
+			nResponse = MsgBox( "The type is already present in the configuration! Overwrite?", 4 )
+			if ( 6 = nResponse ) Then
+				aProviderData.removeByName( xx(i) )
+			Else
+				bAddNode = FALSE
+			End If
+		End If
+	next i
+
+	if ( bAddNode ) Then
+		' create a new node for the new type
+		aContentProviderData = aProviderData.createInstance( )
+		' fill this new type node
+		aContentProviderData.ServiceName = "com.sun.star.ucb.OdmaContentProvider"
+		aContentProviderData.URLTemplate = "vnd.sun.star.odma"
+		' insert this new type
+		aProviderData.insertByName( "Provider" + (UBOUND(xx) - LBOUND(xx) + 2), aContentProviderData )
+	End If
+
+
+	' commit the changes done
+	aConfiguration.commitChanges( )
+
+	' register the component implementing the filter
+' 	RegisterFilterComponent( )
+End Sub
+
+Sub RegisterFilterComponent
+	Dim oRegistry as Object
+	Dim oImplReg as Object
+	oRegistry = createUnoService( "com.sun.star.registry.SimpleRegistry" )
+	oImplReg = createUnoService( "com.sun.star.registry.ImplementationRegistration" )
+	if ( IsNull( oRegistry ) Or IsNull( oImplReg ) ) Then
+		MsgBox "could not create the components necessary for registering the component!"
+		Exit Sub
+	End If
+
+	On Local Error Resume Next
+	oRegistry.open( "applicat.rdb", FALSE, FALSE )
+	if ( Not oRegistry.IsValid() ) Then
+		MsgBox "could not open the registry!"
+		Exit Sub
+	End If
+	On Local Error Goto 0
+
+	oImplReg.registerImplementation( "com.sun.star.loader.SharedLibrary", "ucpodma1.dll", oRegistry )
+End Sub
+
+</pre>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

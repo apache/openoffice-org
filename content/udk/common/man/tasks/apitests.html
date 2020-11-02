@@ -1,0 +1,192 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+   <meta name="Author" content="pluby"/>
+   <title>API Tests</title>
+<style type="text/css">
+<!--
+h1 { text-align:center; margin-top: 0.2cm; text-decoration: none; color: #ffffff; font-size: 6; margin-top: 0.2cm}
+h2 { margin-top: 0.2cm; margin-bottom=0.1cm; color: #ffffff; background-color: #666699; padding: 0.2cm; }
+li {margin-bottom: 0.2cm;}
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm;}
+dt {margin-bottom: 0.2cm;}
+-->
+</style>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/udk/">udk</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/">common</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/">man</a>&nbsp;&raquo;&nbsp;<a href="/udk/common/man/tasks/">tasks</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<table WIDTH="100%" bgcolor=#666699 summary=header>
+<tr> <td>
+<h1> API Tests </h1>
+</td></tr>
+</table>
+
+
+<h2> Introduction </h2>
+
+<p>This document provides a list of header files, by module, that need API
+tests. At this time we are working on the sal module. However, once a set of
+API tests for the sal module is completed, we will add other UDK modules (e.g.
+vos, cppu, etc.) to this URL.
+
+<p>If you want to help out, please put your name in the "Responsible Engineer"
+column in the table below <b>before</b> starting any work. If you do not have
+commit priviledges to the CVS tree, please post your updates to the
+dev@udk.openoffice.org mailing list so that we can update this URL for you.
+
+
+<h2> Building and running the API test tool </h2>
+
+<p>The API test tool is a command line tool called <b>testshl</b>. Although the
+testshl command is not built as part of the OpenOffice.org build, you can
+build it manually by executing the following commands:
+
+<pre>
+cd $SRC_ROOT ; cvs -d `cat sal/CVS/Root` co -D "05/22/2001" sal solenv/inc/unxsols3.mk
+cd $SRC_ROOT ; cvs -d `cat sal/CVS/Root` co -A sal/inc/rtl/tres.hxx
+cd $SRC_ROOT ; cvs -d `cat sal/CVS/Root` co -A sal/tests
+cd $SRC_ROOT ; cvs -d `cat sal/CVS/Root` co -A testshl
+cd $SRC_ROOT/sal ; dmake -u ; deliver
+cd $SRC_ROOT/testshl/util ; dmake -u
+cd $SRC_ROOT/testshl/src ; dmake -u ; deliver
+</pre>
+
+<p>The testshl command takes 2 arguments: a shared library containing your test
+functions and a text file that lists the names of those test functions (an
+*.sce file). The source files for your test functions, the *.sce file, and the
+makfile.mk file that builds your shared library is normally put in a "tests"
+subdirectory of each module. For example, in the sal module, there is a
+sal/tests subdirectory. If you are implementing tests for a new module, you
+should create a "tests" subdirectory for that module and use the makefile.mk
+and *.sce files in sal/tests as a template.
+
+<p>Once you have successfully built the testshl command, you can build and
+execute your test functions by executing the following commands:
+
+<pre>
+cd $SRC_ROOT/(module-name)/tests ; dmake -u
+testshl $SRC_ROOT/(module-name)/$INPATH/lib/(test-library-name) $SRC_ROOT/(module-name)/tests/sce/(sce-name)
+</pre>
+
+<p>For example, to execute the test functions in sal/tests, you would execute
+the following commands:
+
+<pre>
+cd $SRC_ROOT/sal/tests ; dmake -u
+testshl $SRC_ROOT/sal/$INPATH/lib/librtl_apitest.so $SRC_ROOT/sal/tests/sce/rtl_apitest.sce
+testshl $SRC_ROOT/sal/$INPATH/lib/libosl_apitest.so $SRC_ROOT/sal/tests/sce/osl_apitest.sce
+</pre>
+
+<h2> Module: sal </h2>
+
+<table width="100%" border=5 summary="Module Testers">
+<tr>
+<th>
+Header File
+</th>
+<th>
+Responsible Engineer
+</th>
+<th>
+API Test Source File
+</th>
+<th>
+Status
+</th>
+</tr>
+
+<tr><td>sal/inc/osl/conditn.hxx</td><td><a href="mailto:gene.anaya@sun.com">gene.anaya@sun.com</a></td><td>osl_apitest_conditn.cxx</td><td>Implemented 7/11/2001</td></tr>
+<tr><td>sal/inc/osl/conditn.h</td><td><a href="mailto:gene.anaya@sun.com">gene.anaya@sun.com</a></td><td>osl_apitest_conditn.cxx</td><td>Implemented 7/11/2001</td></tr>
+<tr><td>sal/inc/osl/diagnose.h</td><td><a href="mailto:gene.anaya@sun.com">gene.anaya@sun.com</a></td><td>osl_apitest_diagnose.cxx</td><td>Implemented 7/11/2001</td></tr>
+<tr><td>sal/inc/osl/endian.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/osl/file.h</td><td><a href="mailto:gene.anaya@sun.com">gene.anaya@sun.com</a></td><td>osl_apitest_file.cxx</td><td>Implemented 7/27/2001</td></tr>
+<tr><td>sal/inc/osl/file.hxx</td><td><a href="mailto:gene.anaya@sun.com">gene.anaya@sun.com</a></td><td>osl_apitest_file.cxx</td><td>Mostly Implemented 7/27/2001</td></tr>
+<tr><td>sal/inc/osl/interlck.h</td><td><a href="mailto:gene.anaya@sun.com">gene.anaya@sun.com</a></td><td>osl_apitest_interlck.cxx</td><td>Implemented 7/11/2001</td></tr>
+<tr><td>sal/inc/osl/module.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/osl/module.hxx</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/osl/mutex.h</td><td><a href="mailto:gene.anaya@sun.com">gene.anaya@sun.com</a></td><td>osl_apitest_mutex.cxx</td><td>Implemented 07/11/2001</td></tr>
+<tr><td>sal/inc/osl/mutex.hxx</td><td><a href="mailto:gene.anaya@sun.com">gene.anaya@sun.com</a></td><td>osl_apitest_mutex.cxx</td><td>Mostly Implemented</td></tr>
+<tr><td>sal/inc/osl/nlsupport.h</td><td><a href="mailto:gene.anaya@sun.com">gene.anaya@sun.com</a></td><td>osl_apitest_nlsupport.cxx</td><td>Implemented 7/11/2001</td></tr>
+<tr><td>sal/inc/osl/pipe.hxx</td><td><a href="mailto:gene.anaya@sun.com">gene.anaya@sun.com</a></td><td>osl_apitest_pipe.cxx</td><td>Mostly Implemented</td></tr>
+<tr><td>sal/inc/osl/pipe.h</td><td><a href="mailto:gene.anaya@sun.com">gene.anaya@sun.com</a></td><td>osl_apitest_pipe.cxx</td><td>Mostly Implemented</td></tr>
+<tr><td>sal/inc/osl/pipe_decl.hxx</td><td><a href="mailto:gene.anaya@sun.com">gene.anaya@sun.com</a></td><td>osl_apitest_pipe.cxx</td><td>see pipe.hxx</td></tr>
+<tr><td>sal/inc/osl/process.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/osl/profile.h</td><td><a href="mailto:gene.anaya@sun.com">gene.anaya@sun.com</a></td><td>osl_apitest_profile.cxx</td><td>Implemented 7/14/2001</td></tr>
+<tr><td>sal/inc/osl/profile.hxx</td><td><a href="mailto:gene.anaya@sun.com">gene.anaya@sun.com</a></td><td>osl_apitest_profile.cxx</td><td>Implemented 7/14/2001</td></tr>
+<tr><td>sal/inc/osl/security.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/osl/security.hxx</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/osl/security_decl.hxx</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/osl/semaphor.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/osl/semaphor.hxx</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/osl/signal.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/osl/socket.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/osl/socket.hxx</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/osl/socket_decl.hxx</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/osl/thread.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/osl/thread.hxx</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/osl/time.h</td><td><a href="mailto:gene.anaya@sun.com">gene.anaya@sun.com</a></td><td>osl_apitest_time.cxx</td><td>Implemented 7/11/2001</td></tr>
+<tr><td>sal/inc/osl/util.h</td><td><a href="mailto:gene.anaya@sun.com">gene.anaya@sun.com</a></td><td>osl_apitest_util.cxx</td><td>Implemented 7/11/2001</td></tr>
+<tr><td>sal/inc/rtl/byteseq.hxx</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/alloc.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/byteseq.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/cipher.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/crc.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/digest.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/locale.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/locale.hxx</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/memory.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/process.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/random.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/ref.hxx</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/strbuf.h</td><td><a href="mailto:babak.mahbod@sun.com">babak.mahbod@sun.com</a></td><td>rtl_StringBuffer.cxx</td><td>In Development</td></tr>
+<tr><td>sal/inc/rtl/strbuf.hxx</td><td><a href="mailto:babak.mahbod@sun.com">babak.mahbod@sun.com</a></td><td>rtl_OStringBuffer.cxx</td><td>In Development</td></tr>
+<tr><td>sal/inc/rtl/string.h</td><td><a href="mailto:babak.mahbod@sun.com">babak.mahbod@sun.com</a></td><td>rtl_String.cxx</td><td>In Development</td></tr>
+<tr><td>sal/inc/rtl/string.hxx</td><td><a href="mailto:babak.mahbod@sun.com">babak.mahbod@sun.com</a></td><td>rtl_OString.cxx</td><td>Last Update 07/27/01</td></tr>
+<tr><td>sal/inc/rtl/tencinfo.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/textcvt.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/textenc.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/tres.hxx</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/uri.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/uri.hxx</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/ustrbuf.h</td><td><a href="mailto:babak.mahbod@sun.com">babak.mahbod@sun.com</a></td><td>rtl_UStringBuffer.cxx</td><td>In Development</td></tr>
+<tr><td>sal/inc/rtl/ustrbuf.hxx</td><td><a href="mailto:babak.mahbod@sun.com">babak.mahbod@sun.com</a></td><td>rtl_OUStringBuffer.cxx</td><td>In Development</td></tr>
+<tr><td>sal/inc/rtl/uuid.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/ustring.h</td><td><a href="mailto:babak.mahbod@sun.com">babak.mahbod@sun.com</a></td><td>rtl_UString.cxx</td><td>In Development</td></tr>
+<tr><td>sal/inc/rtl/ustring.hxx</td><td><a href="mailto:babak.mahbod@sun.com">babak.mahbod@sun.com</a></td><td>rtl_OUString.cxx</td><td>Last Update 07/27/01</td></tr>
+<tr><td>sal/inc/rtl/ustring.tmp</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/bootstrap.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/bootstrap.hxx</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/rtl/unload.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/sal/config.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/sal/macros.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/sal/main.h</td><td></td><td></td><td></td></tr>
+<tr><td>sal/inc/sal/types.h</td><td></td><td></td><td></td></tr>
+
+</table>
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
