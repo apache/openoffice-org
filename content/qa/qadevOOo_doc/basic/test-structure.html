@@ -1,0 +1,225 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+  <meta http-equiv="CONTENT-TYPE"
+ content="text/html; charset=iso-8859-1">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/qa/">qa</a>&nbsp;&raquo;&nbsp;<a href="/qa/qadevOOo_doc/">qadevOOo_doc</a>&nbsp;&raquo;&nbsp;<a href="/qa/qadevOOo_doc/basic/">basic</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h1>Test Structure</h1>
+<p style="">Source code for basic tests is
+stored in XML format in .xba files. </p>
+<p style="">There is a separate file and folder
+for every interface/service and for every object. Files for objects
+contain BASIC procedures for creating and disposing objects.
+Interface/service files contain procedures for testing
+interfaces and services. These files are loaded on Runner's demand at
+runtime into the Office as BASIC modules, and required functions
+from these modules are executed.</p>
+<p style="">The directory structure is similar
+to the one used for Java tests. Filenames should be unique in the whole
+scope. This is because basic module's name is exactly the same as a
+filename
+(without path). So the file for sw.SwXBodyText should be
+</p>
+<pre>    .../basic/mod/sw/SwXBodyText/sw_SwXBodyText.xba</pre>
+For a service like XMLImporter which can be found in xmloff.Chart as
+well as in xmloff.Draw, the structure has to be
+<pre>    .../basic/mod/xmloff/Chart/XMLImporter/xmloff_Chart_XMLImporter.xba</pre>
+<p></p>
+<p style="">To pass information between different
+BASIC modules, global variables are used. Some global variables are
+initialized by the Runner using the "SetValue" command. These
+variables are:</p>
+<ul>
+  <li><b>cBASPath</b> - root path to BASIC modules (/qadev/tests/basic/)</li>
+  <li><b>cTestDocsDir</b> - path to test documents</li>
+  <li><b>CNCSTR</b> - a connection string</li>
+</ul>
+<p>The Runner provides also information about object's implementation
+name, optional
+properties and methods.</p>
+<p style="">All other global variables are set by
+<b>BasicBridge.sxw</b> or the by the tests. They are:</p>
+<ul>
+  <li><b>oObj</b> - a reference to the object being tested</li>
+  <li><b>oDoc</b> - the document that is used for object creation
+(usually only one
+document for object creation is required. If <b>oDoc</b> points on
+such a document, then it will be disposed automatically in the object
+disposing procedure.)</li>
+  <li><b>cObjectName</b> - the name of the object being tested; </li>
+  <li><b>cIfcShortName</b> and <b>cIfcLongName</b> - different forms
+of the name of the interface being tested</li>
+  <li><b>NULL_OBJECT</b> - a NULL object.</li>
+</ul>
+<h2>The object file</h2>
+<p>An object file should contain the procedure <b>CreateObj() </b>that
+will
+be called from the <b>BasicBridge.sxw</b>. In this procedure a global
+BASIC variable <b>oObj</b> has to be initialized with an appropriate
+object. If the object needs special code for destruction, it
+should be implemented in the <b>DisposeObj()</b> procedure. <b>BasicBridge.sxw</b>
+checks, if the object has been created properly. There is no need to do
+that
+yourself.
+</p>
+<p><img src="p4.gif" name="Graphic4" align="left" width="863"
+ height="376" border="0"><br clear="left">
+<br>
+<br>
+</p>
+<h2>The interface file</h2>
+<p style="margin-bottom: 0cm;">To test an interface, <b>BasicBridge.sxw</b>
+will call the <b>RunTest()</b> method from the appropriate .xba file.
+A test of every method that is supported by the interface should be
+implemented in this procedure. Before starting the method testing, a
+method
+<b>Test.StartMethod(methodName)</b> has to be called. This will
+produce some log information and, even more important, this will
+set the <b>cCurrMethodName</b> variable to an appropriate value (it is
+used
+for writing information in case of an exception). After the method was
+tested, a method <b>Test.MethodTested(methodName, bResult)</b> has to
+be used to tell the Runner about the result of the test. </p>
+<p style="margin-bottom: 0cm;"><img src="p5.gif" name="Graphic5"
+ align="left" width="912" height="359" border="0"><br clear="left">
+<br>
+</p>
+<p style="margin-bottom: 0cm;">Runner provides the <b>BasicBridge.sxw</b>
+with
+full information about the interface that should be tested. This
+information includes the name of the interface, the names of
+methods and information if anything is optional. This information is
+transformed to an array that is passed to the BASIC part of Bridge.
+This <b>info</b> contains also the type of the test (interface test or
+service test). </p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p></p>
+<pre>info[][][] - first array contains the name of the interface/service + the names of the methods/properties<br>           - second array contains boolean values (true, if interface/method/service/property is optional)<br>           - third array contains the type of the test<br></pre>
+Example:<br>
+<pre>[0] com.sun.star....  [0] true   [0] interface<br>[1] get...()          [1] false  [1] &lt;not set&gt;<br>[2] set...()          [2] false  [1] &lt;not set&gt;<br>[3] ...               [3] ...    [1] ...</pre>
+<p></p>
+<h2>The service file</h2>
+<p>Usually testing of services is very simple - for every
+supported property one just has to call the
+<b>PropertyTester.testProperty(propName)</b> procedure, which changes
+the value of the property automatically.
+In some cases, the value of the property cannot be tested
+automatically: if only
+certain values are allowed or if the value of the property is not a
+simple type.
+Then an additional parameter can be passed to the <b>testProperty()</b>
+method, an array of defined values. The property will be set to any of
+those values.<br>
+If no parameter passed, <b>PropertyTester</b> will test
+the property simply relying on the property's type.</p>
+<p><img src="p6.gif" name="Graphic6" align="left" width="924"
+ height="339" border="0"><br clear="left">
+<br>
+<br>
+</p>
+<h1>Creating own implementations</h1>
+<p>For some tests it is required to have own helper implementations for
+services, since it is not possible to implement own services directly
+in BASIC.
+For this one has to provide e.g. a Java class. A class that implements
+the XSimpleServiceFactory interface and that can create an instance of
+the required service should also be provided.
+This ServiceFactory has to be inserted into the MultiServiceFactory of
+the Office before connecting the <b>BasicBridge</b>.
+These services can be created in BASIC using the
+<b>createUnoService(serviceName)</b> method. For detailed information
+look
+at the <bf>XAcceptor test. This test uses the <b>basichelper.Connector</b>
+class for testing the interface.</bf></p>
+<h2>Starting Runner</h2>
+<p>To run the Basic tests just start <b>./executeBasic -o
+sw.SwXBodyText</b> to execute SwXBodyText from sw module.<br>
+(confer the <a href="../user-guide.html">General User Guide</a>)
+</p>
+<h2>Debugging</h2>
+<p>As BASIC tests cannot be started separately from the Runner, there
+are some difficulties in debugging. The easiest debug method is to
+use message boxes around the code where the problem is located.
+Also you could use a debug file. Add to the configuration file
+'basic.props' the following entry:</p>
+<p>on UNIX: <b>soapi.test.basic.debugFile=/temp/BasicDebug.log</b><br>
+on Windows: <b>soapi.test.basic.debugFile=c:\\temp\\BasicDebug.log</b></p>
+<p>In this file all information that BASIC sends to Java will be
+stored. To create output in the tests,
+use <b>Out.dbg("My Message")</b></p>
+<h2>Writing style</h2>
+<p style="margin-bottom: 0cm;">Follow these rules while writing basic
+tests:</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<ul>
+  <li>
+    <p style="margin-bottom: 0cm;">Use <b>option explicit</b></p>
+    <p style="margin-bottom: 0cm;">This option forces to dimension
+every variable that is used in basic code.</p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;">Headers</p>
+    <p style="margin-bottom: 0cm;">Headers in interface tests contain a
+special field named "<b>required</b>". If an interface needs some
+variables that should be initialized during the object creation, then
+the variables should be inserted into this field. It can be very
+helpful when writing objectCreation code.</p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;">Use functions from <b>BasicBridge.sxw</b>.
+    </p>
+    <p style="margin-bottom: 0cm;">If there is something that should be
+done for many objects or interfaces then it is better to move this code
+to one of the modules of the <b>BasicBridge.sxw</b> (e.g. <b>utils</b>).
+This provides more flexibility.</p>
+  </li>
+</ul>
+<h1>Some tips</h1>
+<ul>
+  <li>
+    <p style="margin-bottom: 0cm;">During module loading all NON-global
+variables may be reseted. So, if you want to reuse a variable after a
+library was loaded, define it as global.</p>
+  </li>
+  <li>
+    <p style="margin-bottom: 0cm;">If some interface test requires a
+global variable that is an array of UNO structures, it should be
+defined as Variant and initialized using additional temporary variables
+of the appropriate type.</p>
+  </li>
+</ul>
+<h2>Examples</h2>
+<p>Please look through the following examples: </p>
+<p>object file: <a href="sw_SwXBodyText.html">sw_SwBodyText.xba</a></p>
+<p>interface file: <a href="frame_XController.html">frame_XController.xba</a></p>
+<p>service file: <a href="text_CellProperties.html">text_CellProperties.xba</a></p>
+<hr>
+<p>Last modified: $Date: 2004/03/10 16:30:15 $</p>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
