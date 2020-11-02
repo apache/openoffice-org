@@ -1,0 +1,294 @@
+<html><head>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+<h2>UNO Accessibility API</h2>
+
+<p>The UNO Accessibility API (also called UAA in the following) is modeled
+closely after Java Accessibility API in version 1.4 and the the Gnome
+Accessibility API.  The UAA is part of the offapi project.  You can browse
+the CVS archive at <a
+href="http://ui.openoffice.org/source/browse/api/offapi/com/sun/star/accessibility/"
+title="Browse the IDL source files of the UNO Accessibility API"
+>com/sun/star/accessibility</a> or have a look at the documentation <a 
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/module-ix.html"
+title="Documentation: UAA reference">here</a>. </p>
+
+<h3>Representation of GUI and documents</h3>
+
+<p>The UAA represents both <em>structure</em> and <em>content</em> of the
+  GUI.  Here GUI included the views of documents that are embedded
+  therein.</p>
+
+
+<h4>Structure</h4>
+
+<p>Each top-level window of the GUI is represented as a tree of
+  accessibility objects.  Each accessibility object stands for one GUI
+  element or one object of a document view:
+<ul><li><b>Leaves</b><br>  Some GUI elements are
+  represented by  leaves in the tree.  Such elements are for example labels and
+    buttons</li>
+<li><b>Internal nodes</b><br>
+  Other GUI elements are represented by internal nodes and thus have a
+  sub-tree of their own.  An example for this are frames, menus and
+  tool-bars.  Menu items
+  can be both depending of whether they have a sub-menu.</b></li>
+<li><b>Root</b><br>
+  The root of every tree represents a top level window.  This means that the
+  accessibility representation of a running OpenOffice.org is actually a
+  forest of accessibility trees.
+</li>
+</ul>
+
+<p>This tree structure is realized by implementing the
+<a href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleContext.html"
+   title="Documentation of the XAccessibleContext interface"><code>XAccessibleContext</code></a> interface.  To go up
+   towards the root of a tree you can get an object's parent.  To go down
+   towards the leaves of a tree you can retrieve all the children of an
+   object.</p>
+
+<h5>Relations</h5>
+Relations introduce a secondary structure that is independent of the tree
+hierarchy created by the parent/child relationship provided by the <a href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleContext.html"
+   title="Documentation of the XAccessibleContext interface"><code>XAccessibleContext</code></a> interface.  Relation sets as
+returned by the <a href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleContext.html#getAccessibleRelationSet"
+title="Documentation of the XAccessibleContext::getAccessibleRelationSet() method"><code>XAccessibleContext::getAccessibleRelationSet()</code></a> are defined
+ by the <a href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleRelationSet.html"
+   title="Documentation of the XAccessibleRelationSet interface"><code>XAccessibleRelationSet</code></a> interface.
+
+<h4>Content</h4>
+
+<p>Each node of the tree that implements <a href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleContext.html"
+   title="Documentation of the XAccessibleContext interface"><code>XAccessibleContext</code></a> gives access to different
+   facets of the represented GUI element or document part.  These are
+
+<dl>
+
+<dt>name</dt><dd>The name is a localized string and acts as short, one word
+description, this is e.g. the text displayed on a button.</dd>
+
+<dt>role</dt> <dd>The kind of control or document part.  E.g. the role of a
+button is "button".  With the <a href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/AccessibleRole.html"
+   title="Documentation of the AccessibleRole constants group"><code>AccessibleRole</code></a> collection of
+constants there is a set of predefined roles that is suitable for the elements
+of the GUI whereas there are no (not yet) roles for the direct support of the
+document.</dd>
+
+<dt>description</dt><dd>A localized string description that is longer and more
+specific than the name.</dd>
+
+<dt>state</dt><dd>States of GUI elements as described by the
+<a href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/AccessibleStateType.html"
+   title="Documentation of the AccessibleStateType constants group"><code>AccessibleStateType</code></a> constants collection can be for example
+"active", "hidden", or "checked".  Again there is a predefined set of states
+suitable for GUI elements but maybe not sufficient to represent states of
+document parts.</dd>
+
+<dt>actions</dt><dd>This active part of a node content can for instance open a
+pop up window with a context sensitive menu.  Another example are additional
+navigational commands.  Actions are represented by the
+<a href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/AccessibleRole.html"
+   title="Documentation of the AccessibleRole constants group"><code>AccessibleRole</code></a> service.  In general there should be as few
+actions as possible.  It is better to offer additional functionality through
+the clasical means of the GUI.</dd>
+
+<dt>graphical representation</dt><dd>The graphical representation of an
+accessible object is exposed by the <a href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleComponent.html"
+   title="Documentation of the XAccessibleComponent interface"><code>XAccessibleComponent</code></a> interface.
+It can be queried for instance for its bounding-box or for the child node at a
+given point on the screen.</dd>
+
+<dt>content</dt><dd>The actual content of a node of the accessibility tree can
+have different forms:
+<ul> 
+
+<li>Text is represented by the interfaces <a href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleText.html"
+   title="Documentation of the XAccessibleText interface"><code>XAccessibleText</code></a> (read
+only) and <a href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleEditableText.html"
+   title="Documentation of the XAccessibleEditableText interface"><code>XAccessibleEditableText</code></a>.  There is also the interface
+<a href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleHypertext.html"
+   title="Documentation of the XAccessibleHypertext interface"><code>XAccessibleHypertext</code></a> for texts that contain
+hyperlinks.</li>
+
+<li>Tables are represented by the interface <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleTable.html"
+   title="Documentation of the XAccessibleTable interface"><code>XAccessibleTable</code></a>.</li>
+
+<li>Images are represented by the interface
+<a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleImage.html"
+   title="Documentation of the XAccessibleImage interface"><code>XAccessibleImage</code></a>.</li>
+
+<li>Simple numerical values, like the position of a slider or the value of a
+spin box are represented by the <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleValue.html"
+   title="Documentation of the XAccessibleValue interface"><code>XAccessibleValue</code></a>
+interface.</li>
+
+</ul>
+
+</dl>
+</p>
+
+
+
+
+<h3>Events</h3>
+
+<p>The tree modeled by the UAA is not a static data
+structure.  Because of scrolling the document window, changing its content, or
+modifying the contents of GUI controls, the structure and content of single
+nodes and sub-trees is constantly changing.  These changes are notified to the
+AT by sending events to registered listeners (among them the AT).  The kind of
+event that is sent for a specific change depends on the UAA interfaces that
+the node that represents the modified object does support and on the actual
+implementation of these interfaces.  Listeners to accessibility events
+implement the <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleEventListener.html"
+   title="Documentation of the XAccessibleEventListener interface"><code>XAccessibleEventListener</code></a> interface while broadcasters
+implement the 
+<a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleEventBroadcaster.html"
+   title="Documentation of the XAccessibleEventBroadcaster interface"><code>XAccessibleEventBroadcaster</code></a> interface.
+Events are <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/AccessibleEventObject.html"
+   title="Documentation of the AccessibleEventObject structure"><code>AccessibleEventObject</code></a> structures, their types
+   are described in the <a
+   href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/AccessibleEventId.html"
+   title="Documentation of the AccessibleEventId constants group"><code>AccessibleEventId</code></a> constants group.</p>
+
+
+
+
+<h3>Independent implementation of the UAA</h3>
+
+<p>The <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessible.html"
+   title="Documentation of the XAccessible interface"><code>XAccessible</code></a> interface allows the decoupling
+   of the implementation of the UAA from the implementation of the rest of
+   the UNO API.  Its only method, <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessible.html#getAccessibleContext"
+   title="Documentation of the XAccessible::getAccessibleContext() method"><code>getAccessibleContext()</code></a>,
+   returns
+   an object that implements the <code>AccessibleContext</code> service.
+   This may or may not be done by a class other than the one that implements the
+   <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessible.html"
+   title="Documentation of the XAccessible interface"><code>XAccessible</code></a> interface.  This has the big advantage, that the
+   existing API implementation needs only minimal modifications.</p>
+
+
+
+
+
+<h3>Differences between the Accessibility APIs of UNO and Java</h3>
+
+Here is a list of major differences between the UNO and the Java Accessibility APIs:
+
+<ul>
+
+<li><p>Java interfaces <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/accessibility/AccessibleComponent.html"
+title="Documentation of the JAA AccessibleComponent interface"><code>AccessibleComponent</code></a> and <a href="http://java.sun.com/j2se/1.4.1/docs/api/javax/accessibility/AccessibleExtendedComponent.html"
+title="Documentation of the JAA AccessibleExtendedComponent interface"
+><code>AccessibleExtendedComponent</code></a> have been rearranged into the UAA interfaces <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleComponent.html"
+title="Documentation of the XAccessibleComponent interface"><code>XAccessibleComponent</code></a> and <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleExtendedComponent.html"
+title="Documentation of the XAccessibleExtendedComponent interface"><code>XAccessibleExtendedComponent</code></a>.</p></li>
+
+<li><p>Java interfaces <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/accessibility/AccessibleTable.html"
+title="Documentation of the JAA AccessibleTable interface"><code>AccessibleTable</code></a> and
+<a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/accessibility/AccessibleExtendedTable.html"
+title="Documentation of the JAA AccessibleExtendedTable interface"><code>AccessibleExtendedTable</code></a> have been merged into the single
+UNO interface <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleTable.html"
+title="Documentation of the XAccessibleTable interface"><code>XAccessibleTable</code></a>.</p></li>
+
+<li><p>Java interfaces <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/accessibility/AccessibleText.html"
+title="Documentation of the JAA AccessibleText interface"><code>AccessibleText</code></a> and
+<a href="http://java.sun.com/j2se/1.4.1/docs/api/javax/accessibility/AccessibleEditableText.html"
+title="Documentation of the JAA AccessibleEditableText interface"
+><code>AccessibleEditableText</code></a> have been rearranged into the UAA interfaces <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleText.html"
+title="Documentation of the XAccessibleText interface"><code>XAccessibleText</code></a> and <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleEditableText.html"
+title="Documentation of the XAccessibleEditableText interface"><code>XAccessibleEditableText</code></a> to better reflect the read only and
+  read/write access to text.</p></li>
+
+
+<li><p>The Java class <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/accessibility/AccessibleBundle.html"
+title="Documentation of the JAA AccessibleBundle interface"><code>AccessibleBundle</code></a> is not supported, because it is
+  not necessary in the UNO environment.</p></li> 
+
+<li><p>The Java class <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/accessibility/AccessibleResourceBundle.html"
+title="Documentation of the JAA AccessibleResourceBundle interface"><code>AccessibleResourceBundle</code></a> is not supported, because it
+  is deprecated in the Java API.</p></li>
+
+<li><p>The Java <em>classes</em> <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/accessibility/AccessibleRelation.html"
+title="Documentation of the JAA AccessibleRelation interface"><code>AccessibleRelation</code></a>,
+<a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/accessibility/AccessibleRole.html"
+title="Documentation of the JAA AccessibleRole interface"><code>AccessibleRole</code></a>, and <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/accessibility/AccessibleState.html"
+title="Documentation of the JAA AccessibleState interface"><code>AccessibleState</code></a> are realized
+  by UNO <em>constants collections</em> 
+<a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/AccessibleRelationType.html"
+title="Documentation of the AccessibleRelationType constants collection"><code>AccessibleRelationType</code></a>, <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/AccessibleRole.html"
+title="Documentation of the AccessibleRole constants collection"><code>AccessibleRole</code></a>, and <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/AccessibleStateType.html"
+title="Documentation of the AccessibleStateType constants collection"><code>AccessibleStateType</code></a>
+due to different API designs.</p></li>
+
+<li><p>The Java interface <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/accessibility/AccessibleIcon.html"
+title="Documentation of the JAA AccessibleIcon interface"><code>AccessibleIcon</code></a> has been renamed into
+  the UNO interface <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleImage.html"
+title="Documentation of the XAccessibleImage interface"><code>XAccessibleImage</code></a> to represent its more general approach.</p></li>
+
+<li><p>The methods of the Java class <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/accessibility/AccessibleHyperlink.html"
+title="Documentation of the JAA AccessibleHyperlink interface"><code>AccessibleHyperlink</code></a> regarding actions have been
+  removed.  Instead the UNO service <code>AccessibleHyperlink</code> supports
+  in addition to the interface <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleHyperlink.html"
+title="Documentation of the XAccessibleHyperlink interface"><code>XAccessibleHyperlink</code></a> also the
+  <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/XAccessibleAction.html"
+title="Documentation of the XAccessibleAction interface"><code>XAccessibleAction</code></a> interface.</p></li>
+
+</ul>
+
+
+
+<h3>Documentation of the UNO Accessibility API</h3>
+
+<p>More details of the UAA can be found in the <a 
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/accessibility/module-ix.html"
+title="Documentation: UAA reference">API reference</a>.
+
+<p>The services that expose application specific details of the UAA can be
+  found here for the  <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/awt/module-ix.html" 
+title="Services of the UAA implementation used by the GUI">GUI</a>, <a
+href="http://api.openoffice.org/docs/common/ref/com/sun/star/text/module-ix.html" 
+title="Services of theUAA implementation used by the Writer">Writer</a>, 
+<a href="http://api.openoffice.org/docs/common/ref/com/sun/star/sheet/module-ix.html" 
+title="Services of the UAA implementation used by the Calc">Calc</a>, 
+<a href="http://api.openoffice.org/docs/common/ref/com/sun/star/drawing/module-ix.html" 
+title="Services of the UAA implementation used by Draw/Impress">Draw/Impress</a>,
+and <a href="http://api.openoffice.org/docs/common/ref/com/sun/star/chart/module-ix.html" 
+title="Services of the UAA implementation used by Chart">Chart</a>.</p>
+</body>
+</html>
+

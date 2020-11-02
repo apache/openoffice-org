@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Gunnar Timm">
+	<META NAME="CREATED" CONTENT="20020114;16054600">
+	<META NAME="CHANGEDBY" CONTENT="Frank Sch&ouml;nheit">
+	<META NAME="CHANGED" CONTENT="20020304;18365265">
+	<STYLE>
+	<!--
+		TD P { margin-bottom: 0.1cm }
+		TD P.western { font-family: "Thorndale", serif }
+		P.western { font-family: "Thorndale", serif }
+		H2 { color: #ffffff }
+		H2.western { font-family: "Arial", sans-serif; font-size: 14pt; font-style: italic }
+		A:visited { color: #444488 }
+		A:link { color: #444488 }
+	-->
+	</STYLE>
+</head>
+<body LANG="de-DE" LINK="#444488" VLINK="#444488" BGCOLOR="#eeeeff">
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 STYLE="page-break-before: always">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H1 ALIGN=CENTER><A HREF="http://www.openoffice.org/"><IMG SRC="../images/open_office_org_logo.gif" NAME="Grafik1" ALT="OpenOffice" ALIGN=RIGHT WIDTH=168 HEIGHT=71 BORDER=0></A><FONT COLOR="#ffffff"><FONT FACE="Arial"><FONT SIZE=5>File
+			Open Dialog<BR>rudimentary functional description</FONT></FONT></FONT></H1>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 NOSHADE>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP BGCOLOR="#666699">
+			<H2 CLASS="western">General</H2>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P CLASS="western">The file open dialog implementation allows to,
+			well, open or save files. In a more abstract sense, it allows to
+			browse a content hierarchy as provided by a <A HREF="http://ucb.openoffice.org/">Universal
+			Content Broker</A>, and pick a content in such a hierarchy for
+			doing an action with this content (mostly &quot;load&quot; or
+			&quot;save&quot;).</P>
+			<P CLASS="western">A general problem is the difference between a
+			specification for the file picker service, and the usage of this
+			service in OOo. An example for this is the paragraph about
+			settings persistence: In general, the dialog tries to restore some
+			settings from it's previous incarnation. However, this is a
+			feature of the service. In OOo, there may be places where this is
+			explicitly disabled for whatever reasons, which then is a feature
+			of the enclosing component.</P>
+			<P CLASS="western"><BR><BR>
+			</P>
+			<P CLASS="western">This document is not remotely a complete
+			specification. It covers things which we found to be usefull
+			information, and which may be the very rudimentary base of what
+			would be a real specification.</P>
+			<P CLASS="western"><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP BGCOLOR="#666699">
+			<H2 CLASS="western">Keyboard navigation</H2>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P CLASS="western">As every dialog within OpenOffice.org, in
+			general controls within the dialog are reachable via a shortcut.
+			For instance the filter listbox has a label called &quot;Fil<U>t</U><SPAN STYLE="text-decoration: none">er&quot;,
+			where the underlined &quot;t&quot; means the filter list box can
+			be activated by pressing &quot;Alt-L&quot;.</SPAN></P>
+			<P CLASS="western"><BR><BR>
+			</P>
+			<P CLASS="western">This should work in the usual manner &ndash; no
+			matter where the focus is, &quot;Alt-&lt;shortcut&gt;&quot; should
+			travel to the respective control.</P>
+			<P CLASS="western"><BR><BR>
+			</P>
+			<P CLASS="western"><BR>
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP BGCOLOR="#666699">
+			<H2 CLASS="western">Settings Persistence</H2>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P CLASS="western">In general, the file open dialog should
+			remember it's last working directory, relative to it's context.
+			Here, <I>context</I> means the usage of the dialog: &quot;as
+			save-as dialog&quot;, &quot;as file-open dialog&quot;, as &quot;open
+			graphics dialog&quot;. The context concept of the dialog is to be
+			re-designed, currently, there is a lot of magics involved which
+			I'd be ashamed of to tell here in more detail.</P>
+			<P CLASS="western">In general, upon starting the dialog, it tries
+			to restore the last working directory for this context (this can
+			be overwritten from the outside). For file-URLs, an existence
+			check is made, and if the folder does not exist anymore, a error
+			message is shown. After this, the default working directory (as
+			got from the configuration) is chosen as initial path to show.</P>
+			<P CLASS="western"><BR><BR>
+			</P>
+			<P CLASS="western"><BR>
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<P CLASS="western" STYLE="margin-bottom: 0cm"><BR>
+</P>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<P CLASS="western" ALIGN=LEFT><FONT COLOR="#ffffff">Author: <SDFIELD TYPE=DOCINFO SUBTYPE=CHANGE FORMAT=AUTHOR>Frank Sch&ouml;nheit</SDFIELD></FONT><A HREF="mailto:ibo@system-entwicklung.de"><FONT COLOR="#444488"><BR></FONT></A><FONT COLOR="#ffffff">Last
+			Modified: <SDFIELD TYPE=DOCINFO SUBTYPE=CHANGE FORMAT=DATE SDNUM="1031;0;TT.MM.JJ">04.03.02</SDFIELD>
+			<SDFIELD TYPE=DOCINFO SUBTYPE=CHANGE FORMAT=TIME SDNUM="1031;1031;HH:MM:SS">18:36:53</SDFIELD><BR><I>Copyright
+			&copy; 2002 OpenOffice.org</I></FONT></P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+</TABLE>
+<P CLASS="western" STYLE="margin-bottom: 0cm"><BR>
+</P>
+</body>
+</HTML>

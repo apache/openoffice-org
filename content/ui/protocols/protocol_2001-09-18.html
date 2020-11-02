@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>meeting minutes</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="AUTHOR" CONTENT="Oliver Specht">
+	<META NAME="CREATED" CONTENT="20010919;11062707">
+	<META NAME="CHANGEDBY" CONTENT="Oliver Specht">
+	<META NAME="CHANGED" CONTENT="20010919;11514492">
+</head>
+<body>
+<TABLE WIDTH=100% BORDER=2 BORDERCOLOR="#000000" CELLPADDING=5 CELLSPACING=0 FRAME=HSIDES RULES=NONE STYLE="page-break-before: always; page-break-inside: avoid">
+	<COL WIDTH=57*>
+	<COL WIDTH=199*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=22% BGCOLOR="#e6e6e6">
+				<P ALIGN=LEFT>Date</P>
+			</TH>
+			<TD WIDTH=78% SDVAL="35665" SDNUM="5127;0;@">
+				<P ALIGN=LEFT>September 18<SUP>th</SUP> 2001</P>
+			</TD>
+		</TR>
+	</THEAD>
+</TABLE>
+<P><BR><BR>
+</P>
+<H1>Protocol Replaceable UI</H1>
+<H2>TODOs</H2>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=5 CELLSPACING=0 FRAME=BELOW RULES=ROWS STYLE="page-break-inside: avoid">
+	<COL WIDTH=149*>
+	<COL WIDTH=54*>
+	<COL WIDTH=54*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=58% BGCOLOR="#cccccc">
+				<P ALIGN=LEFT>ToDo 
+				</P>
+			</TH>
+			<TH WIDTH=21% BGCOLOR="#cccccc">
+				<P ALIGN=LEFT>Responsible</P>
+			</TH>
+			<TH WIDTH=21% BGCOLOR="#cccccc">
+				<P ALIGN=LEFT>Status</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=58%>
+				<P>Create documentation for slots using sdi-files</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>OS</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>new</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=58%>
+				<P>How-to intercept PopupMenues</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>OS</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>new</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=58%>
+				<P>Configurable scripts (in menue/toolbars/accelarators)</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>MBA</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>new</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=58%>
+				<P>Find hard-coded accelerators 
+				</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>OS</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>new</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=58%>
+				<P>Propagation of view property changes to other existing views 
+				</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>OS</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>new</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=58%>
+				<P>Find missing view properties</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>OS</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>new</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=58%>
+				<P>Enable menu configuration in runtime using XML-configuration
+				files</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>MBA</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>new</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<BR>
+</P>
+<H2>UI component replacement</H2>
+<H3>Dialog replacement</H3>
+<P>The replacement of dialogs can be achieved by intercepting the
+slots (already possibly). To enable users to intercept slots an
+automatically generated documentation of all configurable slots has
+to be created from the sdi-files and the related slot-resource files.
+If possible the help texts for the slots should be added. 
+</P>
+<P>To increase performance the dialogs are to be moved to
+load-on-call libraries. A factory to implement this has to be
+defined. 
+</P>
+<H3>Replacement of PopupMenues</H3>
+<P>A list of non-standard PopupMenues has to be collected. The
+standard popupMenue is created from SfxDispatcher::ExecutePopup().</P>
+<H3>Replacement of Menu/Toolbox/Accelerators 
+</H3>
+<P>To change the Menu/Toolbox/Accelerator configuration at runtime an
+XML-based interface will be introduced. 
+</P>
+<P>In the near future it will not be possible to replace the
+controller that are bound to the slots and also not possible to
+register own controllers. 
+</P>
+<P>The possibility of configuring inline scripts has to be checked. 
+</P>
+<P>It has to be checked whether hard-coded accelerators are used and
+how they can be replaced. 
+</P>
+<H3>Properties of views</H3>
+<P>All configurable view elements (ScrollBars, Help tips, Rulers,
+object bars) should be accessible via API and not be overwritten by
+user interface actions. This will prevent the necessity of
+implementing hacks like hiding the StatusBar in the Help UI or
+preventing Help tips in the writer. 
+</P>
+<P>It has to be determined how changes of view properties are
+propagated to existing views. Today some settings only affect the
+current and future views (like Scrollbars, Rulers) and some are
+applied to all existing views (like ObjectBar, StatusBar).</P>
+<P>Missing view properties have to be found and implemented (like
+help tip).</P>
+<P><BR><BR>
+</P>
+<P>Remark: All initials for names should be
+interpreted as &lt;Initial&gt;@openoffice.org</P>
+</body>
+</HTML>

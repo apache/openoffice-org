@@ -1,0 +1,121 @@
+<html><head>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+<h2>Document representation guidelines</h2>
+
+<p><em>Last modification on October 31st 2001.</em></p>
+
+<p>The following list contains a set of guidelines for the representation of
+StarOffice/OpenOffice.org documents with the UNO Accessibility API (UAA).
+The intention of these guidelines is to define--in an application unspecific
+way--what kind of information of a document should expose over the UAA.  It
+thus complements the syntactic specification made by the actual UAA
+definition.</p>
+
+<p>It is not the goal of these guidelines to give a detailed description of
+how to represent documents of the individual applications.  That is done at
+another place.
+</p>
+
+<ol>
+<li><b>View based approach</b><br>
+<p>In order to let people that use different interfaces--for example the
+OpenOffice.org GUI or a Braille display--help each other with working on a
+document all of them need to have access to an <em>equivalent</em>
+representation of that document.  We think that the best way to achieve this
+goal is to use the current GUI as a reference and to expose all information
+over the UAA that is available over the GUI.</p>
+
+<p>We are, of course, aware of the fact that the information available over
+the UAA will not be completely equivalent to that available over the GUI.
+Content of graphical objects for example can be exposed only rudimentary.</p>
+
+<p>This approach is called view based as opposed to a structure or content
+based approach that would focus not on the graphical appearance on the screen,
+but on the structure of a document's content.</p>
+
+<p>Consequences of employing the view based approach are for instance that in
+a Writer document a text paragraph may be split into several portions
+according to its layout on the screen.  Another example is the exposure of how
+text is broken into lines.</p>
+
+<p>A further reason to favor the view based approach over the content based
+one is the better consistency with the WYSIWYG paradigm.</p>
+<br>
+</li>
+
+
+<li><b>Keep it simple</b><br>
+
+<p>The idea behind this rule is to keep the <em>structure</em> of the UAA
+document representation as simple as possible while at the same time give
+access to as much of a document's semantical <em>content</em> as possible.
+One way to achieve that is to remove nodes from the representation tree that
+expose no content by themselves but serve only as container for other
+objects.  Such container nodes should be used only in selected places.</p>
+
+<p>The reason for this is a pragmatically one.  Current AT devices can't cope
+with information with a structure that is overly complex.  Moreover, no AT
+vendor will invest much time and money into supporting an API that differs too
+much from their current source of information.</p>
+<br></li>
+
+
+<li><b>Don't represent objects that lie completely off-screen</b><br>
+
+<p>There are two reasons for this rule.  The first one is to keep the document
+representation consistent with what is visible on the screen.  If document
+parts not visible on the screen where given access to via the UAA each AT
+device had to figure out on its own what parts are visible and shall be
+exposed to the user and which parts to hold back.</p>
+
+<p>The second reason is the reduction of the amount of data that has to be
+transmitted from application to AT.  This point is mainly relevant when
+application and AT are not running on the same computer.  When exposing the
+whole document over the UAA the AT would have to probe a lot of objects in
+order to determine the visible ones.</p>
+
+<p>There is one exception to not represent off-screen objects.  Calc tables
+will give access to all their cells at once regardless of whether they are
+on- or off-screen.  There are again two reasons for this.  The first is
+consistency with existing implementations of the AccessibleTable interface
+like the javax.swing.JTable.AccessibleJTable class.  The second reason has
+to do with cell indices.  When only the visible cells would be represented
+scrolling the document would result in each cell getting new indices--relative
+to the upper left visible cell--assigned.  This would render using indices
+virtually useless.  Representing all cells leads to indices that remain
+unchanged by scrolling.</p>
+
+<p>There still remains the issue of partially visible document parts.  Some,
+like text paragraphs, may be split into on- and off-screen parts.  If that
+is not possible partially visible objects are handled exactly like
+completely visible objects.</p>
+
+<p>Use the VISIBLE and SHOWING states to appropriately mark objects.  If
+they are completely or partially visible on the screen they are VISIBLE
+<em>and</em> SHOWING.  Objects contained in the UAA representation tree,
+that lie outside the visible area are marked as VISIBLE <em>but not</em>
+SHOWING.</p> <br></li>
+
+<li><b>Don't represent hidden objects</b><br> 
+
+<p>This is very similar to the previous rule.  Objects that have been
+actively marked as hidden are not visible on the screen and therefore are
+not represented by the API.</p> <br></li>
+
+<li><b>Do not represent the cursor position explicitly beyond the means of
+AccessibleText</b><br>
+
+<p>The cursor position, i.e. the position at which text typed on the
+keyboard will be inserted into a document, has not to be explicitely exposed
+by the UAA e.g. by providing special AccessibleAction objects.  It is taken
+care of by sending events with every change of the cursor position, which
+contain information about the AccessibleText object which contains the
+cursor.  This object can then be queried for the caret position.</p>
+
+</li>
+</ol>
+</body>
+</html>
+

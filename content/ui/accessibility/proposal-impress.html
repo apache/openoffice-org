@@ -1,0 +1,235 @@
+<html><head>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+<h2>Impress and Draw Accessibility</h2>
+<p>Proposal</p>
+<p>by Andre Fischer (<a href="mailto:andre.w.fischer@sun.com" 
+title="Mail address of Andre Fischer">andre.w.fischer@sun.com</a>),<br>
+last modification on November 11th 2001</p>
+
+
+<h3>1. Introduction</h3>
+
+<p>This paper describes how documents of the StarOffice/OpenOffice.org
+Impress and Draw applications can be made accessible by using the UNO
+Accessibility API (UAA).</p>
+
+<p>It will be shown that making Impress accessible can be (largely) reduced
+to making Draw accessible.  This proposal will therefore first give a short
+introduction to Impress documents and then show that mainly Draw pages
+have to be made accessible.</p>
+
+
+<h3>2. Impress Documents</h3>
+
+<p>Impress documents consist of one ore more pages.  Each page can contain a
+number of objects like 
+<ul>
+<li>Outliner objects contain text organized in a hierarchical list.</li>
+<li>Text objects used e.g. for titles.</li>
+<li>Graphical objects like lines, polygons, circles, etc.</li>
+<li>OLE objects</li>
+</ul>
+</p>
+
+<p>Every page of an Impress document is made up of two parts: a drawing page
+and a master page.  There is one drawing page per document page.  Master pages
+are used to specify material that is visible on more than one page and
+therefore can be shared between drawing pages.  A master page can be used for
+example to include the page number, time, date, or author.
+</p>
+
+<p>
+There are six display modes for visualizing an Impress document:
+<ol>
+<li><b>Drawing View</b><br>
+<p>This is the only graphical edit mode.  At any one time there is one document
+page visible on the screen.  Its initial scale is chosen so that the whole
+page fits in the document window.</p></li>
+
+<li><b>Outline View</b><br> <p>The textual content of all pages including
+title and outliner objects is displayed and can be edited in a hierarchical
+list.  It gives an overview of the document's structure and offers an easy
+and non-graphical way to create and modify the document.  The outline view
+is certainly very attractive for users which create an Impress slide show
+via an AT device.</p></li>
+
+<li><b>Slide View</b><br> <p>Display of all pages at once.  This view acts
+as a visual selection tool.  You can browse the whole document for a
+specific page and jump from there into the edit mode.</p></li>
+
+<li><b>Notes View</b><br> <p>This introduces a third kind of page, the notes
+page.  Each notes page is associated to one document page.  It is divided
+into two parts.  The first contains the document page, the second contains a
+list of notes describing the document page.  In this display mode you can
+not edit document pages.</p></li>
+
+<li><b>Handout View</b><br> <p>At the first glance similar to the slide
+view, this mode puts several--defaults to four--document pages onto one
+print page.  It is used to create a printed version of the whole document.
+You can neither edit the pages nor can you jump into the edit mode from
+here.</p></li>
+
+<li><b>Slide Show</b><br> <p>The slide show mode displays all document pages
+full-screen one slide at a time in a consecutive order.  Mouse clicks or
+pressing a key advances to the next page.  No editing in this mode.</p></li>
+</ol> </p>
+
+<p>Only the first mode allows the graphical modification of the document.
+The second lets you change at least the text information.  All but the
+second contain graphical representations of one or more document pages.</p>
+
+<p>As a result we have two different cases.  All modes but the second use
+draw pages for visualizing the document.  This case is handled by making the
+Draw application accessible.  Special handling due to the editing capability of the
+drawing view is not necessary.  The outline view has to be handled
+separately.  The two cases are described in more detail in the next two sections.</p>
+
+
+
+<h3>3. UAA representation of Draw Pages</h3>
+
+<p>The UAA uses a set of interfaces to offer a hierarchical representation of an
+application window.  In the following we will focus on representing one draw
+page.  If there is more than one draw page visible on the screen then each one
+of them is represented by a separate sub-tree.</p>
+
+<p>According to our <a
+href="http://ui.openoffice.org/accessibility/docrep-guidelines.html"
+title="Document representation guidelines">document representation
+guidelines</a> only those objects on a draw page will be represented, that
+are visible at the time of a query.  Both Draw and Impress scale new pages
+so that the whole page fits on the screen.  Therefore, only an active
+rescaling or placing of objects outside the page boundaries will result in
+objects not being represented.</p>
+
+<p>However, there is one exception to the rule to represent only fully or
+partially visible objects.  If a connector links a visible object to one
+object that is currently not visible, this target object will be included
+into the UAA representation.  This is necessary to be able to provide the
+connectors as <code>AccessibleRelation</code> objects.</p>
+
+
+<h4>3.1. Details</h4>
+
+<p>All classes that implement the draw pages and the objects--shapes and OLE
+objects--that can be inserted into a draw page have to be extended to
+support the <code>Accessible</code> service.  Calls to their
+<code>getAccessibleContext</code> method will return references to instances
+of classes that are implemented independently from the draw page and shape
+classes.  That means that the only modification of existing code is needed
+for the support of the <code>XAccessible</code> interface.  All other coding
+can be done independently in another place.</p>
+
+<p>All fully and partially visible objects on a draw page are represented by
+objects that support the <code>AccessibleContext</code> service.  They
+support the additional services <code>AccessibleComponent</code>,
+<code>AccessibleEditableText</code>, <code>AccessibleRole</code>, and
+<code>AccessibleText</code>.  Whether or not the
+<code>AccessibleAction</code> service will be supported has yet to be
+discussed.  If a shape is linked to other shapes via connectors then the
+<code>AccessibleContext</code> object of the shape from which such a link
+originates will return a non empty relation set when the
+<code>getRelationSet</code> method is called.</p>
+
+<p>Each draw page will be represented in a shallow hierarchy.  The root node
+corresponds to the view that is responsible for drawing a document window.
+Its children are the representations of all visible draw pages.  The
+children of each draw page node are the representations of the visible
+shapes on that draw page.</p>
+
+<p>The order of the children of a draw page node depends on the z-order of
+the represented shapes, i.e. the order in which they are painted onto the
+screen: if shape A is painted over by shape B, then shape A comes
+<em>before</em> shape B in the list of children.</p>
+
+<p>The UAA representations of the different view modes described above
+differ only in their second layers: There are a different number of draw
+pages and the draw pages have different geometries.</p>
+
+
+<h4>3.2. Roles, Names, and Descriptions</h4>
+
+<p>The task to assign roles, names, and descriptions to draw shapes is not a
+trivial one.  There is a multitude of shapes which leads to the problem of
+creating meaningful default names and descriptions.
+
+<p>The roles could be taken from a small set like 'View', 'DrawPage', and
+'Shape' that would have essentially one role per layer.  However, this would
+render the role quite useless.  It is preferable to use a larger set of
+roles that gives each type of shape its own role and maybe distinguishes
+even between different kinds of views.  With this an AT can perform special
+actions on certain roles.  A shape's role would be quite similar to a
+shape's default name but because roles are taken from a fixed set (fixed in
+the environment of a given application) while names are free-form strings.
+Roles are therefore better suited to be processed automatically than
+names.</p>
+
+<p>On the first glance naming the objects may seem to be straightforward.
+Simply use the already existing name attribute of the shapes.  The problem
+lies in finding proper default names.  A first and trivial solution is to
+use the shape's type and append a number.</p>
+
+<p>The same holds true with descriptions.  One approach can be to use a
+shape's type and adorn it with a human readable and, more importantly,
+understandable representation of the shape's properties like fill color,
+outline width, or font.</p>
+
+<p>However good the defaults for name and description will be, they will
+never come close to those supplied by the author of a document.  Therefore,
+the author should be more 'encouraged' to do so.  It would be helpful to
+have a special accessibility mode that would--at appropriate times--pop up a
+dialog box inquiring names and descriptions of shapes that have not yet been
+given explicit names or descriptions.</p>
+
+
+<h4>3.3. Special objects</h4>
+
+<p>There are a number of objects that can appear on a draw page, that
+deserve special consideration:</p>
+
+<ul>
+
+<li><b>Animations</b> are normal shapes that can change their positions or
+appearances.  They will be represented like static shapes.  Their state at
+the end of the animation will be exposed.  It has yet to be discussed
+whether to provide a flag that a shape is animated and additional
+information that describes the animation.</li>
+
+
+<li><b>Special effects for changing slides</b> pose the problem that for a
+short time two slides can be seen at the same place and that the visibility
+changes for all their shapes.  The first approach to solve this problem will
+be to not represent effects for slide changes at all.  At the end of the
+effect the AT will be informed of a change of the complete window.</li>
+
+<li><b>Connectors</b> connect exactly two shapes.  They are represented by entries in
+the <code>XAccessibleRelationSet</code> object returned by the object from
+which the connection originates.
+</li>
+
+</ul>
+ 
+
+<h3>4. Impress Outline View</h3>
+
+<p>The Impress outline view is a relatively simple document visualization and
+its UAA representation is straightforward.  It consists of a hierarchical
+view of most of the textual information on all slides.  Each slide has a
+top-level entry.  The text on the slides follows properly indented.</p>
+
+<p>The UAA tree will use objects implementing
+<code>AccessibleEditableText</code> which are nested according to the
+hierarchy of the text in the outline view.  It will be only those objects be
+available that lie inside the visible area.</p>
+
+<p>Entering the outline view creates a preview window that shows a preview
+of the slide who's text in the outline view contains the cursor.  Its
+content is a single draw page and can be represented accordingly.  Because
+the preview is not directly editable, there is no need to make the preview
+window focusable.</p>
+
+<br></body>
+</html>
+
