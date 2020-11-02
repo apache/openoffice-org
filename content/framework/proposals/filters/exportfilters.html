@@ -1,0 +1,138 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Mathias Bauer">
+	<META NAME="CREATED" CONTENT="20020320;11105752">
+	<META NAME="CHANGEDBY" CONTENT="Mathias Bauer">
+	<META NAME="CHANGED" CONTENT="20020320;17323202">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="de-DE">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/framework/">framework</a>&nbsp;&raquo;&nbsp;<a href="/framework/proposals/">proposals</a>&nbsp;&raquo;&nbsp;<a href="/framework/proposals/filters/">filters</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H2>Proposal for a unified API for exporting and saving documents</H2>
+<P>Impress has two different kinds of export filters. Some of them
+can be used for &bdquo;SaveAs&ldquo; (like PowerPoint and StarOffice
+binary filters), some of them are only accessible throuh the &bdquo;Export&ldquo;
+function. While the first kind of filters can be used via API (
+com::sun::star::XStorable::store(To/AsURL) ), the second kind of
+filters can't. We want to change this, and the most natural way is to
+use the same API for both. The &bdquo;Export&ldquo; functionality in
+the user interface will use this API in the same way the &bdquo;SaveAs&ldquo;
+functionality does it, with some slight differences:</P>
+<OL>
+	<LI><P>&bdquo;Export&ldquo; uses storeToURL, SaveAs uses storeAsURL.
+	The difference is, that the latter method also changes the URL of
+	the document in memory.</P>
+	<LI><P>This implies that it's not possible to use a pure export
+	filter in the storeAsURL method, because the generated file would
+	not be importable. Pure export filters can only be used in the
+	storeToURL method. Using a wrong filter will cause throwing of an
+	exception.</P>
+	<LI><P>To ease the implementation to find out which filters shall be
+	used in which funtion, &bdquo;Export&ldquo; uses only pure export
+	filters, while &bdquo;SaveAs&ldquo; only uses filters that can both
+	import and export. If an Import/Export filter should also be used
+	for &bdquo;Exporting&ldquo;, another filter must be created in the
+	filter configuration for the same file type, but without the
+	&bdquo;Import&ldquo; flag set. If new filters are created in the
+	configuration, they can get the same UI names as the old
+	import/export filter (because they won't be seen in the same file
+	dialog), but must get a new internal filter name. Filter names of
+	import filters must not be changed, because they may have been used
+	before. If an import filter shall not be used in the &bdquo;SaveAs&ldquo;
+	dialog, they must not have the &bdquo;Export&ldquo; flag set, use a
+	different filter ony for export.<BR>We will have three kind of
+	filters then: pure import filter (document can't be stored over the
+	old file after loading), pure export filters (saved document is not
+	loadable again, so this filter will be used only in the &bdquo;Export&ldquo;
+	function) and combined import/export filters.</P>
+	<LI><P>Export filters support an additional property
+	&bdquo;ExportSelection&ldquo; in the media descriptor, that tells
+	the filter to export only the current selection and not the whole
+	document. This will be reflected by a checkbox in the file dialog.</P>
+</OL>
+<P>All parameters to configure the export operation will be passed in
+the &bdquo;FilterData&ldquo; property of the media descriptor that is
+passed to the filter (implemented as sequence&lt;PropertyValue&gt;).
+If there is no configuration data given, the filter must use some
+suitable defaults. 
+</P>
+<P>In the user interface it's also possible to provide a UI component
+that retrieves the needed information and adds it to the media
+descriptor. If the filter wants, it can also store the input in a
+configuration file and use it as default in the next operation
+without given parameters. Here also the &bdquo;UserData&ldquo;
+parameter of the Typedetection.xml can be used for storing the
+configuration. This is only possible for data representable as a
+string, but the advantage is that the default for the filter can be
+specified in the Typedetection.xml, not in the source code. In this
+case the filter implementation first must look for &bdquo;FilterData&ldquo;,
+then for &bdquo;UserData&ldquo;.</P>
+<P>The UI component is identified by an implementation name in the
+filter configuration (Typedetection.xml). The UI code for the
+&bdquo;Export&ldquo; function will look into the configuration and
+instantiate the UI component. The exact interface for this component
+will be specified in a different proposal, it should use a media
+descriptor as input/output paremeter and return a boolean value, that
+will be set to &bdquo;false&ldquo; if the user cancels the operation.</P>
+<P>The UI component is not restricted for usage inside the &bdquo;Export&ldquo;
+functionality. We will also have this new feature for the filters
+used for loading and storing documents.</P>
+<P>At the end we will have one single API for storing or exporting
+documents, one single set of filters with a common API, only the two
+UI functions will use it in two different ways. This API also enables
+other developers to provide export filters for OO.o documents using
+our filter API, with the additional capabilities of exporting only
+parts of the document.</P>
+<P>Of course this mechanism can be used in other office components
+also.</P>
+<P>ToDo's:</P>
+<OL>
+	<LI><P>Extend Typedetection.xml for new implementation name for UI
+	component and change filtercache implementation. Make sure that the
+	compatibilty to 6.0 is preserved.</P>
+	<LI><P>Provide properties &bdquo;ExportSelection&ldquo; and
+	&bdquo;FilterData&ldquo; in media descriptor and SfxItemSet at
+	SfxMedium.</P>
+	<LI><P>Divide filters into import, export and import/export filters.</P>
+	<LI><P>Create interface for the UI component.</P>
+	<LI><P>Implement a UI component for all current export filters and
+	register it for all of them in the configuration.</P>
+	<LI><P>Move the old &bdquo;core&ldquo; code from the FuExport to the
+	ConvertTo method in Impress.</P>
+	<LI><P>Offer SID_EXPORT in SFX that will look for the UI component
+	and feed the API call.</P>
+	<LI><P>Check for pure export filters in storeToURL and for pure
+	import filters in store calls.</P>
+	<LI><P>Enable the current code for loading and storing documents to
+	use the filters UI components.</P>
+	<LI><P>Document all parameters of our current export filters.</P>
+</OL>
+<P><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

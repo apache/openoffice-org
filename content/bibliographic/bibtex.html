@@ -1,0 +1,1191 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<TITLE>btxdoc</TITLE>
+<META NAME="description" CONTENT="btxdoc">
+<META NAME="keywords" CONTENT="btxdoc">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="btxdoc.css">
+
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body >
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/bibliographic/">bibliographic</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<!--Navigation Panel-->
+<IMG WIDTH="81" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next_inactive"
+ SRC="file:/usr/lib/latex2html/icons/nx_grp_g.png"> 
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up_g.png"> 
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev_g.png">   
+<BR>
+<BR><BR>
+<!--End of Navigation Panel-->
+
+<P>
+
+<H1><A NAME="SECTION00010000000000000000">
+1 Overview</A>
+</H1>
+
+<P>
+[This document will be expanded when 
+
+<P>
+version 1.00 comes out. Please report typos, omissions, inaccuracies,
+and especially unclear explanations to me (<TT>patashnik@SCORE.STANFORD.EDU</TT>).
+Suggestions for improvements are wanted and welcome.]
+
+<P>
+This documentation, for 
+
+<P>
+version 0.99b, is meant for general 
+
+<P>
+users; bibliography-style designers should read this document and
+then read ``Designing 
+
+<P>
+Styles''&nbsp;[<A
+ HREF="btxdoc.html#btxhak">3</A>], which is meant for just them.
+
+<P>
+This document has three parts: Section&nbsp;<A HREF="btxdoc.html#differences">2</A> describes
+the differences between versions 0.98i and 0.99b of 
+
+<P>
+and between the corresponding versions of the standard styles; Section&nbsp;<A HREF="btxdoc.html#latex-appendix">3</A>
+updates Appendix&nbsp;B.2 of the L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X book&nbsp;[<A
+ HREF="btxdoc.html#latex">2</A>]; and Section&nbsp;<A HREF="btxdoc.html#odds-and-ends">4</A>
+gives some general and specific tips that aren't documented elsewhere.
+It's assumed throughout that you're familiar with the relevant sections
+of the L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X book.
+
+<P>
+This documentation also serves as sample input to help 
+
+<P>
+implementors get it running. For most documents, this one included,
+you produce the reference list by: running L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X on the document
+(to produce the <TT>aux</TT> file(s)), then running 
+
+<P>
+ (to produce the <TT>bbl</TT> file), then L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X twice more (first
+to find the information in the <TT>bbl</TT> file and then to get the
+forward references correct). In very rare circumstances you may need
+an extra /L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X run.
+
+<P>
+
+<P>
+version 0.99b should be used with L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X version 2.09, for which
+the closed bibliography format is the default; to get the open format,
+use the optional document style <TT>openbib</TT> (in an open format
+there's a line break between major blocks of a reference-list entry;
+in a closed format the blocks run together).]
+
+<P>
+Note: 
+
+<P>
+0.99b is not compatible with the old style files; nor is 
+
+<P>
+0.98i compatible with the new ones (the new , however, is
+compatible with old database files).
+
+<P>
+Note for implementors: 
+
+<P>
+provides logical-area names <TT>TEXINPUTS:</TT> for bibliography-style
+files and <TT>TEXBIB:</TT> for database files it can't otherwise
+find.
+
+<P>
+
+<H1><A NAME="SECTION00020000000000000000">
+2 Changes</A>
+</H1>
+
+<P>
+<A NAME="differences"></A>
+<P>
+This section describes the differences between 
+
+<P>
+versions 0.98i and 0.99b, and also between the corresponding standard
+styles. There were a lot of differences; there will be a lot fewer
+between 0.99 and 1.00.
+
+<P>
+
+<H2><A NAME="SECTION00021000000000000000">
+2.1 New 
+
+<P>
+features</A>
+</H2>
+
+<P>
+<A NAME="features"></A>
+<P>
+The following list explains 's new features and how to use
+them. 
+
+<P>
+
+<OL>
+<LI>With the single command `<code>\nocite{*}</code>' you can now include
+in the reference list every entry in the database files, without having
+to explicitly <code>\cite</code> or <code>\nocite</code> each entry.
+Giving this command, in essence, <code>\nocite</code>s all the enties
+in the database, in database order, at the very spot in your document
+where you give the command.
+</LI>
+<LI><A NAME="concat"></A> You can now have as a field value (or an <TT>@STRING</TT>
+definition) the concatenation of several strings. For example if you've
+defined <PRE>
+    @STRING( WGA = " World Gnus Almanac" )
+</PRE> then it's easy to produce nearly-identical <TT>title</TT> fields
+for different entries: <PRE>
+  @BOOK(almanac-66,
+    title = 1966 # WGA,
+    .  .  .
+  @BOOK(almanac-67,
+    title = 1967 # WGA,
+</PRE> and so on. Or, you could have a field like <PRE>
+    month = "1~" # jan,
+</PRE> which would come out something like `<code>1~January</code>' or
+`<code>1~Jan.</code>' in the <TT>bbl</TT> file, depending on how
+your bibliography style defines the <TT>jan</TT> abbreviation. You
+may concatenate as many strings as you like (except that there's a
+limit to the overall length of the resulting field); just be sure
+to put the concatenation character `<TT>#</TT>', surrounded
+by optional spaces or newlines, between each successive pair of strings.
+</LI>
+<LI>
+
+<P>
+has a new cross-referencing feature, explained by an example. Suppose
+you say <code>\cite{no-gnats}</code> in your document, and suppose
+you have these two entries in your database file: <PRE>
+  @INPROCEEDINGS(no-gnats,
+    crossref = "gg-proceedings",
+    author = "Rocky Gneisser",
+    title = "No Gnats Are Taken for Granite",
+    pages = "133-139")
+  .  .  .
+  @PROCEEDINGS(gg-proceedings,
+    editor = "Gerald Ford and Jimmy Carter",
+    title = "The Gnats and Gnus 1988 Proceedings",
+    booktitle = "The Gnats and Gnus 1988 Proceedings")
+</PRE> Two things happen. First, the special <TT>crossref</TT> field
+tells 
+
+<P>
+that the <TT>no-gnats</TT> entry should inherit any fields
+it's missing from the entry it cross references, <TT>gg-proceedings</TT>.
+In this case it in inherits the two fields <TT>editor</TT>
+and <TT>booktitle</TT>. Note that, in the standard styles
+at least, the <TT>booktitle</TT> field is irrelevant for the
+<TT>PROCEEDINGS</TT> entry type. The <TT>booktitle</TT>
+field appears here in the <TT>gg-proceedings</TT> entry only
+so that the entries that cross reference it may inherit the field.
+No matter how many papers from this meeting exist in the database,
+this <TT>booktitle</TT> field need only appear once.
+
+<P>
+The second thing that happens: 
+
+<P>
+automatically puts the entry <TT>gg-proceedings</TT> into
+the reference list if it's cross referenced by two or more entries
+that you <code>\cite</code> or <code>\nocite</code>, even if you don't
+<code>\cite</code> or <code>\nocite</code> the <TT>gg-proceedings</TT>
+entry itself. So <TT>gg-proceedings</TT> will automatically
+appear on the reference list if one other entry besides <TT>no-gnats</TT>
+cross references it.
+
+<P>
+To guarantee that this scheme works, however, a cross-referenced entry
+must occur later in the database files than every entry that cross-references
+it. Thus, putting all cross-referenced entries at the end makes sense.
+(Moreover, you may not reliably nest cross references; that is, a
+cross-referenced entry may not itself reliably cross reference an
+entry. This is almost certainly not something you'd want to do, though.)
+
+<P>
+One final note: This cross-referencing feature is completely unrelated
+to the old 's cross referencing, which is still allowed. Thus,
+having a field like <PRE>
+    note = "Jones \cite{jones-proof} improves the result"
+</PRE> is not affected by the new feature.
+
+<P>
+</LI>
+<LI>
+
+<P>
+now handles accented characters. For example if you have an entry
+with the two fields <PRE>
+    author = "Kurt G{\"o}del",
+    year = 1931,
+</PRE> and if you're using the <TT>alpha</TT> bibliography style,
+then 
+
+<P>
+will construct the label [G&#246;d31] for this entry, which
+is what you'd want. To get this feature to work you must place the
+entire accented character in braces; in this case either <code>{\"o}</code>
+or <code>{\"{o}}</code> will do. Furthermore these braces must not
+themselves be enclosed in braces (other than the ones that might delimit
+the entire field or the entire entry); and there must be a backslash
+as the very first character inside the braces. Thus neither <code>{G{\"{o}}del}</code>
+nor <code>{G\"{o}del}</code> will work for this example.
+
+<P>
+This feature handles all the accented characters and all but the nonbackslashed
+foreign symbols found in Tables 3.1 and&nbsp;3.2 of the L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X book.
+This feature behaves similarly for ``accents'' you might define;
+we'll see an example shortly. For the purposes of counting letters
+in labels, 
+
+<P>
+considers everything contained inside the braces as a single letter.
+
+<P>
+</LI>
+<LI>
+
+<P>
+also handles hyphenated names. For example if you have an entry with
+<PRE>
+    author = "Jean-Paul Sartre",
+</PRE> and if you're using the <TT>abbrv</TT> style, then the result
+is `J.-P. Sartre'.
+</LI>
+<LI><A NAME="preamble"></A> There's now an <code>@PREAMBLE</code> command
+for the database files. This command's syntax is just like <code>@STRING</code>'s,
+except that there is no name or equals-sign, just the string. Here's
+an example: <PRE>
+    @PREAMBLE{ "\newcommand{\noopsort}[1]{} "
+             # "\newcommand{\singleletter}[1]{#1} " }
+</PRE> (note the use of concatenation here, too). The standard styles output
+whatever information you give this command (L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X macros most
+likely) directly to the <TT>bbl</TT> file. We'll look at one possible
+use of this command, based on the <code>\noopsort</code> command
+just defined.
+
+<P>
+The issue here is sorting (alphabetizing). 
+
+<P>
+does a pretty good job, but occasionally weird circumstances conspire
+to confuse : Suppose that you have entries in your database
+for the two books in a two-volume set by the same author, and that
+you'd like volume&nbsp;1 to appear just before volume&nbsp;2 in your reference
+list. Further suppose that there's now a second edition of volume&nbsp;1,
+which came out in 1973, say, but that there's still just one edition
+of volume&nbsp;2, which came out in 1971. Since the <TT>plain</TT> standard
+style sorts by author and then year, it will place volume&nbsp;2 first
+(because its edition came out two years earlier) unless you help .
+You can do this by using the <TT>year</TT> fields below for the two
+volumes: <PRE>
+    year = "{\noopsort{a}}1973"
+    .  .  .
+    year = "{\noopsort{b}}1971"
+</PRE> According to the definition of <code>\noopsort</code>, L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X will
+print nothing but the true year for these fields. But 
+
+<P>
+will be perfectly happy pretending that <code>\noopsort</code> specifies
+some fancy accent that's supposed to adorn the `a' and the&nbsp;`b'; thus
+when 
+
+<P>
+sorts it will pretend that `a1973' and `b1971' are the real years,
+and since `a' comes before&nbsp;`b', it will place volume&nbsp;1 before
+volume&nbsp;2, just what you wanted. By the way, if this author has any
+other works included in your database, you'd probably want to use
+instead something like <code>{\noopsort{1968a}}1973</code> and <code>{\noopsort{1968b}}1971</code>,
+so that these two books would come out in a reasonable spot relative
+to the author's other works (this assumes that 1968 results in a reasonable
+spot, say because that's when the first edition of volume&nbsp;1 appeared).
+
+<P>
+There is a limit to the number of <code>@PREAMBLE</code> commands
+you may use, but you'll never exceed this limit if you restrict yourself
+to one per database file; this is not a serious restriction, given
+the concatenation feature (item&nbsp;<A HREF="btxdoc.html#concat">2</A>).
+
+<P>
+</LI>
+<LI>'s sorting algorithm is now stable. This means that if two
+entries have identical sort keys, those two entries will appear in
+citation order. (The bibliography styles construct these sort keys--usually
+the author information followed by the year and the title.)
+</LI>
+<LI>
+
+<P>
+no longer does case conversion for file names; this will make 
+
+<P>
+easier to install on Unix systems, for example.
+</LI>
+<LI>It's now easier to add code for processing a command-line <TT>aux</TT>-file
+name.
+</LI>
+</OL>
+
+<P>
+
+<H2><A NAME="SECTION00022000000000000000">
+2.2 Changes to the standard styles</A>
+</H2>
+
+<P>
+This section describes changes to the standard styles (<TT>plain</TT>,
+<TT>unsrt</TT>, <TT>alpha</TT>, <TT>abbrv</TT>) that affect ordinary
+users. Changes that affect style designers appear in the document
+``Designing 
+
+<P>
+Styles''&nbsp;[<A
+ HREF="btxdoc.html#btxhak">3</A>]. 
+
+<P>
+
+<OL>
+<LI>In general, sorting is now by ``author'', then year, then
+title--the old versions didn't use the year field. (The <TT>alpha</TT>
+style, however, sorts first by label, then ``author'', year,
+and title.) The quotes around author mean that some entry types might
+use something besides the author, like the editor or organization.
+</LI>
+<LI>Many unnecessary ties (<code>~</code>) have been removed. L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X thus
+will produce slightly fewer `<TT>Underfull</TT>
+
+<P>
+<code>\hbox</code>' messages when it's formatting the reference list.
+</LI>
+<LI>Emphasizing (<code>{\em ...}</code>) has replaced italicizing (<code>{\it ...}</code>).
+This will almost never result in a difference between the old output
+and the new.
+</LI>
+<LI>The <TT>alpha</TT> style now uses a superscripted&nbsp;`<IMG
+ WIDTH="14" HEIGHT="18" ALIGN="BOTTOM" BORDER="0"
+ SRC="img2.png"
+ ALT="$^{+}$">' instead
+of a&nbsp;`*' to represent names omitted in constructing the label.
+If you really liked it the way it was, however, or if you want to
+omit the character entirely, you don't have to modify the style file--you
+can override the&nbsp;`<IMG
+ WIDTH="14" HEIGHT="18" ALIGN="BOTTOM" BORDER="0"
+ SRC="img2.png"
+ ALT="$^{+}$">' by redefining the <code>\etalchar</code>
+command that the <TT>alpha</TT> style writes onto the <TT>bbl</TT>
+file (just preceding the <code>\thebibliography</code> environment);
+use L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X's <code>\renewcommand</code> inside a database <TT>@PREAMBLE</TT>
+command, described in the previous subsection's item&nbsp;<A HREF="btxdoc.html#preamble">6</A>.
+</LI>
+<LI>The <TT>abbrv</TT> style now uses `Mar.' and `Sept.' for those months rather than `March' and `Sep.'
+</LI>
+<LI>The standard styles use 's new cross-referencing feature by
+giving a <code>\cite</code> of the cross-referenced entry and by omitting
+from the cross-referencing entry (most of the) information that appears
+in the cross-referenced entry. These styles do this when a titled
+thing (the cross-referencing entry) is part of a larger titled thing
+(the cross-referenced entry). There are five such situations: when
+(1)&nbsp;an <TT>INPROCEEDINGS</TT> (or <TT>CONFERENCE</TT>,
+which is the same) cross references a <TT>PROCEEDINGS</TT>;
+when (2)&nbsp;a <TT>BOOK</TT>, (3)&nbsp;an <TT>INBOOK</TT>, or (4)&nbsp;an
+<TT>INCOLLECTION</TT> cross references a <TT>BOOK</TT> (in
+these cases, the cross-referencing entry is a single volume in a multi-volume
+work); and when (5)&nbsp;an <TT>ARTICLE</TT> cross references
+an <TT>ARTICLE</TT> (in this case, the cross-referenced entry
+is really a journal, but there's no <TT>JOURNAL</TT> entry
+type; this will result in warning messages about an empty <TT>author</TT>
+and <TT>title</TT> for the journal--you should just ignore
+these warnings).
+</LI>
+<LI>The <TT>MASTERSTHESIS</TT> and <TT>PHDTHESIS</TT>
+entry types now take an optional <TT>type</TT> field. For example
+you can get the standard styles to call your reference a `Ph.D. dissertation'
+instead of the default `PhD thesis' by including a <PRE>
+    type = "{Ph.D.} dissertation"
+</PRE> in your database entry.
+</LI>
+<LI>Similarly, the <TT>INBOOK</TT> and <TT>INCOLLECTION</TT>
+entry types now take an optional <TT>type</TT> field, allowing `section&nbsp;1.2'
+instead of the default `chapter&nbsp;1.2'. You get this by putting
+<PRE>
+    chapter = "1.2",
+    type = "Section"
+</PRE> in your database entry.
+</LI>
+<LI>The <TT>BOOKLET</TT>, <TT>MASTERSTHESIS</TT>, and
+<TT>TECHREPORT</TT> entry types now format their <TT>title</TT>
+fields as if they were <TT>ARTICLE</TT>
+
+<P>
+<TT>title</TT>s rather than <TT>BOOK</TT>
+
+<P>
+<TT>title</TT>s.
+</LI>
+<LI>The <TT>PROCEEDINGS</TT> and <TT>INPROCEEDINGS</TT>
+entry types now use the <TT>address</TT> field to tell where
+a conference was held, rather than to give the address of the publisher
+or organization. If you want to include the publisher's or organization's
+address, put it in the <TT>publisher</TT> or <TT>organization</TT>
+field.
+</LI>
+<LI>The <TT>BOOK</TT>, <TT>INBOOK</TT>, <TT>INCOLLECTION</TT>,
+and <TT>PROCEEDINGS</TT> entry types now allow either <TT>volume</TT>
+or <TT>number</TT> (but not both), rather than just <TT>volume</TT>.
+</LI>
+<LI>The <TT>INCOLLECTION</TT> entry type now allows a <TT>series</TT>
+and an <TT>edition</TT> field.
+</LI>
+<LI>The <TT>INPROCEEDINGS</TT> and <TT>PROCEEDINGS</TT>
+entry types now allow either a <TT>volume</TT> or <TT>number</TT>,
+and also a <TT>series</TT> field.
+</LI>
+<LI>The <TT>UNPUBLISHED</TT> entry type now outputs, in one block,
+the <TT>note</TT> field followed by the date information.
+</LI>
+<LI>The <TT>MANUAL</TT> entry type now prints out the <TT>organization</TT>
+in the first block if the <TT>author</TT> field is empty.
+</LI>
+<LI>The <TT>MISC</TT> entry type now issues a warning if all the optional
+fields are empty (that is, if the entire entry is empty).
+</LI>
+</OL>
+
+<P>
+
+<H1><A NAME="SECTION00030000000000000000">
+3 The Entries</A>
+</H1>
+
+<P>
+<A NAME="latex-appendix"></A>
+<P>
+This section is simply a corrected version of Appendix&nbsp;B.2 of the
+L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X book&nbsp;[<A
+ HREF="btxdoc.html#latex">2</A>], &#169;&nbsp;1986, by Addison-Wesley.
+The basic scheme is the same, only a few details have changed.
+
+<P>
+
+<H2><A NAME="SECTION00031000000000000000">
+3.1 Entry Types</A>
+</H2>
+
+<P>
+When entering a reference in the database, the first thing to decide
+is what type of entry it is. No fixed classification scheme can be
+complete, but 
+
+<P>
+provides enough entry types to handle almost any reference reasonably
+well.
+
+<P>
+References to different types of publications contain different information;
+a reference to a journal article might include the volume and number
+of the journal, which is usually not meaningful for a book. Therefore,
+database entries of different types have different fields. For each
+entry type, the fields are divided into three classes: 
+
+<P>
+<DL>
+<DT><STRONG>required</STRONG></DT>
+<DD>Omitting the field will produce a warning message and,
+rarely, a badly formatted bibliography entry. If the required information
+is not meaningful, you are using the wrong entry type. However, if
+the required information is meaningful but, say, already included
+is some other field, simply ignore the warning.
+</DD>
+<DT><STRONG>optional</STRONG></DT>
+<DD>The field's information will be used if present, but can
+be omitted without causing any formatting problems. You should include
+the optional field if it will help the reader.
+</DD>
+<DT><STRONG>ignored</STRONG></DT>
+<DD>The field is ignored. 
+
+<P>
+ignores any field that is not required or optional, so you can include
+any fields you want in a <TT>bib</TT> file entry. It's a good
+idea to put all relevant information about a reference in its <TT>bib</TT>
+file entry--even information that may never appear in the bibliography.
+For example, if you want to keep an abstract of a paper in a computer
+file, put it in an <TT>abstract</TT> field in the paper's
+<TT>bib</TT> file entry. The <TT>bib</TT> file is
+likely to be as good a place as any for the abstract, and it is possible
+to design a bibliography style for printing selected abstracts. Note:
+Misspelling a field name will result in its being ignored, so watch
+out for typos (especially for optional fields, since 
+
+<P>
+won't warn you when those are missing).
+</DD>
+</DL>
+The following are the standard entry types, along with their required
+and optional fields, that are used by the standard bibliography styles.
+The fields within each class (required or optional) are listed in
+order of occurrence in the output, except that a few entry types may
+perturb the order slightly, depending on what fields are missing.
+These entry types are similar to those adapted by Brian Reid from
+the classification scheme of van&nbsp;Leunen&nbsp;[<A
+ HREF="btxdoc.html#van-leunen">4</A>] for use
+in the <I>Scribe</I> system. The meanings of the individual fields
+are explained in the next section. Some nonstandard bibliography styles
+may ignore some optional fields in creating the reference. Remember
+that, when used in the <TT>bib</TT> file, the entry-type name
+is preceded by an <TT>@</TT> character.
+
+<P>
+
+<P>
+<DL>
+<DT><STRONG>article</STRONG></DT>
+<DD>An article from a journal or magazine. Required
+fields: <TT>author</TT>, <TT>title</TT>, <TT>journal</TT>,
+<TT>year</TT>. Optional fields: <TT>volume</TT>, <TT>number</TT>,
+<TT>pages</TT>, <TT>month</TT>, <TT>note</TT>.
+</DD>
+<DT><STRONG>book</STRONG></DT>
+<DD>A book with an explicit publisher. Required fields:
+<TT>author</TT> or <TT>editor</TT>, <TT>title</TT>,
+<TT>publisher</TT>, <TT>year</TT>. Optional fields:
+<TT>volume</TT> or <TT>number</TT>, <TT>series</TT>,
+<TT>address</TT>, <TT>edition</TT>, <TT>month</TT>,
+<TT>note</TT>.
+</DD>
+<DT><STRONG>booklet</STRONG></DT>
+<DD>A work that is printed and bound, but without a
+named publisher or sponsoring institution. Required field: <TT>title</TT>.
+Optional fields: <TT>author</TT>, <TT>howpublished</TT>,
+<TT>address</TT>, <TT>month</TT>, <TT>year</TT>,
+<TT>note</TT>.
+</DD>
+<DT><STRONG>conference</STRONG></DT>
+<DD>The same as <TT>INPROCEEDINGS</TT>, included
+for <I>Scribe</I> compatibility.
+</DD>
+<DT><STRONG>inbook</STRONG></DT>
+<DD>A part of a book, which may be a chapter (or section
+or whatever) and/or a range of pages. Required fields: <TT>author</TT>
+or <TT>editor</TT>, <TT>title</TT>, <TT>chapter</TT>
+and/or <TT>pages</TT>, <TT>publisher</TT>, <TT>year</TT>.
+Optional fields: <TT>volume</TT> or <TT>number</TT>,
+<TT>series</TT>, <TT>type</TT>, <TT>address</TT>,
+<TT>edition</TT>, <TT>month</TT>, <TT>note</TT>.
+</DD>
+<DT><STRONG>incollection</STRONG></DT>
+<DD>A part of a book having its own title. Required
+fields: <TT>author</TT>, <TT>title</TT>, <TT>booktitle</TT>,
+<TT>publisher</TT>, <TT>year</TT>. Optional fields:
+<TT>editor</TT>, <TT>volume</TT> or <TT>number</TT>,
+<TT>series</TT>, <TT>type</TT>, <TT>chapter</TT>,
+<TT>pages</TT>, <TT>address</TT>, <TT>edition</TT>,
+<TT>month</TT>, <TT>note</TT>.
+</DD>
+<DT><STRONG>inproceedings</STRONG></DT>
+<DD>An article in a conference proceedings. Required
+fields: <TT>author</TT>, <TT>title</TT>, <TT>booktitle</TT>,
+<TT>year</TT>. Optional fields: <TT>editor</TT>, <TT>volume</TT>
+or <TT>number</TT>, <TT>series</TT>, <TT>pages</TT>,
+<TT>address</TT>, <TT>month</TT>, <TT>organization</TT>,
+<TT>publisher</TT>, <TT>note</TT>.
+</DD>
+<DT><STRONG>manual</STRONG></DT>
+<DD>Technical documentation. Required field: <TT>title</TT>.
+Optional fields: <TT>author</TT>, <TT>organization</TT>,
+<TT>address</TT>, <TT>edition</TT>, <TT>month</TT>,
+<TT>year</TT>, <TT>note</TT>.
+</DD>
+<DT><STRONG>mastersthesis</STRONG></DT>
+<DD>A Master's thesis. Required fields: <TT>author</TT>,
+<TT>title</TT>, <TT>school</TT>, <TT>year</TT>.
+Optional fields: <TT>type</TT>, <TT>address</TT>,
+<TT>month</TT>, <TT>note</TT>.
+</DD>
+<DT><STRONG>misc</STRONG></DT>
+<DD>Use this type when nothing else fits. Required fields:
+none. Optional fields: <TT>author</TT>, <TT>title</TT>,
+<TT>howpublished</TT>, <TT>month</TT>, <TT>year</TT>,
+<TT>note</TT>.
+</DD>
+<DT><STRONG>phdthesis</STRONG></DT>
+<DD>A PhD thesis. Required fields: <TT>author</TT>,
+<TT>title</TT>, <TT>school</TT>, <TT>year</TT>.
+Optional fields: <TT>type</TT>, <TT>address</TT>,
+<TT>month</TT>, <TT>note</TT>.
+</DD>
+<DT><STRONG>proceedings</STRONG></DT>
+<DD>The proceedings of a conference. Required fields:
+<TT>title</TT>, <TT>year</TT>. Optional fields: <TT>editor</TT>,
+<TT>volume</TT> or <TT>number</TT>, <TT>series</TT>,
+<TT>address</TT>, <TT>month</TT>, <TT>organization</TT>,
+<TT>publisher</TT>, <TT>note</TT>.
+</DD>
+<DT><STRONG>techreport</STRONG></DT>
+<DD>A report published by a school or other institution,
+usually numbered within a series. Required fields: <TT>author</TT>,
+<TT>title</TT>, <TT>institution</TT>, <TT>year</TT>.
+Optional fields: <TT>type</TT>, <TT>number</TT>, <TT>address</TT>,
+<TT>month</TT>, <TT>note</TT>.
+</DD>
+<DT><STRONG>unpublished</STRONG></DT>
+<DD>A document having an author and title, but not
+formally published. Required fields: <TT>author</TT>, <TT>title</TT>,
+<TT>note</TT>. Optional fields: <TT>month</TT>, <TT>year</TT>.
+</DD>
+</DL>
+In addition to the fields listed above, each entry type also has an
+optional <TT>key</TT> field, used in some styles for alphabetizing,
+for cross referencing, or for forming a <code>\bibitem</code> label.
+You should include a <TT>key</TT> field for any entry whose
+``author'' information is missing; the ``author'' information
+is usually the <TT>author</TT> field, but for some entry types
+it can be the <TT>editor</TT> or even the <TT>organization</TT>
+field (Section&nbsp;<A HREF="btxdoc.html#odds-and-ends">4</A> describes this in more detail).
+Do not confuse the <TT>key</TT> field with the key that appears
+in the <code>\cite</code> command and at the beginning of the database
+entry; this field is named ``key'' only for compatibility with
+<I>Scribe</I>.
+
+<P>
+
+<H2><A NAME="SECTION00032000000000000000">
+3.2 Fields</A>
+</H2>
+
+<P>
+Below is a description of all fields recognized by the standard bibliography
+styles. An entry can also contain other fields, which are ignored
+by those styles. 
+
+<P>
+<DL>
+<DT><STRONG>address</STRONG></DT>
+<DD>Usually the address of the <TT>publisher</TT>
+or other type of institution. For major publishing houses, van&nbsp;Leunen
+recommends omitting the information entirely. For small publishers,
+on the other hand, you can help the reader by giving the complete
+address.
+</DD>
+<DT><STRONG>annote</STRONG></DT>
+<DD>An annotation. It is not used by the standard bibliography
+styles, but may be used by others that produce an annotated bibliography.
+</DD>
+<DT><STRONG>author</STRONG></DT>
+<DD>The name(s) of the author(s), in the format described
+in the L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X book.
+</DD>
+<DT><STRONG>booktitle</STRONG></DT>
+<DD>Title of a book, part of which is being cited.
+See the L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X book for how to type titles. For book entries,
+use the <TT>title</TT> field instead.
+</DD>
+<DT><STRONG>chapter</STRONG></DT>
+<DD>A chapter (or section or whatever) number.
+</DD>
+<DT><STRONG>crossref</STRONG></DT>
+<DD>The database key of the entry being cross referenced.
+</DD>
+<DT><STRONG>edition</STRONG></DT>
+<DD>The edition of a book--for example, ``Second''.
+This should be an ordinal, and should have the first letter capitalized,
+as shown here; the standard styles convert to lower case when necessary.
+</DD>
+<DT><STRONG>editor</STRONG></DT>
+<DD>Name(s) of editor(s), typed as indicated in the L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X book.
+If there is also an <TT>author</TT> field, then the <TT>editor</TT>
+field gives the editor of the book or collection in which the reference
+appears.
+</DD>
+<DT><STRONG>howpublished</STRONG></DT>
+<DD>How something strange has been published. The
+first word should be capitalized.
+</DD>
+<DT><STRONG>institution</STRONG></DT>
+<DD>The sponsoring institution of a technical report.
+</DD>
+<DT><STRONG>journal</STRONG></DT>
+<DD>A journal name. Abbreviations are provided for many
+journals; see the <I>Local Guide</I>.
+</DD>
+<DT><STRONG>key</STRONG></DT>
+<DD>Used for alphabetizing, cross referencing, and creating
+a label when the ``author'' information (described in Section&nbsp;<A HREF="btxdoc.html#odds-and-ends">4</A>)
+is missing. This field should not be confused with the key that appears
+in the <code>\cite</code> command and at the beginning of the database
+entry.
+</DD>
+<DT><STRONG>month</STRONG></DT>
+<DD>The month in which the work was published or, for
+an unpublished work, in which it was written. You should use the standard
+three-letter abbreviation, as described in Appendix B.1.3 of the L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X book.
+</DD>
+<DT><STRONG>note</STRONG></DT>
+<DD>Any additional information that can help the reader.
+The first word should be capitalized.
+</DD>
+<DT><STRONG>number</STRONG></DT>
+<DD>The number of a journal, magazine, technical report,
+or of a work in a series. An issue of a journal or magazine is usually
+identified by its volume and number; the organization that issues
+a technical report usually gives it a number; and sometimes books
+are given numbers in a named series.
+</DD>
+<DT><STRONG>organization</STRONG></DT>
+<DD>The organization that sponsors a conference
+or that publishes a manual.
+</DD>
+<DT><STRONG>pages</STRONG></DT>
+<DD>One or more page numbers or range of numbers, such
+as <TT>42-111</TT> or <TT>7,41,73-97</TT> or <TT>43+</TT>
+(the `<TT>+</TT>' in this last example indicates pages following that
+don't form a simple range). To make it easier to maintain <I>Scribe</I>-compatible
+databases, the standard styles convert a single dash (as in <TT>7-33</TT>)
+to the double dash used in T<SMALL>E</SMALL>X to denote number ranges (as in
+<TT>7-33</TT>).
+</DD>
+<DT><STRONG>publisher</STRONG></DT>
+<DD>The publisher's name.
+</DD>
+<DT><STRONG>school</STRONG></DT>
+<DD>The name of the school where a thesis was written.
+</DD>
+<DT><STRONG>series</STRONG></DT>
+<DD>The name of a series or set of books. When citing
+an entire book, the the <TT>title</TT> field gives its title
+and an optional <TT>series</TT> field gives the name of a
+series or multi-volume set in which the book is published.
+</DD>
+<DT><STRONG>title</STRONG></DT>
+<DD>The work's title, typed as explained in the L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X book.
+</DD>
+<DT><STRONG>type</STRONG></DT>
+<DD>The type of a technical report--for example, ``Research
+Note''.
+</DD>
+<DT><STRONG>volume</STRONG></DT>
+<DD>The volume of a journal or multivolume book.
+</DD>
+<DT><STRONG>year</STRONG></DT>
+<DD>The year of publication or, for an unpublished work,
+the year it was written. Generally it should consist of four numerals,
+such as <TT>1984</TT>, although the standard styles can handle any
+<TT>year</TT> whose last four nonpunctuation characters are numerals,
+such as `(about 1984)'.
+</DD>
+</DL>
+
+<P>
+
+<H1><A NAME="SECTION00040000000000000000">
+4 Helpful Hints</A>
+</H1>
+
+<P>
+<A NAME="odds-and-ends"></A>
+<P>
+This section gives some random tips that aren't documented elsewhere,
+at least not in this detail. They are, roughly, in order of least
+esoteric to most. First, however, a brief spiel.
+
+<P>
+I understand that there's often little choice in choosing a bibliography
+style--journal&nbsp;<IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img3.png"
+ ALT="$X$"> says you must use style&nbsp;<IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img4.png"
+ ALT="$Y$"> and that's that.
+If you have a choice, however, I strongly recommend that you choose
+something like the <TT>plain</TT> standard style. Such a style, van&nbsp;Leunen&nbsp;[<A
+ HREF="btxdoc.html#van-leunen">4</A>]
+argues convincingly, encourages better writing than the alternatives--more
+concrete, more vivid.
+
+<P>
+<I>The Chicago Manual of Style</I>&nbsp;[<A
+ HREF="btxdoc.html#chicago">1</A>], on the other
+hand, espouse the author-date system, in which the citation might
+appear in the text as `(Jones, 1986)'. I argue that this system,
+besides cluttering up the text with information that may or may not
+be relevant, encourages the passive voice and vague writing. Furthermore
+the strongest arguments for using the author-date system--like ``it's
+the most practical''--fall flat on their face with the advent of
+computer-typesetting technology. For instance the <I>Chicago Manual</I>
+contains, right in the middle of page&nbsp;401, this anachronism: ``The
+chief disadvantage of [a style like <TT>plain</TT>] is that additions
+or deletions cannot be made after the manuscript is typed without
+changing numbers in both text references and list.'' L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X, obviously,
+sidesteps the disadvantage.
+
+<P>
+Finally, the logical deficiencies of the author-date style are quite
+evident once you've written a program to implement it. For example,
+in a large bibliography, using the standard alphabetizing scheme,
+the entry for `(Aho et&nbsp;al., 1983b)' might be half a page later than
+the one for `(Aho et&nbsp;al., 1983a)'. Fixing this problem results
+in even worse ones. What a mess. (I have, unfortunately, programmed
+such a style, and if you're saddled with an unenlightened publisher
+or if you don't buy my propaganda, it's available from the Rochester
+style collection.)
+
+<P>
+Ok, so the spiel wasn't very brief; but it made me feel better, and
+now my blood pressure is back to normal. Here are the tips for using
+
+<P>
+with the standard styles (although many of them hold for nonstandard
+styles, too). 
+
+<P>
+
+<OL>
+<LI>With 's style-designing language you can program general database
+manipulations, in addition to bibliography styles. For example it's
+a fairly easy task for someone familiar with the language to produce
+a database-key/author index of all the entries in a database. Consult
+the <I>Local Guide</I> to see what tools are available on your
+system.
+</LI>
+<LI>The standard style's thirteen entry types do reasonably well at formatting
+most entries, but no scheme with just thirteen formats can do everything
+perfectly. Thus, you should feel free to be creative in how you use
+these entry types (but if you have to be too creative, there's a good
+chance you're using the wrong entry type).
+</LI>
+<LI>Don't take the field names too seriously. Sometimes, for instance,
+you might have to include the publisher's address along with the publisher's
+name in the <TT>publisher</TT> field, rather than putting
+it in the <TT>address</TT> field. Or sometimes, difficult
+entries work best when you make judicious use of the <TT>note</TT>
+field.
+</LI>
+<LI>Don't take the warning messages too seriously. Sometimes, for instance,
+the year appears in the title, as in <I>The 1966 World Gnus Almanac</I>.
+In this case it's best to omit the <TT>year</TT> field and to ignore
+'s warning message.
+</LI>
+<LI>If you have too many names to list in an <TT>author</TT> or
+<TT>editor</TT> field, you can end the list with ``and
+others''; the standard styles appropriately append an ``et&nbsp;al.''
+</LI>
+<LI>In general, if you want to keep 
+
+<P>
+from changing something to lower case, you enclose it in braces. You
+might not get the effect you want, however, if the very first character
+after the left brace is a backslash. The ``special characters''
+item later in this section explains.
+</LI>
+<LI>For <I>Scribe</I> compatibility, the database files allow an
+<TT>@COMMENT</TT> command; it's not really needed because
+
+<P>
+allows in the database files any comment that's not within an entry.
+If you want to comment out an entry, simply remove the `<TT>@</TT>'
+character preceding the entry type.
+</LI>
+<LI>The standard styles have journal abbreviations that are computer-science
+oriented; these are in the style files primarily for the example.
+If you have a different set of journal abbreviations, it's sensible
+to put them in <TT>@STRING</TT> commands in their own database
+file and to list this database file as an argument to L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X's <code>\bibliography</code>
+command (but you should list this argument before the ones that specify
+real database entries).
+</LI>
+<LI>It's best to use the three-letter abbreviations for the month, rather
+than spelling out the month yourself. This lets the bibliography style
+be consistent. And if you want to include information for the day
+of the month, the <TT>month</TT> field is usually the best place.
+For example <PRE>
+    month = jul # "~4,"
+</PRE> will probably produce just what you want.
+</LI>
+<LI>If you're using the <TT>unsrt</TT> style (references are listed
+in order of citation) along with the <code>\nocite{*}</code> feature
+(all entries in the database are included), the placement of the <code>\nocite{*}</code>
+command within your document file will determine the reference order.
+According to the rule given in Section&nbsp;<A HREF="btxdoc.html#features">2.1</A>: If the command
+is placed at the beginning of the document, the entries will be listed
+in exactly the order they occur in the database; if it's placed at
+the end, the entries that you explicitly <code>\cite</code> or <code>\nocite</code>
+will occur in citation order, and the remaining database entries will
+be in database order.
+</LI>
+<LI>For theses, van Leunen recommends not giving the school's department
+after the name of the degree, since schools, not departments, issue
+degrees. If you really think that giving the department information
+will help the reader find the thesis, put that information in the
+<TT>address</TT> field.
+</LI>
+<LI>The <TT>MASTERSTHESIS</TT> and <TT>PHDTHESIS</TT>
+entry types are so named for <I>Scribe</I> compatibility; <TT>MINORTHESIS</TT>
+and <TT>MAJORTHESIS</TT> probably would have been better names.
+Keep this in mind when trying to classify a non-U.S. thesis.
+</LI>
+<LI>Here's yet another suggestion for what to do when an author's name
+appears slightly differently in two publications. Suppose, for example,
+two journals articles use these fields. <PRE>
+    author = "Donald E. Knuth"
+    .  .  .
+    author = "D. E. Knuth"
+</PRE> There are two possibilities. You could (1)&nbsp;simply leave them as
+is, or (2)&nbsp;assuming you know for sure that these authors are one
+and the same person, you could list both in the form that the author
+prefers (say, `Donald&nbsp;E. Knuth'). In the first case, the entries
+might be alphabetized incorrectly, and in the second, the slightly
+altered name might foul up somebody's electronic library search. But
+there's a third possibility, which is the one I prefer. You could
+convert the second journal's field to <PRE>
+    author = "D[onald] E. Knuth"
+</PRE> This avoids the pitfalls of the previous two solutions, since 
+
+<P>
+alphabetizes this as if the brackets weren't there, and since the
+brackets clue the reader in that a full first name was missing from
+the original. Of course it introduces another pitfall--`D[onald]&nbsp;E. Knuth'
+looks ugly--but in this case I think the increase in accuracy outweighs
+the loss in aesthetics.
+</LI>
+<LI>L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X's comment character `<TT>%</TT>' is not a comment character
+in the database files.
+</LI>
+<LI>Here's a more complete description of the ``author'' information
+referred to in previous sections. For most entry types the ``author''
+information is simply the <TT>author</TT> field. However:
+For the <TT>BOOK</TT> and <TT>INBOOK</TT> entry types
+it's the <TT>author</TT> field, but if there's no author then
+it's the <TT>editor</TT> field; for the <TT>MANUAL</TT>
+entry type it's the <TT>author</TT> field, but if there's
+no author then it's the <TT>organization</TT> field; and for
+the <TT>PROCEEDINGS</TT> entry type it's the <TT>editor</TT>
+field, but if there's no editor then it's the <TT>organization</TT>
+field.
+</LI>
+<LI>When creating a label, the <TT>alpha</TT> style uses the ``author''
+information described above, but with a slight change--for the <TT>MANUAL</TT>
+and <TT>PROCEEDINGS</TT> entry types, the <TT>key</TT> field
+takes precedence over the <TT>organization</TT> field. Here's
+a situation where this is useful. <PRE>
+   organization = "The Association for Computing Machinery",
+   key = "ACM"
+</PRE> Without the <TT>key</TT> field, the <TT>alpha</TT> style
+would make a label from the first three letters of information in
+the <TT>organization</TT> field; <TT>alpha</TT> knows
+to strip off the `<TT>The </TT>', but it would still
+form a label like `[Ass86]', which, however intriguing,
+is uninformative. Including the <TT>key</TT> field, as above, would
+yield the better label `[ACM86]'.
+
+<P>
+You won't always need the <TT>key</TT> field to override the <TT>organization</TT>,
+though: With <PRE>
+    organization = "Unilogic, Ltd.",
+</PRE> for instance, the <TT>alpha</TT> style would form the perfectly
+reasonable label `[Uni86]'.
+
+<P>
+</LI>
+<LI>Section&nbsp;<A HREF="btxdoc.html#features">2.1</A> discusses accented characters. To ,
+an accented character is really a special case of a ``special character'',
+which consists of everything from a left brace at the top-most level,
+immediately followed by a backslash, up through the matching right
+brace. For example in the field <PRE>
+    author = "\AA{ke} {Jos{\'{e}} {\'{E}douard} G{\"o}del"
+</PRE> there are just two special characters, `<code>{\'{E}douard}</code>'
+and `<code>{\"o}</code>' (the same would be true if the pair of
+double quotes delimiting the field were braces instead). In general,
+
+<P>
+will not do any processing of a T<SMALL>E</SMALL>X or L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X control sequence
+inside a special character, but it <I>will</I> process other
+characters. Thus a style that converts all titles to lower case would
+convert <PRE>
+    The {\TeX BOOK\NOOP} Experience
+</PRE> to <PRE>
+    The {\TeX book\NOOP} experience
+</PRE> (the `<TT>The</TT>' is still capitalized because it's the first word
+of the title).
+
+<P>
+This special-character scheme is useful for handling accented characters,
+for getting 's alphabetizing to do what you want, and, since
+
+<P>
+counts an entire special character as just one letter, for stuffing
+extra characters inside labels. The file <TT>XAMPL.BIB</TT>
+distributed with 
+
+<P>
+gives examples of all three uses.
+
+<P>
+</LI>
+<LI>This final item of the section describes 's names (which appear
+in the <TT>author</TT> or <TT>editor</TT> field) in
+slightly more detail than what appears in Appendix&nbsp;B of the L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X book.
+In what follows, a ``name'' corresponds to a person. (Recall that
+you separate multiple names in a single field with the word ``and'',
+surrounded by spaces, and not enclosed in braces. This item concerns
+itself with the structure of a single name.)
+
+<P>
+Each name consists of four parts: First, von, Last, and&nbsp;Jr; each
+part consists of a (possibly empty) list of name-tokens. The Last
+part will be nonempty if any part is, so if there's just one token,
+it's always a Last token.
+
+<P>
+Recall that Per Brinch&nbsp;Hansen's name should be typed <PRE>
+    "Brinch Hansen, Per"
+</PRE> The First part of his name has the single token ``Per''; the
+Last part has two tokens, ``Brinch'' and ``Hansen''; and the
+von and Jr parts are empty. If you had typed <PRE>
+    "Per Brinch Hansen"
+</PRE> instead, 
+
+<P>
+would (erroneously) think ``Brinch'' were a First-part token,
+just as ``Paul'' is a First-part token in ``John&nbsp;Paul Jones'',
+so this erroneous form would have two First tokens and one Last token.
+
+<P>
+Here's another example: <PRE>
+    "Charles Louis Xavier Joseph de la Vall{\'e}e Poussin"
+</PRE> This name has four tokens in the First part, two in the von, and
+two in the Last. Here 
+
+<P>
+knows where one part ends and the other begins because the tokens
+in the von part begin with lower-case letters.
+
+<P>
+In general, it's a von token if the first letter at brace-level&nbsp;0
+is in lower case. Since technically everything in a ``special character''
+is at brace-level&nbsp;0, you can trick 
+
+<P>
+into thinking that a token is or is not a von token by prepending
+a dummy special character whose first letter past the T<SMALL>E</SMALL>X control
+sequence is in the desired case, upper or lower.
+
+<P>
+To summarize, 
+
+<P>
+allows three possible forms for the name: <PRE>
+    "First von Last"
+    "von Last, First"
+    "von Last, Jr, First"
+</PRE> You may almost always use the first form; you shouldn't if either
+there's a Jr part, or the Last part has multiple tokens but there's
+no von part.
+
+<P>
+</LI>
+</OL>
+
+<H2><A NAME="SECTION00050000000000000000">
+Bibliography</A>
+</H2><DL COMPACT><DD><P></P><DT><A NAME="chicago">1</A>
+<DD>
+<EM>The Chicago Manual of Style</EM>, pages 400-401.
+<BR>University of Chicago Press, thirteenth edition, 1982.
+
+<P></P><DT><A NAME="latex">2</A>
+<DD>
+Leslie Lamport.
+<BR>L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X:<EM> A Document Preparation System</EM>.
+<BR>Addison-Wesley, 1986.
+
+<P></P><DT><A NAME="btxhak">3</A>
+<DD>
+Oren Patashnik.
+<BR>Designing  styles.
+<BR>The part of 's documentation that's not meant for general
+  users, 8&nbsp;February 1988.
+
+<P></P><DT><A NAME="van-leunen">4</A>
+<DD>
+Mary-Claire van Leunen.
+<BR><EM>A Handbook for Scholars</EM>.
+<BR>Knopf, 1979.
+</DL>
+
+<P>
+
+<H1><A NAME="SECTION00060000000000000000">
+About this document ...</A>
+</H1>
+ <P>
+This document was generated using the
+<A HREF="http://www.latex2html.org/"><STRONG>LaTeX</STRONG>2<tt>HTML</tt></A> translator Version 2002-1 (1.68)
+<P>
+Copyright &#169; 1993, 1994, 1995, 1996,
+<A HREF="http://cbl.leeds.ac.uk/nikos/personal.html">Nikos Drakos</A>, 
+Computer Based Learning Unit, University of Leeds.
+<BR>Copyright &#169; 1997, 1998, 1999,
+<A HREF="http://www.maths.mq.edu.au/~ross/">Ross Moore</A>, 
+Mathematics Department, Macquarie University, Sydney.
+<P>
+The command line arguments were: <BR>
+ <STRONG>latex2html</STRONG> <TT>-no_subdir -split 0 -show_section_numbers /tmp/lyx_tmpdir15095W9Gc8W/lyx_tmpbuf1/btxdoc.tex</TT>
+<P>
+The translation was initiated by root on 2002-12-22<HR>
+<!--Navigation Panel-->
+<IMG WIDTH="81" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next_inactive"
+ SRC="file:/usr/lib/latex2html/icons/nx_grp_g.png"> 
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up_g.png"> 
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev_g.png">   
+<BR>
+<!--End of Navigation Panel-->
+<ADDRESS>
+root
+2002-12-22
+</ADDRESS>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

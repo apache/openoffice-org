@@ -1,0 +1,137 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Apache OpenOffice Downloads</title>
+    <script src="/scripts/api.simile-widgets.org/timeplot/1.1/timeplot-api.js"  type="text/javascript">
+    </script>
+    <script type="text/javascript">
+    var daily_resizeTimerID = null;
+    var total_resizeTimerID = null;
+    var daily_timeplot;
+    var total_timeplot;
+    function onResize() {
+        if (daily_resizeTimerID == null)
+        {
+            daily_resizeTimerID = window.setTimeout(function(){
+                                                    daily_resizeTimerID = null;
+                                                   daily_timeplot.repaint();
+                                                   }, 100);
+        }
+        if (total_resizeTimerID == null)
+        {
+            total_resizeTimerID = window.setTimeout(function(){
+                                                    total_resizeTimerID = null;
+                                                   total_timeplot.repaint();
+                                                   }, 100);
+        }
+    }
+    function onLoad() {
+        var daily_eventSource = new Timeplot.DefaultEventSource();
+        var total_eventSource = new Timeplot.DefaultEventSource();
+        var daily_plotInfo = [
+                             Timeplot.createPlotInfo({
+                                                     id: "daily",
+                                                     dataSource: new Timeplot.ColumnSource(daily_eventSource,1),
+                                                     valueGeometry: new Timeplot.DefaultValueGeometry({
+                                                                                                      gridColor: "#000000",
+                                                                                                      axisLabelsPlacement: "left",
+                                                                                                      }),
+                                                     timeGeometry: new Timeplot.DefaultTimeGeometry({
+                                                                                                    gridColor: new Timeplot.Color("#000000"),
+                                                                                                    axisLabelsPlacement: "top"
+                                                                                                    }),
+                                                     lineColor: "#007DCD",
+                                                     fillColor: "#BBC8D0",
+                                                     showValues: true
+                                                     })
+                             ];
+        var total_plotInfo = [
+                             Timeplot.createPlotInfo({
+                                                     id: "total",
+                                                     dataSource: new Timeplot.ColumnSource(total_eventSource,2),
+                                                     valueGeometry: new Timeplot.DefaultValueGeometry({
+                                                                                                      gridColor: "#000000",
+                                                                                                      axisLabelsPlacement: "left",
+                                                                                                      }),
+                                                     timeGeometry: new Timeplot.DefaultTimeGeometry({
+                                                                                                    gridColor: new Timeplot.Color("#000000"),
+                                                                                                    axisLabelsPlacement: "top"
+                                                                                                    }),
+                                                     lineColor: "#007DCD",
+                                                     fillColor: "#BBC8D0",
+                                                     showValues: true
+                                                     })
+                             ];
+        daily_timeplot = Timeplot.create(document.getElementById("daily"), daily_plotInfo);
+        daily_timeplot.loadText("aoo-downloads.txt", ",", daily_eventSource);
+        total_timeplot = Timeplot.create(document.getElementById("total"), total_plotInfo);
+        total_timeplot.loadText("aoo-downloads.txt", ",", total_eventSource);
+    }
+    </script>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body onload="onLoad();" onresize="onResize();">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/stats/">stats</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+
+<h2>Download Stats</h2>
+
+<div class="label">
+Daily Downloads
+</div>
+
+<div id="daily" style="height: 150px;">
+</div>
+<p></p>
+<div class="label">
+Total (Cumulative) Downloads
+</div>
+
+<div id="total" style="height: 250px;">
+</div>
+
+<p>
+These charts use the <a href="https://www.simile-widgets.org/">SIMILE Timeplot widget</a> and are based on the data series contained in
+<a href="https://www.openoffice.org/stats/aoo-downloads.txt">this data file</a>. The data in that file based on download statistics gathered by
+SourceForge (the host of our downloads) and exposed by them through their
+<a href="https://sourceforge.net/p/forge/documentation/Download%20Stats%20API/">Download Stats API</a>. The data is collected and aggregated by a
+<a href="https://svn.apache.org/repos/asf/openoffice/devtools/aoo-stats/detail-by-day.py">Python script</a>.
+</p>
+
+<p>
+The download figures are for full-install downloads of Apache OpenOffice downloaded via SourceForge. This does not include downloads of language
+packs, SDK's or source tarballs. It does not include downloads of earlier versions of OpenOffice.org or downloads made from copies of OpenOffice hosted on other repositories.
+</p>
+
+<p>
+Note: This is a download count, not a user count. These are related, but not identical concepts, since a single user can download multiple copies
+of OpenOffice, or a single download might be shared with multiple users or installed on several machines.
+</p>
+
+<p>
+These charts are <b>not</b> live. The data is manually updated. Data on the edges of the chart may represent data for partial days.
+</p>
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

@@ -1,0 +1,509 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>Home Page</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="CREATED" CONTENT="20010222;14495345">
+	<META NAME="CHANGEDBY" CONTENT="Mathias Bauer">
+	<META NAME="CHANGED" CONTENT="20010411;13361546">
+	<STYLE>
+	<!--
+		TD P { color: #000000 }
+		H1 { color: #000000 }
+		P { color: #000000 }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body TEXT="#000000" BGCOLOR="#ffffff">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/framework/">framework</a>&nbsp;&raquo;&nbsp;<a href="/framework/documentation/">documentation</a>&nbsp;&raquo;&nbsp;<a href="/framework/documentation/filters/">filters</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=0 CELLSPACING=0 STYLE="page-break-before: always">
+	<TR>
+		<TD>
+			<P ALIGN=LEFT><BR>
+			</P>
+		</TD>
+		<TD>
+			<P ALIGN=CENTER><BR>
+			</P>
+		</TD>
+		<TD>
+			<P ALIGN=RIGHT><A HREF="services.html">&gt;&gt;</A></P>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 COLOR="#000000">
+<CENTER>
+	<TABLE WIDTH=684 BORDER=0 CELLPADDING=2 CELLSPACING=0>
+		<COL WIDTH=13>
+		<COL WIDTH=355>
+		<COL WIDTH=286>
+		<COL WIDTH=14>
+		<TR>
+			<TD COLSPAN=4 WIDTH=680>
+				<H1>Type Detection</H1>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=4 WIDTH=680>
+				<P><FONT SIZE=5>General</FONT> <BR><BR>In version src619, the old
+				filter and type detection has been moved from &quot;install.ini&quot;
+				to the new configuration management. To do this, the information
+				was translated into XML format while the principle structure was
+				modified. Now you can use the complete process of the loading,
+				displaying or storing documents as a modular system. It functions
+				generically in many components and can easily be adapted to your
+				needs through the addition of your own modules or the removal of
+				others.</P>
+				<P><FONT COLOR="#ff0000">Note: <BR>The processes described in the
+				following sections are still in the development phase and may be
+				subject to change. We will update this site in the event of
+				changes. </FONT>
+				</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=4 WIDTH=680>
+				<P><BR><FONT SIZE=5>Configuration</FONT> <BR><BR>The new
+				structure of the configuration is illustrated by the following
+				figure: 
+				</P>
+				<P><IMG SRC="configstructure.gif" NAME="Graphic1" ALT="configuration structure" ALIGN=LEFT WIDTH=680 HEIGHT=605 BORDER=0><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=4 WIDTH=680>
+				<P>As shown on the left, the file consists of four lists (called
+				Sets) and two DEFAULT entries. The list items are described by
+				the structures shown on the right to which the arrows point.</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=4 WIDTH=680>
+				<HR SIZE=1 COLOR="#cccccc">
+				<UL>
+					<LI><P><A NAME="description_Type"></A>The most important
+					component of the configuration is the <STRONG>Type</STRONG>.<BR>It
+					describes the type of contents which can be represented in the
+					Office. This is usually a document type. However, the results of
+					active contents (e.g. macros) or DB contents can also be
+					described here.</P>
+					<UL>
+						<LI><P STYLE="margin-bottom: 0cm">The <STRONG>internal name</STRONG>
+						of a type must be unique and is also used as list entry. It
+						cannot contain any special characters. For example, a valid
+						name is &quot;<EM>my_own_type_for_example_files</EM>&quot;.</P>
+						<LI><P STYLE="margin-bottom: 0cm">The <STRONG>UIName</STRONG>
+						is used to display UI names and is localized. That means you
+						can choose an assignment between value and language for it.
+						Thus, support of CJK versions is possible. All UniCode
+						characters are permitted here. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><STRONG>MediaType</STRONG>
+						describes the MIME type of the contents. The regulations of the
+						XML format are the reason for the separation into MediaType and
+						&quot;internal type name&quot;. Since the latter is used as an
+						entry in the type list &#150; and thus corresponds to one XML
+						tag - not all special characters can be used. As a by-product
+						of this, the internal names can be altered at any time without
+						effecting the process as such. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm">The <STRONG>ClipboardFormat</STRONG>
+						is a unique description of this type for use in clipboards. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm">Important components of a
+						type are the <STRONG>URLPatterns</STRONG>. They enable the
+						support of your own URL pattern.<BR>e.g. in the Office:
+						&quot;private:factory/swriter&quot; for opening an empty writer
+						document 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm">Most important, however, are
+						the <STRONG>Extensions</STRONG>. They make the assignment of a
+						type to a URL possible. In 90% of the cases, the flat detection
+						depends on them alone.</P>
+						<LI><P STYLE="margin-bottom: 0cm">Since file endings cannot
+						always be assigned to a particular type, the <STRONG>Preferred</STRONG>
+						flag was introduced. It indicates the preferred type for a
+						group of types with the same extensions. Otherwise, the first
+						match is the one that will be used.</P>
+						<LI><P>Finally, one type can also be assigned an icon. To do
+						this, the <STRONG>DocumentIconID</STRONG> is used as reference
+						to a resource. 
+						</P>
+					</UL>
+				</UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=4 WIDTH=680>
+				<P><BR><BR>
+				</P>
+				<P>Especially interesting is the possibility of <STRONG><SPAN STYLE="font-weight: medium">registering
+				modules, <STRONG><SPAN STYLE="font-weight: medium">suitable for a
+				type</SPAN></STRONG>, which are capable of taking over various
+				tasks. The </SPAN></STRONG>&quot;<STRONG>Filters<STRONG>/&quot;,
+				&quot;<STRONG>DetectServices</STRONG>&quot; and &quot;<STRONG>FrameLoaders</STRONG>&quot;
+				<SPAN STYLE="font-weight: medium">lists were created for this
+				purpose.</SPAN></STRONG></STRONG></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=4 WIDTH=680>
+				<HR SIZE=1 COLOR="#cccccc">
+				<UL>
+					<LI><P><A NAME="description_DetectService"></A>What are
+					<STRONG>DetectServices</STRONG>? 
+					</P>
+					<P>Due to the registered types, flat detection is already
+					possible, i.e. the assignment of types (e.g. to a URL) only on
+					the basis of configuration data. If, however, you imagine
+					special cases (e.g. modifying the file extension of a Writer
+					file from .sdw to .doc), it quickly becomes clear that you
+					cannot always get a correct result with flat detection. To be
+					certain to get correct results, you need deep detection, i.e.
+					the file itself has to be examined. And that is exactly the
+					function of DetectServices. They get all the information
+					collected so far on a document and then decide which type to
+					assign it to. In the new modular model, such a detector is meant
+					as UNO service which registers itself in the Office and is
+					requested by the generic type detection if necessary. Therefore
+					you need two pieces of information:</P>
+					<UL>
+						<LI><P STYLE="margin-bottom: 0cm">The <STRONG>ServiceName -</STRONG>
+						This must be a valid UNO service name. It is also an entry in
+						the corresponding configuration list. <BR>Example:
+						&quot;<EM>com.company.devision.DetectService</EM>&quot; 
+						</P>
+						<LI><P>A list of <STRONG>Types</STRONG> able to be recognized
+						by this service - You can also implement and register detectors
+						for groups of types. 
+						</P>
+					</UL>
+				</UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=4 WIDTH=680>
+				<HR SIZE=1 COLOR="#cccccc">
+				<UL>
+					<LI><P>What are <STRONG>FrameLoaders</STRONG>? 
+					</P>
+					<P>FrameLoaders are also UNO services, but ones that are
+					supposed to &quot;load&quot; a detected type. A visual component
+					is expected as the result. The component can be
+					com.sun.star.awt.XWindow or, optionally, a view component
+					com.sun.star.frame.XController. 
+					</P>
+					<UL>
+						<LI><P STYLE="margin-bottom: 0cm">The <STRONG>UIName</STRONG>
+						permits a localized display in selection dialogs. 
+						</P>
+						<LI><P>In this case as well, the list of <STRONG>Types</STRONG>
+						corresponds to the registration as possible loader for groups
+						of types. 
+						</P>
+					</UL>
+				</UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=4 WIDTH=680>
+				<HR SIZE=1 COLOR="#cccccc">
+				<UL>
+					<LI><P>What are <STRONG>Filters</STRONG>? 
+					</P>
+					<P>These objects also represent a service. Their function is to
+					import or export the contents of a type into a component.
+					Accordingly, import filters are differentiated from export
+					filters. The component must implement the
+					com.sun.star.lan.XComponent interface. Further interfaces are
+					determined by the respective document service. The use of a
+					filter usually comes from a loader. 
+					</P>
+					<UL>
+						<LI><P STYLE="margin-bottom: 0cm">The <STRONG>Installed</STRONG>
+						flag indicates the installation status of a filter. A filter is
+						generally registered equally for all users. But even in a
+						network installation you should be able to deactivate this for
+						certain groups or single users. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm">Even a filter should be able
+						to show a localized <STRONG>UIName</STRONG> in selection
+						dialogs. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm">A filter must register itself
+						for a <STRONG>Type <SPAN STYLE="font-weight: medium">that i</SPAN></STRONG>t
+						can edit. Multiple assignments are not possible. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm">The <STRONG>DocumentService</STRONG>
+						describes the component on which the filter operates. Depending
+						upon the use, this is seen either as output or goal of the
+						filter process. A UNO service name is expected. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm">The <STRONG>FilterService</STRONG>
+						is the real UNO service name of the filter implementation. 
+						</P>
+						<LI><P>The <STRONG>Flags</STRONG> describe the sort of filter.
+						This is where, among other things, the organization into import
+						and export filters takes place. <BR><FONT COLOR="#aa0000">Note:
+						External filters must set the ThirdParty flag in order to be
+						detected <FONT COLOR="#aa0000">as such</FONT>!</FONT>
+						<BR>Supported flags are: 
+						</P>
+					</UL>
+				</UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD ROWSPAN=19 WIDTH=13 VALIGN=TOP></TD>
+			<TD WIDTH=355>
+				<P>Import</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00000001 <SUB>h</SUB></P>
+			</TD>
+			<TD ROWSPAN=19 WIDTH=14 VALIGN=TOP></TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>Export</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00000002 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>Template</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00000004 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>Internal</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00000008 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>TemplatePath</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00000010 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>Own</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00000020 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>Alien</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00000040 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>UsesOptions</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00000080 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>Default</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00000100 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>NotInFileDialog</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00001000 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>NotInChooser</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00002000 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>Asynchron</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00004000 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>Readonly</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00010000 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>NotInstalled</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00020000 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>ConsultService</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00040000 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>ThirdParty</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00080000 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>Packed</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00100000 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>SilentExport</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x00200000 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=355>
+				<P>Preferred</P>
+			</TD>
+			<TD WIDTH=286>
+				<P>&nbsp;&nbsp;0x10000000 <SUB>h</SUB></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=4 WIDTH=680>
+				<UL>
+					<UL>
+						<LI><P STYLE="margin-bottom: 0cm">Some filters need to be able
+						to store more configuration data than usual. This can be
+						realized with the <STRONG>UserData</STRONG> entry. The format
+						of the string list is not restricted in any way. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><STRONG>FileFormatVersion</STRONG>
+						indicates a certain version number of a document which can be
+						edited by this filter. 
+						</P>
+						<LI><P>A <STRONG>TemplateName</STRONG> ... 
+						</P>
+					</UL>
+				</UL>
+			</TD>
+		</TR>
+	</TABLE>
+</CENTER>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=0 CELLSPACING=0>
+	<TR>
+		<TD>
+			<P ALIGN=LEFT><BR>
+			</P>
+		</TD>
+		<TD>
+			<P ALIGN=CENTER><BR>
+			</P>
+		</TD>
+		<TD>
+			<P ALIGN=RIGHT><A HREF="services.html">&gt;&gt;</A> 
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 COLOR="#000000">
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
+	<TR>
+		<TD>
+			<P><STRONG><FONT SIZE=2><FONT FACE="Arial">author</FONT></FONT> </STRONG>
+			</P>
+		</TD>
+		<TD>
+			<P><FONT SIZE=2><FONT FACE="Arial">&nbsp;&nbsp;&nbsp;Andreas
+			Schl&uuml;ns</FONT></FONT> 
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P><STRONG><FONT SIZE=2><FONT FACE="Arial">email</FONT></FONT> </STRONG>
+			</P>
+		</TD>
+		<TD>
+			<P>&nbsp;&nbsp;&nbsp;<A HREF="mailto:andreas.schluens@germany.sun.com"><FONT SIZE=2><FONT FACE="Arial">andreas.schluens@germany.sun.com</FONT></FONT></A>
+						</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P><STRONG><FONT SIZE=2><FONT FACE="Arial">last modification</FONT></FONT>
+			</STRONG>
+			</P>
+		</TD>
+		<TD>
+			<P><FONT SIZE=2><FONT FACE="Arial">&nbsp;&nbsp;&nbsp;11.04.2001</FONT></FONT>
+						</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

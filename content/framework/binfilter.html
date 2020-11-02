@@ -1,0 +1,105 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>binfilter</title>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/framework/">framework</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h1>binfilter project<br>
+</h1>
+(short form of binary filters)<br>
+<h2>Summary:</h2>
+Before implementing the OpenOffice XML formats the main file
+format was the binary format for all applications. In OOo 1.0 and OOo
+1.1 we have both file formats included and did change the default
+format to XML. The binary formats exist as long as the applications
+exist. They were developed straightforward and run through various bug
+fixing/extension cycles. When starting implementing that filters it was
+straightforward to directly stream in and out the object model data.
+This was done mostly in implementing streaming operators at/for that
+classes defining the object model.<br>
+<p>
+Today, after that fixing/extension cycles, that format has several
+problems:<br>
+Due to extensions/changes (which is possible in small amounts in the
+binary files but always needs to stay readable for older versions,
+including previously made errors) the format is no longer
+straightforward. In many parts huge transitions to older object model
+data are done at saving and transition to newer data structures at
+loading.<br>
+The biggest problem is the streaming approach itself. This prevents us
+from doing necessary bigger changes at the application cores. It is
+possible to add new data to the binary format in a compatible manner,
+but at least at writing the corresponding older document model data
+needs to be created and written compatible for older versions. This
+also leads to having much data twice in the files. It is not possible
+to change the structure between the data chunks (which are the core
+classes normally) at all.<br>
+To get rid of that not well structured approach, the XML formats were
+developed and introduced as a first step. Now, in a second step, we
+want to break that document model core blockage by removing the old
+binary formats from the cores. Thus, a OOo 1.1 should be the last
+version containing XML and the binary filters. This will allow us to do
+a lot of more than necessary changes in the application cores for
+future versions.<br>
+This opens the problem that for later versions we still want to offer
+the user the possibility to read/write our 'old' binary file formats.
+There are different possibilities to do that which will now be shown.</p>
+<p>Thus, the targets of this project are:</p>
+<ul>
+  <li>Remove the binary filters from the document model cores</li>
+</ul>
+<ul>
+  <li>
+    <p> Find and supply a possibility for the users of OOo after 1.1
+to work with the 'old' binary file formats. This is called Filter
+Migration</p>
+  </li>
+</ul>
+The first point is obvoiusly not a big problem, but the 2nd one is.
+This new project thus deals with solvong the second point.<br>
+After the evaluation of different possibilities of Filter Migration it
+seems to be the safest and simplest to take a copy of the modules
+containing the binary filters and 'strip' everything that is not
+needed. Thus, the remaining modules will still contain the old data
+model cores, parts of the API implementations and the XML
+implementations. It is simplest to use XML as exchange format since we
+have a way to read/write XML with the current application cores and XML
+is well defined and will stay compatible to later OOo versions.<br>
+<br>
+<h2>Project Description:</h2>
+This OOo project covers the Filter Stripping approach to enable us
+to remove the outdated binary filters contained in OOo. Main reason is
+that the old filters are blocking future development. Since in later
+OOo versions there needs to be a possibiulity offered to still work
+with file formats from OOo 1.0 and OOo 1.1, this project will develop a
+solution for that. The solution will provide 'stripped' (reduced)
+versions of the core modules which keep the binary filter functionality
+and will be able to import/export from there to XML. Thus we will
+derive isolated, reduced filter modules for the old binary file formats.<br>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

@@ -1,0 +1,394 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+<title>FreeBSD OpenOffice.org porting status page : Implementation testing</title>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/porting/">porting</a>&nbsp;&raquo;&nbsp;<a href="/porting/freebsd/">freebsd</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h2>FreeBSD OpenOffice.org porting status page : Implementation testing</h2>
+
+<p>$Id: testing.html,v 1.8 2005/09/25 20:42:12 xxjack12xx Exp $</p>
+by <a href="mailto:openoffice@FreeBSD.org">OpenOffice.org porting team</a>, 
+<a href="mailto:maho@FreeBSD.org">NAKATA, Maho</a>, 
+and <a href="mailto:xxjack12xx@openoffice.org">Jackson Low</a>
+
+<h3>Testing OOo</h3>
+This page describes how to perform low level testing of OOo to check whether implementations are done correctly.
+<hr>
+Before testing...
+<ul>
+<li> Build your OOo
+<li> tcsh ; cd work ; source FreeBSDEnv.Set
+</ul>
+
+How to test for 1.1.4
+<ul>
+<li> sal
+<pre>
+# cd ${SRCROOT}/svtools/workben ; dmake ; deliver
+# cd ${SRCROOT}/svtools/unxfbsd.pro/bin
+# ./svdem
+</pre>
+<li> stoc
+<pre>
+# cd ${SRCROOT}/stoc/test/testsmgr_cpnt ; dmake ; deliver
+# cd ${SRCROOT}/stoc/test ; dmake ; deliver
+# cd ${SRCROOT}/stoc/unxfbsd.pro/bin
+# testconv
+ ./testconv
+test_Conversion(): start...
+test_Conversion(): end.
+# ./testcorefl
+ ./testcorefl
+
+testcorefl succeeded !
+# ./testintrosp
+./testintrosp
+1
+2
+3
+4
+before test_introsp
+after test_introsp
+testintrosp succeeded !
+# ./testinvocation
+> test_iadapter() succeeded.
+> test_invocation() succeeded.
+# ./testloader
+Test Dll ComponentLoader, OK!
+# ./testproxyfac
+testproxyfac succeeded !
+# ./testregistry
+Test SimpleRegistry, OK!
+test InvalidRegistryException OK!
+Test DefaultRegistry, OK!
+Test SimpleRegistry, OK!
+Test DefaultRegistry, OK!
+# ./testsmgr
+> implementation name: com.sun.star.comp.stoc.SimpleRegistry
+> implementation name: com.sun.star.comp.stoc.OServiceManagerWrapper
+> implementation name: com.sun.star.comp.stoc.NestedRegistry
+> implementation name: com.sun.star.comp.stoc.ImplementationRegistration
+> implementation name: com.sun.star.comp.stoc.RegistryTypeDescriptionProvider
+> implementation name: com.sun.star.security.comp.stoc.FilePolicy
+> implementation name: com.sun.star.comp.stoc.TypeDescriptionManager
+> implementation name: com.sun.star.security.comp.stoc.AccessController
+> implementation name: com.sun.star.comp.stoc.DLLComponentLoader
+ServiceManagerTest : OK
+</pre>
+<li> bridge
+<pre>
+# cd ${SRCROOT}/bridges/test/java_uno ; dmake ; deliver
+??
+</pre>
+</ul>
+
+How to test for 2.0 <br>
+<ul>
+<li> <a href="http://udk.openoffice.org/common/man/draft/tests.html">UDK test</a> by Stephan Bergmann
+<pre>
+1. bridges/test/com/sun/star/lib/uno/bridges/java_remote/
+# dmake ${SRCROOT}/bridges/test/com/sun/star/lib
+# cd ${SRCROOT}/bridges/test/com/sun/star/lib/ ; dmake
+
+2. bridges/test/java_uno/acquire/
+# cd ${SRCROOT}/bridges/test/java_uno/acquire/
+# dmake
+...
+# cd ../../../unxfbsd.pro/bin/
+# ./testacquire-java-server &
+# sleep 3 # wait for server to accept connection
+# ./testacquire-java-client
+....
+Client and server both cleanly terminate now: Success
+# ./testacquire-java-server ; sleep 3 ; ./testacquire-native-client
+...
+Client and server both cleanly terminate now: Success
+# ./testacquire-native-server & ; sleep 3 ; ./testacquire-java-client
+...
+Client and server both cleanly terminate now: Success
+# ./testacquire-native-server & ; sleep 3 ; ./testacquire-native-client
+...
+Client and server both cleanly terminate now: Success
+
+3. bridges/test/java_uno/any/ 
+# dmake bridges/test/com/sun/star/lib
+# cd bridges/test/java_uno/any/
+# dmake
+# cd ../../../unxfbsd.pro/bin/
+# ./TestJni
+jni any test succeeded.
+# ./TestRemote
+Server: Accepting...
+
+4. bridges/test/java_uno/equals/
+# dmake bridges/test/com/sun/star/lib
+# cd bridges/test/java_uno/equals/ ; dmake
+# cd ../../../unxfbsd.pro/bin
+# ./testequal
+
+5. bridges/test/java_uno/multinherit/
+# cd bridges/test/java_uno/multinherit/
+# dmake
+# cd ../../../unxfbsd.pro/bin/
+# ./testmultinherit-java-server &  ; sleep 3 ; ./testmultinherit-java-client
+# ./testmultinherit-java-server &  ; sleep 3 ; ./testmultinherit-native-client
+# ./testmultinherit-native-server &; sleep 3 ; ./testmultinherit-java-client
+# ./testmultinherit-native-server &; sleep 3 ; ./testmultinherit-native-client
+
+6. bridges/test/java_uno/nativethreadpool/
+# cd bridges/test/java_uno/nativethreadpool/
+# dmake
+
+7. codemaker/test/cppumaker/
+# cd codemaker/test/cppumaker/
+# dmake
+
+8. codemaker/test/javamaker/
+# cd codemaker/test/javamaker/
+# dmake
+
+9. comphelper/qa/propertysetmixin/
+# cd comphelper/qa/propertysetmixin/
+# dmake test
+
+10. idlc/test/parser/
+# cd idlc/test/parser/ ; dmake
+
+11. jurt/test/
+# cd jurt/test/ ; dmake 
+
+12. registry/test/regcompare/
+# cd registry/test/regcompare/ ; dmake
+
+13. ridljar/test/
+# cd ridljar/test/ ; dmake
+
+14. stoc/test/registry_tdprovider/
+# cd stoc/test/registry_tdprovider/ ; dmake
+
+15. stoc/test/tdmanager/
+# cd stoc/test/tdmanager/ ; dmake
+
+16. stoc/test/uriproc/
+# cd stoc/test/uriproc/ ; dmake
+</pre>
+<li>
+<a href="http://www.openoffice.org/nonav/issues/showattachment.cgi/21174/testuno.txt">Sparcmoz's test</a>, see also <a href="http://qa.openoffice.org/issues/show_bug.cgi?id=40081">#iZ 40081</a>.
+<pre>
+1. cppu
+cd cppu/test; dmake
+cd cppu/unxfbsd.pro/bin
+./testcppu
+> invocation test succeeded!
+> exception test succeeded!
+> C++-UNO test (c++ <-> uno <-> c++ [component impl]) succeeded!
+
+2. stoc
+Not yet done.
+
+3. 
+</pre>
+
+</ul>
+
+RESULT for 1.1.4 port
+<blockquote>
+Test done with FreeBSD 5.3-RELEASE + OpenOffice.og 1.1.4 + JDK 1.4.2 (ports) at 2005/Jan/16
+</blockquote>
+<ul> 
+<li> sal: failed (infinite loop)
+<li> stoc: testconv (ok), testcorefl (ok), testintrosp (ok), testinvocation (ok), testloader (ok), testproxyfac (ok), testregistry (ok), testsmgr (ok)
+<li> bridge : failed (no test suite exits)
+</ul>
+
+RESULT for 2.0(1.9) port
+<blockquote>
+Test done with FreeBSD 5.3-RELEASE + OpenOffice.og 1.9.m71 + JDK 1.4.2 (ports), at 2005/Jan/16
+</blockquote>
+<ul> 
+<li> UDK test
+<ul>
+<li> bridges/test/com/sun/star/lib/uno/bridges/java_remote : passed
+<li> bridges/test/java_uno/acquire : passed
+<li> bridges/test/java_uno/any/ : TestRemote failed. (waiting forever)
+<li> ridges/test/java_uno/equals/ : passed
+<li> bridges/test/java_uno/multinherit/ : passed
+<li> bridges/test/java_uno/nativethreadpool/ : failed
+<pre>
+dmake:  makefile.mk:  line 74:  Error -- Expecting macro or rule defn, found neither
+'---* *---'
+</pre>
+<li> codemaker/test/cppumaker/ : passed
+<li> codemaker/test/javamaker/ : failed
+<pre>
+java -classpath .:../../unxfbsd.pro/class/test:/usr/local/jdk1.4.2/jre/lib/rt.jar:.:../../unxfbsd.pro/class:/work/ports/editors/openoffice-2.0-devel/work/solver/680/unxfbsd.pro/bin/juh.jar:/work/ports/editors/openoffice-2.0-devel/work/solver/680/unxfbsd.pro/bin/jurt.jar:/work/ports/editors/openoffice-2.0-devel/work/solver/680/unxfbsd.pro/bin/ridl.jar:/work/ports/editors/openoffice-2.0-devel/work/solver/680/unxfbsd.pro/bin/OOoRunner.jar org.openoffice.Runner -TestBase java_complex \
+        -NoOffice yes -o   test.codemaker.javamaker.Test
+TestJob: -o test.codemaker.javamaker.Test
+Searching Class: test.codemaker.javamaker.Test
+Got test: test.codemaker.javamaker.Test@186d4c1
+Exception in thread "main" java.lang.NullPointerException
+        at java.lang.Class.forName0(Native Method)
+        at java.lang.Class.forName(Class.java:141)
+        at util.DynamicClassLoader.forName(DynamicClassLoader.java:80)
+        at util.DynamicClassLoader.getInstance(DynamicClassLoader.java:91)
+        at base.java_complex.executeTest(java_complex.java:124)
+        at org.openoffice.Runner.main(Runner.java:116)
+dmake:  Error code 1, while making 'Test.test'
+'---* tg_merge.mk *---'
+</pre>
+
+<li> comphelper/qa/propertysetmixin/ : failed
+<pre>
+using loader com.sun.star.loader.Java2
+register component 'file:///work/ports/editors/openoffice-2.0-devel/work/comphelper/qa/propertysetmixin/../../unxfbsd.pro/misc/qa_propertysetmixin/qa_propertysetmixin.uno.jar' in registry '../../unxfbsd.pro/misc/qa_propertysetmixin/uno.rdb' failed!
+error (CannotRegisterImplementationException): test.comphelper.propertysetmixin.comp.JavaSupplier
+dmake:  Error code 1, while making '../../unxfbsd.pro/misc/qa_propertysetmixin/uno.rdb'
+dmake:  '../../unxfbsd.pro/misc/qa_propertysetmixin/uno.rdb' removed.
+'---* tg_merge.mk *---'
+</pre>
+<li> idlc/test/parser/ : passed
+<li> jurt/test/ : failed
+<pre>
+java -classpath .:../../../../../../unxfbsd.pro/class/test:/usr/local/jdk1.4.2/jre/lib/rt.jar:.:../../../../../../unxfbsd.pro/class:/work/ports/editors/openoffice-2.0-devel/work/solver/680/unxfbsd.pro/bin/ridl.jar:/work/ports/editors/openoffice-2.0-devel/work/solver/680/unxfbsd.pro/bin/OOoRunner.jar org.openoffice.Runner -TestBase java_complex \
+        -NoOffice yes -o   com.sun.star.comp.bridgefactory.BridgeFactory_Test
+TestJob: -o com.sun.star.comp.bridgefactory.BridgeFactory_Test
+Searching Class: com.sun.star.comp.bridgefactory.BridgeFactory_Test
+Got test: com.sun.star.comp.bridgefactory.BridgeFactory_Test@1820dda
+Exception in thread "main" java.lang.NullPointerException
+        at java.lang.Class.forName0(Native Method)
+        at java.lang.Class.forName(Class.java:141)
+        at util.DynamicClassLoader.forName(DynamicClassLoader.java:80)
+        at util.DynamicClassLoader.getInstance(DynamicClassLoader.java:91)
+        at base.java_complex.executeTest(java_complex.java:124)
+        at org.openoffice.Runner.main(Runner.java:116)
+dmake:  Error code 1, while making 'BridgeFactory_Test.test'
+'---* tg_merge.mk *---'
+dmake:  Error code 255, while making 'all'
+'---* *---'
+</pre>
+<li> registry/test/regcompare/ : passed
+<li> ridljar/test/  : failed
+<pre>
+java -classpath .:../../../../../../../unxfbsd.pro/class/test:/usr/local/jdk1.4.2/jre/lib/rt.jar:.:../../../../../../../unxfbsd.pro/class:/work/ports/editors/openoffice-2.0-devel/work/solver/680/unxfbsd.pro/bin/OOoRunner.jar org.openoffice.Runner -TestBase java_complex \
+        -NoOffice yes -o   com.sun.star.lib.uno.typedesc.TypeDescription_Test
+TestJob: -o com.sun.star.lib.uno.typedesc.TypeDescription_Test
+Searching Class: com.sun.star.lib.uno.typedesc.TypeDescription_Test
+Got test: com.sun.star.lib.uno.typedesc.TypeDescription_Test@15f5897
+Exception in thread "main" java.lang.NullPointerException
+        at java.lang.Class.forName0(Native Method)
+        at java.lang.Class.forName(Class.java:141)
+        at util.DynamicClassLoader.forName(DynamicClassLoader.java:80)
+        at util.DynamicClassLoader.getInstance(DynamicClassLoader.java:91)
+        at base.java_complex.executeTest(java_complex.java:124)
+        at org.openoffice.Runner.main(Runner.java:116)
+dmake:  Error code 1, while making 'TypeDescription_Test.test'
+'---* tg_merge.mk *---'
+dmake:  Error code 255, while making 'all'
+'---* *---'
+</pre>
+<li> stoc/test/registry_tdprovider/ : passed
+<li> stoc/test/tdmanager/ : passed
+<li> stoc/test/uriproc/ : passed
+</ul>
+<li> other test (?)
+</ul>
+
+Links
+<ul>
+<li> <a href="http://qa.openoffice.org/issues/show_bug.cgi?id=40081">Sparcmoz's</a> test process
+<li> Python test
+<blockquote>
+See: <a href="http://porting.openoffice.org/servlets/ReadMsg?list=dev&msgId=1514298">Joerg's mail</a>, and <a href="http://porting.openoffice.org/servlets/ReadMsg?list=dev&msgNo=14488">Joerg's mail</a>
+</blockquote>
+<li> UDK test
+<a href="http://udk.openoffice.org/common/man/draft/tests.html">UDK test</a>
+<li> 
+<a href="http://porting.openoffice.org/mac/build_11_X11.html">SAL, GSL</a> test for Mac OS X, X11 port.
+</ul>
+
+
+<hr>
+Appendix download dirs:<br>
+Since OOo has several external modules, all the modules are not yet
+completely ported for FreeBSD. There is an issue of -pthread that we must carefully check.
+<ul>
+<li> 1.1.4
+<pre>
+external/download
+berkeleydb/download
+sablot/download
+stlport/download
+freetype/download
+nas/download
+openssl/download
+neon/download
+expat/download
+np_sdk/download
+zlib/download
+icu/download
+jpeg/download
+curl/download
+boost/download
+python/download
+bitstream_vera_fonts/download
+libxml2/download
+msfontextract/download
+dlcompat/download
+moz.runtime/download
+</pre>
+<li> 1.9m71
+<pre>
+external/download
+berkeleydb/download
+sablot/download
+stlport/download
+freetype/download
+nas/download
+neon/download
+expat/download
+np_sdk/download
+zlib/download
+icu/download
+jpeg/download
+curl/download
+boost/download
+python/download
+bitstream_vera_fonts/download
+libxml2/download
+msfontextract/download
+libxmlsec/download
+libwpd/download
+portaudio/download
+sndfile/download
+xalan/download
+hsqldb/download
+moz/download
+</pre>
+</ul>
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

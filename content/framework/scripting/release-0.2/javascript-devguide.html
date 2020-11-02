@@ -1,0 +1,175 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="tomas o connor">
+  <title>Developing Scripts in JavaScript</title>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/framework/">framework</a>&nbsp;&raquo;&nbsp;<a href="/framework/scripting/">scripting</a>&nbsp;&raquo;&nbsp;<a href="/framework/scripting/release-0.2/">release-0.2</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h1>Writing Office Scripts in JavaScript</h1>
+
+A prototype Script Runtime has been developed for JavaScript using the
+<a href="http://www.mozilla.org/rhino/index.html">Rhino JavaScript
+Interpreter</a> from the Mozilla project. This Runtime allows JavaScript
+scripts to be executed in OpenOffice.org. Unlike the BeanShell and Java
+Runtimes the JavaScript Runtime is still in development and is not yet
+fully functional, however it is suitable for experimenting with Office
+scripting in JavaScript.
+
+<p>
+Some known limitations of the JavaScript Runtime are:
+
+<ul>
+<li>Currently the JavaScript Runtime does support loading of Java classes that
+are deployed with the JavaScript script.
+<li>The JavaScript Runtime will not report any errors that occur during the
+execution of the script.
+<li>Currently there is no support for interactive development of
+JavaScript scripts.
+</ul>
+
+<h2>Contents</h2>
+
+<ul>
+<li><p><a href="#install">Installation</a>
+<li><p><a href="#hellow">Hello World in JavaScript</a>
+<li><p><a href="#deploy">Invoking JavaScript in OpenOffice.org</a>
+<li><p><a href="#issues">Issues</a>
+</ul>
+
+<a name="install"><h2>Installation</h2></a>
+
+<ul>
+<li>Download the <a href="jsruntime.zip">JavaScript Runtime UNO package</a>
+<li>If you have OpenOffice.org running you should close it.
+<li>Switch to the directory named program under your OpenOffice.org installation
+directory
+<li>Run the command:
+<p>
+<pre>
+pkgchk &lt;path to your downloaded jsruntime.zip&gt;
+<pre>
+</ul>
+
+<a name="hellow"><h2>Hello World in JavaScript</h2></a>
+
+Here's a JavaScript script that inserts Hello World at the start
+of an OpenOffice.org Writer document:
+
+<pre>
+importClass(Packages.com.sun.star.uno.UnoRuntime);
+importClass(Packages.com.sun.star.text.XTextDocument);
+
+var oModel = ScriptContext.getDocument(); 
+var oTextdoc = UnoRuntime.queryInterface(XTextDocument, oModel);
+var oText = oTextdoc.getText(); 
+var oCursor = oText.createTextCursor(); 
+
+oText.insertString(oCursor, "Hello World", false);
+</pre>
+
+<p>
+The ScriptContext variable above is a global instance of the XScriptContext type
+which is available to all JavaScript scripts executed by the Scripting
+Framework. See <a href="developer-guide.html#context">Writing Office Scripts
+and the XScriptContext type</a> for the methods available for the XScriptContext type.
+
+<a name="deploy"><h2>Invoking a JavaScript script in OpenOffice.org</h2></a>
+
+You have two choices for making your Hello World script available for
+execution within OpenOffice.org:
+
+<ol>
+<li><b>Using the command line tools</b>
+
+<p>
+You can use the CommandLineTools class available with the Scripting Framework
+to generate and deploy a Script Parcel. To do this with the Hello World script:
+
+<p>
+<ul>
+<li>Create a directory called helloworld and create a file called helloworld.js
+in that directory using the code above
+
+<li>Setup the command line tools according to the instructions on the
+<a href="commandline-devguide.html">Command Line Tools</a> page
+
+<li>To generate a script parcel run the command:
+<p>
+<pre>
+java CommandLineTools -g -l Rhino=.js
+</pre>
+
+<li>To deploy the generated .sxp file:
+<p>
+<pre>
+java CommandLineTools -d &lt;path to helloworld.sxp&gt; &lt;path to your OpenOffice.org&gt;/user/Scripts
+</pre>
+</ul>
+
+<li><b>Manually deploying your script</b>
+
+<p>
+<ul>
+<li>Create a directory called &lt;path to your OpenOffice.org&gt;/user/Scripts/rhino/helloworld
+<li>Create a file helloworld.js in that directory with the Hello World code
+<li>Create a file called parcel-descriptor.xml in that directory with the following contents:
+
+<p>
+<pre>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+
+&lt;parcel language=&quot;Rhino&quot; xmlns:parcel=&quot;scripting.dtd&quot;&gt;
+
+    &lt;script language=&quot;Rhino&quot;&gt;
+        &lt;locale lang=&quot;en&quot;&gt;
+            &lt;displayname value=&quot;HelloWorld&quot;/&gt;
+            &lt;description&gt;Insert Hello World in a document&lt;/description&gt;
+        &lt;/locale&gt;
+        &lt;functionname value=&quot;helloworld.js&quot;/&gt;
+        &lt;logicalname value=&quot;HelloWorld.Rhino&quot;/&gt;
+    &lt;/script&gt;
+&lt;/parcel&gt;
+</pre>
+</ul>
+</ol>
+
+<p>
+Once you have the JavaScript ScriptRuntime installed and the Hello World script
+deployed restart OpenOffice.org. See the
+<a href="user-guide.html">Scripting Framework User Guide</a> for instructions
+on how to bind your script to a menu item, key binding or event. To see your
+script set the Location to User and the Language to Rhino in the Assign
+dialogs.
+
+<p>
+If you want to change your Hello World script, just edit the helloworld.js file
+in a text editor, save it and rerun the script using your menu, key or event
+binding. You don't need to restart OpenOffice.org or rebind to the script
+as the Scripting Framework reloads the script each time it runs it.
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

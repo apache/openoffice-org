@@ -1,0 +1,1499 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ===================================================================
+  
+  Citation Style Language (CSL) schema for describing bibliographic 
+  and citation formatting.
+  
+  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  
+  Copyright Bruce D'Arcus <bdarcus@sourceforge.net>, 2004
+  
+  Permission to use, copy and distribute the Citation Style Language
+  (CSL) schema and its accompanying documentation for any purpose and
+  without fee is hereby granted in perpetuity, provided that the above
+  copyright notice and this paragraph appear in all copies. The copyright
+  holders make no representation about the suitability of the schema for
+  any purpose. It is provided "as is" without expressed or implied
+  warranty.
+  
+  This license does not grant permission to distribute modifications
+  to CSL.
+  
+  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  
+  ===================================================================
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://purl.org/NET/xbiblio/csl" xmlns:cs="http://purl.org/NET/xbiblio/csl">
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:group name="Classes">
+    <xs:choice>
+      <xs:group ref="cs:CitationStyle.author-year"/>
+      <xs:group ref="cs:CitationStyle.note-bib"/>
+      <xs:group ref="cs:CitationStyle.note-nobib"/>
+      <xs:group ref="cs:CitationStyle.number"/>
+      <xs:group ref="cs:CitationStyle.citekey"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="CitationStyle.author-year">
+    <xs:annotation>
+      <xs:documentation>in-text author-year citations like (Doe, 1999)</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="citationstyle">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="cs:info"/>
+            <xs:group ref="cs:Content.author-year"/>
+          </xs:sequence>
+          <xs:attribute name="class" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="author-year"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute ref="xml:lang" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="CitationStyle.note-bib">
+    <xs:annotation>
+      <xs:documentation>foot/endnote citations, with a bibliography list</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="citationstyle">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="cs:info"/>
+            <xs:group ref="cs:Content.note-bib"/>
+          </xs:sequence>
+          <xs:attribute name="class" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="note-bib"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute ref="xml:lang" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="CitationStyle.note-nobib">
+    <xs:annotation>
+      <xs:documentation>foot/endnote citations, without a bibliography list</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="citationstyle">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="cs:info"/>
+            <xs:group ref="cs:Content.note-nobib"/>
+          </xs:sequence>
+          <xs:attribute name="class" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="note-nobib"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute ref="xml:lang" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="CitationStyle.number">
+    <xs:annotation>
+      <xs:documentation>numeric citations like [1] </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="citationstyle">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="cs:info"/>
+            <xs:group ref="cs:Content.number"/>
+          </xs:sequence>
+          <xs:attribute name="class" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="number"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute ref="xml:lang" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="CitationStyle.citekey">
+    <xs:annotation>
+      <xs:documentation>citekey in-text citation like [Doe99a]</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="citationstyle">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="cs:info"/>
+            <xs:group ref="cs:Content.citekey"/>
+          </xs:sequence>
+          <xs:attribute name="class" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="citekey"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute ref="xml:lang" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="info">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="cs:Info.Title"/>
+        <xs:element minOccurs="0" ref="cs:title-short"/>
+        <xs:element minOccurs="0" ref="cs:edition"/>
+        <xs:element minOccurs="0" ref="cs:version"/>
+        <xs:element minOccurs="0" ref="cs:author"/>
+        <xs:element ref="cs:dateCreated"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="cs:dateModified"/>
+        <xs:element minOccurs="0" ref="cs:sources"/>
+        <xs:element minOccurs="0" ref="cs:basedOn"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="cs:field"/>
+        <xs:element minOccurs="0" ref="cs:description"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Info.Title">
+    <xs:annotation>
+      <xs:documentation>The title for the citation style.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="title" type="xs:string"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="title-short" type="xs:token"/>
+  <xs:element name="edition" type="xs:string"/>
+  <xs:element name="version" type="xs:string"/>
+  <xs:element name="author">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="cs:name"/>
+        <xs:group minOccurs="0" ref="cs:Info.Url"/>
+        <xs:element minOccurs="0" ref="cs:email"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="name" type="xs:string"/>
+  <xs:group name="Info.Url">
+    <xs:sequence>
+      <xs:element name="url" type="xs:anyURI"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="email" type="xs:token"/>
+  <xs:element name="dateCreated" type="xs:date"/>
+  <xs:element name="dateModified" type="xs:date"/>
+  <xs:element name="sources">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="cs:source"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="source">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="text"/>
+            <xs:enumeration value="uri"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="basedOn">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="cs:Info.Title"/>
+        <xs:element minOccurs="0" ref="cs:version"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="field" type="xs:token"/>
+  <xs:element name="description" type="xs:string"/>
+  <xs:group name="Content.author-year">
+    <xs:sequence>
+      <xs:element name="content">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="cs:NamesFormat"/>
+            <xs:element ref="cs:dates"/>
+            <xs:element ref="cs:locators"/>
+            <xs:element ref="cs:terms"/>
+            <xs:group ref="cs:CitationLayout.author-year"/>
+            <xs:group ref="cs:BibliographyLayout.author-year"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="Content.note-bib">
+    <xs:sequence>
+      <xs:element name="content">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="cs:NamesFormat"/>
+            <xs:element ref="cs:dates"/>
+            <xs:element ref="cs:terms"/>
+            <xs:group ref="cs:CitationLayout.note-bib"/>
+            <xs:group ref="cs:BibliographyLayout.note-bib"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="Content.note-nobib">
+    <xs:sequence>
+      <xs:element name="content">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="cs:NamesFormat"/>
+            <xs:element ref="cs:dates"/>
+            <xs:element ref="cs:terms"/>
+            <xs:group ref="cs:CitationLayout.note-nobib"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="Content.number">
+    <xs:sequence>
+      <xs:element name="content">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="cs:NamesFormat"/>
+            <xs:element ref="cs:dates"/>
+            <xs:element ref="cs:terms"/>
+            <xs:group ref="cs:CitationLayout.number"/>
+            <xs:group ref="cs:BibliographyLayout.number"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="Content.citekey">
+    <xs:sequence>
+      <xs:element name="content">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="cs:NamesFormat"/>
+            <xs:element ref="cs:dates"/>
+            <xs:element ref="cs:terms"/>
+            <xs:group ref="cs:CitationLayout.citekey"/>
+            <xs:group ref="cs:BibliographyLayout.citekey"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:complexType name="LayoutStructures">
+    <xs:complexContent>
+      <xs:extension base="cs:Entry.Biblio"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:attributeGroup name="Citation.Delimiter">
+    <xs:attribute name="delimiter" use="required" type="xs:token"/>
+  </xs:attributeGroup>
+  <xs:group name="CitationLayout.author-year">
+    <xs:sequence>
+      <xs:element name="citation">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="cs:prefix"/>
+            <xs:choice>
+              <xs:element ref="cs:all"/>
+              <xs:sequence>
+                <xs:group ref="cs:FirstReference.author-year"/>
+                <xs:group ref="cs:SubsequentReferences.author-year"/>
+              </xs:sequence>
+            </xs:choice>
+            <xs:element minOccurs="0" ref="cs:suffix"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="cs:Citation.Delimiter"/>
+          <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="all">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:multiple-authors"/>
+        <xs:element name="layout" type="cs:CitationEntry.author-year"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="FirstReference.author-year">
+    <xs:sequence>
+      <xs:element name="first">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="cs:multiple-authors"/>
+            <xs:element name="layout" type="cs:CitationEntry.author-year"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="SubsequentReferences.author-year">
+    <xs:sequence>
+      <xs:element name="subsequent">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="cs:multiple-authors"/>
+            <xs:element minOccurs="0" name="layout" type="cs:CitationEntry.author-year"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:complexType name="CitationEntry.author-year">
+    <xs:sequence>
+      <xs:element ref="cs:creator"/>
+      <xs:element ref="cs:year"/>
+      <xs:element ref="cs:point"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+  </xs:complexType>
+  <!-- FIX ME -->
+  <xs:group name="CitationLayout.note-bib">
+    <xs:sequence>
+      <xs:element name="citation">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="all">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" ref="cs:multiple-authors"/>
+                  <xs:group ref="cs:CitationEntry.note-bib"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attributeGroup ref="cs:Citation.Delimiter"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="CitationLayout.note-nobib">
+    <xs:sequence>
+      <xs:element name="citation" type="cs:CitationEntry.note-nobib"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="CitationEntry.note-bib">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="cs:multiple-authors"/>
+      <xs:element name="layout">
+        <xs:complexType>
+          <xs:choice>
+            <xs:group ref="cs:Formatting.Elements"/>
+            <xs:group ref="cs:Entry.Citation-note"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:complexType name="CitationEntry.note-nobib">
+    <xs:sequence>
+      <xs:element name="first">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="cs:multiple-authors"/>
+            <xs:element name="layout">
+              <xs:complexType>
+                <xs:group ref="cs:Entry.Citation-note"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="subsequent">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="cs:multiple-authors"/>
+            <xs:element minOccurs="0" name="layout">
+              <xs:complexType>
+                <xs:choice>
+                  <xs:group ref="cs:Formatting.Elements"/>
+                  <xs:group ref="cs:Entry.Citation-note"/>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="ibid">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attributeGroup ref="cs:Citation.Delimiter"/>
+  </xs:complexType>
+  <xs:group name="Entry.Citation-note">
+    <xs:sequence>
+      <xs:group ref="cs:RefClass-Monograph-Required"/>
+      <xs:group ref="cs:RefClass-PartInMonograph-Required"/>
+      <xs:group ref="cs:RefClass-PartInSerial-Required"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="cs:RefClass-Monograph-Optional"/>
+        <xs:group ref="cs:RefClass-PartInMonograph-Optional"/>
+        <xs:group ref="cs:RefClass-PartInSerial-Optional"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="CitationLayout.number">
+    <xs:sequence>
+      <xs:element name="citation">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="cs:prefix"/>
+            <xs:element ref="cs:CitationEntry.number"/>
+            <xs:element minOccurs="0" ref="cs:suffix"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="cs:CitationEntry.number"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="CitationEntry.number" abstract="true">
+    <xs:complexType/>
+  </xs:element>
+  <xs:attributeGroup name="CitationEntry.number">
+    <xs:attributeGroup ref="cs:Citation.Delimiter"/>
+  </xs:attributeGroup>
+  <xs:element name="number" substitutionGroup="cs:CitationEntry.number"/>
+  <xs:group name="CitationLayout.citekey">
+    <xs:sequence>
+      <xs:element name="citation">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="cs:prefix"/>
+            <xs:element ref="cs:CitationEntry.citekey"/>
+            <xs:element minOccurs="0" ref="cs:suffix"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="cs:CitationEntry.citekey"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="CitationEntry.citekey" abstract="true">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="CitationEntry.citekey">
+    <xs:attributeGroup ref="cs:Citation.Delimiter"/>
+  </xs:attributeGroup>
+  <xs:element name="point">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="BibliographyLayout.author-year">
+    <xs:sequence>
+      <xs:element name="bibliography">
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="cs:LayoutStructures">
+              <xs:attributeGroup ref="cs:AuthorSort"/>
+              <xs:attributeGroup ref="cs:AuthorShorten"/>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="AuthorSort">
+    <xs:attribute name="author-as-sort-order" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="no"/>
+          <xs:enumeration value="first-author"/>
+          <xs:enumeration value="all"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="AuthorShorten">
+    <xs:attribute name="author-shorten">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:group name="BibliographyLayout.note-bib">
+    <xs:sequence>
+      <xs:element name="bibliography">
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="cs:LayoutStructures">
+              <xs:attributeGroup ref="cs:AuthorSort"/>
+              <xs:attributeGroup ref="cs:AuthorShorten"/>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="BibliographyLayout.citekey">
+    <xs:sequence>
+      <xs:element name="bibliography">
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="cs:LayoutStructures">
+              <xs:attributeGroup ref="cs:AuthorSort"/>
+              <xs:attributeGroup ref="cs:AuthorShorten"/>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="BibliographyLayout.number">
+    <xs:sequence>
+      <xs:element name="bibliography">
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="cs:LayoutStructures">
+              <xs:attributeGroup ref="cs:SortOrder-Bib.number"/>
+              <xs:attributeGroup ref="cs:AuthorSort"/>
+              <xs:attributeGroup ref="cs:AuthorShorten"/>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="SortOrder-Bib.number">
+    <xs:attribute name="sort-order" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="cited"/>
+          <xs:enumeration value="author-year"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <!--
+    By handling this separately from the main citation and 
+    bibliography layout, we make the formatting more flexible,
+    and the style language easier to handle in GUIs.
+  -->
+  <xs:element name="terms">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:roles"/>
+        <xs:element minOccurs="0" ref="cs:genres"/>
+        <xs:element minOccurs="0" ref="cs:media"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="NamesFormat">
+    <xs:sequence>
+      <xs:element name="names">
+        <xs:complexType>
+          <xs:attribute name="initialize-with">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value=""/>
+                <xs:enumeration value="."/>
+                <xs:enumeration value=". "/>
+                <xs:enumeration value=" "/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="and-as" use="required">
+            <xs:annotation>
+              <xs:documentation>"and"-as determines whether multiple names use text (and) or a symbol (&amp;)</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="roles">
+    <xs:complexType>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="cs:Role.Term"/>
+    </xs:complexType>
+  </xs:element>
+  <!--
+    internationalization: should representation of months be handled
+    in the schema?
+  -->
+  <xs:element name="dates" type="cs:Months"/>
+  <xs:complexType name="Months">
+    <xs:sequence>
+      <xs:element ref="cs:months"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="months">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="cs:January"/>
+        <xs:group ref="cs:February"/>
+        <xs:group ref="cs:March"/>
+        <xs:group ref="cs:April"/>
+        <xs:group ref="cs:May"/>
+        <xs:group ref="cs:June"/>
+        <xs:group ref="cs:July"/>
+        <xs:group ref="cs:August"/>
+        <xs:group ref="cs:September"/>
+        <xs:group ref="cs:October"/>
+        <xs:group ref="cs:November"/>
+        <xs:group ref="cs:December"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="January">
+    <xs:sequence>
+      <xs:element name="month">
+        <xs:complexType mixed="true">
+          <xs:attribute name="number" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:integer">
+                <xs:enumeration value="01"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="February">
+    <xs:sequence>
+      <xs:element name="month">
+        <xs:complexType mixed="true">
+          <xs:attribute name="number" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:integer">
+                <xs:enumeration value="02"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="March">
+    <xs:sequence>
+      <xs:element name="month">
+        <xs:complexType mixed="true">
+          <xs:attribute name="number" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:integer">
+                <xs:enumeration value="03"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="April">
+    <xs:sequence>
+      <xs:element name="month">
+        <xs:complexType mixed="true">
+          <xs:attribute name="number" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:integer">
+                <xs:enumeration value="04"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="May">
+    <xs:sequence>
+      <xs:element name="month">
+        <xs:complexType mixed="true">
+          <xs:attribute name="number" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:integer">
+                <xs:enumeration value="05"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="June">
+    <xs:sequence>
+      <xs:element name="month">
+        <xs:complexType mixed="true">
+          <xs:attribute name="number" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:integer">
+                <xs:enumeration value="06"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="July">
+    <xs:sequence>
+      <xs:element name="month">
+        <xs:complexType mixed="true">
+          <xs:attribute name="number" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:integer">
+                <xs:enumeration value="07"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="August">
+    <xs:sequence>
+      <xs:element name="month">
+        <xs:complexType mixed="true">
+          <xs:attribute name="number" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:integer">
+                <xs:enumeration value="08"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="September">
+    <xs:sequence>
+      <xs:element name="month">
+        <xs:complexType mixed="true">
+          <xs:attribute name="number" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:integer">
+                <xs:enumeration value="09"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="October">
+    <xs:sequence>
+      <xs:element name="month">
+        <xs:complexType mixed="true">
+          <xs:attribute name="number" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:integer">
+                <xs:enumeration value="10"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="November">
+    <xs:sequence>
+      <xs:element name="month">
+        <xs:complexType mixed="true">
+          <xs:attribute name="number" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:integer">
+                <xs:enumeration value="11"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="December">
+    <xs:sequence>
+      <xs:element name="month">
+        <xs:complexType mixed="true">
+          <xs:attribute name="number" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:integer">
+                <xs:enumeration value="12"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="genres">
+    <xs:complexType>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="cs:Genre.Term"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Genre.Term">
+    <xs:sequence>
+      <xs:element name="genre">
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="cs:Renderas">
+              <xs:attribute name="term" use="required"/>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="locators">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="cs:locator"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="Locator.UseWhen">
+    <xs:attribute name="use-when" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="missing-volume-issue"/>
+          <xs:enumeration value="always"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:element name="locator">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="cs:Renderas-Multiple">
+          <xs:attribute name="unit" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="paragraph"/>
+                <xs:enumeration value="page"/>
+                <xs:enumeration value="figure"/>
+                <xs:enumeration value="section"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="use-when">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="missing-volume-issue"/>
+                <xs:enumeration value="always"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="media">
+    <xs:complexType>
+      <xs:group maxOccurs="unbounded" ref="cs:Medium.Term"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Medium.Term">
+    <xs:sequence>
+      <xs:element name="medium">
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="cs:Renderas">
+              <xs:attribute name="term" use="required"/>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="Role.Term">
+    <xs:sequence>
+      <xs:element name="role">
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="cs:Renderas-Multiple">
+              <xs:attribute name="term" use="required">
+                <xs:simpleType>
+                  <xs:restriction base="xs:token">
+                    <xs:enumeration value="editor"/>
+                    <xs:enumeration value="translator"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="term" type="xs:string"/>
+  <xs:complexType name="Renderas">
+    <xs:sequence>
+      <xs:element name="renderas" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Renderas-Multiple">
+    <xs:sequence>
+      <xs:element name="renderas">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="cs:single"/>
+            <xs:element ref="cs:multiple"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="single" type="xs:string"/>
+  <xs:element name="multiple" type="xs:string"/>
+  <xs:complexType name="Entry.Biblio">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="cs:multiple-authors"/>
+      <xs:element name="layout">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="cs:group"/>
+            <xs:group ref="cs:RefClass-Monograph-Required"/>
+            <xs:group ref="cs:RefClass-PartInMonograph-Required"/>
+            <xs:group ref="cs:RefClass-PartInSerial-Required"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:group ref="cs:RefClass-Monograph-Optional"/>
+              <xs:group ref="cs:RefClass-PartInMonograph-Optional"/>
+              <xs:group ref="cs:RefClass-PartInSerial-Optional"/>
+            </xs:choice>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="cs:group"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="group">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="cs:heading"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="cs:RefClass-Monograph-Optional"/>
+          <xs:group ref="cs:RefClass-PartInMonograph-Optional"/>
+          <xs:group ref="cs:RefClass-PartInSerial-Optional"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="heading" type="xs:string"/>
+  <xs:group name="RefClass-Monograph-Required">
+    <xs:sequence>
+      <xs:element name="reftype">
+        <xs:complexType>
+          <xs:group ref="cs:Formatting.Elements"/>
+          <xs:attribute name="name" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="book"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="RefClass-PartInSerial-Required">
+    <xs:sequence>
+      <xs:element name="reftype">
+        <xs:complexType>
+          <xs:group ref="cs:Formatting.Elements"/>
+          <xs:attribute name="name" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="article"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="RefClass-PartInMonograph-Required">
+    <xs:sequence>
+      <xs:element name="reftype">
+        <xs:complexType>
+          <xs:group ref="cs:Formatting.Elements"/>
+          <xs:attribute name="name" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="chapter"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="RefClass-Monograph-Optional">
+    <xs:sequence>
+      <xs:element name="reftype">
+        <xs:complexType>
+          <xs:group ref="cs:Formatting.Elements"/>
+          <xs:attribute name="name" use="required" type="cs:Types-Optional-Monographs"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="RefClass-PartInSerial-Optional">
+    <xs:sequence>
+      <xs:element name="reftype">
+        <xs:complexType>
+          <xs:group ref="cs:Formatting.Elements"/>
+          <xs:attribute name="name" use="required" type="cs:Types-Optional-PartsInSerials"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="RefClass-PartInMonograph-Optional">
+    <xs:sequence>
+      <xs:element name="reftype">
+        <xs:complexType>
+          <xs:group ref="cs:Formatting.Elements"/>
+          <xs:attribute name="name" use="required" type="cs:Types-Optional-PartsInMonographs"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <!-- optional type lists -->
+  <xs:simpleType name="Types-Optional-PartsInSerials">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="legal case"/>
+      <xs:enumeration value="bill"/>
+      <xs:enumeration value="article-magazine"/>
+      <xs:enumeration value="article-newspaper"/>
+      <xs:enumeration value="article-journal"/>
+      <xs:enumeration value="conference paper"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Types-Optional-PartsInMonographs">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="song"/>
+      <xs:enumeration value="webpage"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Types-Optional-Monographs">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="treaty"/>
+      <xs:enumeration value="patent"/>
+      <xs:enumeration value="personal communication"/>
+      <xs:enumeration value="thesis"/>
+      <xs:enumeration value="report"/>
+      <xs:enumeration value="graphic"/>
+      <xs:enumeration value="speech"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--
+    Use interleave to control validation irrespective of order.
+    TODO: need different patterns for different classes
+  -->
+  <xs:group name="Formatting.Elements">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="cs:creator"/>
+        <xs:group ref="cs:Title"/>
+        <xs:element ref="cs:date"/>
+        <xs:element ref="cs:container"/>
+        <xs:element ref="cs:availability"/>
+        <xs:group ref="cs:Genre"/>
+        <xs:group ref="cs:Medium"/>
+        <xs:element ref="cs:origin"/>
+        <xs:element ref="cs:notes"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="Formatting.Attributes">
+    <xs:attribute name="font-family"/>
+    <xs:attribute name="font-style">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="italic"/>
+          <xs:enumeration value="small caps"/>
+          <xs:enumeration value="normal"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="font-weight">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="normal"/>
+          <xs:enumeration value="bold"/>
+          <xs:enumeration value="light"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:element name="prefix" type="xs:string"/>
+  <xs:element name="suffix" type="xs:string"/>
+  <xs:element name="multiple-authors">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="cs:Multiple-Authors.Content"/>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="Multiple-Authors.Content">
+    <xs:attribute name="min-authors" use="required" type="xs:integer"/>
+    <xs:attribute name="use-first" use="required" type="xs:integer"/>
+  </xs:attributeGroup>
+  <xs:element name="creator">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:choice>
+            <xs:group ref="cs:Names"/>
+            <xs:element ref="cs:names-short"/>
+          </xs:choice>
+          <xs:group ref="cs:Role"/>
+        </xs:choice>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+      <xs:attribute name="alternate-sortkey">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="title"/>
+            <xs:enumeration value="container-title"/>
+            <xs:enumeration value="anonymous"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Names">
+    <xs:sequence>
+      <xs:element name="names">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="cs:prefix"/>
+            <xs:element minOccurs="0" ref="cs:suffix"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="names-short">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Role">
+    <xs:sequence>
+      <xs:element name="role">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="cs:prefix"/>
+            <xs:element minOccurs="0" ref="cs:suffix"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="Title">
+    <xs:annotation>
+      <xs:documentation>primary work title; equivalent to dc:title</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="title">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="cs:prefix"/>
+            <xs:element minOccurs="0" ref="cs:suffix"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="conference">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="date">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:element minOccurs="0" ref="cs:year"/>
+        <xs:group minOccurs="0" ref="cs:Month"/>
+        <xs:element minOccurs="0" ref="cs:day"/>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="container">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="cs:conference"/>
+          <xs:element ref="cs:creator"/>
+          <xs:group ref="cs:Title"/>
+          <xs:element ref="cs:origin"/>
+          <xs:element ref="cs:part-details"/>
+          <xs:group ref="cs:Series"/>
+        </xs:choice>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Series">
+    <xs:sequence>
+      <xs:element name="series">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="cs:creator"/>
+            <xs:group ref="cs:Title"/>
+            <xs:element ref="cs:part-details"/>
+          </xs:choice>
+          <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="availability">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="cs:physicalLocation"/>
+          <xs:group ref="cs:URL"/>
+        </xs:choice>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="physicalLocation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="URL">
+    <xs:annotation>
+      <xs:documentation>for online works</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="url">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="cs:prefix"/>
+            <xs:element minOccurs="0" ref="cs:suffix"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="Genre">
+    <xs:sequence>
+      <xs:element name="genre">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="cs:prefix"/>
+            <xs:element minOccurs="0" ref="cs:suffix"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="Medium">
+    <xs:annotation>
+      <xs:documentation>the carrier for the content; e.g. CD-ROM</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="medium">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="cs:prefix"/>
+            <xs:element minOccurs="0" ref="cs:suffix"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="origin">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="cs:publisher"/>
+          <xs:element ref="cs:place"/>
+        </xs:choice>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="day">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Month">
+    <xs:sequence>
+      <xs:element name="month">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="cs:prefix"/>
+            <xs:element minOccurs="0" ref="cs:suffix"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="year">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="part-details">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="cs:file"/>
+          <xs:element ref="cs:volume"/>
+          <xs:element ref="cs:issue"/>
+          <xs:element ref="cs:pages"/>
+          <xs:element ref="cs:date"/>
+          <xs:group ref="cs:SeriesNumber"/>
+        </xs:choice>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="publisher">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="place">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="volume">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="file">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="issue">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="SeriesNumber">
+    <xs:sequence>
+      <xs:element name="series">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="cs:prefix"/>
+            <xs:element minOccurs="0" ref="cs:suffix"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="pages">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="notes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="cs:prefix"/>
+        <xs:element minOccurs="0" ref="cs:suffix"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="cs:Formatting.Attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="citekey" substitutionGroup="cs:CitationEntry.citekey"/>
+</xs:schema>

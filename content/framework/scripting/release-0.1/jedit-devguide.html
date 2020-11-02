@@ -1,0 +1,392 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<!-- jEdit options: -->
+<!-- :tabSize=8:indentSize=2:noTabs=true:maxLineLen=80: -->
+<title>Developer Guide for jEdit</title>
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/framework/">framework</a>&nbsp;&raquo;&nbsp;<a href="/framework/scripting/">scripting</a>&nbsp;&raquo;&nbsp;<a href="/framework/scripting/release-0.1/">release-0.1</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h1>Developer Guide for jEdit</h1>
+ 
+<h2>Contents</h2>
+
+<ul>
+<li><a href="#prerequisites">Pre-requisites</a>
+<li><a href="#setup">Setting up the Office Scripting plugin</a>
+<li><a href="#using">Using the Office Scripting plugin</a>
+<li><a href="#options">Options</a>
+<li><a href="#steps">Step by step actions</a>
+<li><a href="#troubleshooting">Troubleshooting</a>
+</ul>
+       
+<h2><a name="prerequisites"></a>Pre-requisites</h2>
+    
+<ul>
+<li>The plugin only runs in jEdit 4.0.3 (available from
+<a href="http://www.jedit.org/index.php?page=download">jedit.org</a>)
+
+<li>You <b>MUST</b> have the following plugins installed: AntFarm, Console<br>
+(see below for instructions on installing them)
+
+<li>If you wish to have code completion when writing Office scripts you
+also need to install the SpeedJava plugin
+</ul>
+       
+<h2><a name="setup"></a>
+Setting up the Office Scripting plugin</h2>
+
+See the <a href="install-guide.html">Installation Guide</a>
+for instructions on installing the Office Scripting plugin.
+
+<blockquote>
+<h3>Setting up the http proxy</h3>
+
+<ul>
+<li>Browse to Utilities/Global Options...
+<li>Browse in the Global Options dialog box to the Proxy Servers.
+<li>Check "Use HTTP proxy Servers" and set all information needed for
+jEdit to access the web.
+<li>Click on OK.
+</ul>
+
+<h3>Installing required plugins</h3>
+
+<ul>
+<li>Browse to Plugins/Plugin Manager...
+<li>Click on Install Plugins (If you get erors then your Proxy is not
+well setup)
+<li>Then you get a list of plugins.
+<li>The plugins needed by the Office Scripting plugin are AntFarm and Console.
+<li>So just select them if you cant find them on the list then you have
+them already installed.
+<li>Click on install
+<li>Click on OK if needed then Close.
+<li>Exit jEdit.
+</ul>
+
+<h3>Setting up the Office Scripting plugin for jEdit</h3>
+
+If you did not install the Office Scripting plugin according to the
+instructions in the Installation Guide you need to do so first.
+
+<ul>
+<li>Browse to Utilities/Global Options...
+<li>Select Plugins/Office Scripting
+  <ul>
+  <li>Select which Office version you want to work with
+  <li>You must click OK to verify your choice even if there is only one
+      Office version listed.
+  </ul>
+<li>Select Plugins/AntFarm/Build Options
+  <ul>
+  <li>Select <i>Run Ant Targets in the same JVM</i>.
+  </ul>
+</ul>
+
+<h3>Recommended layout for the jEdit window</h3>
+
+<ul>
+<li>Browse to Utilities/Global Options...
+<li>Select Docking
+  <ul>
+  <li>Activity Log docking position: <b>bottom</b>
+  <li>Ant Farm docking position: <b>right</b>
+  <li>Console docking position: <b>bottom</b>
+  <li>Error List docking position: <b>bottom</b>
+  <li>File System Browser docking position: <b>left</b>
+  <li>Scripting Framework docking position: <b>right</b>
+  </ul>
+<li>Click on OK.
+</ul>
+</blockquote>
+ 
+<h2><a name="using"></a>Using the Office Scripting plugin</h2>
+
+<blockquote>
+<h3>Popup Menu actions</h3>
+The Scripting plugin provides a dockable window listing your scripts.  A
+number of actions are available in this window:
+
+<ul>
+
+<li><p><b>On the ROOT (All Parcels node)</b>          
+  <ul>
+  <li><i>Open... </i>: This will open a file chooser dialog box. You
+      can select an .sxp file, directory or Office Document.
+
+  <li><i>New... </i>: This will prompt you for a parcel name and then
+      create by default everything needed for a scripting parcel
+
+  <li><i>Parcel Wizard...</i>: Kind of the same than Parcel Template
+      except you choose the java files you want to include in the parcel.
+  </ul>
+</li>
+
+<li><p><b>On a Script Parcel</b>
+  <p>
+  If the parcel is a directory (created from parcel template or parcel wizard):
+
+  <ul>
+  <li><i>Add Directory</i>: This will prompt you for a Directory Name
+      and it will create it under the selected Node.
+
+  <li><i>Add File</i>: This will prompt you with a file chooser dialog
+      box and you can select the files you want to add to the selected node.
+
+  <li><i>Rename</i>: This prompt you for the new name and rename the parcel.
+
+  <li><i>Remove</i>: This will remove the parcel.
+
+  <li><i>Generate Build.xml</i>: This menu is only displayed if no
+      build.xml file exists in the Parcel directory. To avail the options
+      below you need to generate this build.xml file.
+
+  <li><i>Reload Parcel</i>: This will reload the Parcel if the content
+      on disk changed.
+
+  <li><i>Edit Build File</i>: This will open the build.xml file that
+      you can edit. This file is generated automatically when using
+      wizard or parcel template.
+
+  <li><i>Ant Targets</i>: The Ants targets will automatically be displayed
+      and by selecting them you will run the Ant command (requires AntFarms).
+
+  <li><i>ScriptCompile</i>: Default Ant target to compile the full parcel.
+
+  <li><i>ScriptClean</i>: Deafult Ant target to clean all compilation
+      output files.
+
+  <li><i>Build SXP</i>: This will compile and create the .sxp Parcel file.
+
+  <li><i>Configure Parcel...</i>: This will display the available methods
+      name in the Parcel and you can select which methods can be available
+      in OpenOffice.org.
+  </ul>
+
+  <p>
+  If the parcel selected is contained in an Office Document
+  the actions available are:
+
+  <ul>
+  <li><i>Remove</i>: This will remove the parcel from the document
+  </ul>
+</li>
+   
+<li><p><b>On a File/Directory</b>
+  <p>Some typical menu items are available on file and directory Items:<br>
+
+  <ul>
+  <li><i>Add Directory</i>: Only on directory. This will add a directory
+      under the selected directory.
+
+  <li><i>Add File</i>: Only on directory. This will prompt you with a file
+      chooser and add the selected files in the selected directory.
+
+  <li><i>Rename</i>: this will rename physically the selected entry.
+
+  <li><i>Remove</i>: this will remove physically the selected entry.
+  </ul>
+
+<li><p><b>On a Script Parcel (.sxp) file</b>
+
+  <p>The following actions are available on Script Parcel files:<br>
+
+  <ul>
+  <li><i>Deploy to</i>
+    <ul>
+    <li><i>Office Versions</i>: this will deploy the Parcel to an
+        installed version of OpenOffice.org. If you have OpenOffice.org
+        running, you need to use the Tools/Refresh User Scripts (Java)
+        menu item in OpenOffice.org for the script to appear in the
+        Assign Script dialog in Office.
+
+    <li><i>Office Document</i>: this will deploy the Parcel to an
+        Office Document.
+
+    <li><i>Remove SXP</i>: will remove physically the .sxp file generated
+        by the build command.
+    </ul>
+  </ul>
+</ul>
+         
+<h3>Menu actions</h3>
+
+Menu actions available are:
+
+<ul>
+<li><i>New...</i>
+<li><i>Add...</i>
+<li><i>Parcel Wizard...</i>
+</ul>
+</blockquote>
+   
+<h2><a name="options"></a>Options</h2>
+
+<blockquote>
+
+You may configure some options in
+<b>Utilities/Global Options/Plugin Options/Scripting</b>
+Most of them are self-explanatory, but some need further explanation:
+
+<ul>
+<li><i>OpenOffice.org Directory</i>: Locations of all OpenOffice.org
+installations. You need to select one.
+
+<li><i>Show tooltips in tree</i>: Show tooltips in the tree of Parcels in
+the Office Scripting window
+
+<li><i>Warn before removing File from Parcel</i>: Will display a
+confirmation box before removing a file.
+
+<li><i>Warn before removing Directory from Parcel</i>: Will display a
+confirmation box before removing a directory.
+
+<li><i>Include source code</i>: This will include the source code in
+the Script Parcel (.sxp) file.
+</ul>
+</blockquote>
+    
+<h2><a name="steps"></a>Step by step actions</h2>
+
+<blockquote>
+<h3>How to create a Parcel using the New... menu.</h3>
+
+By clicking on the first button or by right clicking on the
+&quot;All Parcels&quot; tree item and selecting New...  a dialog box
+is displayed asking the name of the parcel you want to create. After you
+have input the name is this dialog, another dialog box is displayed
+requesting the destination path where that parcel should be created.
+
+<p>
+Clicking on OK will create the full tree structure for the parcel
+if no problem were encountered.
+
+<h3>How to create a Parcel using the Wizard... menu.</h3>
+
+By clicking on the third button or by right clicking on the
+"All Parcels" tree item and selecting Parcel Wizard... a dialog box
+is displayed. You need to enter the Parcel Name, the destination path
+where the parcel will be created and select the java files you wish
+to include in the parcel.
+
+<p>
+Clicking on OK will create the full tree structure for the parcel
+if no problem is encountered.
+
+<h3>How to open a Parcel using the Open... menu.</h3>
+
+By clicking on the second button or by right clicking on the
+"All Parcels" tree item and selecting Open..., a file chooser
+dialog box will be displayed you can select a directory parcel, and
+.sxp file representing a Parcel or an Office Document.
+
+<p>
+A directory parcel should look like this:
+
+<p>
+<pre>
+Parcel Name
+  - Contents
+    - Java files
+    - Directories
+</pre>
+
+<p>
+A .sxp file should look like this:
+
+<p>
+<pre>
+Parcel Name
+  - Contents
+    - Java files
+    - Directories
+  - .sxp File output
+</pre>
+
+<p>
+An Office Document look like this:
+
+<p>
+<pre>
+Office Document
+  - Contents
+    - Parcels
+</pre>
+
+<h3>How to Compile a Parcel using the ScriptCompile menu.</h3>
+
+This action is only available on a Directory parcel for the moment. The
+ScriptCompile menu item is only available if a build.xml file is available
+in the parcel.
+
+<p>
+By clicking on this menu item the parcel will be compiled and errors will
+be shown in the ErrorList Plugin.
+
+<h3>How to Build a Parcel using the Build SXP menu</h3>
+
+This action is only available on a Directory parcel for the moment. By
+clicking on this item, the parcel will be rebuilt and a dialog box will
+be displayed showing the available methods in the parcel. This dialog
+box enables you to select methods that you want to export as scripts
+in Office.
+
+<p>
+For each method you can assign a Logical Name to use as a script name
+in OpenOffice.org. Clicking on OK will create the .sxp File.
+</blockquote>
+ 
+<h2><a name="troubleshooting"></a>Troubleshooting</h2>
+
+<ul>
+<li><p>If you reinstall the Scripting Framework you will need to update any
+build files that were generated for old scripts that you wrote to reflect
+the path to the new framework under your
+&lt;Office Installation&gt;/user/uno_packages directory for those scripts to
+build.
+
+<li><p>The Choose Methods to Export as Scripts dialog <b>only</b> displays
+methods which are defined within class files, it will not display
+methods in class files which are within jar files in the Parcel Recipe.
+
+<li><p>If you get the message &quot;Could not generate Ant build. No Office
+Directory set in the Options&quot;, you need to do the following:
+
+<ul>
+<li>Select the Utilities/Global Options menu item
+<li>Go to the Plugin Options/Office Scripting section
+<li>Select one of the Office installations from the list and click OK.
+</ul>
+</ul>
+<p>
+
+<hr>
+Last Modified: Fri Nov 29 14:19:53 GMT 2002
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

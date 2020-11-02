@@ -1,0 +1,170 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	  <title>Install Note: Still not working?</title>
+	  <meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+  
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/lingucomponent/">lingucomponent</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+		<a href="download_dictionary.html">return to Table of Contents</a><br />
+		
+    <table width="80%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td>
+          <h2 align="center"><a name="reinstall">Install Note:<br />
+          If Spellcheck, still, not working</a></h2>
+          <pre>
+    From: Kevin B. Hendricks &lt;kevin.hendricks@sympatico.ca&gt;
+    Subject: Re: [users] question (spellcheck still not working)
+    Date: Sun, 15 Dec 2002 09:28:26 -0500
+
+    Hi,
+
+    I'm the author of the spellchecking system with which some seem to be having trouble.
+    I really want to nail down what is going wrong.
+
+    &gt; Apart from that, the spellchecker dialog presents every word
+    &gt; of 2 or more characters as an "Unknown word". After clicking the
+    &gt; "confirm (ABC tick)" button, the "Language" list box changes from
+    &gt; "English (AU)" to "English (USA)", I then click on the "Add" button and
+    &gt; the checker moves to the next "Unknown word".
+    &gt; It is as if the checker is learning the language. I am not sure where
+    &gt; the checked words are being saved - soffice [All] perhaps. When I rerun
+    &gt; the checker, it skips the words it has already checked.
+          </pre>
+
+          <p>No, this is wrong -- you are mixing two different types of dictionaries.<br />
+          <br />
+          Spellchecking *does* work and you do *not* need to add every word to a user specified dictionary. If you do, <br />
+          you will simply interfere with the proper operation of other dictionaries and create bloat.<br />
+          <br />
+          Assuming we are talking about a Linux system (we can modify these steps for Windows). Please do the following <br />
+          to test the spell checking system from scratch: We will delete any old or partially installed dictionariesand re-install <br />
+          them from known, good copies and go from there)<br />
+          <br />
+          1. Start with OOo1.0.1 or OOo643C (english only), spellchecking in OOo1.0.0 has too many bugs. <br />
+          Please upgrade, if at all possible.<br />
+          <br />
+          2. Exit out of OpenOffice and Quickstarter (make sure neither is running).<br />
+          <br />
+          3. Next, let's remove any old dictionary files of any sort. (you may have to be root to perform this step):<br />
+          cd PLACE_YOU_INSTALLED_OPENOFFICE/share/dict/ooo<br />
+          rm *.dic<br />
+          rm *.aff<br />
+          rm dictionary.lst<br />
+          <br />
+          [as user]<br />
+          cd YOUR_USER_SPECIFIC_LOCATION/user/wordbook/<br />
+          rm *.dic<br />
+          rm *.aff<br />
+          rm dictionary.lst<br />
+          <br />
+          4. Using en_GB as an example, ... go to http://lingucomponent.openoffice.org/download_dictionary.html <br />
+          and download to your computer:<br />
+          en_GB.zip<br />
+          hyph_en.zip<br />
+          en_US.zip<br />
+          <br />
+          5. cd PLACE_YOU_INSTALLED_OPENOFFICE/share/dict/ooo<br />
+          unzip PATH_TO/en_GB.zip<br />
+          unzip PATH_TO/en_US.zip<br />
+          unzip PATH_TO/hyph_en.zip<br />
+          (this will create en_GB.dic and en_GB.aff in share/dict/ooo/ and <br />
+          replace the en_US.aff, en_US.dic, and hyph_en.dic that came with OOo
+          originallywhich you deleted in step 3 above)<br />
+          <br />
+          6. create a completely new dictionary.lst file at this location just in case the old one is messed up somehow:<br />
+          echo "DICT en GB en_GB" &gt; dictionary.lst<br />
+          echo "HYPH en GB hyph_en" &gt;&gt; dictionary.lst<br />
+          echo "THES en GB th_en_US" &gt;&gt; dictionary.lst<br />
+          echo "DICT en US en_US" &gt;&gt; dictionary.lst<br />
+          echo "HYPH en US hyph_en" &gt;&gt; dictionary.lst<br />
+          echo "THES en US th_en_US" &gt;&gt; dictionary.lst<br />
+          [Note: you can do this with a text editor, if preferred.]<br />
+          <br />
+          7. If you did all of this, then share/dict/ooo/ should look like the following:<br />
+          dictionary.lst<br />
+          en_GB.aff<br />
+          en_GB.dic<br />
+          en_US.dic<br />
+          en_US.aff<br />
+          hyph_en.dic<br />
+          th_en_US.dat<br />
+          th_en_US.idx<br />
+          <br />
+          and dictionary.lst should look like this:<br />
+          DICT en GB en_GB<br />
+          HYPH en GB hyph_en<br />
+          THES en GB th_en_US<br />
+          DICT en US en_US<br />
+          HYPH en US hyph_en<br />
+          THES en US th_en_US<br />
+          <br />
+          8. After double-checking that steps 1 to 7 have been done, then start up OOo (and quickstarter if you use it).<br />
+          <br />
+          9. Go immediately to: Tools-&gt;Options-&gt;LanguageSettings-&gt;WritingAids<br />
+          Hit "Edit" and use the *pull down* menu to select your locale<br />
+          DO NOT FORGET TO HIT THE EDIT BUTTON AND USE THE LOCALE PULLDOWN and then,
+          make sure to check the box beside the MySpell Spell Checker for that locale, as well as hyphenator and theasurus,
+          if so desired.Then, once those are checked you should see checkboxes with ABC beside both en(US) and en(UK).<br />
+          <br />
+          10. Now, to test if this has worked, do NOT open any previous document but simply go to an empty Writer doc (should be on screen already )
+          and type the following lines:<br />
+          This is a line of text in American, and<br />
+          this is a line of text in British.<br />
+          Then highlight both lines and use the Font pull-down menu and select a font you know absolutely certain is installed on your machine (i.e.,
+          do NOT select Thorndale!). I chose Courier on my machine for this test.<br />
+          <br />
+          11. Highlight the first line of the file and go to Format-&gt;Character-&gt;Font<br />
+          and using the language pulldown menu select "en (US)" (you should see a<br />
+          little check with ABC by it).<br />
+          <br />
+          12. Highlight the second line of the file and go to Format-&gt;Character-&gt;Font and use the pulldown menu and select "en (UK)" (it should
+          also have a little check ABC beside it).<br />
+          <br />
+          13. Then, once all of this is done, please put your cursor at the very beginning of this document and using Tools, tell it to spellcheck the
+          document.<br />
+          <br />
+          You should immediately see a spelling error with "linee" in a window with "line" as one of the suggestions (this is the spellling error in
+          the American line) and then once you replace that you should in fact see the exact same window (this time for the British spelling error)
+          which you can then replace.<br />
+          <br />
+          You should have now spellchecked a document successfully in two different languages in one pass. I have tested all of these procedures on my
+          machine and it works 100% of the time for me.<br />
+          <br />
+          If you have followed these instructions exactly and don't see what I see, then we have a bug I need to track down. Please contact me directly
+          with exactly what happened at each step and we can figure out why spellchecking is not working for you.<br />
+          <br />
+          Kevin</p>
+          <hr />
+
+      		<p><a href="download_dictionary.html">return to Table of Contents for Writer's Aids</a></p>
+
+          
+        </td>
+      </tr>
+    </table>
+  
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

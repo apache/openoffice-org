@@ -1,0 +1,159 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <title>No title</title>
+  <meta name="generator" content="amaya 8.1b, see http://www.w3.org/Amaya/" />
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/bibliographic/">bibliographic</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h3>A sample OpenOffice basic program to write records to the Bibliographic
+database.</h3>
+
+<p></p>
+
+<p>REM ***** BASIC *****</p>
+
+<p></p>
+
+<p>Option Explicit</p>
+
+<p></p>
+
+<p>Sub Main</p>
+
+<p>' create a row set</p>
+
+<p>Dim oRowSet as Object</p>
+
+<p>oRowSet = createUnoService( "com.sun.star.sdb.RowSet" )</p>
+
+<p></p>
+
+<p>' tell it to operate on the Bibliography/biblio table</p>
+
+<p>oRowSet.DataSourceName = "Bibliography"</p>
+
+<p>oRowSet.Command = "biblio"</p>
+
+<p>oRowSet.CommandType = com.sun.star.sdb.CommandType.TABLE</p>
+
+<p></p>
+
+<p>' since we want to insert new records only, we</p>
+
+<p>' can optimize the set so that it does not care for</p>
+
+<p>' already existing data</p>
+
+<p>oRowSet.IgnoreResult = TRUE</p>
+
+<p></p>
+
+<p>' fire</p>
+
+<p>oRowSet.execute</p>
+
+<p></p>
+
+<p>' let's insert the following data</p>
+
+<p>Dim sTitles(4) as String</p>
+
+<p>sTitles(0) = "The Hitchhiker's Guide to the Galaxy"</p>
+
+<p>sTitles(1) = "The Restaurant at the End of the Universe"</p>
+
+<p>sTitles(2) = "Life, the Universe and Everything"</p>
+
+<p>sTitles(3) = "So Long, and Thanks for All the Fish"</p>
+
+<p>sTitles(4) = "Mostly Harmless"</p>
+
+<p></p>
+
+<p>' for optimizations, we retrieve the column objects only once,</p>
+
+<p>' and reuse them in every iteration</p>
+
+<p>Dim colIdentifier as Object</p>
+
+<p>Dim colTitle as Object</p>
+
+<p>Dim colType as Object</p>
+
+<p>Dim colAuthor as Object</p>
+
+<p></p>
+
+<p>colIdentifier = oRowSet.getColumns().getByName( "Identifier" )</p>
+
+<p>colTitle = oRowSet.getColumns().getByName( "Title" )</p>
+
+<p>colType = oRowSet.getColumns().getByName( "Type" )</p>
+
+<p>colAuthor = oRowSet.getColumns().getByName( "Author" )</p>
+
+<p></p>
+
+<p>' now let's really insert the data</p>
+
+<p>Dim i as Integer</p>
+
+<p>For i = LBound( sTitles() ) To UBound( sTitles() )</p>
+
+<p>' move the row set to the row dedicated to inserting data</p>
+
+<p>oRowSet.moveToInsertRow()</p>
+
+<p>' fill the column values</p>
+
+<p>colIdentifier.updateString( "ADAMS" &amp; ( i + 1 ) )</p>
+
+<p>colTitle.updateString ( sTitles( i ) )</p>
+
+<p>colType.updateString ( "1" )</p>
+
+<p>colAuthor.updateString ( "Douglas Adams" )</p>
+
+<p>' (note: everything which we do not change here will be</p>
+
+<p>' defaulted by the underlying database, if possible)</p>
+
+<p>' write the new record</p>
+
+<p>oRowSet.insertRow</p>
+
+<p>Next i</p>
+
+<p></p>
+
+<p>' finally clean up</p>
+
+<p>oRowSet.dispose</p>
+
+<p>End Sub</p>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

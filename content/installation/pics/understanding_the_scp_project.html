@@ -1,0 +1,141 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 8  (Solaris Sparc)">
+	<META NAME="AUTHOR" CONTENT="Ingo Schmidt">
+	<META NAME="CREATED" CONTENT="20020419;13085671">
+	<META NAME="CHANGED" CONTENT="20070730;16142900">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="de-DE" DIR="LTR">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/installation/">installation</a>&nbsp;&raquo;&nbsp;<a href="/installation/pics/">pics</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<P ALIGN=LEFT STYLE="font-weight: medium"><FONT FACE="Verdana, sans-serif"><FONT SIZE=6>Understanding
+the scp2 project</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Verdana, sans-serif"><B>What are scp files?</B></FONT></P>
+<P><FONT FACE="Verdana, sans-serif">scp is the abbreviation for
+<B>script particle</B>. Every scp file is a small part of the <B>setup
+script</B>, which can be found in the installation set next to the
+setup. The setup script contains the information about the
+installation of OpenOffice.org. Every script particle contains a
+little information, for example about the kde integration, or the
+readme files or entries for the Windows registry. You will see, there
+are many, many different scp files for many different applications.</FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Verdana, sans-serif"><B>When do I have to make changes
+in the scp2 project?</B></FONT></P>
+<P><FONT FACE="Verdana, sans-serif">Changes in the scp2 project are
+necessary, if the installation of OpenOffice.org has to be changed.
+This can include a new file, or an additional entry into the windows
+registry. Anything that is done by the setup, has to be available in
+the setup script. Every file and every entry into the Windows
+registry is written in the setup script in this special setup script
+language. In detail the setup script can contain the following
+information: </FONT>
+</P>
+<P><FONT FACE="Verdana, sans-serif"><I><B>Setup Modules</B></I>,
+<I><B>Files</B></I>, <I><B>Directories</B></I>, <I><B>Profiles</B></I>
+(ini-files), <I><B>ProfileItems</B></I> (entries into ini-files),
+<I><B>RegistryItems</B></I> (entries into the Windows registry),
+<I><B>Folder</B></I> and <I><B>FolderItems</B></I> (Directories and
+Links in the Windows system directories), <I><B>ShortCuts</B></I>
+(Links to defined files or other Shortcuts), <I><B>UnixLinks</B></I>
+(Links to any location in the system), <I><B>WindowsCustomActions</B></I>
+(Windows Installer specific actions), <I><B>ScpActions</B></I>
+(copying files from the output tree into the installation set (only
+for the ZipDirector and lzip)) and <I><B>Installation</B></I> (for
+global installation parameters). </FONT>
+</P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Verdana, sans-serif"><B>How do we build the setup
+script?</B></FONT></P>
+<P><FONT FACE="Verdana, sans-serif">The setup script is made of the
+script particle. These particle contain information about the
+languages, the platform, the different products etc. Therefore the
+scp files are first of all edited by a preprocessor, who gets the
+necessary parameter. Then the program pre2par.pl prepares the files
+for the linker par2script.pl. The results of pre2par.pl are par-files
+(same filename, but extension .par), which you can find in the output
+tree in the par directory.</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">Which par files for which
+products and which platforms have to be built, is determined in the
+makefile.mk in the local source directories of the different scp
+projects. After creating the par files, the linker links all
+necessary par files to the different setup scripts. Which par files
+are needed for which platform and which product is described in the
+makefile.mk in the util directory of the different scp projects.</FONT></P>
+<P><FONT FACE="Verdana, sans-serif">The resulting setup script still
+contains all information for the different languages we support, but
+is specified for one product and one platform. Therefore in the last
+step of creating installation sets the scpzip packs all files which
+are mentioned in the setup script, writes this information into the
+script and changes the script corresponding to the desired language. </FONT>
+</P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Verdana, sans-serif"><B>Which scp projects exist?</B></FONT></P>
+<P><FONT FACE="Verdana, sans-serif">Currently the project containing
+scp files is named <B>scp2</B>.</FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Verdana, sans-serif"><B>Last changes in the scp
+structure</B></FONT></P>
+<P><FONT FACE="Verdana, sans-serif">
+Caused by the strict separation of language dependent files and language
+independent files and by the increased number of supported languages for
+OpenOffice.org, a new mechanism was required, to generate modules with language
+specific files automatically. In this context a new concept with sct-files
+and modules with flag TEMPLATEMODULE was introduced into src680m242.
+sct is the abbreviation for script template files.
+</FONT>
+</P>
+<P><FONT FACE="Verdana, sans-serif">
+During the scp build process, Perl programs expand the content of the sct files
+to content that would normally be defined in scp files. But the Perl programs
+"know" the supported languages and are therefore able to create a huge number
+of scp modules automatically.
+</FONT>
+</P>
+<P><FONT FACE="Verdana, sans-serif">
+The assignment of "Files", "Dirs" or other items can be achieved by using 
+template modules, that are not used to define "real" modules, but only
+assignments to modules. This template modules require the flag 
+TEMPLATEMODULE. This modules can be included from every non template
+module using the key "Assigns=...". Please find more information
+<A HREF="scpitem_templatemodule.html">here</A>.
+</FONT>
+</P>
+<P><FONT FACE="Verdana, sans-serif"> </FONT>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

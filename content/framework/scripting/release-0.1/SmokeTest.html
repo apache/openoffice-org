@@ -1,0 +1,1138 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>Smoke Test</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.1 Beta 1 (Solaris Sparc)">
+	<META NAME="AUTHOR" CONTENT="Robert.Kinsella@Sun.COM">
+	<META NAME="CREATED" CONTENT="20010103;10350500">
+	<META NAME="CHANGED" CONTENT="20021216;15453300">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="en-US" TEXT="#000000" LINK="#ff0000" VLINK="#551a8b" BGCOLOR="#ffffff" DIR="LTR">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/framework/">framework</a>&nbsp;&raquo;&nbsp;<a href="/framework/scripting/">scripting</a>&nbsp;&raquo;&nbsp;<a href="/framework/scripting/release-0.1/">release-0.1</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<P STYLE="margin-bottom: 0cm">&nbsp; 
+</P>
+<TABLE COLS=1 WIDTH=100% CELLPADDING=2 CELLSPACING=2>
+	<TR>
+		<TD>
+			<P>&nbsp;</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P ALIGN=CENTER><FONT SIZE=6><B>Smoke Tests for OpenOffice.org
+			Scripting FrameWork</B></FONT></P>
+		</TD>
+	</TR>
+</TABLE>
+<P ALIGN=CENTER STYLE="margin-bottom: 0cm">&nbsp;</P>
+<CENTER>
+	<TABLE WIDTH=80% BORDER=1 CELLPADDING=2 CELLSPACING=3>
+		<TR>
+			<TD WIDTH=11%>
+				<P><A HREF="#README">README</A></P>
+			</TD>
+			<TD WIDTH=89%>
+				<P>Outline the order by which the installs of various components
+				must occur.</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=11%>
+				<P><A HREF="#install_01">Install_01</A></P>
+			</TD>
+			<TD WIDTH=89%>
+				<P><FONT SIZE=3>Test the SFrameworkInstall.jar file will not
+				install if placed in the incorrect directory.</FONT></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=11%>
+				<P><A HREF="#install_02">Install_02</A></P>
+			</TD>
+			<TD WIDTH=89%>
+				<P><FONT SIZE=3>Test the SFrameworkInstall.jar&nbsp; will sense
+				directory names longer than 8 characters.&nbsp;</FONT></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=11%>
+				<P><A HREF="#install_03">Install_03</A></P>
+			</TD>
+			<TD WIDTH=89%>
+				<P><FONT SIZE=3>Test the SFrameworkInstall.jar&nbsp; will sense
+				directory names which contain a space character.&nbsp;</FONT></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=11%>
+				<P><A HREF="#install_04">Install_04</A></P>
+			</TD>
+			<TD WIDTH=89%>
+				<P>Test the SFrameworkInstall.jar file when deployed will present
+				to the user options to allow a script to be bound to an event.&nbsp;
+				<BR>Also test&nbsp; that scripting framework jar files are
+				successfully deployed to NetBeans and Jedit.&nbsp;</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=11%></TD>
+			<TD WIDTH=89%></TD>
+		</TR>
+		<TR>
+			<TD WIDTH=11%>
+				<P><A HREF="#bindings_01">Bindings_01</A></P>
+			</TD>
+			<TD WIDTH=89%>
+				<P><FONT SIZE=3>Test that the user can assign a deployed script
+				to a key.&nbsp;</FONT></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=11%>
+				<P><A HREF="#bindings_02">Bindings_02</A></P>
+			</TD>
+			<TD WIDTH=89%>
+				<P><FONT SIZE=3>Test that the user can&nbsp; remove an assigned
+				key.&nbsp;</FONT></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=11%>
+				<P><A HREF="#bindings_03">Bindings_03</A></P>
+			</TD>
+			<TD WIDTH=89%>
+				<P><FONT SIZE=3>Test that the user can assign a deployed script
+				to the File menu item.&nbsp;</FONT></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=11%>
+				<P><A HREF="#bindings_04">Bindings_04</A></P>
+			</TD>
+			<TD WIDTH=89%>
+				<P><FONT SIZE=3>Test that the user can delete an assigned File
+				menu item.&nbsp;</FONT></P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=11%>
+				<P><A HREF="#bindings_05">Bindings_05</A></P>
+			</TD>
+			<TD WIDTH=89%>
+				<P>Test that the user can execute a&nbsp; script stored in a
+				document with a binding stored in the same document.</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<P><A HREF="#bindings_06">Bindings_06</A></P>
+			</TD>
+			<TD>
+				<P>Test that the user can store a binding within a document for a
+				script already stored in that document.</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD></TD>
+			<TD></TD>
+		</TR>
+		<TR>
+			<TD WIDTH=11%>
+				<P><A HREF="#jedit_01">jEdit_01</A></P>
+			</TD>
+			<TD WIDTH=89%>
+				<P>Compile and deploy a java script to the application user area
+				using jedit.</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<P><A HREF="#jedit_02">jedit_02</A></P>
+			</TD>
+			<TD>
+				<P>Verify that Refresh User Scripts (Java) functions correctly
+				for scripts deployed from jEdit.</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<P><A HREF="#jedit_03">jedit_03</A></P>
+			</TD>
+			<TD>
+				<P>Verify that user can deploy a script to a document using jEdit</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<P><A HREF="#jedit_04">jedit_04</A></P>
+			</TD>
+			<TD>
+				<P>Verify that user can delete a script deployed to a document
+				using jEdit.</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=11%>
+				<P><A HREF="#netbeans_01">NetBeans_01</A></P>
+			</TD>
+			<TD WIDTH=89%>
+				<P>Compile and deploy a java script to the application user area
+				using NetBeans.</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<P><A HREF="#netbeans_02">NetBeans_02</A></P>
+			</TD>
+			<TD>
+				<P>Compile and deploy a java script to a document&nbsp; using
+				NetBeans.</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<P><A HREF="#netbeans_03">NetBeans_03</A></P>
+			</TD>
+			<TD>
+				<P>Delete a script&nbsp; deployed to a document&nbsp; using
+				NetBeans.</P>
+			</TD>
+		</TR>
+	</TABLE>
+</CENTER>
+<HR>
+<HR>
+<H1 ALIGN=CENTER STYLE="text-decoration: none"><A NAME="README"></A>Test
+Case: README</H1>
+<H2 STYLE="text-decoration: none">Test Area: Solaris&nbsp; - Linux -
+Windows</H2>
+<P><B><FONT COLOR="#000000">Test Aim</FONT></B> <BR><FONT COLOR="#000000">Outline
+the order by which the installs of various components must occur.</FONT>
+<BR>&nbsp; 
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000"><B>Prerequisites</B>:-</FONT>
+<BR><FONT COLOR="#000000">Download NetBeans 3.4&nbsp; from
+http://www.netbeans.org.</FONT> <BR><FONT COLOR="#000000">Download
+Jedit&nbsp; 4.0.3&nbsp; from http://www.jedit.org</FONT> <BR><FONT COLOR="#000000">Download
+Scripting Framework from http://framework.openoffice.org/scripting/</FONT>
+<BR><FONT COLOR="#000000">Download OpenOffice.org 643C or later from
+http://www.openoffice.org</FONT> 
+</P>
+<HR>
+<P STYLE="text-decoration: none"><B><FONT COLOR="#000000">General
+Description:</FONT></B> <BR><FONT COLOR="#000000">It is important
+that the following steps be executed in order and before and other
+test cases.</FONT> 
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">1. Install
+NetBeans</FONT> <BR><FONT COLOR="#000000">2. Install jedit, install
+the jar version by executing&nbsp; 'java -Djava.compiler=none -jar
+filename.jar'</FONT> <BR><FONT COLOR="#000000">3.&nbsp; Start jedit,
+cd to the install directory and select jedit. exit jedit.</FONT> <BR><FONT COLOR="#000000">4.&nbsp;
+Start NetBeans, cd to the install-dir/bin and execute runide.sh for
+unix systems,</FONT> <BR><FONT COLOR="#000000">select runidew.exe for
+windows. exit NetBeans.</FONT> <BR><FONT COLOR="#000000">5.&nbsp;
+Install OpenOffice.org.</FONT> <BR><FONT COLOR="#000000">6.&nbsp;
+Copy&nbsp; the SFrameworkInstall.jar file to the
+OpenOffice.org-install-dir/program directory.</FONT> 
+</P>
+<HR>
+<HR>
+<P><BR>&nbsp; <BR>&nbsp; 
+</P>
+<H1 ALIGN=CENTER STYLE="text-decoration: none"><A NAME="install_01"></A>
+Test Case: install_01</H1>
+<H2 STYLE="text-decoration: none">Test Area: Solaris&nbsp; - Linux -
+Windows</H2>
+<P><B><FONT COLOR="#000000">Test Aim</FONT></B> <BR><FONT COLOR="#000000">Test
+the SFrameworkInstall.jar file will not install if placed in the
+incorrect directory.</FONT> <BR>&nbsp; 
+</P>
+<P STYLE="margin-bottom: 0cm"><B><FONT COLOR="#000000">Requirements</FONT></B>
+<BR><FONT COLOR="#000000"><A HREF="#README">README </A>is performed
+before running this test case.</FONT> 
+</P>
+<HR>
+<P STYLE="text-decoration: none"><B><FONT COLOR="#000000">Description:</FONT></B>
+<BR><FONT COLOR="#000000">1. Copy the SFrameworkInstall.jar file to
+the &lt;office-installation&gt;&nbsp; directory.</FONT> <BR><FONT COLOR="#000000">2.
+Ensure OpenOffice is not running, also ensure the quickstarters for
+windows and Linux are not running.</FONT> <BR><FONT COLOR="#000000">3.
+Execute java -jar SFrameworkInstall.jar</FONT> <BR><FONT COLOR="#000000">4.
+The installer should launch and advise the user that the installer
+must be run from the program directory</FONT> <BR><FONT COLOR="#000000">of
+a valid Office installation.</FONT> <BR><FONT COLOR="#000000">5.
+Select Cancel, the installer closes.</FONT> 
+</P>
+<P STYLE="margin-bottom: 0cm"><B><FONT COLOR="#000000">Expected
+Result:</FONT></B> <BR><FONT COLOR="#000000">All operations should
+complete successfully.</FONT> 
+</P>
+<HR>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<HR>
+<P><BR>&nbsp; <BR>&nbsp; 
+</P>
+<H1 ALIGN=CENTER STYLE="text-decoration: none"><A NAME="install_02"></A>
+Test Case: install_02</H1>
+<H2 STYLE="text-decoration: none">Test Area: Windows</H2>
+<P><B><FONT COLOR="#000000">Test Aim</FONT></B> <BR><FONT COLOR="#000000">Test
+the SFrameworkInstall.jar&nbsp; will sense directory names longer
+than 8 characters.</FONT> 
+</P>
+<P STYLE="margin-bottom: 0cm"><B><FONT COLOR="#000000">Requirements</FONT></B>
+<BR><FONT COLOR="#000000"><A HREF="#README">README</A>is performed
+before running this test case.</FONT> <BR><FONT COLOR="#000000">OpenOffice.org
+installation path directory has a name which is nine characters or
+more.</FONT> <BR><FONT COLOR="#000000">Jedit installation path
+directory has a name which is nine characters or more.</FONT>
+<BR><FONT COLOR="#000000">NetBeans installation path directory has a
+name which is nine characters or more.</FONT> 
+</P>
+<HR>
+<P STYLE="text-decoration: none"><B><FONT COLOR="#000000">Description:</FONT></B>
+<BR><FONT COLOR="#000000">1. Copy the SFrameworkInstall.jar file to
+the &lt;office-installation&gt;/program&nbsp; directory.</FONT> <BR><FONT COLOR="#000000">2.
+Ensure OpenOffice is not running, also ensure the quickstarters for
+windows and Linux are not running.</FONT> <BR><FONT COLOR="#000000">3.
+Execute java -jar SFrameworkInstall.jar</FONT> <BR><FONT COLOR="#000000">4.
+On the Scripting Framework Installer welcome screen click next.</FONT>
+<BR><FONT COLOR="#000000">5. Select Install, in the dialog select
+Next.</FONT> <BR><FONT COLOR="#000000">6. When Installation has
+completed, select Finish, the next dialog should prompt you that the
+installer has</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;
+found a Jedit installation and a NetBeans installation, select Next.</FONT>
+<BR><FONT COLOR="#000000">8. Select the IDE's for update, i.e.
+NetBeans and Jedit, select Next, Select Install, Select Finish</FONT>
+</P>
+<P><FONT COLOR="#000000">9. Manully check the jedit install,
+directory &lt;jedit-install&gt;/jars for the following files:-</FONT>
+<BR><B><FONT COLOR="#000000">OfficeScripting.jar</FONT></B>
+<BR><FONT COLOR="#000000">i<B>desupport.jar</B></FONT> <BR><FONT COLOR="#000000">10.
+Manually check the NetBeans install directory
+&lt;netbeans-install&gt;/modules for the following file:-</FONT>
+<BR><B><FONT COLOR="#000000">office.jar</FONT></B> 
+</P>
+<P><FONT COLOR="#000000">11. Start OpenOffice.org, select Tools,
+there should be an entry - Assign Script (java) to and an entry
+Refresh User Scripts.</FONT> <BR><FONT COLOR="#000000">12. Select
+Tools, Assign Script(java) , Menu. An assign Script(java) dialog
+should be launched.</FONT> 
+</P>
+<P STYLE="margin-bottom: 0cm"><B><FONT COLOR="#000000">Expected
+Result:</FONT></B> <BR><FONT COLOR="#000000">All operations should
+complete successfully.</FONT> 
+</P>
+<HR>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<HR>
+<P><BR>&nbsp; <BR>&nbsp; 
+</P>
+<H1 ALIGN=CENTER STYLE="text-decoration: none"><A NAME="install_03"></A>
+Test Case: install_03</H1>
+<H2 STYLE="text-decoration: none">Test Area: Windows</H2>
+<P><B><FONT COLOR="#000000">Test Aim</FONT></B> <BR><FONT COLOR="#000000">Test
+the SFrameworkInstall.jar&nbsp; will sense directory names which
+contain a space character.</FONT> 
+</P>
+<P STYLE="margin-bottom: 0cm"><B><FONT COLOR="#000000">Requirements</FONT></B>
+<BR><FONT COLOR="#000000"><A HREF="#README">README </A>is performed
+before running this test case.</FONT> <BR><FONT COLOR="#000000">OpenOffice.org
+installation path directory has a name which&nbsp; contains a space
+character.</FONT> <BR><FONT COLOR="#000000">Jedit installation path
+directory has a name which contains a space character.</FONT>
+<BR><FONT COLOR="#000000">NetBeans installation path directory has a
+name which contains a space character.</FONT> 
+</P>
+<HR>
+<P STYLE="text-decoration: none"><B><FONT COLOR="#000000">Description:</FONT></B>
+<BR><FONT COLOR="#000000">1. Copy the SFrameworkInstall.jar file to
+the &lt;office-installation&gt;/program&nbsp; directory.</FONT> <BR><FONT COLOR="#000000">2.
+Ensure OpenOffice is not running, also ensure the quickstarters for
+windows and Linux are not running.</FONT> <BR><FONT COLOR="#000000">3.
+Execute java -jar SFrameworkInstall.jar</FONT> <BR><FONT COLOR="#000000">4.
+On the Scripting Framework Installer welcome screen click next.</FONT>
+<BR><FONT COLOR="#000000">5. Select Install, in the dialog select
+Next.</FONT> <BR><FONT COLOR="#000000">6. When Installation has
+completed, select Finish, the next dialog should prompt you that the
+installer has</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;
+found a Jedit installation and a NetBeans installation, select Next.</FONT>
+<BR><FONT COLOR="#000000">8. Select the IDE's for update, i.e.
+NetBeans and Jedit, select Next, Select Install, Select Finish</FONT>
+</P>
+<P><FONT COLOR="#000000">9. Manully check the jedit install,
+directory &lt;jedit-install&gt;/jars for the following files:-</FONT>
+<BR><B><FONT COLOR="#000000">OfficeScripting.jar</FONT></B>
+<BR><FONT COLOR="#000000">i<B>desupport.jar</B></FONT> <BR><FONT COLOR="#000000">10.
+Manually check the NetBeans install directory
+&lt;netbeans-install&gt;/modules for the following file:-</FONT>
+<BR><B><FONT COLOR="#000000">office.jar</FONT></B> 
+</P>
+<P><FONT COLOR="#000000">11. Start OpenOffice.org, select Tools,
+there should be an entry - Assign Script (java) to and an entry
+Refresh User Scripts.</FONT> <BR><FONT COLOR="#000000">12. Select
+Tools, Assign Script(java) , Menu An assign Script(java) dialog
+should be launched.</FONT> 
+</P>
+<P STYLE="margin-bottom: 0cm"><B><FONT COLOR="#000000">Expected
+Result:</FONT></B> <BR><FONT COLOR="#000000">All operations should
+complete successfully.</FONT> 
+</P>
+<HR>
+<HR>
+<P><BR>&nbsp; 
+</P>
+<H1 ALIGN=CENTER STYLE="text-decoration: none"><A NAME="install_04"></A>
+Test Case: install_04</H1>
+<H2 STYLE="text-decoration: none">Test Area: Solaris&nbsp; - Linux -
+Windows</H2>
+<P><B><FONT COLOR="#000000">Test Aim</FONT></B> <BR><FONT COLOR="#000000">Test
+the SFrameworkInstall.jar file when deployed will present to the user
+options to allow a script to be bound to an event.</FONT> <BR><FONT COLOR="#000000">Also
+test&nbsp; that scripting framework jar files are successfully
+deployed to NetBeans and Jedit.</FONT> 
+</P>
+<P STYLE="margin-bottom: 0cm"><B><FONT COLOR="#000000">Requirements</FONT></B>
+<BR><FONT COLOR="#000000"><A HREF="#README">README </A>is performed
+before running this test case.</FONT> 
+</P>
+<HR>
+<P STYLE="text-decoration: none"><B><FONT COLOR="#000000">Description:</FONT></B>
+<BR><FONT COLOR="#000000">1. Copy the SFrameworkInstall.jar file to
+the &lt;office-installation&gt;/program&nbsp; directory.</FONT> <BR><FONT COLOR="#000000">2.
+Ensure OpenOffice is not running, also ensure the quickstarters for
+windows and Linux are not running.</FONT> <BR><FONT COLOR="#000000">3.
+Execute java -jar SFrameworkInstall.jar</FONT> <BR><FONT COLOR="#000000">4.
+On the Scripting Framework Installer welcome screen click next, the
+welcome screen should state the version of SFramework.jar.</FONT> <BR><FONT COLOR="#000000">5.
+Select Install, in the dialog select Next.</FONT> <BR><FONT COLOR="#000000">6.
+When Installation has completed, select Finish, the next dialog
+should prompt you that the installer has</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;
+found a Jedit installation and a NetBeans installation, select Next.</FONT>
+<BR><FONT COLOR="#000000">8. Select the IDE's for update, i.e.
+NetBeans and Jedit, select Next, Select Install, Select Finish</FONT>
+</P>
+<P><FONT COLOR="#000000">9. Manully check the jedit install,
+directory &lt;jedit-install&gt;/jars for the following files:-</FONT>
+<BR><B><FONT COLOR="#000000">OfficeScripting.jar</FONT></B>
+<BR><FONT COLOR="#000000">i<B>desupport.jar</B></FONT> <BR><FONT COLOR="#000000">10.
+Manually check the NetBeans install directory
+&lt;netbeans-install&gt;/modules for the following file:-</FONT>
+<BR><B><FONT COLOR="#000000">office.jar</FONT></B> <BR><FONT COLOR="#000000">11.
+Manually check that the SFrameworkInstall.log file was writter to the
+program directory.</FONT> <BR><FONT COLOR="#000000">12. Start
+OpenOffice.org, select Tools, there should be an entry - Assign
+Script (java) to and an entry Refresh User Scripts.</FONT> <BR><FONT COLOR="#000000">13.
+Select Tools, Assign Script(java) , Menu An assign Script(java)
+dialog should be launched.</FONT> 
+</P>
+<P STYLE="margin-bottom: 0cm"><B><FONT COLOR="#000000">Expected
+Result:</FONT></B> <BR><FONT COLOR="#000000">All operations should
+complete successfully.</FONT> 
+</P>
+<HR>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<HR>
+<P><BR>&nbsp; <BR>&nbsp; 
+</P>
+<H1 ALIGN=CENTER STYLE="text-decoration: none"><A NAME="bindings_01"></A>
+Test Case: bindings_01</H1>
+<H2 STYLE="text-decoration: none">Test Area: Solaris&nbsp; - Linux -
+Windows</H2>
+<P><B><FONT COLOR="#000000">Test Aim</FONT></B> <BR><FONT COLOR="#000000">Test
+that the user can assign a deployed script to an key.</FONT> <BR>&nbsp;
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">Prerequisites:-</FONT>
+<BR><FONT COLOR="#000000"><A HREF="#install_04">install_04 </A>is
+executed before running this test case.</FONT> 
+</P>
+<HR>
+<P STYLE="text-decoration: none"><B><FONT COLOR="#000000">Description:</FONT></B>
+<BR><FONT COLOR="#000000">1.&nbsp; Start OpenOffice.org writer
+document.</FONT> <BR><FONT COLOR="#000000">2. Select Tools -Assign
+Script(java) To, Key.</FONT> <BR><FONT COLOR="#000000">3. In the
+popup dialog,</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;
+in the select script function select a script e.g.
+HighlightText.showForm</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;
+Select&nbsp; Key Group SHIFT + CONTROL +F keys.</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;
+Select ShortcutKey SHIFT + CONTROL + F3.</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;
+Select New Script Key.</FONT> <BR><FONT COLOR="#000000">4. The Key
+should now be assigned to HighlightText.showForm. Select OK.</FONT>
+<BR><FONT COLOR="#000000">5. Select OK when prompted that you need to
+restart OpenOffice.org</FONT> <BR><FONT COLOR="#000000">6. Exit and
+restart OpenOffice.org, opening a writer document.</FONT> <BR><FONT COLOR="#000000">7.
+Select Shift - Control - F3. The Highlight Text box dialog should be
+displayed.</FONT> <BR><FONT COLOR="#000000">8. Select Tools - Assign
+Script(java) To, Key, SHIFT-CONTROL-F3 should be listed as assigned
+to HighlightText.showForm. Close the Assign Script (Java) to Key
+dialog</FONT> <BR><FONT COLOR="#000000">9. Select Tools - Configure,
+select the Keyboard option, ensure that writer is selected in the top
+right corner.</FONT> <BR><FONT COLOR="#000000">In the shortcut keys
+scroll to Ctrl+Shift+F3, this should show that it is assigned to
+[script://HighlightText.showForm].</FONT> <BR><FONT COLOR="#000000">10.
+Close the Configuration dialog.</FONT> <BR>&nbsp; <BR>&nbsp; 
+</P>
+<P STYLE="margin-bottom: 0cm"><B><FONT COLOR="#000000">Expected
+Result:</FONT></B> <BR><FONT COLOR="#000000">All operations should
+complete successfully.</FONT> 
+</P>
+<HR>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<HR>
+<P><BR>&nbsp; <BR>&nbsp; 
+</P>
+<H1 ALIGN=CENTER STYLE="text-decoration: none"><A NAME="bindings_02"></A>
+Test Case: bindings_02</H1>
+<H2 STYLE="text-decoration: none">Test Area: Solaris&nbsp; - Linux -
+Windows</H2>
+<P><B><FONT COLOR="#000000">Test Aim</FONT></B> <BR><FONT COLOR="#000000">Test
+that the user can&nbsp; remove an assigned key.</FONT> <BR>&nbsp; 
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">Prerequisites:-</FONT>
+<BR><FONT COLOR="#000000"><A HREF="#bindings_01">bindings_01 </A>is
+executed before running this test case.</FONT> 
+</P>
+<HR>
+<P STYLE="text-decoration: none"><B><FONT COLOR="#000000">Description:</FONT></B>
+<BR><FONT COLOR="#000000">1.&nbsp; Start OpenOffice.org writer
+document.</FONT> <BR><FONT COLOR="#000000">2. Select Tools -Assign
+Script(java) To, Key.</FONT> <BR><FONT COLOR="#000000">3. In the
+popup dialog,</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;
+Select&nbsp; Key Group SHIFT + CONTROL +F keys.</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;
+Select ShortcutKey SHIFT + CONTROL + F3.</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;
+Select&nbsp; Delete Script Key.</FONT> <BR><FONT COLOR="#000000">4.
+The Key should not be assigned to anything. Select OK.</FONT> <BR><FONT COLOR="#000000">5.
+Select OK when prompted that you need to restart OpenOffice.org</FONT>
+<BR><FONT COLOR="#000000">6. Exit and restart OpenOffice.org, opening
+a writer document.</FONT> <BR><FONT COLOR="#000000">7. Select Shift -
+Control - F3. The Highlight Text box dialog should be not&nbsp;
+displayed.</FONT> <BR><FONT COLOR="#000000">8. Select Tools - Assign
+Script(java) To, Key, SHIFT-CONTROL-F3 should not be listed as
+assigned to anything. Close the Assign Script (Java) to Key dialog</FONT>
+<BR><FONT COLOR="#000000">9. Select Tools - Configure, select the
+Keyboard option, ensure that writer is selected in the top right
+corner.</FONT> <BR><FONT COLOR="#000000">In the shortcut keys scroll
+to Ctrl+Shift+F3, this should show that it is not assigned to
+anything</FONT> <BR><FONT COLOR="#000000">10. Close the Configuration
+dialog.</FONT> <BR>&nbsp; <BR>&nbsp; 
+</P>
+<P STYLE="margin-bottom: 0cm"><B><FONT COLOR="#000000">Expected
+Result:</FONT></B> <BR><FONT COLOR="#000000">All operations should
+complete successfully.</FONT> 
+</P>
+<HR>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<HR>
+<P><BR>&nbsp; <BR>&nbsp; 
+</P>
+<H1 ALIGN=CENTER STYLE="text-decoration: none"><A NAME="bindings_03"></A>
+Test Case: bindings_03</H1>
+<H2 STYLE="text-decoration: none">Test Area: Solaris&nbsp; - Linux -
+Windows</H2>
+<P><B><FONT COLOR="#000000">Test Aim</FONT></B> <BR><FONT COLOR="#000000">Test
+that the user can assign a deployed script to the File menu item.</FONT>
+<BR>&nbsp; 
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">Prerequisites:-</FONT>
+<BR><FONT COLOR="#000000"><A HREF="#install_04">install_04 </A>is
+executed before running this test case</FONT> 
+</P>
+<HR>
+<P STYLE="text-decoration: none"><B><FONT COLOR="#000000">Description:</FONT></B>
+<BR><FONT COLOR="#000000">1.&nbsp; Start OpenOffice.org&nbsp; writer
+document.</FONT> <BR><FONT COLOR="#000000">2. Select Tools, Assign
+Script(java) To, Menu.</FONT> <BR><FONT COLOR="#000000">3. In the
+popup dialog,</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;
+in the select script function select a script e.g.
+HighlightText.showForm</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;
+Select File in the Top Level menu drop down list.</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;
+In the New Menu, enter a menu item name e.g. menuhighlight.</FONT>
+<BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp; Select New Script Menu,
+select ok.</FONT> <BR><FONT COLOR="#000000">4. Select OK when
+prompted to restart OpenOffice.org. Exit and restart OpenOffice.org
+writer document.</FONT> <BR><FONT COLOR="#000000">5. Select File,
+menuhighlight - a highlight text box should appear.</FONT> <BR>&nbsp;
+<BR>&nbsp; 
+</P>
+<P STYLE="margin-bottom: 0cm"><B><FONT COLOR="#000000">Expected
+Result:</FONT></B> <BR><FONT COLOR="#000000">All operations should
+complete successfully.</FONT> 
+</P>
+<HR>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<HR>
+<P><BR>&nbsp; <BR>&nbsp; 
+</P>
+<H1 ALIGN=CENTER STYLE="text-decoration: none"><A NAME="bindings_04"></A>
+Test Case: bindings_04</H1>
+<H2 STYLE="text-decoration: none">Test Area: Solaris&nbsp; - Linux -
+Windows</H2>
+<P><B><FONT COLOR="#000000">Test Aim</FONT></B> <BR><FONT COLOR="#000000">Test
+that the user can delete an assigned File menu item.</FONT> <BR>&nbsp;
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">Prerequisites:-</FONT>
+<BR><FONT COLOR="#000000"><A HREF="#bindings_03">bindings_03</A>&nbsp;
+is&nbsp; executed before running this test case</FONT> 
+</P>
+<HR>
+<P STYLE="text-decoration: none"><B><FONT COLOR="#000000">Description:</FONT></B>
+<BR><FONT COLOR="#000000">1.&nbsp; Start OpenOffice.org writer
+document.</FONT> <BR><FONT COLOR="#000000">2. Select Tools, Assign
+Script(java) To, Menu.</FONT> <BR><FONT COLOR="#000000">3. In the
+popup dialog,</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;
+Select File in the Top Level menu drop down list.</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;
+In the Sub Menu, select menuhighlight [ HighlightText.ShowForm]</FONT>
+<BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp; Select Delete Script
+Menu. Select OK.</FONT> <BR><FONT COLOR="#000000">4. Select OK when
+prompted to restart OpenOffice.org. Exit and restart OpenOffice.org
+writer document.</FONT> <BR><FONT COLOR="#000000">5. Select File,
+there should now be no menu option menuhighlight.</FONT> <BR>&nbsp;
+<BR>&nbsp; 
+</P>
+<P STYLE="margin-bottom: 0cm"><B><FONT COLOR="#000000">Expected
+Result:</FONT></B> <BR><FONT COLOR="#000000">All operations should
+complete successfully.</FONT> 
+</P>
+<HR>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<HR>
+<P><BR>&nbsp; <BR>&nbsp; 
+</P>
+<H1 ALIGN=CENTER><A NAME="bindings_05"></A>Test Case: bindings_05</H1>
+<H2 STYLE="text-decoration: none">Test Area: Solaris&nbsp; - Linux -
+Windows</H2>
+<P><B><FONT COLOR="#000000">Test Aim</FONT></B> <BR><FONT COLOR="#000000">Test
+that the user can execute a&nbsp; script stored in a document with a
+binding stored in the same document.</FONT> <BR>&nbsp; 
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">Prerequisites:-</FONT>
+<BR><FONT COLOR="#000000">&nbsp;<A HREF="#install_04">install_04 </A>is
+executed before running this test case.</FONT> 
+</P>
+<HR>
+<P STYLE="text-decoration: none"><B><FONT COLOR="#000000">Description:</FONT></B>
+<BR><FONT COLOR="#000000">1.&nbsp; Start OpenOffice.org.</FONT> <BR><FONT COLOR="#000000">2.
+Select File - Open, navigate to
+&lt;OpenOffice.org-install-dir&gt;/user/Scripts/java/MemoryUsage.</FONT>
+<BR><FONT COLOR="#000000">3. Open file ExampleSpreadSheet.sxc, a
+spreadsheet document with a pie chart should be opened</FONT> <BR><FONT COLOR="#000000">4.
+Press ctrl-shift-m, the user is warned that they are about to execute
+a sctipt.</FONT> <BR><FONT COLOR="#000000">Do you want to execute
+this script.</FONT> <BR><FONT COLOR="#000000">5. Select Yes.</FONT>
+<BR><FONT COLOR="#000000">6. The chart updates with JVM memory usage
+statistics.</FONT> <BR><FONT COLOR="#000000">7. Repeat steps 4-6
+again.</FONT> <BR>&nbsp; <BR>&nbsp; 
+</P>
+<P STYLE="margin-bottom: 0cm"><B><FONT COLOR="#000000">Expected
+Result:</FONT></B> 
+</P>
+<P><FONT SIZE=3>All operations should complete successfully.</FONT></P>
+<HR>
+<HR>
+<H1 ALIGN=CENTER STYLE="text-decoration: none"><A NAME="bindings_06"></A>
+Test Case:&nbsp;bindings_06</H1>
+<H2 STYLE="text-decoration: none">Test Area: Solaris&nbsp; - Linux -
+Windows</H2>
+<P><B>Test Aim</B> <BR>Test that the user can store a binding within
+a document for a script already stored in that document. <BR>&nbsp; 
+</P>
+<P STYLE="margin-bottom: 0cm">Prerequisites:- <BR><A HREF="#jedit_03">jedit_03</A>
+is executed before running this test case. <BR>Note The functionality
+for this test case is not available yet. 
+</P>
+<HR>
+<P STYLE="text-decoration: none"><B>Description:</B> <BR>&nbsp; <BR>&nbsp;
+</P>
+<P STYLE="margin-bottom: 0cm"><B>Expected Result:</B> <BR>All
+operations should complete successfully. 
+</P>
+<HR>
+<HR>
+<P><BR>&nbsp; <BR>&nbsp; 
+</P>
+<H1 ALIGN=CENTER STYLE="text-decoration: none"><A NAME="jedit_01"></A>
+Test Case: jedit_01</H1>
+<H2 STYLE="text-decoration: none">Test Area: Solaris&nbsp; - Linux -
+Windows</H2>
+<P STYLE="margin-bottom: 0cm"><B>Test Aim</B></P>
+<P><FONT COLOR="#000000">Compile and deploy a java script to the
+application user area using jedit.</FONT> 
+</P>
+<P><FONT COLOR="#000000">Prequisites:-</FONT> <BR><FONT COLOR="#000000"><A HREF="#install_04">install_04
+</A>is executed before running this test case.</FONT> <BR><A HREF="jedit-devguide.html#prerequisites">JEdit
+prerequisites</A></P>
+<HR>
+<P STYLE="text-decoration: none"><B><FONT COLOR="#000000">Description:</FONT></B>
+</P>
+<OL START=2>
+	<P><FONT COLOR="#000000">1. Start Jedit.</FONT> <BR><FONT COLOR="#000000">Click
+	on the Office Scripting button on the right of the frame.</FONT> 
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">Right click on
+	all parcels.</FONT> 
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">Select New</FONT>
+	<BR><FONT COLOR="#000000">Enter the name of the new parcel e.g.
+	HelloJedit.</FONT> <BR><FONT COLOR="#000000">Select a directory
+	where you want the parcel to be built .</FONT> 
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">2. In the left
+	hand frame the HelloJedit script is opened you need to add the
+	following lines to the top of the script</FONT> <BR><FONT COLOR="#000000">immediately
+	after the first import statement</FONT> 
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">import
+	com.sun.star.uno.UnoRuntime;</FONT> <BR><FONT COLOR="#000000">import
+	com.sun.star.frame.XModel;</FONT> <BR><FONT COLOR="#000000">import
+	com.sun.star.text.*;</FONT> <BR>&nbsp; 
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">3. Add the
+	following lines to&nbsp; the public method doMethod in the
+	HelloJedit class.</FONT> 
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">XModel model =
+	xSc.getDocument();</FONT> <BR><FONT COLOR="#000000">&nbsp;XTextDocument
+	textdoc = (XTextDocument)</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	UnoRuntime.queryInterface(XTextDocument.class, model);</FONT>
+	<BR><FONT COLOR="#000000">&nbsp;XText oText = textdoc.getText();</FONT>
+	<BR><FONT COLOR="#000000">&nbsp;XTextCursor oCursor =
+	oText.createTextCursor();</FONT> <BR><FONT COLOR="#000000">&nbsp;oText.insertString(oCursor,
+	&quot;Hello jEdit&quot;, false);</FONT> <BR>&nbsp; <BR>&nbsp; 
+	</P>
+	<P><FONT COLOR="#000000">4. Right click on&nbsp; 'HelloJedit' and
+	select ScriptCompile.</FONT> <BR><FONT COLOR="#000000">After
+	complation has successfully completed, right click on 'HelloJedit'
+	and select Build Parcel SXP.</FONT> 
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">In the scripting
+	framework dialog that appears select the method HelloJedit.doMethod
+	in the right frame</FONT> 
+	</P>
+	<P STYLE="margin-bottom: 0cm">and select Add.</P>
+	<P STYLE="margin-bottom: 0cm">Select Finish.</P>
+	<P><BR>&nbsp; 
+	</P>
+	<P><FONT COLOR="#000000">5. Right click on the HelloJedit.sxp parcel
+	and select Deploy to OpenOffice.org.</FONT> 
+	</P>
+	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">Check that the
+	scripts have been deployed to
+	&lt;office_installation&gt;/user/Scripts/java.</FONT> <BR>&nbsp; 
+	</P>
+	<P><FONT COLOR="#000000">6. Assign an event&nbsp; to execute the
+	script.</FONT> <BR><FONT COLOR="#000000">- Start OpenOffice.org&nbsp;
+	writer document.</FONT> <BR><FONT COLOR="#000000">- Select Tools,
+	Assign Script(java) To, Menu.</FONT> <BR><FONT COLOR="#000000">- In
+	the popup dialog,</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;
+	in the select script function select a script e.g.
+	HelloJedit.doMethod</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;
+	Select File in the Top Level menu drop down list.</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;
+	In the New Menu, enter a menu item name e.g. HelloJedit.</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;
+	Select New Script Menu, select ok.</FONT> <BR><FONT COLOR="#000000">-
+	Select OK when prompted to restart OpenOffice.org. Exit and restart
+	OpenOffice.org writer document.</FONT> <BR><FONT COLOR="#000000">-
+	Select File, HelloJedit - Hello jEdit should be inserted into the
+	document.</FONT> <BR>&nbsp; 
+	</P>
+	<P><B>Expected Result:</B></P>
+</OL>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+All operations should complete successfully.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<HR>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<HR>
+<P><BR>&nbsp; 
+</P>
+<H1 ALIGN=CENTER><A NAME="jedit_02"></A>Test Case:&nbsp;jedit_02</H1>
+<H2 STYLE="text-decoration: none">Test Area: Solaris&nbsp; - Linux -
+Windows</H2>
+<P STYLE="margin-bottom: 0cm"><B>Test Aim</B> <BR>Verify that Refresh
+User Scripts (Java) functions correctly for scripts deployed from
+jEdit. 
+</P>
+<P STYLE="margin-bottom: 0cm">&nbsp; <BR>Prequisites:- <BR><A HREF="#install_04">install_04</A>is
+executed before running this test case.</P>
+<P STYLE="margin-bottom: 0cm">OpenOffice.org is running a writer
+document. <BR>Ensure hellojedit2 is not already listed under Assign
+Script (Java) to Key or Menu. 
+</P>
+<HR>
+<P STYLE="text-decoration: none"><B>Description:</B> <BR>&nbsp; <BR>&nbsp;
+</P>
+<OL START=2>
+	<P STYLE="margin-bottom: 0cm">1. Click on the Office Scripting
+	button on the right of the frame. 
+	</P>
+	<P STYLE="margin-bottom: 0cm">Right click on all parcels.</P>
+	<P STYLE="margin-bottom: 0cm">Select New <BR>Enter the name of the
+	new parcel e.g. HelloJedit2. <BR>Select a directory where you want
+	the parcel to be built . 
+	</P>
+	<P STYLE="margin-bottom: 0cm">2. In the left hand frame the
+	HelloJedit2 script is opened you need to add the following lines to
+	the top of the script <BR>immediately after the first import
+	statement 
+	</P>
+	<P STYLE="margin-bottom: 0cm">import com.sun.star.uno.UnoRuntime;
+	<BR>import com.sun.star.frame.XModel; <BR>import
+	com.sun.star.text.*; <BR>&nbsp; 
+	</P>
+	<P STYLE="margin-bottom: 0cm">3. <FONT COLOR="#000000">Add the
+	following lines to&nbsp; the public method doMethod in the
+	</FONT>HelloJedit2 class. 
+	</P>
+	<P STYLE="margin-bottom: 0cm">XModel model = xSc.getDocument();
+	<BR>&nbsp;XTextDocument textdoc = (XTextDocument) <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	UnoRuntime.queryInterface(XTextDocument.class, model); <BR>&nbsp;XText
+	oText = textdoc.getText(); <BR>&nbsp;XTextCursor oCursor =
+	oText.createTextCursor(); <BR>&nbsp;oText.insertString(oCursor,
+	&quot;Hello jEdit2 &quot;, false); <BR>&nbsp;</P>
+	<P STYLE="margin-bottom: 0cm">&nbsp; <BR>4. Select, File - Save.
+	<BR>Right click on&nbsp; 'HelloJedit2' and select ScriptCompile.
+	<BR>After complation has successfully completed, right click on
+	'HelloJedit2' and select Build Parcel SXP.</P>
+	<P STYLE="margin-bottom: 0cm">In the scripting framework dialog that
+	appears select the method HelloJedit2.doMethod in the right frame</P>
+	<P STYLE="margin-bottom: 0cm">and select Add.</P>
+	<P STYLE="margin-bottom: 0cm">&nbsp; <BR>5. Right click on the
+	HelloJedit2.sxp parcel and select Deploy to OpenOffice.org.</P>
+	<P STYLE="margin-bottom: 0cm">&nbsp; <BR>6. In OpenOffice.org select
+	Tools, Assign Script (Java) To - Key. <BR>HelloJedit2 should not be
+	listed&nbsp; in the Select script function box. <BR>Close the Assign
+	Script (Java) To Key dialog box 
+	</P>
+	<P STYLE="margin-bottom: 0cm">7. Select Tools, Refresh User Scripts
+	(java). <BR>Select Tools, Assign Script (Java) To - Key.
+	<BR>HelloJedit2 should now be listed&nbsp; in the Select script
+	function box. 
+	</P>
+	<P STYLE="margin-bottom: 0cm">8. Select HelloJedit2.doMethod in the
+	Select script function box. <BR>Select the shotcut key group Shift +
+	Control + F keys. <BR>Select the Shortcut Key Shift + Control + F10.
+	<BR>Select, New Script Key, Select OK. <BR>Select OK when prompted
+	to restart OpenOffice.org. Exit and restart OpenOffice.org writer
+	document. <BR>Select Shift+ Control + F10, Hello jEdit2 should be
+	inserted into the document.</P>
+	<P><B>Expected Result:</B></P>
+</OL>
+<P STYLE="margin-bottom: 0cm">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+All operations should complete successfully. 
+</P>
+<HR>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<HR>
+<P><BR>&nbsp; <BR>&nbsp; 
+</P>
+<H1 ALIGN=CENTER><A NAME="jedit_03"></A>Test Case:&nbsp;jedit_03</H1>
+<H2 STYLE="text-decoration: none">Test Area: Solaris&nbsp; - Linux -
+Windows</H2>
+<P STYLE="margin-bottom: 0cm"><B>Test Aim</B> <BR>Verify that user
+can deploy a script to a document using jEdit. 
+</P>
+<P STYLE="margin-bottom: 0cm">&nbsp; <BR>Prequisites:- <BR><A HREF="#jedit_01">jedit_01</A>
+is executed before running this test case. <BR>Delete directory
+&lt;office-install&gt;/user/Scripts/java/HelloJedit. <BR>OpenOffice.org
+is not running. <BR>A previously created OpenOffice.org writer
+document, e.g. TestBindjE.sxw</P>
+<HR>
+<P>1. Start Jedit <BR>Click on the HelloJedit.java file listed under
+All Parcels, HelloJedit. <BR>Change the text in the HelloJedit.java
+file from <FONT COLOR="#000000">&quot;Hello jEdit&quot;&nbsp; to
+&quot;Hello jEdit 3---&quot;.</FONT> <BR><FONT COLOR="#000000">Select
+File Save.</FONT> 
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">2. Right click on
+hellojedit and select Script Compile.</FONT> 
+</P>
+<P STYLE="margin-bottom: 0cm">After complation has successfully
+completed, right click on 'HelloJedit' and select Build Parcel SXP.</P>
+<P STYLE="margin-bottom: 0cm">Select Finish. 
+</P>
+<P STYLE="margin-bottom: 0cm">3. <FONT COLOR="#000000">Right click on
+the HelloJedit.sxp parcel and select Deploy to Document.</FONT> 
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">4. Check that the
+script has been successfully deployed to the document by running
+unzip -l&nbsp; </FONT>TestBindjE.sxw<FONT COLOR="#000000">. (Unix) or
+pkunzip -v&nbsp; </FONT>TestBindjE.sxw <FONT COLOR="#000000">(Windows).
+You should see the script saved in the document.</FONT> 
+</P>
+<P STYLE="margin-bottom: 0cm">5. Launch OpenOffice.org, note the
+previously assigned bindings as setup in jedit_01 still apply to the
+TestBindjE.sxw document. Open the TestBindjE.sxw document. 
+</P>
+<P STYLE="margin-bottom: 0cm">6. Select File <FONT COLOR="#000000">HelloJedit
+- &quot;Hello jEdit&nbsp; 3--- &quot;should be inserted into the
+document.</FONT> <BR>&nbsp;</P>
+<HR>
+<HR>
+<P><BR>&nbsp; <BR>&nbsp; 
+</P>
+<H1 ALIGN=CENTER><A NAME="jedit_04"></A>Test Case:&nbsp;jedit_04</H1>
+<H2 STYLE="text-decoration: none">Test Area: Solaris&nbsp; - Linux -
+Windows</H2>
+<P STYLE="margin-bottom: 0cm"><B>Test Aim</B> <BR>Verify that user
+can delete a script deployed to a document using jEdit. 
+</P>
+<P STYLE="margin-bottom: 0cm">&nbsp; <BR>Prequisites:- <BR><A HREF="#jedit_03">jedit_03</A>
+is executed before running this test case. <BR>Close the test
+document TestBindjE.sxw in OpenOffice.org before executing test. 
+</P>
+<HR>
+<P STYLE="margin-bottom: 0cm; text-decoration: none"><B><FONT COLOR="#000000">Description:</FONT></B>
+</P>
+<P STYLE="margin-bottom: 0cm">1. Start Jedit, right click on All
+Parcels and select Open. 
+</P>
+<P STYLE="margin-bottom: 0cm">2. Browse to the document
+TestBindjE.sxw and open it. 
+</P>
+<P STYLE="margin-bottom: 0cm">3. Expand the document TestBindjE.sxw.
+Right click on the PARCEL_FILE and select Remove Parcel. 
+</P>
+<P STYLE="margin-bottom: 0cm">4. <FONT COLOR="#000000">Check that the
+script has been successfully remove from the document by running
+unzip -l&nbsp; </FONT>TestBindjE.sxw<FONT COLOR="#000000">. (Unix) or
+pkunzip -v&nbsp; </FONT>TestBindjE.sxw <FONT COLOR="#000000">(Windows).
+You should see that the script has been removed from the document.</FONT>
+<BR>&nbsp;</P>
+<HR>
+<HR>
+<P><BR>&nbsp; <BR>&nbsp; 
+</P>
+<H1 ALIGN=CENTER STYLE="text-decoration: none"><A NAME="netbeans_01"></A>
+Test Case: netbeans_01</H1>
+<H2 STYLE="text-decoration: none">Test Area: Solaris&nbsp; - Linux -
+Windows</H2>
+<P><B><FONT COLOR="#000000">Test Aim</FONT></B> <BR><FONT COLOR="#000000">Compile
+and deploy a java script to the application user area using NetBeans.</FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><B><FONT COLOR="#000000">Prerequisits</FONT></B>
+<BR><FONT COLOR="#000000"><A HREF="#install_04">install_04 </A>is
+executed before running this test case.</FONT> <BR><A HREF="netbeans-devguide.html#prerequisites">Netbeans
+prerequisites</A></P>
+<HR>
+<P STYLE="text-decoration: none"><B><FONT COLOR="#000000">Description:</FONT></B>
+<BR>&nbsp; 
+</P>
+<OL START=2>
+	<P><FONT COLOR="#000000">1. Create an examples directory e.g.
+	HelloNetBeans.#</FONT> <BR><FONT COLOR="#000000">Start NetBeans.</FONT>
+		</P>
+	<P><FONT COLOR="#000000">2. Mount the examples directories</FONT>
+	<BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	Select the File-&gt;Mount Filesystem menu item</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	In the Choose Filesystem Type window select Local Directory and
+	click Next</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	Mount the examples directory you created i.e. HelloNetBeans.</FONT>
+	<BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	Select Finish.</FONT> 
+	</P>
+	<P><FONT COLOR="#000000">3.&nbsp;&nbsp; Create a new script parcel</FONT>
+	<BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	Right click on your mounted examples directory.</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	Select New-&gt;Office Scripting-&gt;Parcel Recipe</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	In the New Wizard window that appears, enter the name you wish to
+	call your new parcel e.g HelloNetBeans.</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	Select Finish.</FONT> 
+	</P>
+	<P><FONT COLOR="#000000">4.&nbsp; Click on the Contents-Empty file</FONT>
+	<BR><FONT COLOR="#000000">-Change the name of 'public class Empty'
+	to 'public class HelloNetBeans'</FONT> <BR><FONT COLOR="#000000">-Remove
+	the package declaration 'package HelloNetBeans.Contents;' at the top
+	of the file</FONT> <BR><FONT COLOR="#000000">-Add the following
+	lines to the top of the script immediately after the first import
+	statement</FONT> 
+	</P>
+	<P><FONT COLOR="#000000">import com.sun.star.uno.UnoRuntime;</FONT>
+	<BR><FONT COLOR="#000000">import com.sun.star.frame.XModel;</FONT>
+	<BR><FONT COLOR="#000000">import com.sun.star.text.*;</FONT> <BR>&nbsp;
+		</P>
+	<P><FONT COLOR="#000000">5. Add the following lines to&nbsp; the
+	public method doMethod in the </FONT>HelloNetBeans class. 
+	</P>
+	<P><FONT COLOR="#000000">XModel model = xSc.getDocument();</FONT>
+	<BR><FONT COLOR="#000000">&nbsp;XTextDocument textdoc =
+	(XTextDocument)</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	UnoRuntime.queryInterface(XTextDocument.class, model);</FONT>
+	<BR><FONT COLOR="#000000">&nbsp;XText oText = textdoc.getText();</FONT>
+	<BR><FONT COLOR="#000000">&nbsp;XTextCursor oCursor =
+	oText.createTextCursor();</FONT> <BR><FONT COLOR="#000000">&nbsp;oText.insertString(oCursor,
+	&quot;Hello NetBeans&quot;, false);</FONT> 
+	</P>
+	<P><FONT COLOR="#000000">6. Right click on the HelloNetBeans in the
+	right frame and select save.</FONT> 
+	</P>
+	<P><FONT COLOR="#000000">7.&nbsp;&nbsp; Right click on&nbsp; the
+	HelloNetBeans directory and select compile. You should note that</FONT>
+	<BR><FONT COLOR="#000000">the compile completes successfully from
+	the lower right hand frame (output window) of NetBeans.</FONT> 
+	</P>
+	<P><FONT COLOR="#000000">8. Right click on the HelloNetBeans&nbsp;
+	directory and select build,</FONT> <BR><FONT COLOR="#000000">In the
+	dialog which appears select the HelloNetBeans.doMethod and add to
+	scripts , select OK.</FONT> <BR><FONT COLOR="#000000">A
+	HelloNetBeans parcel file should be built.</FONT> 
+	</P>
+	<P><FONT COLOR="#000000">9. Right click on the Hello NetBeans parcel
+	file and select Deploy to OpenOffice.org.</FONT> 
+	</P>
+	<P><FONT COLOR="#000000">10. Check that the files have been
+	successfully deployed to &lt;office-install&gt;/user/Scripts/java.</FONT>
+		</P>
+	<P><FONT COLOR="#000000">11. Assign an event&nbsp; to execute the
+	script.</FONT> <BR><FONT COLOR="#000000">- Start OpenOffice.org&nbsp;
+	writer document.</FONT> <BR><FONT COLOR="#000000">- Select Tools,
+	Assign Script(java) To, Menu.</FONT> <BR><FONT COLOR="#000000">- In
+	the popup dialog,</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;
+	in the select script function select a script e.g.
+	HelloNetBeans.doMethod</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;
+	Select File in the Top Level menu drop down list.</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;
+	In the New Menu, enter a menu item name e.g. HelloNetBeans.</FONT>
+	<BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp; Select New Script Menu,
+	select ok.</FONT> <BR><FONT COLOR="#000000">- Select OK when
+	prompted to restart OpenOffice.org. Exit and restart OpenOffice.org
+	writer document.</FONT> <BR><FONT COLOR="#000000">- Select File,
+	HelloNetBeans - Hello NetBeans should be inserted into the document.</FONT></P>
+</OL>
+<P><B><FONT COLOR="#000000">Expected Result:</FONT></B> <BR>&nbsp; 
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000">All operations
+should complete successfully.</FONT> 
+</P>
+<HR>
+<HR>
+<P><BR>&nbsp; <BR>&nbsp; 
+</P>
+<H1 ALIGN=CENTER STYLE="text-decoration: none"><A NAME="netbeans_02"></A>
+Test Case: netbeans_02</H1>
+<H2 STYLE="text-decoration: none">Test Area: Solaris&nbsp; - Linux -
+Windows</H2>
+<P><B><FONT COLOR="#000000">Test Aim</FONT></B> <BR><FONT COLOR="#000000">Compile
+and deploy a java script to a document&nbsp; using NetBeans.</FONT> 
+</P>
+<P STYLE="margin-bottom: 0cm"><B><FONT COLOR="#000000">Prerequisites</FONT></B>
+<BR><FONT COLOR="#000000"><A HREF="#netbeans_01">netbeans_01</A> is
+executed before running this test case.</FONT> <BR>Delete directory
+&lt;office-install&gt;/user/Scripts/java/HelloNetBeans. <BR>A
+previously created OpenOffice.org writer document, e.g.
+TestBindNB.sxw 
+</P>
+<HR>
+<P><BR>&nbsp; 
+</P>
+<P>1. Start NetBeans <BR><FONT COLOR="#000000">&nbsp;Right click on
+the HelloNetBeans in the right frame and select the previously opened
+HelloNetBeans.java file.</FONT> <BR><FONT COLOR="#000000">Change the
+&quot;Hello NetBeans&quot; line to &quot;Hello NetBeans 2 ----&quot;</FONT>
+<BR><FONT COLOR="#000000">Select File Save.</FONT> 
+</P>
+<P><FONT COLOR="#000000">2.&nbsp;&nbsp; Right click on&nbsp; the
+HelloNetBeans directory and select compile. You should note that</FONT>
+<BR><FONT COLOR="#000000">the compile completes successfully from the
+lower right hand frame (output window) of NetBeans.</FONT> 
+</P>
+<P><FONT COLOR="#000000">3. Right click on the HelloNetBeans&nbsp;
+directory and select build,</FONT> <BR><FONT COLOR="#000000">In the
+dialog which appears select the HelloNetBeans.doMethod and add to
+scripts , select OK.</FONT> <BR><FONT COLOR="#000000">A HelloNetBeans
+parcel file should be built.</FONT> 
+</P>
+<P><FONT COLOR="#000000">4. Right click on the Hello NetBeans parcel
+file and select Deploy to Office Document, select the previously
+saved</FONT> <BR><FONT COLOR="#000000">test document i.e.
+</FONT>TestBindNB.sxw<FONT COLOR="#000000">.</FONT> 
+</P>
+<P><FONT COLOR="#000000">5. Check that the script has been
+successfully deployed to the document by running unzip -l&nbsp;
+</FONT>TestBindNB.sxw<FONT COLOR="#000000">. (Unix) or pkunzip -v&nbsp;
+</FONT>TestBindNB.sxw <FONT COLOR="#000000">(Windows). You should see
+the script saved in the document.</FONT> 
+</P>
+<P><FONT COLOR="#000000">6. Assign an event&nbsp; to execute the
+script.</FONT> <BR><FONT COLOR="#000000">- Start OpenOffice.org&nbsp;
+writer document.</FONT> <BR><FONT COLOR="#000000">- Select Tools,
+Assign Script(java) To, Menu.</FONT> <BR><FONT COLOR="#000000">- In
+the popup dialog,</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;&nbsp;
+in the select script function select a script e.g.
+HelloNetBeans.doMethod</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;
+Select File in the Top Level menu drop down list.</FONT> <BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp;
+In the New Menu, enter a menu item name e.g. HelloNetBeans.</FONT>
+<BR><FONT COLOR="#000000">&nbsp;&nbsp;&nbsp; Select New Script Menu,
+select ok.</FONT> <BR><FONT COLOR="#000000">- Select OK when prompted
+to restart OpenOffice.org. Exit and restart OpenOffice.org writer
+document.</FONT> <BR><FONT COLOR="#000000">- Select File,
+HelloNetBeans - Hello NetBeans should be inserted into the document.</FONT>
+<BR>&nbsp; 
+</P>
+<HR>
+<HR>
+<P><BR>&nbsp; <BR>&nbsp; 
+</P>
+<H1 ALIGN=CENTER STYLE="text-decoration: none"><A NAME="netbeans_03"></A>
+Test Case: netbeans_03</H1>
+<H2 STYLE="text-decoration: none">Test Area: Solaris&nbsp; - Linux -
+Windows</H2>
+<P><B><FONT COLOR="#000000">Test Aim</FONT></B> <BR><FONT COLOR="#000000">Delete
+a script&nbsp; deployed to a document&nbsp; using NetBeans.</FONT> 
+</P>
+<P STYLE="margin-bottom: 0cm"><B><FONT COLOR="#000000">Prerequisits</FONT></B>
+<BR><FONT COLOR="#000000"><A HREF="#netbeans_02">netbeans_02</A> is
+executed before running this test case.</FONT> 
+</P>
+<HR>
+<P>1. Start NetBeans. <BR>Mount the file system where&nbsp;<FONT COLOR="#000000">
+</FONT>TestBindNB.sxw<FONT COLOR="#000000">. is stored.</FONT> 
+</P>
+<P><FONT COLOR="#000000">2. Expand the file TestBindNB.sxw file .
+Right click on the PARCEL_FILE and select Delete.</FONT> 
+</P>
+<P><FONT COLOR="#000000">3. The Script saved in the office document
+TestBindNB.sxw should now be deleted.</FONT> 
+</P>
+<P><FONT COLOR="#000000">4. Check that it is deleted by running unzip
+-l </FONT>TestBindNB.sxw<FONT COLOR="#000000">. (Unix) or pkunzip -v
+</FONT>TestBindNB.sxw <FONT COLOR="#000000">(Windows). You should see
+that&nbsp; the previously saved&nbsp; script in the document is now
+gone.</FONT> 
+</P>
+<HR>
+<HR>
+<P><BR>&nbsp; 
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

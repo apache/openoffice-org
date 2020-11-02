@@ -1,0 +1,307 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="CREATED" CONTENT="20020530;14220812">
+	<META NAME="CHANGED" CONTENT="20020530;15563490">
+	<STYLE>
+	<!--
+		@page { margin: 2cm }
+		P { margin-bottom: 0.21cm; text-align: justify; page-break-before: auto }
+		P.western { font-family: "Times New Roman", serif; font-size: 11pt }
+		TD P { margin-bottom: 0.21cm; text-align: justify; page-break-before: auto }
+		TD P.western { font-family: "Times New Roman", serif; font-size: 11pt }
+		TH P { margin-bottom: 0.21cm; page-break-before: auto }
+		TH P.western { font-family: "Times New Roman", serif; font-size: 11pt; font-style: italic }
+		TH P.cjk { font-style: italic }
+		TH P.ctl { font-style: italic }
+		H1 { margin-bottom: 0.21cm }
+		H1.western { font-family: "Times New Roman", serif; font-size: 14pt }
+		H1.cjk { font-size: 16pt }
+		H1.ctl { font-size: 16pt }
+		H2 { margin-bottom: 0.21cm }
+		H2.western { font-family: "Times New Roman", serif; font-size: 12pt; font-style: normal }
+		H2.cjk { font-size: 14pt; font-style: italic }
+		H2.ctl { font-size: 14pt; font-style: italic }
+		H3 { margin-bottom: 0.21cm }
+		H3.western { font-family: "Times New Roman", serif; font-size: 12pt; font-weight: medium }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/framework/">framework</a>&nbsp;&raquo;&nbsp;<a href="/framework/documentation/">documentation</a>&nbsp;&raquo;&nbsp;<a href="/framework/documentation/others/">others</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<P ALIGN=LEFT STYLE="margin-top: 0.42cm; page-break-after: avoid"><FONT SIZE=4 STYLE="font-size: 16pt"><B>Job
+Execution Service</B></FONT></P>
+<P CLASS="western"><BR>Inside the office exist a special service
+com.sun.star.task.JobExecutor.  He can be used to trigger special
+events for which some uno components can be registered. Such
+components must provide the interfaces com.sun.star.task.XJob &ndash;
+for synchronous job execution &ndash; or com.sun.star.task.XAsyncJob
+&ndash; for asnychronous job execution. The global executor knows all
+these registered jobs and her possible trigger events by using a
+configuration package org.openoffice.Office.Jobs. He starts jobs if
+requested &ndash; control their life time and maintain her
+configuration.</P>
+<P CLASS="western">Note this</P>
+<UL>
+	<LI><P CLASS="western">Because it's currently not implemented &ndash;
+	asynchronous jobs are not supported yet.</P>
+	<LI><P CLASS="western">Every trigger event must be coded inside the
+	office. It requires creation of the global job executor and call his
+	method trigger() with a string value which describe the detected
+	event. The executor services reacts then only.</P>
+</UL>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western">Following events are available:</P>
+<UL>
+	<LI><P CLASS="western"><I>onFirstVisibleTask</I><BR>This occures one
+	times only at runtime of an office. It will be triggered if any
+	first visible document frame will be shown. Next occurence will
+	happen after next startup.<BR>Note: An already running quickstart
+	module (under windows) hinder the office on a real shutdown.</P>
+	<LI><P CLASS="western"><I>onFirstRunInitialization</I><BR>This
+	occures on first startup of an office directly after installation.
+	After that a special flag inside configuration will be set &ndash;
+	to disable it. It willn't be called again.</P>
+</UL>
+<P CLASS="western"><BR><BR>
+</P>
+<H1 CLASS="western">Configuration</H1>
+<P CLASS="western">To add job functionality to the office it's
+neccessary to write a service (will be described later) and of course
+to register it inside configuration. The name of corresponding
+package is org.openoffice.Office.Jobs. There exist two sets (lists):</P>
+<OL>
+	<LI><P CLASS="western">Job</P>
+	<LI><P CLASS="western">Event</P>
+</OL>
+<H2 CLASS="western"><BR>The Job List</H2>
+<P CLASS="western">Every job must be registered here with some
+informations which describe it. Following entries are neccessary:</P>
+<P CLASS="western"><BR><BR>
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=44*>
+	<COL WIDTH=34*>
+	<COL WIDTH=179*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=17%>
+				<P CLASS="western">property name</P>
+			</TH>
+			<TH WIDTH=13%>
+				<P CLASS="western">value type</P>
+			</TH>
+			<TH WIDTH=70%>
+				<P CLASS="western">description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P CLASS="western">AdminTime</P>
+			</TD>
+			<TD WIDTH=13%>
+				<P CLASS="western">[string]</P>
+			</TD>
+			<TD WIDTH=70%>
+				<P CLASS="western">Time stamp of an administrator (neccessary for
+				network installations). A service will be started only if this
+				stamp is new then the following one UserTime. By using these two
+				stamps it's possible to reactivate as finished declared jobs
+				again.</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P CLASS="western">UserTime</P>
+			</TD>
+			<TD WIDTH=13%>
+				<P CLASS="western">[string]</P>
+			</TD>
+			<TD WIDTH=70%>
+				<P CLASS="western">Time stamp of the office user. If a job was
+				finished and wish to be deregistered &ndash; this stamp is set to
+				the current time. After that AdminTime should be older and the
+				job never will be started again. That's true till the
+				administrator change his stamp.</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P CLASS="western">Service</P>
+			</TD>
+			<TD WIDTH=13%>
+				<P CLASS="western">[string]</P>
+			</TD>
+			<TD WIDTH=70%>
+				<P CLASS="western">This is the service name of the job component.
+				But it must be the real implementation name of this service.
+				Because the service name isn't unambigous and nobody can
+				guarantee which implementation will be used in case the generic
+				job service name is used.</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P CLASS="western">Arguments</P>
+			</TD>
+			<TD WIDTH=13%>
+				<P CLASS="western">[any list]</P>
+			</TD>
+			<TD WIDTH=70%>
+				<P CLASS="western">Every job can use this set to add his own
+				configuration data. Such set provides the possibility to add
+				key-value pairs.</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P CLASS="western">Async</P>
+			</TD>
+			<TD WIDTH=13%>
+				<P CLASS="western">[boolean]</P>
+			</TD>
+			<TD WIDTH=70%>
+				<P CLASS="western">Mark this job as an asynchronous one.<BR>Note:
+				is currently not supported and must be false!</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P CLASS="western"><BR><BR>
+</P>
+<H3 CLASS="western">Notation of a time stamp</H3>
+<P CLASS="western">Used time stamps are realized as special formated
+strings. See following
+notation:<BR>&bdquo;&lt;day&gt;.&lt;month&gt;.&lt;year&gt;/&lt;hour&gt;:&lt;minute&gt;:&lt;seconds&gt;&ldquo;.<BR>E.g.:
+&bdquo;01.01.2002/00:00:01&ldquo;</P>
+<P CLASS="western"><BR><BR>
+</P>
+<H2 CLASS="western">The Event List</H2>
+<P CLASS="western">These list contains all possible trigger events
+and knows which job components are registered for. The event names
+are used as entries inside this list. Every string value is possible
+&ndash; but he must be used inside the office code too. Every entry
+contains a list of strings which describes all registered services
+for this event. These strings are the same like the entries of the
+job list &ndash; not the service names.</P>
+<P CLASS="western"><BR><BR>
+</P>
+<H1 CLASS="western">How it works</H1>
+<P CLASS="western">Some code inside the office detect a special event
+&ndash; e.g. first visible document frame was opened. He creates the
+global job executor service and call him with a string value which
+descibe the event. The executor searches for any registered job
+inside his configuration which is registered for this event and not
+disabled. To check that two time stamps AdminTime and UserTime are
+used. (see before). After creation he queries the job component for
+the required interface and start it. Possible configuration data are
+passed to the job before. The job does his work then and return. At
+this time he must decide if he whish to be active and whish to be
+deactivated for further occurences of this event. He can do that by
+using a special protocol packed inside the returned Any value. A list
+of com.sun.star.beans.NamedValue is required there. Following values
+are supported:</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=44*>
+	<COL WIDTH=58*>
+	<COL WIDTH=154*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=17%>
+				<P CLASS="western">property name</P>
+			</TH>
+			<TH WIDTH=23%>
+				<P CLASS="western">value type</P>
+			</TH>
+			<TH WIDTH=60%>
+				<P CLASS="western">description</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P CLASS="western">Deactivate</P>
+			</TD>
+			<TD WIDTH=23%>
+				<P CLASS="western">[boolean]</P>
+			</TD>
+			<TD WIDTH=60%>
+				<P CLASS="western">Job wish to be deactivated. He should call
+				that after successfull execution,or if something was wrong and
+				couldnt be resolved ...<BR>If this property is set, all other
+				ones are ignored. Because the service can be deregistered by
+				setting the time stamp or be real deletion of hi entries. That
+				depends from the implementation of the exceutor service and can
+				be changed for further versions of it.</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P CLASS="western">SaveArguments</P>
+			</TD>
+			<TD WIDTH=23%>
+				<P CLASS="western">[list of NamedValue]</P>
+			</TD>
+			<TD WIDTH=60%>
+				<P CLASS="western">Job can save his own special arguments back to
+				configuration and mustn't implement it by itself.</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western">Note this</P>
+<P CLASS="western">If a job will be a synchronous one &ndash; he
+shouldn't show any UI during his execution. Because nobody knows the
+time when this job will be triggered and executed. And any UI dialogs
+can produce many trouble if the come at wrong time.</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western">Example</P>
+<P CLASS="western">Following sequence diagram shows an example job
+which is triggered for an &bdquo;event1&ldquo;. He gets his own
+configuration data which includes a &bdquo;count&ldquo; value. The
+job increased and checked it. In case of &bdquo;count==1&ldquo; he
+knows that it was the first execution and he invite the job executor
+to save some configuration data for it &ndash; which means especialy
+the count value. But the job shouldn't be deactivated. If next
+&bdquo;event1&ldquo; is triggered the job is started again and gets
+his count information. He found out that it was the second execution
+and decide to be deactivated from now. He invite the job executor and
+this service deactivate it inside the configuration.</P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western"><IMG SRC="job_executor.gif" NAME="Objekt1" ALIGN=LEFT ><BR CLEAR=LEFT><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

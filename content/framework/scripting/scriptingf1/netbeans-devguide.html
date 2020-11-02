@@ -1,0 +1,265 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>Developing Scripts in NetBeans</title>
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/framework/">framework</a>&nbsp;&raquo;&nbsp;<a href="/framework/scripting/">scripting</a>&nbsp;&raquo;&nbsp;<a href="/framework/scripting/scriptingf1/">scriptingf1</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<a name="top"></a>     
+
+<h1>Developing Scripts in NetBeans</h1>
+         
+This document describes how to set up NetBeans for OpenOffice.org Scripting
+and how to write a simple script using NetBeans. You can download
+the NetBeans IDE from the <a href="http://www.netbeans.org/ide/download.html">
+NetBeans download page</a>.
+
+<h2>Contents:</h2>
+
+<ul>
+<li><p><a href="#prerequisites">Pre-requisites</a>
+<li><p><a href="#recipe-create">Creating a Parcel Recipe</a>
+<li><p><a href="#recipe-actions">Actions available for Parcel Recipes</a>
+<li><p><a href="#parcel-actions">Actions available for Script Parcels</a>
+<li><p><a href="#document-actions">Actions available for OpenOffice.org Documents</a>
+<li><p><a href="#debugging">Debugging Java OpenOffice.org scripts in NetBeans</a>
+<li><p><a href="#troubleshooting">Troubleshooting</a>
+</ul>
+
+<a name="prerequisites"></a>
+<h2>Pre-requisites</h2>
+
+<ul>
+<!-- <li>You need to install the OpenOffice.org API support module for NetBeans which
+can be obtained from
+<a href="http://api.openoffice.org/common/man/IDEintegration/OfficeNetBeansIntegration.html">here</a>.
+This module must be installed in NetBeans if you wish to use the
+OpenOffice.org API in your scripts.
+-->
+
+<li>Install the <a href="./office.jar">OpenOffice.org Scripting module</a>
+To install this module, shutdown NetBeans and copy the office.jar file to
+your &lt;NetBeans installation&gt;/modules directory.
+
+<li>Create a directory somewhere on your machine in which you will develop
+your scripts.
+
+<li><b>Note:</b> The OpenOffice.org Scripting module has been tested with NetBeans 3.4
+</ul>
+
+Now start NetBeans and mount the directory you created using the
+File/Mount Filesystem menu option. You also need to mount the following
+of the jar files in the &lt;OpenOffice.org installation&gt;/program/classes directory
+in order to access the OpenOffice.org API from your scripts:
+<p>
+unoil.jar, ridl.jar, sandbox.jar, jurt.jar, juh.jar
+
+<p>
+<a href="#top">Top</a>
+
+<p>
+<a name="recipe-create"></a>
+<h2>Creating a Parcel Recipe</h2>
+
+OpenOffice.org scripts are delivered in Script Parcels. Like OpenOffice.org documents they
+are zip files. Script Parcels have the .sxp extension. Script Parcels are
+generated from Parcel Recipes where all of the files that are necessary
+to create the parcel are put together. To create a new Parcel Recipe:
+
+<ul>
+<li>Right click on your mounted filesystem
+<li>Select New/Office Scripting/Parcel Recipe
+<li>In the New Wizard window that appears enter a name for your Parcel Recipe
+<li>Select a language for your Parcel Recipe from the Initial Script
+Language dropdown list.
+<li>Click the Finish button to create your Parcel Recipe
+</ul>
+                         
+This will create a new directory with the name you chose. In this directory
+you will find a Contents directory where all of your files will
+be placed. An empty stub file will have been placed in the
+Contents directory and can be used as a starting point for your script.
+
+<p>
+<b>Note:</b> To add further empty stub scripts to your Parcel Recipe, right
+click on the Contents directory and use the New/Office Scripting/Empty Script
+menu item.
+
+<p>
+<a href="#top">Top</a>
+
+<p>
+<a name="recipe-actions"></a>
+<h2>Actions available for Parcel Recipe</h2>
+
+If the user right clicks on the parcel directory they should be
+able to use the following actions:
+
+<ul>
+<li><b>Compile:</b> Compiles all of the .java files in the Parcel Recipe
+
+<li><b>Build:</b> Compiles all of the .java files in the Parcel Recipe.
+It then searches for valid OpenOffice.org scripts in the language you selected
+in the Contents directory files and pops up a dialog
+which allows you to select which Java methods or BeanShell scripts
+you wish to export as OpenOffice.org scripts.
+Once you have finish making your selections, it creates a
+&lt;Parcel Recipe Name&gt;.sxp Script Parcel file in the Parcel
+Recipe directory. You can configure what files are put into the
+Script Parcel using the File Filter property. If you script includes any
+jar files that need to be in the classpath when it is executed you should
+add them to the Classpath property of your Parcel Recipe.
+
+<li><b>Configure:</b> This pops up the Configure dialog, which allows you
+to select what OpenOffice.org scripts to export. Any changes you make in
+this dialog will <b>only</b> appear in your Script Parcel after you run
+Build again.
+</ul>
+<p>
+<a href="#top">Top</a>
+
+<p>
+<a name="parcel-actions"></a>
+<h2>Actions available for Script Parcels</h2>
+
+Script Parcels supports only one action:
+
+<ul>
+<li><b>Deploy:</b> This will deploy the Script Parcel to an OpenOffice.org Document
+or to an OpenOffice.org installation. If the Script Parcel already exists
+in the target, you will be asked whether you want to overwrite.
+</ul>
+
+<p>
+<b>Note:</b> If you deploy a Script Parcel to an OpenOffice.org
+installation you need to use the Tools/Scripting Add-on's/Refresh All Scripts
+menu item for the new script to appear in the Assign Script dialog.
+
+<p>
+<b>Note:</b> You can also deploy to OpenOffice.org documents within NetBeans
+using drag and drop or cut and paste.
+<p>
+<a href="#top">Top</a>
+
+<p>
+<a name="document-actions"></a>
+<h2>Actions available for OpenOffice.org Documents</h2>
+
+OpenOffice.org Documents are also recognised by NetBeans. Any parcels contained
+in the document will be displayed as nodes of the OpenOffice.org document. Deleting
+one of these nodes will remove the Script Parcel from the document. You
+should ensure that the document is not open in OpenOffice.org before deleting
+any parcels it may contain.
+
+OpenOffice.org documents support the standard Delete, Cut and Copy actions and
+the following custom actions:
+
+<ul>
+<li><b>Open:</b> This will open the document in OpenOffice.org using the path
+in the Office Settings property to find the OpenOffice.org installation.
+
+<p>
+If the path to OpenOffice.org is not valid, an error dialog will be popped
+up informing the user that they need to set their Path to Office
+Installation property. This setting can be changed by bringing
+up the Tools/Options dialog and changing
+IDE Configuration/Server and External Tool Settings/Office Settings
+</ul>
+<p>
+<a href="#top">Top</a>
+
+<p>
+<a name="debugging"></a>
+<h2>Debugging Java OpenOffice.org scripts in NetBeans</h2>
+
+<ul>
+<li>Follow the instructions at
+<a href="http://api.openoffice.org/common/man/IDEintegration/OfficeNetBeansIntegration.html#Debugging">
+Debugging Java components in NetBeans/Forte for Java</a>
+to set up your OpenOffice.org installation to allow debugging of the JVM.
+
+<li>Start OpenOffice.org and run one of your Java scripts. This will
+make sure the JVM is running.
+
+<li>Attach to OpenOffice.org JVM using the NetBeans Debug/Start Session/Attach...
+menu option.
+
+<li>Load a script source in NetBeans and set up breakpoints using
+Debug/New Breakpoint... menu option.
+
+<li>Run the script in OpenOffice.org.
+</ul>
+
+<p>
+<b>Note:</b> As the BeanShell scripting language does not support debugging
+it is not possible to debug BeanShell OpenOffice.org scripts from NetBeans. You
+can however use the Interactive BeanShell scripting menu item under the Tools
+menu in OpenOffice.org to test BeanShell code. Just enter any BeanShell code
+and hit the Eval button to execute it.
+<p>
+<a href="#top">Top</a>
+
+<p>
+<a name="troubleshooting"></a>
+<h2>Troubleshooting</h2>
+
+<ul>
+<li><p>If you encounter problems when developing or deploying scripts in
+NetBeans, one thing you can try is to move your NetBeans settings directory
+(.netbeans on UNIX, netbeans in Windows - can be found in your home
+directory) to another name and restart NetBeans.
+
+<li><p>The Choose What to Export as Scripts dialog <b>only</b> displays
+methods which are defined within class files, it will not display
+methods in class files which are within jar files in the Parcel Recipe.
+
+<li><p>If you include package directives in the Java source files of your
+Parcel Recipe, you should ensure that the source files are in the appropriate
+directories for your package directives. This is because the
+default NetBeans compiler implementation does not use the -d switch to the
+Java compiler. As a result class files do not get placed in the appropriate
+directories and methods in these classes will not appear in the
+Choose What to Export as Scripts dialog.
+
+<p>
+There are a couple of workarounds for this problem:
+
+<p>
+<ol>
+<li>Use the <a href="commandline-devguide.html">command line tools</a>
+<li>Set the Target flag in the Tools/Options window under
+Building/Compiler Types/Internal Compilation
+</ol>
+</ul>
+
+<p>
+<a href="#top">Top</a>
+
+<hr>
+Last Modified: Nov 19 2003
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

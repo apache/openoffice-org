@@ -1,0 +1,301 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.9.109  (Win32)">
+	<META NAME="CREATED" CONTENT="20050510;16051600">
+	<META NAME="CHANGEDBY" CONTENT="Sigrid Kronenberger">
+	<META NAME="CHANGED" CONTENT="20050620;21324200">
+	<META NAME="SDENDNOTE" CONTENT="ARABIC">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="de-DE" DIR="LTR">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/porting/">porting</a>&nbsp;&raquo;&nbsp;<a href="/porting/mac/">mac</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1 ALIGN=LEFT><FONT FACE="Arial"><FONT SIZE=4>Installation unter
+Mac-OS</FONT></FONT></H1>
+<DL>
+	<DT><FONT COLOR="#0000ff"><FONT FACE="Arial"><FONT SIZE=4><B>Dieses
+	Anleitung ist noch in Arbeit.</B></FONT></FONT></FONT><DT>
+	<BR>
+</DL>
+<P>Systemanforderungen:</P>
+<P>1.OS 10.3 („Panther“) oder OS 10.4. (Tiger). OpenOffice.org
+l&auml;uft auf allen Systemen, die Panther- bzw. Tigerf&auml;hig
+sind.</P>
+<P>2.Installiertes X11-Paket</P>
+<P><FONT FACE="Bitstream Vera Sans">3.<FONT SIZE=3>Die aktuellen
+Versionen von Eric Hoch (incl. M109) sind <B>mit Einschr&auml;nkungen</B>
+f&uuml;r Tiger (Mac OS X 10.4.x) freigeben – wir arbeiten dran</FONT></FONT></P>
+<UL>
+	<P></P>
+</UL>
+<H1 ALIGN=LEFT><FONT FACE="Arial"><FONT SIZE=4>1Hinweise zur Nutzung
+unter Mac OS X 10.4.x aka Tiger</FONT></FONT></H1>
+<P>Dieser Milestone 109 l&auml;&szlig;t sich ohne gr&ouml;&szlig;ere
+Probleme unter Mac OS X 10.4.x aka Tiger installieren. 
+</P>
+<P>Einschr&auml;nkungen gibt es jedoch bez&uuml;glich der
+Funktionalit&auml;t des mitgelieferten Startskriptes und durch einen
+Bug in Apples X11.</P>
+<H2><FONT FACE="Arial"><FONT SIZE=4>1.1Starten von OpenOffice.org
+unter Mac OS X 10.4.x</FONT></FONT></H2>
+<P>Das mitgelieferte Ooopener l&auml;uft <B>nicht</B> unter Tiger.
+Als Alternativen empfehlen sich:</P>
+<OL>
+	<LI><P>Das alte Begin_OOo (hier einfach die Fehlermeldung
+	ignorieren) 
+	</P>
+	<LI><P>Starten von OpenOffice.org &uuml;ber das Terminal. Dazu gehen
+	Sie wie folgt vor:</P>
+</OL>
+<UL>
+	<LI><P>X11 starten und im erscheinenden xterm folgendes eingeben:</P>
+	<LI><P>cd /Applications/openoffice.org109/programm</P>
+	<LI><P>./soffice</P>
+</UL>
+<H2><FONT FACE="Arial"><FONT SIZE=4>1.2Bug in Apples X11</FONT></FONT></H2>
+<P>Im aktuellen X11 das von Apple mit Mac OS X 10.4.x mitgeliefert
+wird, ist ein Bug der verhindert, dass in OpenOffice.org die
+korrekten Tastenkombinationen ausgef&uuml;hrt werden k&ouml;nnen und
+damit auch die Eingabe des Eurozeichens und des @ Zeichens. Wir
+arbeiten an einem Patch um dieses Problem zu l&ouml;sen.</P>
+<P>M&ouml;gliche Workarounds sind:</P>
+<OL>
+	<LI><P>Einf&uuml;gen-&gt;Sonderzeichen verwenden und dort das
+	gew&uuml;nschte Zeichen ausw&auml;hlen und einf&uuml;gen</P>
+	<LI><P>Anstelle von Alt+L f&uuml;r das @ Zeichen Alt-Crtl-L dr&uuml;cken.
+	F&uuml;r das Eurozeichen funktioniert dies allerdings nicht.</P>
+	<LI><P>Eine .xmodmap verwenden. Die .xmodmap in ihrem
+	Heimverzeichnis (das mit dem H&auml;uschen im Finder) sollte wie
+	folgt aussehen:</P>
+</OL>
+<P>! start</P>
+<P>! this is a comment</P>
+<P>! tip for Mac OSX Tiger and last Apple X11 *only*</P>
+<P>!</P>
+<P>keycode 0x42 = Mode_switch</P>
+<P>clear mod1</P>
+<P>add mod5 = Mode_switch</P>
+<P>! end</P>
+<P>Im Anschluss daran bitte folgendes im Terminal eingeben:</P>
+<P>echo &quot;xmodmap .xmodmap&quot; &gt;&gt; ~/.bashrc</P>
+<P>Zum Erstellen der xmodmap eignet sich jeder Texteditor unter Mac
+OS X. Bitte achten sie beim Abspeichern auf den Punkt <B>vor</B> dem
+Dateinamen. Er sagt, dass es sich um eine Konfigurationsdatei f&uuml;r
+den Unixunterbau von OS X handelt. 
+</P>
+<P><B>Achtung: </B>Es ist m&ouml;glich, da&szlig; die .xmodmap <B>nicht</B>
+funktioniert! Wenden Sie sich in diesem Falle bitte mit Ihrer
+Fehlermeldung an eine der im n&auml;chsten Punkt genannten
+Anlaufstellen.</P>
+<H1 ALIGN=LEFT><FONT FACE="Arial"><FONT SIZE=4>2Melden von Fehlern in
+OpenOffice.org Milestone 109 f&uuml;r Mac OS X</FONT></FONT></H1>
+<P>Sollten Sie Fehler im Milestone 109 finden wenden Sie sich bitte
+an eine der folgenden Mailinglisten:</P>
+<P><A HREF="mailto:dev@porting.openoffice.org">dev@porting.openoffice.org</A>
+– Achtung! Englischsprachig</P>
+<P><A HREF="mailto:dev@de.openoffice.org">dev@de.openoffice.org</A> –
+deutschsprachig</P>
+<P><A HREF="mailto:users@de.openoffice.org">users@de.openoffice.org</A>
+– deutschsprachig</P>
+<P>Bitte geben Sie an welchen Milestone und welches Betriebssystem
+Sie verwenden. Versuchen Sie auch eine m&ouml;glichst detallierte
+Fehlerbeschreibung zu erstellen, dies hilft den Entwicklern dabei,
+den m&ouml;glichen Fehler nachzuvollziehen und erh&ouml;ht die
+Chancen auf schnelle Hilfe. 
+</P>
+<P>Eine deutschsprachige Einf&uuml;hrung zu den Mailinglisten gibt es
+unter <A HREF="http://de.openoffice.org/about-users-mailinglist.html">http://de.openoffice.org/about-users-mailinglist.html</A>
+</P>
+<H1 ALIGN=LEFT><FONT FACE="Arial"><FONT SIZE=4>4.Die Installation</FONT></FONT></H1>
+<H2><FONT FACE="Arial"><FONT SIZE=4>2.1Installationsdateien
+&uuml;berpr&uuml;fen</FONT></FONT></H2>
+<P>Es empfiehlt sich immer, die heruntergeladenen
+Installationsdateien zu &uuml;berpr&uuml;fen um Probleme, die auf
+fehlerhaften Dateien beruhen, auszuschlie&szlig;en. Das OOo-Projekt
+ver&ouml;ffentlicht im Rahmen der Qualit&auml;tssicherung hierf&uuml;r
+die entsprechenden MD5-Pr&uuml;fsummen f&uuml;r die
+Installationsarchive. Diese sind unter
+<A HREF="http://de.openoffice.org/md5sums.txt">http://de.openoffice.org/md5sums.txt</A>
+erh&auml;ltlich. Allgemeine Hinweise finden Sie unter
+<A HREF="http://de.openoffice.org/downloads/hinweise.html">http://de.openoffice.org/downloads/hinweise.html</A>.</P>
+<UL>
+	<LI><P>Die MD5-Pr&uuml;fsumme wird direkt mit Hilfe der
+	Kommandozeile (Dienstprogramme/Terminal) ermittelt: Hinter dem
+	Eingabeprompt den Befehl „md5“ und ein Leerzeichen angeben und
+	dann den Pfad zu der zu pr&uuml;fenden Datei eintippen. 
+	</P>
+	<LI><P>Am einfachsten geht das, wenn man nach dem Tippen des
+	Leerzeichens das Datei-Icon auf das Konsolenfenster zieht – dann
+	wird der volle Pfadname automatisch eingetragen.<BR>	<TT><FONT FACE="Cumberland"><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT SIZE=1>MeinMac:~user$</FONT>
+	</FONT></SPAN></FONT></TT><CODE><FONT FACE="Cumberland"><FONT SIZE=1><FONT FACE="Cumberland"><FONT COLOR="#000000">md5
+	/User/users/Documents/Open....</FONT></FONT></FONT></FONT></CODE></P>
+	<LI><P>Return dr&uuml;cken und einen Moment warten – es kommt dann
+	sowas wie:</P>
+</UL>
+<P ALIGN=LEFT><CODE><FONT FACE="Cumberland"><FONT SIZE=1><FONT FACE="Cumberland"><FONT COLOR="#000000">	MD5
+(/Hier/steht/der/Pfad/zum/Dokument/wie/oben) =
+437772942858aa871df75022c19217a4</FONT></FONT></FONT></FONT></CODE></P>
+<UL>
+	<LI><P>Vergleichen Sie die<SPAN LANG="de-DE"> angezeigte Pr&uuml;fsumme
+	mit der f&uuml;r dieses Archiv g&uuml;ltigen und ver&ouml;ffentlichten
+	Pr&uuml;fsumme. Sollte keine &Uuml;bereinstimmung bestehen, ist das
+	Archiv besch&auml;digt und sollte keinesfalls verwendet werden!</SPAN></P>
+</UL>
+<P>In der Apple OS X - Online-Hilfe ist eine andere Methode
+dargestellt: Demnach kann die MD5-Summe auch mit dem
+Festplatten-Dienstprogramm, (in &quot;Programme/Dienstprogramme&quot;)
+gepr&uuml;ft werden. Dazu muss als erstes das Disk-Image (die
+*.dmg-Datei) durch einen Doppelklick aktiviert werden. Starten Sie
+dann das Festplatten-Dienstprogramm, markieren Sie das Image und
+w&auml;hlen Sie dann &quot;Images&quot; &gt; &quot;Pr&uuml;fsumme&quot;
+&gt; &quot;UDIF-MD5&quot;. Daraufhin wird in einem extra Fenster die
+Pr&uuml;fsumme berechnet und angezeigt. 
+</P>
+<P>Die berechnete Pr&uuml;fsumme wird auch im Protokoll des
+Festplatten-Dienstprogramms gespeichert. Um das Protokoll anzusehen,
+&ouml;ffnen Sie das Programm &quot;Konsole&quot; im Ordner
+&quot;Programme/Dienstprogramme&quot;. Klicken Sie in &quot;Protokolle&quot;
+und suchen Sie nach dem Protokoll &quot;DiskUtility.log&quot;. Dort
+k&ouml;nnen Sie die Pr&uuml;fsumme auch sp&auml;ter noch nachschauen.
+</P>
+<P><B>Leider f&uuml;hrt diese Methode zu anderen Pr&uuml;fsummen als
+die mit dem Kommandozeilen-Befehl. Die so ermittelten Pr&uuml;fsummen
+stimmen nicht mit den ver&ouml;ffentlichten &uuml;berein – sie
+k&ouml;nnen nicht zur Verifizierung verwendet werden!</B></P>
+<H2><FONT FACE="Arial"><FONT SIZE=4>2.2X11 installieren</FONT></FONT></H2>
+<DL>
+	<DT>X11 muss <B>vor</B> der Installation von OpenOffice.org
+	unbedingt installiert werden. Es wird empfohlen, das Apple-eigene
+	X11 zu verwenden, aber auch andere X11 Versionen, beispielsweise von
+	Xfree86 oder X.org, sind m&ouml;glich. 
+</DL>
+<P>Am einfachsten ist es, X11 schon bei der Installation des Systems
+mit zu installieren – dazu muss „Angepasste Installation“
+gew&auml;hlt und dort ein H&auml;kchen bei „X11“ gemacht werden.</P>
+<P>Nachtr&auml;glich kann man X11 auch installieren: In der Regel ist
+es auf der Installations-CD 3 im Ordner „Packages“ – dort ist
+es das das Paket X11User.pkg, das mit einem Doppelklick installiert
+werden kann.</P>
+<P>Sie finden den Download f&uuml;r Apples mit Mac OS X 10.3.x
+kompatible X11 unter
+<A HREF="http://www.apple.com/downloads/macosx/apple/x11formacosx.html">http://www.apple.com/downloads/macosx/apple/x11formacosx.html</A>.
+Ein zu Mac OS X 10.4 kompatibles X11 von Apple steht noch nicht zum
+separaten Download bereit.</P>
+<P>Wenn X11 installiert ist, sollte sich in
+„Progamme/Dienstprogramme“ ein Programm namens X11 befinden.
+OpenOffice.org bzw. das Startskript startet es automatisch, man muss
+also weiter nichts tun – es muss nur da sein.</P>
+<H2><FONT FACE="Arial"><FONT SIZE=4>2.3OpenOffice.org installieren</FONT></FONT></H2>
+<P>Ein Doppelklick auf die heruntergeladene Datei aktiviert das Paket
+als neues Volume – jetzt kann die Pr&uuml;fsumme gecheckt und dann
+mit Doppelklick auf die darin enthaltene *.mpk-Datei der
+Installationsvorgang gestartet werden.</P>
+<P>Der Ablauf ist wie bei jeder anderen Softwareinstallation auch:
+Lizenz best&auml;tigen, Admin-Passwort eingeben usw. 
+</P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P>... die Installation startet und Sie sehen den
+Begr&uuml;&szlig;ungsbildschirm des Installationsassistenten, klicken
+Sie auf <FONT FACE="Arial"><FONT SIZE=3><B> Weiter &gt; </B></FONT></FONT>
+…</P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P>...nun haben Sie die Auswahl was Sie konkret installieren m&ouml;chten.
+Normalerweise k&ouml;nnen Sie die vorhandene Voreinstellung
+<CITE>„Vervollst&auml;ndigen“</CITE> beibehalten. &Uuml;berspringen
+Sie in diesem Fall den folgenden Hinweis, und klicken Sie im Dialog
+gleich auf <FONT FACE="Arial"><FONT SIZE=3><B>Weiter &gt;</B></FONT></FONT>
+...</P>
+<P><B>Hinweis:</B></P>
+<P>Nur falls Sie selbst auf den Umfang der Installation Einflu&szlig;
+nehmen wollen aktivieren Sie die Option <CITE>„Anpassen“</CITE>.
+Damit gelangen Sie zu folgendem Dialog wo Sie die entsprechenden
+Einstellungen vornehmen k&ouml;nnen.</P>
+<P ALIGN=CENTER> --</P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER>Screenshot 3</P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER>  --</P>
+<P>Hier kann man die zus&auml;tzliche Installation der Testskripte
+f&uuml;r die sog. „Smoketestst“ veranlassen – f&uuml;r alle,
+die die automatisierten Standardtests der OpenOffice.org-QA mal
+laufen lassen wollen. Standardm&auml;&szlig;ig werden diese Tests
+nicht mit installiert.</P>
+<P>Klicken Sie danach ebenfalls auf <FONT FACE="Arial"><FONT SIZE=3><B>Weiter
+&gt;</B></FONT></FONT>.</P>
+<P>Nun startet die Installation auf das  ausgew&auml;hlte Volume.</P>
+<H1 ALIGN=LEFT><FONT FACE="Arial"><FONT SIZE=4>5.Update einer
+bestehenden 1.x – Version</FONT></FONT></H1>
+<P>Beim ersten Start der Software haben Sie die M&ouml;glichkeit die
+bestehenden <B>Benutzereinstellungen</B> aus Ihrer vorhandenen
+Version in die neue Version von OpenOffice.org zu <B>&uuml;bernehmen</B>.
+N&auml;heres dazu in Kapitel 6 des ausf&uuml;hrlicheren
+Installationshandbuches.</P>
+<P>Anschlie&szlig;end k&ouml;nnen Sie die &auml;ltere Version
+wahlweise normal deinstallieren oder als Parallelinstallation
+beibehalten. 
+</P>
+<P>Das Beibehalten einer Parallelinstallation verursacht bis auf die
+Belegung von Festplattenspeicher keine Nachteile und kann beim
+&Uuml;bergang von 1.x auf 2.x auch deshalb empfohlen werden, weil es
+so m&ouml;glich ist, notwendige &Uuml;berarbeitungen von Dokumenten
+wahlweise in der alten oder neuen Version vorzunehmen. Beachten Sie
+beispielweise, dass, wenn Sie selbst Makros in einer 1.x-Version
+erstellt haben, diese m&ouml;glicherweise einer &Uuml;berarbeitung
+bed&uuml;rfen.<A CLASS="sdfootnoteanc" NAME="sdfootnote1anc" HREF="#sdfootnote1sym"><SUP>1</SUP></A></P>
+<H1 ALIGN=LEFT><FONT FACE="Arial"><FONT SIZE=4>3OpenOffice.org ohne
+X11 – NeoOffice/J</FONT></FONT></H1>
+<P>Neben der „offiziellen“ Mac-Version, die von den deutschen
+Projektseiten heruntergeladen werden kann, gibt es auch eine
+wesentlich besser an den Mac angepasste Version von Ed Peterlin und
+Patrick Luby: NeoOffice/J. 
+</P>
+<P>Diese ben&ouml;tigt kein X11, benutzt die Aqua-Oberfl&auml;che,
+hat Zugriff auf alle Fonts und verwendet die Apple-nativen
+Druckerdialoge (und bietet somit alle Druckoptionen an). 
+</P>
+<P>So viele tolle Eigenschaften haben ihren Preis: Zum einen basiert
+die Oberfl&auml;che komplett auf Java, ben&ouml;tigt also wesentlich
+mehr Hardwareressourcen; zum anderen existiert bisher nur eine
+Version 1.1.4 Beta davon – ob und wann es &uuml;berhaupt eine auf
+OpenOffice.org 2.0 basierende Version geben wird, steht in den
+Sternen und h&auml;ngt ganz wesentlich von der (auch finanziellen)
+Unterst&uuml;tzung f&uuml;r die Programmierer – und nicht zuletzt
+auch der Verf&uuml;gbarkeit einer fehlerfreien X11-Version von
+OpenOffice.org 2.0 ab, da diese die Grundlage f&uuml;r NeoOffice
+darstellt.</P>
+<P>N&auml;heres dazu auf www.neooffice.org</P>
+<DIV ID="sdfootnote1">
+	<P><FONT SIZE=2><A CLASS="sdfootnotesym" NAME="sdfootnote1sym" HREF="#sdfootnote1anc">1</A>Keine
+	Sorge, Sie m&uuml;ssen sich nicht v&ouml;llig neu einarbeiten, aber
+	es gibt einige Unterschiede was hier nicht verschwiegen werden soll.
+	</FONT>
+</DIV>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

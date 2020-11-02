@@ -1,0 +1,231 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 7  (Win32)">
+	<META NAME="CREATED" CONTENT="20040628;10483376">
+	<META NAME="CHANGED" CONTENT="20040628;14315971">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="de-DE" DIR="LTR">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/installation/">installation</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<P><FONT SIZE=5><B>HowTo create native installation sets for
+OpenOffice.org 2.x<BR></B></FONT><BR><BR>
+</P>
+<P>by <A HREF="mailto:is@openoffice.org">Ingo Schmidt</A></P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4><BR>Introduction:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">This HowTo describes the necessary
+steps to create native installation sets for OpenOffice.org 2.0. This
+includes Windows Installer for the Windows platform, RPMs for Linux
+and Solaris-packages for Solaris. Because of the usage of EPM is will
+also be possible to create native installation sets for all operating
+systems supported by EPM. In the current EPM version 3.7 this are:
+AIX, FreeBSD, NetBSD, OpenBSD, HP-UX, Debian software distribution,
+IRIX, MacOS X. The currently available process is adapted to Windows,
+Linux and Solaris. Therefore it might be necessary to make some
+changes in the new packaging process for the other platforms. The
+installation sets are created in the new cvs module
+&bdquo;instsetoo_native&ldquo;, but it is also still possible to
+create installation sets using the old setup application in the cvs
+module &bdquo;instsetoo&ldquo;. But in the near future we want to
+remove the module &bdquo;instsetoo&ldquo; and with it the old setup
+application located in the cvs module &bdquo;setup2&ldquo;</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The packaging program:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">New CVS modules were introduced for the
+usage of native installer. This are &bdquo;setup_native&ldquo; and
+&bdquo;instsetoo_native&ldquo;. Additionally the packaging program
+was added to the &bdquo;solenv&ldquo; module. 
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><U>&bdquo;solenv&ldquo;</U>: The new
+packaging program is completely Perl based. You find it in
+solenv/bin. The main program is called &bdquo;make_installer.pl&ldquo;.
+It uses all the Perl submodules located in
+solenv/bin/modules/installer.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><U>&bdquo;setup_native&ldquo;</U>: This
+new cvs module contains at the moment the Windows Installer custom
+actions, that are executed during the installation process.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><U>&bdquo;instsetoo_native&ldquo;</U><SPAN STYLE="text-decoration: none">:
+This is the new packaging module. In the output tree of
+&bdquo;instsetoo_native&ldquo; the installation sets are created. You
+will find there also a preregistered services.rdb, many unpacked zip
+files, logging files and many files more. Therefore you need
+sufficient disc space for the &bdquo;instsetoo_native&ldquo;
+directory. This shows that the new packaging process includes much
+functionality, that was included in our old setup application, but is
+not supported by the native installers. Therefore is also takes more
+time to create the native installation sets, but we are still trying
+to optimize this process.</SPAN></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>The packaging process:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Included in the new packaging process
+are different Perl programs, that create the native installation sets
+based on the information stored in our platform independent
+installation set description language &bdquo;scp&ldquo;. Files,
+directories, and many things more are described in the cvs module
+&bdquo;scp2&ldquo;. Based on these files, a platform and product
+specific setup script is created, which is then used by the new
+packaging process to create the native installation sets. The
+different processes are shown in the following graphic:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="pics/how_to_create_native_installer.gif" NAME="Grafik1" ALIGN=LEFT WIDTH=571 HEIGHT=408 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Prerequisites:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">For the new native packaging process,
+new prerequisites are needed. Especially there are different
+prerequisites for the Windows OS and the non-Windows OS:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><U>Windows</U>: For creating
+successfully Windows Installer installation sets it is needed, that
+you have installed the Windows Plattform SDK with Windows Installer
+SDK, Version February 2003. This is available at
+<A HREF="http://www.microsoft.com/msdownload/platformsdk/sdkupdate/">http://www.microsoft.com/msdownload/platformsdk/sdkupdate/</A>
+.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The two Windows Installer files
+instmsia.exe and instmsiw.exe (non-Unicode and Unicode version of the
+Windows Installer service) have also to be downloaded from the
+Microsoft homepage. For the packaging process they have to be located
+in the directory &bdquo;instsetoo_native/inc_openoffice/windows/msifiles&ldquo;.
+This will probably change in the near future.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><U>Non-Windows</U>:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">For the non-Windows platforms it is
+essential, that you have installed EPM, v. 3.7 on your system. You
+can download it from <A HREF="http://www.easysw.com/epm/">http://www.easysw.com/epm/</A></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Using EPM for Linux or Solaris we
+approve the usage of a patch, that can be downloaded <A HREF="epm-3.7.patch">here</A>.
+This patch fixes the following problems:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The RPMs or Solaris packages are
+relocatable. This means, that the administrator can change the
+OpenOffice.org installation directory. Non relocatable RPMs or
+Solaris packages are always installed at a fixed place in the
+directory system. In the version 4.0 of EPM it is planned, to make
+the packages relocatable, then this patch becomes superfluous.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">A second problem occurs only on Linux
+and is caused by some dependency problems of the OpenOffice.org
+libraries. Without the patch the OpenOffice.org core RPM can only be
+installed with the parameter &bdquo;--nodeps&ldquo;. If you use the
+patch, you can simply install &bdquo;rpm -i
+openoffice-core-680-1.i586.rpm&ldquo;.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Using Solaris 8 and Solaris 9 maximum
+package name contains 9 characters. Because this is not sufficient
+for for the different OpenOffice.org packages, we decided to make use
+of Bug 4025718, which introduces the maximum of 25 characters for a
+package name. This requires that the following patches are installed
+on Solaris systems:</P>
+<P STYLE="margin-bottom: 0cm"><BR>The longer packages names we
+introduce by Bug 4025718. <BR>If your building packages on Solaris 8
+you need patches: <BR>110934-12 (sparc) &amp; 110935-12 (x86) <BR>If
+your building packages on Solaris 9 you need patches: <BR>113713-03
+(sparc) &amp; 114568-02 (x86) 
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT SIZE=4>Installation of native
+installation sets:</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><U>Windows:</U> The installation set is
+located in the directory
+instsetoo_native/wntmsci10.pro/OpenOffice/install . You find there an
+executable &bdquo;setup.exe&ldquo;, which you can simply start. Then
+you get the well-known Windows Installer GUI that will guide you
+through the installation process. The OpenOffice.org can only be
+removed with the &bdquo;Add-Remove-Software-Applet&ldquo;, that is
+located in the Control Panel.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P><U>Linux</U>: The installation set is located in the directory
+instsetoo_native/unxlngi5.pro/OpenOffice/install . You find there
+different RPMs belonging to the installation set. You can decide
+wheter you want to install all of them or only parts. The names of
+the RPMs are not fix yet. First of all you have to install the core
+RPM openoffice-core-680-1.i586.rpm. All other RPMs have a dependency
+to this core package. For installing a RPM you need to have root
+priviliges. Than you can simply install it by :</P>
+<P>rpm -i openoffice-core-680-1.i586.rpm --prefix=/opt/myOOOdir
+(relocatable with the optional parameter --prefix) 
+</P>
+<P>Without using the EPM patch, you also have to use the parameter
+&bdquo;--nodeps&ldquo;.</P>
+<P>You can remove the RPM with the command (this is also system
+dependent)</P>
+<P>rpm -e openoffice-core-680-1.i586.rpm</P>
+<P><U>Solaris</U>: The installation set is located in the directory
+instsetoo_native/unxsols4.pro/OpenOffice/install
+(instsetoo_native/unxsoli4.pro/OpenOffice/install for Solaris x86) .
+You find there different Solaris packages belonging to the
+installation set. You can decide wheter you want to install all of
+them or only parts. The names of the packages are not fix yet. First
+of all you have to install the core package OOOopenoffice-core. All
+other packages have a dependency to this core package. For installing
+a Solaris package you need to have root priviliges. Than you can
+simply install it by :</P>
+<P>pkgadd -a adminfile.txt -d . OOOopenoffice-core (relocatable with
+the optional admin file (parameter -a) in which
+&quot;basedir=/opt/myOOOdir&quot; has to be defined) 
+</P>
+<P>You can remove the Solaris package with the command:</P>
+<P>pkgrm OOOopenoffice-core</P>
+<P><BR><BR>
+</P>
+<P>And now have fun with the native installer :-)</P>
+<P><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

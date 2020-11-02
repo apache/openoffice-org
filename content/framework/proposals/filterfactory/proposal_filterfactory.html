@@ -1,0 +1,142 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="CREATED" CONTENT="20020116;12484000">
+	<META NAME="CHANGED" CONTENT="20020215;8401975">
+	<STYLE>
+	<!--
+		@page { margin: 2cm }
+		P { margin-bottom: 0.21cm }
+		H1 { margin-bottom: 0.21cm }
+		H1.western { font-family: "Albany", sans-serif; font-size: 16pt }
+		H1.cjk { font-size: 16pt }
+		H1.ctl { font-size: 16pt }
+		H2 { margin-bottom: 0.21cm }
+		H2.western { font-family: "Albany", sans-serif; font-size: 14pt; font-style: italic }
+		H2.cjk { font-size: 14pt; font-style: italic }
+		H2.ctl { font-size: 14pt; font-style: italic }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="de-DE">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/framework/">framework</a>&nbsp;&raquo;&nbsp;<a href="/framework/proposals/">proposals</a>&nbsp;&raquo;&nbsp;<a href="/framework/proposals/filterfactory/">filterfactory</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1 CLASS="western">Proposal: Searching and creating filters (3)</H1>
+<H2 CLASS="western" ALIGN=JUSTIFY>Problem</H2>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><FONT COLOR="#000000"><SPAN STYLE="background: transparent">Our
+current mechanism to <SPAN STYLE="font-weight: medium">search</SPAN>
+and create filters which are registered for types is not really
+understandable for api user. This proposal describes a better (but
+incompatible) way to make it easier.</SPAN></FONT></P>
+<H2 CLASS="western">Changes</H2>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><FONT COLOR="#000000"><SPAN STYLE="background: transparent">Please
+see the follow list corresponding with the graphic below to get all
+information.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><BR>
+</P>
+<OL>
+	<LI><P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><B>com.sun.star.container.XNameAccess</B><A HREF="http://com.sun.star.container.XNameAccess/"><SPAN STYLE="background: transparent"><U><FONT COLOR="#000000"><BR></FONT></U></SPAN></A><B><FONT COLOR="#008000">(unchanged)</FONT></B><A HREF="file:///X:/as/proposal/com.sun.star.container.XNameAccess"><SPAN STYLE="background: transparent"><U><FONT COLOR="#000000"><BR></FONT></U></SPAN></A><SPAN STYLE="background: transparent"><FONT COLOR="#000000">Use
+	it for a low level read/write access to pure filter configuration in
+	the same manner as now. The interface works with internal filter
+	names only and supports set/get filter properties.</FONT></SPAN></P>
+	<LI><P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><B>draft.com.sun.star.container.XContainerQuery</B><A HREF="http://draft.com.sun.star.util.XSimpleQuery/"><SPAN STYLE="background: transparent"><FONT COLOR="#000000"><BR></FONT></SPAN></A><B><FONT COLOR="#b3b300">(draft)</FONT></B><A HREF="http://draft.com.sun.star.util.XSimpleQuery/"><SPAN STYLE="background: transparent"><BR></SPAN></A>Use
+	it to search/group filters by special parameters. Returned
+	enumeration contains filters wich match your search parameters. They
+	are represented by flat data structures as Sequence&lt;PropertyValue&gt;
+	including all properties of them. So it's not neccessary to use
+	XNameAccess again to get the properties. Internal name of filters
+	will be a part of returned data structures too and can be used on
+	interface XMultiServiceFactory to create the filter objects.</P>
+	<LI><P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><B>com.sun.star.lang.XMultiServiceFactory</B><A HREF="http://com.sun.star.lang.XMultiServiceFactory/"><SPAN STYLE="background: transparent"><FONT COLOR="#000000"><BR></FONT></SPAN></A><B><FONT COLOR="#800000">(changed)</FONT></B></P>
+</OL>
+<UL>
+	<LI><P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><FONT COLOR="#000000"><SPAN STYLE="background: transparent"><I>old</I><BR>The
+	method &bdquo;createInstance()&ldquo; called with an internal filter
+	name wasn't supported. Same method called with an internal type name
+	searched for any suitable (registered default) filter in the
+	configuration and returned a created filter object.<BR>The method
+	&bdquo;createInstanceWithArguments()&ldquo; does the same as
+	&bdquo;createInstance()&ldquo;. The optional argument &bdquo;FilterName&ldquo;
+	suppresses the search and create the specified filter object by name
+	directly.</SPAN></FONT></P>
+	<LI><P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><FONT COLOR="#000000"><I>new</I><BR>Both
+	methods of this interface create filter objects by internal name
+	only. There exist no optional search mechanism any longer. The
+	return value is the created filter object, initialized with his own
+	configuration data by calling
+	&bdquo;XInitialization::initialize()&ldquo;.<BR>Format of
+	initialization data:<BR>Sequence&lt;Any&gt;[0]     = filter config
+	data as Sequence&lt;PropertyValue&gt;<BR>Sequence&lt;Any&gt;[1..n] =
+	optional arguments of &bdquo;createInstanceWithArguments()&ldquo;<BR>
+	directly</FONT></SPAN></P>
+</UL>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P ALIGN=JUSTIFY><IMG SRC="filterfactory.gif" NAME="Objekt1" ALIGN=LEFT><BR CLEAR=LEFT><BR><BR>
+</P>
+<H2 CLASS="western" ALIGN=JUSTIFY>Consequences</H2>
+<OL>
+	<LI><P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><FONT COLOR="#000000"><SPAN STYLE="background: transparent"><I>XMultiServiceFactory</I>
+	methods doesn't support the creation of filters using internal type
+	names any longer.</SPAN></FONT></P>
+	<LI><P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><FONT COLOR="#000000"><SPAN STYLE="background: transparent">This
+	should be a part of new interface <I>XContainerQuery</I>. Please
+	have a look on
+	<A HREF="http://api.openoffice.org/source/browse/api/udkapi/com/sun/star/container/XContainerQuery.idl">http://api.openoffice.org/source/browse/api/udkapi/com/sun/star/container/XContainerQuery.idl</A>
+	too, to get more information about the generic functionality of this
+	interface.</SPAN></FONT></P>
+	<LI><P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><FONT COLOR="#000000"><SPAN STYLE="background: transparent">Filter
+	implementations must support <I>XInitialization</I> to get her own
+	configuration data and optional arguments of
+	<I>XMultiServiceFactory::createInstanceWithArguments()</I>.</SPAN></FONT></P>
+	<LI><P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><FONT COLOR="#000000"><SPAN STYLE="background: transparent">They
+	can implement <I>XNamed()</I> to identify herself. User of a filter
+	object can use returned internal name on service FilterFactory to
+	get more information about it.<BR>&bdquo;getName()&ldquo; must
+	return the internal name of the filter<BR>&bdquo;setName()&ldquo;
+	can be ignored or should be used to rename the filter inside the
+	configuration by using mechanism of service FilterFactory.<BR>=&gt;
+	Discussion: Should it be allowed to rename a filter during
+	runtime?<BR>=&gt; I would say: &bdquo;NO&ldquo;! Nobody can support
+	a right error handling for name clashes if a filter with same name
+	already exist. This functionality should be a part of the setup or
+	an administration process.</SPAN></FONT></P>
+</OL>
+<H2 CLASS="western" ALIGN=JUSTIFY>Example</H2>
+<P ALIGN=JUSTIFY>Follow sequence diagram should show creation of a
+suitable (default) filter for a detected type. First the user try to
+get the internal filter name by using <I>XContainerQuery</I>
+interface with the internal type name and some optional search
+parameters. The returned filter name can be used on another interface
+<I>XMultiServiceFactory</I> to create the filter object directly.
+Filter will be created and initialized (by calling
+<I>XInitialization::initialize())</I> with his own configuration data
+by used FilterFactory.</P>
+<P ALIGN=JUSTIFY><IMG SRC="seq_create_filter.gif" NAME="Objekt2" ALIGN=LEFT><BR CLEAR=LEFT><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
