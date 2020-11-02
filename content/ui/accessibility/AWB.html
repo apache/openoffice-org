@@ -1,0 +1,154 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ui/">ui</a>&nbsp;&raquo;&nbsp;<a href="/ui/accessibility/">accessibility</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h2>Accessibility Work Bench</h2>
+<em>A test tool for the UNO Accessibility API</em><br><br>
+<em>Last changed on April 25th 2003</em>
+
+
+<h3>Introduction</h3>
+
+<p>The Accessibility Work Bench, or AWB for short, is a tool for testing the
+accessibility implementation of OpenOffice/StarOffice that uses the UNO
+Accessibility API (UAA) directly.  There are other tools that use the Java
+Accessibility API (JAA).  The AWB is implemented in Java.  Its purpose is to give
+developers of the UAA a tool to aid them in testing and debugging their
+implementation.</p> 
+
+<h3>Latest Version is 1.7</h3>
+The current version is 1.7.  The CVS tag is v1_7.  Changes since the last
+version are:
+<ul>
+<li>Integrated move of UAA files from drafts to final.</li>
+<li>Control left click in the graphical view expands the object that has
+  been clicked at.</li>
+
+<li>Introduction of split panes for easily changing the size of the three
+main widgets.</li>
+
+<li>The graphical view visualizes the screen size.</li>
+
+<li>Removed the "Load" button.</li>
+<li>Removed the status line.</li>
+<li>New "views" menu that allows you to select the zoom scale of the
+  graphical view.</li>
+<li>New "help" menu gives access to some (hopefully) helpful information.</li>
+</ul>
+
+<h3>Start Up</h3>
+<p>First be sure to compile the java source code by simply calling dmake.
+Before you start the AWB make sure that you have an Office running that
+accepts connections from outside.  Start the Office like <br>
+<nobr><code>soffice
+        "-accept=socket,host=localhost,port=5678;urp;"</code>.</nobr><br>
+If you are unhappy with the port number you can change that but remember to
+tell the AWB of this.  There are two ways to start the AWB:
+<ol>
+<li>From a solar environment just call <code>dmake run</code>.</li>
+<li>Otherwise you have to specify the place of all necessary jar files with <code>java
+-classpath
+.:&lt;path-to-jar-files&gt;/unoil.jar:&lt;path-to-jar-files&gt;/sandbox.jar:&lt;path-to-jar-files&gt;/ridl.jar:&lt;path-to-jar-files&gt;/jurt.jar:&lt;path-to-jar-files&gt;/juh.jar:&lt;path-to-jar-files&gt;/java_uno.jar
+
+AccessibilityWorkBench</code> where &lt;path-to-jar-files&gt; has to be
+replaced with the name of the path where the jar file live.  So, if you an
+office installed at <code>/home/af/office</code> then the command line is <code>java -classpath .:/home/af/office/program/classes/unoil.jar:/home/af/office/program/classes/sandbox.jar:/home/af/office/program/classes/ridl.jar:/home/af/office/program/classes/jurt.jar:/home/af/office/program/classes/juh.jar:/home/af/office/program/classes/java_uno.jar AccessibilityWorkBench</code>.
+</li>
+</ol>
+</p>
+
+<p>The AWB understands one option:
+<ul>
+<li>-p &lt;port-number&gt; changes the port number at which the AWB tries to
+  connect to the Office.  It defaults to 5678.</li>
+</ul>
+</p>
+
+
+<h3>Graphical User Interface</h3>
+<img src="awb.png" title="Screenshot of the AWB at work">
+<p>The (somewhat outdated) image shows a screenshot of the AWB displaying the accessibility
+information of a char document.  The most important parts of the AWB
+GUI are:
+<ul>
+<li>The tree view on the left side displays the accessibility tree.  The
+nodes on the second level represent the document windows of the Office.
+Nodes on higher levels represent parts of these documents.  Double left clicking on
+a tree node expands it.  This may take a while because the tool reads
+information about each new child node from the Office.  Leafs of the tree
+show information about details of the various UAA interfaces. Single left
+clicks on an internal node highlights the corresponding graphical
+representation.  Right (OS dependant) clicking on a node pops up a context
+sensitive menu that allows you to expand the subtree (all nodes or just the
+shapes) or to do other, context dependant, things.</li>
+<li>The graphical view of the accessibility objects is located on the right
+side of the tree view.  The objects are shown with their bounding boxes
+outlined or filled with the colors derived from the
+XAccessibleExtendedComponent interface.  If that is not supported default
+colors are used.  An object is drawn filled if it contains no children and
+draw as a rectangle when it does.  Holding the shift key while moving the
+mouse highlights the object the mouse pointer is over.  Also the
+corresponding node in the tree view is selected.  The same is done for a
+left click (without a modifier.)  Name and description are shown if not
+deselected in the option menu.</li>
+<li>Into the output area below the graphical view various messages are
+printed indicating success or failure of certain operations or that give
+feedback during longer operations.  If for instance no Office can be found
+to which the AWB can connect it says so in this area and prints the command
+line argument that you can use to start the Office in a way that allows
+connection to the AWB.</li>
+<li>The status line below the text and the graphical view shows temporary
+messages indicating what goes on in the AWB.</li>
+<li>The button bar at the bottom contains the following buttons:
+<ul>
+<li><b>Connect</b> connects to an Office that has been started after the
+AWB.  A connection with an already running Office is established
+automatically at start up time.</li>
+<li><b>Update</b> Clears tree view and graphical view and re-reads the
+visible document windows.  Use this button after loading a new document into
+the Office to tell the AWB of it.</li>
+<li><b>Expand Shapes</b> expands all nodes in the tree view that represent
+  draw shapes.  Use the context menu to expand shapes more selectively.</li>
+<li><b>Expand All</b> expands all nodes in the tree view.  Use the context
+  menu to expand nodes more selectively.</li>
+<li><b>Quit</b> exits from the AWB without asking for confirmation.</li>
+</ul></li>
+</ul></p>
+
+<p>For up-to-date information please refer to the help text that is
+  accessible through the Help-&gt;Help menu item.</p>
+
+<h3>Download</h3>
+The source code of the AWB is located in the test/accessibility directory of
+the toolkit project. You have to do a checkout from the CVS repository with
+a command like <code>cvs checkout toolkit/test/accessibility</code> after
+setting up the proper CVS server and logging in to it.  Use a tag like v1_7
+to check out a specific version.  You can browse it <a 
+href="http://ui.openoffice.org/source/browse/toolkit/test/accessibility/"
+title="Browse the AWB source code">here</a>.
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

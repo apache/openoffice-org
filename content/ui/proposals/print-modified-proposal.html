@@ -1,0 +1,201 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Lutz H&ouml;ger">
+	<META NAME="CREATED" CONTENT="20010921;13214600">
+	<META NAME="CHANGEDBY" CONTENT="Oliver Specht">
+	<META NAME="CHANGED" CONTENT="20010921;13422999">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm; margin: 2cm }
+		P { margin-bottom: 0.21cm; font-family: "SunSerif-Regular" }
+		H1 { margin-bottom: 0.21cm; font-family: "SunSans-Heavy"; font-size: 16pt; font-weight: medium }
+		H2 { margin-bottom: 0.21cm; font-family: "SunSans-Heavy"; font-size: 14pt; font-style: normal; font-weight: medium }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ui/">ui</a>&nbsp;&raquo;&nbsp;<a href="/ui/proposals/">proposals</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<P ALIGN=CENTER STYLE="margin-top: 0.42cm; font-weight: medium; page-break-after: avoid">
+<FONT FACE="SunSans-Heavy"><FONT SIZE=5>Printing and The &quot;document
+modified&quot; Status</FONT></FONT></P>
+<P ALIGN=CENTER STYLE="margin-top: 0.42cm; font-style: normal; page-break-after: avoid">
+<FONT FACE="SunSans-Demi"><FONT SIZE=4>Specification Proposal<BR>Lutz
+H&ouml;ger, Matthias Breuer, 09/21/2001</FONT></FONT></P>
+<H1>Problem</H1>
+<P>When a document gets opened, printed and closed, StarOffice asks
+whether the changes should be saved. Many users don't understand this
+and &#150; depending on the current work situation &#150; sometimes
+even feel uncertain about which decision they should make (Have I
+changed anything erroneously? Didn't I save my latest changes? ...)</P>
+<H1>Background</H1>
+<P>When a StarOffice application, like Writer, receives the &#147;print&#148;
+command, it performs a couple of actions before it actually prints
+the document:</P>
+<UL>
+	<LI><P>Updating the document info (File &#150; Properties) and set
+	the &#147;last printed&#148; date.</P>
+	<LI><P>Updating the fields in the document</P>
+	<LI><P>Possibly reformatting the whole document because the printer
+	driver used for printing is different from the printer driver the
+	document was created for originally.</P>
+</UL>
+<P>As it takes quite some engineering effort to find out whether or
+not these preparations actually change the document, the &#147;modified&#148;
+flag is set by default, as soon as an application starts the print
+preparations.</P>
+<P>Of course it would be a better solution, if the applications knew
+whether changes were triggered by printing or by other actions. This
+would also give us the chance to change the warning message that's
+displayed when an unsaved, modified document gets closed. But the
+engineering cost to distinguish between the source of the changes is
+very high (first incomplete estimate: 1 week planning, at least 2
+weeks of implementation, additional time for testing), and we don't
+feel like solving this problem is worth the cost.</P>
+<H1>Solution</H1>
+<P>As an alternative,more simple approach, we should offer an option
+that suppresses the modification of the &#147;document modified&#148;
+flag by the print process. This option would not be active by
+default, but if a user feels confused by the current behavior, he can
+choose to activate it. 
+</P>
+<P>Behind the scenes, the status of the &#147;document modified&#148;
+flag would be saved as soon as the printing process gets triggered
+and it would be reset to the saved value after printing has finished.
+Of course the changes mentioned above would still be made, it would
+be just the status of the document that's &#147;locked&#148; against
+changes. If the document has been modified before it was printed, the
+status after printing would be &#147;modified&#148;. If it has just
+been opened with no automatic changes (like triggered by macros or
+updated links), it would show the status &#147;unmodified&#148; after
+printing. If the user subsequently changes the document, the status
+would change accordingly, i.e. Switch to &#147;modified&#148;.</P>
+<H2>There are some disadvantages to this solution:</H2>
+<UL>
+	<LI><P>If the user doesn't save the document after printing, the
+	changes will be lost, so the printed document is &#147;newer&#148;
+	than the saved document<BR>(This would also be the case if the user
+	decides not to save the document when asked about this)</P>
+	<LI><P>The &#147;last printed&#148; document info field would not
+	contain the correct value<BR>(same as above; today the field also
+	doesn't get updated if a document is printed from the system shell
+	(like from the context menu in Windows Explorer))</P>
+</UL>
+<P>I consider these disadvantages to be a moderate price that the
+user pays for his convenience. And anyway, we would not make this
+setting the default, so the user himself would be responsible for
+changing this behavior.</P>
+<H2>How does the user learn about the new feature? 
+</H2>
+<P>As described in the background section, we do not want to
+distinguish between general changes and changes triggered by the
+printing process. So we can't modify the warning message box that
+asks the user if his changes should be saved, because we don't know
+which changes caused this box to appear. 
+</P>
+<P>An alternative way to inform the user is to display the Help Agent
+together with the message box. The Help Agent leads the user to a
+description of this feature in our help system. 
+</P>
+<H2>Further specification details</H2>
+<UL>
+	<LI><P>Add an option to Tools &#150; Options &#150; General<BR>This
+	is maybe not the most natural option page for this setting, but due
+	to other dialogs being already &#147;full&#148;, this is the best
+	compromise for this setting.</P>
+	<LI><P>The option should be called: Printing sets &#147;document
+	modified&#148; status. It should be preceded by a separator line
+	labeled &#147;Document status&#148;<BR>In German: Drucken setzt
+	&#147;Dokument ge&auml;ndert&#148; Status (separator label:
+	Dokumentstatus)</P>
+</UL>
+<H1>Action Items</H1>
+<TABLE WIDTH=803 BORDER=0 CELLPADDING=5 CELLSPACING=0>
+	<COL WIDTH=535>
+	<COL WIDTH=248>
+	<TR VALIGN=TOP>
+		<TD WIDTH=535>
+			<P>Propose specification</P>
+		</TD>
+		<TD WIDTH=248>
+			<P>Lutz H&ouml;ger</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=535>
+			<P>Describe the feature and maybe the technical background</P>
+		</TD>
+		<TD WIDTH=248>
+			<P>Frank Peters</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=535>
+			<P>Optionally save and restore the document status when printing</P>
+		</TD>
+		<TD WIDTH=248>
+			<P>Mathias Bauer</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=535>
+			<P>Implement Tools &#150; Options UI</P>
+		</TD>
+		<TD WIDTH=248>
+			<P>Oliver Specht</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=535>
+			<P>Implement trigger for Help Agent</P>
+		</TD>
+		<TD WIDTH=248>
+			<P>Oliver Specht</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=535>
+			<P>Write feature e-mail</P>
+		</TD>
+		<TD WIDTH=248>
+			<P>Oliver Specht</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=535>
+			<P>Translate UI and documentation</P>
+		</TD>
+		<TD WIDTH=248>
+			<P>Rafaella Braconi</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

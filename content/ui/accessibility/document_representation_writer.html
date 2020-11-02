@@ -1,0 +1,244 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV=3D"CONTENT-TYPE" CONTENT=3D"text/html; charset=3Diso-8=
+859-1">
+	<TITLE></TITLE>
+	<!-- Changed by: Andre Fischer, 21-Sep-2001 -->
+	<META NAME=3D"GENERATOR" CONTENT=3D"StarOffice 6.0  (Solaris Sparc)">
+	<META NAME=3D"AUTHOR" CONTENT=3D"Michael Brauer">
+	<META NAME=3D"CREATED" CONTENT=3D"20010919;8143700">
+	<META NAME=3D"CHANGEDBY" CONTENT=3D"Michael Brauer">
+	<META NAME=3D"CHANGED" CONTENT=3D"20010921;16293200">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm; margin-left: 3.18cm; margin-right: 3.18cm; =
+margin-top: 2.54cm; margin-bottom: 2.54cm }
+		P { margin-bottom: 0.21cm; font-family: "Frutiger Roman", "Arial" }
+		H1 { margin-bottom: 0.21cm; font-family: "Albany", sans-serif; font-si=
+ze: 16pt }
+		P.documenttype { font-size: 24pt; font-weight: bold }
+		P.companyname { margin-bottom: 0cm; color: #00a6ff; font-family: "Frut=
+iger-Bold", "Arial", "Helvetica"; font-size: 36pt; font-weight: bold; te=
+xt-align: right }
+		H2 { margin-bottom: 0.21cm; font-family: "Albany", sans-serif; font-si=
+ze: 14pt; font-style: italic }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ui/">ui</a>&nbsp;&raquo;&nbsp;<a href="/ui/accessibility/">accessibility</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<TABLE WIDTH=3D100% BORDER=3D0 CELLPADDING=3D0 CELLSPACING=3D0 STYLE=3D"=
+page-break-before: always; page-break-inside: avoid">
+	<COL WIDTH=3D128*>
+	<COL WIDTH=3D128*>
+	<THEAD>
+		<TR VALIGN=3DTOP>
+			<TD WIDTH=3D50%>
+				<P CLASS=3D"documenttype"><B>Draft</B></P>
+			</TD>
+			<TD WIDTH=3D50%>
+				<P CLASS=3D"companyname">Star Office</P>
+			</TD>
+		</TR>
+	</THEAD>
+</TABLE>
+<H1>Proposal for an Accessibility API in StarOffice Writer</H1>
+<H2>Introduction</H2>
+<P>In the following proposal it is assumed that StarOffice's
+Accessibility API is based on the Java Accessibility API. For that
+reason, it is very often referred to classes and interfaces of that
+API. The classes and interfaces mentioned are:</P>
+<UL>
+	<LI><P>class AccessibleContext: An object (for instance a button)
+	may support an interface Accessible. In this case, one can retrieve
+	an object of class AccessibleContext from the object. An object of
+	class AccessibleContext has some methods that support Assistive
+	Technology tools, for instance by assigning a role and a description
+	to the original object. The AccessibleContext objects for a certain
+	dialog, or for a document, might be arranged to a tree there each
+	AccessibleContext is a node of this tree. The structure of such
+	trees is discussed below.</P>
+	<LI><P>AccessibleEditableText is an interface that offers access to
+	text as well as methods to modify the text. It might be supported by
+	objects of class AccessibleContext.</P>
+	<LI><P>AccessibleComponent is an interface that might be supported
+	by an AccessibleContext and describes the position and size of an
+	object that is displayed on the screen relative to the parent
+	AccessibleContext.</P>
+	<LI><P>AccessibleAction is an interface that might be supported by
+	an AccessibleContext. It offers the possibility to trigger (custom)
+	operations that are applied to that object.</P>
+</UL>
+<P>The proposal for an Accessibility API  for StarOffice Writer
+described in this document is still incomplete. It mainly covers the
+following areas:</P>
+<UL>
+	<LI><P>The representation of the current text position (i.e. the
+	text cursor).</P>
+	<LI><P>The conflict between an AccessibleContext tree that
+	represents the current view and an AccessibleContext tree that
+	represents the whole document based on its logical structure.</P>
+</UL>
+<H2>The Text Cursor</H2>
+<P>In current word processors as well as in simple text editors,
+there is the concept of a text cursor. That is a position there any
+insertion, deletion, change, etc. takes place. These operations can
+be triggered for instance by a key stroke or by selecting a menu
+item.=20
+</P>
+<P>Within a tree of AccessibleContexts it's quite difficult to
+represent a text cursor. Even if the leafs of an AccessibleContext
+tree would be characters (regardless whether this is sensible), there
+would not be a position between to leafs. It also seems not to be
+convenient that the text cursor is an AccessibleContext itself. The
+result would be that every move of the text cursor would change the
+AccessibleContext tree.</P>
+<P>However, the problem is already solved within the
+AccessibleEditableText interface. This interface on the one hand
+offers methods to retrieve a word, character or sentence at a certain
+character position within some text. On the other hand, it offers
+methods to set and get a caret and a selection within the text, where
+a caret is a selection that has the same character start and end
+position. This is nearly the same as a traditional text cursor,
+except that a text cursor not only denotes a position within a
+paragraph but also a certain paragraph. In contrast to this, the
+AccessibleEditableText does not have the concept of paragraphs at
+all.</P>
+<P>To be able to use the AccessibleEditableText interface anyway, one
+has to specify that each paragraph is represented by an=20
+AccessibleEditableText interface of its own. Disregarding things like
+text boxes and footnotes, paragraphs in this case are leafs of the
+AccessibleContext tree that additionally support the
+AccessibleEditableText interface.</P>
+<P>However, what's still missing is a way to mimic the paragraph
+position of a traditional text cursor. This could be done by making
+it possible to give a focus not only to controls but also to
+paragraphs. In other words, if there is not eventually a text box or
+some other kind of non paragraph object selected, there always is one
+paragraph that has the focus. Any operation within the paragraph is
+done by the  AccessibleEditableText interface. Or in other words
+again, within the Accessibility API the paragraph position of a
+traditional text cursor is represented by assigning the focus the
+paragraphs itself while its character position is mapped to the caret
+of the paragraph's  AccessibleEditableText interface.</P>
+<H2>The visual and the logical AccessibleContext Tree</H2>
+<P>A tree of AccessibleContext either may represent a document's
+logical structure or its representation as printed or displayed on a
+screen. Moreover, it may either represent a full document or just a
+part of it.</P>
+<P>Having the logical tree of the whole document on the one hand
+makes powerful AT tools possible, on the other hand it might be the
+case that these tools have to be powerful to be able to handle the
+large amount of information they get. However, to make such tools
+possible, a tree like this should be existing.</P>
+<P>Another tree that seems to be necessary is a tree that represents
+the current view of the document as displayed on the screen. This has
+several reasons. First of all, there might be situations where one
+can see the screen view, but needs AT tools for input or to get
+additional information. In this case, it seems to be an advantage if
+the AT tool may operate on exactly the same data that is displayed on
+the screen.</P>
+<P>Another reason is that this tree simplifies the interoperation
+between traditional UI operations and and the AccessibleContext tree.
+ It's hard to image how an UI operation could be applied to some data
+if these data is not visible, but its also seems to be impossible to
+make any operation that can be triggered using the UI available to
+the Accessibility API, too.=20
+</P>
+<P>Last but not least an AccessibleContext tree bases on the current
+screen view is required if a blind and a non blind shall have a look
+at the same document. For instance, if a blind wants to know what is
+shown in an image it's required that he can make the image visible on
+the screen. Moreover, it seems to be convenient that he can describe
+the position of the image on the screen instead of having to describe
+where it is located in the logical tree of the document.</P>
+<P>Another possibility, having a tree that represents only a part of
+the document, seems to be not convenient, because this would be a sub
+tree of the whole document only. A tree that represents the whole
+document but in the way it is displayed at the screen or printed
+might be more convenient. However, having the possibility to navigate
+through the document like it is done on the screen should be
+sufficient. Therefor, I pay no attention to these to possibilities
+here. For convenience, the tree that represents the whole document
+logically is called logical tree in this document. The tree that
+represents the document's view on the screen is called screen tree.</P>
+<P>As mentioned above, it seems to be necessary that using the
+Accessibility API makes it further possible to use the UI. Many UI
+operations take the current text cursor position into account. Using
+the above representation of the text cursor as a focus of a paragraph
+and a caret in this paragraph, this is no problem for the screen
+tree. The only thing that has to be ensured is that the state of the
+tree and the text cursor are synchronized. This in fact, should be
+the expected behavior anyway.</P>
+<P>Making the the logical tree and the UI working together is not
+much harder anyway. A prerequisite for this is that there is exactly
+one AccessibleContext for any object that can be contained in the
+logical as well as in  the screen tree, for instance for a paragraph.
+In other words, one and the same AccessibleContext has to be
+contained in the logical as well as the screen tree if it belongs to
+the same object, for instance a paragraph. What's missing then is a
+possibility to assign the focus to a certain paragraph. This most
+probably can be  done by the AccessibleComponent interface (if one
+specifies that it is available for AcessibleContexts that are no
+visible currently, too), or it can be implemented by an
+AccessibleAction. Assigning the focus to an AccessibleContext has to
+make the paragraph visible on the screen. This way, it's possible to
+navigate and operate on the logical tree, but also to use the UI by
+assigning the focus to a certain paragraph. The screen tree in this
+case might offer an additional help, but of course it's not required
+to use it.</P>
+<H2>Other Objects, Like Tables Or Drawings</H2>
+<P>The above proposal can be extended to other objects like tables or
+drawings by specifying that these objects, or the objects they
+consist of, may get a focus, too.</P>
+<H2>The Logical Tree</H2>
+<P>It's quite obvious that the logical tree should reflect the
+chapter/sub section structure of a document. The remaining issue is
+how detailed the tree should be. It seems to be sensible that the
+tree should contain any object that may get the focus and that might
+get visible.</P>
+<H2>The Screen Tree</H2>
+<P>The structure the screen tree should have is not as obvious as the
+one of the logical tree. One possibility might be to have a root that
+corresponds to the visible area of the document. The visible
+paragraphs might be children of the root directly. But it also might
+be a solution that the root contains a body, a header, a footer and a
+footnote area as children, where any of these areas is optional, and
+that these areas contain the visible paragraphs. However, there seems
+to be no reason to include nodes for chapters or sub sections into
+the screen tree. The screen tree and the logical tree are tied as
+close together that these information can be obtained from the
+logical tree at any time.</P>
+<P>One issue regarding the screen tree is the fact that a paragraph
+might be visible partially only or might be split by a page break.
+The first problem might be addresses by an enhanced
+AccessibleComponent interface that provides information which parts
+of the paragraph are visible. The second problem might be addressed
+by having a list of AccessibleComponents instead of a single one.</P>
+<P><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

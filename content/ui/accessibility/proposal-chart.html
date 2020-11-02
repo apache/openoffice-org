@@ -1,0 +1,203 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ui/">ui</a>&nbsp;&raquo;&nbsp;<a href="/ui/accessibility/">accessibility</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h2>Chart Accessibility</h2>
+<p>Proposal</p>
+<p>by Bj&ouml;rn Milcke (<a href="mailto:Bjoern.Milcke@Sun.COM" title="Mail
+address of Bj&ouml;rn Milcke">Bjoern.Milcke@Sun.COM</a>),<br> last modification
+on March 5th 2002</p>
+
+<!-- ---------------------------------------- -->
+<h3>1. Introduction</h3>
+
+<p>This paper describes how documents of the StarOffice/OpenOffice.org Chart
+application can be made accessible by using the UNO Accessibility API (UAA).</p>
+
+<!-- ---------------------------------------- -->
+<h3>2. Chart Documents</h3>
+
+<p>In contrast to other applications, a chart document has a relatively fixed
+structure.  For most objects in a chart you always have at most one instance.
+For example, there may only be one main title object and one legend.  Only the
+number of data series and data points inside of series may change, which depends
+directly on the dimension of the input data.</p>
+
+<p>There is only one page in a chart.  On this page there are the following
+top level objects:</p>
+<ul>
+ <li>Titles (main title, subtitle, axis titles)</li>
+ <li>Legend</li>
+ <li>Diagram</li>
+ <li>Additional shapes (see <a href="#add-shapes">section 4</a>)</li>
+</ul>
+<p>The page's background color is determined by the chart area object, which is
+the object that you can select via the GUI to format the background of the
+entire space a chart document occupies.</p>
+
+<p>The Diagram is the object containing the actual plot.  In three-dimensional
+charts the diagram is a scene object.  There are four kinds of sub-objects in
+the diagram:</p>
+<ul>
+ <li>Series representing parts of the data (see <a href="#series">section 3</a>)</li>
+ <li>Axes (primary x/y/z axis, secondary x/y axis)</li>
+ <li>Grids (major and minor grids)</li>
+ <li>Wall, and floor for three-dimensional charts</li>
+</ul>
+
+<p>The number of objects we are dealing with here is limited to a small constant
+for all objects except the series.  These can vary in number depending on the
+size of the input data; however usually, this number should also be small.
+Having more than ten, or so, series usually doesn't make much sense.  In
+contrast, the series themselves can contain a lot of data points.  This might
+become a problem for AT (Assistive Technology) tool.  We will discuss this
+issue in the following section.</p>
+
+<!-- ---------------------------------------- -->
+<h3><a name="series">3. Data Series and Data Points</a></h3>
+
+<p>As stated before, the number of series usually is small.  So, we assume not
+having problems here.  However, the number of data points contained in a series
+may be huge, and although you may not be able to really distinguish all points
+from each other on a screen, they are all visible in the current window, thus
+have to be made accessible.</p>
+
+<p>Consider a chart where you have five series, each representing 2,000 data
+points displayed as little symbols.  You can select every of those points
+(e.g. via the keyboard) and give it a different formatting, thus you should also
+provide them as objects in the document tree for getting notified on selection.
+As a result we would get 10,000 objects in the tree for those objects.  This
+will consume a lot of time and also memory.  Maybe a tool might even crash when
+getting such a lot of nodes, because normally you do not have so many objects in
+a document that are all visible at the same time (especially in dialogs, for
+which most tools were initially designed).  There are several solutions to this
+problem, which we want to discuss next.</p>
+
+<h4>Assume that AT-Tools are Clever</h4>
+
+<p>An AT-tool may feel free to query the number of children and accessible
+object has.  If it turns out that this number is quite high (according to some
+threshold), the tool could simply not request those objects.  Even on rendering,
+those objects could be omitted, because their bounding boxes must all lie in the
+bounding box of the parent element.</p>
+
+<p>However, if a user travels down the document to a series, the tool would most
+probably load all children to offer them to the user.  Alternatively the tool
+could just state how many children there are, and the user could select the
+<em>n</em><sup>th</sup> child without knowing what this child <em>looks</em>
+like.</p>
+
+<p>The question here mainly is, if AT-tools will be enhanced when the
+requirements increase for using StarOffice/OpenOffice.org.  As this does not lie
+in our hands, this way has a certain risk.</p>
+
+<h4>Offer only those Data Points that have their Own Attributes</h4>
+
+<p>When you create a chart from scratch, all data points have no own attributes.
+Instead they inherit their appearance from the series.  A user can select a data
+point and apply different properties to it.  Internally, there is a list of all
+data points that differ from the default, i.e., have been modified by a user.
+The number of modified data points usually is also small.</p>
+
+<p>This way, a user accessing a document via an AT-tool could get information
+about all data points that are differently formatted.  For example, if a series
+has a blue fill color, and one data point is made red to underline its
+importance, the user would have access to it.  However, the user would not be
+able to select an unformatted data point to apply a different color herself.</p>
+
+<h4>Do not offer Data Points at All</h4>
+
+<p>The data points are usually not formatted differently from the series.  And
+even if some points are differently formatted, the question remains if a user is
+interested in that.  One important property of a data point is its value.  But
+the value can be found in the underlying data table, which is also accessible.
+So we could generally ignore data points.</p>
+
+<p>The only downside of this is that you can select data points via the GUI,
+e.g., the keyboard.  When doing so you would get an object that is not
+accessible from the view.</p>
+
+<h4>Offer Data Points dependent on Chart Type</h4>
+
+<p>If you take for example pie charts, you will notice that there will usually
+not be too many data points, otherwise you could not really interpret this chart
+visually (which is the main purpose of a chart).  And also bar charts, mostly
+used in business graphics, do not have too many bars.</p>
+
+<p>The most prominent examples for charts that may represent huge amount of
+data, are line charts and xy-charts (scatter charts).  Those two chart types
+also have subtypes that contain just the lines and no symbols.  In this case
+there simply do not exist any data points.  Thus, the problematic situation is
+(under our previous assumptions) having a line- or scatter chart using symbols
+for a lot of data points.</p>
+
+<p>One solution (which in fact solves the problem just under the assumptions
+made) would be not to offer any data points for certain chart types, namely
+line- and scatter charts (and maybe radar charts).</p>
+
+<h4>Offer Data Points dependent on the Quantity</h4>
+
+<p>As we can never be sure that there are no bar charts with thousands of bars,
+the previous approach may fail.  So we could use a heuristic that children are
+only created, if their number is smaller than a given constant threshold.  This
+way we would be on the safe side.  We would also have no problems for all types
+of charts having only a small number of data points per series.</p>
+
+<p>A remaining problem would still be the inconsistency, that you could select
+data points via the GUI (the keyboard) but would not get accessible objects from
+the selection.  However, this seems to me the most promising approach at the
+moment.</p>
+
+<!-- ---------------------------------------- -->
+<h3><a name ="add-shapes">4. Additional Shapes</a></h3>
+
+<p>You can add additional shapes to a chart.  When being inserted via the
+clipboard those shapes are always meta-files or bitmaps.  These shapes can be
+treated the same way as shapes in the Draw/Impress.  In other words, we can get
+an XShape from the drawing layer that supports all necessary accessibility
+capabilities.</p>
+
+<!-- ---------------------------------------- -->
+<h3>4. Visibility</h3>
+
+<p>The tree of accessible objects is always constructed of the objects that are
+in the current scope of the screen.  Charts may only be OLE objects, and the
+view for an OLE object is only created when it is entered in <em>In-Place
+mode</em>.  On activation the OLE-object is moved such that it is completely
+visible, unless its size exceeds the size of the window.  This is the only
+(rare) situation when not all objects of a chart may be visible.</p>
+
+<p>Apart from that, consider a bar chart where the rightmost bar is not in the
+current scope.  I think it doesn't make much sense to offer all data series, but
+one series has one data point less than the others, just because it is not
+visible.</p>
+
+<p>Therefore I suggest to always offer the complete tree of objects, no matter
+if really everything is visible.</p>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

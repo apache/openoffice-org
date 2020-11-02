@@ -1,0 +1,405 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Frank Sch&ouml;nheit">
+	<META NAME="CREATED" CONTENT="20011105;15462526">
+	<META NAME="CHANGEDBY" CONTENT="Frank Sch&ouml;nheit">
+	<META NAME="CHANGED" CONTENT="20011106;12284220">
+	<STYLE>
+	<!--
+		H1 { text-align: center }
+		H4 { text-align: center }
+		TD P.paragraphheader-western { color: #ffffff; font-family: "Arial", sans-serif; font-size: 16pt; font-weight: bold }
+		TD P.paragraphheader-cjk { color: #ffffff }
+		TD P.paragraphheader-ctl { color: #ffffff }
+		TD P.subparagraphheader-western { color: #ffffff; font-family: "Arial", sans-serif; font-weight: bold }
+		TD P.subparagraphheader-cjk { color: #ffffff }
+		TD P.subparagraphheader-ctl { color: #ffffff }
+	-->
+	</STYLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body LANG="en-US" BGCOLOR="#e6e6ff">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ui/">ui</a>&nbsp;&raquo;&nbsp;<a href="/ui/proposals/">proposals</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1>Re-Arranging the common Office UI code</H1>
+<H4>Inventory and Proposal</H4>
+<H4>Frank Sch&ouml;nheit, 11/06/2001</H4>
+<P><BR><BR>
+</P>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=256*>
+	<THEAD>
+		<TR>
+			<TD WIDTH=100% VALIGN=TOP BGCOLOR="#666699">
+				<P CLASS="paragraphheader-western">Content</P>
+			</TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR>
+			<TD WIDTH=100% VALIGN=TOP>
+				<P STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><A HREF="#situation">The
+				Situation</A><BR><A HREF="#goals">The Goals</A><BR><A HREF="#way">The
+				Way</A></SPAN></P>
+				<P STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><SPAN STYLE="background: transparent"><A HREF="#keep">Keep
+				it (for the moment?)</A><BR><A HREF="#tbx">Toolbox Controllers</A><BR><SPAN STYLE="background: transparent"><A HREF="#tabpages">Tab
+				Pages</A><BR><A HREF="#floating">Floating Tools</A><BR><A HREF="#factories"><SPAN STYLE="background: transparent">Factories
+				</SPAN></A><BR></SPAN><A HREF="#libs">Proposed Libraries</A></SPAN></P>
+				<P><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=100% VALIGN=TOP BGCOLOR="#666699">
+				<P CLASS="paragraphheader-western"><A NAME="situation"></A>The
+				Situation</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=100% VALIGN=TOP>
+				<P>Currently, the code for common user interface (I'll abbreviate
+				this with CUI from time to time) elements are wide-spread over at
+				least 4 different projects: SVTOOLS, SFX2, SVX, OFFMGR.<BR>This
+				includes:</P>
+				<UL>
+					<LI><P>common base classes like the SfxTabDialog/SfxTabPage</P>
+					<LI><P>frequently used components such as Character
+					Formatting</P>
+					<LI><P>self-contained components like the internal file-open
+					dialog</P>
+					<LI><P>common toolbox controllers like the one for the
+					Undo/Redo-dropdown</P>
+					<LI><P>specialized SfxPoolItems</P>
+				</UL>
+				<P>Note 1: <I>This does <strong>not</strong> include fundamental
+				controls like buttons, fixed texts, and such - they're part of the
+				VCL layer, and we're not interested in them here. Also, this does
+				not include low-level UI helpers as the SvTreeListBox and
+				BrowseBox - at least not in the first run.</I></P>
+				<P>The reasons for this are various, one bold-printed line in the
+				list of these reasons titled &quot;History&quot; ....<BR>Several
+				drawbacks of the current situation become obvious (most of them
+				having a &quot;performance issue&quot label on their back).</P>
+				<UL>
+					<LI><P>Maintaining this primeval forest becomes more and more
+					difficult as it grows.</P>
+					<LI><P>The startup behaviour of the office suffers: Just because
+					later on, there may be a need for, say the character formatting
+					tab page, the library containing this page is loaded at the
+					moment the writer is started</P>
+					<LI><P>An application does not have a chance to deny loading of
+					unused code: Opening the Tools/Options dialog means loading a
+					lot of code for some pages present there - though they're not
+					needed</P>
+				</UL>
+				<P>Note 2: <I>To prevent this question from arising: We're
+				not talking about actually creating tab pages which are not
+				needed. There already are good mechanisms which ensure that there
+				is no page for the Load/Save options created if you do not open
+				the Options dialog on exactly this page. But the <I>code</I> for
+				this page is loaded into memory - as well as the code for, say,
+				position and size of a shape of the drawing layer, and on some
+				platforms also the code for the UNO representation of some
+				drawing layer components, just because they're all in one lib --
+				Did I already mention that it's weird?</I></P>
+				<P>Note 3: <I>Of course, there are a lot of options pages
+				which are application specific and not implemented in the CUI,
+				but in the application itself. But splitting the applications
+				into a core and a UI part is a completely different story.</I></P>
+				<P><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=100% VALIGN=TOP BGCOLOR="#666699">
+				<P CLASS="paragraphheader-western"><A NAME="goals"></A>The Goals</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=100% VALIGN=TOP>
+				<P>We want to have:</P>
+				<UL>
+					<LI><P>a clear structure in the high-level components which are
+					necessary for a common office UI</P>
+					<LI><P>libraries specific to the CUI</P>
+					<LI><P>a more intelligent grouping of code, thus decreasing the
+					overhead of loading unnecessary code.</P>
+					<LI><P>the possibility to load shared code <I>on demand</I>,
+					thus improving startup performance</P>
+				</UL>
+				<P><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=100% VALIGN=TOP BGCOLOR="#666699">
+				<P CLASS="paragraphheader-western"><A NAME="way"></A>The Way</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=100% VALIGN=TOP>
+				<P>Well, the following is not really a comprehensive description
+				of &quot;The Way&quot;. It is an introduction to what we think
+				could be steps on the way to reach the goals. It is neither
+				complete nor finished, it's just a rough outline at the moment.</P>
+				<P><BR>
+				</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=8*>
+	<COL WIDTH=248*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TD WIDTH=3%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=97% BGCOLOR="#666699">
+				<P CLASS="subparagraphheader-western"><A NAME="keep"></A>Keep it
+				(at the moment ?)</P>
+			</TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=3%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=97%>
+				<P>There is some stuff which won't be moved in a first run. This
+				includes:</P>
+				<UL>
+					<LI><P><B>The OfficeApplication class</B>. This global
+					application class should stay in OFFMGR - it handles common
+					application-wide tasks, and it is needed as soon as a doc is
+					opened, anyway.</P>
+					<LI><P><B>Image Lists</B>. Currently, such lists for CUI purpose
+					are found in OFFMGR (and SFX2?). Load-on-demand seems to be
+					unnecessary for them (they would be loaded as soon as the first
+					document is opened, which is 
+					</P>
+					<LI><P><B>small MessageBoxes</B>: moving them seems to be
+					oversized</P>
+					<LI><P><B>SFX-Toolboxes</B> (such as the common Office-Toolbar):
+					as above</P>
+					<LI><P><B>Print Dialog / Document Info Dialog</B>: They're
+					integrated with the current SFX framework (callbacks into
+					SfxModules and such), and thus should not be moved at the moment
+					- this can change in the future</P>
+				</UL>
+				<P><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=3%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=97% BGCOLOR="#666699">
+				<P CLASS="subparagraphheader-western"><A NAME="tbx"></A>Toolbox
+				Controllers</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=3%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=97%>
+				<P>If a application wants to bind a given ToolboxController to a
+				slot id, it calls some kind of (static) RegisterXYZ method. There
+				are different shades of this (sometimes the slot id is passed,
+				sometimes it's hard coded, some controllers need a module pointer
+				passed, etc.), but the main idea is always the same.</P>
+				<P>So, for outsourcing the controllers to CUI, we need to broaden
+				the interfaces so they cover all possibilities, which mainly
+				means that there needs to be a static RegisterXYZ function for
+				every controller.</P>
+				<P><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=3%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=97% BGCOLOR="#666699">
+				<P CLASS="subparagraphheader-western"><A NAME="tabpages"></A>Tab
+				Pages</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=3%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=97%>
+				<P>Looking at the various commonly used tab pages we currently
+				have, we can discern at least 3 groups:</P>
+				<OL TYPE=a>
+					<LI><P>pages used for the drawing layer</P>
+					<LI><P>pages for common options</P>
+					<LI><P>other dialogs</P>
+				</OL>
+				<P>It seems reasonable to reflect these groups in different
+				libraries. Users who do not use drawing functionality during a
+				session won't load a). Users who have already adjusted their
+				office to their very personal preferences will never load b) in
+				all subsequent sessions.</P>
+				<P>Because of the factory concept, we can change this grouping
+				later (if we see the demand) without changes in the applications.</P>
+				<P><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=3%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=97% BGCOLOR="#666699">
+				<P CLASS="subparagraphheader-western"><A NAME="floating"></A>Floating
+				Tools</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=3%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=97%>
+				<P>There are some common tools which appear in a floating window,
+				and are (potentially) needed as soon as a document is opened.
+				This includes the Stylist, the Navigator, and the Find & 
+				Replace dialog. Thus, it would make sense to have these tools in
+				a common library.</P>
+				<P><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=3%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=97% BGCOLOR="#666699">
+				<P CLASS="subparagraphheader-western"><A NAME="factories"></A>Factories</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=3%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=97%>
+				<P>A main requirement is to load code, only on demand. This means
+				we need factories to create all the components we want to
+				provide.<p>Note 4: <i>It surely is oversized to use UNO
+				mechanisms for this (though UNO already features an abstract
+				factory concept), as this would mean that our components
+				would need to be wrapped in UNO.</i><p>Looking at what kind of
+				interfaces, applications typically use, we have the following:</P>
+				<UL>
+					<LI><P><B>factories</B>: For tab pages, a Create method is
+					passed when referring to a page class, which means we need a
+					factory which creates such factory functions.</P>
+					<LI><P><B>direct instantiation</B>: For dialogs, the
+					applications need immediate access to an instance of a class,
+					thus we need to provide simply factories</P>
+					<LI><P><B>static init functions</B>: For toolboxes, as mentioned
+					above, an application needs to know (and call) a static
+					RegisterXYZ function only.</P>
+				</UL>
+				<P>In ideal, applications would link only against a library
+				containing all the factory methods, and create all needed
+				components indirectly using these factories. We then can even
+				hide the more detailed library structure: Whether a given tab
+				page (created by a factory) is located in library X or library Y
+				is of no interest to the application. This placement in libs can
+				even be changed without any notice - the application still only
+				calls the factory, and the factory decides which other lib to
+				load to create the component.</P>
+				<P>Of course, we still need to expose the interfaces of the
+				classes created by the factories, which in C++ means the class
+				declaration has to be exported, and the methods have to be kept
+				virtual (as calling non-virtual method requires linking against
+				the implementation lib.)</P>
+				<P><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=3%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=97% BGCOLOR="#666699">
+				<P CLASS="subparagraphheader-western"><A NAME="libs"></A>Proposed
+				Libraries</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=3%>
+				<P><BR>
+				</P>
+			</TD>
+			<TD WIDTH=97%>
+				<P>Suggestion for libraries to introduce in CUI (in the
+				following, <I>dialogs</I> is an alias for &quot;dialogs, tab
+				pages, and such&quot; :)</P>
+				<OL TYPE=a>
+					<LI><P>drawing layer dialogs</P>
+					<LI><P>option dialogs</P>
+					<LI><P>other dialogs</P>
+					<LI><P>floating tools (Stylist, Navigator, Find dialog)</P>
+					<LI><P>FileDialogHelper, File-Open dialog, Document'n'Templates
+					dialog, Help-UI</P>
+					<LI><P>Toolbox controllers, base classes, factories</P>
+				</OL>
+				<P>e) and f) would be libraries to link against (because they
+				contain components which a normal application needs, very often
+				this does not matter).<BR>d) would be a lib containing tools
+				which are needed often, but not always, and would be loaded on
+				demand.<BR>a) and c) are loaded on demand only</P>
+				<P>Perhaps e) can be split up even more, moving the pure UNO
+				components (which counts for the file dialog, <I>nearly</I> for
+				the Help-UI, and <I>potentially</I> for the DocTempl dialog) into
+				separate libs.</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

@@ -1,0 +1,200 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>Service AccessibleDrawDocumentView</title>
+<style>h3 { font-size:13pt; font-weight:bold; margin-top:3pt; margin-bottom:1pt; }
+p, dt, dd, pre  { font-size:11pt; margin-top:3pt; margin-bottom:1pt; }
+table.lightbg { background-color:#eeeeff; }
+table.subtitle { margin-top:6pt; margin-bottom:6pt; }
+td { font-size:11pt; }
+td.title { font-family: Arial; font-size:19pt; font-weight:bold; text-align:center; background-color:#ccccff; line-height:30pt; }
+td.subtitle { font-family: Arial; font-size:13pt; background-color:#ccccff; line-height:20pt; }
+td.imdetail { width:100%; background-color:#eeeeff; }
+a.membertitle { font-size:12pt; font-weight:bold; line-height:18pt; }
+td.imsum_left { width:30%;  }
+td.imsum_right { width:70%;  }
+td.navimain, a.navimain { text-align:center; font-family: Arial; font-size:12pt; font-weight:bold; }
+td.navimainself { text-align:center; font-family: Arial; font-size:12pt; font-weight:bold; color:#ffffff; background-color:#2222ad; }
+td.navimainnone { text-align:center; font-family: Arial; font-size:12pt; }
+td.attrtitle { font-weight:bold; background-color:#eeeeff; }
+td.navisub, a.navisub, td.attrtitle, td.attrvalue { text-align:center; font-family: Arial; font-size:9pt; font-variant:small-caps; }
+td.navimain, td.navisub { padding-left:7pt; padding-right:7pt; }
+p.raise  { font-size:11pt; margin-top:0pt; text-align:right; padding-right:5pt; }
+a.navimain, a.navisub  { color:#000000; }
+.dt     { font-weight:bold; }
+.namechain  { font-size:13pt; font-weight:bold; margin-top:3pt; margin-bottom:6pt; }
+.tpl        { font-size:13pt; margin-top:3pt; margin-bottom:6pt; }
+</style>
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body bgcolor="#ffffff">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/ui/">ui</a>&nbsp;&raquo;&nbsp;<a href="/ui/accessibility/">accessibility</a>&nbsp;&raquo;&nbsp;<a href="/ui/accessibility/apiref/">apiref</a>&nbsp;&raquo;&nbsp;<a href="/ui/accessibility/apiref/drafts/">drafts</a>&nbsp;&raquo;&nbsp;<a href="/ui/accessibility/apiref/drafts/com/">com</a>&nbsp;&raquo;&nbsp;<a href="/ui/accessibility/apiref/drafts/com/sun/">sun</a>&nbsp;&raquo;&nbsp;<a href="/ui/accessibility/apiref/drafts/com/sun/star/">star</a>&nbsp;&raquo;&nbsp;<a href="/ui/accessibility/apiref/drafts/com/sun/star/drawing/">drawing</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<a name="_top_"> </a>
+<table border="0" cellpadding="3" class="lightbg">
+<tr>
+<td class="navimain"><a href="../../../../../com/sun/star/module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="AccessibleDrawDocumentView-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table border="0" cellpadding="0">
+<tr>
+<td class="navisub">Included Services</td>
+<td class="navisub"><a href="#ExportedInterfaces" class="navisub">Exported Interfaces</a></td>
+<td class="navisub">Properties' Summary</td>
+<td class="navisub">Properties' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../../module-ix.html" class="namechain">::</a> <a href="../../../../module-ix.html" class="namechain">drafts</a> :: <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">drawing</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">service AccessibleDrawDocumentView</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd> The <a href="AccessibleDrawDocumentView.html">AccessibleDrawDocumentView</a> service is implemented by
+ views of Draw and Impress documents.
+
+</dd>
+<dd><p> An object that implements the <a href="AccessibleDrawDocumentView.html">AccessibleDrawDocumentView</a>
+ service provides information about the view of a Draw or Impress
+ document in one of the various view modes. With its children it gives
+ access to the current page and the shapes on that page.</p>
+
+<p> This service gives a simplified view on the underlying document. It
+ tries both to keep the structure of the accessibility representation
+ tree as simple as possible and provide as much relevant information as
+ possible. This has the following consequences:
+<ol>
+<li> Only the current draw page and only the visible shapes are
+ accessible. To switch to another page or to access shapes that lie
+ outside the currently visible area, the user has to issue these requests
+ manually or programmatically through the usual chanels, e.g. pressing
+ keys or selecting menu entries.</li>
+<li> The hierarchy exposed through the ::XAccessibleContext
+ interface does not necessarily correspond directly to the underlying
+ draw page structure. Internal nodes in this hierarchy are introduced
+ by group shapes, 3D scenes, and OLE objects.</li>
+<li> The view modes editing view, outline view, slides view, notes view,
+ handout view, and presentation view are not exposed explicitly.
+ However, if there happens to be a view mode change which results in a
+ rearrangement of the visible shapes, the user gets notified of this.</li>
+</ol></p>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="ExportedInterfaces"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Exported Interfaces</td>
+</tr>
+<tr>
+<td class="imsum_left">::drafts::com::sun::star::<a href="../accessibility/module-ix.html">accessibility</a>::<a href="../accessibility/XAccessible.html">XAccessible</a></td>
+<td class="imsum_right"><dl>
+<dt><b>Description</b></dt>
+<dd> Base interface for being accessible. It gives access to the
+ ::XAccessibleContext interface.
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::drafts::com::sun::star::<a href="../accessibility/module-ix.html">accessibility</a>::<a href="../accessibility/XAccessibleContext.html">XAccessibleContext</a></td>
+<td class="imsum_right"><dl>
+<dt><b>Description</b></dt>
+<dd> Provide access to the view of a document.
+
+</dd>
+<dd><p> You can access the following information:
+<ul>
+<li> Role: The object's role is<b> AccessibleRole::DOCUMENT</b> .</li>
+<li> Name: Its name is "AccessibleDrawDocumentView",
+ "AccessibleOutlineView", or "slide window".</li>
+<li> Description: The description is "Draw Document", "Accessible
+ Draw Document Outline", or "slide window".</li>
+<li> Children: The shapes of the current draw page that are currently
+ visible are direct and indirect children of (an object
+ implementing)
+ this service. Group shapes, 3D scenes, and OLE objects
+ introduce further levels into the hierarchy. If the visibility
+ of shapes changes--due to
+ scrolling, switching the current draw page, or changing the view
+ mode--the appropriate listeners are called and the user gets
+ informed of this.</li>
+<li> Parent: The parent will usually be the window that contains the
+ draw document view. It has to be set via implementation dependend
+ ways.</li>
+<li> Relations: Relations are set and modified from the outside.</li>
+<li> States:<b> AccessibleStateType::DEFUNC</b> is set if a document view
+ becomes obsolete like when the window, which displays the view,
+ is closed. Otherwise the states
+<b> AccessibleStateType::ENABLED</b> ,
+<b> AccessibleStateType::SHOWING</b> ,
+<b> AccessibleStateType::VISIBLE</b> ,
+<b> AccessibleStateType::FOCUSABLE</b> , and
+<b> AccessibleStateType::SELECTABLE</b>
+ are always set.</li>
+<li> Locale: Is obtained from the parent and returned unchanged.</li>
+</ul></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::drafts::com::sun::star::<a href="../accessibility/module-ix.html">accessibility</a>::<a href="../accessibility/XAccessibleComponent.html">XAccessibleComponent</a></td>
+<td class="imsum_right"><dl>
+<dt><b>Description</b></dt>
+<dd> Provide access to a draw document's graphical representation.
+
+</dd>
+<dd><p> The main purpose of this interface is to provide a bounding box
+ of the currently visible area and to let the user find children
+ (i.e. shapes) that cover a given test point. The more interesting
+ part of the graphical representation of a draw page lies in its
+ children. See the <a href="AccessibleShape.html">AccessibleShape</a> service for more
+ information about shapes.</p>
+
+</dd>
+<dt><b>See also</b></dt>
+<dd><a href="AccessibleShape.html">AccessibleShape</a><br>
+
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<br>&nbsp;<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2003 Sun Microsystems, Inc.</p>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
