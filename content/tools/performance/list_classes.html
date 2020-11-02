@@ -1,0 +1,259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+</head>
+<body>
+<H2>Analysis of List class uses</H2>
+
+<P><STRONG>Summary</STRONG><P>
+<P>All code that uses OOo's List class (ie DECLARE_LIST(foo, OString)) should be converted to use std::vector or std::deque since these functions are more efficient, faster, and better understood.  Little work is required for this conversion as the functionality of List and std::vector/std::deque is pretty much the same.</P>
+
+<P>Results Spreadsheet: <A HREF="ListComparison.sxc">ListComparison.sxc</A></P>
+
+<P><strong>Problem</strong></P>
+<P>OOo uses its internal List class (see tools/inc/list.hxx) in a fair number of places.  This code was written originally in 1991/1992 and is probably pre-Standard Template Library.  Its usage is a bit arcane, and the STL implementations of various list variants are probably more understood and better implemented.  The Tools List class is implemented using C Macros, as such:</P>
+<PRE>DECLARE_LIST( list_class_name, list_class_type )</PRE>
+<P>After this statement, a class named "list_class_name" will exist, which stores objects of type "list_class_type".  The List class has a number of functions that perform operations such as removal of elements, insertion of elements, and arbitrary retrieval of elements.  However, this is a non-standard API (compared to the STL), and as we will see below, is not as efficient as certain STL classes.</P>
+
+<P><strong>Comparison of Classes</strong></P>
+<P>4 list classes were compared: OOo's Tools List class, and STLport's std::list, std::vector, and std::deque.  It is fairly trivial to convert instances of the Tools List class over to equivalent STL classes, yielding better performance for the operations OOo code most uses.</P>
+<P>Testing methodology was fairly informal, and the results of the speed tests are not absolute.  They should give a best-case scenario of the efficiency and speed of which each particular list class completes certain operations.  For each class, a small test program was run, which tested 5 operations 30 times each, for 10, 100, 1000, and 10000 list elements.  An average was then calculated and printed to stderr.  List elements were of type 'int'.</P>
+<OL>
+<LI>Creation of list with N elements
+<LI>Deletion of list with N elements
+<LI>Sequential removal of all elements, from Front (including dereference of iterator)
+<LI>Sequential removal of all elements, from Back (including dereference of iterator)
+<LI>Sequential iteration of all elements in the list, Front->Back
+</OL>
+<P>The test program was run 4 times, and the best average score from each of the operations from all 4 times was recorded as the final time.  I.E.: run once (30-run average for each of the 5 ops), enter times.  Run 3 more times and enter best time from any test for each of the 5 operations.</P>
+
+<P>
+<A HREF="stl-list.cxx">stl-list.cxx</A>&nbsp;&nbsp;
+<A HREF="stl-vector.cxx">stl-vector.cxx</A>&nbsp;&nbsp;
+<A HREF="stl-deque.cxx">stl-deque.cxx</A>&nbsp;&nbsp;
+<A HREF="ooo-list.cxx">ooo-list.cxx</A>
+</P><BR>
+
+<P><STRONG>Results</STRONG></P>
+<P><CENTER>
+<TABLE FRAME=VOID CELLSPACING=0 COLS=5 RULES=GROUPS BORDER=1>
+	<COLGROUP><COL WIDTH=148><COL WIDTH=86><COL WIDTH=86><COL WIDTH=86><COL WIDTH=86></COLGROUP>
+	<TBODY>
+		<TR>
+			<TD WIDTH=148 HEIGHT=16 ALIGN=LEFT>Operation</TD>
+			<TD WIDTH=86 ALIGN=LEFT>STL std::list</TD>
+			<TD WIDTH=86 ALIGN=LEFT>STL std::vector</TD>
+			<TD WIDTH=86 ALIGN=LEFT>STL std::deque</TD>
+			<TD WIDTH=86 ALIGN=LEFT>OOo List</TD>
+			<TD></TD>
+		</TR>
+	</TBODY>
+	<TBODY>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Create 10e</TD>
+			<TD ALIGN=RIGHT SDVAL="8" SDNUM="1033;">8</TD>
+			<TD ALIGN=RIGHT SDVAL="9" SDNUM="1033;">9</TD>
+			<TD ALIGN=RIGHT SDVAL="6" SDNUM="1033;">6</TD>
+			<TD ALIGN=RIGHT SDVAL="8" SDNUM="1033;">8</TD>
+			<TD ROWSPAN=5><A HREF="chart_10_elem.jpg">Chart</A></TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Delete 10e</TD>
+			<TD ALIGN=RIGHT SDVAL="8" SDNUM="1033;">8</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Remove Front 10e</TD>
+			<TD ALIGN=RIGHT SDVAL="8" SDNUM="1033;">8</TD>
+			<TD ALIGN=RIGHT><BR></TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+			<TD ALIGN=RIGHT SDVAL="8" SDNUM="1033;">8</TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Remove Back 10e</TD>
+			<TD ALIGN=RIGHT SDVAL="8" SDNUM="1033;">8</TD>
+			<TD ALIGN=RIGHT SDVAL="6" SDNUM="1033;">6</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Iteration 10e</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Create 100e</TD>
+			<TD ALIGN=RIGHT SDVAL="25" SDNUM="1033;">25</TD>
+			<TD ALIGN=RIGHT SDVAL="12" SDNUM="1033;">12</TD>
+			<TD ALIGN=RIGHT SDVAL="8" SDNUM="1033;">8</TD>
+			<TD ALIGN=RIGHT SDVAL="24" SDNUM="1033;">24</TD>
+			<TD ROWSPAN=5><A HREF="chart_100_elem.jpg">Chart</A></TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Delete 100e</TD>
+			<TD ALIGN=RIGHT SDVAL="24" SDNUM="1033;">24</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+			<TD ALIGN=RIGHT SDVAL="8" SDNUM="1033;">8</TD>
+			<TD ALIGN=RIGHT SDVAL="9" SDNUM="1033;">9</TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Remove Front 100e</TD>
+			<TD ALIGN=RIGHT SDVAL="24" SDNUM="1033;">24</TD>
+			<TD ALIGN=RIGHT><BR></TD>
+			<TD ALIGN=RIGHT SDVAL="8" SDNUM="1033;">8</TD>
+			<TD ALIGN=RIGHT SDVAL="27" SDNUM="1033;">27</TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Remove Back 100e</TD>
+			<TD ALIGN=RIGHT SDVAL="24" SDNUM="1033;">24</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+			<TD ALIGN=RIGHT SDVAL="8" SDNUM="1033;">8</TD>
+			<TD ALIGN=RIGHT SDVAL="16" SDNUM="1033;">16</TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Iteration 100e</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Create 1000e</TD>
+			<TD ALIGN=RIGHT SDVAL="192" SDNUM="1033;">192</TD>
+			<TD ALIGN=RIGHT SDVAL="19" SDNUM="1033;">19</TD>
+			<TD ALIGN=RIGHT SDVAL="20" SDNUM="1033;">20</TD>
+			<TD ALIGN=RIGHT SDVAL="179" SDNUM="1033;">179</TD>
+			<TD ROWSPAN=5><A HREF="chart_1000_elem.jpg">Chart</A></TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Delete 1000e</TD>
+			<TD ALIGN=RIGHT SDVAL="159" SDNUM="1033;">159</TD>
+			<TD ALIGN=RIGHT SDVAL="8" SDNUM="1033;">8</TD>
+			<TD ALIGN=RIGHT SDVAL="12" SDNUM="1033;">12</TD>
+			<TD ALIGN=RIGHT SDVAL="9" SDNUM="1033;">9</TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Remove Front 1000e</TD>
+			<TD ALIGN=RIGHT SDVAL="177" SDNUM="1033;">177</TD>
+			<TD ALIGN=RIGHT><BR></TD>
+			<TD ALIGN=RIGHT SDVAL="15" SDNUM="1033;">15</TD>
+			<TD ALIGN=RIGHT SDVAL="791" SDNUM="1033;">791</TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Remove Back 1000e</TD>
+			<TD ALIGN=RIGHT SDVAL="180" SDNUM="1033;">180</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+			<TD ALIGN=RIGHT SDVAL="14" SDNUM="1033;">14</TD>
+			<TD ALIGN=RIGHT SDVAL="111" SDNUM="1033;">111</TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Iteration 1000e</TD>
+			<TD ALIGN=RIGHT SDVAL="11" SDNUM="1033;">11</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+			<TD ALIGN=RIGHT SDVAL="9" SDNUM="1033;">9</TD>
+			<TD ALIGN=RIGHT SDVAL="7" SDNUM="1033;">7</TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Create 10000e</TD>
+			<TD ALIGN=RIGHT SDVAL="1762" SDNUM="1033;">1762</TD>
+			<TD ALIGN=RIGHT SDVAL="231" SDNUM="1033;">231</TD>
+			<TD ALIGN=RIGHT SDVAL="126" SDNUM="1033;">126</TD>
+			<TD ALIGN=RIGHT SDVAL="1068" SDNUM="1033;">1068</TD>
+			<TD ROWSPAN=5><A HREF="chart_10000_elem.jpg">Chart</A></TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Delete 10000e</TD>
+			<TD ALIGN=RIGHT SDVAL="1513" SDNUM="1033;">1513</TD>
+			<TD ALIGN=RIGHT SDVAL="22" SDNUM="1033;">22</TD>
+			<TD ALIGN=RIGHT SDVAL="56" SDNUM="1033;">56</TD>
+			<TD ALIGN=RIGHT SDVAL="12" SDNUM="1033;">12</TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Remove Front 10000e</TD>
+			<TD ALIGN=RIGHT SDVAL="1711" SDNUM="1033;">1711</TD>
+			<TD ALIGN=RIGHT><BR></TD>
+			<TD ALIGN=RIGHT SDVAL="85" SDNUM="1033;">85</TD>
+			<TD ALIGN=RIGHT SDVAL="7975" SDNUM="1033;">7975</TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Remove Back 10000e</TD>
+			<TD ALIGN=RIGHT SDVAL="1720" SDNUM="1033;">1720</TD>
+			<TD ALIGN=RIGHT SDVAL="13" SDNUM="1033;">13</TD>
+			<TD ALIGN=RIGHT SDVAL="82" SDNUM="1033;">82</TD>
+			<TD ALIGN=RIGHT SDVAL="1064" SDNUM="1033;">1064</TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=16 ALIGN=LEFT>Iteration 10000e</TD>
+			<TD ALIGN=RIGHT SDVAL="57" SDNUM="1033;">57</TD>
+			<TD ALIGN=RIGHT SDVAL="13" SDNUM="1033;">13</TD>
+			<TD ALIGN=RIGHT SDVAL="28" SDNUM="1033;">28</TD>
+			<TD ALIGN=RIGHT SDVAL="13" SDNUM="1033;">13</TD>
+		</TR>
+	</TBODY>
+</TABLE><BR>
+NOTE: all times are in u-seconds<BR>
+</CENTER></P>
+<P><STRONG>Analysis</STRONG></P>
+<P>
+OOo List class: not the best choice for some operations.  In fact, it does horribly at removing items from the front of the list, and not quite so badly at removing items from the rear.  In fact, it was found that remove items from a loop as follows (which is done quite often in OOo) is even <I>worse</I>, by a factor of 10 or more:<BR>
+<PRE>
+	while(mpPageMasterInfoList->Count())
+		delete mpPageMasterInfoList->Remove(mpPageMasterInfoList->Count() - 1L);
+</PRE><BR>
+Using the Remove( N ) function is much slower than using the Remove() function.  Remove() simply removes the node pointed to by the current list pointer, which is set using Front(), Back(), Next(), and Prev().  Rewriting the code as such gains a factor of 10 speed increase, at least in this limited test case:<BR>
+<PRE>
+	while(mpPageMasterInfoList->Count())
+	{
+		mpPageMasterInfoList->Last();
+		delete mpPageMasterInfoList->Remove();
+	}
+</PRE><BR>
+In general though, the OOo list class performs poorly compared to the STL's std::vector and std::deque.
+</P><BR>
+<P>
+std::list: while faster than the OOo list class, it is not as ideal as std::vector or std::deque.
+</P><BR>
+<P>
+std::vector: while faster than the OOo list class and std::list, it is not as ideal as std::deque because it does not support head-removal (ie pop_front()).
+</P><BR>
+<P>
+std::deque: while not always the fastest class, it is generally in the same class as std::vector.  However, it supports head-removal and also random access to its elements.  It is therefore more versatile than std::vector and almost as fast.
+</P><BR>
+
+<P><STRONG>Recommendations</STRONG></P>
+<P>Code that uses the OOo List class should gradually be converted over to either std::deque or std::vector, whichever is appropriate for the situation.  This conversion yields the following benefits:<BR>
+<OL>
+<LI>Faster
+<LI>Better understood code and tradeoffs
+<LI>More recent code
+</OL>
+</P>
+</body>
+</HTML>

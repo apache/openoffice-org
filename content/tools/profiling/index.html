@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+  <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+  <TITLE></TITLE>
+    <!-- Changed by: Andre Fischer, 17-Oct-2001 -->
+  <META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+  <META NAME="AUTHOR" CONTENT="Martin Hollmichel">
+  <META NAME="CREATED" CONTENT="20010419;16101287">
+  <META NAME="CHANGED" CONTENT="20010802;13535209">
+</head>
+<body>
+<H2>OpenOffice.org Profiling Tools</H2>
+<P>In order to speed up the startup time of OpenOffice applications
+we have developed a set of tools to derive profiling data from those
+applications. Our approach differs from that of other (commercial)
+tools in the following points:</P>
+<UL>
+  <LI><P>The information that we gather from the applications covers
+  larger blocks of code suitable for an overall analysis instead of
+  logging every code line or every instruction.</P>
+  <LI><P>The ability to write profiling information is compiled
+  automatically into the code at (almost) every build.</P>
+  <LI><P>Profiling data from different runs can be compared to each
+  other, so that an automatic analysis can take place that informs you
+  about speed-ups or slow-downs from version to version.</P>
+</UL>
+<P>Your comments on the profiling tools and on this page are welcome.
+Please send them to <A HREF="mailto:andre.w.fischer@sun.com">andre.w.fischer@sun.com</A>
+or <A HREF="mailto:carsten.driesner@sun.com">carsten.driesner@sun.com</A>.</P>
+<H3>Overview</H3>
+<P>The profiling process can be divided into four steps:</P>
+<OL>
+  <LI><P>Add macros for writing time stamps to your code. This of
+  course requires a rough idea at what code parts are too slow and need
+  to be optimized. Don't write too much time stamps because of the
+  runtime penalty and more important in a run time analysis on a much
+  higher than code line level. This step has to be done only once, so
+  the overhead of adding macros for writing time stamps should not be
+  too high.</P>
+  <LI><P>Run the office application you are interested in. This
+  generates a log file that contains all time stamps. If you are
+  interested in more then start-up or file-open times use the
+  scripting functionality of the office.</P>
+  <LI><P>Post process the log files. In this step you can filter away
+  unwanted time stamps that would otherwise clutter the analysis
+  results and obscure those parts that you are interested in. Also the
+  time stamps can be augmented by additional information.</P>
+  <LI><P>Analyze the log files and generate reports. Compare the new
+  timings with those of previous runs. This enables you to see if a
+  piece of code got slower or faster. Generation of automatic
+  notifications of the responsible developers is also possible.</P>
+</OL>
+<H3>Status</H3>
+<P>The classes, functions, and macros used for instrumenting the
+source code in the first step are ready for using. See the section
+<STRONG>Source Code</STRONG> for details.</P>
+<P>There is a first set of Perl scripts for post processing and
+generation of simple reports as Calc documents available. Both
+post-processing and analysis will be extended in the near future. See
+the <STRONG>Tools</STRONG> section for details.</P>
+<H3><A NAME="source_code"></A>Source Code</H3>
+<P>The classes and macros for writing the time stamps can be found in
+the sal project of the udk. They are defined in the files
+<CODE>sal/inc/rtl/logfile.h</CODE>, <CODE>sal/inc/logfile.hxx</CODE>,
+and <CODE>sal/rtl/source/logfile.cxx</CODE>. For inclusion into your
+source code use <CODE>#include &lt;rtl/logfile.h&gt;</CODE> or
+<CODE>#include &lt;rtl/logfile.hxx&gt;</CODE> as described in the
+How-To (see below under Documentation).</P>
+<H3>Tools</H3>
+<P>The scripts for post-processing the log files can be found in the
+(sub) project tools/contrib/profiling. Note that you have to check
+them out by hand.</P>
+<P><A HREF="write-calc-doc.html">write-calc-doc.pl</A> transforms a
+log file into a Calc document that contains two data sheets for every
+thread. The first sheet displays a pretty printed version of the raw
+data. The second sheet is made up by a table that contains for each
+function or other scope the minimal, maximal, average, and total time
+and the number of calls. More <A HREF="write-calc-doc.html">details</A>.</P>
+<H3>Documentation</H3>
+<P>There is a <A HREF="profiling-howto.html">How-To</A> that
+describes how to instrument the source code so that profiling time
+stamps are written to the log file.</P>
+<P><A HREF="time-stamp-format.html">This</A> document describes the
+format of the time stamps written to the log file.</P>
+<P>The Calc document containing the documentation of the time stamps
+that are written to the profiling log files is <A HREF="time-stamp-documentation.html">here</A>.while
+some words on what to include into that file can be found <A HREF="time-stamp-documentation.html">here</A>.</P>
+<H3>Communication</H3>
+<P>The mailing list for discussing matters concerning this profiling
+project is <A HREF="mailto:dev@tools.openoffice.org">dev@tools.openoffice.org</A>.</P>
+<P><BR><BR>
+</P>
+</body>
+</HTML>

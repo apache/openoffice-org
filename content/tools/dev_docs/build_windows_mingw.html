@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>OpenOffice.org - Build OOo with MinGW</title>
+  <meta name="AUTHOR" content="Volker Quetschke">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+</head>
+<body>
+<h1>Building OpenOffice.org with the MinGW compiler</h1>
+<p><b>Disclaimer! The build of OpenOffice.org with the MinGW compiler
+is not supported and <span style="color: rgb(255, 0, 0);">fully</span>
+experimental at this moment!</b></p>
+<p>The following page is a short summary of the required actions to
+build OpenOffice.org with this compiler.</p>
+<p>The only branch with applied MinGW patches is <b>cws_srx645_mingw</b>.
+You have to checkout the source with cvs, no source archiv is available
+as this document is written.</p>
+<h2>Requirements</h2>
+<p>The build has the same requirements as the
+<a href="http://tools.openoffice.org/dev_docs/build_windows_tcsh.html">W32-tcsh</a>
+build, but you don't need any Microsoft compiler. (Only the compiler,
+you need
+all the rest, e.g. MASM and PSDK.)</p>
+<h3>A lot of memory</h3>
+<p>Experiments show that with only 256MB real memory ld is using
+virtual memory
+to link the libraries, this takes very long. 512MB real memory and
+1.5GB virtual
+memory are suficient.</p>
+<h3>A patched MinGW compiler</h3>
+You can either use the MinGW compiler that comes with Cygwin (gcc
+-mno-cygwin, alias <b>cygming</b>)
+or install a <b>MinGW</b> system in addition to you already needed
+cygwin installation. Choose
+one of the following two possibilities:
+cygming
+<ul>
+  <li>
+    <h3>cygming ( Either this ... )<br>
+    </h3>
+In addition to the cygwin packages mentioned <a
+ href="http://tools.openoffice.org/dev_docs/build_windows_tcsh.html">here</a>
+for W32-tcsh you need to install:<br>
+    <br>
+    <b>Only binary</b><br>
+gcc-mingw<br>
+gcc-mingw-core<br>
+gcc-mingw-g++<br>
+    <br>
+    <b>With source</b><br>
+binutils<br>
+mingw-runtime<br>
+w32api<br>
+    <br>
+    <span style="font-weight: bold;">Get and install reimp.exe</span><br>
+You need reeimp.exe in your path. reimp.exe is used to generate def
+files from Microsoft import libraries, you can find it in a MinGW
+installation in the <code>bin</code> directory, or in&nbsp; <code>mingw-utils-0.3.tar.gz
+from <a href="http://www.mingw.org/download.shtml">http://www.mingw.org/download.shtml</a></code>.<br>
+    <span style="font-weight: bold; color: rgb(255, 0, 0);">Only put
+reimp.exe in the path you are using when building OOo, not all files
+from that archive</span>.<br>
+    <h4>Patch and rebuild binutils, w32api and mingw-runtime</h4>
+The setup program unpacks the source packages to /usr/src. Get the
+needed <a
+ href="http://www.openoffice.org/nonav/issues/showattachment.cgi/14477/resres.c.patch">resres.c.patch</a>
+and <a
+ href="https://sourceforge.net/tracker/download.php?group_id=2435&amp;atid=302435&amp;file_id=67897&amp;aid=844566">pseudo-reloc.diff</a>.
+patches and save them to /usr/src. Now apply the patches:<br>
+    <div style="margin-left: 40px;"><code>/usr/src:$ cd
+/usr/src/binutils-20040312-1</code><br>
+    <code>/usr/src/binutils-20040312-1:$ patch -p1 &lt;
+../resres.c.patch</code><br>
+    <code>/usr/src/binutils-20040312-1:$ patch -p0 &lt;
+../pseudo-reloc.diff</code><br>
+    </div>
+    <br>
+Rebuild binutils:<br>
+    <div style="margin-left: 40px;"><code>/usr/src/binutils-20040312-1:$&nbsp;
+./configure --prefix=/usr \</code><br>
+    <code>&nbsp;&nbsp; --sysconfdir=/etc \</code><br>
+    <code>&nbsp;&nbsp; --libexecdir=/usr/sbin \</code><br>
+    <code>&nbsp;&nbsp; --localstatedir=/var \</code><br>
+    <code>&nbsp;&nbsp; --datadir=/usr/share \</code><br>
+    <code>&nbsp;&nbsp; --mandir=/usr/share/man \</code><br>
+    <code>&nbsp;&nbsp; --infodir=/usr/share/info</code><br>
+    <code>/usr/src/binutils-20040312-1:$ make &amp;&amp; make install</code><br>
+    </div>
+    <br>
+Rebuild&nbsp;
+mingw-runtime:<br>
+    <div style="margin-left: 40px;"><code>/usr/src/binutils-20040312-1:$
+cd ../w32api-2.5-1</code><br>
+    <code>/usr/src/w32api-2.5-1:$ ./configure --prefix=/usr \</code><br>
+    <code>&nbsp;&nbsp; --sysconfdir=/etc \</code><br>
+    <code>&nbsp;&nbsp; --libexecdir=/usr/sbin \</code><br>
+    <code>&nbsp;&nbsp; --localstatedir=/var \</code><br>
+    <code>&nbsp;&nbsp; --datadir=/usr/share \</code><br>
+    <code>&nbsp;&nbsp; --mandir=/usr/share/man \</code><br>
+    <code>&nbsp;&nbsp; --infodir=/usr/share/info</code><br>
+    <code>/usr/src/w32api-2.5-1:$ make &amp;&amp; make install</code><br>
+    </div>
+    <br>
+Rebuild w32api:<code> <br>
+    </code>
+    <div style="margin-left: 40px;"><code>/usr/src/w32api-2.5-1:$
+cd ..</code><br>
+    <code>/usr/src:$ ln -s w32api-2.5-1 w32api</code><br>
+    <code>/usr/src:$ cd w32api-2.5-1</code><br>
+    <code>/usr/src/w32api-2.5-1:$ cd ../mingw-runtime-3.2-1</code><br>
+    <code>/usr/src/mingw-runtime-3.2-1:$ ./configure --prefix=/usr \</code><br>
+    <code>&nbsp;&nbsp; --sysconfdir=/etc \</code><br>
+    <code>&nbsp;&nbsp; --libexecdir=/usr/sbin \</code><br>
+    <code>&nbsp;&nbsp; --localstatedir=/var \</code><br>
+    <code>&nbsp;&nbsp; --datadir=/usr/share \</code><br>
+    <code>&nbsp;&nbsp; --mandir=/usr/share/man \</code><br>
+    <code>&nbsp;&nbsp; --infodir=/usr/share/info</code><br>
+    <code> /usr/src/mingw-runtime-3.2-1:$
+make &amp;&amp; make install</code><br>
+    </div>
+    <br>
+That's it. Proceed with the <a href="#Build">build</a> section.</li>
+</ul>
+or
+<ul>
+  <li>
+    <h3>MinGW ( ... or this! )<br>
+    </h3>
+    <p>You need to install MinGW first, you need:<br>
+MinGW-3.1.0-1.exe,<br>
+gcc-core-3.3.1-20030804-1.tar.gz,<br>
+gcc-g++-3.3.1-20030804-1.tar.gz and<br>
+w32api-2.5.tar.gz</p>
+    <p>You have to patch and rebuild binutils <b>and</b> you have to
+rebuild
+libmsvcrt.a with
+the patched binutils. For this you need:<br>
+MSYS-1.0.9.exe,<br>
+msysDTK-1.0.1.exe,<br>
+binutils-2.13.90-20030111-1-src.tar.gz,<br>
+mingw-runtime-3.2-src.tar.gz,<br>
+w32api-2.5-src.tar.gz,<br>
+bison,<br>
+flex.</p>
+    <p>Patch the binutils sources with <a
+ href="http://www.openoffice.org/nonav/issues/showattachment.cgi/14477/resres.c.patch">resres.c.patch</a>
+and <a
+ href="https://sourceforge.net/tracker/download.php?group_id=2435&amp;atid=302435&amp;file_id=67897&amp;aid=844566">pseudo-reloc.diff</a>.</p>
+    <p>Hint 1: First rebuild w32api-2.5 and then mingw-runtime-3.2
+(This containes libmsvcrt.a)</p>
+    <p>Hint 2: To build binutils with MinGW you need bison and flex,
+but
+you have to remove them from the path before you start the OOo build.</p>
+  </li>
+</ul>
+<h3><a name="Build">Build</a></h3>
+<p>It is recommended to use an as short as possible path, but the path
+must include
+the Platform SDK Bin directory, e.g.:</p>
+<p><code>$ export
+PATH=/bin:/cygdrive/c/WINNT/system32:/cygdrive/c/WINNT:/cygdrive/c/psdk02_2003/Bin</code></p>
+<p>
+Now configure, e.g.:</p>
+<p>For cygming:<br>
+<code>$ ./configure --with-mingwin=yes
+--with-jdk-home=/cygdrive/c/j2sdk1.4.1_02
+\<br>
+&nbsp;&nbsp;&nbsp; --with-ant-home=/cygdrive/c/ant-1.5.3-1
+--with-psdk-home=/cygdrive/d/psdk02_2003</code><br>
+</p>
+<p>or for MinGW:<br>
+<code>$ ./configure --with-mingwin=/cygdrive/c/MinGW
+--with-jdk-home=/cygdrive/c/j2sdk1.4.1_02 \<br>
+&nbsp;&nbsp;&nbsp; --with-ant-home=/cygdrive/c/ant-1.5.3-1
+--with-psdk-home=/cygdrive/d/psdk02_2003</code><br>
+<br>
+Start a tcsh<br>
+<code>$ tcsh</code></p>
+<p>Set your environment variables:<br>
+<code>$ source winmingw.set</code></p>
+<p>Build dmake<br>
+<code>$ ./bootstrap</code></p>
+<p>Rehash your path<br>
+<code>$ rehash</code></p>
+<p>Build OOo<br>
+<code>$ dmake</code></p>
+<p>And now wait. ...</p>
+<h2>Comments and updates</h2>
+<p>This document is a work in progress, any comments to <a
+ href="mailto:vq@openoffice.org">Volker Quetschke</a>.</p>
+</body>
+</html>

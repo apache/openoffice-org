@@ -1,0 +1,119 @@
+<HTML>
+<head>
+<TITLE>LogFile::Processor - Perl module for processing profiling data obtained
+from a run of an executable of the OpenOffice family.</TITLE>
+<LINK REV="made" HREF="mailto:feedback@suse.de">
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+
+<body>
+
+<A NAME="__index__"></A>
+<!-- INDEX BEGIN -->
+
+<UL>
+
+  <LI><A HREF="#name">NAME</A></LI>
+  <LI><A HREF="#synopsis">SYNOPSIS</A></LI>
+  <LI><A HREF="#description">DESCRIPTION</A></LI>
+  <UL>
+
+    <LI><A HREF="#calc_lengths"><CODE>calc_lengths</CODE></A></LI>
+    <LI><A HREF="#create_simple_table"><CODE>create_simple_table</CODE></A></LI>
+    <LI><A HREF="#create_total_list"><CODE>create_total_list</CODE></A></LI>
+  </UL>
+
+</UL>
+<!-- INDEX END -->
+
+<HR>
+<P>
+<H1><A NAME="name">NAME</A></H1>
+<P>LogFile::Processor - Perl module for processing profiling data obtained
+from a run of an executable of the OpenOffice family.</P>
+<P>
+<HR>
+<H1><A NAME="synopsis">SYNOPSIS</A></H1>
+<PRE>
+    use LogFile::Processor;</PRE>
+<PRE>
+    # Obtain the profiling data via module LogFileParser.
+        my $thread_data_list = ...
+</PRE>
+<PRE>
+
+    # Process the data set of each thread.
+    my @data_table = ();
+    foreach my $thread_data (@$thread_data_list)
+    {
+        # Calculate the length of time that each function/scope of the
+        # profiled program has taken.
+        calc_lengths ($thread_data);</PRE>
+<PRE>
+
+        # Transform into a data table that is writable to XML.
+        push @data_table, create_simple_table ($thread_data);</PRE>
+<PRE>
+
+                #       Create a list with time totals for every function/scope.
+                push @data_table, create_total_list ($thread_data);
+    }</PRE>
+<PRE>
+    #   write @data_table to XML file via module XML_Writer.</PRE>
+<P>
+<HR>
+<H1><A NAME="description">DESCRIPTION</A></H1>
+<P>The functions in this package have the purpose to process the raw
+profiling data obtained from a run of an executable of the OpenOffice
+family.</P>
+<P>
+<H2><A NAME="calc_lengths"><CODE>calc_lengths</CODE></A></H2>
+<P>Compute for each start/end of scope pair of time stamps the time spend in
+that scope.  The value is put into the start time stamp.  Two arguments are
+expected:</P>
+<DL>
+<DT><STRONG><A NAME="item_%24threadid"><CODE>$threadid</CODE></A></STRONG><BR>
+<DD>
+The id of the thread.
+<P></P>
+<DT><STRONG><A NAME="item_%24list"><CODE>$list</CODE></A></STRONG><BR>
+<DD>
+The list of time stamps.
+<P></P></DL>
+<P>
+<H2><A NAME="create_simple_table"><CODE>create_simple_table</CODE></A></H2>
+<P>Create a simple table that basically just pretty-prints all the
+information of the given one-thread-list.  It takes two required and an 
+optional third argument:</P>
+<DL>
+<DT><STRONG><CODE>$threadid</CODE></STRONG><BR>
+<DD>
+The id of the thread.
+<P></P>
+<DT><STRONG><CODE>$list</CODE></STRONG><BR>
+<DD>
+The list of time stamps.
+<P></P>
+<DT><STRONG><A NAME="item_show_ends"><CODE>$show_ends</CODE> (optional)</A></STRONG><BR>
+<DD>
+This flag indicates wether to show the function/scope exit times.
+<P></P></DL>
+<P>
+<H2><A NAME="create_total_list"><CODE>create_total_list</CODE></A></H2>
+<P>Create a list of all functions/scopes together with the total time
+they took to compute.  This functions requires a prior call to
+calc_lengths.</P>
+<DL>
+<DT><STRONG><CODE>$threadid</CODE></STRONG><BR>
+<DD>
+The id of the thread.
+<P></P>
+<DT><STRONG><CODE>$list</CODE></STRONG><BR>
+<DD>
+The list of time stamps.
+<P></P></DL>
+
+</body>
+
+</HTML>

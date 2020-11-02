@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<meta content=
+"HTML Tidy for Linux/x86 (vers 1st March 2003), see www.w3.org"
+name="generator">
+<meta http-equiv="CONTENT-TYPE" content=
+"text/html; charset=us-ascii">
+<title></title>
+<meta name="GENERATOR" content="StarOffice/5.2 (Win32)">
+<meta name="AUTHOR" content="Vladimir Glazounov">
+<meta name="CREATED" content="20010510;16553080">
+<meta name="CHANGEDBY" content="Vladimir Glazounov">
+<meta name="CHANGED" content="20010510;18034676">
+</head>
+<body>
+<p>Optimizer.pl &#8211; tool for eliminating redundant exported
+symbols.</p>
+<p>Make new optimized .def-file (first step) or make lists of
+unused export symbols (as second step).</p>
+<p>Synopsis:</p>
+<p>perl optimizer.pl [-pro] -c|a</p>
+<p>Description</p>
+<p>-a</p>
+<p>Analyse the stand. This should be used as a first step. New,
+optimized .def files are produced on this step.</p>
+<p>It is recommended when finished this first step to build the
+libraries with modified wnt.mk. If you remove /OPT:NOREF option for
+linker in this file, you'll get fully optimized version of
+libraries (there's no guarantee that it will be working version).
+You get also correspondent .map file. It seems to worth efforts to
+analyse stand again and rebuild libraries, since now some unused
+imported symbols might be thrown away.</p>
+<p>-c</p>
+<p>Compare the lists. This should be used as a first step. On this
+step new .map files and old .map-files are compared and file with
+obsolete symbols is stored in the same directory as .obs, where
+these two are.</p>
+<p>How it works:</p>
+<p>This tool is a Perl script, its functionality is implemented on
+analysis of .def and .map files produced by MS linker cl.exe. It
+must be started from the main directory of the stand with
+options:</p>
+<p>The tool looks for the symbols imported from another libraries
+in correspondent .map files and makes a complete table of used
+symbols (CTS) in memory, than .def file for each library is parsed
+and if there are symbols which are not found in CTS, than they are
+thrown away in new .def file. Former .def file is backed up as
+.olddef if there were no .olddef file before. You get the entire
+list of the libraries and projects to be rebuilt if any new .def
+files were made. There are some symbols which are exported a
+priori, they are:</p>
+<p>component_getDescriptionFunc</p>
+<p>component_getImplementationEnvironment</p>
+<p>component_getFactory</p>
+<p>component_writeInfo</p>
+<p>This table can be enlarged when needed.</p>
+<br>
+</body>
+</html>

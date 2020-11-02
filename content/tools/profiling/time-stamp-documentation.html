@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+  <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+  <TITLE></TITLE>
+  <META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+  <META NAME="CREATED" CONTENT="20010724;11274300">
+  <META NAME="CHANGED" CONTENT="20010731;15435171">
+  <STYLE>
+  <!--
+    @page { margin: 2cm }
+    H2 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 14pt; font-style: italic }
+    P { margin-bottom: 0.21cm; text-align: justify; page-break-before: auto; page-break-after: auto }
+    H1 { margin-bottom: 0.21cm; font-family: "Arial", sans-serif; font-size: 16pt }
+    P { margin-bottom: 0.21cm; text-align: justify; page-break-before: auto; page-break-after: auto }
+  -->
+  </STYLE>
+</head>
+<body>
+<H1>Profiling: Time Stamp Documentation</H1>
+<P>The purpose of this document is to give those of us who write
+filters for post-processing and analysis of profiling log files an
+overview over the available time stamps and their meaning. The
+documentation should enable us to write a filter which extracts only
+those time stamps from a log file that belong to a specific task say
+for example the loading of a writer document in XML format.</P>
+<P>Don't include a description of every time stamp into this
+document.</P>
+<H2>Format</H2>
+<P>The description of a time <SPAN STYLE="font-style: normal">stamp
+should include the following information:</SPAN></P>
+<OL>
+  <LI><P STYLE="font-style: normal">A (very) short description that
+  serves as a title.</P>
+  <LI><P STYLE="font-style: normal">The line that is written to the
+  logfile (that part of it that follows time and threadid of course).
+  Be very carefull with this because it is used in regular expressions
+  to match the time stamps in the log files. In time stamps that are
+  emitted on entering and leaving a function or other scope replace
+  the opening or closing curly brackets by a set of both (and include
+  such time stamps only once).</P>
+  <LI><P STYLE="font-style: normal">A description that tells the
+  filter writer what happens in the function that is bracketed with
+  the time stamp(s) in question, resp. what a message time stamp tells
+  you.</P>
+  <LI><P STYLE="font-style: normal">Whatever information you think
+  would be helpfull to the filter writer.</P>
+</OL>
+<H2>Example</H2>
+<P>Look at the following table taken from the chart project for an
+example of what time stamp descriptions might look like. Here <SAMP>sch</SAMP>
+is the name of the project (chart) and af is the author short</P>
+<TABLE COLS=4 WIDTH=100% BORDER=1 CELLPADDING=2 CELLSPACING=0 FRAME=BELOW RULES=GROUPS>
+  <COL WIDTH=95>
+  <COL WIDTH=269>
+  <COL WIDTH=465>
+  <COL WIDTH=521>
+  <Tbody>
+    <TR VALIGN=TOP>
+      <TD WIDTH=95 HEIGHT=32 BGCOLOR="#ccccff">
+        <P ALIGN=LEFT><FONT SIZE=3><B>Project</B></FONT></P>
+      </TD>
+      <TD WIDTH=269 BGCOLOR="#ccccff">
+        <P ALIGN=LEFT><FONT SIZE=3><B>Short description</B></FONT></P>
+      </TD>
+      <TD WIDTH=465 BGCOLOR="#ccccff">
+        <P ALIGN=LEFT><FONT SIZE=3><B>Time stamp</B></FONT></P>
+      </TD>
+      <TD WIDTH=521 BGCOLOR="#ccccff">
+        <P ALIGN=LEFT><FONT SIZE=3><B>Description</B></FONT></P>
+      </TD>
+    </TR>
+  </Tbody>
+  <Tbody>
+    <TR>
+      <TD WIDTH=95 HEIGHT=40 VALIGN=TOP>
+        <P ALIGN=LEFT>Sch (Chart)</P>
+      </TD>
+      <TD WIDTH=269 VALIGN=TOP>
+        <P ALIGN=LEFT>Main function of the chart.</P>
+      </TD>
+      <TD WIDTH=465 VALIGN=TOP>
+        <P ALIGN=LEFT>{} sch (af119097) ::ChartModel::BuildChart</P>
+      </TD>
+      <TD WIDTH=521>
+        <P ALIGN=LEFT>BuildChart is the method that does most of the work
+        in creating a chart and consumes most of the time. It is called
+        mutch to often.</P>
+      </TD>
+    </TR>
+    <TR>
+      <TD WIDTH=95 HEIGHT=40 VALIGN=TOP>
+        <P><BR>
+        </P>
+      </TD>
+      <TD WIDTH=269 VALIGN=TOP>
+        <P ALIGN=LEFT>Build chart not skipped</P>
+      </TD>
+      <TD WIDTH=465 VALIGN=TOP>
+        <P ALIGN=LEFT>{} sch (af119097) ::ChartModel::BuildChart : {}
+        full</P>
+      </TD>
+      <TD WIDTH=521>
+        <P ALIGN=LEFT>Indication that due to a lock of the model the
+        build chart has not been skipped.</P>
+      </TD>
+    </TR>
+  </Tbody>
+  <Tbody>
+    <TR>
+      <TD WIDTH=95 HEIGHT=22 VALIGN=TOP>
+        <P><BR>
+        </P>
+      </TD>
+      <TD WIDTH=269 VALIGN=TOP>
+        <P ALIGN=LEFT>Loading of a chart</P>
+      </TD>
+      <TD WIDTH=465 VALIGN=TOP>
+        <P ALIGN=LEFT>{} sch (af119097) ::SchChartDocShell::Load</P>
+      </TD>
+      <TD WIDTH=521>
+        <P ALIGN=LEFT>Loading of a chart object.</P>
+      </TD>
+    </TR>
+    <TR>
+      <TD WIDTH=95 HEIGHT=20 VALIGN=TOP>
+        <P><BR>
+        </P>
+      </TD>
+      <TD WIDTH=269 VALIGN=TOP>
+        <P ALIGN=LEFT>Chart is loaded from XML format</P>
+      </TD>
+      <TD WIDTH=465 VALIGN=TOP>
+        <P ALIGN=LEFT>| sch (af119097) ::SchChartDocShell::Load : XML
+        Format</P>
+      </TD>
+      <TD WIDTH=521>
+        <P ALIGN=LEFT>Chart is loaded from an XML storage.</P>
+      </TD>
+    </TR>
+    <TR>
+      <TD WIDTH=95 HEIGHT=22 VALIGN=TOP>
+        <P><BR>
+        </P>
+      </TD>
+      <TD WIDTH=269 VALIGN=TOP>
+        <P ALIGN=LEFT>Chart is loaded from binary format</P>
+      </TD>
+      <TD WIDTH=465 VALIGN=TOP>
+        <P ALIGN=LEFT>| sch (af119097) ::SchChartDocShell::Load : Binary
+        Format</P>
+      </TD>
+      <TD WIDTH=521>
+        <P ALIGN=LEFT>Chart is loaded from a binary storage.</P>
+      </TD>
+    </TR>
+  </Tbody>
+</TABLE>
+<P><BR><BR>
+</P>
+</body>
+</HTML>

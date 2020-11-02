@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>Debugging tips</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Linux)">
+	<META NAME="CREATED" CONTENT="20010725;17180700">
+	<META NAME="CHANGED" CONTENT="20010801;15113300">
+</head>
+<body>
+<H1>Tips for debugging OpenOffice under Unix</H1>
+<H2>Solaris</H2>
+<P>Debugger: Forte 6 update 1 (dbx or workshop)</P>
+<P>It's strongly recommended to install patch 109510-03 (109511-03
+for x86), otherwise the debugger will die on setting certain (not at
+all uncommon) breakpoints.</P>
+<H3>1) How to set breakpoints in not yet loaded shared libraries</H3>
+<P>The easiest way to set a breakpoint in a load on call shared
+library is to preload it: Example</P>
+<P>(../dbx) loadobjects -p libsc638ss.so</P>
+<P>(../dbx) stop in CreateScDocShellDll</P>
+<P>(../dbx) run</P>
+<H3>2) How to catch exceptions</H3>
+<P>Example:</P>
+<P>(../dbx) intercept -a 
+</P>
+<P>will intercept all exceptions</P>
+<P>(../dbx) intercept &lt;typename&gt;</P>
+<P>will intercept exceptions of type &lt;typename&gt; if you have
+debug information at the place of throw()</P>
+<H3>3) How to display Unicode strings</H3>
+<P>Problem: OOo uses 16 bit quantities as Unicode characters (UCS2).
+Since wchar_t is 32 bit on most Unix platforms it's hard to decipher
+strings in OOo.</P>
+<P>One possible solution:</P>
+<P>Tools string:</P>
+<P>(../dbx) print
+((char*)&amp;aString.mpData-&gt;maStr[0])[1..&lt;desired.length*2&gt;:2]</P>
+<P>OUString:</P>
+<P>(../dbx) print
+((char*)&amp;aString.pData-&gt;buffer[0])[1..&lt;desired.length*2&gt;:2]</P>
+<P>For Solaris x86 you'll have to modify the line:</P>
+<P>Tools string:</P>
+<P>(../dbx) print
+((char*)&amp;aString.mpData-&gt;maStr[0])[0..&lt;desired.length*2&gt;:2]</P>
+<P>OUString:</P>
+<P>(../dbx) print
+((char*)&amp;aString.pData-&gt;buffer[0])[0..&lt;desired.length*2&gt;:2]</P>
+<P><BR><BR>
+</P>
+<P>Caolan McNamara provided the following macro (place it in your
+.dbxrc) :</P>
+<PRE><FONT SIZE=3>function pu<BR>{<BR>: ${1?&quot;usage: $0 unicode_string # print unicode&quot;}<BR>    len=$[($1).mpData-&gt;mnLen]<BR>    i=$[0]<BR>    str=&quot;&quot;<BR>    while [ $i -lt $len ]<BR>    do<BR>        u=$[(char)((sal_Unicode*)&amp;$1.mpData-&gt;maStr)[$i]]<BR>        str=$str$u<BR>        i=$[$i+1]<BR>    done<BR>    echo $str | sed -e &quot;s/\'//g&quot;<BR>}</FONT></PRE><H3>
+4) How to intercept the dynamic loading of shared libraries</H3>
+<P>Example: stop on loading libsc638ss.so</P>
+<P>(../dbx) stop dlopen libsc638ss.so</P>
+<P><BR><BR>
+</P>
+<H2>Linux</H2>
+<H3>TBD.</H3>
+<h3>How to display Unicode Strings</h3>
+<p><code>(gdb) print dbg_dump(sString)</code></p>
+<p>Where sString is any of String/ByteString/rtl::OUString/rtl::OString.
+Providing extra overridden dbg_dump functions along the lines of the existing
+ones should provide the ability to extend the technique to any other string
+types that we have festering away somewhere, or of course any other custom
+types which might benefit from a human readable debugging view.</p>
+<h2>Addendum</h2>
+<P>Any corrections and further suggestions/additions to this document
+are highly welcome.</P>
+<P>Author: <A HREF="mailto:rechtien@sun.com?subject=Debugs Tips and Tricks">Jens-Heiner
+Rechtien</A> (HR), last change 2001/08/01</P>
+<H1>Tips for debugging OpenOffice under Windows</H1>
+<p>The following is lifted straight from the mailing lists.</p>
+<pre>
+In that case when you want to debug a particular library/module you
+need to "cd &lt;whatever module" e.g. "cd sw" for the Writer application.
+And then "build debug=true", then copy the built libraries into your
+OOo installation and point MSVisual C++ at it.
+</pre>
+<p>And perhaps more informational</p>
+<pre>
+debug OOo on windows platform: 
+1. Install VC++ 6.0 
+2. Install a oo643C Win build 
+3. Copy the dlls that contain debug info to local machine, and
+   to replace the old files in &lt;ooRoot&gt;/program.
+4. Create an empty project in VC. 
+ Goto Project -&gt; Settings -&gt; Debug Tab: 
+  For General -&gt; Executable for debug session: , set "soffice.exe"
+  For "Add additional dlls" -&gt; Modules -&gt; add the dlls.
+5. Open some OOo source code and add some breakpoints.
+6. Go debug!
+</pre>
+
+<p>The following might be a useful comment</p>
+<pre>
+Project-&gt;settings-&gt;debug-&gt;Category: select additional dlls. In the
+list area place the dlls that you will be debugging, i.e. c:\path\to\swXXXmi.dll
+</pre>
+<h3>Some hints that appear to be Win 2000 specific</h3>
+<pre>
+Make sure, your debug libraries get used by the soffice process (e.g. by 
+explicitly copying them into the program directory).
+
+The MS debugger can be started simply with
+
+msdev
+
+out of your environment.
+
+Depending on your MSDEV version, you can simply start
+
+(6.x)
+  msdev soffice.exe
+
+(.NET)
+
+  msdev /someswitchidonotknow soffice.exe
+(I think with msdev /? you get a list of possible switches.
+
+
+, afterwards press F5 to start the process
+</pre>
+
+<p>And an extra comment was added</p>
+<p>After copying the .PDB files to the program level the MVC++ Debugger seems
+to be detecting the debug info.</p>
+
+
+<h3>For more information on debugging</h3>
+<p>Caolan wrote a very good 
+<a href="http://www.openoffice.org/servlets/ReadMsg?msgId=73802&listName=dev">
+summary of debugging</a>, volunteers to integrate this information please.</p>
+
+</body>
+</HTML>

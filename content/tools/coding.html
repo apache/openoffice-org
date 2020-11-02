@@ -1,0 +1,678 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta http-equiv="CONTENT-TYPE" content="text/html; charset=iso-8859-1">
+</head>
+<body>
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=3 WIDTH="100%" STYLE="page-break-before: always" >
+<tr>
+<td VALIGN=TOP>
+<h1><a NAME="portability_rules"></a>C++ coding guidelines</h1>
+The <a href="http://www.mozilla.org/hacking/portable-cpp.html">Mozilla
+C++ portability guidelines</a> provide an excellent source of information
+on portable C++ programming. Many of these guidelines are direct applicable
+to coding OpenOffice.org projects and are taken over verbatim into the
+guidelines below. I've taken out some of the Mozilla rules
+(don't use exceptions,
+RTTI and namespaces) which restrict the usage of newer language features.
+OpenOffice.org can't be compiled with older compilers anyway, and current
+compilers implement these features properly. I've also added a few rules
+from our OpenOffice.org programming guidelines.
+<p>The guidelines are roughly ordered by importance. Guideline 1,2,4,5
+cover problems which are almost always present in any mayor build of OpenOffice.org
+and require sometimes excessive amount of code tweaking by the release
+engineers.
+<br>
+<h2><a NAME="dont_use_static_constructors"></a>Don't use static constructors.</h2>
+<p>Non-portable example:
+<pre>
+  FooBarClass static_object(87, 92);
+
+  void
+  bar()
+  {
+    if (static_object.count &gt; 15) {
+       ...
+    }
+  }
+</pre>
+Static constructors don't work reliably either. A static initialized object
+is an object which is instanciated at startup time (just before <tt>main()</tt>
+is called). Usually there are two components to these objects. First there
+is the data segment which is static data loaded into the global data segment
+of the program. The second part is a initializer function that is called
+by the loader before <tt>main()</tt> is called. We've found that many compilers
+do not reliably implement the initializer function. So you get the object
+data, but it is never initialized. One workaround for this limitation is
+to write a wrapper function that creates a single instance of an object,
+and replace all references to the static initialized object with a call
+to the wrapper function:
+<p>Portable example:
+<pre>
+  static FooBarClass* static_object;
+
+  FooBarClass*
+  getStaticObject()
+  {
+    if (!static_object)
+      static_object =
+        new FooBarClass(87, 92);
+    return static_object;
+  }
+
+  void
+  bar()
+  {
+    if (getStaticObject()-&gt;count &gt; 15) {
+      ...
+    }
+  }
+</pre>
+<h2><a NAME="use_common_den"></a>Use the common denominator between members
+of a C/C++ compiler family.</h2>
+<p>For many of the compiler families we use, the implementation of the
+C and C++ compilers are completely different, sometimes this means that
+there are things you can do in the C language, that you cannot do in the
+C++ language on the same machine. One example is the 'long long' type.
+On some systems (IBM's compiler used to be one, but I think it's better
+now), the C compiler supports long long, while the C++ compiler does not.
+This can make porting a pain, as often times these types are in header
+files shared between C and C++ files. The only thing you can do is to go
+with the common denominator that both compilers support. In the special
+case of long long, we developed a set of macros for supporting 64 bit integers
+when the long long type is not available. We have to use these macros if
+either the C or the C++ compiler does not support the special 64 bit type.
+<h2><a NAME="no_cpp_comments_in_c"></a>Don't put C++ comments in C code.</h2>
+<p>The quickest way to raise the blood pressure of a Release engineer is
+to put C++ comments (<b><tt>//</tt></b> comments) into C files. Yes, this
+might work on your Microsoft Visual C compiler, but it's wrong, and is
+not supported by the vast majority of C compilers in the world.<b> Just
+do not go there.</b>
+<p>Many header files will be included by C files and included by C++ files.
+We think it's a good idea to apply this same rule to those headers. Don't
+put C++ comments in header files included in C files. You might argue that
+you could use C++ style comments inside <tt>#ifdef __cplusplus</tt> blocks,
+but we are not convinced that is always going to work (some compilers have
+weird interactions between comment stripping and pre-processing), and it
+hardly seems worth the effort. Just stick to C style <tt>/**/</tt> comments
+for any header file that is ever likely to be included by a C file.
+<h2><a NAME="put_new_line_at_eof"></a>Put a new line at end-of-file.</h2>
+<p>Not having a new-line char at end-of-file breaks some compilers (Solaris).
+<h2><a NAME="no_extra_semi_colons"></a>Don't put extra top-level semi-colons
+in code.</h2>
+<p>Non-portable example:
+<pre>
+  int
+  A::foo()
+  {
+  };
+</pre>
+This is another problem that seems to show up more on C++ than C code.
+This is problem really a bit of a drag. That extra little semi-colon at
+the end of the function is ignored by most compilers, but it makes some
+compilers very unhappy (IBM's AIX compiler doesn't like extra top-level
+semi-colons). Don't do it.
+<p>Portable example:
+<pre>
+  int
+  A::foo()
+  {
+  }
+</pre>
+<h2><a NAME="file_extension_is_cpp"></a>C++ filename extension is <tt>.cxx</tt>.</h2>
+<p>This one is another plain annoying problem. What's the name of a C++
+file? <tt>file.cpp</tt>, <tt>file.cc</tt>, <tt>file.C</tt>, <tt>file.cxx</tt>,
+<tt>file.c++</tt>,
+<tt>file.C++</tt>?
+Most compilers could care less, but some are very particular. We have not
+been able to find one file extension which we can use on all the platforms
+we have ported OpenOffice.org code to. For no great reason, we've settled
+on <tt>file.cxx</tt>, probably because the first C++ code in OpenOffice.org
+code was checked in with that extension. Well, it's done. The extension
+we use is <tt>.cxx</tt>. This extension seems to make most compilers happy,
+but there are some which do not like it.
+<h2><a NAME="dont_use_init_lists_with_cpp"></a>Don't use initializer
+lists with objects.</h2>
+<p>Non-portable example:
+<pre STYLE="margin-bottom: 0.2in">  FooClass myFoo = {10, 20};</pre>
+Some compilers won't allow this syntax for objects (HP-UX won't), actually
+only some will allow it. So don't do it. Again, use a wrapper function,
+see <a href="http://www.mozilla.org/hacking/portable-cpp.html#dont_use_static_constructors">Don't
+use static constructors.</a>
+<h2><a NAME="always_have_default_constructor"></a>Always have a default
+constructor.</h2>
+<p>Always have a default constructor, even if it doesn't make sense in
+terms of the object structure/hierarchy. HP-UX will barf on statically
+initialized objects that don't have default constructors.
+<h2><a NAME="inner_classes"></a>Be careful with inner-classes.</h2>
+<p>Some compilers (HP-UX) generally require that types (classes, enums,
+etc.) declared inside of another class should be referred to with their
+fully scoped form (e.g., <tt>Foo::kListMaxLen</tt> versus <tt>kListMaxLen</tt>).
+<h2><a NAME="init_variables_at_top"></a>Be careful of variable declarations
+that require construction or initialization.</h2>
+<p>Non-portable example:
+<pre>
+  void
+  A::foo(int c)
+  {
+    switch(c) {
+    case FOOBAR_1:
+      XyzClass buf(100);
+      // <i>stuff
+</i>      break;
+    }
+  }
+</pre>
+Be careful with variable placement around if blocks and switch statements.
+Some compilers (HP-UX) require that any variable requiring a constructor/initializer
+to be run, needs to be at the start of the method -- it won't compile code
+when a variable is declared inside a switch statement and needs a default
+constructor to run.
+<p>Portable example:
+<pre>
+  void
+  A::foo(int c)
+  {
+    XyzClass buf(100);
+
+    switch(c) {
+    case FOOBAR_1:
+      // <i>stuff</i>
+      break;
+    }
+  }
+</pre>
+<h2><a NAME="header_files_c_and_cpp"></a>Make header files compatible with
+C and C++.</h2>
+<p>Non-portable example:
+<pre>
+  /*<i>oldCheader.h</i>*/
+  int existingCfunction(char*);
+  int anotherExistingCfunction(char*);
+
+  /*<i> oldCfile.c </i>*/
+  #include "oldCheader.h"
+  ...
+
+  // <i>new file.cxx</i>
+  extern "C" {
+  #include "oldCheader.h"
+  };
+  ...
+</pre>
+If you make new header files with exposed C interfaces, make the header
+files work correctly when they are included by both C and C++ files. If
+you start including an existing C header in new C++ files, fix the C header
+file to support C++ (as well as C), don't just <tt>extern "C" {}</tt> the
+old header file. Do this:
+<p>Portable example:
+<pre>
+  /*<i>oldCheader.h</i>*/
+  #ifdef __cplusplus
+  extern "C" {
+  #endif
+  int existingCfunction(char*);
+  int anotherExistingCfunction(char*);
+  #ifdef __cplusplus
+  }
+  #endif
+
+  /*<i> oldCfile.c </i>*/
+  #include "oldCheader.h"
+  ...
+
+  // <i>new file.cxx</i>
+  #include "oldCheader.h"
+  ...
+</pre>
+There are number of reasons for doing this, other than just good style.
+For one thing, you are making life easier for everyone else, doing the
+work in one common place (the header file) instead of all the C++ files
+that include it. Also, by making the C header safe for C++, you document
+that "hey, this file is now being included in C++". That's a good thing.
+You also avoid a big portability nightmare that is nasty to fix...
+<p>Some systems include C++ in system header files that are designed to
+be included by C or C++. Not just <tt>extern "C" {}</tt> guarding, but
+actual C++ code, usually in the form of inline functions that serve as
+"optimizations". While we question the wisdom of vendors doing this, there
+is nothing we can do about it. Changing system header files, is not a path
+we wish to take. Anyway, so why is this a problem? Take for example the
+following code fragment:
+<p>Non-portable example:
+<pre>
+  /*<i>system.h</i>*/
+  #ifdef __cplusplus
+    /*<i> optimization </i>*/
+  inline int sqr(int x) {return(x*x);}
+  #endif
+
+  /*<i>header.h</i>*/
+  #include &lt;system.h&gt;
+  int existingCfunction(char*);
+
+  // <i>file.cxx </i>
+  extern "C" {
+  #include "header.h"
+  }
+</pre>
+What's going to happen? When the C++ compiler finds the <tt>extern "C"</tt>
+declaration in <tt>file.cxx</tt>, it will switch dialects to C, because
+it's assumed all the code inside is C code, and C's type free name rules
+need to be applied. But the __cplusplus pre-processor macro is still defined
+(that's seen by the pre-processor, not the compiler). In the system header
+file the C++ code inside the <tt>#ifdef __cplusplus</tt> block will be
+seen by the compiler (now running in C mode). Syntax Errors galore! If
+instead the <tt>extern "C"</tt> was done in the header file, the C functions
+can be correctly guarded, leaving the systems header file out of the equation.
+This works:
+<p>Portable example:
+<pre>
+  /*<i>system.h</i>*/
+  #ifdef __cplusplus
+    /*<i> optimization </i>*/
+  inline int sqr(int x) {return(x*x);}
+  #endif
+
+  /*<i>header.h</i>*/
+  #include &lt;system.h&gt;
+  extern "C" {
+  int existingCfunction(char*);
+  }
+
+  // <i>file.cxx</i>
+  #include "header.h"
+</pre>
+One more thing before we leave the <tt>extern "C"</tt> segment of the program.
+Sometimes you're going to have to <tt>extern "C"</tt> system files. This
+is because you need to include C system header files that do not have <tt>extern
+"C"</tt> guarding themselves. Most vendors have updated all their headers
+to support C++, but there are still a few out there that won't grok C++.
+You might have to do this only for some platforms, not for others (using
+<tt>#ifdef
+SYSTEM_X</tt>). The safest place to do <tt>extern "C"</tt> a system header
+file (in fact the safest place to include a system header file) is at the
+lowest place possible in the header file inclusion hierarchy. That is,
+push all this stuff down to the header files closer to the system code,
+don't do this stuff in the mail header files. Ideally the best place to
+do this is in the NSPR or XP header files - which sit directly on the system
+code.
+<h2><a NAME="variables_in_for"></a>Be careful of the scoping of variables
+declared inside <tt>for()</tt> statements.</h2>
+<p>Non-portable example:
+<pre>
+  void
+  A::foo()
+  {
+      for (int i = 0; i &lt; 10; i++) {
+        // <i>do something</i>
+      }
+      // <i><b>i</b> might get referenced</i>
+      // <i> after the loop.</i>
+      ...
+  }
+</pre>
+This is actually an issue that comes about because the C++ standard has
+changed over time. The original C++ specification would scope the <b>i</b>
+as part of the outer block (in this case function <tt>A::foo()</tt>). The
+standard changed so that now the <b>i</b> in is scoped within the <tt>for()
+{}</tt> block. Most compilers use the new standard. Some compilers (for
+example, HP-UX) still use the old standard. Some other compilers (for example,
+gcc) use the new rules, but will tolerate the old. If <b>i</b> was referenced
+later in the <tt>for() {}</tt> block, gcc will allow the construct, but
+give a warning about use of an "obsolete binding". So, while the code above
+is valid, it would become ambiguous if <b>i</b> was used later in the function.
+It's probably better to be on the safe side and declare the iterator variable
+outside of the <tt>for()</tt> loop. Then you'll know what you are getting
+on all platforms:
+<p>Portable example:
+<pre>
+  void
+  A::foo()
+  {
+    int i;
+    for (i = 0; i &lt; 10; i++) {
+      // <i>do something</i>
+    }
+    // <i><b>i</b> might get referenced</i>
+    // <i> after the loop.</i>
+	...
+  }
+</pre>
+<h2><a NAME="local_aggregates"></a>Declare local initialized aggregates
+as static.</h2>
+<p>Non-portable example:
+<pre>
+  void
+  A:: func_foo()
+  {
+    char* foo_int[] = {"1", "2", "C"};
+    ...
+  }
+</pre>
+This seemingly innocent piece of code will generate a "loader error" using
+the HP-UX compiler/linker. If you really meant for the array to be static
+data, say so:
+<p>Portable example:
+<pre>
+  void
+  A:: func_foo()
+  {
+    static char *foo_int[] = {"1", "2", "C"};
+    ...
+  }
+</pre>
+Otherwise you can keep the array as an automatic, and initialize by hand:
+<p>Portable example:
+<pre>
+  void
+  A:: func_foo()
+  {
+    char *foo_int[3];
+
+    foo_int[0] = XP_STRDUP("1");
+    foo_int[1] = XP_STRDUP("2");
+    foo_int[2] = XP_STRDUP("C");
+    // <i>or something equally Byzantine...</i>
+    ...
+  }
+</pre>
+<h2><a NAME="complex_inlines"></a>Expect complex inlines to be non-portable.</h2>
+<p>Non-portable example:
+<pre>
+  class FooClass {
+    ...
+    int fooMethod(char* p) {
+      if (p[0] == '\0')
+        return -1;
+
+      doSomething();
+      return 0;
+    }
+    ...
+  };
+</pre>
+It's surprising, but many C++ compilers do a very bad job of handling inline
+member functions. Cfront based compilers (like those on SCO and HP-UX)
+are prone to give up on all but the most simple inline functions, with
+the error message "sorry, unimplemented". Often times the source of this
+problem is an inline with multiple return statements. The fix for this
+is to resolve the returns into a single point at the end of the function.
+But there are other constructs which will result in "not implemented".
+For this reason, you'll see that most of the C++ code in Mozilla does not
+use inline functions. We don't want to legislate inline functions away,
+but you should be aware that there is some danger in using them, so do
+so only when there is some measurable gain (not just a random hope of performance
+win). <b>Maybe you should just not go there.</b>
+<p>Portable example:
+<pre>
+  class FooClass {
+    ...
+    int fooMethod(char* p) {
+      int return_value;
+
+        if (p[0] == '\0') {
+           return_value = -1;
+        } else {
+           doSomething();
+           return_value = 0;
+        }
+        return return_value;
+    }
+    ...
+  };
+</pre>
+Or
+<p>Portable example:
+<pre>
+  class FooClass {
+    ...
+    int fooMethod(char* p);
+    ...
+  };
+
+  int FooClass::fooMethod(char* p)
+  {
+    if (p[0] == '\0')
+      return -1;
+
+    doSomething();
+    return 0;
+  }
+</pre>
+<h2><a NAME="inlines_in_return"></a>Don't use return statements that have
+an inline function in the return expression.</h2>
+<p>For the same reason as the previous tip, don't use return statements
+that have an inline function in the return expression. You'll get that
+same "sorry, unimplemented" error. Store the return value in a temporary,
+then pass that back.
+<h2><a NAME="virtual_on_subclasses"></a>Use virtual declaration on all
+subclass virtual member functions.</h2>
+<p>Non-portable example:
+<pre>
+  class A {
+    virtual void foobar(char*);
+  };
+
+  class B : public A {
+    void foobar(char*);
+  };
+</pre>
+Another drag. In the class declarations above, <tt>A::foobar()</tt> is
+declared as virtual. C++ says that all implementations of void <tt>foobar(char*)</tt>
+in subclasses will also be virtual (once virtual, always virtual). This
+code is really fine, but some compilers want the virtual declaration also
+used on overloaded functions of the virtual in subclasses. If you don't
+do it, you get warnings. While this is not a hard error, because this stuff
+tends to be in headers files, you'll get so many warnings that's you'll
+go nuts. Better to silence the compiler warnings, by including the virtual
+declaration in the subclasses. It's also better documentation:
+<p>Portable example:
+<pre>
+  class A {
+    virtual void foobar(char*);
+  };
+
+  class B : public A {
+    virtual void foobar(char*);
+  };
+</pre>
+<h2><a NAME="copy_constructors"></a>Always declare a copy constructor and
+assignment operator.</h2>
+<p>One feature of C++ that can be problematic is the use of copy constructors.
+Because a class's copy constructor defines what it means to pass and return
+objects by value (or if you prefer, pass by value means call the copy constructor),
+it's important to get this right. There are times when the compiler will
+silently generate a call to a copy constructor, that maybe you do not want.
+For example, when a you pass an object by value as a function parameter,
+a temporary copy is made, which gets passed, then destroyed on return from
+the function. Maybe you don't want this to happen, maybe you'd always like
+instances of your class to be passed by reference. If you do not define
+a copy constructor the C++ compiler will generate one for you (the default
+copy constructor), and this automatically generated copy constructor might,
+well, suck. So you have a situation where the compiler is going to silently
+generate calls to a piece of code that might not be the greatest code for
+the job (it may be wrong).
+<p>Ok, you say, "no problem, I know when I'm calling the copy constructor,
+and I know I'm not doing it". But what about other people using your class?
+The safe bet is to do one of two things: if you want your class to support
+pass by value, then write a good copy constructor for your class. If you
+see no reason to support pass by value on your class, then you should explicitly
+prohibit this, don't let the compiler's default copy constructor do it
+for you. The way to enforce your policy is to declare the copy constructor
+as private, and not supply a definition. While your at it, do the same
+for the assignment operator used for assignment of objects of the same
+class. Example:
+<pre>
+  class foo {
+    ...
+    private:
+    // <i>These are not supported</i>
+    // <i>and are not implemented!</i>
+    foo(const foo&amp; x);
+    foo&amp; operator=(const foo&amp; x);
+  };
+</pre>
+When you do this, you ensure that code that implicitly calls the copy constructor
+will not compile and link. That way nothing happens in the dark. When a
+user's code won't compile, they'll see that they were passing by value,
+when they meant to pass by reference (oops).
+<h2><a NAME="signatures"></a>Be careful of overloaded methods with like
+signatures.</h2>
+<p>It's best to avoid overloading methods when the type signature of the
+methods differs only by 1 "abstract" type (e.g. <tt>PR_Int32</tt> or <tt>int32</tt>).
+What you will find as you move that code to different platforms, is suddenly
+on the Foo2000 compiler your overloaded methods will have the same type-signature.
+<h2><a NAME="type_scalar_constants"></a>Type scalar constants to avoid
+unexpected ambiguities.</h2>
+<p>Non-portable code:
+<pre>
+  class FooClass {
+    // <i>having such similar signatures</i>
+    // <i>is a bad idea in the first place.</i>
+    void doit(long);
+    void doit(short);
+  };
+
+  void
+  B::foo(FooClass* xyz)
+  {
+    xyz-&gt;doit(45);
+  }
+</pre>
+Be sure to type your scalar constants, e.g., PR_INT32(10) or 10L. Otherwise,
+you can produce ambiguous function calls which potentially could resolve
+to multiple methods, particularly if you haven't followed (2) above. Not
+all of the compilers will flag ambiguous method calls.
+<p>Portable code:
+<pre>
+  class FooClass {
+    // <i>having such similar signatures</i>
+    // <i>is a bad idea in the first place.</i>
+    void doit(long);
+    void doit(short);
+  };
+
+  void
+  B::foo(FooClass* xyz)
+  {
+    xyz-&gt;doit(45L);
+  }
+</pre>
+<h2><a NAME="bool_types"></a>Type scalar constants to avoid unexpected ambiguities.</h2>
+<p>Some platforms (e.g. Linux) have native definitions of types like bool
+which sometimes conflict with definitions OpenOffice.org code. Always use
+sal_Bool..
+
+<h1><a NAME="c_and_cplusplus"></a>Stuff that is good to do for C or C++.</h1>
+
+<h2><a NAME="dont_ifdef_include"></a>Do not wrap include statements
+with an <tt>#ifdef</tt>.</h2>
+<p>Do not wrap include statements with an <tt>#ifdef</tt>. The reason is
+that when the symbol is not defined, other compiler symbols will not be
+defined and it will be hard to test the code on all platforms. An example
+of what not to do:
+<p>Bad code example:
+<pre>
+  // don't do this
+  #ifdef X
+  #include "foo.h"
+  #endif
+</pre>
+The exception to this rule is when you are including different system files
+for different machines. In that case, you may need to have a <tt>#ifdef
+SYSTEM_X</tt> include.
+<h2><a NAME="assignments_in_boolean"></a>Macs complain about assignments
+in boolean expressions.</h2>
+<p>Another example of code that will generate warnings on a Mac:
+<p>Generates warnings code:
+<pre STYLE="margin-bottom: 0.2in">  if ((a = b) == c) ...</pre>
+Macs don't like assignments in <b>if</b> statements, even if you properly
+wrap them in parentheses.
+<p>More portable example:
+<pre>
+  a=b;
+  if (a == c) ...
+</pre>
+<h2><a NAME="filenames_must_be_unique"></a>Every source file must have a
+unique name.</h2>
+<p>Non-portable file tree:
+<pre>
+  feature_x
+      private.h
+      x.cxx
+  feature_y
+      private.h
+      y.cxx
+</pre>
+For Mac compilers, every has to have a unique name. Don't assume that just
+because your file is only used locally that it's OK to use the same name
+as a header file elsewhere. It's not ok. Every filename must be different.
+<p>Portable file tree:
+<pre>
+  feature_x
+      xprivate.h
+      x.cxx
+  feature_y
+      yprivate.h
+      y.cxx
+</pre>
+<b>Use <tt>#if 0</tt> rather than comments to temporarily kill blocks of
+code.</b>
+<p>Non-portable example:
+<pre>
+  int
+  foo()
+  {
+    ...
+    a = b + c;
+    /*
+     * Not doing this right now.
+    a += 87;
+    if (a &gt; b) (* have to check for the
+                  candy factor *)
+      c++;
+     */
+    ...
+  }
+</pre>
+This is a bad idea, because you always end up wanting to kill code blocks
+that include comments already. No, you can't rely on comments nesting properly.
+That's far from portable. You have to do something crazy like changing
+<tt>/**/</tt>
+pairs to <tt>(**)</tt> pairs. You'll forget. And don't try using <tt>#ifdef
+NOTUSED</tt>, the day you do that, the next day someone will quietly start
+defining <tt>NOTUSED</tt> somewhere. It's much better to block the code
+out with a <tt>#if 0</tt>, <tt>#endif</tt> pair, and a good comment at
+the top. Of course, this kind of thing should always be a temporary thing,
+unless the blocked out code fulfills some amazing documentation purpose.
+<p>Portable example:
+<pre>
+  int
+  foo()
+  {
+    ...
+    a = b + c;
+  #if 0
+    /*<i> Not doing this right now. </i>*/
+    a += 87;
+    if (a &gt; b) /*<i> have to check for the
+                  candy factor </i>*/
+      c++;
+  #endif
+    ...
+  }
+</pre>
+<h2>Source code formatting.</h2>
+<p>After some discussion we agreed that basic indentation should be four
+spaces, no tabs. Please use an editor setting which expands a typed tab
+into spaces. Some examples:</p><br>
+<code>vim: set expandtab</code><br>
+<code>emacs: (setq-default indent-tabs-mode nil)</code><br>
+<code>msdev: check Options-&gt;Tabs-&gt;Insert Spaces</code><br>
+</td>
+</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,443 @@
+<html><head>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+
+<body>
+
+	<STYLE>
+	<!--
+		TD P.courier { font-family: "Courier New", monospace;}
+		TD P.paracode { margin-left: 0.59in; margin-top: 0in; margin-bottom: 0in; font-family: "Courier", monospace;}
+		TD P.paracodeindent { margin-left: 0.78in; margin-top: 0in; margin-bottom: 0in; font-family: "Courier", monospace; }
+		TD P.paracodetable { margin-top: 0in; margin-bottom: 0in; font-family: "Courier", monospace; }
+		SAMP.code { font-family: "Courier", monospace;}
+		KBD.userinput { font-weight: bold }
+		VAR { }
+	-->
+	</STYLE>
+
+<H1><A NAME="3.StarOfficeBuildEnvironment|outline"></A>OpenOffice.org
+Build Environment</H1>
+
+
+<P>This section contains the following information:</P>
+<UL TYPE=DISC>
+	<LI><A HREF="#3.1.TheconfigureScriptforLinuxandSolaris|outline">The configure Script for Linux and Solaris</A></LI>
+	<UL>
+	<LI><A HREF="#3.1.1.OperatingEnvironmentsSupportedbyconfigureScript|outline">Operating
+	Environments Supported by configure Script</A></LI>
+	<LI><A HREF="#3.1.2.CheckingthePrerequisites|outline">Checking
+	the Prerequisites</A></LI>
+	<LI><A HREF="#3.1.3.CheckingToolVersions|outline">Checking
+	Tool Versions</A></LI>
+	<LI><A HREF="#3.1.4.OptionsAvailablewithconfigureScript|outline">Options
+	Available with configure Script</A></LI>
+	<LI><A HREF="#3.1.5.SettingtheEnvironmentVariables|outline">Setting
+	the Environment Variables</A></LI>
+	</UL>
+	<LI><A HREF="#3.2.BuildEnvironmentDescription|outline">Build Environment Description</A></LI>
+	<LI><A HREF="#3.3.ToolsProvidedtoBuildandInstallStarOffice|outline">Tools Provided to Build and Install StarOffice</A></LI>
+	<LI><A HREF="#3.4.CVSModuleStructure|outline">CVS Module Structure</A></LI>
+	<UL>
+	<LI><A HREF="#3.4.1.TopLevelCVSModuleDirectoryStructure|outline">Top
+	Level CVS Module Directory Structure</A></LI>
+	<LI><A HREF="#3.4.2.CompiledObjectsor$INPATHDirectoryStructure|outline">Compiled
+	Objects or $INPATH Directory Structure</A></LI>	
+	</UL>
+	<LI><A HREF="#3.5.MakefilesDescription|outline">Makefiles Description</A></LI>
+	<UL>
+	<LI><A HREF="#3.5.1.GeneralStructureofmakefile.rcMakefiles|outline">General
+	Structure of makefile.rc Makefiles</A></LI>
+	<LI><A HREF="#3.5.2.GeneralStructureofmakefile.mkMakefiles|outline">General
+	Structure of makefile.mk Makefiles</A></LI>
+	<LI><A HREF="#3.5.3.GenerationofObjectFilesandLibraries|outline">Generation
+	of Object Files and Libraries</A></LI>
+	<LI><A HREF="#3.5.4.GenerationofResourceFiles|outline">Generation
+	of Resource Files</A></LI>
+	<LI><A HREF="#3.5.5.GenerationofApplications|outline">Generation
+	of Applications</A></LI>
+	<LI><A HREF="#3.5.6.GenerationofSharedLibrariesorDynamicLinkLibraries|outline">Generation
+	of Shared Libraries or Dynamic Link Libraries</A></LI>
+	<LI><A HREF="#3.5.7.InternalStructureoftheMakefiles|outline">Internal
+	Structure of the Makefiles</A></LI>
+	<UL>
+	<LI><A HREF="#3.5.7.1.Thesettings.mkfile|outline">The
+	settings.mk file</A></LI>
+	<LI><A HREF="#3.5.7.2.Thetarget.mkfile|outline">The
+	target.mk file</A></LI>
+	</UL>
+	<LI><A HREF="#3.5.8.SettingAdditionalOptions|outline">Setting
+	Additional Options</A></LI>
+	<LI><A HREF="#3.5.9.CreationofAdditionalTargets|outline">Creation
+	of Additional Targets</A></LI>
+	<UL>
+	<LI><A HREF="#3.5.9.1.AddTargetstoall|outline">Add
+	Targets to all</A></LI>
+	<LI><A HREF="#3.5.9.2.AddingTargetstoaMakefileThatIncludeTargets|outline">Adding
+	Targets to a Makefile That Include Targets</A></LI>
+	<LI><A HREF="#3.5.9.3.DeclaringDependenciesBeforeAddingTargets|outline">Declaring
+	Dependencies Before Adding Targets</A></LI>
+	</UL>
+	</UL>	
+</UL>
+<H2><A NAME="3.1.TheconfigureScriptforLinuxandSolaris|outline"></A>The
+configure Script for Linux and
+Solaris</H2>
+<P>The <SAMP CLASS="code">configure</SAMP> script is an <SAMP CLASS="code">autoconf</SAMP>
+script that generates the build environment for the StarOffice build.
+This section gives details about the <SAMP CLASS="code">configure</SAMP>
+script, including operating environments supported, prerequisites,
+and options available.</P>
+<H3><A NAME="3.1.1.OperatingEnvironmentsSupportedbyconfigureScript|outline"></A>
+Operating Environments Supported by configure
+Script</H3>
+<P>The following table lists the combinations of hardware
+architecture and operating systems that the <SAMP CLASS="code">configure</SAMP>
+script supports.</P>
+
+	
+		
+		<TABLE BORDER=1 BORDERCOLOR="#000000" CELLPADDING=5 CELLSPACING=0>
+<CAPTION>Operating
+Environments Supported by the <SAMP CLASS="code">configure</SAMP>
+Script</CAPTION>
+			
+			<THEAD>
+				<TR>
+					<TH>
+						<P>Hardware Architecture</P>
+					</TH>
+					<TH>
+						<P>Operating Systems</P>
+					</TH>
+				</TR>
+			</THEAD>
+			<TBODY>
+				<TR>
+					<TD >
+						<P>SPARC</P>
+					</TD>
+					<TD >
+						<UL TYPE=DISC>
+							<LI>Solaris 2.6</LI>
+						</UL>
+						<UL TYPE=DISC>
+							<LI>Solaris 2.7</LI>
+							<LI>Linux 
+							</LI>
+						</UL>
+					</TD>
+				</TR>
+				<TR>
+					<TD>
+						<P>Intel 
+						</P>
+					</TD>
+					<TD>
+						<UL TYPE=DISC>
+							<LI>Linux 
+							</LI>
+						</UL>
+					</TD>
+				</TR>
+			</TBODY>
+		</TABLE>
+	
+
+
+	
+
+<P>Then define the target after this statement. If this object is
+needed now, there is a dependency on the source file and the target
+is executed. You must define all the targets and dependencies after
+the <SAMP CLASS="code">.include:target.mk</SAMP> directive.</P>
+<P>There is still a potential problem of conflicts with targets added
+to the global makefiles in the future. If something in the build
+environment changes and affects your target, it may be difficult to
+identify the change.</P>
+
+
+<H3><A NAME="3.1.2.CheckingthePrerequisites|outline"></A>
+Checking the Prerequisites</H3>
+<P>The <SAMP CLASS="code">configure</SAMP> script checks the
+software, hardware, and system requirements shown in . 
+</P>
+<P>Some of these prerequisites are not essential for the the
+<SAMP CLASS="code">configure</SAMP> script to run. If one of these
+prerequisites is missing, you are warned when the <SAMP CLASS="code">configure</SAMP>
+script completes. 
+</P>
+<P>Other prerequisites are essential for the the <SAMP CLASS="code">configure</SAMP>
+script to run. If these prerequisites are missing, the <SAMP CLASS="code">configure</SAMP>
+script exits. To continue, you must identify the missing prerequisite
+and take the appropriate action. The following table includes
+information on which prerequisites cause the <SAMP CLASS="code">configure</SAMP>
+script to exit.</P>
+<P>
+<B><CAPTION>Prerequisites
+Checked by the <SAMP CLASS="code">configure</SAMP> Script</CAPTION></B></P>
+
+	
+	<TABLE BORDER=1 BORDERCOLOR="#000000" CELLPADDING=5 CELLSPACING=0>
+
+		<THEAD>
+			<TR>
+				<TH>
+					<P>Prerequisite 
+					</P>
+				</TH>
+				<TH>
+					<P>Platform</P>
+				</TH>
+				<TH>
+					<P>If absent</P>
+				</TH>
+				<TH>
+					<P>Comment</P>
+				</TH>
+			</TR>
+		</THEAD>
+		<TBODY>
+			<TR>
+				<TD>
+					<P>Hardware Architecture 
+					</P>
+				</TD>
+				<TD>
+					<P>All</P>
+				</TD>
+				<TD>
+					<P>Script exits</P>
+				</TD>
+				<TD>
+					<P>The <SAMP CLASS="code">configure</SAMP> script only supports
+					certain processors.  
+					</P>
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<P>Operating System 
+					</P>
+				</TD>
+				<TD>
+					<P>All</P>
+				</TD>
+				<TD>
+					<P>Script exits</P>
+				</TD>
+				<TD>
+					<P>The <SAMP CLASS="code">configure</SAMP> script only supports
+					certain operating systems. 
+					</P>
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<P>Compiler 
+					</P>
+				</TD>
+				<TD>
+					<P>All</P>
+				</TD>
+				<TD>
+					<P>Warning displayed</P>
+				</TD>
+				<TD>
+					<P>The <SAMP CLASS="code">configure</SAMP> script only supports
+					certain compilers. 
+					</P>
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<P>C Preprocessor</P>
+				</TD>
+				<TD>
+					<P>All</P>
+				</TD>
+				<TD>
+					<P>Warning displayed</P>
+				</TD>
+				<TD>
+					<P>Needed for the StarOffice build. 
+					</P>
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<P><SAMP CLASS="code">sed</SAMP> 
+					</P>
+				</TD>
+				<TD>
+					<P>All</P>
+				</TD>
+				<TD>
+					<P>Script exits</P>
+				</TD>
+				<TD>
+					<P>Needed by the <SAMP CLASS="code">configure</SAMP> script.</P>
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<P><SAMP CLASS="code">awk</SAMP> 
+					</P>
+				</TD>
+				<TD>
+					<P>All</P>
+				</TD>
+				<TD>
+					<P>Script exits</P>
+				</TD>
+				<TD>
+					<P>Needed by the <SAMP CLASS="code">configure</SAMP> script and
+					the <SAMP CLASS="code">build</SAMP> command. 
+					</P>
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<P>Standard C Headers</P>
+				</TD>
+				<TD>
+					<P>All</P>
+				</TD>
+				<TD>
+					<P>Warning displayed</P>
+				</TD>
+				<TD>
+					<P>Needed for the StarOffice build. 
+					</P>
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<P>JDK 
+					</P>
+				</TD>
+				<TD>
+					<P>All</P>
+				</TD>
+				<TD>
+					<P>Warning displayed</P>
+				</TD>
+				<TD>
+					<P>Needed for the StarOffice build. 
+					</P>
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<P>Perl 
+					</P>
+				</TD>
+				<TD>
+					<P>All</P>
+				</TD>
+				<TD>
+					<P>Script exits</P>
+				</TD>
+				<TD>
+					<P>Needed for the StarOffice build. 
+					</P>
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<P CLASS="paracodetable">csh</P>
+				</TD>
+				<TD>
+					<P>Linux, Solaris</P>
+				</TD>
+				<TD>
+					<P>Script exits</P>
+				</TD>
+				<TD>
+					<P>Needed for the StarOffice build. 
+					</P>
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<P>X Runtime libraries and includes</P>
+				</TD>
+				<TD>
+					<P>Linux, Solaris</P>
+				</TD>
+				<TD>
+					<P>Warning displayed</P>
+				</TD>
+				<TD>
+					<P>Needed for the StarOffice build.</P>
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<P>X Development libraries 
+					</P>
+				</TD>
+				<TD>
+					<P>Linux, Solaris</P>
+				</TD>
+				<TD>
+					<P>Script exits</P>
+				</TD>
+				<TD>
+					<P>Needed for the StarOffice build. 
+					</P>
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<P><SAMP CLASS="code">glibc</SAMP> for Linux 
+					</P>
+				</TD>
+				<TD>
+					<P>Linux</P>
+				</TD>
+				<TD>
+					<P>Script exits</P>
+				</TD>
+				<TD>
+					<P>Needed for the StarOffice build. 
+					</P>
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<P>Pam headers for Linux 
+					</P>
+				</TD>
+				<TD>
+					<P>Linux</P>
+				</TD>
+				<TD>
+					<P>Warning displayed</P>
+				</TD>
+				<TD>
+					<P>Needed for the StarOffice build. 
+					</P>
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<P>Patches for Solaris 
+					</P>
+				</TD>
+				<TD>
+					<P>Solaris</P>
+				</TD>
+				<TD>
+					<P>Warning displayed</P>
+				</TD>
+				<TD>
+					<P>Needed for the StarOffice build. 
+					</P>
+				</TD>
+			</TR>
+		</TBODY>
+	</TABLE>
+
+</html>
+

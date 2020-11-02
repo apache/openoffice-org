@@ -1,0 +1,289 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="AUTHOR" CONTENT="Martin Hollmichel">
+	<META NAME="CREATED" CONTENT="20010510;16524517">
+	<META NAME="CHANGEDBY" CONTENT="Martin Hollmichel">
+	<META NAME="CHANGED" CONTENT="20010510;16533725">
+</head>
+<body>
+<H2>Solaris Performance Issues</H2>
+<h3>Table of contents:</h3>
+<ul>
+  <li> <a href="#StartupTime">Startup Time</a> </li>
+  <li> <a href="#UsingProfiler">Using the Profiler</a> </li>
+</ul>
+<p><br>
+
+<P><A NAME="StartupTime"><h3>Startup Time</h3></A></P>
+<P>As a base of discussion, build SRC632 was installed 
+on Solaris two ways, on local disk and on NFS mounted disk, 
+and then timed how long it takes StarOffice to startup.
+The hardware is a Ultra 10 with a sparcv9 processor
+operating at 440 MHz and a sparcv9 FPU. RAM is 128MB.
+The OS is Solaris 2.8.
+<P>Note:
+The first of each pair of numbers is the time (in seconds)
+it takes to "splash" image appears, the second is the time
+it takes to first application window appears (including
+the first number).
+</P>
+<TABLE WIDTH=100% BORDER=1 CELLPADDING=4 CELLSPACING=3>
+        <COL WIDTH=85*>
+        <THEAD>
+                <TR VALIGN=TOP>
+                        <TH WIDTH=16%> <P><br></P> </TH>
+                        <TH WIDTH=16%> <P>1st time</P> </TH>
+                        <TH WIDTH=16%> <P>2nd time</P> </TH>
+                        <TH WIDTH=16%> <P>3rd time</P> </TH>
+                        <TH WIDTH=16%> <P>4th time</P> </TH>
+                        <TH WIDTH=16%> <P>5th time</P> </TH>
+                </TR>
+                <TR VALIGN=TOP>
+                        <TH WIDTH=16%> <P>mounted</P> </TH>
+                        <TH WIDTH=16%> <P>57/111</P> </TH>
+                        <TH WIDTH=16%> <P>13/34</P> </TH>
+                        <TH WIDTH=16%> <P>7/25</P> </TH>
+                        <TH WIDTH=16%> <P>6/23</P> </TH>
+                        <TH WIDTH=16%> <P>6/23</P> </TH>
+                </TR>
+                <TR VALIGN=TOP>
+                        <TH WIDTH=16%> <P>local</P> </TH>
+                        <TH WIDTH=16%> <P>20/34</P> </TH>
+                        <TH WIDTH=16%> <P>6/20</P> </TH>
+                        <TH WIDTH=16%> <P>6/20</P> </TH>
+                        <TH WIDTH=16%> <P>6/19</P> </TH>
+                        <TH WIDTH=16%> <P>6/18</P> </TH>
+                </TR>
+        </THEAD>
+</TABLE>
+
+<P>Observations:
+<OL>
+<li>There is a big difference between mounted disk and local disk.
+This is due to the time required by Solaris to load the application executable, 
+its shared libraries, and some data files (such as font files) into memory 
+by streaming them across the network for NFS mounted installation.  
+<li>The initial invocation takes much longer than
+subsequent invocations, after three invocations, the numbers stabilize. 
+This is due to caching and memory mapping so that some of the binaries
+need not be reloaded at subsequent invocations.
+</OL> 
+In order to reduce startup time, it should be very helpful to reduce the number 
+and the size of these binary files being loaded. Using truss command 
+shows a number of large files were loaded.  
+By the way, in SRC632 (vs SRC627), many large data files are no 
+longer loaded, most shared libraries are slightly larger, some libraries 
+and some data files are smaller.  
+The following is a list of files 1 MB or larger:
+<pre>
+ 15.3MB libsvx632ss.so
+ 15.1MB libsw632ss.so
+  6.3MB libsfx632ss.so
+  6.1MB libxo632ss.so
+  4.6MB libsvt632ss.so
+  4.1MB libvcl632ss.so
+  3.9MB liblocaledata_ascii.so
+  3.6MB libcfgmgr2.so
+  3.0MB libi18n632ss.so
+  2.8MB applicat.rdb
+  2.5MB libtk632ss.so
+  2.2MB libstlport_sunpro.so
+  2.1MB liblnn632ss.so
+  1.9MB libbasctl632ss.so
+  1.7MB libdbtools2.so
+  1.6MB libset632ss.so
+  1.4MB libso632ss.so
+  1.6MB libsvl632ss.so
+  1.2MB libsal2.so
+  1.1MB libtl632ss.so
+  1.1MB libfwk632ss.so
+  1.0MB libsb632ss.so
+
+</pre>
+<p>The next step is to find out which of these files need not be loaded
+during startup.  The data files will be examined later.  As for the
+shared libraries, the sotruss command was tried but did not yield
+useful results.  <a href="#UsingProfiler">Profiling</a> with gprof,
+assisted by other ways, was used instead to find out which libraries 
+have no or few symbols invoked.  The summary results are shown below. 
+The list of symbols invoked during startup from each library can be
+found at this <A HREF="symbol_list.html">link</A>:
+</P>
+<TABLE WIDTH=100% BORDER=1 CELLPADDING=4 CELLSPACING=3>
+        <COL WIDTH=85*>
+        <THEAD>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15%> <P>file size</P> </TH>
+             <TH WIDTH=30%> <P>library name</P> </TH>
+             <TH WIDTH=50%> <P>number of symbols invoked during startup</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>15340328</P> </TH>
+             <TH WIDTH=30%> <P>libsvx632ss.so</P> </TH>
+             <TH WIDTH=50%> <P>numerous</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>15189324</P> </TH>
+             <TH WIDTH=30%> <P>libsw632ss.so</P> </TH>
+             <TH WIDTH=50%> <P>3 + UNO components loaded via dlsym</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>6397488</P> </TH>
+             <TH WIDTH=30%> <P>libsfx632ss.so</P> </TH>
+             <TH WIDTH=50%> <P>numerous</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>6166124</P> </TH>
+             <TH WIDTH=30%> <P>libxo632ss.so</P> </TH>
+             <TH WIDTH=50%> <P>9</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>4690244</P> </TH>
+             <TH WIDTH=30%> <P>libsvt632ss.so</P> </TH>
+             <TH WIDTH=50%> <P>numerous</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>4390092</P> </TH>
+             <TH WIDTH=30%> <P>libvcl632ss.so</P> </TH>
+             <TH WIDTH=50%> <P>numerous</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>3720620</P> </TH>
+             <TH WIDTH=30%> <P>libcfgmgr2.so</P> </TH>
+             <TH WIDTH=50%> <P>numerous</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>3069348</P> </TH>
+             <TH WIDTH=30%> <P>libi18n632ss.so</P> </TH>
+             <TH WIDTH=50%> <P>numerous</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>2534008</P> </TH>
+             <TH WIDTH=30%> <P>libtk632ss.so</P> </TH>
+             <TH WIDTH=50%> <P>numerous</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>2283664</P> </TH>
+             <TH WIDTH=30%> <P>libstlport_sunpro.so</P> </TH>
+             <TH WIDTH=50%> <P>numerous</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>2177148</P> </TH>
+             <TH WIDTH=30%> <P>liblnn632ss.so</P> </TH>
+             <TH WIDTH=50%> <P>UNO components loaded via dlsym</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>1969836</P> </TH>
+             <TH WIDTH=30%> <P>libbasctl632ss.so</P> </TH>
+             <TH WIDTH=50%> <P>13</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>1773580</P> </TH>
+             <TH WIDTH=30%> <P>libdbtools2.so</P> </TH>
+             <TH WIDTH=50%> <P>1</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>1685480</P> </TH>
+             <TH WIDTH=30%> <P>libset632ss.so</P> </TH>
+             <TH WIDTH=50%> <P>3</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>1402200</P> </TH>
+             <TH WIDTH=30%> <P>libso632ss.so</P> </TH>
+             <TH WIDTH=50%> <P>numerous</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>1667920</P> </TH>
+             <TH WIDTH=30%> <P>libsvl632ss.so</P> </TH>
+             <TH WIDTH=50%> <P>numerous</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>1225464</P> </TH>
+             <TH WIDTH=30%> <P>libsal2.so</P> </TH>
+             <TH WIDTH=50%> <P>numerous</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>1099688</P> </TH>
+             <TH WIDTH=30%> <P>libtl632ss.so</P> </TH>
+             <TH WIDTH=50%> <P>numerous</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>1158628</P> </TH>
+             <TH WIDTH=30%> <P>libfwk632ss.so</P> </TH>
+             <TH WIDTH=50%> <P>numerous</P> </TH>
+           </TR>
+           <TR VALIGN=TOP>
+             <TH WIDTH=15% ALIGN=RIGHT> <P>1054752</P> </TH>
+             <TH WIDTH=30%> <P>libsb632ss.so</P> </TH>
+             <TH WIDTH=50%> <P>7</P> </TH>
+           </TR>
+        </THEAD>
+</TABLE>
+<P>As the above table shows, four libraries with only a few symbols 
+invoked during startup.  The total size of these 4 libraries is 
+about 10MB.  Here is a proposal that may be able to reduce startup 
+time which is yet to be proven.
+We may be able to split the libraries into two libraries. 
+Basically we keep the few symbols that are invoked in the current 
+library and link all the 
+remaining symbols into a new library within the same project. 
+The new library would be built first and the current library would 
+be built. In addition, the current library would be lazily linked 
+against the new library so that other projects can still link 
+against the current library to get the symbols in the new library. 
+The lazy linking, however, would defer loading of the new library 
+until after startup.
+If later we found some libraries that have no symbols that are invoked
+during startup, we can use lazy linking to defer their loading 
+to after startup.  
+<P>The splitting of a shared library is experimented and worked as we
+expected, however, the lazyloading part is not working as we expected.
+Work is in progress to find the cause and/or workaround.
+In addition to splitting a shared library, it may be possible to
+modify the code so that the symbol invoked during startup don't
+need to be invoked.  This needs to be examined on a symbol by symbol
+basis and side effects needs to be avoided.
+<P>This work is in progress, please stay tuned.
+  
+<P><A NAME="UsingProfiler"><h3>Using the Profiler</h3></A></P>
+<P>We can use the Solaris profiler gprof to find out which
+symbols of a given shared library are invoked by the startup 
+executable soffice.bin (and javaldx).  The following are the steps:
+<ol>
+<li>We must first dmake project desktop with profile=true.  
+Make sure r1.12 (or later revision) of 
+solenv/inc/unxsols3.mk is used to avoid a link problem of javaldx
+where there was a conflict among /usr/lib, libstlport_sunpro.so and 
+WorkShop 6 profiling libraries.  This will produce soffice.bin and javaldx  
+executables that were 1linked with the profiling library.
+<li>We can then use LD_PROFILE to set the shared library we want to profile. 
+In order to find out if a shared library is invoked by startup,
+the library must not have stripped the symbols using mapfiles.
+For those libraries that use mapfiles as a default, the 
+SHLnVERSIONMAP=$(TARGET).map line in the makefile.mk (usually
+in util directory) should be commented out 
+(where SHLn may be SHL1, SHL2, etc.)
+Please note that LD_PROFILE allows to be set to one library at a time.
+When LD_PROFILE is set, running soffice and then gprof will result
+a profile output detailing the call graph and the symbols called
+statistics (see man gprof).
+<li>Due to profiler's limitation, some shared libraries (for example,
+liblnn632ss.so) may appear 
+no symbols that are invoked by the startup executable soffice.bin,
+may turned out to be UNO components loaded via dlsym and were
+not detectable by the profiler.  Therefore, we need to supplement the
+profiling steps with a debug step as follows: use r1.17 or later revision of file 
+$SRC_ROOT/sal/osl/unx/module.c and dmake $SRC_ROOT/sal with debug=true,
+then run soffice, we will get a debug trace output that includes
+those libraries that have symbols loaded via dlsym. 
+<li>There is yet another way of loading symbols, i.e., through UNO.  Investigation
+must be done to figure out how these symbols are loaded.  Initial understanding
+is that this way of loading is not used during startup (using debug=true to
+build bridges project), but it needs to be verified.
+</ol>
+</body>
+</HTML>

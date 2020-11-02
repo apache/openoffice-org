@@ -1,0 +1,507 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=us-ascii">
+<title>Apache OpenOffice - Build tools</title>
+</head>
+<body>
+<h2>Tools Provided for Building and Installing</h2>
+<p>The following table describes the tools provided to build and
+install the office suite. It also indicates what tree these tools
+reside in after you build. For more information on
+<code>solenv</code> and <code>solver</code>, see Source Trees and
+Output Trees.</p>
+<table border="0" cellspacing="0" cellpadding="5" width="400">
+<tr valign="top">
+<th>Tool</th>
+<th>Location</th>
+<th>Description</th>
+</tr>
+<tr valign="top">
+<td><code>_mkout</code></td>
+<td><code>solenv</code></td>
+<td>A small utility for creating an output tree, normally
+<code>$OUTPATH.$PROEXT</code>, for a project. The <code>dmake</code>
+command executes <code>solenv/$OUTPATH.$PROEXT/bin/_mkout</code>
+when building the first files in a project
+<code>solenv/$OUTPATH.$PROEXT/bin/_mkout</code>. You can also call
+this utility from the command line. The <code>_mkout</code> utility
+is built in the <code>tools</code> module.</td>
+</tr>
+<tr valign="top">
+<td><code>bmp</code></td>
+<td><code>solver</code></td>
+<td>A tool for generating image lists. The <code>bmp</code> tool
+takes a <code>.srs</code> input resource file, searches for the
+individual bitmaps, and creates an image list from them. The image
+lists are used in toolbars. You must include the directory paths of
+the bitmaps. The syntax for this tool is as follows:
+<pre>
+bmp <var>srs-input-resource-file</var> <br>
+<var>path-to-bitmaps</var> <var>location-of-language-dependent-bitmaps</var> 
+</pre>
+<p>For example, the following command creates an image list from
+the resource file <code>appl.srs</code> of the German bitmaps in
+<code>../../win/res</code> to the directory
+<code>/german/testdir</code>:</p>
+<pre>
+% <kbd>bmp ../../wntmsci3/srs/appl.srs ../../win/res 
+/german/testdir ../../wntmsci3/res/49 deut</kbd>
+</pre>
+<p>Note that in this example, you must specify <code>49</code> and
+<code>deut</code> to create a list of the German resources. Note
+that <code>49</code> is part of the destination directory name, and
+<code>deut</code> specifies language-dependent bitmaps mostly taken
+from the module <code>res</code>.</p>
+<p>Use the <code>-f</code> option to write a success message to a
+file. If the BMP_WRITES_FLAG parameter is set, this file is
+checked. The following example creates an image list for German,
+and writes a log to the <code>../../common/misc</code>
+directory:</p>
+<pre>
+% <kbd>bmp ../../wntmsci3/srs/appl.srs ../../win/res 
+../../wntmsci3/res/49 deut -f ../../common/misc</kbd>
+</pre>
+<p>For this tool to work on UNIX systems, you must set the
+<code>DISPLAY</code> variable properly. You must also be able to
+access the UNIX system. A Win32 version of this tool is available,
+with a GUI. This tool is built in the module
+<code>svtools</code>.</p>
+</td>
+</tr>
+<tr valign="top">
+<td><code>build</code></td>
+<td><code>solenv</code></td>
+<td>
+<p>This utility iterates through the module directories, spawning
+<code>dmake</code> in each module directory. The <code>prj/build.lst</code>
+list specifies the build prerequisites and a build sequence is determined.</p>
+<p><code>build</code> is aliased to <code>"perl $SRC_ROOT/solenv/bin/build.pl"</code></p>
+<p>The <code>build</code> utility is located at
+<code>solenv/$OUTPATH/bin/build.pl</code>.</p>
+<p>For more information on the build utility refer to the <a href="tools/build.html">detailed documentation</a>.
+<p>For more information
+on the <code>dmake</code> tool, see <a href="#dmake">dmake</a>.
+<p>The command line options for <code>build</code> are as
+follows:</p>
+<p><code>-file</code></p>
+<p>Specifies the temporary file that is created to support the set
+of commands that need to be executed. This option is mandatory.</p>
+<p><code>-all</code></p>
+<p>Specifies to build all module dependencies. The
+<code>build</code> utility builds these modules and delivers
+them.</p>
+<p><code>-get</code></p>
+<p>Checks out the latest source of the project from the CVS tree
+using the <code>$WORK_STAMP</code> tag string. <b>Note</b> that
+this will not work for OpenOffice checkouts</p>
+<p><code>-listall</code></p>
+<p>Lists the order that the modules are built in. This list appears
+in the file specified by the option <code>-file</code>.</p>
+<p><code>-make</code></p>
+<p>Specifies which <code>make</code> utility to run, for example
+<code>dmake</code> on Linux, Solaris, or Mac OS X. The
+<code>make</code> utility is built in the <code>tools</code> module
+directory.</p>
+<p>All unknown parameters are handed over to
+<code>dmake</code>.</p>
+</td>
+</tr>
+<tr valign="top">
+<td><code>cc, cpp.lcc</code></td>
+<td><code>solenv</code></td>
+<td>Wrapper script for preprocessing <code>.c</code> files with
+carriage return and line feed line ends.
+<p>Needed for Solaris only because the Workshop C compiler on
+Solaris (<code>SUNWspro</code>) cannot handle multiline macros in
+files with MS-DOS line end convention.</p>
+</td>
+</tr>
+<tr valign="top">
+<td><code>checkdll</code></td>
+<td><code>solenv</code></td>
+<td>This performs a simple test-it tries to load the library. This
+executable is wrapped in a shell script called
+<code>checkdll.sh</code>.</td>
+</tr>
+<tr valign="top">
+<td><code>cppumaker</code></td>
+<td><code>solver</code></td>
+<td>Generates <code>file.hpp</code> and <code>file.hdl</code> from
+the type library or registry database <code>applicat.rdb</code>.
+The <code>.hpp</code> files are the class definition of the UNO IDL
+files. The <code>.hdl</code> files are included in the
+<code>.hpp</code> files and contain definitions. This utility is
+built in the module <code>codemaker</code> and is located in the
+<code>solver</code> tree.
+<p>You can use the following options with the
+<code>cppumaker</code> tool:</p>
+<p><code>-O</code><var>path</var></p>
+<p>The <i>path</i> parameter describes the root directory for the
+generated output. The output directory tree is generated under this
+directory.</p>
+<p><code>-T</code><var>name</var></p>
+<p>The <var>name</var> parameter specifies a type or a list of
+types. The <code>cppumaker</code> tool generates output for this
+type. If you do not specify a <code>-T</code> option, then the
+<code>cppumaker</code> tool generates output for all types. For
+example, <code>com.sun.star.uno.XInterface</code> is a valid
+type.</p>
+<p><code>-B</code><var>name</var></p>
+<p>The <var>name</var> parameter specifies the base node. The
+<code>cppumaker</code> tool searches all types under this node. The
+default is the root directory of the registry files.</p>
+<p><code>-L</code></p>
+<p>For Win32 only. Generates the <code>getCppuType</code> function
+in a short form. Only the name and TypeClass of the type are
+used.</p>
+<p><code>-C</code></p>
+<p>The <code>getCppuType</code> function is generated with
+comprehensive type information.</p>
+<p><code>-G</code></p>
+<p>Use this option to generate only target files which do not
+exist.</p>
+<p><code>-Gc</code></p>
+<p>Use this option to generate only target files whose content will
+be changed.</p>
+<p>The following is an example of using the <code>cppumaker</code>
+tool with some of the options available:</p>
+<p><code>%</code> <kbd>cppumaker -C -BUCR -O../$OUTPATH.$PROEXT/inc
+$SRC_ROOT/solver/$UPD/$OUTPATH.$PROEXT/bin/applicat.rdb</kbd></p>
+</td>
+</tr>
+<tr valign="top">
+<td><code>deliver</code></td>
+<td><code>solenv</code></td>
+<td>Copies headers, generated headers, binaries, shared libraries,
+resources, and so on to <code>solver</code>. The file
+<var>module-name</var><code>/prj/d.lst</code> describes where to
+locate each file, and where to deliver it to.
+<p>Formerly, the <code>deliver</code> tool could also correct the
+include path for the delivered include files to the <code>solver</code>
+tree. These were marked with <code>hedabu</code> in the
+<code>d.lst</code> file. This directed <code>deliver</code> to build
+a new header file by merging header files. Surplus comments and
+empty lines were removed.</p>
+<p><code>hedabu</code> functionality meanwhile (SRC680 m209) got
+removed for the main development code line.</p>
+</td>
+</tr>
+<tr valign="top">
+<td><a name="dmake"></a><code>dmake</code></td>
+<td><code>solenv</code></td>
+<td>A make utility similar to <code>GNU make</code>, used when building AOO.
+<p>For more information on <code>dmake</code>, see the <a href=
+"dmake/index.html">dmake page</a> or for a description of
+OpenOffice makefiles see <a href="build_env_mkfiles.html">our
+description</a>.</p>
+<p>Some useful additional <code>dmake</code> switches and targets
+are also available, as follows:</p>
+<p><code>dmake debug=true</code></p>
+<p>Compiles with debug information.</p>
+<p><code>dmake depend=true</code></p>
+<p>Removes dependency information, dependencies are regenerated on
+the next <code>dmake</code> run.</p>
+<p><code>dmake -v -p</code></p>
+<p>Dump out the make file as it is running, provides lots of
+information.</p>
+<p><code>dmake -u</code></p>
+<p>Rebuild everything in the current directory. The use of the
+<code>-u</code> flag can result in unnecessary builds of objects
+because of the recursive nature of the dependencies. Do not use
+this option unless you are sure you understand what you are doing.
+Using this option can cause the following problems:</p>
+<ul>
+<li>The <code>dmake</code> tool tries to rebuild the generated
+headers, because they are in the dependency list
+(<code>.dpc</code>). This causes an error because the generated
+headers are built elsewhere.</li>
+<li>Some object files appear in more than one target. When
+<code>dmake</code> uses one of these object files in a build, it
+updates the timestamp on the file. The <code>dmake</code> tool then
+uses this timestamp to ensure that the object file is built in the
+correct order, and also to apply the correct build switches to the
+object file. If this timestamp is ignored, <code>dmake</code>
+builds the object a second time, this time with incorrect
+switches.</li>
+</ul>
+<p><code>dmake killobj</code></p>
+<p>Remove all objects for sources in the current directory.</p>
+<p><code>dmake killsrs</code></p>
+<p>Remove search resource string files from the current
+directory.</p>
+<p><code>dmake killres</code></p>
+<p>Remove resource files from the current directory.</p>
+<p><code>dmake killdef</code></p>
+<p>Remove existing built targets.</p>
+<p>The default alias of <code>dmake</code> is as follows:
+<code>dmake product=full</code></p>
+</td>
+</tr>
+<!--
+<tr VALIGN=TOP>
+<TD>
+<CODE>include</CODE>
+</TD>
+
+<TD>
+<CODE>solenv</CODE>
+</TD>
+
+<TD>This parses the database generated by the <CODE>incparse</CODE> tool and
+writes the include statements to standard output. If you want to add an
+include statement for a specific class, struct, typedef, or macro in your
+source code, you can use the include tool to get the correct include statement
+for it. You can also use this tool with text editors such as <CODE>vi</CODE>
+or <CODE>emacs</CODE>.</TD>
+</TR>
+
+<tr VALIGN=TOP>
+<TD>
+<CODE>incparse</CODE>
+</TD>
+
+<TD>
+<CODE>solver</CODE>
+</TD>
+
+<TD>Win32 only. The <CODE>incparse</CODE>, or include parse tool generates
+a database of all C and C++ data types. You can use this tool to find the
+location of a header file. For example, if you know that a class called
+<CODE>string</CODE> exists, you can check this database to find the header
+file for this class.</TD>
+</TR>
+-->
+<tr valign="top">
+<td><code>javadep</code></td>
+<td><code>solenv</code></td>
+<td>Creates Java dependency files. These files are stored in
+<var>module-name</var>/<code>$OUTPATH$PROEXT/misc/*.dpj</code>
+files. This utility is similar to the <code>makedepn</code>
+utility. It resides in the <code>solenv</code> tree.</td>
+</tr>
+<tr valign="top">
+<td><code>javamaker</code></td>
+<td><code>solver</code></td>
+<td>Like the <code>cppumaker</code> tool, this generates Java files
+from the type library or registry database
+<code>applicat.rdb</code>. This utility is built in the module
+<code>codemaker</code> and is located in the <code>solver</code>
+tree.
+<p>The syntax is as follows:</p>
+<p><code>javamaker [-options] file_1 ... file_n</code></p>
+<p>You can use the following options with the
+<code>javamaker</code> tool:</p>
+<p><code>-O</code><var>path</var></p>
+<p>The <var>path</var> parameter describes the root directory for
+the generated output. The output directory tree is generated under
+this directory.</p>
+<p><code>-T</code><var>name</var></p>
+<p>The <var>name</var> parameter specifies a type or a list of
+types. The <code>javamaker</code> tool generates output for this
+type. If you do not specify a <code>-T</code> option, then the
+<code>javamaker</code> tool generates output for all types. For
+example, <code>com.sun.star.uno.XInterface</code> is a valid
+type.</p>
+<p><code>-B</code><var>name</var></p>
+<p>The <var>name</var> parameter specifies the base node. The
+<code>cppumaker</code> tool searches all types under this node. The
+default is the root directory of the registry files.</p>
+</td>
+</tr>
+<tr valign="top">
+<td><code>ldump</code></td>
+<td><code>solenv</code></td>
+<td>Dumps all the symbols of a library and filters the symbols by
+discarding all that contain one of the entries in a
+<code>.flt</code> file. This output is used to build the
+<code>.def</code> files.
+<p>The tools <code>ldump2.exe</code> and <code>ldump3.exe</code>
+perform similar functions. The <code>.flt</code> file is used to
+limit the number of exported symbols.</p>
+<p>On UNIX platforms, map files perform a similar function.</p>
+</td>
+</tr>
+<tr valign="top">
+<td><code>lzip</code></td>
+<td><code>solver</code></td>
+<td>Generates an install package.</td>
+</tr>
+<tr valign="top">
+<td><code>makedepn</code></td>
+<td><code>solenv</code></td>
+<td>This tool generates dependencies for source files. If you
+introduce new source files, makedepn executes automatically at make
+time. The syntax for this tool is irregular. Command line
+parameters are as follows:
+<p><code>-I:</code> <var>pathname</var></p>
+<p>Include files in the specified paths.</p>
+<p><code>-E:</code> <var>pathname</var></p>
+<p>Exclude dependent files in the specified paths.</p>
+<p><code>-O</code></p>
+<p>Output file.</p>
+<p><code>-V</code></p>
+<p>Verbose mode.</p>
+<p><code>-D</code></p>
+<p>Debug mode.</p>
+<p>Thus dependencies are not hard-coded into the makefiles but are
+generated at make time. The output dependency list file is created
+as <code>filename.dpc</code> in the following directory:</p>
+<p><var>module-name</var><code>/$INPATH/misc</code></p>
+<p>The <code>makedepn</code> tool is built in the
+<code>tools</code> module.</p>
+</td>
+</tr>
+<tr valign="top">
+<td><code>mksvconf</code></td>
+<td><code>solenv</code></td>
+<td>A minor utility that provides information about the underlying
+system. For example, it provides information about the byte size of
+integers, byte alignment, and so on. The <code>mksvconf</code>
+utility is built in the <code>tools</code> module.
+<p>It creates a <code>svconf.h</code> file in the
+<code>tools/include</code> directory.</p>
+</td>
+</tr>
+<tr valign="top">
+<td><code>msg_filter</code></td>
+<td><code>solenv</code></td>
+<td>A Perl script that contains a list of redundant messages from
+the compiler that cannot be removed. It filters these redundant
+messages from the compiler. It resides in
+<code>solenv/bin</code>.</td>
+</tr>
+<tr valign="top">
+<td><code>rdbmaker</code></td>
+<td><code>solver</code></td>
+<td>Maintains and merges <code>.rdb</code> files for different
+projects.</td>
+</tr>
+<!--
+<tr valign="top">
+<td><code>registerimplementations</code></td>
+<td><code>solenv</code></td>
+<td>This tool registers and unregisters the following in the
+registry database (<code>applicat.rdb</code>):
+<ul type="DISC">
+<li>Shared libraries (DLLs)</li>
+<li>Class names</li>
+<li>URLs of jar files</li>
+</ul>
+<p>Command line options are as follows:</p>
+<p><code>-register</code></p>
+<p>Register the implementations.</p>
+<p><code>-revoke</code></p>
+<p>Unregister the implementations.</p>
+<p>The <code>registerimplementations</code> tool is built in the
+module <code>usr</code>.</p>
+<p><b>Note:</b> This tool is no longer used.</p>
+</td>
+</tr>
+-->
+<tr valign="top">
+<td><code>regview<br>regmerge</code></td>
+<td><code>solver</code></td>
+<td>These are tools for viewing and manipulating the registry
+(<code>applicat.rdb</code>). This tool is built in the module
+<code>registry</code>.</td>
+</tr>
+<tr valign="top">
+<td><code>rsc, rsc2</code></td>
+<td><code>solver</code></td>
+<td>This resource compiler generates the <code>.res</code> and
+<code>.srs</code> resource files. The <code>rsc2</code> tool is
+called from within the <code>rsc</code> utility. For more
+information, run these commands with the <code>-h</code> option.
+These tools are built in the <code>rsc</code> module.</td>
+</tr>
+<tr valign="top">
+<td><code>rscdep</code></td>
+<td><code>solenv</code></td>
+<td>This tool generates dependencies for resource files
+(<code>filename.src</code>). The <code>rscdep</code> tool is the
+resource compiler equivalent of <code>makedepn</code>. In other
+words, the tool generates resource file dependencies similar to
+<code>makedepn</code>. The <code>rscdep</code> tool creates the
+output dependency list file in the
+<var>module-name</var><code>/$OUTPATH.$PROEXT/misc</code> directory
+as <var>filename</var><code>.dpr</code>. The <code>rscdep</code>
+tool is built in the <code>tools</code> module.</td>
+</tr>
+<tr valign="top">
+<td><code>rscpp</code></td>
+<td><code>solenv</code></td>
+<td>Resource compiler preprocessor.</td>
+</tr>
+<tr valign="top">
+<td><code>sbllink</code></td>
+<td><code>solver</code></td>
+<td>Merges interface descriptions for BASIC modules.</td>
+</tr>
+<tr valign="top">
+<td><code>scpcomp</code></td>
+<td><code>solver</code></td>
+<td>Script particle compiler. Generates <code>.par</code> files
+from <code>.scp</code> files. The <code>scplink</code> tool uses
+the <code>.par</code> files to create installation configuration
+files.</td>
+</tr>
+<tr valign="top">
+<td><code>scplink</code></td>
+<td><code>solver</code></td>
+<td>Creates installation configuration files from <code>.par</code>
+files. The <code>setup</code> program uses these <code>.ins</code>
+installation configuration files.</td>
+</tr>
+<tr valign="top">
+<td><code>setsolar</code></td>
+<td><code>solenv</code></td>
+<td>
+<p>This is not used in OpenOffice, it is used in StarOffice
+builds.</p>
+<!--
+This information is out of date.  I cant fix this, so commenting out.
+
+<p>Sets environment variables from a database.
+It generates a shell script that you must run the <CODE>source</CODE> command
+on. It is built in the <CODE>tools</CODE> module. 
+<P>The <CODE>stand.lst</CODE> file specifies the platforms to build on, and
+a list of the modules to build. It also contains references to two files:
+a <CODE>.ini</CODE> file and a <CODE>.lst</CODE> file. The <CODE>.ini</CODE>
+file specifies the configuration compiler pathnames that are needed to
+build. The <CODE>.lst</CODE> lists the module directories and the
+dependencies between these modules.
+-->
+</td>
+</tr>
+<tr valign="top">
+<td><code>svidl</code></td>
+<td><code>solver</code></td>
+<td>The View application IDL compiler. This tool has now been
+superseded by <code>unoidl</code> but is still used in places. This
+tool is built in the module <code>idl</code>.</td>
+</tr>
+<tr valign="top">
+<td><code>unocpp</code></td>
+<td><code>solver</code></td>
+<td>This is the UNO IDL preprocessor. This tool is built in the
+module <code>idl</code>.</td>
+</tr>
+<tr valign="top">
+<td><code>unoidl</code></td>
+<td><code>solver</code></td>
+<td>IDL compiler for <code>.idl</code> files, supplied with
+backends for C++, Java, documentation, and so on. For more
+information, run this command with the <code>-h</code> option. This
+tool is built in the module <code>unoidl</code>.</td>
+</tr>
+<tr valign="top">
+<td><code>zipdep</code></td>
+<td><code>solenv</code></td>
+<td>Generates dependencies between zipped files. The
+<code>zipdep</code> tool is derived from version 2.0.1 of the
+common zip utility.</td>
+</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+  <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+  <TITLE></TITLE>
+  <META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+  <META NAME="AUTHOR" CONTENT="Vladimir Glazounov">
+  <META NAME="CREATED" CONTENT="20010510;16553080">
+  <META NAME="CHANGEDBY" CONTENT="Vladimir Glazounov">
+  <META NAME="CHANGED" CONTENT="20010514;12420636">
+</head>
+<body>
+<P>Optimizer.pl &#150; tool for eliminating redundant exported
+symbols.</P>
+<P>Make new optimized .def-file (first step) or make lists of unused
+export symbols (as second step).</P>
+<P>Synopsis:</P>
+<P>perl optimizer.pl [-pro] -c|a</P>
+<P>Description</P>
+<P>-a 
+</P>
+<P>Analyse the stand. This should be used as a first step. New,
+optimized .def files are produced on this step.</P>
+<P>It is recommended when finished this first step to build the
+libraries with modified wnt.mk. If you remove /OPT:NOREF option for
+linker in this file, you'll get fully optimized version of libraries
+(there's no guarantee that it will be working version). You get also
+correspondent .map file. It seems to worth efforts to analyse stand
+again and rebuild libraries, since now some unused imported symbols
+might be thrown away.</P>
+<P>-c</P>
+<P>Compare the lists. This should be used as a first step. On this
+step new .map files and old .map-files are compared and file with
+obsolete symbols is stored in the same directory as .obs, where these
+two are.</P>
+<P>How it works:</P>
+<P>This tool is a Perl script, its functionality is implemented on
+analysis of .def and .map files produced by MS linker cl.exe. It must
+be started from the main directory of the stand whith corresponding
+options.</P>
+<P>The tool parses symbols imported from another libraries in
+correspondent .map files and makes a complete t imported symbols
+table (IST) in memory. When all .map files are parsed and complete
+IST is made, .def file for each library is analysed and if there are
+symbols which are not found in IST, than they are thrown away in new
+.def file. Former .def file is backed up as .olddef if there were no
+.olddef file before. You get the entire list of the libraries and
+projects to be rebuilt if any new .def files were made. There are
+some symbols which are exported a priori (a priori export symbols
+(APE), they are:</P>
+<P>component_getDescriptionFunc</P>
+<P>component_getImplementationEnvironment</P>
+<P>component_getFactory</P>
+<P>component_writeInfo</P>
+<P>This table can be enlaged when needed. This tool enables to reduce
+libraries' size, but there is no warranty, that optimized library
+would be working correctly. This may occur when there are symbols
+that must not be thrown away, but they are not imported by any
+library explicitely. Such symbols should be taken into account when
+optimizing, that is taken into APE. This tool was developed with
+intention to reduce export tables of libraries and to produce list of
+probably unused symbols.</P>
+</body>
+</HTML>

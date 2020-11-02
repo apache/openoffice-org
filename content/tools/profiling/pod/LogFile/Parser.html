@@ -1,0 +1,89 @@
+<HTML>
+<head>
+<TITLE>LogFile::Parser - Perl module for parsing the log file containing the
+profiling data emitted by an suitably instrumented executable of the
+OpenOffice family.</TITLE>
+<LINK REV="made" HREF="mailto:feedback@suse.de">
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+
+<body>
+
+<A NAME="__index__"></A>
+<!-- INDEX BEGIN -->
+
+<UL>
+
+  <LI><A HREF="#name">NAME</A></LI>
+  <LI><A HREF="#synopsis">SYNOPSIS</A></LI>
+  <LI><A HREF="#description">DESCRIPTION</A></LI>
+</UL>
+<!-- INDEX END -->
+
+<HR>
+<P>
+<H1><A NAME="name">NAME</A></H1>
+<P>LogFile::Parser - Perl module for parsing the log file containing the
+profiling data emitted by an suitably instrumented executable of the
+OpenOffice family.</P>
+<P>
+<HR>
+<H1><A NAME="synopsis">SYNOPSIS</A></H1>
+<PRE>
+   use LogFile::Parser;</PRE>
+<PRE>
+   my $profiling_data = LogFileParser::parse (&quot;profiling_data_1234.log&quot;);</PRE>
+<P>
+<HR>
+<H1><A NAME="description">DESCRIPTION</A></H1>
+<P>The only function of this package parses the log file containing the
+profiling data of one run of a program of the OpenOffice family. It
+splits the set of time stamps according their thread ids.  The
+returned hash reference maps the thread ids to references of arrays of
+time stamps.  Each time stamp is represented by a hash map containing
+the following items:</P>
+<DL>
+<DT><STRONG><A NAME="item_time">time</A></STRONG><BR>
+<DD>
+The time of the time stamp in milli seconds after program start.
+<P></P>
+<DT><STRONG><A NAME="item_what">what</A></STRONG><BR>
+<DD>
+A character denoting the type of time stamp.  May be one of
+<DL>
+<DT><STRONG><A NAME="item_%7B">{</A></STRONG><BR>
+<DD>
+enters a new function or scope
+<P></P>
+<DT><STRONG><A NAME="item_%7D">}</A></STRONG><BR>
+<DD>
+Leaves a function or scope
+<P></P>
+<DT><STRONG><A NAME="item_%7C">|</A></STRONG><BR>
+<DD>
+Arbitrary message not necessarily from inside a function or scope.
+<P></P></DL>
+<DT><STRONG><A NAME="item_fname">fname</A></STRONG><BR>
+<DD>
+Name of the function or scope that is entered or left or from
+which a message has been emitted.
+<P></P>
+<DT><STRONG><A NAME="item_message">message</A></STRONG><BR>
+<DD>
+The actual message.  Empty if not a message entry, i.e. the
+what item was originally not a '|'.
+<P></P>
+<DT><STRONG><A NAME="item_project">project</A></STRONG><BR>
+<DD>
+A string that describes the project from which the time stamp has been emitted.
+<P></P>
+<DT><STRONG><A NAME="item_author">author</A></STRONG><BR>
+<DD>
+A string that contains the shortcout of the person that is responsible
+for the code from which the time stamp has been emitted.
+<P></P></DL>
+
+</body>
+
+</HTML>
