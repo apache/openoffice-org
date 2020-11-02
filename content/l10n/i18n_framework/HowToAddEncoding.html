@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Adding new text encoding to OpenOffice.org</title>
+</head>
+<body>
+
+<h3>Adding new text encoding to OpenOffice.org</h3>
+
+<p>
+  Adding a new text encoding involves a number of modifications, mostly in the <a
+  href="http://porting.openoffice.org/source/browse/porting/sal/textenc/">sal/textenc</a> source
+  directory (see below).  The main benefits of adding a text encoding typically are that you can add
+  it to the drop-down list boxes where you choose a character encoding (e.g., for the "Text Encoded"
+  filter for importing/exporting plain text files, or in the
+  "<b>Tools</b> - <b>Options...</b> - <b>Load/Save</b> - <b>HTML Compatibility</b>" dialog).
+</p>
+
+<p>
+  The necessary steps include:
+
+  <ol>
+    <li>
+Add a new <code>RTL_TEXTENCODING_</code> to <a
+href="http://porting.openoffice.org/source/browse/porting/sal/inc/rtl/textenc.h">sal/inc/rtl/textenc.h</a>,
+and update <code>rtl_isOctetEncoding</code> in <a
+href="http://porting.openoffice.org/source/browse/porting/sal/textenc/tencinfo.c">sal/textenc/tencinfo.c</a>.
+    </li>
+
+
+    <li>
+In <a
+href="http://porting.openoffice.org/source/browse/porting/sal/textenc/">sal/textenc</a>,
+create a <code>static ImplTextEncodingData</code> instance for the new
+encoding.  If it is a single-byte encoding based on ASCII, you can easily
+reuse the <code>ImplTextConverter</code> framework that is already in
+place. You also have to specify corresponding Windows/Unix/MIME character
+sets, if such exist.  If your text encoding is single-byte, your
+<code>ImplTextEncodingData</code> instance would probably best fit into one of the
+already existing tcvt<var>XXX</var>1.tab source files (e.g., if your
+encoding is for Tibetan, it would fit into <a
+href="http://porting.openoffice.org/source/browse/porting/sal/textenc/tcvteas1.tab">tcvteas1.tab</a>).
+Do not forget to add a pointer to your <code>ImplTextEncodingData</code>
+structure to the <code>aData</code> array in <a
+    href="http://porting.openoffice.org/source/browse/porting/sal/textenc/textenc.cxx">textenc.cxx</a>
+<code>Impl_getTextEncodingData()</code>. Note that for older versions (OOo1.x
+SRX645 branch and up to SRC680_m44) this was <a
+    href="http://porting.openoffice.org/source/browse/porting/sal/textenc/textenc.c">textenc.c</a>
+    </li>
+
+    <li>
+      You should add tests of your new encoding to <a
+      href="http://porting.openoffice.org/source/browse/porting/sal/test/testtextenc.cxx">sal/test/texttestenc.cxx</a>.
+    </li>
+
+    <li>
+      To make the new encoding appear in the drop-down list boxes mentioned above, you have:
+      <ol>
+  <li>open an issue for <code>Liz@openoffice.org</code>, write the path of where the
+    string is going to go (for example, "<b>Tools</b> - <b>Options...</b> - <b>Load/Save</b> -
+    <b>HTML Compatibility</b>" dialog) and suggest the new string you want added (in English)
+    and wait for approval for the string as well as the German equivalent from Liz. (If you
+    can suggest the string in German as well that would be helpful.</li>
+  <li>
+    add both the English and German strings to the resources in <a
+href="http://graphics.openoffice.org/source/browse/graphics/svx/source/dialog/txenctab.src">svx/source/dialog/txenctab.src</a> file manually; that means directly into the source code.
+  </li>
+      </ol>
+    </li>
+  </ol>
+</p>
+
+<p>
+
+That said, <em>adding any new text encodings also adds complexity</em> to OpenOffice.org (mostly
+source and code size in this case), so it should be done only if really necessary (e.g., if there is
+demand to import/export plain text files encoded in a special encoding; <em>adding a new text
+encoding would generally not be necessary to just make sure that OpenOffice.org can be localized to
+some language, or that texts in that language can be written in OpenOffice.org</em>).
+</p>
+
+<p>
+  If you have any further questions, just ask on our <a
+  href="http://mail-archives.apache.org/mod_mbox/incubator-ooo-l10n/">list</a>.
+</p>
+
+</body>
+</html>
