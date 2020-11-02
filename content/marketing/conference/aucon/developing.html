@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>Developing OpenOffice.org</title>
+<meta name="version" content="S5 1.0" />
+<link rel="stylesheet" href="ui/slides.css" type="text/css" media="projection" id="slideProj" />
+<link rel="stylesheet" href="ui/opera.css" type="text/css" media="projection" id="operaFix" />
+<link rel="stylesheet" href="ui/print.css" type="text/css" media="print" id="slidePrint" />
+<script src="ui/slides.js" type="text/javascript"></script>
+</head>
+<body>
+
+<div class="layout">
+
+<div id="currentSlide"></div>
+<div id="header"></div>
+<div id="footer">
+<h1>OOo miniconf &#8226; 18th Apr 2005</h1>
+<h2>Developing OpenOffice.org</h2>
+<div id="controls"></div>
+</div>
+
+</div>
+
+
+<div class="presentation">
+
+<div class="slide">
+<h1>Developing OpenOffice.org (OOo)</h1>
+<h3>Ken Foskey</h3>
+<h4>OpenOffice.org Developer</h4>
+</div>
+
+
+<div class="slide">
+<h1>Choices in developing</h1>
+<ul>
+<li>Challenges of OOo</li>
+<li><a href="http://api.openoffice.org">OpenOffice.org API</a></li>
+<li>Work outside of code</li>
+<li>Choice of languages</li>
+<li>What project within OOo</li>
+</ul>
+<div class="handout">
+<p></p>
+</div>
+</div>
+
+<div class="slide">
+<h1>Size of OpenOffice.org</h1>
+<ul>
+<li>10 Million lines+ of code</li>
+<li>12 Gb to compile a complete OOo</li>
+<li>Debugging only parts of OOo</li>
+<li>No one can take in the whole of OOo</li>
+<li>Scratching your itch</li>
+<li>Number of programming languages</li>
+</ul>
+<div class="handout">
+<p>OpenOffice.org requires a reasonable computer to work on.  REalistically in
+order to build OOo you need at least 1.7 ghz CPU, 512Mb ram and 14 Gb of
+harddisk spare. I have built OOo on a Pentium 350 but it took three days to
+compile. It does take a hardware commitment from you to make a build
+possible.</p>
+<p>It is almost a requirement to use ccache to build OOo. The first build is
+not significantly faster (12 hours) but builds after that are much faster
+(&lt;6 hours)</p>
+<p>A complete build will take about 10 Gb, if you include debugging it will
+grow even more.  This really is a huge peice of software.  In three years a
+build has grown from 7Gb to just over 10Gb, where to next.</p>
+<p>You can forget building a complete debug build of OOo and debugging it.
+Thereis simply too much code and gdb will not really cope.  You are better off
+working out roughly where the problem is and only compiling that module with
+debug mode. You can compile with small symbols to get some debugging out to
+narrow the search. Expect to need a Gb of memory in order to debug OOo</p>
+<p>Frankly with millions of lines of code it is impossible to take in OOo.
+In order to be effective you need to specialise.  Some have simple requirements
+to "simply" port onto a platform. Others are working on an area like drawing
+diagrams in order to solve some issue that they have.  The key to successful
+development is specialisation.  Get an overview of the projects and pick one to
+focus on.  We desperately need more focus on impress for example, it would make
+a huge difference to focus there than to work on many projects and bugs with
+little expertese.</p>
+<p>Scratching your itch is simply work out why you want to work on OOo.  If you
+do not have specific goals you will soon be lost in a maze of code with no
+clear direction.  Again I repeat pick a project you are interested in and
+work specifically with that project.</p>
+<p>One of the strengths of OpenOffice.org is the number of languages that you
+can work with.  The weakness of OpenOffice.org is the number of languages that
+you can use.  There is an expanding base of Java being used in OOo, this is
+causing a conflict with the debian community because there is no acceptable
+free version of Java available that will run the OOo code.  Stick with the
+language of the project itself, however if you have a choice I recommend using
+C++ for development.</p>
+<p>In order to be an effective developer you really must have an itch that you
+are scratching.  My initial entry was simply work on OOo, this in hindsight eas
+silly.  Pick something that interests you and work specifically in that
+project. If graphics is your thing,  writer, grammar checker (please...),
+why are you getting involved?</p>
+</div>
+</div>
+
+<div class="slide">
+<h1>Developing OpenOffice.org</h1>
+<ul>
+<li><a href="http://tools.openoffice.org">Tools project</a></li>
+<li><a href="http://ooo.ximian.com/hackers-guide.html">Hackers guide</a></li>
+<li><a href="http://ooo.ximian.com/ooo-build.html">Ximian ooo-build</a></li>
+<li><a href="http://www.openoffice.org/contributing/programming.html">Sun licensing JCA</a></li>
+<li>External code, libraries OOo uses</li>
+</ul>
+<div class="handout">
+<p>OpenOffice.org is a significant challenge to build.  It requires a fairly good computer</p>
+<p>It is tricky getting the right combination of compilers and preprocessors
+such as bison to make the build work.  If you work on older releases of
+software, eg RedHat 7.2 you can forget getting a compile to work, you really
+need the latest tools or be prepared to spend a lot of time with little support
+getting it to work.</p>
+<p>There are constant irritations that add to this.  The people supporting
+bison seem to want to regularly break the current release.  It is irritating
+when you have syntax rules that are suddenly enforced like xslt rules.
+Consider not having the latest and greatest debian unstable release purely
+to make your life with OOo pleasant.</p>
+<p>If you make a change to OpenOffice.org you then need to have it accepted
+by the community.  The "community" has, unfortunately, two camps  Ximian
+supported and Sun Supported.  The difference between the two is the timeliness
+of accepting patches. Both require you to provide a signed JCA before providing
+patches.</p>
+<p>The Sun environment is very structured, this leads to longer acceptance time
+on patches.  Ximian is more packaging based, this allows for a faster
+acceptance of patches with a higher risk of accepting bad patches.  They both
+work together and ultimately  the Ximian patches do get integrated into the
+Official OOo release.  The reason for the two is that Ximian is Linux based,
+this means that patches that do not yet work on Windows are accepted and the
+community will work on making these work across platforms.
+</p>
+</div>
+</div>
+
+<div class="slide">
+<h1>OpenOffice.org API</h1>
+<ul>
+<li>Universal Development Kit (UDK)</li>
+<li>Universal Network Objects (UNO)</li>
+<li>Use OOo without requiring Voodoo</li>
+<li><a href="http://api.openoffice.org">http://api.openoffice.org</a></li>
+<li>Change menus</li>
+<li>Add advanced features</li>
+</ul>
+<div class="handout">
+<p>OOo is as I mentioned is huge. In order to understand at a high level
+where you need to change then take the time to understand that particular
+project and then finally make the change can be a significant challenge.
+There is always the expectation that you can "understand" the program you are
+working on.  I have been working on OOo for three years and I do not pretend to
+understand what all projects are for, I have my simple speciality and everyone
+works with me.</p>
+<p>Universal Network Objects (UNO) are the coolest tool since CORBA.  It is a
+shame it is not known outside of OOo, doing networked objects correctly.  The
+ability to quickly connect to other servers</p>
+<ul>
+<li>UNO does not degrade performance of objects when they are running on the
+same computer.</li>
+<li>UNO is easy to construct.</li>
+<li>Write in any language and use any language.</li>
+<li>Understands networks</li>
+<li>Understands numerical formats</li>
+</ul>
+<p>Isaac Newton said "Stand on the shoulders of giants".  UDK gives you that
+ability, without diving deep into the code of OOo you could for example overlay
+the menus with perfect replicas of MS Word, if that is your itch.</p>
+<p>Some of us want advanced features, intergrate databases into OOo documents.
+We want to add features like intelligent tags when they open documents.
+We want to construct driven documents or constructed spreadsheets.
+We want to cheat the managers by automating those stupid presentations that
+we want.</p>
+<p>Most people wish advanced features but do not have time to work out the nuts
+and bolts to integrate directly. Optimisation rules are first make it work and
+then make it useful. If your extension is important leave it for experts to
+integrate better later.</p>
+</div>
+</div>
+
+<div class="slide">
+<h1>Work outside of code</h1>
+<ul>
+<li>Bug Triage</li>
+<li>Templates</li>
+<li>Graphics</li>
+<li>Website maintenance.</li>
+<li>Document review</li>
+<li>Project summaries</li>
+<li>Marketing</li>
+</ul>
+<div class="handout">
+<p>This is a world of many specialities.  OOo needs a lot of help in order to
+function cleanly.  Simple tasks, keeping an eye on common errors and having a
+ready answer to that new person. Improving documentation so that the
+information is easily located.</p>
+<p>Bug triage needs a reasonable knowledge of OOo.  It can require a good
+memory to remember similar errors to recognise repeat problems.  If you
+can repeat the problem in the release they have </p>
+<p>OpenOffice.org comes with a few installed templates. Business specialists
+need to write the templates to make it easier for their particular business
+type to move to OOo smoothly.  This is an area where OOo can excel, we have
+many dedidcated OOo specialists that we can do the best possible templates.</p>
+</div>
+</div>
+
+<div class="slide">
+<h1>Working with languages</h1>
+<ul>
+<li>Java</li>
+<li>C++</li>
+<li>Python</li>
+<li>Scripting &amp; Perl</li>
+<li>Ruby</li>
+</ul>
+<div class="handout">
+<p>You have a huge choice of languages to build your feature with.  I have
+listed a few that can work with.  I strongly recommend that you use C++ because
+of licensing and support issues with Open Source versions of Java.</p>
+<p>Java support causes problems because there is no "really good" version of
+FOSS Java.  There is active project to make OOo work on FOSS java any new code
+should be compliant to this rule hwoever this is NOT a rule that Sun will
+enforce of course.</p>
+<p>There are other features written in a number of languages.  THe important
+thing is to stick with the language of the project.  If you are writing a new
+feature then the choice is yours.</p>
+<p>Of course the problem with writing C++ is designing the classes.  The
+concepts are easy but designing a really good Object Oriented solution is
+difficult. This is the challenge of OOo,  there are experts that can help you
+to design your feature however you must establish yourself in the community
+first.</p>
+</div>
+</div>
+
+<div class="slide">
+<h1>Finding code</h1>
+<ul>
+<li>ASK</li>
+<li>Grep for messages</li>
+<li>Projects and modules</li>
+</ul>
+<div class="handout">
+<p>The obvious choice is to ask people what you want to know.
+Do not expect to be able to lift the Word doc import easily for another project.
+That is not to say you cannot workon making the API for document formats open
+to all word processing software (HINT!).  filters is where the doc formats
+logic is stored.
+</p>
+<p>Often you can grep for phrases from menus, or messages coming out of OOo.
+This gives you a hint for the general location of the software.</p>
+<p>Look at the <a href="http://projects.openoffice.org">projects webpages</a>
+This provides an excellent overview of the what the different things are
+for.  From the projects page you can go to a specific project page and then
+you can look at specific modules.</p>
+<p>Working backwards, you have found your code and you want to determine the
+project that your patch effects,  simply `cat CVS/Repository`.</p>
+</div>
+</div>
+
+</div>
+
+</body>
+</html>
