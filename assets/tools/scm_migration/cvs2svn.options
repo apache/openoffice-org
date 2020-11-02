@@ -1,0 +1,552 @@
+# (Be in -*- python -*- mode.)
+#
+# ====================================================================
+# Copyright (c) 2006-2007 CollabNet.  All rights reserved.
+#
+# This software is licensed as described in the file COPYING, which
+# you should have received as part of this distribution.  The terms
+# are also available at http://subversion.tigris.org/license-1.html.
+# If newer versions of this license are posted there, you may use a
+# newer version instead, at your option.
+#
+# This software consists of voluntary contributions made by many
+# individuals.  For exact contribution history, see the revision
+# history and logs, available at http://cvs2svn.tigris.org/.
+# ====================================================================
+
+#                  #####################
+#                  ## PLEASE READ ME! ##
+#                  #####################
+#
+# This is a template for an options file that can be used to configure
+# cvs2svn.  Many options do not have defaults, so it is easier to copy
+# this file and modify what you need rather than creating a new
+# options file from scratch.
+#
+# This file is in Python syntax, but you don't need to know Python to
+# modify it.  But if you *do* know Python, then you will be happy to
+# know that you can use arbitary Python constructs to do fancy
+# configuration tricks.
+#
+# But please be aware of the following:
+#
+# * In many places, leading whitespace is significant in Python (it is
+#   used instead of curly braces to group statements together).
+#   Therefore, if you don't know what you are doing, it is best to
+#   leave the whitespace as it is.
+#
+# * In normal strings, Python uses backslashes ("\") are used as an
+#   escape character.  Therefore you need to be careful, especially
+#   when specifying regular expressions or Windows filenames.  It is
+#   recommended that you use "raw strings" for these cases.
+#   Backslashes in raw strings are treated literally.  A raw string is
+#   written by prefixing an "r" character to a string.  Example:
+#
+#       ctx.sort_executable = r'c:\windows\system32\sort.exe'
+#
+# Two identifiers will have been defined before this file is executed,
+# and can be used freely within this file:
+#
+#     ctx -- a Ctx object (see cvs2svn_lib/context.py), which holds
+#         many configuration options
+#
+#     run_options -- an instance of the OptionsFileRunOptions class
+#         (see cvs2svn_lib/run_options.py), which holds some variables
+#         governing how cvs2svn is run
+
+
+# Import some modules that are used in setting the options:
+import re
+
+from cvs2svn_lib.boolean import *
+from cvs2svn_lib import config
+from cvs2svn_lib import changeset_database
+from cvs2svn_lib.common import CVSTextDecoder
+from cvs2svn_lib.log import Log
+from cvs2svn_lib.project import Project
+from cvs2svn_lib.svn_output_option import DumpfileOutputOption
+from cvs2svn_lib.svn_output_option import ExistingRepositoryOutputOption
+from cvs2svn_lib.svn_output_option import NewRepositoryOutputOption
+from cvs2svn_lib.revision_manager import NullRevisionRecorder
+from cvs2svn_lib.revision_manager import NullRevisionExcluder
+from cvs2svn_lib.rcs_revision_manager import RCSRevisionReader
+from cvs2svn_lib.cvs_revision_manager import CVSRevisionReader
+from cvs2svn_lib.checkout_internal import InternalRevisionRecorder
+from cvs2svn_lib.checkout_internal import InternalRevisionExcluder
+from cvs2svn_lib.checkout_internal import InternalRevisionReader
+from cvs2svn_lib.symbol_strategy import AllBranchRule
+from cvs2svn_lib.symbol_strategy import AllTagRule
+from cvs2svn_lib.symbol_strategy import BranchIfCommitsRule
+from cvs2svn_lib.symbol_strategy import ExcludeRegexpStrategyRule
+from cvs2svn_lib.symbol_strategy import ForceBranchRegexpStrategyRule
+from cvs2svn_lib.symbol_strategy import ForceTagRegexpStrategyRule
+from cvs2svn_lib.symbol_strategy import HeuristicStrategyRule
+from cvs2svn_lib.symbol_strategy import UnambiguousUsageRule
+from cvs2svn_lib.symbol_strategy import DefaultBasePathRule
+from cvs2svn_lib.symbol_strategy import HeuristicPreferredParentRule
+from cvs2svn_lib.symbol_strategy import SymbolHintsFileRule
+from cvs2svn_lib.symbol_transform import ReplaceSubstringsSymbolTransform
+from cvs2svn_lib.symbol_transform import RegexpSymbolTransform
+from cvs2svn_lib.symbol_transform import NormalizePathsSymbolTransform
+from cvs2svn_lib.property_setters import AutoPropsPropertySetter
+from cvs2svn_lib.property_setters import CVSBinaryFileDefaultMimeTypeSetter
+from cvs2svn_lib.property_setters import CVSBinaryFileEOLStyleSetter
+from cvs2svn_lib.property_setters import CVSRevisionNumberSetter
+from cvs2svn_lib.property_setters import DefaultEOLStyleSetter
+from cvs2svn_lib.property_setters import EOLStyleFromMimeTypeSetter
+from cvs2svn_lib.property_setters import ExecutablePropertySetter
+from cvs2svn_lib.property_setters import KeywordsPropertySetter
+from cvs2svn_lib.property_setters import MimeMapper
+from cvs2svn_lib.property_setters import SVNBinaryFileKeywordsPropertySetter
+
+# To choose the level of logging output, uncomment one of the
+# following lines:
+#Log().log_level = Log.WARN
+#Log().log_level = Log.QUIET
+Log().log_level = Log.NORMAL
+#Log().log_level = Log.VERBOSE
+#Log().log_level = Log.DEBUG
+
+
+# There are several possible options for where to put the output of a
+# cvs2svn conversion.  Please choose one of the following and adjust
+# the parameters as necessary:
+
+# Use this output option if you would like cvs2svn to create a new SVN
+# repository and store the converted repository there.  The first
+# argument is the path to which the repository should be written (this
+# repository must not already exist).  The second (optional) argument
+# allows a --fs-type option to be passed to "svnadmin create".  The
+# third (optional) argument can be specified to set the
+# --bdb-txn-nosync option on a bdb repository:
+ctx.output_option = NewRepositoryOutputOption(
+    r'./svnrepo', # Path to repository
+    fs_type='fsfs', # Type of repository to create
+    #bdb_txn_nosync=False, # For bsd repositories, this option can be added
+    )
+
+# Use this output option if you would like cvs2svn to store the
+# converted CVS repository into an SVN repository that already exists.
+# The argument is the filesystem path of an existing local SVN
+# repository (this repository must already exist):
+#ctx.output_option = ExistingRepositoryOutputOption(
+#    r'/path/to/svnrepo', # Path to repository
+#    )
+
+# Use this type of output option if you want the output of the
+# conversion to be written to a SVN dumpfile instead of committing
+# them into an actual repository:
+#ctx.output_option = DumpfileOutputOption(
+#    dumpfile_path=r'/path/to/cvs2svn-dump', # Name of dumpfile to create
+#    )
+
+
+# Independent of the ctx.output_option selected, the following option
+# can be set to True to suppress cvs2svn output altogether:
+ctx.dry_run = False
+
+# The following set of options specifies how the revision contents of
+# the RCS files should be read.
+#
+# The default selection is InternalRevisionReader, which uses built-in
+# code that reads the RCS deltas while parsing the files in
+# CollectRevsPass.  This method is very fast but requires lots of
+# temporary disk space.  The disk space is required for (1) storing
+# all of the RCS deltas, and (2) during OutputPass, keeping a copy of
+# the full text of every revision that still has a descendant that
+# hasn't yet been committed.  Since this can includes multiple
+# revisions of each file (i.e., on multiple branches), the required
+# amount of temporary space can potentially be many times the size of
+# a checked out copy of the whole repository.  Setting compress=True
+# cuts the disk space requirements by about 50% at the price of
+# increased CPU usage.  Using compression usually speeds up the
+# conversion due to the reduced I/O pressure, unless --tmpdir is on a
+# RAM disk.  This method does not expand CVS's "Log" keywords.
+#
+# The second possibility is RCSRevisionReader, which uses RCS's "co"
+# program to extract the revision contents of the RCS files during
+# OutputPass.  This option doesn't require any temporary space, but it
+# is relatively slow because (1) "co" has to be executed very many
+# times; and (2) "co" itself has to assemble many file deltas to
+# compute the contents of a particular revision.  The constructor
+# argument specifies how to invoke the "co" executable.
+#
+# The third possibility is CVSRevisionReader, which uses the "cvs"
+# program to extract the revision contents out of the RCS files during
+# OutputPass.  This option doesn't require any temporary space, but it
+# is the slowest of all, because "cvs" is considerably slower than
+# "co".  However, it works in some situations where RCSRevisionReader
+# fails; see the HTML documentation of the "--use-cvs" option for
+# details.  The constructor argument specifies how to invoke the "co"
+# executable.
+#
+# Choose one of the following three groups of lines:
+ctx.revision_recorder = InternalRevisionRecorder(compress=True)
+ctx.revision_excluder = InternalRevisionExcluder()
+ctx.revision_reader = InternalRevisionReader(compress=True)
+
+#ctx.revision_recorder = NullRevisionRecorder()
+#ctx.revision_excluder = NullRevisionExcluder()
+#ctx.revision_reader = RCSRevisionReader(co_executable=r'co')
+
+#ctx.revision_recorder = NullRevisionRecorder()
+#ctx.revision_excluder = NullRevisionExcluder()
+#ctx.revision_reader = CVSRevisionReader(cvs_executable=r'cvs')
+
+# Set the name (and optionally the path) of some other executables
+# required by cvs2svn:
+ctx.svnadmin_executable = r'svnadmin'
+ctx.sort_executable = r'sort'
+
+# Change the following line to True if the conversion should only
+# include the trunk of the repository (i.e., all branches and tags
+# should be ignored):
+ctx.trunk_only = True
+
+# Change the following line to True if cvs2svn should delete a
+# directory once the last file has been deleted from it:
+ctx.prune = True
+
+# How to convert author names, log messages, and filenames to unicode.
+# The first argument to CVSTextDecoder is a list of encoders that are
+# tried in order in 'strict' mode until one of them succeeds.  If none
+# of those succeeds, then fallback_encoder is used in lossy 'replace'
+# mode (if it is specified).  Setting a fallback encoder ensures that
+# the encoder always succeeds, but it can cause information loss.
+ctx.cvs_author_decoder = CVSTextDecoder(
+    [
+        #'latin1',
+        #'utf8',
+        'ascii',
+        ],
+    fallback_encoding='latin1'
+    )
+ctx.cvs_log_decoder = CVSTextDecoder(
+    [
+        #'latin1',
+        #'utf8',
+        #'ascii',
+        ],
+    fallback_encoding='latin1'
+    )
+# You might want to be especially strict when converting filenames to
+# unicode (e.g., maybe not specify a fallback_encoding).
+ctx.cvs_filename_decoder = CVSTextDecoder(
+    [
+        #'latin1',
+        #'utf8',
+        'ascii',
+        ],
+    #fallback_encoding='latin1'
+    )
+
+# Some CVS clients for MacOS store resource fork data into CVS along
+# with the file contents itself by wrapping it all up in a container
+# format called "AppleSingle".  Subversion currently does not support
+# MacOS resource forks.  Nevertheless, sometimes the resource fork
+# information is not necessary and can be discarded.  Set the
+# following option to True if you would like cvs2svn to identify files
+# whose contents are encoded in AppleSingle format, and discard all
+# but the data fork for such files before committing them to
+# Subversion.  (Please note that AppleSingle contents are identified
+# by the AppleSingle magic number as the first four bytes of the file.
+# This check is not failproof, so only set this option if you think
+# you need it.)
+ctx.decode_apple_single = False
+
+# This option can be set to the name of a filename to which are stored
+# statistics and conversion decisions about the CVS symbols.
+ctx.symbol_info_filename = None
+#ctx.symbol_info_filename = 'symbol-info.txt'
+
+# cvs2svn uses "symbol strategy rules" to help decide how to handle
+# CVS symbols.  The rules in a project's symbol_strategy_rules are
+# applied in order, and each rule is allowed to modify the symbol.
+# The result (after each of the rules has been applied) is used for
+# the conversion.
+#
+# 1. A CVS symbol might be used as a tag in one file and as a branch
+#    in another file.  cvs2svn has to decide whether to convert such a
+#    symbol as a tag or as a branch.  cvs2svn uses a series of
+#    heuristic rules to decide how to convert a symbol.  The user can
+#    override the default rules for specific symbols or symbols
+#    matching regular expressions.
+#
+# 2. cvs2svn is also capable of excluding symbols from the conversion
+#    (provided no other symbols depend on them.
+#
+# 3. CVS does not record unambiguously the line of development from
+#    which a symbol sprouted.  cvs2svn uses a heuristic to choose a
+#    symbol's "preferred parents".
+#
+# The standard branch/tag/exclude StrategyRules do not change a symbol
+# that has already been processed by an earlier rule, so in effect the
+# first matching rule is the one that is used.
+
+global_symbol_strategy_rules = [
+    # It is possible to specify manually exactly how symbols should be
+    # converted and what line of development should be used as the
+    # preferred parent.  To do so, create a file containing the symbol
+    # hints and enable the following option.
+    #
+    # The format of the hints file is described in the documentation
+    # for the SymbolHintsFileRule class in
+    # cvs2svn_lib/symbol_strategy.py.  The file output by the
+    # --write-symbol-info (i.e., ctx.symbol_info_filename) option is
+    # in the same format.  The simplest way to use this option is to
+    # run the conversion through CollateSymbolsPass with
+    # --write-symbol-info option, copy the symbol info and edit it to
+    # create a hints file, then re-start the conversion at
+    # CollateSymbolsPass with this option enabled.
+    #SymbolHintsFileRule('symbol-hints.txt'),
+
+    # To force all symbols matching a regular expression to be
+    # converted as branches, add rules like the following:
+    #ForceBranchRegexpStrategyRule(r'branch.*'),
+
+    # To force all symbols matching a regular expression to be
+    # converted as tags, add rules like the following:
+    #ForceTagRegexpStrategyRule(r'tag.*'),
+
+    # To force all symbols matching a regular expression to be
+    # excluded from the conversion, add rules like the following:
+    #ExcludeRegexpStrategyRule(r'unknown-.*'),
+
+    # Usually you want this rule, to convert unambiguous symbols
+    # (symbols that were only ever used as tags or only ever used as
+    # branches in CVS) the same way they were used in CVS:
+    UnambiguousUsageRule(),
+
+    # If there was ever a commit on a symbol, then it cannot be
+    # converted as a tag.  This rule causes all such symbols to be
+    # converted as branches.  If you would like to resolve such
+    # ambiguities manually, comment out the following line:
+    BranchIfCommitsRule(),
+
+    # Last in the list can be a catch-all rule that is used for
+    # symbols that were not matched by any of the more specific rules
+    # above.  (Assuming that BranchIfCommitsRule() was included above,
+    # then the symbols that are still indeterminate at this point can
+    # sensibly be converted as branches or tags.)  Include at most one
+    # of these lines.  If none of these catch-all rules are included,
+    # then the presence of any ambiguous symbols (that haven't been
+    # disambiguated above) is an error:
+
+    # Convert ambiguous symbols based on whether they were used more
+    # often as branches or as tags:
+    HeuristicStrategyRule(),
+    # Convert all ambiguous symbols as branches:
+    #AllBranchRule(),
+    # Convert all ambiguous symbols as tags:
+    #AllTagRule(),
+
+    # This rule sets the SVN path of each symbol to the default value
+    # for the project containing it, if a path hasn't been set
+    # already.
+    DefaultBasePathRule(),
+
+    # The last rule is here to choose the preferred parent of branches
+    # and tags, that is, the line of development from which the symbol
+    # sprouts.
+    HeuristicPreferredParentRule(),
+    ]
+
+# Specify a username to be used for commits generated by cvs2svn.  If
+# this options is set to None then no username will be used for such
+# commits:
+ctx.username = None
+#ctx.username = 'cvs2svn'
+
+# ctx.svn_property_setters contains a list of rules used to set the
+# svn properties on files in the converted archive.  For each file,
+# the rules are tried one by one.  Any rule can add or suppress one or
+# more svn properties.  Typically the rules will not overwrite
+# properties set by a previous rule (though they are free to do so).
+ctx.svn_property_setters.extend([
+    # To read auto-props rules from a file, uncomment the following line
+    # and specify a filename.  The boolean argument specifies whether
+    # case should be ignored when matching filenames to the filename
+    # patterns found in the auto-props file:
+    #AutoPropsPropertySetter(
+    #    r'/home/username/.subversion/config',
+    #    ignore_case=True,
+    #    ),
+
+    # To read mime types from a file, uncomment the following line and
+    # specify a filename:
+    #MimeMapper(r'/etc/mime.types'),
+
+    # Omit the svn:eol-style property from any files that are listed
+    # as binary (i.e., mode '-kb') in CVS:
+    CVSBinaryFileEOLStyleSetter(),
+
+    # If the file is binary and its svn:mime-type property is not yet
+    # set, set svn:mime-type to 'application/octet-stream'.
+    CVSBinaryFileDefaultMimeTypeSetter(),
+
+    # To try to determine the eol-style from the mime type, uncomment
+    # the following line:
+    #EOLStyleFromMimeTypeSetter(),
+
+    # Choose one of the following lines to set the default
+    # svn:eol-style if none of the above rules applied.  The argument
+    # is the svn:eol-style that should be applied, or None if no
+    # svn:eol-style should be set (i.e., the file should be treated as
+    # binary).
+    #
+    # The default is to treat all files as binary unless one of the
+    # previous rules has determined otherwise, because this is the
+    # safest approach.  However, if you have been diligent about
+    # marking binary files with -kb in CVS and/or you have used the
+    # above rules to definitely mark binary files as binary, then you
+    # might prefer to use 'native' as the default, as it is usually
+    # the most convenient setting for text files.  Other possible
+    # options: 'CRLF', 'CR', 'LF'.
+    DefaultEOLStyleSetter(None),
+    #DefaultEOLStyleSetter('native'),
+
+    # Prevent svn:keywords from being set on files that have
+    # svn:eol-style unset.
+    SVNBinaryFileKeywordsPropertySetter(),
+
+    # If svn:keywords has not been set yet, set it based on the file's
+    # CVS mode:
+    KeywordsPropertySetter(config.SVN_KEYWORDS_VALUE),
+
+    # Set the svn:executable flag on any files that are marked in CVS as
+    # being executable:
+    ExecutablePropertySetter(),
+
+    # Uncomment the following line to include the original CVS revision
+    # numbers as file properties in the SVN archive:
+    #CVSRevisionNumberSetter(),
+
+    ])
+
+# The directory to use for temporary files:
+ctx.tmpdir = r'cvs2svn-tmp'
+
+# To skip the cleanup of temporary files, uncomment the following
+# option:
+#ctx.skip_cleanup = True
+
+
+# In CVS, it is perfectly possible to make a single commit that
+# affects more than one project or more than one branch of a single
+# project.  Subversion also allows such commits.  Therefore, by
+# default, when cvs2svn sees what looks like a cross-project or
+# cross-branch CVS commit, it converts it into a
+# cross-project/cross-branch Subversion commit.
+#
+# However, other tools and SCMs have trouble representing
+# cross-project or cross-branch commits.  (For example, Trac's Revtree
+# plugin, http://www.trac-hacks.org/wiki/RevtreePlugin is confused by
+# such commits.)  Therefore, we provide the following two options to
+# allow cross-project/cross-branch commits to be suppressed.
+
+# To prevent CVS commits from different projects from being merged
+# into single SVN commits, change this option to False:
+ctx.cross_project_commits = True
+
+# To prevent CVS commits on different branches from being merged into
+# single SVN commits, change this option to False:
+ctx.cross_branch_commits = True
+
+
+# By default, it is a fatal error for a CVS ",v" file to appear both
+# inside and outside of an "Attic" subdirectory (this should never
+# happen, but frequently occurs due to botched repository
+# administration).  If you would like to retain both versions of such
+# files, change the following option to True, and the attic version of
+# the file will be left in an SVN subdirectory called "Attic":
+ctx.retain_conflicting_attic_files = False
+
+# Now use stanzas like the following to define CVS projects that
+# should be converted.  The arguments are:
+#
+# - The filesystem path of the project within the CVS repository.
+#
+# - The path that should be used for the "trunk" directory of this
+#   project within the SVN repository.  This is an SVN path, so it
+#   should always use forward slashes ("/").
+#
+# - The path that should be used for the "branches" directory of this
+#   project within the SVN repository.  This is an SVN path, so it
+#   should always use forward slashes ("/").
+#
+# - The path that should be used for the "tags" directory of this
+#   project within the SVN repository.  This is an SVN path, so it
+#   should always use forward slashes ("/").
+#
+# - A list of symbol transformations that can be used to rename
+#   symbols in this project.  Each entry is a tuple (pattern,
+#   replacement), where pattern is a Python regular expression pattern
+#   and replacement is the text that should replace the pattern.  Each
+#   pattern is matched against each symbol name.  If the pattern
+#   matches, then it is replaced with the corresponding replacement
+#   text.  The replacement can include substitution patterns (e.g.,
+#   r'\1' or r'\g<name>').  Typically you will want to use raw strings
+#   (strings with a preceding 'r', like shown in the examples) for the
+#   regexp and its replacement to avoid backslash substitution within
+#   those strings.
+
+
+# Create the default project (using ctx.trunk, ctx.branches, and ctx.tags):
+run_options.add_project(
+    r'cvsrep4/code',
+    trunk_path='trunk',
+    branches_path='branches',
+    tags_path='tags',
+    symbol_transforms=[
+        #RegexpSymbolTransform(r'release-(\d+)_(\d+)',
+        #                      r'release-\1.\2'),
+        #RegexpSymbolTransform(r'release-(\d+)_(\d+)_(\d+)',
+        #                      r'release-\1.\2.\3'),
+        # Convert backslashes into forward slashes:
+        ReplaceSubstringsSymbolTransform('\\','/'),
+        # Eliminate leading, trailing, and repeated slashes:
+        NormalizePathsSymbolTransform(),
+        ],
+    symbol_strategy_rules=[
+        # Additional, project-specific symbol strategy rules can
+        # be added here.
+        ] + global_symbol_strategy_rules,
+    )
+
+# Add a second project, to be stored to projA/trunk, projA/branches,
+# and projA/tags:
+#run_options.add_project(
+#    r'my/cvsrepo/projA',
+#    trunk_path='projA/trunk',
+#    branches_path='projA/branches',
+#    tags_path='projA/tags',
+#    symbol_transforms=[
+#        #RegexpSymbolTransform(r'release-(\d+)_(\d+)',
+#        #                      r'release-\1.\2'),
+#        #RegexpSymbolTransform(r'release-(\d+)_(\d+)_(\d+)',
+#        #                      r'release-\1.\2.\3'),
+#        # Convert backslashes into forward slashes:
+#        ReplaceSubstringsSymbolTransform('\\','/'),
+#        # Eliminate leading, trailing, and repeated slashes:
+#        NormalizePathsSymbolTransform(),
+#        ],
+#    symbol_strategy_rules=[
+#        # Additional, project-specific symbol strategy rules can
+#        # be added here.
+#        ] + global_symbol_strategy_rules,
+#    )
+
+# Change this option to True to turn on profiling of cvs2svn (for
+# debugging purposes):
+run_options.profiling = False
+
+
+# Should CVSItem -> Changeset database files be memory mapped?  In
+# some tests, using memory mapping speeded up the overall conversion
+# by about 5%.  But this option can cause the conversion to fail with
+# an out of memory error if the conversion computer runs out of
+# virtual address space (e.g., when running a very large conversion on
+# a 32-bit operating system).  Therefore it is disabled by default.
+# Uncomment the following line to allow these database files to be
+# memory mapped.
+#changeset_database.use_mmap_for_cvs_item_to_changeset_table = True
