@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+    <HEAD>
+        <TITLE>openoffice.org : graphics : chart project</TITLE>
+        <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+        <!-- $Revision: 1.4 $ -->
+        <!-- $Author: iha $ $Date: 2007/05/23 08:26:47 $ -->
+        <META NAME="GENERATOR" CONTENT="XEmacs">
+        <META NAME="CREATED" CONTENT="20011402">
+    </HEAD>
+    <body>
+        <h2>Rough Overview of the Code Structure in Module chart2</h2>
+        <p>The chart2 module produces 4 libraries:
+            <ul>
+                <li>
+                chartmodel
+                <li>
+                chartview
+                <li>
+                chartcontroller
+                <li>
+                charttools
+            </ul>
+        </p>
+        <p>The libraries are created in the respective directories:
+            <ul>
+                <li>
+                    <a href="http://www.openoffice.org/source/browse/graphics/chart2/source/model/?only_with_tag=MAIN">
+                        chart2/source/model
+                    </a>
+                </li>
+                <li>
+                    <a href="http://www.openoffice.org/source/browse/graphics/chart2/source/view/?only_with_tag=MAIN">
+                        chart2/source/view
+                    </a>
+                </li>
+                <li>
+                    <a href="http://www.openoffice.org/source/browse/graphics/chart2/source/controller/?only_with_tag=MAIN">
+                        chart2/source/controller
+                    </a>
+                </li>
+                <li>
+                    <a href="http://www.openoffice.org/source/browse/graphics/chart2/source/tools/?only_with_tag=MAIN">
+                        chart2/source/tools
+                    </a>
+                </li>
+            </ul>
+        </p>
+        <p>Model, View and Controller are named according to the classic design pattern.</p>
+        <h3>Model</h3>
+        <p>
+            The model contains the basic content of the chart. Access on the model objects
+            is only possible via UNO interfaces. The model uses an unpublished new UNO API which is subject to futther changes. You can find that API in module offapi
+            ( <a href="http://api.openoffice.org/source/browse/api/offapi/com/sun/star/chart2/?only_with_tag=MAIN">com::sun::star::chart2</a> ).
+            The central class is 'ChartModel'(implementing 
+            the service ChartDocument). It represents the chart document which contains all 
+            further chart elements. While describing interfaces or services I use 'cssc2::' 
+            instead of writing the long namespace '::com::sun::star::chart2::' again and 
+            again here. The hierarchy looks like this:
+            <ul>
+                <li>
+                    ChartModel ( service: cssc2::ChartDocument and class: ChartModel )
+                    <ul>
+                        <li>
+                        DataProvider (optionally internal data) ( service: cssc2::data::DataProvider 
+                        and class: InternalDataProvider for charts own data (calc and writer implement 
+                        their own DataProvider) )
+                        <li>
+                        Maintitle ( service: cssc2::Title and class: Title )
+                        <li>
+                            Diagram ( service: cssc2::Diagram and class: Diagram )
+                            <ul>
+                                <li>
+                                Subtitle ( service: cssc2::Title and class: Title )
+                                <li>
+                                Legend ( service: cssc2::Legend and class: Legend )
+                                <li>
+                                Wall and Floor ( class: Wall )
+                                <li>
+                                    a list of Coordinatesystems (restricted to 1 currently)
+                                    <br>
+                                    ( service: cssc2::CoordinateSystem and base class: BaseCoordinateSystem and 
+                                    several classes: CartesianCoordinateSystem and PolarCoordinateSystem )
+                                    <ul>
+                                        <li>
+                                            <li>
+                                                the Axes ( service: cssc2::Axis and class: Axis )
+                                                <ul>
+                                                <li>
+                                                    the Grids ( service: cssc2::Grid and class: Grid )
+                                                </ul>
+                                            <li>
+                                                a list of Charttypes ( service: cssc2::ChartType and base class: ChartType and
+                                                several classes: AreaChartType, ColumnChartType, etc. )
+                                                <ul>
+                                                <li>
+                                                    a list of Data Series ( service: cssc2::DataSeries and class: DataSeries )
+                                                </ul>
+                                    </ul>
+                            </ul>
+                    </ul>
+            </ul>
+        </p>
+        <h3>View</h3>
+        <p>
+            The View is the creator of the visual screen representation. The chart view
+            creates Shapes as offered by Draw and Impress ( see API
+            <a href="http://api.openoffice.org/source/browse/api/offapi/com/sun/star/drawing/?only_with_tag=MAIN">
+                com::sun::star::drawing
+            </a> service 'Shape'). There are some c++ exports from
+            this library (see chart2/source/inc/chartview) offered for use in the
+            controller. These are candidates for UNO interfaces in future.
+        </p>
+        <p>The central class here is 'ChartView'. The place where the shapes are created is 
+            method 'createShapes()'. Roughly there is a view class for each type of chart element for creating the shapes.
+            They are often named with a leading 'V' to indicate that this is the according view class. For an example you have the class 'Legend' in the chart model and the class 'VLegend' that creates the shapes for the view.
+        </p>
+        <p>For having an interactive view where the user can select objects and perform 
+            some actions on it it is necessary to match the drawing shapes to the related 
+            chart model objects. This is done by identifiers. When the view does create a 
+            shape it sets an according identifier to the shapes Name property. The class 
+            that handles the creation and parsing of these identifiers is 
+            'ObjectIdentifier'.
+        </p>
+        <h3>Controller</h3>
+        <p>The controller is the connection to the framework and the user input via menu, 
+            mouse and keyboard. Here you will find dialogs and execution of chart changing 
+            methods.
+        </p>
+        <p>The central class here is 'ChartController'. The method where commands from the 
+            menues arrive and are executed is 'dispatch()'. Events coming from the window 
+            like mousclicks or key inputs are directed to the controller for execution by 
+            the interface 'WindowController'.
+        </p>
+        <h3>Tools</h3>
+        <p>The tools library contains some helping classes - for example to ease the access 
+            to the UNO interfaces. There are several exports (see chart2/source/inc 
+            (exclusive chartview)) which can be used in all other chart libs.
+        </p>
+        <h3>Load/Save</h3>
+        <p>Loading and saving of the chart is implemented in module xmloff/source/chart.
+        </p>
+        </p>
+    </body>
+</HTML>
