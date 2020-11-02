@@ -1,0 +1,1691 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>680 m41 snapshot</title>
+</head>
+<body>
+<h1>680 m41 Snapshot <br>
+</h1>
+<h2>Release Notes</h2>
+these notes contains changes between 680_m38 and&nbsp; 680_m41.<br>
+this release will install as OpenOffice.org 680, it comes with ugly
+hacked splash screen to make clear, that this is an iterims build
+between 1.1 and 2.0.<br>
+for snapshot builds there will be no extra source tar balls created,
+sources can be received from cvs by tag SRC680_m41.<br>
+<br>
+For our Solaris build a new base line is required. It is now expect to
+have Solaris 8 with the following patches applied:<br>
+<ul>
+  <li>Solaris 8 (Sparc) 108434-11 <br>
+  </li>
+  <li>Solaris 8 (x86)
+108436-10&nbsp;</li>
+  <li>Solaris 9 (Sparc)
+111711-04&nbsp;</li>
+  <li>Solaris 9 (x86)
+111713-02 <br>
+  </li>
+</ul>
+The new baseline is required because of the change of the Compiler used
+for the builds.<br>
+<h2>known problems</h2>
+i25609&nbsp; P2 Web page autopilot functionality is broken
+<br>
+???&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P2 Library sizes of
+Applications are increased<br>
+i29881&nbsp; P2 startup time increased<br>
+<br>
+<h2>What's new ?</h2>
+<font color="grey">- if you miss some features in the list or the list
+is empty, it is possible that the feature-announcement is missing. <br>
+- or the issue wasn't added to a CWS, have a look at the issue in EIS. </font><br>
+<br>
+<table bgcolor="#ffffff" border="1" cellpadding="2" cellspacing="0">
+  <thead><tr bgcolor="#eeeeee">
+    <th>Feature title </th>
+    <th>TaskId </th>
+    <th>Spec. abstract </th>
+    <th>Spec. link </th>
+    <th>Component </th>
+  </tr>
+  </thead> <tbody>
+    <tr>
+      <td>Alphabetical Index change <br>
+karl.hong@sun.com </td>
+      <td>i25323 </td>
+      <td>feature-info:<br>
+I have moved previous hard-coded index information from
+indexentrysupplier to localedata, create a new section LC_INDEX in
+localedata xml files. It includes 3 parts, index key, script type and
+page words.
+Index key defines a letter list for an index algorithm, like A, B,
+C...X, Y, Z for English Alphanumeric. It is possible to define more
+than one algorithm for a language, like we define 'pinyin', 'stroke'
+and 'radical' fro Simplified Chinese. If the letter list is blank, the
+individual UNO service for the algorithm should be provided.
+Script type defines Unicode range for the language, it is Unicode
+defined script type, like 0 for basic latin, 10 for hebrew, for
+example, we need 0 (basic latin) and 1 (Latin 1 Supplement) to cover
+German. See offapi/com/sun/star/i18n/UnicodeScript.idl for the list of
+script type. Page words contain two words, like p. and pp. for English,
+f. and ff. for German. The words are used in the option 'Combine
+indentical entries with p or pp'. </td>
+      <td> <font color="red">speclink<br>
+not set</font> </td>
+      <td>api </td>
+    </tr>
+    <tr>
+      <td>Naming of property in form property browser changed <br>
+ocke.janssen@sun.com </td>
+      <td><br>
+      </td>
+      <td>feature-info:<br>
+Hi *,
+the text "Delete data" changed to "Allow deletions" on the data page
+in the form properties browser.
+Best regards,
+Ocke </td>
+      <td> <font color="red">speclink<br>
+not set</font> </td>
+      <td>dba </td>
+    </tr>
+    <tr>
+      <td>form text fields: New property "Text lines end with" <br>
+frank.schoenheit@sun.com </td>
+      <td>i13497 </td>
+      <td>When processing multi line text on a computer, there have
+always been
+two major approaches how to indicate a line break in a text,
+represented by a character string: so called "Unix style" line-ends and
+"DOS style" line-ends. Depending on which approach is used for a
+particular data set, applications working with this data need to take
+different measures to properly deal with the text.
+Database Access is also affected by this: When storing multi line text
+in a database table (field), there is no general definition which of
+the two approaches is to be used, instead, the approach is chosen by
+the designer of the database, and/or the designer of the applications
+working with this database.
+To allow the user the most flexibility in designing her database, and
+to improve OpenOffice.org's capabilities to interoperate with databases
+which follow any of the two approaches, the multi line text field in
+OpenOffice.org database forms will be extended with a setting how it
+should treat the input the user made &#8211; in a Unix-like or in a DOS-like
+way. </td>
+      <td> <a
+ href="http://dba.openoffice.org/specifications/forms/multiline_line_ends.sxw">speclink
+      </a> </td>
+      <td>dba </td>
+    </tr>
+    <tr>
+      <td>"Filter" and "Sort" do not add criterion based on current
+field anymore <br>
+frank.schoenheit@sun.com </td>
+      <td>i14491 </td>
+      <td>feature-info:<br>
+When opening the "Filter" or "Sort" dialog from within either the data
+source browser or a database form, these dialogs now will *not* append
+a new filter resp. sort criterion according to the currently focussed
+control/column.
+As it turned out that this behavior was more a usability glitch than a
+feature (since it suggested the user a filter/order which in real was
+not present), it was removed in the course of fixing issue 14491. </td>
+      <td> <font color="red">speclink<br>
+not set</font> </td>
+      <td>dba </td>
+    </tr>
+    <tr>
+      <td>table data view: memo fields automatically displayed with a
+multi-line-capable text column <br>
+frank.schoenheit@sun.com </td>
+      <td>i14649 </td>
+      <td>When processing multi line text on a computer, there have
+always
+been two major approaches how to indicate a line break in a text,
+represented by a character string: so called "Unix style" line-ends and
+"DOS style" line-ends. Depending on which approach is used for a
+particular data set, applications working with this data need to take
+different measures to properly deal with the text.
+Database Access is also affected by this: When storing multi line text
+in a database table (field), there is no general definition which of
+the two approaches is to be used, instead, the approach is chosen by
+the designer of the database, and/or the designer of the applications
+working with this database.
+To allow the user the most flexibility in designing her database, and
+to improve OpenOffice.org's capabilities to interoperate with databases
+which follow any of the two approaches, the multi line text field in
+OpenOffice.org database forms will be extended with a setting how it
+should treat the input the user made &#8211; in a Unix-like or in a DOS-like
+way. </td>
+      <td> <a
+ href="http://dba.openoffice.org/specifications/forms/multiline_line_ends.sxw">speclink
+      </a> </td>
+      <td>dba </td>
+    </tr>
+    <tr>
+      <td>text columns in table controls now able to display/edit multi
+line text <br>
+frank.schoenheit@sun.com </td>
+      <td>i14649 </td>
+      <td>When processing multi line text on a computer, there have
+always
+been two major approaches how to indicate a line break in a text,
+represented by a character string: so called "Unix style" line-ends and
+"DOS style" line-ends. Depending on which approach is used for a
+particular data set, applications working with this data need to take
+different measures to properly deal with the text.
+Database Access is also affected by this: When storing multi line text
+in a database table (field), there is no general definition which of
+the two approaches is to be used, instead, the approach is chosen by
+the designer of the database, and/or the designer of the applications
+working with this database.
+To allow the user the most flexibility in designing her database, and
+to improve OpenOffice.org's capabilities to interoperate with databases
+which follow any of the two approaches, the multi line text field in
+OpenOffice.org database forms will be extended with a setting how it
+should treat the input the user made &#8211; in a Unix-like or in a DOS-like
+way. </td>
+      <td> <a
+ href="http://dba.openoffice.org/specifications/forms/multiline_line_ends.sxw">speclink
+      </a> </td>
+      <td>dba </td>
+    </tr>
+    <tr>
+      <td>"Character set" property renamed to "Font" <br>
+frank.schoenheit@sun.com </td>
+      <td>i26592 </td>
+      <td>feature-info:<br>
+The "Character set" property for form controls has been renamed to
+"Font" for linguistic consistency. In german, the text changed from
+"Zeichensatz" to "Schrift".
+See issue 26592
+(http://www.openoffice.org/issues/show_bug.cgi?id=26592) for details. </td>
+      <td> <font color="red">speclink<br>
+not set</font> </td>
+      <td>dba </td>
+    </tr>
+    <tr>
+      <td>"Data Input" changed to "Data Entry" in UNDO string <br>
+frank.schoenheit@sun.com </td>
+      <td>i27469 </td>
+      <td>feature-info:<br>
+as suggested after a linguistic review, the string "Undo: Data Input"
+(which is the tooltip of the "Undo" button in the data source browser)
+has been changed to "Undo: Data Entry".
+See issue 27469
+(http://www.openoffice.org/issues/show_bug.cgi?id=27469) for details. </td>
+      <td> <font color="red">speclink<br>
+not set</font> </td>
+      <td>dba </td>
+    </tr>
+    <tr>
+      <td>native widget framework <br>
+stephan.schaefer@sun.com </td>
+      <td>i25130 </td>
+      <td> <br>
+      </td>
+      <td> <a
+ href="http://specs.openoffice.org/ui_in_general/controls/NativeWidgetRenderingSpec.sxw">speclink
+      </a> </td>
+      <td>gsl </td>
+    </tr>
+    <tr>
+      <td>Excel import/export of Scrollbars and Spinbuttons <br>
+daniel.rentz@sun.com </td>
+      <td>i27879 </td>
+      <td>feature-info:<br>
+Import and export of spin buttons and scroll bars has been added to the
+Excel filters.
+1) *** Import of old fashioned MS Office 95 controls ***
+1a) Spin buttons:
+- imported: current value, minimum, maximum, step increment, cell link
+- Excel does not support: colors (system default only), orientation
+(always vertical), disabled state, repeat delay time.
+- Calc does not support: flat 2D style
+1b) Scroll bars:
+- imported: current value, minimum, maximum, step imcrement, page
+increment, orientation (horizontal/vertical, not changable in Excel UI,
+but possible to set in Excel file format, and correctly shown by Excel
+and Calc then), cell link
+- Excel does not support: colors (system default only), disabled state,
+repeat delay time
+- Calc does not support: flat 2D style
+2) *** Import of new MS Office 97 OLE controls ***
+2a) Spin buttons:
+- imported: current value, minimum, maximum, step increment, cell link,
+fill color, symbol color, orientation, disabled state, repeat delay
+time
+- Calc does not support: flat 2D style
+2b) Scroll bars:
+- imported: current value, minimum, maximum, step imcrement, page
+increment, orientation (horizontal/vertical), cell link, fill color,
+symbol color, disabled state, repeat delay time
+- Calc does not support: flat 2D style
+3) *** Export ***
+All controls are exported as old fashioned MS Office 95 controls.
+3a) Spin buttons:
+- exported: current value, minimum, maximum, step increment, cell link
+- Excel does not support: colors (system default only), orientation
+(always vertical), disabled state, repeat delay time.
+3b) Scroll bars:
+- exported: current value, minimum, maximum, step imcrement, page
+increment, orientation (horizontal/vertical), cell link
+- Excel does not support: colors (system default only), disabled state,
+repeat delay time </td>
+      <td> <font color="red">speclink<br>
+not set</font> </td>
+      <td>sc </td>
+    </tr>
+    <tr>
+      <td>Transparent Use of Office UNO Components from C++ <br>
+thomas.benisch@sun.com </td>
+      <td><br>
+      </td>
+      <td>no abstract found </td>
+      <td> <a
+ href="http://udk.openoffice.org/common/man/spec/transparentofficecomponents.html">speclink
+      </a> </td>
+      <td>udk </td>
+    </tr>
+    <tr>
+      <td>Automatic Java Configuration, Java Options Panel <br>
+joachim.lingner@sun.com </td>
+      <td>i20052 </td>
+      <td>A new panel in the options dialog will be introduced allowing
+to
+determine what Java shall be used by OpenOffice.org. A set off
+additional arguments which are passed to the selected Java VM during
+its creation can be specified by the user. </td>
+      <td> <a
+ href="http://specs.openoffice.org/appwide/java/java_options_dialog_spec.sxw">speclink
+      </a> </td>
+      <td>udk </td>
+    </tr>
+    <tr>
+      <td>Automatic frame width <br>
+frank.meies@sun.com </td>
+      <td>i20202 </td>
+      <td>Automatically resize text frames width dependent on
+containing text
+width. </td>
+      <td> <a
+ href="http://specs.openoffice.org/writer/textframeautowidth/textframeautowidth.sxw">speclink
+      </a> </td>
+      <td>word processing </td>
+    </tr>
+    <tr>
+      <td>Tables in tables <br>
+frank.meies@sun.com </td>
+      <td>i25676 </td>
+      <td>The Writer doesn't allow to insert a table into a table cell.
+We want
+to enable this functionality. </td>
+      <td> <a
+ href="http://specs.openoffice.org/writer/tables/table_in_table.sxw">speclink
+      </a> </td>
+      <td>word processing </td>
+    </tr>
+    <tr>
+      <td>Word import/export of Scrollbars and Spinbuttons <br>
+daniel.rentz@sun.com </td>
+      <td>i27879 </td>
+      <td>feature-info:<br>
+Import and export of spin buttons and scroll bars has been added to the
+Word filters.
+1) Spin buttons:
+- imported/exported: current value, minimum, maximum, step increment,
+fill color, symbol color, orientation, disabled state, repeat delay
+time
+- Writer does not support: flat 2D style
+2) Scroll bars:
+- imported/exported: current value, minimum, maximum, step imcrement,
+page increment, orientation (horizontal/vertical), fill color, symbol
+color, disabled state, repeat delay time
+- Writer does not support: flat 2D style </td>
+      <td> <font color="red">speclink<br>
+not set</font> </td>
+      <td>word processing </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<h2>Features and Enhancements</h2>
+<table width="100%">
+  <tbody>
+    <tr>
+      <th><a
+ href="http://www.openoffice.org/issues/buglist.cgi?issue_id=24380,18734,20052,20193,20330,21150,26923,28384,28812,20304,19974,20365,20366,27525,23601,20355,20356,20379,25326,18735,27879,27499,21237,25679,25689,18686,9046,27202,27203,27204,27205,27615,7983&amp;order=issues.issue_id">ID</a>
+      </th>
+      <th><a
+ href="http://www.openoffice.org/issues/buglist.cgi?resort=1&amp;issue_id=24380,18734,20052,20193,20330,21150,26923,28384,28812,20304,19974,20365,20366,27525,23601,20355,20356,20379,25326,18735,27879,27499,21237,25679,25689,18686,9046,27202,27203,27204,27205,27615,7983&amp;order=issues.component%2C%20issues.component%2C%20issues.votes%20desc%2C%20issues.component%2C%20issues.version%2C%20issues.issue_id">Comp</a></th>
+      <th><a
+ href="http://www.openoffice.org/issues/buglist.cgi?resort=1&amp;issue_id=24380,18734,20052,20193,20330,21150,26923,28384,28812,20304,19974,20365,20366,27525,23601,20355,20356,20379,25326,18735,27879,27499,21237,25679,25689,18686,9046,27202,27203,27204,27205,27615,7983&amp;order=issues.short_desc%2C%20issues.component%2C%20issues.votes%20desc%2C%20issues.component%2C%20issues.version%2C%20issues.issue_id">Summary</a></th>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=24380">24380</a>
+      </td>
+      <td><span class="component">Database</span> </td>
+      <td><span class="summary">Create a column descriptor control for
+the table wizard</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=18734">18734</a>
+      </td>
+      <td><span class="component">Drawing</span> </td>
+      <td><span class="summary">PCD particle MMP 06 - Context menu
+handling in Draw/Impress</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=20052">20052</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">Q-PCD Allow installation or
+modification of JRE via Tools/Op</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=20193">20193</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">Q-PCD MSInteroperability-19</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=20330">20330</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">Q-PCD EaseOfUse-MMP-06 context for
+context menus</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=21150">21150</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">Q-PCD Programmability-4: UNO ease of Use</span>
+      </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=26923">26923</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">Implement Script Organizer specification</span>
+      </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=28384">28384</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">Implement Macro Selector specification</span>
+      </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=28812">28812</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">Alphabetical listing of Scripts needed,
+also need to be able</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=20304">20304</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">Q-PCD Programmability: Live Deployment
+and GUI</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=19974">19974</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">Q-PCD Programmability-8 (OOoBean) (OOo
+1.1.1 parts)</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=20365">20365</a>
+      </td>
+      <td><span class="component">gsl</span> </td>
+      <td><span class="summary">Q-PCD GnomeIntegration-CP-08: Gnome IME
+integration</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=20366">20366</a>
+      </td>
+      <td><span class="component">gsl</span> </td>
+      <td><span class="summary">Q-PCD GnomeIntegration-CP-09: Gnome
+hotkeys, accelerators</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27525">27525</a>
+      </td>
+      <td><span class="component">gsl</span> </td>
+      <td><span class="summary">rsc - generate liists of used images</span>
+      </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=23601">23601</a>
+      </td>
+      <td><span class="component">gsl</span> </td>
+      <td><span class="summary">file aliases in font.dir files and
+font.alias files are also</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=20355">20355</a>
+      </td>
+      <td><span class="component">Installa</span> </td>
+      <td><span class="summary">Q-PCD GnomeIntegration-5: Start Menu
+Integration</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=20356">20356</a>
+      </td>
+      <td><span class="component">Installa</span> </td>
+      <td><span class="summary">Q-PCD GnomeIntegration-7: Mime-type
+registration for OpenOff</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=20379">20379</a>
+      </td>
+      <td><span class="component">Installa</span> </td>
+      <td><span class="summary">Q-PCD ConfigAdminDeploy-50: system wide
+mime type settings</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=25326">25326</a>
+      </td>
+      <td><span class="component">Installa</span> </td>
+      <td><span class="summary">Remove or substitute todays setup
+functionality</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=18735">18735</a>
+      </td>
+      <td><span class="component">Spreadsh</span> </td>
+      <td><span class="summary">PCD particle MMP 06 - Context menu
+handling in Calc</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27879">27879</a>
+      </td>
+      <td><span class="component">Spreadsh</span> </td>
+      <td><span class="summary">Excel/Word import/export of scrollbars
+and spinbuttons</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27499">27499</a>
+      </td>
+      <td><span class="component">ucb</span> </td>
+      <td><span class="summary">openFileWrite for vnd.sun.star.tdoc
+throws UnsupportedDataS</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=21237">21237</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Q-PCD MSInteroperability-16</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=25679">25679</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Writer core implementation of 'Tables
+in tables'</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=25689">25689</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">xml import/export and API for 'Tables
+in tables'</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=18686">18686</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">PCD particle MMP 06 - Context menu
+handling in Writer</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=9046">9046</a> </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Automatic frame width - Not show page
+numbering when documen</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27202">27202</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Automatic frame width - ui</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27203">27203</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Automatic frame width - api / xml
+im/export</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27204">27204</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Automatic frame width - word im/export</span>
+      </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27205">27205</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Automatic frame width - layout</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27615">27615</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Place cursor in front of label</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=7983">7983</a> </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Undo does not know about page format
+changes</span> </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<h2>Fixed Issues</h2>
+List of fixed issues in IssueZilla (unfortunatly some issues are still
+tracked by Sun internal Bug Tracking system :(, but this will change
+soon :) )<br>
+<br>
+<table width="100%">
+  <tbody>
+    <tr>
+      <th><a
+ href="http://www.openoffice.org/issues/buglist.cgi?Submit%20query=Submit%20query&amp;issue_type=DEFECT&amp;issue_type=PATCH&amp;email1=&amp;emailtype1=exact&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=exact&amp;emailreporter2=1&amp;issueidtype=include&amp;issue_id=10737%2C15027%2C15547%2C15851%2C16341%2C18677%2C18686%2C18734%2C18735%2C18834%2C18941%2C18954%2C18989%2C19526%2C19674%2C19890%2C19974%2C20052%2C20193%2C20304%2C20330%2C20355%2C20356%2C20365%2C20366%2C20379%2C21150%2C21237%2C21904%2C21926%2C22052%2C22149%2C23533%2C23601%2C23684%2C24286%2C2432%2C24380%2C24852%2C24860%2C25323%2C25326%2C25342%2C25350%2C25430%2C25558%2C25679%2C25689%2C26108%2C26147%2C26237%2C26424%2C26500%2C26503%2C26532%2C26547%2C26609%2C26620%2C26621%2C26629%2C26923%2C26971%2C27063%2C27070%2C27128%2C27202%2C27203%2C27204%2C27205%2C27379%2C27380%2C27457%2C27499%2C27500%2C27525%2C27607%2C27610%2C27613%2C27615%2C27658%2C27711%2C27746%2C27879%2C27888%2C27914%2C27962%2C27978%2C28023%2C28277%2C28384%2C28761%2C28812%2C28888%2C28903%2C29169%2C29180%2C29204%2C29238%2C29251%2C29286%2C29320%2C29326%2C29347%2C29443%2C29452%2C29627%2C29656%2C29760%2C29762%2C29781%2C441%2C7983%2C9046&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;issue_file_loc=&amp;issue_file_loc_type=substring&amp;status_whiteboard=&amp;status_whiteboard_type=substring&amp;keywords=&amp;keywords_type=anytokens&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;order=issues.issue_id">ID</a>
+      </th>
+      <th><a
+ href="http://www.openoffice.org/issues/buglist.cgi?resort=1&amp;Submit%20query=Submit%20query&amp;issue_type=DEFECT&amp;issue_type=PATCH&amp;email1=&amp;emailtype1=exact&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=exact&amp;emailreporter2=1&amp;issueidtype=include&amp;issue_id=10737%2C15027%2C15547%2C15851%2C16341%2C18677%2C18686%2C18734%2C18735%2C18834%2C18941%2C18954%2C18989%2C19526%2C19674%2C19890%2C19974%2C20052%2C20193%2C20304%2C20330%2C20355%2C20356%2C20365%2C20366%2C20379%2C21150%2C21237%2C21904%2C21926%2C22052%2C22149%2C23533%2C23601%2C23684%2C24286%2C2432%2C24380%2C24852%2C24860%2C25323%2C25326%2C25342%2C25350%2C25430%2C25558%2C25679%2C25689%2C26108%2C26147%2C26237%2C26424%2C26500%2C26503%2C26532%2C26547%2C26609%2C26620%2C26621%2C26629%2C26923%2C26971%2C27063%2C27070%2C27128%2C27202%2C27203%2C27204%2C27205%2C27379%2C27380%2C27457%2C27499%2C27500%2C27525%2C27607%2C27610%2C27613%2C27615%2C27658%2C27711%2C27746%2C27879%2C27888%2C27914%2C27962%2C27978%2C28023%2C28277%2C28384%2C28761%2C28812%2C28888%2C28903%2C29169%2C29180%2C29204%2C29238%2C29251%2C29286%2C29320%2C29326%2C29347%2C29443%2C29452%2C29627%2C29656%2C29760%2C29762%2C29781%2C441%2C7983%2C9046&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;issue_file_loc=&amp;issue_file_loc_type=substring&amp;status_whiteboard=&amp;status_whiteboard_type=substring&amp;keywords=&amp;keywords_type=anytokens&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;order=issues.component%2C%20issues.component%2C%20issues.votes%20desc%2C%20issues.component%2C%20issues.version%2C%20issues.issue_id">Comp</a></th>
+      <th><a
+ href="http://www.openoffice.org/issues/buglist.cgi?resort=1&amp;Submit%20query=Submit%20query&amp;issue_type=DEFECT&amp;issue_type=PATCH&amp;email1=&amp;emailtype1=exact&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=exact&amp;emailreporter2=1&amp;issueidtype=include&amp;issue_id=10737%2C15027%2C15547%2C15851%2C16341%2C18677%2C18686%2C18734%2C18735%2C18834%2C18941%2C18954%2C18989%2C19526%2C19674%2C19890%2C19974%2C20052%2C20193%2C20304%2C20330%2C20355%2C20356%2C20365%2C20366%2C20379%2C21150%2C21237%2C21904%2C21926%2C22052%2C22149%2C23533%2C23601%2C23684%2C24286%2C2432%2C24380%2C24852%2C24860%2C25323%2C25326%2C25342%2C25350%2C25430%2C25558%2C25679%2C25689%2C26108%2C26147%2C26237%2C26424%2C26500%2C26503%2C26532%2C26547%2C26609%2C26620%2C26621%2C26629%2C26923%2C26971%2C27063%2C27070%2C27128%2C27202%2C27203%2C27204%2C27205%2C27379%2C27380%2C27457%2C27499%2C27500%2C27525%2C27607%2C27610%2C27613%2C27615%2C27658%2C27711%2C27746%2C27879%2C27888%2C27914%2C27962%2C27978%2C28023%2C28277%2C28384%2C28761%2C28812%2C28888%2C28903%2C29169%2C29180%2C29204%2C29238%2C29251%2C29286%2C29320%2C29326%2C29347%2C29443%2C29452%2C29627%2C29656%2C29760%2C29762%2C29781%2C441%2C7983%2C9046&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;issue_file_loc=&amp;issue_file_loc_type=substring&amp;status_whiteboard=&amp;status_whiteboard_type=substring&amp;keywords=&amp;keywords_type=anytokens&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;order=issues.short_desc%2C%20issues.component%2C%20issues.votes%20desc%2C%20issues.component%2C%20issues.version%2C%20issues.issue_id">Summary</a></th>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=16341">16341</a>
+      </td>
+      <td><span class="component">api</span> </td>
+      <td><span class="summary">OOBasic module can not be empty</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=18954">18954</a>
+      </td>
+      <td><span class="component">api</span> </td>
+      <td><span class="summary">Service DocumentInfo documentation
+error.</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=26971">26971</a>
+      </td>
+      <td><span class="component">api</span> </td>
+      <td><span class="summary">repeated open of a bean in the same
+frame crashes OOo</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27607">27607</a>
+      </td>
+      <td><span class="component">api</span> </td>
+      <td><span class="summary">API: ucb.DynamicResultSet</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27888">27888</a>
+      </td>
+      <td><span class="component">api</span> </td>
+      <td><span class="summary">LIB: rtl_Bootstrap::getFrom</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=18834">18834</a>
+      </td>
+      <td><span class="component">api</span> </td>
+      <td><span class="summary">UDK: no documentation on what exports
+XUserInputInterception</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=19890">19890</a>
+      </td>
+      <td><span class="component">api</span> </td>
+      <td><span class="summary">Example won't work in "Setting the
+Chart Type"</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=25558">25558</a>
+      </td>
+      <td><span class="component">api</span> </td>
+      <td><span class="summary">API:
+i18n.IndexEntrySupplier::XExtendedIndexEntrySupplier::l</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=25350">25350</a>
+      </td>
+      <td><span class="component">api</span> </td>
+      <td><span class="summary">UAA: AccessibleTreeListBoxEntries
+should not be transient.</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=26237">26237</a>
+      </td>
+      <td><span class="component">api</span> </td>
+      <td><span class="summary">Incorrect RDB file location, 4.6 C++
+Component</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=18677">18677</a>
+      </td>
+      <td><span class="component">api</span> </td>
+      <td><span class="summary">Color type in UNO API</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=18941">18941</a>
+      </td>
+      <td><span class="component">api</span> </td>
+      <td><span class="summary">MediaDescriptor.OutputStream missing</span>
+      </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=15547">15547</a>
+      </td>
+      <td><span class="component">Database</span> </td>
+      <td><span class="summary">DataSource,RightClick, Edit Table,
+Fields always sorted alph</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=26503">26503</a>
+      </td>
+      <td><span class="component">Database</span> </td>
+      <td><span class="summary">memory corruption when traveling the
+bugdoc MySQL table (ODB</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=28903">28903</a>
+      </td>
+      <td><span class="component">Database</span> </td>
+      <td><span class="summary">cannot update boolean form fields for
+certain forms</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=23533">23533</a>
+      </td>
+      <td><span class="component">Database</span> </td>
+      <td><span class="summary">Field in form displays wrong data</span>
+      </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=15027">15027</a>
+      </td>
+      <td><span class="component">Database</span> </td>
+      <td><span class="summary">too much error messages when copying
+table rows fails</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=15851">15851</a>
+      </td>
+      <td><span class="component">Database</span> </td>
+      <td><span class="summary">field format coding not working in
+flat-import from text fil</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=24852">24852</a>
+      </td>
+      <td><span class="component">document</span> </td>
+      <td><span class="summary">IDL: i18n.XBreakIterator.idl</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=2432">2432</a> </td>
+      <td><span class="component">Drawing</span> </td>
+      <td><span class="summary">Worried about gsl_getSystemTextEncoding
+in wmf code</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=21926">21926</a>
+      </td>
+      <td><span class="component">Drawing</span> </td>
+      <td><span class="summary">WW8: Escher wmf cannot be decompressed</span>
+      </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=19674">19674</a>
+      </td>
+      <td><span class="component">Drawing</span> </td>
+      <td><span class="summary">PDF export produces weird looking PDFs</span>
+      </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29238">29238</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">CommandLineTools contains obsolete
+reference to XMLParserFac</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=24860">24860</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">XMLFilterDialogComponent::queryAggregation
+fails</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27380">27380</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">reload of documents leaves stale
+tdoc:references</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=28888">28888</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">script assigned to event "Start
+Application" (application) n</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29169">29169</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">Unable to rename new library / name
+only updated internally </span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29180">29180</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">Nodes not displayed correctly when new
+library created.</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29204">29204</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">Many css.ucb.NameclashException's
+during startup</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29627">29627</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">Segmentation fault at exit</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29656">29656</a>
+      </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="summary">wizards needs complexlib</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=21904">21904</a>
+      </td>
+      <td><span class="component">gsl</span> </td>
+      <td><span class="summary">starting OOoBean twice =&gt; crash in
+Window:ImplGrabFocus</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=23684">23684</a>
+      </td>
+      <td><span class="component">gsl</span> </td>
+      <td><span class="summary">No Pair Kerning using Postscript Type 1
+Fonts</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=28023">28023</a>
+      </td>
+      <td><span class="component">gsl</span> </td>
+      <td><span class="summary">PPD files with multiple extensions not
+recognized</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29781">29781</a>
+      </td>
+      <td><span class="component">gsl</span> </td>
+      <td><span class="summary">gtk plugin chosen on systems without
+recent libgtk</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=24286">24286</a>
+      </td>
+      <td><span class="component">gsl</span> </td>
+      <td><span class="summary">Various TrueType fonts cause segfaults
+in Linux</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=26147">26147</a>
+      </td>
+      <td><span class="component">gsl</span> </td>
+      <td><span class="summary">PostScript PageSetup should not change
+the PostScript conten</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=22149">22149</a>
+      </td>
+      <td><span class="component">gsl</span> </td>
+      <td><span class="summary">Alpha blending support</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27070">27070</a>
+      </td>
+      <td><span class="component">gsl</span> </td>
+      <td><span class="summary">Imbedded graphics crashes Writer while
+printing</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27914">27914</a>
+      </td>
+      <td><span class="component">gsl</span> </td>
+      <td><span class="summary">rsc.exe doesn't evaluate @file correctly</span>
+      </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=26424">26424</a>
+      </td>
+      <td><span class="component">gsl</span> </td>
+      <td><span class="summary">PDF export with particular fonts makes
+wrong PDF</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=26547">26547</a>
+      </td>
+      <td><span class="component">gsl</span> </td>
+      <td><span class="summary">Printer Test page issues</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29760">29760</a>
+      </td>
+      <td><span class="component">Installa</span> </td>
+      <td><span class="summary">setup -deinstall doesn't work</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27711">27711</a>
+      </td>
+      <td><span class="component">l10n</span> </td>
+      <td><span class="summary">Hungarian breakiterator patch</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27962">27962</a>
+      </td>
+      <td><span class="component">l10n</span> </td>
+      <td><span class="summary">Bad format of Slovak dates</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29762">29762</a>
+      </td>
+      <td><span class="component">porting</span> </td>
+      <td><span class="summary">regression: reset of crash reporter
+proxy presets</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29347">29347</a>
+      </td>
+      <td><span class="component">porting</span> </td>
+      <td><span class="summary">Enable RTTI</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=28761">28761</a>
+      </td>
+      <td><span class="component">porting</span> </td>
+      <td><span class="summary">Linux compile with newer glibc's</span>
+      </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29286">29286</a>
+      </td>
+      <td><span class="component">porting</span> </td>
+      <td><span class="summary">FreeBSD porting: deliver.pl needs strip
+command</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=22052">22052</a>
+      </td>
+      <td><span class="component">sdk</span> </td>
+      <td><span class="summary">table of formats in "Table Auto
+Formats" has too many entrie</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27128">27128</a>
+      </td>
+      <td><span class="component">sdk</span> </td>
+      <td><span class="summary">SDK is using the Java in PATH instead
+of the selected one</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=26500">26500</a>
+      </td>
+      <td><span class="component">Spreadsh</span> </td>
+      <td><span class="summary">Not safe to delete a void *</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27978">27978</a>
+      </td>
+      <td><span class="component">Spreadsh</span> </td>
+      <td><span class="summary">Assertion when loading MSO 2003 VBA
+project</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27379">27379</a>
+      </td>
+      <td><span class="component">Spreadsh</span> </td>
+      <td><span class="summary">insert-&gt;external data loops on
+specific URL</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=19526">19526</a>
+      </td>
+      <td><span class="component">Spreadsh</span> </td>
+      <td><span class="summary">Typo in German version</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27658">27658</a>
+      </td>
+      <td><span class="component">Spreadsh</span> </td>
+      <td><span class="summary">the math-function KGV_ADD has corrupt
+description</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=25430">25430</a>
+      </td>
+      <td><span class="component">Spreadsh</span> </td>
+      <td><span class="summary">debug portability dump issue</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27613">27613</a>
+      </td>
+      <td><span class="component">tools</span> </td>
+      <td><span class="summary">tg_ext.mk cannot handle BUILD_ACTIONS
+containing logical ope</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29326">29326</a>
+      </td>
+      <td><span class="component">tools</span> </td>
+      <td><span class="summary">SRC680_m39: basegfx needs tools</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27746">27746</a>
+      </td>
+      <td><span class="component">tools</span> </td>
+      <td><span class="summary">disable java issue ...</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27500">27500</a>
+      </td>
+      <td><span class="component">ucb</span> </td>
+      <td><span class="summary">XSimpleFileAccess2 writeFile method
+does not overwrite file </span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29320">29320</a>
+      </td>
+      <td><span class="component">ucb</span> </td>
+      <td><span class="summary">Creating a new stream in doct using
+XSimpleFileAccess2 fails</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29251">29251</a>
+      </td>
+      <td><span class="component">udk</span> </td>
+      <td><span class="summary">Do not install CLI - UNO bridge</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29443">29443</a>
+      </td>
+      <td><span class="component">udk</span> </td>
+      <td><span class="summary">move com.sun.star.lib.loader classes
+from javaunohelper to o</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=18989">18989</a>
+      </td>
+      <td><span class="component">udk</span> </td>
+      <td><span class="summary">The LBound and UBound functions fail
+with empty arrays from </span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27063">27063</a>
+      </td>
+      <td><span class="component">ui</span> </td>
+      <td><span class="summary">SegFault when closing the office after
+the options dialog ha</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=441">441</a> </td>
+      <td><span class="component">utilitie</span> </td>
+      <td><span class="summary">UNIX Signal Handling doesn't work</span>
+      </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=25323">25323</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Sort (Scandinavian): Wrong alphabetic
+order... in Writer</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=26532">26532</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Tables in tables: Wrong assignment of
+table names via UI</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=26609">26609</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Multiselection of table cells and
+"InsertTable"</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=26620">26620</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Cursor travelling with tables in tables</span>
+      </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=26621">26621</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Tables in tables and manual breaks</span>
+      </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=26629">26629</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">same table names with tables in tables</span>
+      </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27610">27610</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Numbering wrong in MS Word imported
+document</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=10737">10737</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Cropping EPS files does not work</span>
+      </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=25342">25342</a>
+      </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="summary">Envelope in landscape mode prints in
+portrait mode</span> </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<h2>Integrated Child Workspaces</h2>
+List of integrated child workspaces:<br>
+<ul>
+  <br>
+  <li>ab08<br>
+  </li>
+  <li>ause010<br>
+  </li>
+  <li>bmpres01<br>
+  </li>
+  <li>comptrans2<br>
+  </li>
+  <li>crashre</li>
+  <li>&lt;&gt;port02</li>
+  <li>dr17<br>
+  </li>
+  <li>hbqea101<br>
+  </li>
+  <li>hr4<br>
+  </li>
+  <li>i18<br>
+  </li>
+  <li>impress9ea1<br>
+  </li>
+  <li>jl6<br>
+  </li>
+  <li>&lt;&gt;oj5</li>
+  <li>os17<br>
+  </li>
+  <li>qwizards1<br>
+  </li>
+  <li>scriptingf4<br>
+  </li>
+  <li>sdk10<br>
+  </li>
+  <li>sdk13<br>
+  </li>
+  <li>swautowidth<br>
+  </li>
+  <li>swundo01<br>
+  </li>
+  <li>tableintable<br>
+  </li>
+  <li>tbe8<br>
+  </li>
+  <li>tdocfixes1<br>
+  </li>
+  <li>uno8eabugs01<br>
+  </li>
+  <li>vcl21<br>
+  </li>
+</ul>
+<ul>
+</ul>
+<ul>
+</ul>
+&nbsp; new cvs modules modules<br>
+<ul>
+  <li>jvmfwk</li>
+</ul>
+<h2>Unconfirmed issues reported on m34,m36, m38<br>
+</h2>
+<table width="100%">
+  <tbody>
+    <tr>
+      <th><a
+ href="http://www.openoffice.org/issues/buglist.cgi?Submit%20query=Submit%20query&amp;issue_status=UNCONFIRMED&amp;version=680m34&amp;version=680m36&amp;version=680m38&amp;version=680m39&amp;version=680m40&amp;version=680m41&amp;email1=&amp;emailtype1=exact&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=exact&amp;emailreporter2=1&amp;issueidtype=include&amp;issue_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;issue_file_loc=&amp;issue_file_loc_type=substring&amp;status_whiteboard=&amp;status_whiteboard_type=substring&amp;keywords=&amp;keywords_type=anytokens&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;order=issues.issue_id">ID</a>
+      </th>
+      <th><a
+ href="http://www.openoffice.org/issues/buglist.cgi?resort=1&amp;Submit%20query=Submit%20query&amp;issue_status=UNCONFIRMED&amp;version=680m34&amp;version=680m36&amp;version=680m38&amp;version=680m39&amp;version=680m40&amp;version=680m41&amp;email1=&amp;emailtype1=exact&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=exact&amp;emailreporter2=1&amp;issueidtype=include&amp;issue_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;issue_file_loc=&amp;issue_file_loc_type=substring&amp;status_whiteboard=&amp;status_whiteboard_type=substring&amp;keywords=&amp;keywords_type=anytokens&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;order=issues.priority%2C%20issues.component%2C%20issues.votes%20desc%2C%20issues.component%2C%20issues.version%2C%20issues.issue_id">Pri</a></th>
+      <th><a
+ href="http://www.openoffice.org/issues/buglist.cgi?resort=1&amp;Submit%20query=Submit%20query&amp;issue_status=UNCONFIRMED&amp;version=680m34&amp;version=680m36&amp;version=680m38&amp;version=680m39&amp;version=680m40&amp;version=680m41&amp;email1=&amp;emailtype1=exact&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=exact&amp;emailreporter2=1&amp;issueidtype=include&amp;issue_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;issue_file_loc=&amp;issue_file_loc_type=substring&amp;status_whiteboard=&amp;status_whiteboard_type=substring&amp;keywords=&amp;keywords_type=anytokens&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;order=map_assigned_to.userid%2C%20issues.component%2C%20issues.votes%20desc%2C%20issues.component%2C%20issues.version%2C%20issues.issue_id">Owner</a></th>
+      <th><a
+ href="http://www.openoffice.org/issues/buglist.cgi?resort=1&amp;Submit%20query=Submit%20query&amp;issue_status=UNCONFIRMED&amp;version=680m34&amp;version=680m36&amp;version=680m38&amp;version=680m39&amp;version=680m40&amp;version=680m41&amp;email1=&amp;emailtype1=exact&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=exact&amp;emailreporter2=1&amp;issueidtype=include&amp;issue_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;issue_file_loc=&amp;issue_file_loc_type=substring&amp;status_whiteboard=&amp;status_whiteboard_type=substring&amp;keywords=&amp;keywords_type=anytokens&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;order=map_reporter.userid%2C%20issues.component%2C%20issues.votes%20desc%2C%20issues.component%2C%20issues.version%2C%20issues.issue_id">Reporter</a></th>
+      <th><a
+ href="http://www.openoffice.org/issues/buglist.cgi?resort=1&amp;Submit%20query=Submit%20query&amp;issue_status=UNCONFIRMED&amp;version=680m34&amp;version=680m36&amp;version=680m38&amp;version=680m39&amp;version=680m40&amp;version=680m41&amp;email1=&amp;emailtype1=exact&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=exact&amp;emailreporter2=1&amp;issueidtype=include&amp;issue_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;issue_file_loc=&amp;issue_file_loc_type=substring&amp;status_whiteboard=&amp;status_whiteboard_type=substring&amp;keywords=&amp;keywords_type=anytokens&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;order=issues.component%2C%20issues.component%2C%20issues.votes%20desc%2C%20issues.component%2C%20issues.version%2C%20issues.issue_id">Comp</a></th>
+      <th><a
+ href="http://www.openoffice.org/issues/buglist.cgi?resort=1&amp;Submit%20query=Submit%20query&amp;issue_status=UNCONFIRMED&amp;version=680m34&amp;version=680m36&amp;version=680m38&amp;version=680m39&amp;version=680m40&amp;version=680m41&amp;email1=&amp;emailtype1=exact&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=exact&amp;emailreporter2=1&amp;issueidtype=include&amp;issue_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;issue_file_loc=&amp;issue_file_loc_type=substring&amp;status_whiteboard=&amp;status_whiteboard_type=substring&amp;keywords=&amp;keywords_type=anytokens&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;order=issues.version%2C%20issues.component%2C%20issues.votes%20desc%2C%20issues.component%2C%20issues.version%2C%20issues.issue_id">Vers</a></th>
+      <th><a
+ href="http://www.openoffice.org/issues/buglist.cgi?resort=1&amp;Submit%20query=Submit%20query&amp;issue_status=UNCONFIRMED&amp;version=680m34&amp;version=680m36&amp;version=680m38&amp;version=680m39&amp;version=680m40&amp;version=680m41&amp;email1=&amp;emailtype1=exact&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=exact&amp;emailreporter2=1&amp;issueidtype=include&amp;issue_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;issue_file_loc=&amp;issue_file_loc_type=substring&amp;status_whiteboard=&amp;status_whiteboard_type=substring&amp;keywords=&amp;keywords_type=anytokens&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;order=issues.short_desc%2C%20issues.component%2C%20issues.votes%20desc%2C%20issues.component%2C%20issues.version%2C%20issues.issue_id">Summary</a></th>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=28167">28167</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">msc</span> </td>
+      <td><span class="reporter">mjneedles</span> </td>
+      <td><span class="component">Database</span> </td>
+      <td><span class="version">680m34</span> </td>
+      <td><span class="summary">Improper representation of Smallint(3)
+field</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29045">29045</a>
+      </td>
+      <td><span class="priority">P4</span> </td>
+      <td><span class="owner">bh</span> </td>
+      <td><span class="reporter">bigserpent</span> </td>
+      <td><span class="component">Formula </span> </td>
+      <td><span class="version">680m36</span> </td>
+      <td><span class="summary">asterisk * as superscript from MathType
+is not understood</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29525">29525</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">mru</span> </td>
+      <td><span class="reporter">bigserpent</span> </td>
+      <td><span class="component">Formula </span> </td>
+      <td><span class="version">680m38</span> </td>
+      <td><span class="summary">Big symbols (integral, sum) display
+shifted</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=26393">26393</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">bh</span> </td>
+      <td><span class="reporter">aparan</span> </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="version">680m34</span> </td>
+      <td><span class="summary">Pressing Esc to Cancel / Close any of
+the Dialog</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29007">29007</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">bh</span> </td>
+      <td><span class="reporter">lcn</span> </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="version">680m36</span> </td>
+      <td><span class="summary">Format/Ruby only for Asian languages ?</span>
+      </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29008">29008</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">us</span> </td>
+      <td><span class="reporter">lcn</span> </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="version">680m36</span> </td>
+      <td><span class="summary">Format/Ruby window is complete ?</span>
+      </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29009">29009</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">bh</span> </td>
+      <td><span class="reporter">lcn</span> </td>
+      <td><span class="component">framewor</span> </td>
+      <td><span class="version">680m36</span> </td>
+      <td><span class="summary">Ruby format in HTML editor</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=28327">28327</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">pl</span> </td>
+      <td><span class="reporter">davidvo</span> </td>
+      <td><span class="component">gsl</span> </td>
+      <td><span class="version">680m34</span> </td>
+      <td><span class="summary">PDF Generation Failure for Word
+document with mathematical f</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29209">29209</a>
+      </td>
+      <td><span class="priority">P5</span> </td>
+      <td><span class="owner">us</span> </td>
+      <td><span class="reporter">jrh</span> </td>
+      <td><span class="component">Installa</span> </td>
+      <td><span class="version">680m36</span> </td>
+      <td><span class="summary">Installation Issues for 680_m3* on Linux</span>
+      </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29718">29718</a>
+      </td>
+      <td><span class="priority">P2</span> </td>
+      <td><span class="owner">of</span> </td>
+      <td><span class="reporter">thomaszillinger</span> </td>
+      <td><span class="component">Installa</span> </td>
+      <td><span class="version">680m38</span> </td>
+      <td><span class="summary">Does not detect correct available
+diskspace</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=28996">28996</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">cl</span> </td>
+      <td><span class="reporter">andy_dd</span> </td>
+      <td><span class="component">Presenta</span> </td>
+      <td><span class="version">680m36</span> </td>
+      <td><span class="summary">memory leak in batch document conversion</span>
+      </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29094">29094</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">cgu</span> </td>
+      <td><span class="reporter">arielt</span> </td>
+      <td><span class="component">Presenta</span> </td>
+      <td><span class="version">680m36</span> </td>
+      <td><span class="summary">Page blink with motion on top of
+background</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29120">29120</a>
+      </td>
+      <td><span class="priority">P4</span> </td>
+      <td><span class="owner">cl</span> </td>
+      <td><span class="reporter">arielt</span> </td>
+      <td><span class="component">Presenta</span> </td>
+      <td><span class="version">680m36</span> </td>
+      <td><span class="summary">Presentation loads slides and remains
+stuck for some seconds</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29371">29371</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">bh</span> </td>
+      <td><span class="reporter">oharboe</span> </td>
+      <td><span class="component">Presenta</span> </td>
+      <td><span class="version">680m38</span> </td>
+      <td><span class="summary">Render preview asynchronously</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29462">29462</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">bh</span> </td>
+      <td><span class="reporter">oharboe</span> </td>
+      <td><span class="component">Presenta</span> </td>
+      <td><span class="version">680m38</span> </td>
+      <td><span class="summary">ctrl and shift select in Slides view
+does not work as expect</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29557">29557</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">bh</span> </td>
+      <td><span class="reporter">oharboe</span> </td>
+      <td><span class="component">Presenta</span> </td>
+      <td><span class="version">680m38</span> </td>
+      <td><span class="summary">Add capability to edit slides directly
+in Slides view</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29562">29562</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">cgu</span> </td>
+      <td><span class="reporter">oharboe</span> </td>
+      <td><span class="component">Presenta</span> </td>
+      <td><span class="version">680m38</span> </td>
+      <td><span class="summary">Scrolling up and down in the slides
+view flashes on secondar</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=28825">28825</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">spreadsheet</span> </td>
+      <td><span class="reporter">bigserpent</span> </td>
+      <td><span class="component">Spreadsh</span> </td>
+      <td><span class="version">680m34</span> </td>
+      <td><span class="summary">copying data from imput line modifies
+the document</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29506">29506</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">fst</span> </td>
+      <td><span class="reporter">marcdver</span> </td>
+      <td><span class="component">Spreadsh</span> </td>
+      <td><span class="version">680m38</span> </td>
+      <td><span class="summary">Sort Doesn't Use Header Line</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29935">29935</a>
+      </td>
+      <td><span class="priority">P4</span> </td>
+      <td><span class="owner">spreadsheet</span> </td>
+      <td><span class="reporter">kasey</span> </td>
+      <td><span class="component">Spreadsh</span> </td>
+      <td><span class="version">680m38</span> </td>
+      <td><span class="summary">Undoing unformatted text pasting
+selects the wrong range.</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=28481">28481</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">bh</span> </td>
+      <td><span class="reporter">aaronforjesus</span> </td>
+      <td><span class="component">ui</span> </td>
+      <td><span class="version">680m34</span> </td>
+      <td><span class="summary">Dockable Dialog Boxes</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=28772">28772</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">sba</span> </td>
+      <td><span class="reporter">r6144</span> </td>
+      <td><span class="component">ui</span> </td>
+      <td><span class="version">680m34</span> </td>
+      <td><span class="summary">The setting of Options/View/Scale isn't
+saved</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=28785">28785</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">bh</span> </td>
+      <td><span class="reporter">lcn</span> </td>
+      <td><span class="component">ui</span> </td>
+      <td><span class="version">680m34</span> </td>
+      <td><span class="summary">Options/Language settings ; UI needs to
+be improved</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=28771">28771</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">sba</span> </td>
+      <td><span class="reporter">r6144</span> </td>
+      <td><span class="component">ui</span> </td>
+      <td><span class="version">680m36</span> </td>
+      <td><span class="summary">Menu customization doesn't work</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29758">29758</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">sba</span> </td>
+      <td><span class="reporter">helmerj</span> </td>
+      <td><span class="component">ui</span> </td>
+      <td><span class="version">680m38</span> </td>
+      <td><span class="summary">changing the UI font doesn't work</span>
+      </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=27906">27906</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">hi</span> </td>
+      <td><span class="reporter">tcsoftwareguy</span> </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="version">680m34</span> </td>
+      <td><span class="summary">Opening Help from Writer, causes an
+error &amp; blank dialog</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=28593">28593</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">jsk</span> </td>
+      <td><span class="reporter">gemal</span> </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="version">680m34</span> </td>
+      <td><span class="summary">Error loading BASIC of document</span> </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=28624">28624</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">bh</span> </td>
+      <td><span class="reporter">aparan</span> </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="version">680m34</span> </td>
+      <td><span class="summary">Ctrl + arrow keys for moving objects by
+small values</span> </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29889">29889</a>
+      </td>
+      <td><span class="priority">P3</span> </td>
+      <td><span class="owner">mru</span> </td>
+      <td><span class="reporter">marcdver</span> </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="version">680m38</span> </td>
+      <td><span class="summary">Complex RTFs Not rendered properly</span>
+      </td>
+    </tr>
+    <tr class="a">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29909">29909</a>
+      </td>
+      <td><span class="priority">P2</span> </td>
+      <td><span class="owner">mru</span> </td>
+      <td><span class="reporter">kasey</span> </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="version">680m38</span> </td>
+      <td><span class="summary">MS Word Import: 680m38 crashing doc file</span>
+      </td>
+    </tr>
+    <tr class="b">
+      <td> <a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=29923">29923</a>
+      </td>
+      <td><span class="priority">P2</span> </td>
+      <td><span class="owner">mru</span> </td>
+      <td><span class="reporter">kasey</span> </td>
+      <td><span class="component">Word pro</span> </td>
+      <td><span class="version">680m38</span> </td>
+      <td><span class="summary">MS Word Import: 680m38 freezing doc file</span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

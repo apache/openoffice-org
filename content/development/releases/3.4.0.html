@@ -1,0 +1,479 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>AOO 3.4.0 Release Notes</title>
+  <style type="text/css">
+<!--
+@page { size: 8.5in 11in; margin: 0.79in }
+P { margin-bottom: 0.08in; text-align: justify }
+P.western { font-family: "Albany", sans-serif; font-size: 10pt }
+TD P { margin-bottom: 0.08in; text-align: left }
+TD P.western { font-family: "Albany", sans-serif; font-size: 10pt }
+H3 {font-style: italic; text-decoration: underline }
+-->
+  </style>
+</head>
+<BODY LANG="en-US" TEXT="#000000" BGCOLOR="#ffffff" DIR="LTR" STYLE="border: none; padding: 0in">
+<H1>AOO 3.4 Release Notes</H1>
+	<p><em>Available translations: <a href="https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+3.4+Release+Notes+in+italian">Italian</a></em></p>
+	
+<ul>
+    <li><a href='#AOO3.40ReleaseNotes-GeneralRemarks'>General Remarks</a></li>
+    <li><a href='#AOO3.40ReleaseNotes-NewFeaturesfromtheOpenOffice.org3.4beta'>New Features from the OpenOffice.org 3.4 beta</a></li>
+    <li><a href='#AOO3.4ReleaseNotes-NewFeaturesforApacheOpenOffice3.4'>New Features for Apache OpenOffice 3.4</a></li>
+    <li><a href='#AOO3.4ReleaseNotes-Removed/RetiredFeatures'>Removed/Retired Features</a></li>
+    
+</ul>
+
+<H2 CLASS="western"><A NAME="AOO3.4ReleaseNotes-GeneralRemarks"></A>General
+Remarks</H2>
+<P>The Apache OpenOffice 3.4 features can be split into two stages:
+changes already made in the OpenOffice.org beta, and additional
+changes made at Apache since incubation started. During both stages
+many small bugs were fixed and we can't honestly summarize the huge
+help provided by our development community.</P>
+
+<H2 CLASS="western"><A NAME="AOO3.4ReleaseNotes-NewFeaturesfromtheOpenOffice.org3.4beta"></A>
+New Features from the OpenOffice.org 3.4 beta</H2>
+<P>These features were already part of the OpenOffice.org 3.4 beta.
+The 3.4 beta was built from the OOO340 code line which was cloned
+from DEV300m106. This code line is the base for the Apache OpenOffice
+code.</P>
+
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-FasterStartup"></A>Faster
+Startup</H3>
+<P>Startup is faster since the program now has enough initial
+knowledge about its components so that it doesn't have to start each
+of them.</P>
+
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-ImprovedODF1.2encryptionsupport"></A>
+Improved ODF 1.2 encryption support</H3>
+<P>The ODF 1.2 specification allows optional use of W3C-specified
+algorithms in the encryption (password-protection) of ODF 1.2
+documents.</P>
+<P>For Apache OpenOffice 3.4, the default &quot;Save with Password&quot;
+continues to use SHA1 digests and Blowfish encryption, the one
+combination that is supported for interchange of encrypted documents
+across ODF 1.0/1.1 and ODF 1.2 supporting application.</P>
+<P>In addition, documents encrypted using AES256 are now recognized
+and decrypted when the correct password is provided.</P>
+<P>It is also possible to select AES256 for encrypting &quot;Save
+with Password&quot; documents by setting both of these configuration
+options:</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">Set configuration option
+	org.openoffice.Office.Common/Save/ODF/UseSHA1InODF12 to &quot;false&quot;.
+		</P>
+	<LI><P>Set confguration option
+	org.openoffice.Office.Common/Save/ODF/UseBlowfishInODF12 to &quot;false&quot;.
+		</P>
+</UL>
+<P>A macro to set the options on or off is available at
+<A HREF="http://wiki.services.openoffice.org/wiki/User:TJFrazier/Encryption">http://wiki.services.openoffice.org/wiki/User:TJFrazier/Encryption</A>.</P>
+<P>The configuration options have no effect when saving in ODF
+1.1/ODF 1.0 format.</P>
+<P>See
+<A HREF="http://docs.oasis-open.org/office/v1.2/csprd03/OpenDocument-v1.2-csprd03-part3.html">http://docs.oasis-open.org/office/v1.2/csprd03/OpenDocument-v1.2-csprd03-part3.html</A>
+for precise details of the ODF 1.2 provisions.</P>
+
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Spreadsheet%3ATIMEfunctionreturnsvalues00%3A00%3A00%3C%3Dx%3C%3D23%3A59%3A59.999"></A>
+Spreadsheet: TIME function returns values 00:00:00 &lt;= x &lt;=
+23:59:59.999</H3>
+<P>The TIME spreadsheet function returns values between 00:00:00 and
+23:59:59.999... inclusive and wraps values equal to or greater than
+24:00:00.</P>
+
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Spreadsheet%3ARenamed%22DataPilot%22to%22PivotTable%22"></A>
+Spreadsheet: Renamed &quot;DataPilot&quot; to &quot;Pivot Table&quot;</H3>
+<P>In the Spreadsheet GUI, the term &quot;DataPilot&quot; has been
+replaced with the term &quot;Pivot Table&quot;.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-PivotTablehasbeenextended"></A>
+PivotTable has been extended</H3>
+<P>PivotTable (formerly known as DataPilot) is no longer limited in
+the number of fields supported.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Spreadsheet%3ANewCSVexportoption%2C%22Quotealltextcells%22"></A>
+Spreadsheet: New CSV export option, &quot;Quote all text cells&quot;</H3>
+<P>Previously, in Spreadsheet CSV export, all content from text cells
+was quoted with the selected text delimiter. Now this is optional and
+happens only if the new check box &quot;Quote all text cells&quot; is
+selected. By default, the text delimiter is added only if the cell
+content contains the field delimiter, text delimiter or multiple
+lines. When a CSV file is loaded and saved again without editing the
+filter settings, the import option &quot;Quoted field as text&quot;
+is used for the &quot;Quote all text cells&quot; option. The default
+for &quot;Quoted field as text&quot; is now &quot;off&quot; (but if
+it's changed in the import dialog, that is still saved as new default
+in the configuration).</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-ImprovedCSVexport"></A>
+Improved CSV export</H3>
+<P>Better interoperability with other applications supporting the
+import of CSV (Comma Separated Values) files as the style for
+exporting strings is configurable now.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Spreadsheet%3AUnlimitednumberoffieldsinPivotTablelayoutdialog"></A>
+Spreadsheet: Unlimited number of fields in Pivot Table layout dialog</H3>
+<P>In the Pivot Table layout dialog, it is now possible to add more
+than 8 fields to the &quot;Row Fields&quot;, &quot;Column Fields&quot;,
+and &quot;Data Fields&quot; areas, and more than 10 fields to the
+&quot;Page Fields&quot; area.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-MailMerge%3AScanrowsforcorrecttypeinformationforTextdatabases"></A>
+MailMerge: Scan rows for correct type information for Text databases</H3>
+<P>The MaxRowScan setting allows the user to define how many rows
+should be scanned to find the correct type of a column. In the past
+only the first row was scanned.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Math%3Anewoptiontosaveonlyusedsymbolsforeachformula"></A>
+Math: new option to save only used symbols for each formula</H3>
+<P>In order to save on document file size (namely in Writer documents
+with many formulas) there is now a new option to save only those
+symbols that are used in a formula. By default this option will be
+active. Geek info: However there is a small drawback:&nbsp;
+Previously, if you worked with different office installations,
+documents with formulas could be used to implicitly import <B>ALL</B>
+user-defined symbols in Math from one office installation to the
+next, even if none of them got used in a formula. Since now only the
+actually used symbols get saved, only those can be implicitly
+imported into a different office installation. To get the old
+behavior, simply turn off this new option.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Formula%3AAutomaticbaselineforMathobjects"></A>
+Formula: Automatic baseline for Math objects</H3>
+<P>There is a new check-box named 'Math baseline alignment' available
+in the 'Formatting Aids' tab of the Writer and WriterWeb option
+pages. When this option gets checked then <B>ALL</B> Math OLE objects
+already existing in the Writer document that are anchored 'as
+character' (and only those with this anchor type) will be
+automatically aligned to match the baseline of the formula with the
+one of the surrounding text. Also new Math objects inserted later on
+will be automatically aligned as well. As long as this option is
+active, manual movement of Math objects that are anchored 'as
+character' is not possible, and thus vertical alignment in the
+'Object' context dialog is now disabled as well. For new documents
+this option is set by default. When loading old documents it is not
+set. In any case, once a document gets saved again, the current value
+of this option will be saved along with the document. This automatic
+baseline alignment was implemented by Michal Spisiak as part of this
+year's Google Summer of Code; the mentor for this was Eric Bachard.
+Thanks to both of them!</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-MathsymbolcatalognowsupportsUTF32characters"></A>
+Math symbol catalog now supports UTF-32 characters</H3>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Draw%2FImpressdefaultenhancements%3A"></A>
+Draw/Impress default enhancements:</H3>
+<UL TYPE=SQUARE>
+	<LI><P STYLE="margin-bottom: 0in">Better defaults for Impress &amp;
+	Draw snap. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Changed default for &quot;copy
+	when moving&quot;. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Better defaults for grid settings
+	in Impress &amp; Draw 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Better defaults for bullet spacing
+	and indention 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Animate outline shapes 'By 1st
+	level paragraphs' as default 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">New default colors of drawing
+	objects 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Setting default shadow distance
+	for shapes to 0.2cm 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Enhancement to the &quot;mouse as
+	pen&quot; feature in impress slideshow 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Default full width for text in
+	shapes 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Change outline default bullet
+	symbol order from 'Oo-' in 'O-O-O' 
+	</P>
+	<LI><P>Shortcut for inserting comments changed 
+	</P>
+</UL>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-BetterUIDefaultsforDrawandImpress"></A>
+Better UI Defaults for Draw and Impress</H3>
+<P>See for details:</P>
+<P><A HREF="http://wiki.services.openoffice.org/wiki/BetterDefaults_BulletsColorsShortcuts_workout">Better
+Bullet UI</A> <A HREF="http://wiki.services.openoffice.org/wiki/Specification_BetterDefaults_Gridhandling#Detailed_Specification">Better
+Grid UI</A></P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Draw%2FImpress%3ASettingpixelresolutionwhenexportinggraphics"></A>
+Draw/Impress: Setting pixel resolution when exporting graphics</H3>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-PDFFileSizeReduction"></A>
+PDF File Size Reduction</H3>
+<P>PDFs containing monochrome bitmaps are smaller now</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-PasswordentryinPDFexportdialogchanged"></A>
+Password entry in PDF export dialog changed</H3>
+<P>During PDF export one can enter two passwords (&quot;open&quot;
+and &quot;permission&quot; password). These can now be entered in one
+pass instead of two separate dialogs.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Base%3AMozillaAddressBooksupportremoved%2CinfavorofSeamonkey"></A>
+Base: Mozilla Address Book support removed, in favor of Seamonkey</H3>
+<P>Since the Mozilla product has long been superseded by the
+SeaMonkey suite, and the profile formats of both changed
+incompatibly, the Mozilla Address Book support in OpenOffice.org has
+been removed, in favor of support for the SeaMonkey address books.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Base%3AListboxcontrols%3A%22Boundfield%22isallowedtobe0"></A>
+Base: List box controls: &quot;Bound field&quot; is allowed to be 0</H3>
+<P>The &quot;Bound field&quot; property of a list box control,
+specifying which column of the list boxes result set should be used
+for data exchange, can have the value &quot;0&quot; now.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Base%3Aobjecttrees%3Aselectingentriesbytypingtheirname"></A>
+Base: object trees: selecting entries by typing their name</H3>
+<P>The tree lists in Base's main application window, now support
+selecting entries by typing their name.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Base%3AScanrowsforcorrecttypeinformationforTextdatabases"></A>
+Base: Scan rows for correct type information for Text databases 
+</H3>
+<P>The MaxRowScan setting allows to define how many rows should be
+scanned to find the correct type of a column. In the past only the
+first row was scanned. 
+</P>
+<P><A HREF="http://wiki.services.openoffice.org/wiki/Base/New_features_in_3_4">Base
+new features detailed description and Sreenshots</A></P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Stylist%2FNavigator%2FOptionsDialog%3Aselectingentriesbytypingtheirname"></A>
+Stylist / Navigator / Options Dialog: selecting entries by typing
+their name</H3>
+<P>The tree lists in the application's Navigator, Stylist (&quot;Styles
+and Formattings&quot;), and in the options dialog, now support
+selecting entries by typing their name.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Chart%3AResizeableLegend"></A>
+Chart: Resizeable Legend</H3>
+<P>The legend within charts can be resized now.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Chart%3ADateAxis"></A>
+Chart: Date Axis</H3>
+<P>Date axis are available now for category charts.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-TimeAxissupportedinChart"></A>
+Time Axis supported in Chart</H3>
+<P><FONT COLOR="#000000"><IMG SRC="https://cwiki.apache.org/confluence/download/attachments/27835830/timeaxis_sample.png?version=1&amp;modificationDate=1326805788000" NAME="graphics1" ALIGN=BOTTOM WIDTH=75 HEIGHT=38 BORDER=1></FONT></P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-ImprovedPrintingonUnix"></A>
+Improved Printing on Unix</H3>
+<P>Printing via PDF (if the system supports it) allows object
+transparency to be handled directly by the printer subsystem</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-PrintfileformatchangesonLinuxsystems"></A>
+Print file format changes on Linux systems</H3>
+<P>Printing on Unix systems can now produce PDF files instead of
+PostScript.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-NewGstreamermultimediaframeworkonLinuxsystems"></A>
+New Gstreamer multimedia framework on Linux systems</H3>
+<P>Gstreamer is available now to use to playback multimedia content
+in OpenOffice documents (e.g. audio and video in Impress
+presentations). Note that Gstreamer (and the appropriate gst-plugins)
+need to be installed in system.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-EnhancedRTFexport"></A>
+Enhanced RTF export</H3>
+<P>Now it supports nested tables, more character properties,
+sections, graphics for Wordpad, bookmarks, fields, drawings and OLE
+objects.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Removebinfilterexportfilters"></A>
+Remove binfilter export filters</H3>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Furtherdevelopment%2FbugfixesforDOCXimportfilter"></A>
+Further development/bug fixes for DOCX import filter</H3>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-OOo%2FMacrunningheadlessasdaemon"></A>
+OOo/Mac running headless as daemon</H3>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-VariousBugFixes"></A>Various
+BugFixes</H3>
+<H2 CLASS="western"><A NAME="AOO3.4ReleaseNotes-NewFeaturesforApacheOpenOffice3.4"></A>
+New Features for Apache OpenOffice 3.4</H2>
+<P>These features are the result of the work at Apache on OpenOffice
+since the OpenOffice.org 3.4 beta:</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-LicenseChange"></A>License
+Change</H3>
+<P>The License has changed to our simpler, non-restrictive, <A HREF="http://www.apache.org/licenses/LICENSE-2.0">Apache
+License 2</A>. The Apache License will make adoption, distribution
+and modification of the software easier for all users and developers.
+Of course the software remains free, and the source code with its
+updates will continue to be available through the Apache Software
+Foundation servers.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Misc.Updates."></A>Misc.
+Updates.</H3>
+<P>In accordance to the new license all the software components have
+been updated to use licenses that are in line with ASF guidelines. No
+critical functionality was lost, and we did update many libraries
+that will work better on most situations. Many internal libraries and
+headers were updated with modern versions that provide the same or
+superior functionality. On selected platforms the &quot;Liberation&quot;
+fonts were replaced with the improved Google Chrome fonts.</P>
+<P>We strongly recommend that all developers and distributors update
+to this release to avoid risks resulting from inconsistencies (IP and
+security issues) found in previous versions of the OpenOffice.org
+suite.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Calc%3AFasterLPsolver."></A>
+Calc: Faster LP solver.</H3>
+<P>The previous Linear Programming solver has been replaced with the
+faster and better designed CoinMP from the Computational
+Infrastructure for Operations Research (COIN-OR) project.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-ApacheTomcatupdated."></A>
+Apache Tomcat updated.</H3>
+<P>The Apache Tomcat servlet was updated from the older version
+5.0.30 to version 5.5.35 which brings in years of performance and
+security improvements without changing the API. We plan to continue
+updating components without causing any regression on the current
+code.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-SupportforLineCapProperty"></A>
+Support for Line Cap Property</H3>
+<P>Now you can add a cap to the end of a line. Such caps are not only
+known in the ODF1 .2 standard but in HTML5 and SVG too. Also other
+Office Suites provide caps in different styles to be added to thick
+lines.</P>
+<P>Three styles exist:</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">without a cap, called 'Butt' in
+	programming and 'Flat' in UI (as in MS Office) 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">with a round cap, called 'Round' 
+	</P>
+	<LI><P>with a rectangle cap, called 'Square' The property value
+	'Flat' corresponds to the old behavior and is now the default. 
+	</P>
+</UL>
+<P><FONT COLOR="#000000"><IMG SRC="https://cwiki.apache.org/confluence/download/attachments/27835830/LineCap_PureLines.png?version=1&amp;modificationDate=1326743596000" NAME="graphics2" ALIGN=BOTTOM WIDTH=75 HEIGHT=38 BORDER=1></FONT></P>
+<P>The caps are added to the lines, so that the total length of the
+lines increases with two-times a half line width.</P>
+<P>Select the value from a drop-down-list in the line property
+dialog, just beside the settings for corner style. The new property
+is only available in contexts, where the corner style is active too.</P>
+<P><FONT COLOR="#000000"><IMG SRC="https://cwiki.apache.org/confluence/download/attachments/27835830/LineCap_Dialog.png?version=1&amp;modificationDate=1326743596000" NAME="graphics3" ALIGN=BOTTOM WIDTH=75 HEIGHT=38 BORDER=1></FONT></P>
+<P>If a line is dashed, the single dashes get caps too. Hereby a dot
+is treated as dash. You can style not only pure lines and curves, but
+the border of graphic objects as well.</P>
+<P><FONT COLOR="#000000"><IMG SRC="https://cwiki.apache.org/confluence/download/attachments/27835830/LineCap_BorderlineDotted.png?version=1&amp;modificationDate=1326743596000" NAME="graphics4" ALIGN=BOTTOM WIDTH=75 HEIGHT=38 BORDER=1></FONT>
+<FONT COLOR="#000000"><IMG SRC="https://cwiki.apache.org/confluence/download/attachments/27835830/LineCap_CurveDashed.png?version=1&amp;modificationDate=1326743596000" NAME="graphics5" ALIGN=BOTTOM WIDTH=75 HEIGHT=38 BORDER=1></FONT></P>
+<P>The next example shows the new property applied to a connector.
+Left side without cap, in the middle with 'round' cap, and on the
+right side with 'square' cap.</P>
+<P><FONT COLOR="#000000"><IMG SRC="https://cwiki.apache.org/confluence/download/attachments/27835830/LineCap_CapOnConnectors.png?version=1&amp;modificationDate=1326743595000" NAME="graphics6" ALIGN=BOTTOM WIDTH=75 HEIGHT=38 BORDER=1></FONT></P>
+<P>The caps are available for 3D-objects too, when you turn on lines
+and make them thick. The example shows lines, which are styled to
+look “dotted”.</P>
+<P><FONT COLOR="#000000"><IMG SRC="https://cwiki.apache.org/confluence/download/attachments/27835830/LineCap_SphereDotted.png?version=1&amp;modificationDate=1326743638000" NAME="graphics7" ALIGN=BOTTOM WIDTH=75 HEIGHT=38 BORDER=1></FONT>
+and a zoom… 
+<FONT COLOR="#000000"><IMG SRC="https://cwiki.apache.org/confluence/download/attachments/27835830/LineCap_SphereZoom.png?version=1&amp;modificationDate=1326743638000" NAME="graphics8" ALIGN=BOTTOM WIDTH=75 HEIGHT=38 BORDER=1></FONT></P>
+<P>Linecaps defined in svg-graphics are supported, so that those
+graphics look the same as they do in modern browsers.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-SupportforsheartransformationsforGraphicObjects%28Blogentry%29https%3A%2F%2Fblogs.apache.org%2FOOo%2Fentry%2Ffeaturesforgraphicobjectsandoleobjects"></A>
+Support for shear transformations for GraphicObjects <A HREF="https://blogs.apache.org/OOo/entry/features_for_graphicobjects_and_oleobjects">(Blog
+entry)</A></H3>
+<P>GraphicObjects which get created when inserting graphics in
+Draw/Impress and Spreadsheet support now not only rotation but also
+shear, slant and distort. The visualization during interactions was
+improved, also the break for vector-based GraphicObjects to draw
+objects was improved. Writer has its own GraphicObjects; the ones
+from the other applications can be copied to it as workaround.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-SupportforattributesandtransformationsforOLEObjects%28Blogentry%29https%3A%2F%2Fblogs.apache.org%2FOOo%2Fentry%2Ffeaturesforgraphicobjectsandoleobjects"></A>
+Support for attributes and transformations for OLEObjects <A HREF="https://blogs.apache.org/OOo/entry/features_for_graphicobjects_and_oleobjects">(Blog
+entry)</A></H3>
+<P>OLEObjects (OLE is for Object Linking and Embedding) in
+Draw/Impress and Spreadsheet support now all draw attributes and
+geometrical transformations. They can have line style, fill style,
+shadow and text. They support all transformations, e.g. rotations and
+shear. This is handy for e.g. having a mathematical formula shown
+rotated by 90 degrees or adding a border to a chart. Break to draw
+objects is also enhanced.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-EnhancedcropsupportforGraphicalObjects"></A>
+Enhanced crop support for GraphicalObjects</H3>
+<P>Crop for GraphicObjects now works correctly together with
+horizontal and/or vertical mirroring in all applications.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-SupportforScalableVectorGraphics%28SVG%29%28Blogentry%29https%3A%2F%2Fblogs.apache.org%2FOOo%2Fentry%2Fnativesvgsupportforapache"></A>
+Support for Scalable Vector Graphics (SVG) <A HREF="https://blogs.apache.org/OOo/entry/native_svg_support_for_apache">(Blog
+entry)</A></H3>
+<P>SVG is now supported as content for GraphicObjects in all
+applications. The new implemented generic SVG interpreter supports
+SVG format 1.1. The geometric content is internally processed as
+vector data in all usages, e.g. PDF export and printing, which
+guarantees good visualization quality. SVG graphics can be broken to
+draw objects and be processed further.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-SupportforMultiImageinODF"></A>
+Support for MultiImage in ODF</H3>
+<P>For SVG support it was necessary to allow multiple image
+representations for one GraphicObject to be present in the ODF file
+format, e.g. a pixel graphic and the original SVG is written in case
+of a GraphicObject with SVG content. This allows it to stay
+compatible with other and older ODF supporting applications. The
+number of images for one GraphicObject is not limited: applications
+using this may choose the image with the format which supports its
+purpose best, e.g, prefer to use a pixel graphic for ODF viewers.
+OpenOffice 3.4 uses a weighting function which prefers pixel images
+with transparency over such without and vector formats over pixel
+formats.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Enhancedchartvisualization"></A>
+Enhanced chart visualization</H3>
+<P>The visualization quality of charts has been enhanced by using a
+new mechanism for more direct visualization. This increases speed,
+reduces memory usage and enhances chart visualization in all
+visualizations, including PDF export and printing.</P>
+<P><FONT COLOR="#000000"><IMG SRC="https://cwiki.apache.org/confluence/download/attachments/27835830/aoo340-charts.png?version=1&amp;modificationDate=1336337745300" NAME="graphics9" ALIGN=BOTTOM WIDTH=75 HEIGHT=38 BORDER=1></FONT></P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Writer%3AAsianLanguageWordCount"></A>
+Writer: Asian Language Word Count</H3>
+<P>The word count of Asian languages is now correct. Previous
+releases were counting terms instead of words when counting words of
+Asian language text. Notice that file word count will not be
+automatically updated for existing text documents. You need to make a
+change to the document in order to force an update of the file word
+count.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Newregularexpressions%28regexp%29engine"></A>
+New regular expressions (regexp) engine</H3>
+<P>The existing regular expression engine has been replaced by the
+ICU engine. This solves several bugs in &quot;Find and Replace&quot;
+with the old implementation and speeds up the search.</P>
+<P>The new engine also offers better standards compliance especially
+regarding Unicode, which also means that some non-standard syntax
+extensions like <TT CLASS="western">\&lt;</TT> and <TT CLASS="western">\&gt;</TT>
+for word boundary matching are now deprecated. For the convenience of
+a smooth upgrade experience they get emulated by the <TT CLASS="western">\b</TT>
+operator though.</P>
+<P>See <A HREF="http://userguide.icu-project.org/strings/regexp#TOC-Regular-Expression-Metacharacters">ICU
+regex syntax</A> for expressions supported in the new regular
+expression engine. It is recommended to stay on the common ground
+though and <A HREF="http://www.regular-expressions.info/refflavors.html">regex
+flavors</A> gives an overview where this common ground is. The
+modified syntax applies to macros too: regular expressions in macros
+that were relying on the deprecated syntax should be converted to use
+widely supported regex expressions.</P>
+<P>Users of Japanese scripts should be aware that several non-trivial
+transliterations could behave slightly differently, especially when
+transliteration rules like &quot;ProlongedSoundMark&quot;,
+&quot;IterationMark&quot;, &quot;Ignore-Width&quot;, &quot;BaFa&quot;,
+&quot;SeZe&quot;, &quot;HyuByu&quot;, &quot;IandEfollowedByYa&quot;
+or &quot;KiKuFollowedBySa&quot; might be involved.</P>
+<H3 CLASS="western"><A NAME="AOO3.4ReleaseNotes-NewColorPickerdialog"></A>
+New Color Picker dialog</H3>
+<P>The old color picker which is used in the office code for over a
+decade has been replaced by a new, more intuitive one which offers a
+wide variety of color selection possibilities. This feature was
+developed by Christian Lippka; kudos to him for offering it under
+Apache License. A picture says more than words.</P>
+<TABLE CELLPADDING=2 CELLSPACING=2>
+	<TR>
+		<TH>
+			<P>Old 
+			</P>
+		</TH>
+		<TH>
+			<P>New 
+			</P>
+		</TH>
+	</TR>
+	<TR>
+		<TD>
+			<P><A HREF="https://cwiki.apache.org/confluence/download/attachments/27835830/ColorPicker_Old.png"><FONT COLOR="#000000"><IMG SRC="https://cwiki.apache.org/confluence/download/thumbnails/27835830/ColorPicker_Old.png" NAME="graphics10" ALIGN=BOTTOM WIDTH=200 HEIGHT=117 BORDER=1></FONT></A>
+						</P>
+		</TD>
+		<TD>
+			<P><A HREF="https://cwiki.apache.org/confluence/download/attachments/27835830/ColorPicker_New.png"><FONT COLOR="#000000"><IMG SRC="https://cwiki.apache.org/confluence/download/thumbnails/27835830/ColorPicker_New.png" NAME="graphics11" ALIGN=BOTTOM WIDTH=200 HEIGHT=131 BORDER=1></FONT></A>
+						</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+<H2 CLASS="western"><A NAME="AOO3.4ReleaseNotes-Removed/RetiredFeatures"></A>Removed/Retired Features</H2>
+<h3>WordPerfect</h3>
+<p>WordPerfect support has been removed due to licensing and security issues.</p>
+
+<h3>Crash/Error Reporting Tool</h3>
+<p>The automatic Crash/Error Reporting feature is no longer supplied with binary distributions.  </p>
+
+<P><BR><BR>
+</P>
+</BODY>
+</HTML>

@@ -1,0 +1,262 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head> <style type="text/css">@import url("cvs.css"); </style>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+<title>Developers Digest : week 8 (2004) </title>
+</head><body><h1 align="center">OpenOffice.org<br>
+Development digest<br> week 8 (2004) <br></h1>
+<h3 align="center">by <a href="mailto:cphennessy@openoffice.org">C.P. Hennessy</a></h3>
+<p align="right">
+<a href="http://es.openoffice.org/files/documents/xxx.html"> translation</a>
+ available thanks to .
+<ul>
+<li><a href="#m26"> Development snapshot m26 available </a></li>
+<li><a href="#scp2"> New cvs module scp2 instead of scp </a></li>
+<li><a href="#menu_entry"> N steps to adding a new menu entry </a></li>
+<li> Other development news <ul>
+<li><a href="#oasis"> Oasis Open Office file format status </a></li>
+<li><a href="#lj"> Interesting LinuxJournal feature articles </a></li>
+<li><a href="#devs"> Encouraging more developers </a></li>
+</ul>
+<li><a href="#iz_summary">This weeks Issuezilla summary</a></li>
+<li><a href="#cvs">This weeks CVS highlights</a></li>
+</ul>
+<h2>  </h2>
+<a name="m26"></a>
+<h3> Development snapshot m26 available </h3>
+The latest development snapshot <a href="http://development.openoffice.org/releases/680_m26_snapshot.html">
+m26</a> has many improvements including : Allow creation of dialogs via a UNO service,
+Provide example scripts in all languages, Macro Security, Add Python Scripting Runtime to installset,
+Implement API functionality for creating new Charts from spreadsheets.
+
+
+<a name="scp2"></a>
+<h3> New cvs module scp2 instead of scp </h3>
+<span class="author">Ingo Schmidt</span> wrote to the dev@porting mailing list
+to tell them about the replacement of an old core module with a new module.
+<div class="quote">
+Beginning in src680m25 (post cws_src680_ooo20040225) <i>[Ed:and hence in m26 above]</i>
+the new cvs module
+scp2 replaces the old scp module. The old scp is no longer part of the
+build process. scp2 is the new module describing the OOo installation sets.
+<p>
+<h3>Why these changes?</h3>
+
+The new scp structure allows the creation of difference scp files in
+which you can define and undefine scp defintions to describe the
+difference of two products.
+<p>
+Example: To undefine the defintion of gid_File_Abc you only need to add
+in the scp project the following code line:
+<code>
+UnFile gid_File_Abc
+</code>
+and the file defined with gid_File_Abc is no longer part of the product.
+<p>
+There is another big advantage. Because of the undefining mechanism it
+is no longer necessary to use product defines like #ifdef OSL_PRODUCT
+inside the scp files. Therefore every scp file will only be built once,
+leading to a dramatic decrease of build time for the scp2 project
+compared with the old scp project.
+The removal of product defines inside scp files also leads to more
+simplicity of this files.
+<p>
+A more detailed documentation of the new scp can be found
+<a href ="http://installation.openoffice.org/How_to_scp_in_ooo.html">here</a>
+</div>
+
+<a name="menu_entry"></a>
+<h3> N steps to adding a new menu entry </h3>
+
+<span class="author">Duncan Foster</span> (from the scripting project) recently was
+working on add a new menu entry for a scripting need. I asked him to summarize the steps necessary
+as it may be of interest to others. He kindly responded with :
+<div class="quote">
+First note that in the OOo 2.0 tree, some or all of this is going to
+change in the near future. I think the slots stuff will remain the same,
+just the way the menu entries are defined. Also note that the following
+is based on experience of working in the SRC680 branch. I think the menu
+entries have changed slightly from SRX645, with things being moved out
+of the offmgr project.
+<p>
+So, say for example I want to add an entry, "Script organizer", below
+the entry "macro..." in the Tools->Macro sub-menu.
+<p>
+The first step is define a new "slot" that links the menu entry to the
+code that it will execute. these are defined in sfx2/inc/sfxsids.hrc. I
+define a new slot SID_SCRIPTORGANIZER to be same value as the existing
+SID_SFX_free_START, and incremented the SID_SFX_free_START by one.
+<p>
+Next I define the link between the slot, and the code that handles it.
+For my slot, the application code should handle the execution so this is
+done in sfx2/sdi/appslots.sdi. See also other files in this directory,
+or similar sdi directories in other modules (eg basctl).
+<p>
+In the section that starts "shell SfxApplication" I add the lines:
+<pre>
+SID_SCRIPTORGANIZER
+[
+        ExecMethod = OfaExec_Impl;
+]
+</pre>
+which means that my slot will be handled by the method
+<pre>
+SfxApplication::OfaExec_Impl.
+</pre>
+Then in sfx2/source/appl/appserv.cxx I add code to the method
+SfxApplication::OfaExec_Impl to handle the case for the new slot.
+<p>
+In sfx2/sdi/sfx.sdi, I duplicate the SID_BASICCHOOSER entry, and change
+"MacroDialog" to "ScriptOrganizer", and SID_BASICCHOOSER to
+SID_SCRIPTORGANIZER.
+<br>
+This is the slot definition file
+where attributes for a slot can be defined, like this is a user
+interface command which can be customized to tool bars, menus and
+accelerators. You can define if the slot is a state, a function or both.
+You can add parameters and define the type of a state slot. Don't ask me
+what the entries mean!!
+<p>
+In sfx2/sdi/sfxslots.src, added an SfxSlotInfo for the slot. These are
+the localized names for the slot.
+<p>
+Build & delivered in sfx2. We now have the back end, handling the execution.
+<p>
+The actual menu entries are defined in a number of places. For things
+that are duplicated across several apps, such as the Tools->Macros
+submenu, we find the definition in svx/inc/globlmn.hrc. Here I add a new
+menuItem for the new slot to the
+ITEM_TOOLS_MACROS (using the existing entries as a template). The
+identifier and helpid are the SID, the command
+is .uno:ScriptOrganizer. The command name is what we will see if we
+record a macro that uses this slot.
+<p>
+Run the built & deliver commands in svx. The globlnm.hrc is included in
+offmgr/inc/offmenu.hrc, so we must build & deliver this project too.
+And then rebuild each of the application projects (sw, sc...). This is
+necessary to deliver the slot.ilb files which are merged from lower
+libraries. And finally build in instsetoo and install the rebuild app with your new
+menu entry!!
+</div>
+
+
+
+<p>
+<h2> Other development news </h2>
+<a name="oasis"></a>
+<h3> Oasis Open Office file format status </h3>
+The Oasis Technical committee on Open Office XML Formats had a meeting on Feburary 16th and the meeting minutes are
+<a href="http://lists.oasis-open.org/archives/office/200402/msg00019.html">available</a>.
+The specifictaion is at draft 6 at this stage, os it is getting very close to a final 1.0 release.
+
+<a name="lj"></a>
+<h3> Interesting LinuxJournal feature articles </h3>
+In the <a href="http://www.linuxjournal.com/modules.php?op=modload&name=NS-lj-issues/issue119&file=index"
+> March 2004</a> issue of Linux Journal there are several features which may be of interest to OOo develoeprs
+including :
+<div class="quote">
+      The OASIS Standard for Office Documents  by Marco Fioretti<br>
+       A common file format lets apps compete on features and ease of use.
+</div>
+and
+<div class="quote">
+      Manipulating OOo Documents with Ruby  by James Britt<br>
+       XML and Ruby let your scripts and your office suite handle the
+same files.
+</div>
+There are also other articels in that issue which are of more interest to users.
+
+
+<a name="devs"></a>
+<h3> Encouraging more developers </h3>
+During a conversation on the discuss mailing list I asked what people thought would be
+of interest to prospective developers to help them understand and use OpenOffice.org APIs.
+<span class="author">Daniel Carrera</span> replied with:
+<div class="quote">
+This is what I think we should do to attrack developers:
+<ol>
+<li>Simplify the Python bindings. There seems to be a lot of unnecessary work that could be done behind the scenes.
+
+<li>Create Ruby bindings (Ruby is a fantastic language, imagie taking the best bits of Perl and Python and then making it better).
+<p>
+<p>
+(steps 1 and 2 would make it easier to develop for OOo).
+
+<li>Write tutorials that walk the reader through making simple extensions using Ruby or Python.
+</ol>
+</div>
+<span class="author">Alexandro Colorado</span> (the Spanish translator of this digest)
+replied with his own comment and list :
+<div class="quote">
+The Developer's guide successfully goes through a remote
+script-generated OOo document. So does the PyUNO binding, however I
+would love to see more of these tutorials, independent from the
+developer guide.
+
+Something like:
+<ul>
+<li>How-To make your first plug-in
+<li>From SXW to XHTML - a XSLT Tutorial
+<li>Launching a calculator software from OpenCalc
+<li>Explaining VCL - How OOo interface really work
+<li>Make OOo your publishing app - OODocuments
+<li>Transform your OOo aplication into your RSS blog feeder XML-RPC and
+XSLT
+</ul>
+I love the way the kde-look developer used Tcl to skin OpenOffice.org, a
+tutorial to maybe do it in some other language (using native OOo
+bindings) could also be interesting. Of course this is a little harder.
+</div>
+
+<p>
+<a name="iz_summary"></a>
+<h2>This weeks Issuezilla summary</h2>
+Many bugs have been worked on and resolved (as of Monday Feb 23 2004 ):
+<table class="iz_stats" border="1" cellspacing="0">
+  <tbody><tr><th><br></th><th>&nbsp;No this week</th>
+<th>Change from last week</th></tr><tr>
+<td>Total issues submitted in the week</td>
+<td style="text-align: center;"> 2434 <br></td>
+<td style="text-align: center;"> 0 <br></td>
+</tr><tr>
+<td>Issues submitted in the week resolved or closed</td>
+<td style="text-align: center;"> 261 <br></td>
+<td style="text-align: center;"> -42 <br></td>
+</tr><tr>
+<td>Issues which have the status UNCONFIRMED</td>
+<td style="text-align: center;"> 257 <br></td>
+<td style="text-align: center;"> -22 <br></td>
+</tr><tr>
+<td>Issues which have the status NEW</td>
+<td style="text-align: center;"> 1080 <br></td>
+<td style="text-align: center;"> 34 <br></td>
+</tr><tr>
+<td>Issues which have the status STARTED</td>
+<td style="text-align: center;"> 1087 <br></td>
+<td style="text-align: center;"> 5 <br></td>
+</tr><tr>
+<td>Issues which have the status FIXED</td>
+<td style="text-align: center;"> 7994 <br></td>
+<td style="text-align: center;"> 88 <br></td>
+</tr></tbody></table>
+(a more detailed set of statistics is available <a
+href="http://qa.openoffice.org/iz_statistic.html">here</a>)<br>
+<a name="cvs"></a><H2>Some of the more interesting CVS developments over the last week include:</h2>
+<a href="http://development.openoffice.org/digest/cvs2004_06.html">
+week 8 (2004)</a>:<br><ul>
+<li><a href="cvs2004_8.html#cws_srx645_canvas01"> Canvas module is split into primarily UNO canvas implementations, and cppcanvas, a C++ wrapper canvas </a>
+<li><a href="cvs2004_8.html#cws_src680_tuamfilterteam23"> word 2003 and other filtering strangeness </a>
+<li><a href="cvs2004_8.html#cws_src680_sb14"> simplify coding tasks for Java developers using UNO, by providing appropriate wrapper APIs </a>
+<li><a href="cvs2004_8.html#cws_src680_westportfilterteam26"> lots more compatability and writer speedups </a>
+<li><a href="cvs2004_8.html#cws_src680_scriptingf5"> Rhino debugger(from mozilla.org) integrated </a>
+<li><a href="cvs2004_8.html#cws_srx645_impress2"> Impress slide sorter panel </a>
+<li><a href="cvs2004_8.html#cws_src680_swnum02"> improvements to editing numbering </a>
+<li><a href="cvs2004_8.html#cws_srx645_nativewidget1_fa"> GTK </a>
+<li><a href="cvs2004_8.html#cws_src680_ooo20040225_khendricks"> lots of MacOSX build fixes </a>
+<li><a href="cvs2004_8.html#cws_srx645_nativewidget1_kendy"> KDE </a>
+<li><a href="cvs2004_8.html#cws_src680_xslt2"> Word and Excel XSLT </a>
+<li><a href="cvs2004_8.html#cws_src680_vcl18_pl"> flash plugin support </a>
+<li><a href="cvs2004_8.html#cws_src680_jl6"> Java configuration service </a>
+<li><a href="cvs2004_8.html#cws_srx644_port64bit"> 64 bit porting work - mostly for SPARC V9 </a>
+<li><a href="cvs2004_8.html#cws_srx645_layoutmanager_cd"> layout manager getting close to merge ready state ? </a>
+<li><a href="cvs2004_8.html#cws_src680_frmcontrols03"> rich text control added </a>
+</ul></body></html>

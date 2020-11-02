@@ -1,0 +1,634 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+ <style type="text/css">@import url("cvs.css"); </style>
+ <meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+  <title>Developers Digest : Week 2 ( 2004 )</title>
+</head>
+<body>
+<h1 align="center">OpenOffice.org<br>
+Development digest<br>
+12th January 2004
+</h1>
+<h3 align="center">by <a href="mailto:cphennessy@openoffice.org">C.P.
+Hennessy</a></h3>
+(Note also available in <a href="2004_w02_es.html">Spanish</a>)<p>
+Welcome to what I hope will become the weekly digest of OpenOffice.org
+development.
+<ul>
+  <li> <a href="#intro">Introduction</a>
+    <ul>
+      <li><a href="#intro_help">So how can I help?</a></li>
+      <li><a href="#intro_branches">So what are all these branches?</a></li>
+      <li><a href="#intro_cvs">Current organization and contents of the
+CVS log</a></li>
+    </ul>
+  </li>
+  <li><a href="#other">Other development news</a></li>
+  <li><a href="#intro_summary">This weeks summary</a></li>
+</ul>
+<h2>Introduction</h2>
+Following what's happening in OpenOffice.org code development is not so
+easy, not because there is no information, but rather because that
+there is so much information and it is so spread out. Hopefully this
+digest will help to summarize all of that information into something
+reasonably readable and useful.
+<p>Most of this digest will be concerned with what code has changed in
+CVS, and presenting that info in a readable format, but I also hope to
+include news and information from other OpenOffice.org projects
+including <a href="http://qa.openoffice.org">QA</a>, <a
+ href="http://native-lang.openoffice.org">native language projects</a>,
+<a href="http://api.openoffice.org">API</a>, and any other interesting
+projects.</p>
+<p>Obviously I could really use help with all of this so if you have
+something you would like to contribute, or you see ommisions or
+mistakes please <a
+ href="mailto:cphennessy@openoffice.org?subject=OOo%20Digest%20Suggestion">email
+me</a> your contribution to the digest.</p>
+<p>Some of the areas which are not related to development I do not plan
+on covering, these include the <a href="http://user-faq.openoffice.org">user
+support</a> lists, <a href="http://marketing.openoffice.org">marketing</a>,
+<a href="http://documentation.openoffice.org">documentation</a>, and
+the <a href="http://website.openoffice.org">website</a>. However, I
+will include any interesting news sent to me about these projects.</p>
+<p><a name="intro_help"></a></p>
+<h3>So how can I help?</h3>
+There are several teams who could do with your help :
+<ul>
+  <li>for the non-programmers there is the <a
+ href="http://qa.openoffice.org">QA team</a> where you can help to get
+enough details to reproduce bugs and triage them, help the <a
+ href="http://documentation.openoffice.org">documentation project</a>
+by contributing templates and clipart, and the <a
+ href="http://native-lang.openoffice.org">localization projects</a> (
+e.g. <a
+ href="http://lingucomponent.openoffice.org/servlets/ReadMsg?msgId=965426&amp;listName=dev">help
+to improve compound word spellchecking</a> );</li>
+  <li>for the script programmer there is the <a
+ href="http://api.openoffice.org">API project</a> where you can develop
+on top of OpenOffice.org and program in StarBasic ( very similar to VBA
+), java, python, C++, and perl. A good project to learn the object
+model on and improve your OpenOffice.org scripting skills might be the <a
+ href="http://bibliographic.openoffice.org/">bibliographic project</a>
+where a <a
+ href="http://bibliographic.openoffice.org/servlets/ReadMsg?msgId=965024/&amp;listName=dev">programmer
+new to python and OpenOffice.org APIs</a> was able to help after only a
+few days!;</li>
+  <li>for the XML programmers, there are also interesting projects
+which you could help write using various technologies to transform
+OpenOffice.orgs based XML based to other formats. Two transforms which
+come with OpenOffice.org 1.1 are DocBook, and XHTML. There is
+infrastructure to use XSLT directly from OpenOffice.org, but there are
+also several projects which are generating OpenOffice.org formatted
+files outside of the OpenOffice.org suite. To help get you started, <a
+ href="http://books.evc-cit.info/">OpenOffice.org XML Essentials?Using
+OpenOffice.org?s XML Data Format</a> is a book in progress written by
+J. David Eisenberg for <a href="http://www.oreilly.com/">O?Reilly
+&amp; Associates</a> using the <a
+ href="http://creativecommons.org/licenses/by-nd-nc/1.0">Creative
+Commons License</a>.</li>
+  <li>for the developer there are many areas to get involved in
+including a call for helping to <a
+ href="http://lingucomponent.openoffice.org/servlets/ReadMsg?msgId=965426/&amp;listName=dev">improve
+the code for the spellchecker ( especially for German)</a>(which is
+also use in Mozilla.org), help to <a
+ href="http://sc.openoffice.org/servlets/ReadMsg?msgId=965017/&amp;listName=dev">increase
+the number of rows Calc can handle</a>, or <a
+ href="mailto:dev@gsl.openoffice.org">help with the native widget
+framework</a> for Aqua or KDE ports which compliment the official Win32
+and GTK work.
+    <p>It is not always necessary to recompile all of OpenOffice.org to
+work on only one of its components, but if you do then a very good
+place to start would be the <a
+ href="http://ooo.ximian.com/hackers-guide.html">Unofficial OpenOffice
+Hacker's guide</a> which explains how to build and work on
+OpenOffice.org source code. If you have development related questions
+then please send an email to <a href="mailto:dev@openoffice.apache.org">the
+development project</a>.</p>
+  </li>
+</ul>
+Over the next number of weeks and months I hope to add more information
+here to help you understand how and where you can contribute, how
+OpenOffice.org the community works, and how the various components
+within OpenOffice.org the product work.
+<p><a name="intro_branches"></a></p>
+<h3>So what are all these branches?</h3>
+There is alot of OpenOffice.org development happening as can be seen
+from the details below.
+<p>As with many very large projects with many developers, development
+is going on independently in parallel. To help manage the code in a
+reasonable way a feature of <a href="http://www.cvshome.org">CVS</a>
+called branches is used quite extensively. Basically each major feature
+is developed on a branch by one developer (or a small team of
+developers).<br>
+This type of branch is called a "child workspaces"(CWS). Usually when a
+feature has been completed and some fundamental testing has been
+performed, the branch is then marked as ready for merging to a master
+branch.<br>
+Sometime later the developers branch with the feature is then merged to
+the "master workspace"(MWS) branch where further testing happens to
+make sure that features from different branches do not conflict and
+cause errors.</p>
+<p>At some point a master branch is labelled and a public release of
+code is made.</p>
+<p>An overview of which features will be implement on which branches
+can be found <a
+ href="http://development.openoffice.org/releases/OOo_2_0_timetable.html">here</a>.
+There is a <a href="http://tools.openoffice.org/builds/index.html">more
+complete (and accurate) description of important branches currently used</a>.</p>
+<p><a name="intro_cvs"></a></p>
+<h2>Current organization and contents of the CVS log</h2>
+The CVS summary linked below is organized into what has changed on a
+particular branch by a each developer. There is currently a color
+coding on the left side to make it easier to see what type of change
+has occured. For each change you should see :
+<ul>
+  <li>a link to the relevant bug in <a
+ href="http://www.openoffice.org/issues/query.cgi">IssueTracker</a>
+(except for bugs over 100000 as these are currently Sun internal);</li>
+  <li>a comment the developer made while checking in those changes; and</li>
+  <li>a link to the difference of each change in webcvs.</li>
+</ul>
+There is also two indexes, the first lists all of the development
+branches and logically groups these branches.<br>
+The second index lists all of the OpenOffice.org components which were
+worked on and lists those branches which have changes on those
+components.
+<p><a name="other"></a></p>
+<h2>In Other Development News</h2>
+<h3>Easier builds for MacOSX Panter</h3>
+<a
+ href="http://www.openoffice.org/servlets/ReadMsg?list=users&amp;msgNo=51329">Building
+OOo for MacOSX 10.3 ( Panther) is now reasonably easy</a>, but
+volunteers are desparately needed to build and package on 10.2 and 10.1.<br>
+<h3>Contributions from the Japanese project</h3>
+Takamichi Akiyama wrote to me about developments contributed by the
+members of&nbsp; the <a href="http://ja.openoffice.org">Japanese
+project</a>:<br>
+<ul>
+  <li>Graphic Applications (aka graphics)<a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=9391"><br>
+Enabling the DXF import filter to handle Japanese texts</a><br>
+Status: Done (Integrated in OOo 1.1.1)<br>
+Todos: To cover more encoding types for other languages<br>
+    <br>
+OOo 1.0 can import a DXF file, but cannot properly handle Japanese
+texts in it. This effort has solved this problem caused by ethnic text
+encoding and given OOo more flexibility.<br>
+DXF file format is one of the AutoCAD drawing file formats, especially
+designed for data exchange between different application software.It is
+composed of certain sections and includes drawing objects such as a
+line, polyline, oval, text, and so forth. A type of encoding is stated
+in the HEADER section and texts are encoded in the encoding type.<br>
+Mr. Miyazaki, a member of ja.openoffice.org, initially reported this
+issue in November, 2002 and Tora collected related information, then,
+Kevin B. Hendricks wrote source codes for this new function.
+HiranoKazunari verified it. Stefan Baltzer, wg, sj and msc have kindly
+supported us.</li>
+  <li>Graphic System Layer (aka gsl)<br>
+    <a href="http://www.openoffice.org/issues/show_bug.cgi?id=22367">Finding
+out font names of garbage characters in Asian version</a><br>
+Status: Done (Integrated in cws_src680)<br>
+OOo Asian versions sometime display unexpected garbage characters due
+to insufficient font names in the default font name lists that keep
+several different font names for each specific use such as UI, fixed,
+etc. Linux distributions vary and their primary Asian font name might
+differ, and thus, OOo's default font name list could be improved in
+order to cover such Linux variants.<br>
+This debug version of vcl module helps users find out a font name that
+is improperly chosen and used for displaying Asian characters,
+resulting in garbage characters. Instructions and sample outputs are
+available in a&nbsp; <a
+ href="http://www.openoffice.org/servlets/ReadMsg?list=dev&amp;msgId=951064">post</a>
+by Hirano Kazunari.<br>
+For quick solution to the garbage characters, find out the improper
+font name and replace it with correct one using Tools &gt; Options
+menu. For practical solution, tune up the default font name list in
+share/registry/data/org/openoffice/VCL.xcu on the basis of the debug
+outputs.<br>
+This effort comes from Herbert Duerr's debug codes and Tora's
+additional codes. Hirano Kazunari has tested it on his Linux machines
+and widely informed this function to the OOo community.<br>
+  </li>
+</ul>
+<h3>Contributions from the French project</h3>
+Sophie Gautier wrote to me to tell me of the various contributions from
+the <a href="http://fr.openoffice.org">French project</a>:<br>
+<ul>
+  <li><a href="http://www.openoffice.org/issues/show_bug.cgi?id=23428">Integration
+of dictionaries installation macro for 1.1.1</a><br>
+This macro by Laurent Godard should help users to install the relevant
+dictionaries for their needs. This will be a much appreciated item on
+the <a href="mailto:users@openoffice.apache.org">users</a> mailing list</li>
+  <li><a href="http://www.openoffice.org/issues/show_bug.cgi?id=20181">OOoVirg
+integration</a><br>
+This is a mechanism by R&eacute;my Peyronnet to allow the use of a
+comma instead of a period as a decimal separator. Very useful for
+French, Spanish, and many other languages.</li>
+  <li><a href="http://www.oooconv.de">A new home for OOoConv</a> <br>
+OOoConv is a website where you can upload your OOo documents and get
+them translated into many supported formats. This site is also has
+interfaces in many languages for our international users.</li>
+  <li><a href="http://www.openoffice.org/issues/show_bug.cgi?id=23756">Pinceau</a>(a
+brush to duplicate styles)<br>
+Another useful add-on.<br>
+  </li>
+</ul>
+<h3>Progress on native widgets for GTK/KDE/Win32/Aqua</h3>
+The <a
+ href="http://gsl.openoffice.org/servlets/ReadMsg?list=dev&amp;msgNo=1167">progress</a>
+of the integration of native widgets for GTK, KDE, and Win32 desktops
+also received alot of attention. This is still moving along quite well
+and alot of progress seems to happen each day. The collaboration
+between the GTK and KDE developers is excellent. However the work on
+the Aqua widgets could really do with some <a
+ href="http://gsl.openoffice.org/servlets/ReadMsg?list=dev&amp;msgNo=1168">help</a>.<br>
+<br>
+<h3>Release of developers snapshot m17</h3>
+A developers snapshot release (read do not even consider this alpha
+quality) called <a href="http://download.openoffice.org/680/index.html">680_m17</a>
+is now available and contains many bug fixes (including valgrind
+indicated problems, cleanup of compiler flags for gcc, and more VCL
+cleanups). This builds on the earlier developer snapshot releases <a
+ href="http://development.openoffice.org/releases/680_m15_snapshot.html">m15</a>
+(with the new VCL plug which will allow native toolkits to be used
+instead of the OpenOffice.org one, improvements to the scripting
+framework, lots of compatability and rtl fixes, improvement in graphics
+handling and the draw tool, and changes in the installation process), <a
+ href="http://development.openoffice.org/releases/680_m13_snapshot.html">m13</a>
+(mostly bug fixes), and <a
+ href="http://development.openoffice.org/releases/680_m11_snapshot.html">m11</a>(with
+many features). Note the temporary <a
+ href="http://graphics.openoffice.org/unbranded-source/browse/%7Echeckout%7E/graphics/svx/res/Attic/openintro_sun.bmp?rev=1.1.2.1&amp;content-type=image/bmp">splash
+screen</a>! ( <a href="mailto:dev@openoffice.apache.org">Maybe you can
+contribute</a>? )<br>
+<b>Note: these are all developers releases so be careful and do not
+complain if it crashes, burns and/or eats your computer! </b>However
+if you do test these please report all errors in IssueTracker (to
+report a bug or request a feature http://openoffice.org -&gt;
+"Register", then when you receive a confirmation email, "Login" and
+"File an issue" ).<br>
+<br>
+As progress to the next major release there should be <span
+ style="font-weight: bold;">development snapshots every 2 weeks</span>
+with more features for you to examine. <br>
+<h3>Convertor from xfig to OOo draw</h3>
+Alexander B&uuml;rger <a
+ href="http://www.openoffice.org/servlets/ReadMsg?list=dev&amp;msgNo=9419">announced</a>
+a program to convert files from xfig format to OOo Draw. This program
+is now in a usable state (for Linux) and available for <a
+ href="http://fig2sxd.sourceforge.net">download</a>.&nbsp; There are
+still a few issues but it is generally very usable.<br>
+<br>
+<p><a name="intro_summary"></a></p>
+<h2>This weeks development summary</h2>
+Many bugs have been worked on and resolved ( as of Monday Jan 12 2004
+):
+<table class="iz_stats" border="1" cellspacing="0">
+  <tbody>
+    <tr>
+      <th><br>
+      </th>
+      <th>&nbsp;No this week</th>
+      <th>&nbsp;Change from last week</th>
+    </tr>
+    <tr>
+      <td>Issues which have the status UNCONFIRMED</td>
+      <td style="text-align: center;">431<br>
+      </td>
+      <td style="text-align: center;">-41<br>
+      </td>
+    </tr>
+    <tr>
+      <td>Issues which have the status NEW</td>
+      <td style="text-align: center;">948<br>
+      </td>
+      <td style="text-align: center;">-40<br>
+      </td>
+    </tr>
+    <tr>
+      <td>Issues which have the status STARTED</td>
+      <td style="text-align: center;">990<br>
+      </td>
+      <td style="text-align: center;">+29<br>
+      </td>
+    </tr>
+    <tr>
+      <td>Issues which have the status FIXED</td>
+      <td style="text-align: center;">7520<br>
+      </td>
+      <td style="text-align: center;">+93<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+(a more detailed set of statistics is available <a
+ href="http://qa.openoffice.org/iz_statistic.html">here</a>)<br>
+<br>
+Please note that even though the unconfirmed issues remain a bit high,
+the <a href="http://qa.openoffice.org">QA</a> team is really doing
+some great work in keeping the bugs triaged ready for developers to
+disect. If you dedicate some of your energy on this project it would be
+very worth while.
+<p>Some of the interesting developments over the last number of weeks
+include:</p>
+<ul>
+  <li><a href="http://development.openoffice.org/digest/cvs2004_02.html">week
+2 (2004)</a>: Back with a bang! Over 40MB of changes to be digested. As
+you might expect changes happened all over the place including :<br>
+  </li>
+  <ul>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2004_02.html#cws_src680_ooojdk131">fixes
+for building with Visual Studio .Net 2003</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2004_02.html#cws_src680_swobjpos03">improving
+vertical alignment import from MSWord</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2004_02.html#cws_src680_os26">DDE
+enabled on non-Windows platforms</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2004_02.html#cws_src680_i18n11">fixes
+for Japanese wordbreak iterators</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2004_02.html#cws_srx645_swundo01">improvement
+of undo capability of attributes and properties of pages and fields</a></li>
+    <li>more compilation and linking fixes for <a
+ href="http://development.openoffice.org/digest/cvs2004_02.html#cws_fix645_ooo111fix2">MacOSX</a>
+and <a
+ href="http://development.openoffice.org/digest/cvs2004_02.html#cws_fix645_ooo111fix2_mrauch">NetBSD</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2004_02.html#cws_fix645_ooo111fix2_tv">Slovenian
+extras added</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2004_02.html#cws_src680_rowlimit">more
+row limit work</a> ( i.e. to increase rows from 32000k )</li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2004_02.html#cws_srx645_nativewidget1">lots
+of native widget work</a>, GTK, Windows, and KDE</li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2004_02.html#cws_srx645_canvas01">animation
+work for draw and impress</a>?</li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2004_02.html#cws_src680_hiddentext">added
+support for hidden text</a></li>
+    <li>ongoing work to <a
+ href="http://development.openoffice.org/digest/cvs2004_02.html#cws_srx645_insight01">make
+the database component more visible and compatible with competitors</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2004_02.html#cws_src680_flash01">updates
+to the flash code</a> including master-page animations</li>
+    <li>the spec for a <a
+ href="http://dba.openoffice.org/specifications/index.html#application">new
+concept for database application</a> was also released</li>
+    <li>work continues of the <a
+ href="http://development.openoffice.org/digest/cvs2004_02.html#HEAD_iha">reimplementation
+of the charting application<br>
+      </a><br>
+    </li>
+  </ul>
+  <li><a href="http://development.openoffice.org/digest/cvs2004_01.html">week
+1 (2004)</a> : since most developers were taking a well earned rest,
+cvs was quiet. But a few did find time to contribute:</li>
+  <ul>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2004_01.html#HEAD_rholt">committed
+Spanish DicOOo tutorial files</a> <br>
+    </li>
+    <li>added a <a href="http://dba.openoffice.org/drivers/mdb/">microsoft
+access sdbc driver for linux</a> users<br>
+      <br>
+    </li>
+  </ul>
+  <li><a href="http://development.openoffice.org/digest/cvs2003_53.html">week
+53 (2003)</a> : again a quite week:</li>
+  <ul>
+    <li>some <a
+ href="http://development.openoffice.org/digest/cvs2003_53.html#cws_src680_ooo20031216_pjanik">checks
+for X86_64 and other 64 bit cleanups</a>; and<br>
+    </li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_53.html#HEAD">dictionary</a>
+work.<br>
+      <br>
+    </li>
+  </ul>
+  <li><a href="http://development.openoffice.org/digest/cvs2003_52.html">week
+52 (2003)</a>: <br>
+  </li>
+  <ul>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_52.html#cws_src680_ooo20031216">lots
+of cleanups of warnings</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_52.html#cws_fix645_ooo111fix2">more
+bug fixes for 1.1.1 and fixes for MacOSX 10.2</a></li>
+    <li>added <a
+ href="http://development.openoffice.org/digest/cvs2003_52.html#cws_fix645_ooo111fix2_pjanik">Dutch
+extras</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_52.html#cws_srx645_nativewidget1">native
+widget changes<br>
+      </a><br>
+    </li>
+  </ul>
+  <li><a href="http://development.openoffice.org/digest/cvs2003_51.html">week
+51</a>:</li>
+  <ul>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_51.html#cws_src680_ooo20031216_dsherwin">fixes
+for configuring Visual Studio .NET 2003</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_51.html#cws_srx645_insight01_oj">work
+on importing and exporting databases in XML format</a></li>
+    <li>more <a
+ href="http://development.openoffice.org/digest/cvs2003_51.html#cws_fix645_ooo111fix2_khendricks">MacOSX,
+PPC, and gcc 3.3</a> compilation cleanups <br>
+    </li>
+    <li>more work on allowing <a
+ href="http://development.openoffice.org/digest/cvs2003_51.html#cws_srx645_cellbreak">table
+cells to span a page boundary</a></li>
+    <li>work on <a
+ href="http://development.openoffice.org/digest/cvs2003_51.html#cws_srx645_xslt1">XSL
+for importing Excel XML files</a></li>
+    <li>lots of work on <a
+ href="http://development.openoffice.org/digest/cvs2003_51.html#cws_src680_qwizards1">java
+installation wizards</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_51.html#cws_src680_vcl17">GTK
+and VCL plugin work</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_51.html#cws_src680_scriptingf2">beanshell
+scripting work including code completion and syntax
+highlighting</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_51.html#cws_srx645_canvas01">improved
+canvas for Impress</a></li>
+    <li>lots of <a
+ href="http://development.openoffice.org/digest/cvs2003_51.html#cws_src680_vclcleanup02">VCL
+cleanups</a></li>
+    <li>new <a
+ href="http://development.openoffice.org/digest/cvs2003_51.html#cws_src680_sb12">URI
+processing API</a></li>
+    <li>add <a
+ href="http://development.openoffice.org/digest/cvs2003_51.html#cws_srx645_apoc02_pl">session
+manager service and interfaces </a><br>
+    </li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_51.html#cws_src680_dialogfactory">dialog
+factory for making dialogs loadable on demand</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_51.html#HEAD_bm">chart2
+work,</a> and <a
+ href="http://development.openoffice.org/digest/cvs2003_51.html#HEAD_iha">more
+chart2 work</a><br>
+    </li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_51.html#HEAD_jsc">updates
+to the Developers Guide</a> ( which can be found here )</li>
+    <li><a
+ href="http://dba.openoffice.org/specifications/ADO_Browse_Dialog.sxw">ADO
+Browse Dialog specification</a> (sxw) and <a
+ href="http://dba.openoffice.org/specifications/Ldap_authentication.sxw">LDAP
+authentication enhancements
+specifications</a> (sxw)<br>
+      <br>
+    </li>
+  </ul>
+  <li><a href="http://development.openoffice.org/digest/cvs2003_50.html">week
+50</a>:</li>
+  <ul>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_50.html#cws_srx645_xslt1">work
+on importing MSWord and Excel XML files</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_50.html#cws_src680_vcl17">start
+vcl changes for GTK plugin</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_50.html#cws_srx645_layoutmanager">many
+layout manager</a> additions</li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_50.html#cws_src680_vclcleanup02">VCL
+related cleanups</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_50.html#cws_srx645_droghedafilterteam15">backports
+for MSWord compatability</a> <br>
+    </li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_50.html#cws_src680_dialogdiet">dialog
+diet work</a> - i.e. load code for dialogs only when needed</li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_50.html#cws_src680_networker2">improve
+network installation</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_50.html#cws_srx645_nativewidget1">native
+widget work for GTK widgets</a></li>
+    <li><a
+ href="http://dba.openoffice.org/specifications/forms/prop_browser_enhancements.sxw">database
+property browser specification</a>(sxw) and <a
+ href="http://dba.openoffice.org/specifications/forms/spinbutton_form_control.sxw">spin
+button form control specification</a>(sxw) added<br>
+    </li>
+    <li>added a document for <a
+ href="http://tools.openoffice.org/debugging/usingvalgrind.sxw">using
+valgrind with OOo</a><br>
+    </li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs2003_50.html#HEAD_bm">chart2
+work for statistics, linear regression, mean-value, log
+scaling, error-bar calculation</a></li>
+    <li>database specs for <a
+ href="http://dba.openoffice.org/specifications/Wizard_Form.sxw">FormWizard</a>(sxw),
+and <a href="http://dba.openoffice.org/specifications/Wizard_Query.sxw">QueryWizard</a>(sxw)<br>
+      <br>
+    </li>
+  </ul>
+  <li>week 49</li>
+  <ul>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs49.html#cws_fix645_sligofilterteam19">more
+backports for MSWord filter for 1.1.2</a></li>
+    <li>lots of <a
+ href="http://development.openoffice.org/digest/cvs49.html#cws_srx645_formdesign01">database
+forms work continuing</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs49.html#cws_src680_sj05">works
+starts on EnhancedAutoShapes</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs49.html#cws_srx645_fwk03pp1">C++
+native XSLT component</a><br>
+    </li>
+    <li>lots of MSWord compatability work : <a
+ href="http://development.openoffice.org/digest/cvs49.html#cws_src680_tabstops">tabstops</a>,
+      <a
+ href="http://development.openoffice.org/digest/cvs49.html#cws_src680_mullingarfilterteam18_mmaher">subdocuments
+in a master document</a>, <a
+ href="http://development.openoffice.org/digest/cvs49.html#cws_src680_mullingarfilterteam18_cmc">styles,
+table export and many others</a><br>
+    </li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs49.html#cws_srx645_mingwport">work
+done on mingw port</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs49.html#cws_src680_aw006">new
+gluepoint functionality</a></li>
+    <li><a
+ href="http://development.openoffice.org/digest/cvs49.html#cws_src680_dialogdiet">more
+dialog sliming</a></li>
+    <li>and <a
+ href="http://development.openoffice.org/digest/cvs49.html#cws_srx645_alphaart">lots
+more artwork added by Ximian<br>
+      </a><br>
+    </li>
+  </ul>
+  <li>week 48<br>
+  </li>
+  <ul>
+    <li>the <a href="cvs48.html#cws_srx645_ooo111fix1_ihi">merge of
+bug fixes in branches for 1.1.1</a> is ongoing</li>
+  </ul>
+  <ul>
+    <li>working on converting OpenOffice.org's widget set so that it
+can use the <a href="cvs48.html#cws_srx645_nativewidget1">platforms
+native widgets</a> is going very well.</li>
+  </ul>
+  <ul>
+    <li>more work on <a href="cvs48.html#cws_srx645_layoutmanager">the
+new layout manager for custom toolbars and menus</a></li>
+  </ul>
+  <ul>
+    <li><a href="cvs48.html#cws_src680_xmlsec01">xml security</a>, <a
+ href="cvs48.html#cws_src680_so8forms1">xpath</a>, and <a
+ href="cvs48.html#HEAD_lo">dom</a> APIs and features were worked on</li>
+  </ul>
+  <ul>
+    <li>nice <a href="cvs48.html#cws_srx645_alphaart">alpha artwork
+and fixes</a> added by <a href="http://ximina.com">Ximian</a></li>
+  </ul>
+  <ul>
+    <li>continued improvements on compatibility : <a
+ href="cvs48.html#cws_srx645_droghedafilterteam15">drogheda</a>, <a
+ href="cvs48.html#cws_src680_mullingarfilterteam18">mullingar</a>, <a
+ href="cvs48.html#cws_src680_portlaoisefilterteam16">portlaoise</a></li>
+  </ul>
+  <ul>
+    <li><a href="cvs48.html#cws_srx645_ooo111fix1_pjanik">Catalan,
+Hungarian, Finnish and Slovenian changes</a> were added</li>
+  </ul>
+  <ul>
+    <li>the work to <a href="cvs48.html#cws_srx645_cellbreak">split a
+table row over a page boundary</a> continues</li>
+  </ul>
+  <ul>
+    <li><a href="cvs48.html#cws_src680_networker2">more reworking of
+the installation mechanism</a></li>
+  </ul>
+  <ul>
+    <li>and finally the <a
+ href="http://api.openoffice.org/DevelopersGuide/DevelopersGuide.html">developers
+guide</a> was also <a href="cvs48.html#HEAD_jsc">updated</a></li>
+  </ul>
+</ul>
+</body>
+</html>

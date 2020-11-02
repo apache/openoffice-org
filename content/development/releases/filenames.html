@@ -1,0 +1,440 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Directory and File Name Schema</title>
+  <link rel="stylesheet" type="text/css" href="http://www.openoffice.org/branding/css/style.css" media="screen"/>
+  <link rel="stylesheet" type="text/css" href="http://www.openoffice.org/branding/css/print.css" media="print"/>
+  <style type="text/css">
+    h2, h3, h4, h5 { border: 0; }
+    h2 { margin-bottom: 0; }
+    table.rel { margin: 1em 1em 0 0; background: #f9f9f9; border: 1px #aaaaaa solid; border-collapse: collapse; }
+    table.rel td { border: 1px #aaaaaa solid; padding: .2em 1em .2em .2em; font-size: 0.8em; }
+    table.rel th { background: #f2f2f2; text-align: left; border: 1px #aaaaaa solid; padding: 0.2em; font-size: 0.8em; }
+  </style>
+</head>
+
+<body>
+
+<h1>Directory and File Name Schema</h1>
+<br/>
+
+<p>This document serves as a policy and contains important information for many projects, systems and components.</p><br/>
+
+<h2>Old version</h2>
+
+<p>The previous version of this policy <a href="filenames_old.html">can be found here</a>. The new version was already accepted by the
+<a href="http://wiki.services.openoffice.org/wiki/ReleaseStatus_Minutes">Release Status Meeting</a>.</p>
+
+<h2>Changes</h2>
+
+<p>Compared with the old policy the following has been changed:</p>
+
+<ul>
+  <li>All files for Beta Releases and Release Candidates contain a timestamp. Archive builds, Dev builds and final releases will remain without one.</li>
+  <li>The version of dev builds is no longer separated by a "_" to get rid of a wrong separator.</li>
+  <li>Consolidated the "Intel" and "x86" ARCH into "x86" only, also to separate better against "x86-64".</li>
+  <li>Renamed the "Win32" OS into "Win" as the ARCH addition which is following defines the architecture already.</li>
+  <li>The "OS" and "ARCH" parts are also separated by an "_" (underscore).</li>
+  <li>Created complete new install types.</li>
+  <li>Using the "install-arc" install type for all builds of type "archive".</li>
+  <li>JRE builds are put together with the install type to get rid of this optional part.</li>
+  <li>Deb builds are put together with the install type to get rid of this optional part.</li>
+  <li>There is no default package for Linux. The install type "install-deb" or "install-rpm" is always added.</li>
+  <li>There is no default language. All installation sets include a language code.</li>
+</ul>
+<br/>
+
+<h2>Directories</h2>
+
+<p>Directories are created in the mirroring <a href="http://distribution.openoffice.org/mirrors/#directory">directory structure</a>.<br/>
+Directory names follow the filename and numbering schema of releases or developer builds respectively.</p>
+<br/>
+
+<h2>Files</h2>
+
+<p>File names follow the following schema. Each part is described in detail below.</p>
+
+<table cellspacing="0" cellpadding="0" class="rel">
+  <tr>
+    <th>(PRODUCT NAME)_(VERSION)_(TIMESTAMP)_(OS)_(ARCH)_(INSTALL TYPE)_(LANGUAGE).(FILE EXTENSION)</th>
+  </tr>
+</table>
+<br/>
+
+<h3>Separator Characters</h3>
+
+<p>The "-" (hyphen) is used to bind the data within a part if necessary (e.g., x86-64 or en-US).<br/>
+The "_" (underscore) is used as separator to divide the different parts from each other (e.g., OOo_3.2.0 or x86_install).</p>
+<br/>
+
+<h3>Product Name</h3>
+
+<p>The product name can be one of the following:</p>
+
+<table cellspacing="0" cellpadding="0" class="rel">
+  <tr>
+    <th>Identifier</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>BrOo</td>
+    <td>BrOffice.org used for a final release, Release Candidate and Beta Release.</td>
+  </tr>
+  <tr>
+    <td>OOo</td>
+    <td>OpenOffice.org used for a final release, Release Candidate and Beta Release.</td>
+  </tr>
+  <tr>
+    <td>OOo-Dev</td>
+    <td>Developer Snapshot. Can be installed in parallel to an OOo build.</td>
+  </tr>
+  <tr>
+    <td>OOo-SDK</td>
+    <td>Software Development Kit.</td>
+  </tr>
+  <tr>
+    <td>OOo-Dev-SDK</td>
+    <td>Software Development Kit as Developer Snapshot.</td>
+  </tr>
+  <tr>
+    <td>OOo-URE</td>
+    <td>UNO Runtime Environment. <i>(deprecated)</i></td>
+  </tr>
+</table>
+<br/>
+
+<h3>Version</h3>
+
+<p>The version can either be a final release, Release Candidate, Beta Release, branch from release or development codeline.</p>
+
+<table cellspacing="0" cellpadding="0" class="rel">
+  <tr>
+    <th>Example</th>
+    <th>Type</th>
+  </tr>
+  <tr>
+    <td>3.2.0</td>
+    <td>Release version</td>
+  </tr>
+  <tr>
+    <td>3.2.0rc1</td>
+    <td>Release Candidate</td>
+  </tr>
+  <tr>
+    <td>3.0.0beta1</td>
+    <td>Beta Release</td>
+  </tr>
+  <tr>
+    <td>OOO320m7</td>
+    <td>Milestone from release codeline</td>
+  </tr>
+  <tr>
+    <td>DEV300m70</td>
+    <td>Milestone from development codeline</td>
+  </tr>
+</table>
+<br/>
+
+<h3>Timestamp (optional)</h3>
+
+<p>This identifier is optional. However, a Beta Release and Release Candidate <b>always</b> include a date stamp.</p>
+
+<table cellspacing="0" cellpadding="0" class="rel">
+  <tr>
+    <th>Format</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td>YYYYMMDD</td>
+    <td>20100118</td>
+  </tr>
+</table>
+<br/>
+
+<h3>Operating System</h3>
+
+<p>The operating system can be one of the following:</p>
+
+<table cellspacing="0" cellpadding="0" class="rel">
+  <tr>
+    <th>Identifier</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>Win</td>
+    <td>Microsoft Windows</td>
+  </tr>
+  <tr>
+    <td>Linux</td>
+    <td>Linux</td>
+  </tr>
+  <tr>
+    <td>MacOS</td>
+    <td>Apple Mac OS</td>
+  </tr>
+  <tr>
+    <td>Solaris</td>
+    <td>Sun Solaris</td>
+  </tr>
+  <tr>
+    <td>FreeBSD</td>
+    <td>FreeBSD</td>
+  </tr>
+</table>
+<br/>
+
+<h3>Architecture</h3>
+
+<p>The architecture can be one of the following:</p>
+
+<table cellspacing="0" cellpadding="0" class="rel">
+  <tr>
+    <th>Identifier</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>x86</td>
+    <td>Intel x86 (32-bit)</td>
+  </tr>
+  <tr>
+    <td>x86-64</td>
+    <td>Intel/AMD x86-64 (64-bit)</td>
+  </tr>
+  <tr>
+    <td>Sparc</td>
+    <td>SPARC (32-bit)</td>
+  </tr>
+  <tr>
+    <td>PPC</td>
+    <td>Power PC (32-bit)</td>
+  </tr>
+  <tr>
+    <td>IA64</td>
+    <td>Intel Itanium (64-bit)</td>
+  </tr>
+  <tr>
+    <td>HPPA</td>
+    <td>HP PA-RISC (32-bit)</td>
+  </tr>
+  <tr>
+    <td>S390X</td>
+    <td>IBM s390x (64-bit)</td>
+  </tr>
+</table>
+<br/>
+
+<h3>Install Type</h3>
+
+<p>The install type can be one of the following:</p>
+
+<table cellspacing="0" cellpadding="0" class="rel">
+  <tr>
+    <th>Identifier</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>install</td>
+    <td>Full installation</td>
+  </tr>
+  <tr>
+    <td>install-wJRE</td>
+    <td>Full installation with included Java Runtime Environment (JRE)</td>
+  </tr>
+  <tr>
+    <td>install-arc</td>
+    <td>Full installation as archive</td>
+  </tr>
+  <tr>
+    <td>install-deb</td>
+    <td>Full installation as Debian package (Linux only)</td>
+  </tr>
+  <tr>
+    <td>install-rpm</td>
+    <td>Full installation as RPM package (Linux only)</td>
+  </tr>
+  <tr>
+    <td>install-rpm-wJRE</td>
+    <td>Full installation as RPM package with included JRE (Linux only)</td>
+  </tr>
+  <tr>
+    <td>langpack</td>
+    <td>Language pack</td>
+  </tr>
+  <tr>
+    <td>langpack-arc</td>
+    <td>Language pack as archive</td>
+  </tr>
+  <tr>
+    <td>langpack-deb</td>
+    <td>Language pack as Debian package (Linux only)</td>
+  </tr>
+  <tr>
+    <td>langpack-rpm</td>
+    <td>Language pack as RPM package (Linux only)</td>
+  </tr>
+  <tr>
+    <td>src</td>
+    <td>Source tarball</td>
+  </tr>
+</table>
+<br/>
+
+<h3>Language</h3>
+
+<p>The language can be any language that is specified in <a href="http://xml.coverpages.org/iso639a.html">ISO 639-1</a>.</p><br/>
+
+<table cellspacing="0" cellpadding="0" class="rel">
+  <tr>
+    <th>Example</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>en-US</td>
+    <td>English (US)</td>
+  </tr>
+  <tr>
+    <td>fr</td>
+    <td>French</td>
+  </tr>
+  <tr>
+    <td>de</td>
+    <td>German</td>
+  </tr>
+</table>
+<br/>
+
+<h3>File Extension</h3>
+
+<p>The file extension can be one of the following:</p>
+
+<table cellspacing="0" cellpadding="0" class="rel">
+  <tr>
+    <th>Identifier</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>dmg</td>
+    <td>Apple Disk Image</td>
+  </tr>
+  <tr>
+    <td>exe</td>
+    <td>Windows executable</td>
+  </tr>
+  <tr>
+    <td>sh</td>
+    <td>Unix shell script</td>
+  </tr>
+  <tr>
+    <td>tar.bz2</td>
+    <td>Tar + Bzip2 archive</td>
+  </tr>
+  <tr>
+    <td>tar.gz</td>
+    <td>Tar + Gnuzip archive</td>
+  </tr>
+  <tr>
+    <td>tbz</td>
+    <td>Tar + Bzip2 archive</td>
+  </tr>
+  <tr>
+    <td>zip</td>
+    <td>Zip archive</td>
+  </tr>
+</table>
+<br/>
+
+<h3>Examples</h3>
+
+<h4>Archive builds</h4>
+OOo_DEV300m70_Win_x86_install-arc_en-US.exe<br/>
+OOo_DEV300m70_Linux_x86_install-arc_en-US.tar.gz<br/>
+OOo_DEV300m70_Linux_x86-86_install-arc_en-US.tar.gz<br/>
+OOo_DEV300m70_MacOS_x86_install-arc_en-US.dmg<br/>
+OOo_DEV300m70_Solaris_Sparc_install-arc_en-US.tar.gz<br/>
+OOo_DEV300m70_Solaris_x86_install-arc_en-US.tar.gz
+
+<h4>Developer Snapshot</h4>
+
+OOo-Dev_DEV300m70_Win_x86_install_en-US.exe<br/>
+OOo-Dev_DEV300m70_Linux_x86_install-deb_en-US.tar.gz<br/>
+OOo-Dev_DEV300m70_Linux_x86_install-rpm_en-US.tar.gz<br/>
+OOo-Dev_DEV300m70_Linux_x86-64_install-deb_en-US.tar.gz<br/>
+OOo-Dev_DEV300m70_Linux_x86-64_install-rpm_en-US.tar.gz<br/>
+OOo-Dev_DEV300m70_MacOS_x86_install_en-US.dmg<br/>
+OOo-Dev_DEV300m70_Solaris_Sparc_install_en-US.tar.gz<br/>
+OOo-Dev_DEV300m70_Solaris_x86_install_en-US.tar.gz
+
+<h4>Beta Release</h4>
+
+OOo_3.0.0beta1_20080101_Win_x86_install-wJRE_en-US.exe<br/>
+OOo_3.0.0beta1_20080101_Linux_x86_install-deb_en-US.tar.gz<br/>
+OOo_3.0.0beta1_20080101_Linux_x86_install-rpm_en-US.tar.gz<br/>
+OOo_3.0.0beta1_20080101_Linux_x86-64_install-deb_en-US.tar.gz<br/>
+OOo_3.0.0beta1_20080101_Linux_x86-64_install-rpm-wJRE_en-US.tar.gz<br/>
+OOo_3.0.0beta1_20080101_MacOS_x86_install_en-US.dmg<br/>
+OOo_3.0.0beta1_20080101_Solaris_Sparc_install-wJRE_en-US.tar.gz<br/>
+OOo_3.0.0beta1_20080101_Solaris_x86_install-wJRE_en-US.tar.gz
+
+<h4>Release Candidate</h4>
+
+OOo_3.2.0rc1_20100118_Win_x86_install-wJRE_en-US.exe<br/>
+OOo_3.2.0rc1_20100118_Linux_x86_install-deb_en-US.tar.gz<br/>
+OOo_3.2.0rc1_20100118_Linux_x86_install-rpm-wJRE_en-US.tar.gz<br/>
+OOo_3.2.0rc1_20100118_Linux_x86-64_install-deb_en-US.tar.gz<br/>
+OOo_3.2.0rc1_20100118_Linux_x86-64_install-rpm-wJRE_en-US.tar.gz<br/>
+OOo_3.2.0rc1_20100118_MacOS_x86_install_en-US.dmg<br/>
+OOo_3.2.0rc1_20100118_Solaris_Sparc_install-wJRE_en-US.tar.gz<br/>
+OOo_3.2.0rc1_20100118_Solaris_x86_install-wJRE_en-US.tar.gz
+
+<h4>Release</h4>
+
+OOo_3.2.0_Win_x86_install_en-US.exe<br/>
+OOo_3.2.0_Linux_x86_install-deb_en-US.tar.gz<br/>
+OOo_3.2.0_Linux_x86_install-rpm_en-US.tar.gz<br/>
+OOo_3.2.0_Linux_x86-64_install-deb_en-US.tar.gz<br/>
+OOo_3.2.0_Linux_x86-64_install-rpm-wJRE_en-US.tar.gz<br/>
+OOo_3.2.0_MacOS_x86_install_en-US.dmg<br/>
+OOo_3.2.0_Solaris_Sparc_install-wJRE_en-US.tar.gz<br/>
+OOo_3.2.0_Solaris_x86_install-wJRE_en-US.tar.gz
+
+<h4>SDK</h4>
+
+OOo-SDK_DEV300m70_Solaris_Sparc_install-arc_en-US.tar.gz<br/>
+OOo-Dev-SDK_DEV300m70_Solaris_Sparc_install_en-US.tar.gz<br/>
+OOo-SDK_3.0.0beta1_20080101_Solaris_Sparc_install_en-US.tar.gz<br/>
+OOo-SDK_3.2.0rc1_20100118_Solaris_Sparc_install_en-US.tar.gz<br/>
+OOo-SDK_3.2.0_Solaris_Sparc_install_en-US.tar.gz
+
+<h4>Source tarballs (multiple files)</h4>
+
+OOo-Dev_DEV300m70_src_binfilter.tar.gz<br/>
+OOo-Dev_DEV300m70_src_core.tar.gz<br/>
+OOo-Dev_DEV300m70_src_extensions.tar.gz<br/>
+OOo-Dev_DEV300m70_src_l10n.tar.gz<br/>
+OOo-Dev_DEV300m70_src_system.tar.gz<br/>
+OOo-Dev_DEV300m70_src_testautomation.tar.gz<br/><br/>
+
+OOo_3.2.0rc1_20100118_src_binfilter.tar.bz2<br/>
+OOo_3.2.0rc1_20100118_src_core.tar.bz2<br/>
+OOo_3.2.0rc1_20100118_src_extensions.tar.bz2<br/>
+OOo_3.2.0rc1_20100118_src_l10n.tar.bz2<br/>
+OOo_3.2.0rc1_20100118_src_system.tar.bz2<br/>
+OOo_3.2.0rc1_20100118_src_testautomation.tar.bz2<br/><br/>
+
+OOo_3.1.0_src_binfilter.tar.bz2<br/>
+OOo_3.1.0_src_core.tar.bz2<br/>
+OOo_3.1.0_src_extensions.tar.bz2<br/>
+OOo_3.1.0_src_l10n.tar.bz2<br/>
+OOo_3.1.0_src_system.tar.bz2<br/>
+OOo_3.1.0_src_testautomation.tar.bz2
+
+<h4>Source tarballs (single file)</h4>
+
+OOo-Dev_DEV300m70_src.tar.bz2<br/>
+OOo_3.0.0beta1_20080101_src.tar.bz2<br/>
+OOo_3.2.0rc1_20100118_src.tar.bz2<br/>
+OOo_3.2.0_src.tar.bz2
+
+</body>
+</html>
