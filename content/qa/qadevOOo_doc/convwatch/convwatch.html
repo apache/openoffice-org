@@ -1,0 +1,605 @@
+<HTML>
+<head>
+    <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+    <TITLE>ConvWatch</TITLE>
+    <META NAME="GENERATOR" CONTENT="Hand made (emacs 21.4)">
+    <META NAME="AUTHOR" CONTENT="Lars Langhans">
+
+<!-- <link rel="shortcut icon" href="http://www.openoffice.org/favicon.ico" /> -->
+
+<style type="text/css">
+<!-- 
+.fragment { width:100%; border:none;background-color:#cccccc; }
+.codefragment {
+        font-family:courier,monospace; 
+        width:100%; border:none; background-color:#eeeeee;
+}
+-->
+</style>
+</head>
+<body LANG="en-US">
+
+<p class="NewsDate">last change: $Date: 2006/10/06 10:39:56 $ $Revision: 1.7 $</p>
+
+<H1>ConvWatch</H1>
+<p>ConvWatch is a test tool to compare documents not by it's content but by it's graphical
+representation. It's based on Caol&aacute;n McNamara's convwatch tool written in Python. Due to some limitations
+ConvWatch has been completely rewritten in Java.<br>
+
+<!-- Topics -->
+<H2>Topics</H2>
+<UL>
+<LI><A HREF="#Author">Author</A>
+<LI><A HREF="#dependencies">Dependencies</A>
+<LI><A HREF="#installation">Installation</A>
+<LI><A HREF="#propertyfile">Property File</A>
+<LI><A HREF="#propertyvariables">Property Variables</A>
+<LI><A HREF="#running">Running</A>
+<LI><A HREF="#results">Results</A>
+<!-- <LI><A HREF="#tips">Tips</A> -->
+<LI><A HREF="#createreference">Create References</A>
+<!-- <LI><A HREF="#documentconvert">Document Converter</A> -->
+<LI><A HREF="#javaapi">Java API</A>
+<LI><A HREF="#thanks">Thanks</A>
+</UL>
+
+
+<a name="dependencies"></A>
+<H2>Dependencies</H2>
+<UL>
+<LI><A HREF="#standardprinter">standardized printer driver</A>.
+<LI><A HREF="#ghostscript">Ghostscript</A>.
+<LI><A HREF="#imagemagick">ImageMagick</A>.
+<LI><A HREF="#java">Java</A>.
+
+<LI>A office suite like <A HREF="#openoffice">StarOffice or OpenOffice.org</A>.
+<LI>Maybe <A HREF="#msoffice">Microsoft Office</A> if documents should compare
+to Microsoft Word or Excel.
+<UL>
+   <LI><A HREF="#perl">Perl</A>.
+</UL>
+</UL>
+
+<H2>How ConvWatch work</H2>
+<p>ConvWatch loads a set of documents and
+<OL type="a">
+<LI> saves them by the OpenOffice.org equivalents and compares them to a previous
+saved set of <IT>proved</IT> output.
+<LI> prints the files to PostScript documents and compares them visually to a previous
+saved set of <IT>proved</IT> PostScript output (e.g. output from Microsofts Office's <IT>print to
+file</IT>).
+
+</OL>
+<p>The saved tests ensures no regression against the reference output documents.
+The print tests determine if there are differences against the reference printer
+output (which could either be created by OpenOffice.org originally so as to test
+for layout regressions, or by Microsoft Office so as to compare conversion quality or by
+PDF export from OpenOffice.org)</p>
+<p>
+To make the print tests valid all printing must happen with the same printer
+driver (and the same set of fonts, but we'll overlook that issue here).
+Some additional software is required to facilitate the comparison.</p>
+
+ConvWatch is a part of the <A HREF="http://qa.openoffice.org/qadevOOo_doc/index.html">qadevOOo environment</A>. It's written in <A HREF="http://java.sun.com">Java</A>
+which is good for communication with OpenOffice.org.
+
+So install as follows...
+
+<!-- installation  -->
+
+<A name="installation"></A>
+<H2>Installing</H2>
+
+<p>Some software is required to run ConvWatch and have to be installed locally.
+
+<OL>
+<!-- printer -->
+
+<A name="standardprinter"></A>
+<LI>For Windows environment <STRONG>a standarized printer driver</STRONG> is required <br>
+to give a baseline reference. We don't need this in UNIX environments.<br>
+
+Install <EM>Adobe Universal PostScript Microsoft Windows Driver</EM> from
+<TT>wingsteng.exe</TT>
+Originally download it from: <A HREF="http://www.adobe.com/support/downloads">http://www.adobe.com/support/downloads</A>
+
+Get this <A HREF="crossoffice.ppd"><TT>crossoffice.ppd</TT></A> file also. It is
+only need within Microsoft Windows.
+
+
+<UL>
+<p>Select option <EM>local printer</EM>, and use <TT>FILE:</TT> as the port.
+
+<p>When it asks to <EM>select printer model</EM>, choose browse and go to your
+<TT>temp</TT>-directory and select <TT>crossoffice.ppd</TT>
+and then select <EM>Microsoft Office Generic printer</EM>. Select <EM>no</EM>
+to configuring printer when reaching the end of the install process.
+
+<p>Note: This is the same <TT>.ppd</TT> that is the generic OpenOffice.org driver under Unix with a
+little modification to fix a resolution related problem. Once installed use
+this printer when you <EM>print to file</EM> from Microsoft Office. This allows the same
+printer driver to be used under Unix and Microsoft Windows. So in theory the same output
+should be created by Unix version of OpenOffice.org and Microsoft Windows
+version of OpenOffice.org. In practice
+different fonts are available on different platforms and even if the ttf fonts
+of Microsoft Windows are made available under Unix and type1 fonts disabled then our
+rendering is still different (I've tried a number of approaches). Making Unix
+and Microsoft Windows output equivalent is certainly something to be looked into in the
+future.  Currently there are enough problems elsewhere to be worked out before
+tackling that.
+
+<p><STRONG>Optional</STRONG> make this printer your default Microsoft Windows printer with
+<TT>start->settings->printer</TT>, or remember it's name and set this name as a
+property like PRINTER_NAME=name into a props file. 
+</UL>
+
+<!-- Ghostscript -->
+
+<A name="ghostscript"></A>
+<LI><p><STRONG>Ghostscript</STRONG> is required,<br>
+get it from <A HREF="http://www.cs.wisc.edu/~ghost/">http://www.cs.wisc.edu/~ghost/</A>
+  For Microsoft Windows only, install it to <TT>c:\gs</TT> so there are less problems.
+ Set the environment variable path to
+  <TT>c:\gs\gs8.00\bin</TT>. If ready, try <TT>gswin32c --help</TT> in a fresh command line shell if
+  you get a usage message, installation of Ghostscript is done.
+
+
+<!-- Image Magick  -->
+
+<A name="imagemagick"></A>
+<LI><p><STRONG>ImageMagick</STRONG> is required<br>
+ to compare the images generated by Ghostscript from
+the printer output.
+Get it originally from: <A HREF="http://www.imagemagick.org/">http://www.imagemagick.org/</A>
+ConvWatch only need <TT>composite</TT> and <TT>identify</TT> out of this package.
+
+<!--  java -->
+
+<LI><p><STRONG>Java</STRONG> is required,<br>
+ the communication between ConvWatch and an OpenOffice.org installation runs over Java UNO. So
+   at least a JRE (1.4) is need. Get it from <A HREF="http://java.sun.com">http://java.sun.com</A> if not
+   already installed.
+   
+<!-- TODO: check if it is possible to use some older versions -->
+
+<!-- OpenOffice.org  -->
+
+<A name="openoffice"></A>
+<LI> <p><STRONG>OpenOffice.org</STRONG> in non debug version is required.<br>
+ No extra features has to be
+ activate. It's possible to use a debug version, but it's not really
+ tested due to the much message boxes about assertions and other. Which will not close
+ automatically and so it's not really usable for such automatically tests.
+
+<STRONG>WARNING:</STRONG> Don't install OpenOffice.org versions in directories
+with white spaces in the name, e.g. <TT>Program Files</TT>. This is not supported
+<!-- handled --> right yet.
+
+<A name="msoffice"></A>
+<LI> Within Microsoft Windows environment it's possible to say that ConvWatch could use <STRONG>Microsoft
+Office</STRONG> to create the output via printer driver, but therefore a Microsoft Office
+package is required and must installed. 
+<UL>
+<LI><STRONG>Perl</STRONG> is required, if Microsoft Office is used. ConvWatch uses Perl to communicate between itself and
+Microsoft Office, so Perl must be installed. Get it from <A
+HREF="http://www.activeperl.com">www.activeperl.com</A>.
+</UL>
+
+<LI><STRONG>OOoRunnerLight.jar</STRONG> is required, <br>
+get it from the <A
+HREF="http://qa.openoffice.org/qadevOOo_doc/index.html">qadevOOo
+project</A>. This jar contains the complex test environment which is need to run
+ConvWatch.
+
+</OL>
+
+<!-- -->
+
+<H2>Complex test</H2>
+ConvWatch is realized as a complex test. This complex test environment is be
+able to open/start an already installed OpenOffice.org, also close this
+opened OpenOffice.org and some more
+for automatically test runs.
+
+
+<p>Only one extra property file is need. 
+
+<!-- -->
+<A name="propertyfile"></A>
+<H2>Property File</H2>
+<p>To control the
+ConvWatch process, there must exist a property file. 
+
+<p>Lines starts with '#' are comments. Empty lines are allowed.
+
+<p>In this property file the information stored, where to find the documents, where
+to find the references and where have to go the results.
+
+<p>It also contains the call to a OpenOffice.org executable.
+
+The variables will describe <A HREF="#propertyvariables">here</A>.
+
+<DIV CLASS="CODEFRAGMENT"><PRE>
+
+DOC_COMPARATOR_INPUT_PATH=/path/to/document-pool
+
+DOC_COMPARATOR_REFERENCE_PATH=/path/to/references
+
+DOC_COMPARATOR_OUTPUT_PATH=/path/to/convwatch_results
+
+AppExecutionCommand=/opt/openoffice2/program/soffice -headless -norestore -nocrashreport -accept=socket,host=localhost,port=8100;urp;
+
+</PRE></DIV>
+
+<H3>Enhancements</H3>
+<p>Due to the fact, that ConvWatch works within Microsoft Windows or Unix environment, but there
+are different path variables to set, there exist a variable prefix. This prefix
+based on 7 characters, <TT>wntmsci</TT>, <TT>unxlngi</TT>, <TT>unxsols</TT> or
+<TT>unxsoli</TT>, but doesn't need to set.
+
+So instead of <TT>DOC_COMPARATOR_INPUT_PATH</TT> use
+<TT>unxlngi.DOC_COMPARATOR_INPUT_PATH</TT> or <TT>wntmsci.DOC_COMPARATOR_INPUT_PATH</TT> or
+<TT>unxsols.DOC_COMPARATOR_INPUT_PATH</TT> so there must only exist one property file for all
+environments.
+
+<!-- Property Variables  -->
+<A name="propertyvariables">
+<H2>Property Variables</H2>
+</A>
+As follows a description, which properties exists and how they work in the
+ConvWatch environment. 
+<p>At the moment the variables must exist in the <A HREF="#propertyfile">property file</A> from the Java
+file, there are other ways to manipulate such variables like shell paramater or
+environment variables but this described method is to favour.
+
+<p>The first three variables are the most important, and must set, the other
+variables are optional.
+
+<!--  -->
+<DL>
+<DT><A name="inputpath"><B>DOC_COMPARATOR_INPUT_PATH</B></A></DT>
+<DD>
+<p>Set <TT>DOC_COMPARATOR_INPUT_PATH</TT> to the location of the original document file.
+ConvWatch will not really compare documents, but it's output. So for a original
+document there must also exist a reference document which must have the same
+name but with <TT>*.prn</TT> extension.
+If no reference exist, the test for this document failed.
+</DD>
+<p></p>
+
+<!--  -->
+<DT><A name="outputpath"><B>DOC_COMPARATOR_OUTPUT_PATH</B></A></DT>
+<DD>
+Set <TT>DOC_COMPARATOR_OUTPUT_PATH</TT> to a location, where the results will create. Warning,
+there must be enough disk space for this.
+<p><STRONG>NEVER</STRONG> set <TT>DOC_COMPARATOR_INPUT_PATH</TT> to <TT>DOC_COMPARATOR_OUTPUT_PATH</TT> or a sub directory of it, you will
+lose samples.
+</DD>
+<p></p>
+
+<!--  -->
+<DT><A name="appexecutioncommand"><B>AppExecutionCommand</B></A></DT>
+<DD>
+Set <TT>AppExecutionCommand</TT> to the OpenOffice.org executable which will be involved by
+this test. The parameter for the OpenOffice.org is need to set the
+OpenOffice.org in it's listening mode. Find more about OpenOffice Listening mode
+in the OpenOffice Developers Guide in chapter 
+<A HREF="http://api.openoffice.org/docs/DevelopersGuide/ProfUNO/ProfUNO.htm#1+3+UNO+Concepts">
+UNO Concepts</A>.
+
+e.g.: <TT>AppExecutionCommand=/opt/openoffice2/program/soffice -headless -accept=socket,host=localhost,port=8100;urp;</TT>
+<p>
+The parameter <KBD>-headless</KBD> is to start the office in background.
+</DD>
+<p></p>
+</DL>
+
+<!--  -->
+<DT><A name="diffpath"><B>DOC_COMPARATOR_DIFF_PATH</B></A></DT>
+<DD>
+Due to the fact that no program is perfect, there are always differences, we
+have to live with. But an automatically process can't really decide if we can
+live with such failure or not, it's possible to say where the old differences
+from an old run are. So it's possible to check if the new test is at least as
+good as an old test.
+</DD>
+<p></p>
+
+<!--  -->
+<DT><A name="gfxoutputdpiresolution"><B>DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION</B></A></DT>
+<DD>
+Set <TT>DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION</TT> to a value of dots per inch
+to tell Ghostscript, how big the JPEG
+resolution should be. Greater values consume much more memory and need much more
+compare time, but the JPEG picture will show a lot of more detailed information. 
+
+A smaller value is much faster due to the fact that less pixels have to
+compare. For a first fast overview a value of 75 seems to be enough. 
+<p>
+The default value is 212. 
+So a DIN A4 document results in 1752x2478 pixel sized picture
+which consume round about 17MB memory. 
+
+<p>
+<B>IMPORTANT</B> If Java fails with memory problems it could be that a special Java
+parameter has to set . Search the line where Java is
+called and insert <KBD>-Xmx128m</KBD>. Start again, maybe the value 128 isn't
+high enough. As default the parameter is not used.
+</DD>
+<p></p>
+<!--  -->
+<DT><A name="includesubdir"><B>DOC_COMPARATOR_INCLUDE_SUBDIRS</B></A></DT>
+<DD>
+Set <TT>DOC_COMPARATOR_INCLUDE_SUBDIRS=no</TT> if ConvWatch should not scan recursive in given
+<TT>DOC_COMPARATOR_INPUT_PATH</TT> directories. The default is to run deep through all sub directories.
+</DD>
+<p></p>
+
+<!--  -->
+<DT><A name="printername"><B>DOC_COMPARATOR_PRINTER_NAME</B></A></DT>
+<DD>
+This parameter set the printer, which will use instead of the standard default
+printer. This parameter is only need and supported in Microsoft Windows environment. The
+default is to use the standard printer.
+</DD>
+<p></p>
+
+<!--  -->
+<DT><A name="printmaxpage"><B>DOC_COMPARATOR_PRINT_MAX_PAGE</B></A></DT>
+<DD>
+Set <TT>DOC_COMPARATOR_PRINT_MAX_PAGE</TT> to tell the office, how much pages are export as
+maximum. The default is to print all pages.
+</DD>
+<p></p>
+<!--  -->
+<DT><A name="printonlypage"><B>DOC_COMPARATOR_PRINT_ONLY_PAGE</B></A></DT>
+<DD>
+Set <TT>DOC_COMPARATOR_PRINT_ONLY_PAGE</TT> to tell the office, which pages should be
+print. This is a string value, e.g. set to "1-4;24" to print page 1 to 4 and
+page 24. The default for this value is an empty string.
+</DD>
+<p></p>
+<!--  -->
+<DT><A name="referencepath"><B>DOC_COMPARATOR_REFERENCE_PATH</B></A></DT>
+<DD>
+<p>Set <TT>DOC_COMPARATOR_REFERENCE_PATH</TT> to the location of the reference documents. If
+this variable isn't set ConvWatch assume the reference exists near the original document file.
+For this the behaviour the DOC_COMPARATOR_INPUT_PATH must be writable.
+</DD>
+<p></p>
+
+<!--  -->
+<DT><A name="referencetype"><B>DOC_COMPARATOR_REFERENCE_CREATOR_TYPE</B></A></DT>
+<DD>
+Normally ConvWatch uses the OpenOffice.org printer driver to
+create the postscript output.
+<p>Set <TT>DOC_COMPARATOR_REFERENCE_CREATOR_TYPE=<STRONG>pdf</STRONG></TT>
+the internal PDF creator from OpenOffice.org is taken.<br>
+To test the internal PDF creator to the normal printer driver. Create the
+references without this parameter and the tests with
+<TT>DOC_COMPARATOR_REFERENCE_CREATOR_TYPE=<STRONG>pdf</STRONG></TT> or vise versa.
+</p>
+<p>Set <TT>DOC_COMPARATOR_REFERENCE_CREATOR_TYPE=<STRONG>msoffice</STRONG></TT> not 
+OpenOffice.org creates the output, but Microsoft Office. There must exist a runnable Microsoft Office
+on this PC and this works only in Microsoft Windows environment. <br>
+To test
+OpenOffice.org output within Microsoft Office output, create
+the references without this parameter and the tests with
+<TT>DOC_COMPARATOR_REFERENCE_CREATOR_TYPE=<STRONG>msoffice</STRONG></TT> or vice
+versa.
+</p>
+<p>
+The default, if not set is <STRONG>OOo</STRONG> for OpenOffice.org output.
+</p>
+</DD>
+<p></p>
+
+<!--  -->
+<DT><A name="timeout"><B>ThreadTimeOut</B></A></DT>
+<DD>
+qadevOOo runner is made for automatically tests, so there exist a possibility to
+kill endless running tests after a run out of time. This value is given in
+microseconds.
+ConvWatch consume very much run time for tests, so set the time out higher. 
+e.g. <TT>ThreadTimeOut=3600000</TT> for one hour.
+</DD>
+
+<!--  -->
+<DT><A name="overwritereference"><B>DOC_COMPARATOR_OVERWRITE_REFERENCE</B></A></DT>
+<DD>
+References most the time only needs to create once. So the normal behaviour is
+to no overwrite already existing reference files. Set this parameter to true and
+also already exist references will overwriten by new once.
+So it is possible to run the creation of references again and again.
+</DD>
+<p></p>
+
+<!--  -->
+<DT><A name="gfxcmpwithbordermove"><B>DOC_COMPARATOR_GFXCMP_WITH_BORDERMOVE</B></A></DT>
+<DD>
+With this parameter it is possible to create a second difference check with
+removed borders. Normally all documents have a print border, due to the fact
+that the Hardware isn't able to print to the hole paper, also it's not really
+a good idea to print as much as possible on one page. Most the time the borders
+are equal in documents, but sometimes there could be differences. To see better
+the differences of the content of the document, not only that there exist a move
+of the content, it is possible to remove the border of every document. Set this
+to 'yes' or 'true' and borders will remove by an simple border remove
+algorithm.
+</DD>
+<p></p>
+
+<!--  -->
+
+</DL>
+
+<!--  TODO: Describe the use of the reference generator buildref.pl  -->
+
+<!-- running -->
+
+<A NAME="running"></A>
+<H2>Start ConvWatch</H2>
+
+Just a little tsch helper script, copy the OOoRunnerLight.jar out of the qadevOOo
+project, the other jar files, get out from an current OpenOffice.org
+<TT>program/classes</TT> directory.
+
+<DIV CLASS="CODEFRAGMENT"><PRE>
+
+#!/bin/tcsh 
+
+setenv PTO /path/to/an/office/program
+
+# path to open office classes
+setenv PTOC ${PTO}/classes
+
+# path to OOoRunnerLight.jar
+setenv OOORUNNER /path/to/OOoRunnerLight
+
+setenv JARFILES ${PTOC}/ridl.jar:${PTOC}/unoil.jar:${PTOC}/jurt.jar:${PTOC}/juh.jar:\
+                ${PTOC}/jut.jar:${PTOC}/java_uno.jar:${OOORUNNER}/OOoRunnerLight.jar
+
+# start reference build
+java -cp ${JARFILES} org.openoffice.Runner -tb java_complex -ini propertyfile.ini -o convwatch.ReferenceBuilder
+
+# start the graphical document compare
+java -cp ${JARFILES} org.openoffice.Runner -tb java_complex -ini propertyfile.ini -o convwatch.ConvWatchStarter
+
+</PRE></DIV>
+
+<p>Start the test by simply call this script.
+
+<p>Only set the path to the right places. With this script at first the references will
+build. 
+
+<p>As second, the <IT>same office</IT> is taken to check the just now created
+references against the same office and the same documents. 
+
+<p>OK, the result should never fail but should only demonstrate how ConvWatch works.
+
+<p>Now think about the way to only create references with an old OpenOffice.org
+1.0.x and make a graphically compare to a new OpenOffice.org 2.0. not only with
+one document in the pool.
+
+But be aware, the run could take hours.
+
+<!-- results -->
+<A name="results"></A>
+<H2>Results</H2>
+<!--  TODO: Write here some more, what is in the results  -->
+<p>Use a image viewer to examine the results which will be found in the
+<TT>DOC_COMPARATOR_OUTPUT_PATH</TT> of the property file.
+
+There exist at least 3 JPEG pictures and one PostScript <TT>*.ps</TT> file. All
+based on the document name and some appendix which are described as follows.
+
+<TABLE class="infotable">  
+<TR>
+<TH>Name</TH>
+<TH>Creator</TH>
+<TH>Description</TH>
+</TR>
+<TR>
+<TD>NAME.ps</TD>
+<TD>file printer</TD>
+<TD>This file is created with the original document found in <TT>DOC_COMPARATOR_INPUT_PATH</TT>
+and print to file method.</TD>
+</TR>
+<TR>
+<TD>NAME.ps0001.jpg</TD>
+<TD>gs (Ghostscript)</TD>
+<TD>This file is created with the PostScript file which is created before by Ghostscript.</TD>
+</TR>
+<TR>
+<TD>NAME.prn0001.jpg</TD>
+<TD>gs (Ghostscript)</TD>
+<TD>This file is created with the reference file found in
+<TT>DOC_COMPARATOR_REFERENCE_PATH</TT> by Ghostscript.</TD>
+</TR>
+<TR>
+<TD>NAME.prn.diff0001.jpg</TD>
+<TD>composite</TD>
+<TD>This file is created with both above JPEG pictures with composite from
+ImageMagick. It show how the both files are differ.</TD>
+</TR>
+</TABLE>
+
+<p>
+It's possible that there exist much more files, for every document page at least
+the 3 JPEG pictures.
+
+
+<p>
+The ini result
+file in short, contains at least two sections, the <B>global</B> section
+
+<UL>
+<LI><b>pages</b> contains the number of pages, for which exist output, this depends on DOC_COMPARATOR_PRINT_MAX_PAGE
+<LI><b>buildid</B> contains the buildid value out of the <TT>bootstraprc</TT>, so it is
+possible to know with which version the current output is generated.
+<LI><b>refbuildid</B>contains the buildid of the reference, this is only set, if
+the reference is created by OpenOffice.org. Near the reference
+file <TT>*.prn</TT> exist a <TT>*.info</TT> file which contain this value.
+
+<LI><b>basename</B> contains the real base name with extension of the current document.
+</UL>
+
+<p>The <B>page</B> sections, for every page exist a own section.
+
+<UL>
+<LI><B>oldgfx</B> contains the picture of the reference document
+<LI><B>newgfx</B> contains the picture of the current created document
+<LI><B>diffgfx</B> contains the difference between the current and the reference document
+<LI><B>percent</B> contains a percent value, which should show how much the
+values differ
+<LI><B>BM</B> true, if the <A HREF="#gfxcmpwithbordermove">border move</A> feature was used.
+<LI><B>old_BM_gfx</B> picture of border moved reference document
+<LI><B>new_BM_gfx</B> picture of border moved current document
+<LI><B>diff_BM_gfx</B> contains the difference picture of both above
+<LI><B>percent2</B> contains a percentage value of the border moved difference.
+<LI><B>result</B> is only true, if the percent value is less then 5%
+</UL>
+
+<!--  tips -->
+<A name="tips"></A>
+<H2>Tips</H2>
+<p>If in the Unix environment the PostScript file is only create in black and white,
+create a new printer which produce color output and set it as the default
+printer. Now the output should came also in color.
+
+<A name="createreference"></A>
+<H2>Create References</H2>
+<p>It is possible to create the reference files <TT>*.prn</TT> automatically.
+
+<p> The references have to build only once and rebuild only if there are changes like a new office major
+ version.</p>
+
+<!-- javaapi -->
+<A name="javaapi"></A>
+<H2>Java API</H2>
+<p>There exist also a possibility to use ConvWatch direct from a Java
+environment. 
+<p>But, be aware, this is absolutly alpha state, not tested right and in a strong changeable
+way. To take a look, get <TT>qadevOOo</TT> project, goto directory <TT>runner/convwatch</TT> open
+the Java file <TT>GraphicalDifferenceTest.java</TT> and read it's comments.
+There will be create a javadoc documentation about the API in the near future.
+
+<p>
+If there are problems/ideas with running ConvWatch don't hesitate to contact the
+current game keeper.
+</p>
+
+<a name="Author"></A>
+<A name="thanks"></A>
+<H2>Thanks</H2>
+<UL>
+<LI>Thanks to Caol&aacute;n McNamara for this great tool.
+<LI>The current game keeper is <A HREF="mailto:lla@openoffice.org?subject=convwatch_question">Lars Langhans</A>
+</UL>
+
+
+
+
+</body> 
+</HTML>
+

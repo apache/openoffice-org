@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+  <title>Build and execute qadevOOo with NetBeans</title>
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+ 
+<body>
+
+<h1>Using netbeans</h1>
+Build and execute qadevOOo with NetBeans.
+ 
+<! Pre-requisites> 
+<h2>Pre-requisites</h2>    
+    <ul>
+        <li>An installed version of <a href="http://www.netbeans.org">NetBeans</a></li>
+        <li>The <a href="qadevOOoSetup.class">installable package</a> unpacked and its contents stored in a local folder, in the following called <b>qadev_home</b>.</li>
+        <li>An installed version of the <a href="http://www.openOffice.org">Office</a></li>   
+    </ul>    
+<!------------------------------------------------------------------------------------------------------->
+
+<! Setting up a new project>       
+<h2>Setting up a new project</h2>
+
+    Start the project manager and create a new project (suggested name:  <b>qadevOOo</b>).
+    
+    <! Mounting Jars and Files>     
+    <h3>Mounting Jars and Files</h3>
+         <p>In the &quot;Explorer&quot; section of NetBeans (left on the screen) choose the 
+     &quot;Filesystems&quot; tab to mount the following directories and jars.</p>
+        <img  src="images/mount.jpg" alt="screenshot1" width="386" height="140">     
+        <ul>
+            <li> Jars to be mounted: those can be found in the <i>program/classes</i> subdirectory of your Office installation.<br>
+                 Click right on "Filesystems" inside of the window, and go to <b>mount -&gt; Archive Files</b> for this purpose</li>      
+                <ul>
+                    <li>java_uno.jar</li>
+                    <li>juh.jar</li>
+                    <li>jurt.jar</li>
+                    <li>ridl.jar</li>
+                    <li>sandbox.jar</li>
+                    <li>unoil.jar</li>           
+                </ul>
+            <li>Directories to be mounted: those can be found in the <b>qadev_home</b> directory<br>
+            Click right on "Filesystems" inside of the window, and go to <b>mount -&gt; local Directory</b> for this purpose</li>      
+                <ul>
+                    <li>runner</li>
+                    <li>tests</li>
+                    <li>classes</li>                    
+                </ul>
+        </ul>        
+    <!------------------------------------------------------------------------------------------------------->        
+      
+    <! adding packages to project>      
+    <h3>Adding packages to project</h3>
+        <p>Choose the &quot;project qadevOOo&quot; tab to add the following packages to your project.
+        Click right on &quot;project qadevOOo&quot; inside of the window, and go to <b>add existing ...</b> for this purpose</p>                      
+        <img  src="images/project.jpg" alt="screenshot2" width="224" height="203">
+        <p>all packages can be found in the <b>qadev_home</b> directory and the packages "mod" and "ifc" that are located in the subfolder tests/java.</p>                
+    <!------------------------------------------------------------------------------------------------------->
+
+    <! adjust the project settings>      
+    <h3>Adjust the project settings</h3>
+        <p>Set the output directory for the classes via <b>Tools -&gt; Options</b>. 
+        The register card for this is located in <b>Options -&gt; Building -&gt; Compiler Types</b>.
+      In the right part of the screen, you have to select a <i>Target</i> which
+    determines the output directory. Select <b>qadev_home/classes</b> in the dropdown-list.</p>
+        <img  src="images/options.jpg" alt="screenshot2" width="691" height="430">
+        <p>Finally set the main class via "Project -&gt; Set Project Main Class...". Choose "org -&gt; openOffice" 
+        and select Runner in the following tree structure.</p>                         
+    <! ------------------------------------------------------------------------------------------------------->
+
+
+<! ------------------------------------------------------------------------------------------------------->
+        
+<! Compilation and execution>       
+<h2>Compilation and execution</h2>
+
+    <! compilation>      
+    <h3>Compilation</h3>
+        To compile the whole project switch to the Project tab in the explorer, mark all
+        directories, click right and select <b>Compile All</b>.
+    <!------------------------------------------------------------------------------------------------------->
+    
+    <! execution>      
+    <h3>Execution</h3>
+        select the Runner in the &quot;Explorer&quot; window to add some arguments for the execution.     
+        You'll find these in the properties of the Runner, which are displayed underneath the 
+        &quot;Explorer&quot; window. Select the <b>Execution</b> tab and make the following entry:
+        <pre>
+        -tdoc /qadev_home/testdocs -objdsc /qadev_home/objdsc -o sw.SwXBodyText
+        </pre>
+        The first parameter is the path to the test documents, which are used
+        during test execution, and the second point to the object descriptions.
+        sw.SwXBodyText is the name of the test. 
+        The example entry has to be adjusted to your file structure, and your operating system 
+        (giving here an entry for Solaris/Linux).
+        Also assumed as default is that you would like to execute a Java test 
+        and that an Office is running that can be connected.<br>
+        Start the Office as follows:
+        <pre>
+        soffice -accept=socket,host=localhost,port=8100;urp;
+        </pre>
+      Port 8100 is the default port that the OOoRunner will use for connecting
+     the Office.<br>
+        Execute your test either via &quot;Project -&gt; Execute Project&quot; 
+        or press the shortcut &quot;CTRL-SHIFT-F6&quot;. 
+    To debug use &quot;Project -&gt; Debug Project&quot; 
+        or press the shortcut &quot;CTRL-SHIFT-F5&quot;.
+    <!------------------------------------------------------------------------------------------------------->
+      <p>Also see the <a href="user-guide.html">General User Guide</a> for more 
+    information.</p>
+  <!------------------------------------------------------------------------------------------------------->    
+    <p><HR>Last Modified: $Date: 2004/03/10 15:58:38 $</p>
+</body>
+</html>

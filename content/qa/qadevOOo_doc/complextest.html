@@ -1,0 +1,306 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+  <meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1"/>
+  <title>About Complex-testcases</title>
+  <style type="text/css">
+    <!-- code.comment { color: #008800; } -->
+  </style>
+</head>
+<body>
+
+<h1>About Complex-testcases</h1>
+
+
+<p>The structure of the complex tests is
+quite straightforward. You only have to inherit from a base class,
+called ComplexTestCase (<code>complexlib.ComplexTestCase</code>)
+and implement two methods:</p>
+
+<ul>
+  <li><code>public String[] getTestMethodNames()</code></li>
+  <li><code>public String getTestObjectName()</code></li>
+</ul>
+
+<p>The first method has to return all
+available test methods, while the second should return a sensible
+name of the object, functionality or combination thereof that is
+tested.</p>
+<p>You may implement two more methods:</p>
+<ul>
+  <li><code>public void before()</code></li>
+
+  <li><code>public void after()</code></li>
+</ul>
+<p>The methods are not mandatory and do not 
+have to be implemented if they are not needed. As suggested by their names, 
+before()
+is called before all other test methods, after()
+when all the test methods did finish.</p>
+<p>Note:
+</p>
+<p>
+<ul>
+  <li>An uncaught exception in before()
+  will prevent the test methods from being called: they will be marked as
+  failed.</li>
+  <li>An uncaught exception in after()
+  will be logged, but not change anything concerning the test results.</li>
+</ul>
+
+</p>
+<p>As a general rule, the result of a test
+is &ldquo;ok&rdquo;. There are two functions available to change
+this:</p>
+<p>
+<ul>
+  <li><code>failed(String message)</code><br>
+  This changes the result to &ldquo;failed&rdquo;,
+  while giving &ldquo;message&rdquo; as an explanation.</li>
+
+  <li><code>assure(String message, boolean condition)</code><br>
+  &ldquo;message&rdquo; is the
+  explanation for the error, which is only evaluated, if &ldquo;condition&rdquo;
+  is false. In case of &ldquo;condition&rdquo; being true, &ldquo;message&rdquo;
+  is thrown away.<a CLASS="sdfootnoteanc" NAME="sdfootnote1anc" HREF="#sdfootnote1sym"><sup>1</sup></a></li>
+
+</ul>
+</p>
+<p>The OOoRunner that will execute your
+complex test provides you also with additional helpers and utilities. (See
+<a href="runner_ref/overview-summary.html">
+OOoRunner reference</a> for details.) Before your test starts, the
+OOoRunner will connect or start StarOffice and provide a logging
+mechanism.</p>
+<p>You can reach the office in your test
+with the test parameters, represented by the variable param.
+With param.getMSF() you can get a
+MultiServiceFactory from the office and build your test from there.</p>
+<p>The logging is available with the
+variable log, which offers a
+<code>println(String message)</code> method so the
+test run can be monitored.</p>
+<p><br>
+</p>
+
+<h2>Sample Complex Test</h2>
+<p>To illustrate the mechanisms and
+helpers, a simple commented complex test &ldquo;for beginners&rdquo;
+is listed:</p>
+
+<pre>
+<code class="comment">// package name: as default, start with complex</code>
+<code>package complex.sample;</code><br>
+<code class="comment">// imports</code>
+import complexlib.ComplexTestCase;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.XInterface;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.container.XIndexContainer;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.Type;
+
+import java.io.PrintWriter;
+
+<code class="comment">/**
+ * The following Complex Test will test the
+ * com.sun.star.document.IndexedPropertyValues
+ * service
+ */</code>
+
+<code>public class CheckIndexedPropertyValues extends ComplexTestCase {</code>
+
+    <code class="comment">// The name of the tested service</code>
+    <code>private final String testedServiceName =
+          &quot;com.sun.star.document.IndexedPropertyValues&quot;;</code>
+
+    <code class="comment">// The first of the mandatory functions:
+    /**
+     * Return the name of the test.
+     * In this case it is the actual name of the service.
+     * @return The tested service.
+     */</code>
+    <code>public String getTestObjectName() {
+        return testedServiceName;
+    }</code>
+
+    <code class="comment">// The second of the mandatory functions: return all test methods as an
+    // array. There is only one test function in this example.
+    /**
+     * Return all test methods.
+     * @return The test methods.
+     */</code>
+    <code>public String[] getTestMethodNames() {
+        return new String[]{&quot;checkIndexedPropertyValues&quot;};
+    }</code>
+
+    <code class="comment">// This test is fairly simple, so there is no need for before() or after()
+    // methods.
+
+    // The test method itself.
+    /* 
+     * Test the com.sun.star.document.IndexedPropertyValues service.
+     * Strategy: create the service, check if it is initially empty,
+     * add and exchange some content.
+     */</code>
+    <code>public void checkIndexedPropertyValues() {</code>
+        <code class="comment">// A test object</code>
+
+        <code>Object oObj = null;
+        try {</code>
+           <code class="comment">// Get the MultiServiceFactory.</code>
+           <code>XMultiServiceFactory xMSF = (XMultiServiceFactory)param.getMSF();</code>
+           <code class="comment">// Create an instance of the service.</code>
+           <code>oObj = xMSF.createInstance(testedServiceName);</code>
+           <code class="comment">// Print debug information about the service.
+           // The dbg class of the OOoRunner is used.</code>
+
+           <code>System.out.println(&quot;****************&quot;);
+           System.out.println(&quot;Service Name:&quot;);
+           util.dbg.getSuppServices(oObj);
+           System.out.println(&quot;****************&quot;);
+           System.out.println(&quot;Interfaces:&quot;);
+           util.dbg.printInterfaces((XInterface)oObj, true);
+           System.out.println(&quot;****************&quot;);
+        }
+        catch(com.sun.star.uno.Exception e) {</code>
+            <code class="comment">// Give some information where the exception happened.
+            // This is information that maybe should be kept, so
+            // the log.println(); method is used.</code>
+            <code>log.println(&quot;Cannot create object: '&quot; + 
+                                testedServiceName + &quot;'&quot;);
+            e.printStackTrace((PrintWriter)log);</code>
+
+            <code class="comment">// After this exception the test has failed and cannot continue.</code>
+            <code>failed(e.getMessage());
+            return;
+        }</code>
+
+        <code class="comment">// Query for the interface we would like to test.</code>
+        <code>XIndexContainer xCont = (XIndexContainer)UnoRuntime.queryInterface(
+                                               XIndexContainer.class, oObj);</code>
+
+        <code class="comment">// Assure that the query worked.</code>
+
+        <code>assure(&quot;XIndexContainer was queried but returned null.&quot;, 
+                                                       xCont != null);</code>
+
+        <code class="comment">// Construct some property values.</code>
+        <code>PropertyValue[] prop1 = new PropertyValue[1];
+        prop1[0] = new PropertyValue();
+        prop1[0].Name  = &quot;Jupp&quot;;
+        prop1[0].Value = &quot;GoodGuy&quot;;
+
+        PropertyValue[] prop2 = new PropertyValue[1];
+        prop2[0] = new PropertyValue();
+        prop2[0].Name  = &quot;Horst&quot;;
+        prop2[0].Value = &quot;BadGuy&quot;;</code>
+
+        <code class="comment">// Really start to test.</code>
+        <code>try {
+            Type t = xCont.getElementType();
+            log.println(&quot;Insertable Type: &quot;+ t.getTypeName());</code>
+            <code class="comment">// Make sure that the container is empty after creation</code>             
+            <code>assure(&quot;Initial container is not empty: &quot; + xCont.getCount(),
+                                          xCont.getCount()==0);
+
+            log.println(&quot;Inserting a PropertyValue.&quot;);
+            xCont.insertByIndex(0, prop1);
+            PropertyValue[]ret = (PropertyValue[])xCont.getByIndex(0);</code>
+
+            <code class="comment">// Compare the returned value with the original.</code>
+            <code>assure(&quot;Got the wrong PropertyValue: &quot; +
+                      ret[0].Name + &quot;  &quot; +(String)ret[0].Value,
+                      ret[0].Name.equals(prop1[0].Name)&amp;&amp;
+                      ret[0].Value.equals(prop1[0].Value));
+
+            log.println(&quot;Replace the PropertyValue.&quot;);
+            xCont.replaceByIndex(0, prop2);
+            ret = (PropertyValue[])xCont.getByIndex(0);</code>
+
+            <code class="comment">// Compare the returned value with the original.</code>
+            <code>assure(&quot;Got the wrong PropertyValue: &quot; +
+                      ret[0].Name + &quot;  &quot; +(String)ret[0].Value,
+                      ret[0].Name.equals(prop2[0].Name)&amp;&amp;
+                      ret[0].Value.equals(prop2[0].Value));
+
+            log.println(&quot;Remove the PropertyValue.&quot;);
+            xCont.removeByIndex(0);</code>
+
+            <code class="comment">// Container has to be empty again.</code>
+            <code>assure(&quot;Could not remove PropertyValue.&quot;,
+                  !xCont.hasElements()&amp;&amp; xCont.getCount()==0);
+        }
+        catch(com.sun.star.lang.IllegalArgumentException e) {
+            failed(e.getMessage());
+            e.printStackTrace((PrintWriter)log);
+        }
+        catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+            failed(e.getMessage());
+            e.printStackTrace((PrintWriter)log);
+        }
+        catch(com.sun.star.lang.WrappedTargetException e) {
+            failed(e.getMessage());
+            e.printStackTrace((PrintWriter)log);
+        }
+    }
+}</code>
+</pre>
+
+<p><br>
+</p>
+<h2>Start The Complex Tests</h2>
+<p>The complex tests can be started
+similar to the other tests of the OOoRunner. You have to give a
+test-base for the complex tests, since as default the test-base for
+java fat-office tests is used. This can either be done with a
+
+&ldquo;-tb java_complex&rdquo; in the command-line call of the
+runner or with a &ldquo;TestBase=java_complex&rdquo; if you use an
+ini-file. Confer the 
+<a href="user-guide.html">General User Guide</a> for more details on this.</p>
+<p>The test has to be given with a full
+qualified class name. For the sample test above the call would be:</p>
+<p>
+<pre>java org.openoffice.Runner -tb java_complex -o complex.sample.CheckIndexedPropertyValues</pre></p>
+
+<p><br></p>
+<div ID="sdfootnote1">
+  <p><a CLASS="sdfootnotesym" NAME="sdfootnote1sym" HREF="#sdfootnote1anc">1</a>
+
+  Normally it would have been assert(String message,
+  boolean condition), but assert is a keyword in Java 1.4 and
+  thus forbidden to use.</p>
+</div>
+
+<hr>
+
+<p>Last change: $Date: 2004/03/10 15:58:37 $</p>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

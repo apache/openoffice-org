@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+  <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+  <TITLE></TITLE>
+  <META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+  <META NAME="CREATED" CONTENT="20030120;9535389">
+  <META NAME="CHANGED" CONTENT="20030120;10373215">
+</HEAD>
+<body>
+<H1>About Java-testcases.</H1>
+
+It is recommended to read the chapter 3.4 <a href="http://api.openoffice.org/docs/DevelopersGuide/ProfUNO/ProfUNO.htm">Professional UNO</a> 
+and especially section 3.4.1 <a href="http://api.openoffice.org/docs/DevelopersGuide/ProfUNO/ProfUNO.htm#1+4+1+Java+Language+Binding">Java Language Binding</a>
+in the Developer's Guide before going further.
+
+<H2>Implement a test for an implementation Object</H2>
+
+A test for an implementation object has the following structure:<br>
+<pre>
+<FONT COLOR="#990000">
+public class &lt;ObjectName&gt; extends TestCase {
+ 
+    protected void initialize( TestParameters tParam, PrintWriter log ) {         
+        //initialization issues that have to be done previous to object creation    
+    } 
+
+    protected void cleanup( TestParameters tParam, PrintWriter log ) {         
+        //dipose the environment, e.g close all documents opened during test     
+    } 
+
+    public TestEnvironment createTestEnvironment( TestParameters tParam, PrintWriter log ) 
+                                                                    throws StatusException { 
+        XInterface oObj = null; 
+        //create your Object (oObj) here.   
+        //create a new TestEnvironment for your object  
+        TestEnvironment tEnv = new TestEnvironment( oObj ); 
+        return tEnv; 
+    } // finish method createTestEnvironment 
+
+}// finish class &lt;ObjectName&gt; 
+</FONT>
+</pre>
+
+Thus, to implement an object creation you have to write a new class that extends TestCase
+class. The main method that must be implemented is <FONT COLOR="#990000">createTestEnvironment</FONT>.
+This method is called to create an object and return the <FONT COLOR="#990000">TestEnvironment</FONT>.
+
+Additional parameters that are needed in the corresponding Interface/Service tests are also defined here and added to the
+TestEnvironment with the method  
+<FONT COLOR="#990000">addObjRelation(NameOfTheRelation,ValueOfTheRelation)</FONT>
+<br>
+
+Tests for implemetation objects are store in the package &ldquo;mod.&lt;_module&gt;&rdquo;
+and are called &lt;ObjectName&gt;,
+e.g. a TestCase for &ldquo;sw.SwXBodyText&rdquo; will be stored in
+the package &ldquo;mod._sw&rdquo; and will be called &rdquo;SwXBodyText.Java&rdquo;.
+<br><br>
+To write debug information use <FONT COLOR="#990000">log.println(msg);</FONT>
+
+<H2>Implement the corresponding Interface test</H2>
+An interface test has the following structure: <br>
+
+<pre>
+<FONT COLOR="#990000">
+public class &lt;_XInterfaceName&gt; extends MultiMethodTest {
+
+   public &lt;XInterfaceName&gt; oObj = null; //target to be queried by the framework
+
+   public void _method1() {
+     //Code for method1
+     tRes.tested(&quot;method1()&quot;,booleanResult);
+   }
+
+   public void _methodn() {
+     //Code for methodn
+     tRes.tested(&quot;methodn()&quot;,booleanResult);
+   }
+
+}// finish class &lt;_XInterfaceName&gt;
+</FONT>
+</pre>
+<br>
+&lt;<B>XInterfaceName</B>&gt; is the name of the interface to be queried (e.g. XText). <br>
+Procedures called _&lt;method_name&gt; will be called one by one. The variable <B>oObj</B>
+will be initialized in <FONT COLOR="#990000">createTestEnvironment</FONT>
+of the corresponding implementation object's TestCase. <BR>
+The method tRes.tested of lib.TestResult returns a result for the method to the
+Framework.<BR>
+<pre>
+<FONT COLOR="#990000">
+    tRes.tested(String &quot;&lt;method_name&gt;()&quot;, boolean result);
+</FONT>
+</pre>
+
+<BR>To get needed parameters that were created as
+object-relation in the object's TestCase, the class lib.TestEnvironment provides
+a method <FONT COLOR="#990000">getObjRelation</FONT>:
+<BR>
+<pre>
+<FONT COLOR="#990000">
+    tEnv.getObjRelation(String &quot;&lt;NameOfTheRelation&gt;&quot;);
+</FONT>
+</pre>
+
+<H2>Implement the corresponding Service test</H2>
+
+In most cases to write a test for service you just have to write a class that
+extends <FONT COLOR="#990000">lib.MultiPropertyTest</FONT>.
+<br>
+<pre>
+<FONT COLOR="#990000">
+    public class _&lt;Service_Name&gt; extends MultiPropertyTest { 
+
+    } 
+</FONT>
+</pre>
+
+<B>MultiPropertyTest</B> will test all properties automatically, using the inner class <B>ValueChanger</B>.
+But, if you need to test some property in a special way, you
+can overwrite a test function. <BR>
+In this case you have to write: 
+<pre>
+<FONT COLOR="#990000">
+    public void _&lt;property_name&gt;() {         
+        boolean result = true;         
+            ...         
+        tRes.tested(&quot;&lt;property_name&gt;&quot;, result);     
+    }
+</FONT>
+</pre>
+<hr> 
+Last modified: $Date: 2004/03/10 15:58:38 $       
+</BODY>
+</HTML>

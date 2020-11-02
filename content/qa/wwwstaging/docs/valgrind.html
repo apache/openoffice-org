@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>OpenOffice.org QA Project - Using Valgrind</title>
+<link rel="stylesheet" type="text/css" href="../css/default.css">
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<div id="centercontent">
+<h1>Using Valgrind to track memory bugs</h1>
+<p><i>Special thanks for Dan Kegel for his work and suggestions for using this tool with the QA project.</i>
+
+<p>The free tool Valgrind (like the commercial tool Purify) runs programs in a special way that is twenty times slower, but catches wild pointer and uninitialized memory bugs before they can do any damage. It's really a wonderful tool for anyone trying to find that kind of bug in a complex program. Its main drawbacks are slowness and limited platform support (it only runs on x86 linux). Julian Seward, the author of Valgrind, has a nice presentation about it; it's online at 
+<p style="text-align: center"><a href="http://ooo.ximian.com/valgrind/valgrind.html">http://ooo.ximian.com/valgrind/valgrind.html</a>
+
+<p>You should use Valgrind when there's a hang or crash that's hard to reproduce in gdb, when you are trying to track down a particular bug that you think might be a memory corruption, or if you are running through automated regression tests and want to make darn sure there are no hidden bugs. If Valgrind is the only way to notice a problem, please add keyword '<b>valgrind</b>' to the issue.
+
+<p>Here are canned queries that may be of interest:
+
+<table>
+<tr>
+<td style="width: 10%"></td>
+<td style="width: 220px" valign="top"><a href="http://www.openoffice.org/issues/buglist.cgi?email1=&emailtype1=substring&emailassigned_to1=1&email2=&emailtype2=substring&emailreporter2=1&issueidtype=include&issue_id=&changedin=&votes=&chfieldfrom=&chfieldto=Now&chfieldvalue=&short_desc=&short_desc_type=substring&long_desc=&long_desc_type=substring&issue_file_loc=&issue_file_loc_type=substring&status_whiteboard=&status_whiteboard_type=substring&keywords=valgrind&keywords_type=anywords&field0-0-0=noop&type0-0-0=noop&value0-0-0=&cmdtype=doit&order=%27Importance%27">Issues with keyword 'valgrind'</a></td>
+<td>These are issues where valgrind was definitely helpful in finding a problem</td>
+</tr>
+<tr>
+<td><br></td>
+<td><a href="http://www.openoffice.org/issues/buglist.cgi?issue_type=DEFECT&long_desc=valgrind&long_desc_type=substring">Issues that mention Valgrind</a></td>
+</tr>
+</table>
+
+<p><br>
+<h2>Installing Valgrind</h2>
+To install Valgrind, download the latest source from <a href="http://developer.kde.org/~sewardj">http://developer.kde.org/~sewardj</a> and perform the standard Unix source compilation procedure:
+
+<pre style="margin-left: 15%;margin-right: 10%;">
+bash$  tar -xjvf valgrind-20030725.tar.bz2
+
+bash$  cd valgrind-20030725
+
+bash$  ./configure
+
+bash$  make
+
+bash$  make install
+</pre>
+
+<p>To run OpenOffice 1.1 with valgrind, run the commands:
+<p>Please note, set the "bin" variable to your OOo.org installation directory
+
+<pre style="margin-left: 15%;margin-right: 10%;">
+bash$  bin=/opt/OpenOffice.org1.1/program
+
+bash$  LD_LIBRARY_PATH=$bin 
+
+bash$  valgrind $bin/soffice.bin
+</pre>
+
+<p>This will output warnings whenever it detects strange memory accesses. If you get too many <b>"uninitialized memory"</b> warnings, add the option --skin=addrcheck:
+<p>Please note, set the "bin" variable to your OOo.org installation directory
+
+<pre style="margin-left: 15%;margin-right: 10%;">
+bash$  bin=/opt/OpenOffice.org1.1/program
+
+bash$  LD_LIBRARY_PATH=$bin
+
+bash$  valgrind --skin=addrcheck $bin/soffice.bin
+</pre>
+
+<p>addrcheck doesn't check for uninitialized memory, and runs about twice as fast as the default setting.
+
+<p>Note: there are many minor bugs in the standard system libraries that only recently came to light thanks to tools like Valgrind, so Valgrind shows a fairly large number of false positives. For instance, closedir() in glibc contained an illegal call to pthread_mutext_destroy that was only fixed very recently (in glibc-2.3.2), so expect to see warnings of that sort if you're not using the latest glibc.
+
+<p>When valgrind logs an error, it saves only four lines of stack backtrace. You can increase this number with the commandline parameter <i>--num-callers</i>. You should increase this to 100 to get enough information for application developers to fix their problems.
+
+<p><br>
+<h2>Making OpenOffice More Valgrindable</h2>
+<p>Valgrind works fine on unmodified executables, but if you're building OpenOffice from source, there are three things you can do to make an OpenOffice executable that's more Valgrind-friendly:
+
+<ul style="margin-left: 15%;margin-right: 15%;">
+<li><p>Compile libsal.so.3.1.0 with -DFORCE_SYSALLOC so Valgrind can put a guard around all allocations</li>
+<li><p>Compile all modules with -g so Valgrind can give better stack dumps</li>
+<li><p>Compile all modules with -O0 (disables optimization) - supposedly reduces
+false positives</li>
+</ul>
+
+<p>Alternately, if you don't want to build from source, and you're testing OpenOffice1.1rc1 on a glibc-2.3.2-based system, you can replace your libsal.so.3.1.0 with this copy of libsal.so.3.1.0, which was compiled with -DFORCE_SYSALLOC under glibc-2.3.2. Doing this lets you find quite a few more problems in OOo.
+<p><br>
+
+<h2>Using gdb with Valgrind</h2>
+
+<p>You can have valgrind launch gdb when it runs into an error; then you can do all the backtracing and printing of variabls you like. To do this, add the option --gdb-attach=yes. This doesn't work quite right, since OpenOffice appears to close stdin. Here's one way to work around that:
+
+   1. Create a little script named ~/rungdb containing
+
+#!/bin/sh
+XAUTHORITY=~/.Xauthority DISPLAY=127.0.0.1:0.0 /usr/X11R6/bin/xterm -e gdb "$@"
+
+<p>Be sure to chmod +x ~/rungdb. The script is started without the normal environment variables, so you need to explicitly set any that are needed. The above is for Red Hat Linux 8.0. If the crash you're seeing happens to happen while the X display lock is held, you'll probably want to set DISPLAY to some other host's X display... that actually happened to me once. 
+
+<p>Then run OpenOffice with the command
+
+#!/bin/sh
+bin=/opt/OpenOffice.org1.1Beta/program
+LD_LIBRARY_PATH=$bin valgrind -v --skin=addrcheck     \
+--gdb-attach=yes --gdb-command=~/rungdb \
+$bin/soffice.bin
+
+<p>That will pop up an xterm with a gdb inside it every time you say 'yes' when valgrind asks whether to start gdb. Note that all you can do in that gdb is get a backtrace; you can't continue the program. You must quit gdb before valgrind will continue.
+
+</div>
+
+
+<div id="menu">
+
+<h1>General Info</h1>
+<ul class="nobullets">
+<li><a href="../index.html">Home Page</a></li>
+<li><a href="../info/news.html">News</a></li>
+<li><a href="../info/events.html">Events</a></li>
+</ul>
+
+<h1>Things to do</h1>
+<ul class="nobullets">
+<li><a href="../tasks/quickstart.html">Quick Start!</a></li>
+<li><a href="../tasks/currentpriorities.html">Current priorities</a></li>
+<li><a href="../tasks/documentation.html">Documentation</a></ul>
+</ul>
+
+<h1>Join this project</h1>
+<ul class="nobullets">
+<li><a href="../join/quickref.html">Quick Reference</a></li>
+<li><a href="../join/useraccounts.html">Accounts you need</a></li>
+<li><a href="../join/izprivileges.html">Privileges you need</a></li>
+<li><a href="../join/mailinglists.html">Mailing lists to join</a></li>
+<li><a href="../join/whereishelp.html">Where to get help</a></li>
+</ul>
+
+<h1>Documentation</h1>
+<ul class="nobullets">
+<li><a href="../docs/whatisiz.html">IZ - What is it?</a></li>
+<li><a href="../docs/usingiz.html">IZ - How to use it.</a></li>
+<li><a href="../docs/buglifecycle.html">The Life of a Bug Report</a></li>
+<li><a href="../docs/definitions.html">Definitions & Abbreviations</a></li>
+<li><a href="../docs/tools.html">Tools</a></li>
+</ul>
+
+<h1>IZ helper links</h1>
+<ul class="nobullets">
+<li><a href="../izhelperlinks/thismonth.html">This month's issues that need you!</a></li>
+<li><a href="../izhelperlinks/thismonthnew.html">Issues marked "New" for this month</a></li>
+<li><a href="../izhelperlinks/dejadup.html">Duplicates List</a></li>
+<li><a href="../izhelperlinks/experimental.html">Experimental</a></li>
+</ul>
+
+<h1>Tools</h1>
+<ul class="nobullets">
+<li><a href="http://qa.openoffice.org/qadevOOo_doc/index.html">API Test Case Tool</a></li>
+<li><a href="http://qa.openoffice.org/qatesttool">GUI Testing</a></li>
+<li><a href="http://qa.openoffice.org/testcase/index.html">Smoke Tests</a></li>
+</ul>
+
+<h1>Localization QA</h1>
+<ul class="nobullets">
+<li><a href="http://qa.openoffice.org/localized/index.html">How to help test localized builds</a></li>
+</ul>
+
+<h1>Members</h1>
+<ul class="nobullets">
+<li><a href="http://qa.openoffice.org/servlets/ProjectMemberList">Project Members</a></li>
+<li><a href="../members/whohasizpriv.html">Who has IZ privileges</a></li>
+<li><a href="../members/theleads.html">Project Leads</a></li>
+<li><a href="../members/memberbios.htm">Member Bios</a></li>
+</ul>
+
+<h1>Statistics</h1>
+<ul class="nobullets">
+<li><a href="../stats/qacontrib.html">QA Contributions</a></li>
+<li><a href="http://qa.openoffice.org/iz_statistic.html">Jumbo Stats</a></li>
+</ul>
+
+<h1>About Us</h1>
+<ul class="nobullets">
+<li><a href="../about/missionstatement.html">Mission Statement</a></li>
+</ul>
+
+<h1>Accessibility</h1>
+<ul class="nobullets">
+<li><a href="../index.html">QA Home Page</a></li>
+<li><a href="../access/sitemap.html">Site Map</a></li>
+</ul>
+
+</div>
+
+
+</body>
+</html>

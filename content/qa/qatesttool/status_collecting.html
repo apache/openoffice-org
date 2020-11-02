@@ -1,0 +1,275 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <meta name="author" content="Thorsten Bosbach">
+    <style type="text/css">@import url("/css/dba.css");</style>
+    <style type="text/css">@import url("../dba.css");</style>
+    <title>How to get the status of a test run with the VCL TestTool Application</title>
+  </head>
+  <body lang="en-US">
+        <div style="margin-left:20pt" class="dba">
+      <h1><font size=6 color=#00009C>How to get the status of a test run with the VCL TestTool Application</font></h1>
+<pre>
+http://qa.openoffice.org/qatesttool/status_collecting.txt
+by thorsten.bosbach@sun.com 11.05.2006
+updated: 13.03.2007
+discussion & questions at qa@openoffice.apache.org
+
+How to get the status of a test run with the VCL TestTool Application
+---------------------------------------------------------------------
+
+Goal is to have the essential data from a test run available for
+further processing e.g. writing it into a database.
+This is: Test name, test case, warnings, errors, duration, 
+         OOo version, platform, system- and application language.
+
+Theoretical there exists a way to analyze the result file (.res) by
+parsing it's content. The syntax is available at:
+http://qa.openoffice.org/qatesttool/resultfile.html
+There exists already some tooling about this from Petr Mladek:
+http://go-oo.org/ooo-build/doc/test-ooo.txt
+http://go-oo.org/ooo-build/bin/test-ooo
+http://go-oo.org/ooo-build/bin/test-ooo-analyze
+
+Tora also provided some tool:
+http://qa.openoffice.org/source/browse/qa/qatesttool/script/analyze/
+
+Here another way is shown; During the test run the data is collected
+without the overhead from a result file and put into files for
+further processing. The process is triggered by the TestTool application
+at the end of every test run.
+
+
+Which functions are involved for getting the data about a test run?
+-------------------------------------------------------------------
+
+The core file for this is (in CVS on OOo):
+qa/qatesttool/global/system/inc/status.inc
+http://qa.openoffice.org/unbranded-source/browse/*checkout*/qa/qatesttool/global/system/inc/status.inc?rev=HEAD&content-type=text/plain
+All global variables are declared in:
+qa/qatesttool/global/system/inc/gvariabl.inc
+
+Before the function main() in a .bas file is run, the function 
+LoadIncludeFiles() is called, which is available in every .bas file.
+
+In every .bas file you see a call to 
+qa/qatesttool/global/system/inc/status.inc::hStatusIn("application",".bas file name")
+before calling the first test case and a call to 
+status.inc::hStatusOut() 
+after the last test case was run.
+
+On entering a 'testcase' the function 
+qa/qatesttool/global/system/inc/master.inc::TestEnter() 
+is called.
+
+On leaving a 'testcase' the function 
+master.inc::TestExit() 
+is called, which calls
+status.inc::hStatusAddTestcase()
+
+
+What happens in these functions? - A chronological view on the functions
+------------------------------------------------------------------------
+
+* LoadIncludeFiles()
+--------------------
+
+-> calls master.inc::GetUseFiles()
+   -> calls master.inc::hFirstOutput()
+      -> calls master.inc::hDetectStatusDatabase()
+Which decides how to handle the status writing;
+
+There are 3 modes available:
+0. No data collecting takes place.
+   The current default behaviour for testing OOo.
+
+1. Inside StarOffice Quality Assurance department at Sun Microsystems 
+   the data is collected and written into a database for further processing;
+   This enables the testers to compare Child Workspace (CWS) test runs to 
+   the master test runs, on which the CWS is based on; You get also an 
+   overview on the count of test cases that are run and how the errors evolve
+   between the master builds. The exchange of the data takes place via 
+   a global available file space.
+   HDE@openoffice.org would provide the details, how the database layout should look like.
+
+2. There is an ugly implementation of a try to collect data localy and commit it
+   at a later time to a database. I would just call it an technical example.
+   (qa/qatesttool/global/tools/compressstatus.bas)
+   I would volunteer for making it nicer ... (TBO)
+
+The control of the mode happens via the content and existence of the file:
+qa/qatesttool/errorlog/privateenvironment.txt
+If the file doesn't exist: Mode 0; 
+If the file exists: get the entry 'Current' from the section 'StatusFeatureLevel'
+1: Mode 1;
+Mode 2 will be enabled with:
+The entry in the testtool configuration file in section 'OOoLocalStatusDatabase'
+The entry 'Current' consists of a path:
+---- cut ---
+[OOoLocalStatusDatabase] 
+Current=/some/special/path
+------------
+There are some restrictions to get it run for Mode 2:
+(That's why I call it ugly...)
+- On Unix/Linux; If you have e.g. /somwhere/qa/qatesttool/global
+  then you have to set Current to /somwhere/qa
+- On win32 you have to be in the root of the volume with qatesttool;
+  E.g.: D:\qatesttool
+  Your Current would be D:\
+  There is only the drive letter accepted, and qatesttool has to be there, too!
+- From your 'Current' has to exist the path history/tooling
+  From example above: /somwhere/qa/history/tooling
+  or: D:\history\tooling
+- There is an indication in the result file, if the mode was detected, by the
+  lines:
+  **  Status feature (mySQL)        : Enabled  + your path
+  and a little bit later:
+  ** Status will be written to: ...
+- After running a test, there have to be some files in history/tooling
+
+* status.inc::hStatusIn("Application","name of .bas file")
+----------------------------------------------------------
+
+With the first parameter, that is needed, the application get's set, where
+the test does belong to: currently known values are: 
+framework, writer, calc, chart, base, graphics, math, xml.
+The second parameter has to be the name of the .bas file.
+
+The global array variable 'glsStatusPage()' get's cleared, which will get 
+explained in the next section.
+Here again is evaluated, which data submission mode is used.
+(->getDatabasePath("/history/tooling/")) 
+
+
+-----------------------------------------------
+|  -> Now the first test case will start .... |
+-----------------------------------------------
+
+
+* status.inc::hStatusAddTestcase()
+----------------------------------
+
+After every test case this function is called.
+
+It puts entries to the global array variable 'glsStatusPage()'
+At the end of the test run it will go into a file.
+
+Every item in the array is a connected string of the following parts:
+Name of the test case
+&lt;TAB>
+Duration of test case run
+&lt;TAB>
+A number for the message kind: 0: no faults; 1: Warning; 2: Error; 3: qaError
+&lt;TAB>
+Error message, if one occoured, 0 if no error
+&lt;TAB>
+Line number of error in source file, 0 if no error
+&lt;TAB>
+CVS version of source file, 0 if no error
+&lt;TAB>
+Filename of source file, 0 if no error
+&lt;TAB>
+
+
+-----------------------------------------------
+|  -> After the last test case has ended .... |
+-----------------------------------------------
+
+
+* status.inc::hStatusOut()
+--------------------------
+
+Just calls ....
+
+* hStatusWriteOutput()
+----------------------
+
+There will be two files written;
+The filename is put together with:
+- Three letters of platform
+- User name
+- Name of the computer where the test ran
+- Name of .bas file, without ".bas"
+- "-"
+- Language code 
+- "-"
+- A number from 1,2 (,3,4)
+- ".txt"
+This should make sure to have unique filenames and is 'human readable'.
+
+File with the number "1":
+-------------------------
+(This file is also written on the call of 'hStatusIn' and rewritten now.)
+Every item is put into a new line in the file:
+- Major version of OOo; E.g.: "680" or "645" (from versionrc)
+- Minor version of OOo; E.g.: "m160" (from versionrc)
+- Build ID of OOo; E.g.: "1234" (from versionrc)
+- Date of test run
+- Three letter code of platform; Known values are: win, lin, sol, x86, osx, ...
+- Machine name (from TestTool configuration file the entry [Others] PCname=...)
+- User name; On win32 the environment variable VCSID is evaluated; 
+  On Unix/Linux the environment variable $USER and $LOGNAME are evaluated.
+- Installation type either user (0) or system (1) (nowadays everything is system)
+- Language of OOo as phone ID
+- Language of the system as phone ID
+- The name of the .bas file
+- Test application area
+- Test duration Hours:Minutes:Seconds
+- Child WorkSpace name => if it is the master: "Master"
+- Source tree code, like: SRC, OOF, ...
+
+TODO: If it is OOo, the email of the builder/build provider should get submittet,
+to distinguish between build errors.
+Maybe a property list to not have to rely on the same order of entries.
+
+File with the number "2":
+-------------------------
+The content of the global array variable 'glsStatusPage()' is written into
+the file; Each line in the file is an item from the array.
+
+The handling for mode 2 takes place now:
+These two files are written to a public filespace.
+Then a little handshaking takes place by the files 3 and 4.
+A php script is called via the external helper application 'wget',
+(the TestTool will get a native command to perform a http call #i12345#),
+that reads the files numbered 1 and 2. The output of the php script is recorded 
+into file numbered 4. File numbered 3 is generated by the php scriptby directly
+by writing to the global filespace.
+If everything is ok, in file 3 only "OK" is printed, else an error occurred 
+and you have to check file numbered 4 for error messages.
+
+
+Examples files
+--------------
+* File: linautofahrenhelaub_lvl1_hsqldb-1-1.txt
+------------------------------------------
+680
+m167
+9022
+2006-05-10 10:54:21
+lin
+Helau
+autofahren
+1
+1
+b_lvl1_hsqldb.bas
+base
+00:06:46
+Master
+SRC
+
+* File: linautofahrenhelaub_lvl1_hsqldb-1-2.txt
+--------------------------------------------
+tGeneral 00:02:07 0 0 0 0 0
+tOpenDatabaseWithViews 00:00:35 0 0 0 0 0
+tQueryCriterion 00:02:08 0 0 0 0 0
+tQueryJoin 00:00:59 0 0 0 0 0 
+tiViewToolbar_1 00:00:46 3 tiViewPanes outcommented due to reconstruction of test 52 1.16 im_003_.inc
+tiFormatStylesAndFormatting 00:00:54 2 VorlagenName : Attempt to write on read-only (MultiLine)Edit 925 1.30 id_005.inc
+tiEditHyperlink 00:00:42 1 - Not able to edit Hyperlink! 598 1.42 id_002.inc
+</pre>
+      <div align="right"><font size="-1" color=#BDBEBD><i>Revision: 2.00</i></font></div>
+  </body>
+</html>
+

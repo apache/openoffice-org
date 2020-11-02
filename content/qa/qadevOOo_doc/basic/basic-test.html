@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+  <meta http-equiv="CONTENT-TYPE"
+ content="text/html; charset=iso-8859-1">
+  <title>About Basic-testcases</title>
+  <style>
+  <!--
+    TH P { margin-bottom: 0cm }
+    TD P { margin-bottom: 0cm }
+    P { margin-bottom: 0cm }
+  -->
+  </style>
+</head>
+<body>
+<h1>About Basic-testcases</h1>
+<p>It is recommended to read chapter 11
+<a
+ href="http://api.openoffice.org/docs/DevelopersGuide/BasicAndDialogs/BasicAndDialogs.htm">OpenOffice.org
+Basic and Dialogs</a> in the Developer's Guide before going further.
+</p>
+<p>As stated on the <a href="../index.html">Automated product source
+code QA</a> page,
+the Basic tests are executed using the Runner.</p>
+<p>An additional parameter is needed to
+indicate that a Basic test has to be executed:<br>
+</p>
+<pre>    -TestBase basic_fat</pre>
+or short on commandline
+<pre>    -tb basic_fat</pre>
+<br>
+See the <a href="../user-guide.html">General User Guide</a> for a more
+detailed parameter list.
+<p></p>
+<p>The interaction between Java and Basic is performed using
+the so-called Basic Bridge that consist of two parts:</p>
+<ol>
+  <li>Some <a href="../runner_ref/overview-summary.html">Java classes</a>
+on the Runner side.</li>
+  <li>The BasicBridge.sxw document with Basic scripts on the Office
+side.</li>
+</ol>
+<p>These two parts can communicate using a simple protocol:
+It is possible to send commands from Java to Basic and to
+get results back from Basic to Java.</p>
+The <a href="concept.gif">communication</a> between Runner and Basic
+tests is shown here.
+<p>To perform Basic tests two classes are used:
+BasicTestCase, an extension of TestCase, and BasicIfcTest. Both take
+the part
+of the <font color="#990000">TestCase</font> and the <font
+ color="#990000">_XInterfaceTest</font>
+implementations used in the Java testcases. (see <a
+ href="../java-tests.html">About Java-testcases</a>). </p>
+<p>For the communication between Java and Basic, the BasicHandler is
+used.
+BasicHandler has its own factory called BasicHandlerProvider, which
+inserts it into the MultiServiceFactory of the Office. The Basic
+scripts in BasicBridge.sxw
+can create an instance from the MultiServiceFactory directly and call
+methods there, thus enabling the information flow from Basic to Java.
+</p>
+<p>To provide passing of information in the other direction, Basic
+listeners are used. BasicHandler implements the <a
+ href="http://api.openoffice.org/docs/common/ref/com/sun/star/container/XContainer.html">XContainer</a>
+UNO interface.
+This allows the registering of a listener, which enables Java to call
+functions for it.
+<br>
+One thing that is left is establishing the initial
+connection between Java and Basic (the instance of BasicHandler
+should be obtained in the BasicBridge.sxw and a listener should be
+registered).
+For this, BasicBridge.sxw has an OnLoad() event that starts execution
+of an
+initialization function directly after loading.</p>
+<a href="p3.gif">Overview</a> picture, showing the communication
+between Java and Basic.
+<p><br>
+</p>
+<table width="92%" border="0" cellpadding="2" cellspacing="0"
+ bgcolor="#f0f0f0">
+  <col width="96*"> <col width="160*"> <tbody>
+    <tr>
+      <td colspan="2" width="100%" bgcolor="#00315a">
+      <p align="center"><font color="#ffffff"><font
+ face="Thorndale, serif"><b>Further documentation</b></font></font></p>
+      </td>
+    </tr>
+    <tr>
+      <th width="38%" bgcolor="#99ccff">
+      <p align="center"><font color="#00315a"><font
+ face="Thorndale, serif">Name </font></font> </p>
+      </th>
+      <th width="62%" bgcolor="#99ccff">
+      <p align="center"><font color="#00315a"><font
+ face="Thorndale, serif">Description </font></font> </p>
+      </th>
+    </tr>
+    <tr valign="top">
+      <td width="38%">
+      <p>A deeper look at the Java&lt;-&gt;Basic <a
+ href="protocol.html"> Communication Protocol</a></p>
+      </td>
+      <td width="62%">
+      <p><font face="Thorndale, serif">The communication between Java
+and Basic needs a special interaction handler.</font></p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="38%">
+      <p><a href="test-structure.html"><font face="Thorndale, serif">Test
+Structure</font></a></p>
+      </td>
+      <td width="62%">
+      <p><font face="Thorndale, serif">The syntax for Basic tests.</font></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+<p>Last modified: $Date: 2004/03/10 15:58:39 $</p>
+</body>
+</html>

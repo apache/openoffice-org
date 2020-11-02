@@ -1,0 +1,254 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+  <TITLE>User-Guide</TITLE>
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+<H1>General User Guide</H1>
+<P>The main class of the framework is org.openoffice.Runner
+<BR>If you downloaded the prepared package there will be already
+scripts to start this class with the abilitity to execute Java and
+Basic testcases called <i>executeJava</i> and <i>executeBasic</i>
+repectively.</P>
+<P>At least a test job must be given, this can be a single implementation object or even a
+single Interface/Service of an implementation object as well as a
+complex scenario of such cases.</P>
+<UL>
+  <LI><b><i> java org.openoffice.Runner -o sw.SwXCell</i></b> will execute only sw.SwXCell 
+  <LI><b><i> java org.openoffice.Runner -o sw.SwXBodyText::com::sun::star::text::XText </i></b> will execute the test  for the Interface XText of SwXBodyText
+  <LI><b><i> java org.openoffice.Runner -sce &lt;the_path&gt;/senario.sce </i></b> will execute each job   in the scenario file
+</UL>
+A scenrio file is a simple text file that contains different test jobs, e.g.
+<pre>
+    #Sample scenario file
+    -o sw.SwXCell
+    -o sc.ScCellObj
+    -o sw.swXBodyText::com::sun::star::text::XText
+</pre>
+In the prepared package you'll find a scenario file (api.sce) that contains all testcases. This can be executed using the command
+<pre>
+  ./execute(Java|Basic) -sce api.sce (Unix)
+  execute(Java|Basic).bat -sce api.sce (Windows)
+</pre>
+<br>
+At least the jar files <i>ridl.jar</i>, <i>unoil.jar</i>, 
+<i>sandbox.jar</i>, <i>jurt.jar</i>, <i>juh.jar</i>, and <i>java_uno.jar</i>
+, which are located in '&lt;Office_Path&gt;/program/classes', must be part of your CLASSPATH,
+as well as the classes of the framework and tests.
+<br>
+To be able to connect the office via the Java-UNO bridge it must be started 'connectable'.
+This means you start the office as follows:
+<pre>    &lt;Office_Path&gt;/program/soffice "-accept=socket,host=localhost,port=8100;urp;" (unix/linux)
+    &lt;Office_Path&gt;\program\soffice.exe -accept=socket,host=localhost,port=8100;urp; (windows)
+</pre>
+You can also let the Runner itself start the Office by setting the AppExecutionCommand parameter:
+<pre>   AppExecutionCommand=&lt;Office_Path&gt;/program/soffice -accept=socket,host=localhost,port=8100;urp;</pre>
+<br>
+In the second case the Runner tries to start the Office, if it can't connect. So you'll have to make sure
+that no Office-instance is already running.
+<br>
+In both cases make sure that the quickstarter (Windows only) isn't running.
+<br>
+<p>For more information about connecting the Office from external applications, confer
+the Developer's Guide of OpenOffice.org, chapter
+<a href="http://api.openoffice.org/docs/DevelopersGuide/FirstSteps/FirstSteps.htm#1+3+3+3+Make+the+office+listen">First Steps</a>.
+</p>
+When the Runner starts, it first searches for a property file. If the parameter
+<pre>   -ini &lt;Full_Path&gt; </pre>
+is given it takes this on otherwise it searches in the home directory and the
+current path for a file named runner.props (Win) and .runner.props (Unix) respectively. If no property file is given, the defaults are used.
+<br>
+Afterwards it parses the command line arguments and finally searches the desired
+value set for the given job(s).
+This value set is given in form of so called object descriptions which can be found
+in the objdsc-subdirectory of qadevOOo. 
+Then the job(s) is/are executed and the result is displayed on screen.
+<br><br>
+You can define an arbitrary number of parameters, here are some predefined:
+<br>
+<br>
+<TABLE WIDTH=844 BORDER=1 CELLPADDING=2 CELLSPACING=0 BGCOLOR="#f0f0f0">
+  <COL WIDTH=417>
+  <COL WIDTH=11>
+  <COL WIDTH=343>
+  <COL WIDTH=57>
+  <TR>
+    <TD COLSPAN=4 WIDTH=840 BGCOLOR="#00315a">
+      <P ALIGN=CENTER><FONT COLOR="#ffffff"><B>Parameters</B></FONT></P>
+    </TD>
+  </TR>
+  <TR>
+    <TH WIDTH=417 BGCOLOR="#99ccff">
+      <P ALIGN=CENTER><FONT COLOR="#00315a">Name</FONT>
+      </P>
+    </TH>
+    <TH COLSPAN=3 WIDTH=419 BGCOLOR="#99ccff">
+      <P ALIGN=CENTER><FONT COLOR="#00315a">Description</FONT>
+      </P>
+    </TH>
+  </TR>
+  <TR VALIGN=TOP>
+    <TD WIDTH=417>
+      <P>ConnectionString (cmdLine: -cs)</P>
+    </TD>
+    <TD COLSPAN=3 WIDTH=419>
+      <P>The Connection String used to connect the Office<br>
+                <b>Default:</b> socket,host=localhost,port=8100
+            </P>
+    </TD>
+  </TR>
+  <TR VALIGN=TOP>
+    <TD WIDTH=417>
+      <P>AppProvider</P>
+    </TD>
+    <TD COLSPAN=3 WIDTH=419>
+      <P>Provides access to the Application, will be filled at Runtime if
+            the test harness starts the Office</P>
+    </TD>
+  </TR>
+  <TR VALIGN=TOP>
+    <TD WIDTH=417>
+      <P>ProcessHandler</P>
+    </TD>
+    <TD COLSPAN=3 WIDTH=419>
+      <P>Provides access to the running Process, will be filled at Runtime if
+            the test harness starts the Office
+      </P>
+    </TD>
+  </TR>
+  <TR VALIGN=TOP>
+    <TD WIDTH=417>
+      <P>AppExecutionCommand (cmdLine -cmd)</P>
+    </TD>
+    <TD COLSPAN=3 WIDTH=419>
+      <P>Defines the executable to be started, default is an empty String</P>
+    </TD>
+  </TR>
+  <TR VALIGN=TOP>
+    <TD WIDTH=417>
+      <P>TestBase (cmdLine -tb)</P>
+    </TD>
+    <TD COLSPAN=3 WIDTH=419>
+      <P>Defines the testbase to be used<br>
+            <b>Default:</b> java_fat (for java testcases)<br>
+            also possible: basic_fat (for basic testcases) and java_complex (for Complex testcases).
+            </P>
+    </TD>
+  </TR>
+  <TR VALIGN=TOP>
+    <TD WIDTH=417>
+      <P>ServiceFactory</P>
+    </TD>    
+    <TD COLSPAN=3 WIDTH=419>
+      <P>The ServiceFactory gained from the Application the harness connects too. Is filled at Runtime.
+      </P>
+    </TD>  
+  </TR>
+    
+  <TR>
+    <TD WIDTH=417>
+      <P>DescriptionPath (cmdLine -objdsc)</P>
+    </TD>
+    <TD COLSPAN=3 WIDTH=419>
+      <P>Path to the descriptions that contain the desired value set, this is by default empty</P>
+    </TD>
+  </TR>
+  <TR VALIGN=TOP>
+    <TD WIDTH=417>
+      <P>TestDocumentPath (cmdLine -tdoc)</P>
+    </TD>
+    <TD COLSPAN=3 WIDTH=419>
+      <P>The path to the folder where the documents used by the testcases can be found. 
+            Points by default to the temp-directory</P>
+    </TD>
+  </TR>
+  <TR VALIGN=TOP>
+    <TD WIDTH=417>
+      <P>LoggingIsActive</P>
+    </TD>
+    <TD COLSPAN=3 WIDTH=419>
+      <P>Defines if the testcase logs are printed out
+            <br><b>Default:</b> true
+            </P>
+    </TD>
+  </TR>
+  <TR VALIGN=TOP>
+    <TD WIDTH=417>
+      <P>DebugIsActive</P>
+    </TD>
+    <TD COLSPAN=3 WIDTH=419>
+      <P>Defines if debug information is printed out
+            <br><b>Default:</b> false
+            </P>
+    </TD>
+  </TR>
+  <TR VALIGN=TOP>
+    <TD WIDTH=417>
+      <P>TestJob</P>
+    </TD>
+    <TD COLSPAN=3 WIDTH=419>
+      <P>Defines the test job to run. Is filled during Runtime
+            </P>
+    </TD>
+  </TR>
+  <TR VALIGN=TOP>
+    <TD WIDTH=417>
+      <P>LogWriter</P>
+    </TD>
+    <TD COLSPAN=3 WIDTH=419>
+      <P>Name of the class used for logging purposes<br>
+            <b>Default:</b> stats.SimpleLogWriter
+            </P>
+    </TD>
+  </TR>
+  <TR VALIGN=TOP>
+    <TD WIDTH=417>
+      <P>OutProducer</P>
+    </TD>
+    <TD COLSPAN=3 WIDTH=419>
+      <P>Name of the class used for summarizing purposes<br>
+            <b>Default:</b> stats.SimpleOutProducer
+            </P>
+    </TD>
+  </TR>
+  <TR VALIGN=TOP>
+    <TD WIDTH=417>
+      <P>TimeOut</P>
+    </TD>
+    <TD COLSPAN=3 WIDTH=419>
+      <P>If the Office is started by the frame work this is the time
+            after which a reaction is expected, otherwise the Office will be declared
+            as hanging and killed.<br>
+            <b>Default:</b> 30000 milliseconds            
+            </P>
+    </TD>
+  </TR>
+  <TR VALIGN=TOP>
+    <TD WIDTH=417>
+      <P>BASICBRIDGE</P>
+    </TD>
+    <TD COLSPAN=3 WIDTH=419>
+      <P>Path to the file BasicBridge.sxw, normally located in the testdocs folder.<br>
+            Needed by the framework if the testbase is basic_fat. 
+            </P>
+    </TD>
+  </TR>
+  <TR VALIGN=TOP>
+    <TD WIDTH=417>
+      <P>BASICRESPTH</P>
+    </TD>
+    <TD COLSPAN=3 WIDTH=419>
+      <P>Path to the basic sources.<br>
+            Needed by the framework if the testbase is basic_fat. 
+            </P>
+    </TD>
+  </TR>                                                
+</TABLE>
+<HR>
+<P><FONT FACE="Thorndale, serif"><SPAN LANG="ks">Last Modified:
+$Date: 2004/03/10 15:58:39 $ </SPAN></FONT>
+</P>
+</body>
+</HTML>
