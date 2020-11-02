@@ -1,0 +1,364 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <title>OpenOffice.org Conference 2006</title>
+
+    <!-- Include the common CSS stylesheet -->
+    <link rel="stylesheet" type="text/css" href="default.css" />
+  
+    <style type="text/css">
+        .note .name {
+            color: #032360;
+            font-weight: bold;
+            font-size: smaller;
+        }
+
+        .note .name a {
+            color: #032360;
+        }
+
+        .note .info {
+            margin-left: 0.5em;
+            font-size: smaller;
+        }
+    </style>
+
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAkuzZafuM8GG_4CMEnV1TmxSCNaXyfuZr0UwzIxqOUg1gOjwpYhTKGzkj8BffRwBtO4S0RAVYrSwXzA" type="text/javascript"></script>
+    <script type="text/javascript">
+
+    //<![CDATA[
+    
+    var markers = new Object();
+    var map;
+
+    // Create the "Hotel" marker icon
+    var hotel = new GIcon();
+    hotel.image = "img/hotel.gif";
+    hotel.iconSize = new GSize(20, 20);
+    hotel.iconAnchor = new GPoint(10, 10);
+    hotel.infoWindowAnchor = new GPoint(10, 10);
+       
+    // Create the "logoaj" marker icon
+    var logoaj = new GIcon();
+    logoaj.image = "img/logoaj.gif";
+    logoaj.iconSize = new GSize(20, 20);
+    logoaj.iconAnchor = new GPoint(10, 10);
+    logoaj.infoWindowAnchor = new GPoint(10, 10);
+        
+    // Create the "Resto" marker icon
+    var resto = new GIcon();
+    resto.image = "img/resto.gif";
+    resto.iconSize = new GSize(20, 20);
+    resto.iconAnchor = new GPoint(10, 10);
+    resto.infoWindowAnchor = new GPoint(10, 10);
+
+    // Definition of Hotel Marker
+    function Hotel(id, point, name, address, city, opt_phone, opt_url, opt_icon) {
+        GMarker.call(this, point, opt_icon || hotel);
+
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.city = city;
+        this.phone = opt_phone;
+        this.url = opt_url;
+
+        this.clickhandler = GEvent.addListener(this, 'click', this.openInfoWindow);
+    }
+
+    Hotel.prototype = new GMarker(new GLatLng(0, 0));
+
+    Hotel.prototype.openInfoWindow = function() {
+        var text = '<div class="note">';
+        text = text + '<p class="name">';
+
+        if (this.url) {
+            text = text + '<a href="' + this.url + '">';
+        }
+        text += this.name;
+        if (this.url) {
+            text = text + '</a>';
+        }
+        text = text + '</p>';
+        text = text + '<p class="info"><strong>Adresse: </strong>' + 
+                this.address + '<br />' + this.city + '</p>';
+            
+        if (this.phone) {
+            text = text + '<p class="info"><strong>T&eacute;l&eacute;hone: </strong>' +
+                    this.phone + '</p>';
+        }
+        text = text + '</div>';
+
+        this.openInfoWindowHtml(text);
+    }
+        
+    // Definition of Resto Marker
+    function Resto(id, point, name, description) {
+        GMarker.call(this, point, resto);
+
+        this.id = id;
+        this.name = name;
+        this.description = description;
+
+        this.clickhandler = GEvent.addListener(this, 'click', this.openInfoWindow);
+    }
+
+    Resto.prototype = new GMarker(new GLatLng(0, 0));
+
+    Resto.prototype.openInfoWindow = function() {
+        var text = '<div class="note">';
+        text = text + '<p class="name">' + this.name + '</p>';
+        text = text + '<p class="info">' + this.description + '</p>';
+        text = text + '</div>';
+
+        this.openInfoWindowHtml(text);
+    }
+        
+    // Create the "People" marker icon
+    var people = new GIcon();
+    people.image = "img/people.png";
+    people.iconSize = new GSize(50, 50);
+    people.iconAnchor = new GPoint(25, 25);
+    people.infoWindowAnchor = new GPoint(25, 25);
+        
+    // Definition of People Marker
+    function People(id, point, title, description) {
+        GMarker.call(this, point, people);
+
+        this.id = id;
+        this.title = title;
+        this.description = description;
+
+        this.clickhandler = GEvent.addListener(this, 'click', this.openInfoWindow);
+    }
+
+    People.prototype = new GMarker(new GLatLng(0, 0));
+
+    People.prototype.openInfoWindow = function() {
+        var text = '<div class="note">';
+        text = text + '<p class="name">' + this.title + '</p>';
+        text = text + '<p class="info">' + this.description + '</p>';
+        text = text + '</div>';
+
+        this.openInfoWindowHtml(text);
+    }
+
+    function addMarker(marker) {
+        if (marker) {
+            markers[marker.id] = marker;
+            map.addOverlay(marker);
+        }
+    }
+
+
+    function load() {
+      if (GBrowserIsCompatible()) {
+        
+        map = new GMap2(document.getElementById("map"));
+
+        // Center to view quite all the map
+        map.setCenter(new GLatLng(45.77650, 4.85595), 13);
+        map.addControl(new GLargeMapControl());
+        map.addControl(new GOverviewMapControl());
+        map.addControl(new GMapTypeControl());
+
+
+        // Conferences Place
+        addMarker(new People("main", new GLatLng(45.784363, 4.882891), 
+            "Lieu principal des conf&eacute;rences",
+            "C'est ici que se tiendront les diff�rents fils et stands."));
+
+        addMarker(new People("capelle", new GLatLng(45.78353, 4.88129),
+            "Lieu de conf�rence pl�nieres",
+            "Toutes les conf�rences pl�ni�res auront lieu dans l'amphi Capelle."));
+
+        // Restaurants
+        addMarker(new Resto("ru", new GLatLng(45.78079, 4.876041),
+            "Restaurant Universitaire",
+            "Ici vous attends un repas chaud."));
+        
+        addMarker(new Resto("sandwiches", new GLatLng(45.784546, 4.882811),
+            "Sandwiches",
+            "Pour prendre des sandwiches et manger rapidement."));
+
+        // Hotels
+        addMarker(new Hotel("insa_h", new GLatLng(45.78483, 4.874453),
+            "INSA b&acirc;timent H",
+            "20, avenue Albert Einstein",
+            "69100 Villeurbanne",
+            null,
+            "accommodation_fr.html#insa"));
+        
+        addMarker(new Hotel("insa_f", new GLatLng(45.784284, 4.871706),
+            "INSA b&acirc;timent F",
+            "20, avenue Albert Einstein",
+            "69100 Villeurbanne",
+            "accommodation_fr.html#insa"));
+
+        addMarker(new Hotel("yougthhotel", new GLatLng(45.7603077, 4.824457),
+            "Auberge de jeunesse",
+            "41-45, montee du Chemin Neuf",
+            "69005 Lyon",
+            "+33 (0)4 78 15 05 50",
+            "accommodation_fr.html#yougthhotel",
+            logoaj));
+
+        // Etap Hotel Villeurbanne
+        addMarker(new Hotel("hotel3", new GLatLng(45.78226, 4.890707), 
+            "Etap Hotel Villeurbanne", 
+            "3 rue 8 mai 1945",
+            "69100 Villeurbanne",
+            "+33 (0)8 92 68 09 41",
+            "accommodation_fr.html#hotel3"));
+
+        // Etap Hotel Caluire
+        addMarker(new Hotel("hotel2", new GLatLng(45.7904, 4.8584), 
+            "Etap Hotel Caluire et Cuire",
+            "154 grande rue St Clair",
+            "69300 Caluire et Cuire",
+            "+33 (0)8 92 68 04 91",
+            "accommodation_fr.html#hotel2"));
+        
+        // Holiday Inn Villeurbanne
+        addMarker(new Hotel("hotel4", new GLatLng(45.7790, 4.8742),
+            "Holiday Inn Villeurbanne",
+            "130 boulevard 11 novembre 1918",
+            "69100 Villeurbanne",
+            "+33 (0)4 78 89 95 95",
+            "accommodation_fr.html#hotel4"));
+        
+        // Mercure Charpennes
+        addMarker(new Hotel("hotel5", new GLatLng(45.7710, 4.8633),
+            " H&ocirc;tel Mercure Lyon Charpennes",
+            "7 place Charles Hernu",
+            "69100 Villeurbanne",
+            "+33 (0)4 72 44 46 46",
+            "accommodation_fr.html#hotel5"));
+
+        // Hotel des congres
+        addMarker(new Hotel("hotel1", new GLatLng(45.7772, 4.8618), 
+            "H&ocirc;tel des Congr&egrave;s",
+            "place Rivi&egrave;re",
+            "69100 Villeurbanne",
+            "+33 (0)4 72 69 16 16",
+            "accommodation_fr.html#hotel1"));
+        
+        // Hotel britania
+        addMarker(new Hotel("hotel6", new GLatLng(45.76872, 4.857083), 
+            "H&ocirc;tel Britania",
+            "7 rue Prof. Weill",
+            "69006 Lyon",
+            "+33 (0)4 78 52 86 52",
+            "accommodation_fr.html#hotel6"));
+            
+        // Camping
+        addMarker(new Hotel("camping", new GLatLng(45.81976, 4.7614574),
+            "Camping International",
+            "Porte de Lyon",
+            "69570 Dardilly",
+            "+33 (0)4 78 35 64 55",
+            "accommodation_fr.html#camping"));
+
+        // Centre international de s�jour
+        addMarker(new Hotel("cis", new GLatLng(45.729715, 4.8676943),
+            "Centre Internat. de s&eacute;jour",
+            "103, Bd des &Eacute;tats-Unis",
+            "69008 Lyon",
+            "+33 (0)4 37 90 42 42",
+            "accommodation_fr.html#cis"));
+
+        // Open the marker corresponding to the hash
+        var hash = location.hash;
+        if (hash) {
+            hash = hash.substring(1);
+            var marker = markers[hash];
+
+            if (marker) {
+                marker.openInfoWindow();
+            }
+        }
+      }
+    }
+
+    //]]>
+    </script>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body onload="load()" onunload="GUnload()">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/marketing/">marketing</a>&nbsp;&raquo;&nbsp;<a href="/marketing/ooocon2006/">ooocon2006</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+
+<div id="content">
+
+	<div id="logo">
+        <a href="/conference/index.html">
+            <img style="border: 0px solid" 
+                src="OOoConLyon.png" 
+                alt="OpenOffice.org Conferences logo" />
+        </a>
+    </div>
+
+    <div id="title">
+        <h3>OpenOffice.org Conference (OOoCon 2006)</h3>
+        <p>Carte</p>
+    </div>
+
+    <noscript>
+        <h3>Probl&egrave;me de Javascript</h3>
+
+        <p>Pour visualiser la carte de cette page, vous devez avoir un navigateur 
+        supportant le javascript ou activer le javascript dans les pr&eacute;f&eacute;rences de
+        votre navigateur.</p>
+    </noscript>
+    <div id="map" style="width: 600px; height: 400px; text-align:center"></div>    
+   
+</div>
+
+<!-- Right menu -->
+<div id="menu">
+	<p id="langLine">
+		<a class="lang" href="map.html">En</a> -
+		<span class="thisLang">Fr</span>
+	</p>
+    <h3>Qu'est que OOoCon</h3>
+        <p><a href="index_fr.html">Accueil</a></p>
+    <h3>Comment participer</h3>
+        <p><a href="sponsorship.html">Sponsors</a></p>
+        <p><a href="registration_fr.html">Inscription</a></p>
+    <h3>Informations</h3>
+        <p><a href="travel_fr.html">Voyage</a></p>
+        <p><a href="accommodation_fr.html">H&eacute;bergement</a></p>
+        <p>Carte</p>
+    <h3>Programme</h3>
+        <p><a href="schedule.html">R&eacute;sum&eacute;</a></p>
+        <p><a href="schedule/monday.html">Lundi</a></p>
+        <p><a href="schedule/tuesday.html">Mardi</a></p>
+        <p><a href="schedule/wednesday.html">Mercredi</a></p>
+
+</div>
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
