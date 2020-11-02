@@ -1,0 +1,248 @@
+<html><head>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+<title>Font Trouble Shooting Guide</title>
+</head>
+<body>
+<h2>Font Trouble Shooting Guide</h2>
+
+<table border="1" width="100%" cellspacing="0" cellpadding="2" bordercolor="#99ccff" bgcolor="#FFFFFF">
+  <td bgcolor="#f0f0f0">
+    These faq have been compiled over the span of OpenOffice's lifetime.
+    Most of the information is now out of date.
+    See <a href="https://wiki.openoffice.org/wiki/Documentation/FAQ">the OpenOffice FAQ page</a> on our official wiki
+    for up-to-date information.
+    If you find instances that need updating, let us know by sending a note to <a href="mailto:dev@openoffice.apache.org">dev@openoffice.apache.org</a>.
+  </td>
+</table>
+
+<i>Added 05 May 2002</i><p>
+&nbsp;- <a HREF="mailto:dev@gsl.openoffice.org">Christof Pintaske</a><p>
+        <p>This guide tries to give hints and backgrounds for the most frequent reported problems together with rules of thumb to get over them. The problems described here refer to OpenOffice.org versions 641D and 1.0 on the Linux and the Solaris platform. If you have problems with older versions please update to the current stable release first and see if the problem has already been fixed.</p>
+        <p>This guide is written with the intention to be useful. Nevertheless don't expect it to be complete or error free. It is a work in progress. To suggest enhancements, corrections or additions please write a mail to dev@gsl.openoffice.org .</p>
+        <p>The pattern "openoffice_dir" refers to the directory of your OpenOffice.org installation.</p>
+                <h3>Table of Contents</h3>
+                <ul>
+                        <li><a href="#1">Font antialiasing does not work</a></li>
+                        <li><a HREF="#2">Disable antialiased fonts</a></li>
+                        <li><a HREF="#3">Antialiased fonts are gone on second and forthcoming start of OpenOffice.org application</a></li>
+                        <li><a HREF="#4">Bad quality of screen font rasterization</a></li>
+                        <li><a HREF="#5">Adding TrueType or Type1 fonts to OpenOffice.org</a></li>
+                        <li><a HREF="#6">Application crashes</a></li>
+                        <li><a HREF="#7">Bad font appearance in PDF documents</a></li>
+                        <li><a HREF="#8">User interface font looks garbled</a></li>
+                        <li><a HREF="#9">Changing the user interface font</a></li>
+                        <li><a HREF="#10">Reporting a font related bug</a></li>
+                </ul>
+                <hr>
+                <h3><a name="1">Font antialiasing does not work</a></h3>
+                <h4>Symptom</h4>
+                        <p>Fonts aren't displayed antialiased but appear crisp</p>
+                <h4>Background<h4>
+                        <p>OpenOffice.org uses XFonts as well as fonts that are rendered through FreeType as explained below. While it is possible to have FreeType rasterized fonts displayed antialiased this functionality isn't not implemented for XFonts.</p>
+                        <p>Also, not all displays allow antialiasing. Antialiasing is either provided by the X Rendering extension of an XFree86 XServer or by drawing text by means of getting and putting images (XGetImage/XPutImage) from and to the window.</p>
+                <h4>Trouble shooting</h4>
+                        <p>XFonts are not displayed antialiased. Therefore, just seeing your user interface font rendered without Antialiasing is not enough to conclude  that the antialiasing engine is malfunctioning. The interface font is selected by font shapes and does not prioritize antialiasing.</p>
+                        <p>To check for antialiased fonts open a OpenOffice.org writer document. A fast way to check is to open the font list box and browse through the list of fonts. To examine the complete set of fonts you need to open the "Format -> Character" dialog and select the "Font" tab. In that tab you can select all available fonts in different faces (regular, bold, italic, ...). If one of them is antialiased, antialiasing works in principle. If in doubt you can use the "xmag" program to magnify the shown font sample. Have a close look if the font "OpenSymbol" is available and appears antialiased. "OpenSymbol" ships with OpenOffice.org and should be displayed antialiased.</p>
+                        <p>For proper antialiasing use XFree86, revisions 4.0.2, 4.0.3, 4.1, or 4.2 (or higher). Antialiasing is not used when OpenOffice.org detects the X Rendering extension (Render) together with a Xinerama extension. Antialiasing is also disabled on color displays of 8 bit depth (8 bit PseudoColor visuals).</p>
+                        <p>To check if the X Rendering extension is supported by your XServer please run the program "xdpyinfo" and check it's output for the string RENDER in the list of extensions. For example, running xdpyinfo | grep RENDER will show you if the RENDER extension is available. Seeing antialiased text working in Mozilla or KDE applications is usually a that your X Rendering extension is working.</p>
+                        <p>To check for the Xinerama extension do likewise, but search for the string XINERAMA.</p>
+                        <p>On displays of 24 bit or 32 bit color depth and on displays of 8 bit depth grayscale the XGetImage/XPutImage approach is used to display text antialiased.</p>
+                        <p>Small font sizes are not displayed antialiased by default. You can modify the size at which you want fonts to be antialiased by opening the "Tools -> Options -> OpenOffice.org -> View" dialog. Make sure the box "Screen font antialiasing" is checked and modify the value in the field below. However, most fonts don't display very legible when small font sizes are antialiased.</p>
+                        <p>If you expect a specific font to appear antialiased but it does not please check if it is added correctly (See below).</p>
+                <h4>See also</h4>
+                        <ul>
+                                <li><a HREF="#3">Antialiased fonts are gone on second and forthcoming start of OpenOffice.org application</a></li>
+                                <li><a HREF="#5">Adding TrueType or Type1 fonts to OpenOffice.org</a></li>
+                        </ul>
+<hr>
+        <h3><a NAME=2>Disable antialiased fonts</a></h3>
+                <p>Open the "Tools -> Options -> OpenOffice.org -> View" dialog. Uncheck the "Screen font antialiasing" check box. Leave the dialog by pressing the "OK" button. The change should take effect immediately.</p>
+<hr>
+        <h3><a NAME=3>Antialiased fonts are gone on second and subsequent starts of the OpenOffice.org application</a></h3>
+                <h4>Symptom</h4>
+                        <p>Fonts installed either in the operating system or in the OpenOffice.org installation tree are only antialiased for the first application run but are gone on the second and all following runs.</p>
+                <h4>Background</h4>
+                        <p>The code that interprets the font cache openoffice_dir/share/psprint/pspfontcache contains a bug that incorrectly evaluates the font attributes. While fonts with bold and italic attributes are still available as antialiased fonts the regular style is not. In most cases this style is replaced with the corresponding font taken from the XServer and is thus not antialiased.</p>
+                <h4>Workaround</h4>
+                        <p>You need to remove the font cache file and prevent it's future creation. Please close any running instances of the OpenOffice.org. Open a shell or a terminal. Change to the directory that contains your OpenOffice.org installation. If you made a multi user installation (i.e. you installed OpenOffice.org with the /net or -net command line argument) then please change to the directory of the user-installation. There please issue the following commands:</p>
+                        <table>
+                                <tr>
+                                        <td>Single User Installation</td>
+                                        <td>Multi User Installation</td>
+                                </tr>
+                                <tr>
+                                        <td>rm share/psprint/pspfontcache</td>
+                                        <td>rm user/psprint/pspfontcache</td>
+                                </tr>
+                                <tr>
+                                        <td>touch share/psprint/pspfontcache</td>
+                                        <td>touch user/psprint/pspfontcache</td>
+                                </tr>
+                                <tr>
+                                        <td>chmod 444 share/psprint/pspfontcache</td>
+                                        <td>chmod 444 user/psprint/pspfontcache</td>
+                                </tr>
+                        </table>
+                                <p>Then restart OpenOffice.org. The problem should be gone now. Close OpenOffice.org and start it a second time. If the problem is back double check the font cache file:</p>
+                        <table>
+                                <tr>
+                                        <td>Single User Installation</td>
+                                        <td>Multi User Installation</td>
+                                </tr>
+                                <tr>
+                                        <td>ls -l share/psprint/pspfontcache</td>
+                                        <td>ls -l user/psprint/pspfontcache</td>
+                                </tr>
+                        </table>
+                        <p>should report a file of zero length and no writing permissions granted, similar to:</p>
+                        <pre>
+                                -r--r--r-- 1 joe user 0 May 2 12:32 pspfontcache
+                        </pre>
+                <h4>See also</h4>
+                        <ul>
+                                <li>Have a look at <a HREF="//issues/show_bug.cgi?id=4366">issue 4366</a> in Issue Tracker for an up to date discussion of the problem.</li>
+                        </ul>
+
+ <hr>
+        <h3><a NAME=4>Bad quality of screen font rasterization</a></h3>
+                <h4>Symptom</h4>
+                        <p>TrueType fonts look chiseled and angular on screen and/or have bad spacing while the same font looks quite nice in Mozilla, Gnome or KDE applications.</p>
+                <h4>Problem description</h4>
+                        <p>OpenOffice.org uses the FreeType library for font rasterization. The FreeType library has been compiled with auto-hinting enabled and byte-hinting disabled. While auto-hinting does a reasonable job for grid fitting it's result is still inferior to byte-hinting for many fonts. Please have a look at http://freetype.sourceforge.net/patents.html for a discussion of that issue.</p>
+                <h4>Trouble shooting</h4>
+                        <p>Currently there is no workaround for this issue. It is recommended to use an XServer that supports the antialiased graphical representation of glyphs for improved readability.</p>
+<hr>
+        <h3><a NAME=5>Adding TrueType or Type1 fonts to OpenOffice.org</a></h3>
+                <h4>Symptom</h4>
+                        <p>Fonts are installed on the system, but they do not appear in the font list box of the OpenOffice.org writer application.</p>
+                        <p>Fonts are installed as TrueType or Type1 fonts and are expected to be displayed antialiased but it are not, even though antialiasing is working in principle.</p>
+                <h4>Background</h4>
+                        <p>OpenOffice.org uses two principal foundries of fonts. The first (legacy) foundry is the XServer. These fonts are available for displaying only. The second are TrueType and Type1 (PostScript) fonts that are read from a file. They are rasterized using the FreeType library. They are available for displaying and printing purposes. If a font is available from both foundries rastering by FreeType is preferred.</p>
+                        <p>The writer application offers only fonts that are available for both the display and for printing. Since fonts advertised only by the XServer are not available for printing they often do not show up in the font list box of the writer application. They will only show up if the font name matches a font that is resident in the selected printer (standard fonts like Helvetica, Times, Courier are available in virtually all PostScript printer models).</p>
+                <h4>Adding fonts</h4>
+                        <p>To install fonts for all OpenOffice.org applications it is sufficient that they can be found in the filesystem. OpenOffice.org searches the following directories for fonts:</p>
+                        <table>
+                                <tr>
+                                        <td>&nbsp; </td>
+                                        <td>Solaris</td>
+                                        <td>Linux</td>
+                                </tr>
+                                <tr>
+                                        <td>1</td>
+                                        <td>The directories /usr/openwin/lib/X11/fonts/Type1 and /usr/openwin/lib/X11/fonts/Type1/sun</td>
+                                        <td>The directory /usr/X11R6/lib/X11/fonts/Type1</td>
+                                </tr>
+                                <tr>
+                                        <td>2</td>
+                                        <td>Locale dependend directories found in the file /usr/openwin/lib/locale/"your_locale"/OWfontpath</td>
+                                        <td>The output of the command /usr/sbin/chkfontpath or chkfontpath</td>
+                                <tr>
+                                        <td>3</td>
+                                        <td>The fontpath as returned by XGetFontPath()</td>
+                                        <td>Same as Solaris</td>
+                                </tr>
+                                <tr>
+                                        <td>4</td>
+                                        <td>Directories given by the environment variable SAL_FONTPATH_PRIVATE, usually this variable is set by the soffice script to "openoffice_dir"/share/fonts/truetype</td>
+                                        <td>Same as Solaris</td>
+                                </tr>
+                        </table>
+                        <p>If the fonts are installed in one of the above mentioned directories they should be available for OpenOffice.org. The fontpath is a comma separated list of directories that is searched for fonts by the XServer. Please note that as given in (4) OpenOffice.org searches this path and therefor examines the same font files as the XServer, if the XServer is running on the same machine. Therfore setting up the font for your local XServer is enough.</p>
+                        <p>If you want to add fonts that are used exclusively in OpenOffice.org (i.e. not by the XServer) use the spadmin utility and add the fonts to your OpenOffice.org installation (to the directory openoffice_dir/share/fonts/truetype). Adding fonts with spadmin is described in the
+<a href="http://documentation.openoffice.org/setup_guide/index.html#11">setup guide</a>.
+</p>
+                        <p>The same is true if you want to make sure that your fonts are available on a remote display connection. Since the fontpath is only valid on the machine the XServer is running on you are better off installing the fonts locally on your machine or on a directory that is shared between the XServer and OpenOffice.org.</p>
+                        <p>Most home user will run their XServer locally. They only need to add the fonts to the local fontpath.</p>
+                <h4>Trouble shooting</h4>
+                        <p>OpenOffice.org will handle binary encoded Type1 fonts (".pfb" suffix) as well as text encoded Type1 fonts (".pfa" suffix). However, you still  need to have the corresponding Adobe Font Metric file (AFM) installed. This file needs to have the same base name as the font file (i.e. Times.pfa plus Times.afm or Helvetica.pfb plus Helvetica.afm). It must be installed in the same directory as the font file or in a subdirectory named "afm".</p>
+                        <p>If you are not sure that you have installed the font correctly you can examine the "user/psprint/pspfontcache" file, or if you made a network installation, the "share/psprint/pspfontcache" file. This file is kind of hard to read but it states all font files that have been found during the last run of OpenOffice.org. "| grep" is your friend. Even though it is safe to remove this file please be careful not to modify it.</p>
+                <h4>See also</h4>
+                <ul>
+                <li><a HREF="#3">Antialiased fonts are gone on second and forthcoming start of OpenOffice.org application</a></li>
+                </ul>
+<hr>
+        <h3><a NAME=6>Application crashes</a></h3>
+        <h4>Symptom</h4>
+        <p>Either the soffice or the setup application do not start.</p>
+        <p>Browsing through the font list box crashes the application.</p>
+        <h4>Background</h4>
+        <p>Reading or interpreting information of a font file can lead to a segmentation violation in the FreeType rasterizer. Most often this is a problem with TrueType fonts that do not strictly follow the TrueType font format specification.</p>
+        <h4>Trouble shooting</h4>
+        <p>Since crashes can be caused by quite many reasons it's important to explicitly identify the problem as a font problem. To do so it's useful to reset the fonts in use to the bare minimum. On a Linux box this can be achieved by restricting the fontpath with the command "xset":</p>
+        <p>xset fp /usr/X11R6/lib/X11/fonts/100dpi,/usr/X11R6/lib/X11/fonts/75dpi,/usrX11R6/lib/X11/fonts/Type1,/usr/X11R6/lib/X11/fonts/misc</p>
+        <p>It is necessary to issue the command as a single command line without having spaces between the path elements and the ",". Since OpenOffice.org is reasonably tested with the core set of X fonts any font related crash should no longer show up. If the problem persists it's probably not a font problem.</p>
+        <p>The next step is to exactly identify the font that causes the crash. The rule of thumb is to enlarge the fonts in use up to the original settings. The command</p>
+        <pre>
+        xset fp default
+        </pre>
+        <p>restores the original settings and will make the problem reappear. The fontpath can be shown with</p>
+        <pre>
+        xset -q
+        </pre>
+        <p>The commands</p>
+        <pre>
+        xset fp+ "path"
+        </pre>
+        <pre>
+        xset fp- "path"
+        </pre>
+        <p>add and remove path elements from and to the fontpath. By consecutively removing directories from the fontpath until the problem disappears it's possible to identify the directory that contains the problematic font. It's necessary to restart OpenOffice.org after each fontpath manipulation.</p>
+        <p>To identify a single problematic font in a directory copy all the fonts to a directory where you have write access. Let the fontpath point to this directory and exclude the original directory from the fontpath. Move the fonts either on-by-one or in chunks into a different directory. Restart OpenOffice.org until the problem disappears. The buggy font is in the last chunk you moved out.</p>
+        <p>If you have identified the font that causes the problem please file a bug in Issue Tracker.</p>
+        <h4>See also</h4>
+        <ul>
+        <li>More information about the command "xset" can be found in the according manpage by entering the command "<a HREF="man://xset/usr/X11R6/man/man1/xset.1x.gz">man xset</a>".</li>
+        </ul>
+
+<hr>
+        <h3><a NAME=7>Bad font appearance in PDF documents</a></h3>
+        <h4>Symptom</h4>
+        <p>Viewing a PDF document in Acrobat Reader shows the right contents, but the text is not antialiased but is roughly rasterized and very hard to read.</p>
+        <h4>Background</h4>
+        <p>Creating a PDF document is a 2-step process. The file is printed into a temporary PostScript document which in turn is converted to PDF. Eventually both documents need to embed font information to be rendered appropriately. The quality of the final document is heavily affected by how this is done. Using an advanced printer driver that is capable of understanding TrueType glyph information allows the embedding of a TrueType font in the Type42 format. This format is understood by ghostscript and acrobat distiller and therefore can be maintained in the PDF document. The GENERIC driver does not allow embedding as Type42 and forces the creation of Type3 font information. During conversion from PostScript to PDF this font information is converted into a graphical representation that displays poorly.</p>
+        <h4>Trouble shooting</h4>
+        <p>Don't use the GENERIC driver for PDF generation. Either use the Distiller driver or a printer driver of a more recent printer like the HP5 or Xerox series.</p>
+        <p>See also</p>
+        <ul>
+        <li>Administration of printers and creation of PDF files in general is explained in the <a HREF="http://documentation.openoffice.org/setup_guide/index.html#11">setup guide</a></li>
+        </ul>
+
+<hr>
+        <h3><a NAME=8>User interface font looks garbled</a></h3>
+        <h4>Symptom</h4>
+        <p>Some RedHat users complained that the menu and user interface elements of OpenOffice are almost unreadable or that no font at all is visible.</p>
+        <h4>Background</h4>
+        <p>RedHat 7.2 ships with ulT1mo latin2 fonts. One of the fonts is installed as "Arial" typeface. There is a fair chance that OpenOffice.org chooses this font as the UI font.</p>
+        <h4>Trouble shooting</h4>
+        <p>It is worth a try to remove the fonts from the fontpath since this fixed the problem for many users.</p>
+        <p>Check if your fontpath settings include this path. Issue the command "xset -q" in a shell. Check if "/usr/X11R6/lib/X11/fonts/latin2/Type1" is contained in the list that belongs to the "Font Path:" section.</p>
+        <p>If it is please remove it from your fontpath using the "xset -fp "path_element" " command, restart OpenOffice.org and see if your problem's solved. To permanently remove this directory from the fontpath you need to edit your XServers configuration, usually found in the directory /etc/X11/XF86Config-4.</p>
+        <p>If you are using a font server please run the command "chkfontpath" or if that fails the command "/usr/sbin/chkfontpath". Again check the output for the occurrence of the above mentioned path. To remove the path you need to edit the font server configuration. Usually you'll find it in the file /etc/X11/xfs/config. After changing the configuration you need to restart the font server (run the command "/etc/rc.d/init.d/xfs restart" with root permissions). Please double check with your system administrator before changing system configuration files. Make a backup of the file before you are going to change it.</p>
+        <h4>See also</h4>
+        <ul>
+        <li><a HREF="#9">Changing the user interface font</a></li>
+        <li><a HREF="#4">Bad quality of screen font rasterization</a></li>
+        </ul>
+
+<hr>
+        <h3><a NAME=9>Changing the user interface font</a></h3>
+        <p>There is no dedicated option to just change the font in the User Interface in OpenOffice.org versions that are based on the 641 builds (including OpenOffice 1.0). Nevertheless it is possible to change the font by the general font replacement mechanism. Select</p>
+        <pre>
+        Tools -> Options -> OpenOffice.org -> Font Replacement
+        </pre>
+        <p>from the menu. Check the "Apply Replacement Table" check box. Replace the font</p>
+        <pre>
+        Andale Sans UI
+        </pre>
+        <p>with the desired font. You probably will not find "Andale Sans UI" stated in the font list box of the font to be replaced but you have to write it manually into the "Font" field. Please choose one of the fonts from the dropdown list box for the "Replace with" entry. The settings apply immediately after pressing the "OK" button.</p>
+
+<hr>
+        <h3><a NAME=10>Reporting a font related bug</a></h3>
+        <p>To report a bug about OpenOffice.org please follow the guidelines you'll find at <a HREF="http://qa.openoffice.org/issue_handling/project_issues.html">http://qa.openoffice.org/issue_handling/project_issues.html</a> especially <a HREF="http://qa.openoffice.org/issue_handling/bug_writing_guidelines.html">http://qa.openoffice.org/issue_handling/bug_writing_guidelines.html</a>. Nevertheless for reporting font related bugs some more information is often desirable.</p>
+        <p>Please report your display settings. You can create a decent summary by simply running the command "xdpyinfo". Just add the output as an attachment. Please note if you are running on a remote display connection (i.e. that the XServer is running on machine different from the machine OpenOffice.org is running on).</p>
+        <p>Please report your fontpath settings. Just run the program "xset -q" and again add the output as an attachment. If you are using a font server run the program "chkfontpath". If this program cannot be found by your shell or command interpreter you may need to run "/usr/sbin/chkfontpath".</p>
+        <p>Please state the Linux distribution. Please note as well if you have made any updates to the system regarding display or desktop (update of the XServer, different KDE or Gnome desktop).</p>
+        <p>Please add a note if you have added fonts that are not shipping with your distribution.</p>
+</body>
+</html>
+
