@@ -1,0 +1,1017 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>Cachemaps</TITLE>
+	<STYLE>
+	<!--
+		A:link { color: #444488 }
+		A:visited { color: #444488 }
+	-->
+	</STYLE>
+</head>
+<body LINK="#444488" VLINK="#444488">
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 STYLE="page-break-before: always">
+	<COL WIDTH=75>
+	<TR>
+		<TD BGCOLOR="#666699">
+			<H1 ALIGN=CENTER STYLE="margin-top: 0cm; text-decoration: none"><A HREF="http://www.openoffice.org/"><IMG SRC="../images/open_office_org_logo.gif" NAME="Graphic1" ALT="OpenOffice.org" ALIGN=RIGHT WIDTH=126 HEIGHT=53 BORDER=0></A><FONT COLOR="#ffffff"><FONT SIZE=6>Cachemaps</FONT></FONT></H1>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 NOSHADE>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 STYLE="page-break-before: always">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><FONT COLOR="#ffffff"><FONT SIZE=4>Contents</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0cm"><A HREF="#Abstract">Abstract</A><BR>
+			<A HREF="#Solution1">Solution 1 (Single Mutex)</A><BR>
+			<A HREF="#Solution2">Solution 2 (Weak References)</A><BR>
+			<A HREF="#Solution3">Solution 3 (Best of Both Worlds)</A><BR>
+			<A HREF="#Measurements">Performance Measurements</A></P>
+			<P><BR></P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="Abstract"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Abstract</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">I quite often have the need for a construct I will call a
+			<I>cachemap.</I> A cachemap is like an ordinary map (or hashmap), in
+			that it maps from keys (normally strings) to objects, but it also
+			controls the lifetime of the mapped objects. If a client requests an
+			object that is not yet instantiated, a (refcounted) instance is
+			created, inserted into the cachemap, and returned to the client. If
+			the client no longer needs the object (the refcount of the object
+			drops to zero), it is automatically removed from the cachemap. And if
+			a client requests an object that is already present in the cachemap
+			(because it was requested by a client before, and its refcount is
+			still positive), the present instance is returned. Skeleton C++ class
+			definitions for the cachemap and the objects it manages could look
+			like the following:</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+<PRE>class ObjectContainer // the cachemap
+{
+public:
+    rtl::Reference&lt; Object &gt; get(rtl::OUString const &amp; rKey);
+};
+
+class Object // the objects managed by the cachemap
+{
+public:
+    void acquire() SAL_THROW(());
+
+    void release() SAL_THROW(());
+};</PRE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">The problems in implementing this are that (1) the cachemap must not
+			<FONT SIZE=2><FONT FACE="Courier New, monospace">acquire()</FONT></FONT>
+			the objects it currently has in its map (otherwise, the refcounts of
+			those objects could never drop to zero, and they would never be
+			removed from the map), and (2) in a multi-threaded environment there
+			is a problem when one thread does a final <FONT SIZE=2><FONT FACE="Courier New, monospace">release()</FONT></FONT>
+			of an object (refcount drops to zero and object is removed from the
+			map) and at the same time another thread happens to call <FONT SIZE=2><FONT FACE="Courier New, monospace">get()</FONT></FONT>
+			to request that very object.</P>
+			<P STYLE="margin-bottom: 0.1cm">Below, I describe three different implementations that solve these
+			problems. The first solution was my initial idea, but it tends to be
+			slow. The second is based on weak references, but it turned out to be
+			slow, too. The third combines ideas from the other two
+			solutions---and it turned out to be fast. So, if you are interested
+			in boiler plate code for a fast implementation of the cachemap
+			pattern, turn to <A HREF="#Solution3">the third solution</A>
+			directly.</P>
+			<P STYLE="margin-bottom: 0.1cm">The three solutions all follow the same conventions. They
+			implement an <FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer<I>N</I></FONT></FONT>
+			(the cachemap, mapping from strings to objects) and a corresponding
+			<FONT SIZE=2><FONT FACE="Courier New, monospace">Object<I>N</I></FONT></FONT>
+			(the refcounted objects managed by the cachemap). The source code
+			presented here is also available within the ucb project
+			(<A HREF="http://www.openoffice.org/source/browse/ucb/ucb/workben/cachemap/"><FONT SIZE=2><FONT FACE="Courier New, monospace">ucb/workben/cachemap</FONT></FONT></A>),
+			and it is presented here without the (somewhat longish) copyright
+			headers.</P>
+			<P ALIGN=LEFT><BR></P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="Solution1"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Solution 1 (Single Mutex)</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">The
+			combined header file for both <FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer1</FONT></FONT>
+			and <FONT SIZE=2><FONT FACE="Courier New, monospace">Object1</FONT></FONT> is
+			<A HREF="http://www.openoffice.org/source/browse/ucb/ucb/workben/cachemap/cachemapobject1.hxx"><FONT SIZE=2><FONT FACE="Courier New, monospace">cachemapobject1.hxx</FONT></FONT></A>:</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+<PRE>#ifndef <A HREF="#validguardnames">INCLUDED_UCB_CACHEMAPOBJECT1_HXX</A>
+#define INCLUDED_UCB_CACHEMAPOBJECT1_HXX
+
+#ifndef _OSL_INTERLOCK_H_
+#include &quot;osl/interlck.h&quot;
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include &quot;osl/mutex.hxx&quot;
+#endif
+#ifndef _RTL_REF_HXX_
+#include &quot;rtl/ref.hxx&quot;
+#endif
+#ifndef _SAL_TYPES_H_
+#include &quot;sal/types.h&quot;
+#endif
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include &quot;salhelper/simplereferenceobject.hxx&quot;
+#endif
+
+#ifndef <A HREF="#stdguards">INCLUDED_MAP</A>
+#include &lt;map&gt;
+#define INCLUDED_MAP
+#endif
+#ifndef INCLUDED_MEMORY
+#include &lt;memory&gt;
+#define INCLUDED_MEMORY
+#endif
+
+namespace rtl { class OUString; }
+namespace ucb { namespace cachemap { class Object1; } }
+
+namespace ucb { namespace cachemap {
+
+class ObjectContainer1: <A HREF="#refcountedcontainer">public salhelper::SimpleReferenceObject</A>
+{
+public:
+    ObjectContainer1();
+
+    virtual ~ObjectContainer1() SAL_THROW(());
+
+    rtl::Reference&lt; Object1 &gt; get(rtl::OUString const &amp; rKey);
+
+private:
+    typedef <A HREF="#map">std::map</A>&lt; rtl::OUString, Object1 * &gt; Map;
+
+    Map m_aMap;
+    osl::Mutex m_aMutex;
+
+    void releaseElement(Object1 * pElement) SAL_THROW(());
+
+    <A HREF="#friends">friend class Object1;</A> // to access Map, releaseElement()
+};
+
+class Object1
+{
+public:
+    inline void acquire() SAL_THROW(())
+    { osl_incrementInterlockedCount(&amp;m_nRefCount); }
+
+    inline void release() SAL_THROW(())
+    { m_xContainer-&gt;releaseElement(this); }
+
+private:
+    rtl::Reference&lt; ObjectContainer1 &gt; m_xContainer;
+    ObjectContainer1::Map::iterator m_aContainerIt;
+    oslInterlockedCount m_nRefCount;
+
+    inline Object1(rtl::Reference&lt; ObjectContainer1 &gt; const &amp; rContainer);
+
+    inline ~Object1() SAL_THROW(());
+
+    Object1(Object1 &amp;); // not implemented
+    void operator =(Object1); // not implemented
+
+    friend class ObjectContainer1;
+        // to access m_aContainerIt, m_nRefCount, Object1(), ~Object1()
+#if defined WNT
+    friend struct std::auto_ptr&lt; Object1 &gt; // to access ~Object
+        // work around compiler bug...
+#else // WNT
+    <A HREF="#autoptrfriend">friend class std::auto_ptr&lt; Object1 &gt;;</A> // to access ~Object1()
+#endif // WNT
+};
+
+} }
+
+#endif // INCLUDED_UCB_CACHEMAPOBJECT1_HXX</PRE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">A few notes:</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0.1cm"><A NAME="validguardnames"></A>It is a good idea to use valid
+				C++ identifiers as include guards for header files. That is, do not
+				use identifiers that start with an underline followed by an upper
+				case letter (e.g., <FONT SIZE=2><FONT FACE="Courier New, monospace">_UCB_CACHEMAPOBJECT1_HXX_</FONT></FONT>)
+				or that contain two underlines in a row, because those identifiers
+				are reserved for internal use by the compiler and standard library
+				implementation. (<A HREF="http://cseng.aw.com/book/0,,0201633620,00.html">Lakos</A>,
+				section 2.4, suggestes the <FONT SIZE=2><FONT FACE="Courier New, monospace">INCLUDED_<I>XXX</I></FONT></FONT>
+				style.)</P>
+				<LI><P STYLE="margin-bottom: 0.1cm"><A NAME="stdguards"></A>Use the convention of (redundant but
+				compilation time reducing) external include guards for standard
+				header files, too. For this to work, it is necessary that everybody
+				use the same identifiers for the various standard header files, of
+				course. (See <A HREF="http://cseng.aw.com/book/0,,0201633620,00.html">Lakos</A>,
+				section 2.5.)</P>
+				<LI><P STYLE="margin-bottom: 0.1cm"><A NAME="refcountedcontainer"></A><FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer1</FONT></FONT>
+				turns out to be a refcounted object. This was not required in the
+				introduction of the cachemap pattern, but it is rather a consequence
+				of the chosen implementation (and it should not hurt any client,
+				either).</P>
+				<LI><P STYLE="margin-bottom: 0.1cm"><A NAME="map"></A>In <FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer1</FONT></FONT>,
+				a <FONT SIZE=2><FONT FACE="Courier New, monospace">std::map</FONT></FONT>
+				is used instead of a (de facto standard?) <FONT SIZE=2><FONT FACE="Courier New, monospace">std::hash_map</FONT></FONT>
+				that might be a bit faster. The implementation of <FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer1</FONT></FONT>
+				relies on the fact that iterators into a <FONT SIZE=2><FONT FACE="Courier New, monospace">std::map</FONT></FONT>
+				are not invalidated when calling <FONT SIZE=2><FONT FACE="Courier New, monospace">insert()</FONT></FONT>
+				or <FONT SIZE=2><FONT FACE="Courier New, monospace">erase()</FONT></FONT>.
+				There seems to be no corresponding guarantee for <FONT SIZE=2><FONT FACE="Courier New, monospace">std::hash_map</FONT></FONT>.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm"><A NAME="friends"></A><FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer1</FONT></FONT>
+				and <FONT SIZE=2><FONT FACE="Courier New, monospace">Object1</FONT></FONT>
+				need to be mutual friends. If one entity is a friend of another,
+				these entities are strongly coupled, and it seems always best to
+				keep them together in a single header file (thereby breaking the
+				rule to have a seperate header file for each class).</P>
+				<LI><P STYLE="margin-bottom: 0.1cm"><A NAME="autoptrfriend"></A>Logically, only <FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer1</FONT></FONT>
+				is allowed to create and destroy instances of <FONT SIZE=2><FONT FACE="Courier New, monospace">Object1</FONT></FONT>,
+				hence the design decision to make the constructor and destructor of
+				<FONT SIZE=2><FONT FACE="Courier New, monospace">Object1</FONT></FONT>
+				private and make <FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer1</FONT></FONT>
+				a friend of <FONT SIZE=2><FONT FACE="Courier New, monospace">Object1</FONT></FONT>.
+				But a <FONT SIZE=2><FONT FACE="Courier New, monospace">std::auto_ptr&lt;
+				Object1 &gt;</FONT></FONT> is needed at one place in the
+				implementation, and that <FONT SIZE=2><FONT FACE="Courier New, monospace">std::auto_ptr</FONT></FONT>
+				also needs access to the destructor of <FONT SIZE=2><FONT FACE="Courier New, monospace">Object1</FONT></FONT>.
+				It seemed best to simply make <FONT SIZE=2><FONT FACE="Courier New, monospace">std::auto_ptr&lt;
+				Object1 &gt;</FONT></FONT> a friend of <FONT SIZE=2><FONT FACE="Courier New, monospace">Object1</FONT></FONT>,
+				too, in this situation (though too many friends can be an indication
+				of bad design.) Alas, the Microsoft compiler used on the Windows x86 platform
+				(<FONT SIZE=2><FONT FACE="Courier New, monospace">WNT</FONT></FONT> define)
+				needs to see <FONT SIZE=2><FONT FACE="Courier New, monospace">struct</FONT></FONT> (or nothing) in this friend declaration,
+				instead of the correct <FONT SIZE=2><FONT FACE="Courier New, monospace">class</FONT></FONT>, so some
+				platform-dependent code is needed here (and in retrospect it might seem better to make the destructor of
+				<FONT SIZE=2><FONT FACE="Courier New, monospace">Object1</FONT></FONT> public and get rid of all this).</P>
+			</UL>
+			<P STYLE="margin-bottom: 0.1cm">The corresponding implementation file is
+			<A HREF="http://www.openoffice.org/source/browse/ucb/ucb/workben/cachemap/cachemapobject1.cxx"><FONT SIZE=2><FONT FACE="Courier New, monospace">cachemapobject1.cxx</FONT></FONT></A>:</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+<PRE>#ifndef INCLUDED_UCB_CACHEMAPOBJECT1_HXX
+<A HREF="#orderofincludes">#include &quot;cachemapobject1.hxx&quot;</A>
+#endif
+
+#ifndef _OSL_DIAGNOSE_H_
+#include &quot;osl/diagnose.h&quot;
+#endif
+#ifndef _OSL_INTERLOCK_H_
+#include &quot;osl/interlck.h&quot;
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include &quot;osl/mutex.hxx&quot;
+#endif
+#ifndef _RTL_REF_HXX_
+#include &quot;rtl/ref.hxx&quot;
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include &quot;rtl/ustring.hxx&quot;
+#endif
+
+#ifndef INCLUDED_MEMORY
+#include &lt;memory&gt;
+#define INCLUDED_MEMORY
+#endif
+
+using ucb::cachemap::Object1;
+using ucb::cachemap::ObjectContainer1;
+
+inline
+Object1::Object1(rtl::Reference&lt; ObjectContainer1 &gt; const &amp; rContainer):
+    m_xContainer(rContainer),
+    m_nRefCount(0)
+{
+    OSL_ASSERT(m_xContainer.is());
+}
+
+inline Object1::~Object1() SAL_THROW(())
+{}
+
+void ObjectContainer1::releaseElement(Object1 * pElement) SAL_THROW(())
+{
+    OSL_ASSERT(pElement);
+    bool bDelete = false;
+    {
+        osl::MutexGuard aGuard(m_aMutex);
+        if (osl_decrementInterlockedCount(&amp;pElement-&gt;m_nRefCount) == 0)
+        {
+            m_aMap.erase(pElement-&gt;m_aContainerIt);
+            bDelete = true;
+        }
+    }
+    <A HREF="#minimalmutex">if (bDelete)</A>
+        delete pElement;
+}
+
+ObjectContainer1::ObjectContainer1()
+{}
+
+ObjectContainer1::~ObjectContainer1() SAL_THROW(())
+{}
+
+rtl::Reference&lt; Object1 &gt; ObjectContainer1::get(rtl::OUString const &amp; rKey)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+    Map::iterator aIt(m_aMap.find(rKey));
+    if (aIt == m_aMap.end())
+    {
+        <A HREF="#autoptr">std::auto_ptr&lt; Object1 &gt;</A> xElement(new Object1(this));
+        aIt = m_aMap.insert(Map::value_type(rKey, xElement.get())).first;
+        aIt-&gt;second-&gt;m_aContainerIt = aIt;
+        xElement.release();
+    }
+    return aIt-&gt;second;
+}</PRE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0.1cm"><A NAME="orderofincludes"></A>It is always a good idea to
+				include the header file that belongs to an implementation file first
+				in that file. That way, there is an automatic check that each header
+				file is self-contained (for almost every header, there is a
+				corresponding implementation file, and compilation of that file
+				fails if the header is not self-contained). (See <A HREF="http://cseng.aw.com/book/0,,0201633620,00.html">Lakos</A>,
+				section 3.2.)</P>
+				<LI><P STYLE="margin-bottom: 0.1cm"><A NAME="minimalmutex"></A>Note how <FONT SIZE=2><FONT FACE="Courier New, monospace">releaseElement()</FONT></FONT>
+				deletes the element only after the mutex has been released. It is
+				good practice to do as little as absolutely necessary during the
+				time a mutex is locked.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm"><A NAME="autoptr"></A>Note how a <FONT SIZE=2><FONT FACE="Courier New, monospace">std::auto_ptr&lt;
+				Object1 &gt;</FONT></FONT> is used to ensure the newly created
+				<FONT SIZE=2><FONT FACE="Courier New, monospace">Object1</FONT></FONT>
+				is properly deleted in case the <FONT SIZE=2><FONT FACE="Courier New, monospace">insert()</FONT></FONT>
+				happens to throw an exception.</P>
+			</UL>
+			<P STYLE="margin-bottom: 0.1cm">The way the problems mentionend in the introduction are solved
+			here is that <FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer1</FONT></FONT>
+			only holds pointers to instances of <FONT SIZE=2><FONT FACE="Courier New, monospace">Object1</FONT></FONT>,
+			not refcounting references, and that <FONT SIZE=2><FONT FACE="Courier New, monospace">Object1::release()</FONT></FONT>
+			is simply forwarded to <FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer1::releaseElement()</FONT></FONT>.
+			The <FONT SIZE=2><FONT FACE="Courier New, monospace">releaseElement()</FONT></FONT>
+			method checks whether the refcount of the object drops to zero and
+			removes it from the map, if appropriate. The methods
+			<FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer1::releaseElement()</FONT></FONT>
+			and <FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer1::get()</FONT></FONT>
+			share a mutex, so that there can never be the situation that one
+			thread tries to get an object another thread is about to delete. The
+			disadvantage of this solution is that every call to
+			<FONT SIZE=2><FONT FACE="Courier New, monospace">Object1::release()</FONT></FONT>
+			needs to acquire a mutex, which is quite expensive on typical
+			platforms.</P>
+			<P ALIGN=LEFT><BR></P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="Solution2"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Solution 2 (Weak References)</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">The UNO concept of weak references offers itself as another
+			solution to the problem: <FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer2</FONT></FONT>
+			holds weak references to instances of <FONT SIZE=2><FONT FACE="Courier New, monospace">Object2</FONT></FONT>,
+			and the mechanism used in the <FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer2::get()</FONT></FONT>
+			method to translate a weak reference to an <FONT SIZE=2><FONT FACE="Courier New, monospace">Object2</FONT></FONT>
+			into a hard reference (that may then turn out to be null) solves all
+			the problems for us.</P>
+			<P STYLE="margin-bottom: 0.1cm">With this solution, only <FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer2</FONT></FONT>
+			needs to know <FONT SIZE=2><FONT FACE="Courier New, monospace">Object2</FONT></FONT>,
+			and not also the other way around (as it was in the first solution
+			due to the mutual friend-ness of the two classes). Therefore, there
+			are individual header files for <FONT SIZE=2><FONT FACE="Courier New, monospace">Object2</FONT></FONT>
+			and <FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer2</FONT></FONT>.</P>
+			<P STYLE="margin-bottom: 0.1cm">The header file
+			<A HREF="http://www.openoffice.org/source/browse/ucb/ucb/workben/cachemap/cachemapobject2.hxx"><FONT SIZE=2><FONT FACE="Courier New, monospace">cachemapobject2.hxx</FONT></FONT></A>
+			is nothing more than a skeleton (<FONT SIZE=2><FONT FACE="Courier New, monospace">Object2</FONT></FONT>
+			is so bare-bones it does not even need an implementation file):</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+<PRE>#ifndef INCLUDED_UCB_CACHEMAPOBJECT2_HXX
+#define INCLUDED_UCB_CACHEMAPOBJECT2_HXX
+
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include &quot;cppuhelper/weak.hxx&quot;
+#endif
+
+namespace ucb { namespace cachemap {
+
+class Object2: public cppu::OWeakObject
+{};
+
+} }
+
+#endif // INCLUDED_UCB_CACHEMAPOBJECT2_HXX</PRE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">The header file
+			<A HREF="http://www.openoffice.org/source/browse/ucb/ucb/workben/cachemap/cachemapobjectcontainer2.hxx"><FONT SIZE=2><FONT FACE="Courier New, monospace">cachemapobjectcontainer2.hxx</FONT></FONT></A>
+			is hardly more interesting:</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+<PRE>#ifndef INCLUDED_UCB_CACHEMAPOBJECTCONTAINER2_HXX
+#define INCLUDED_UCB_CACHEMAPOBJECTCONTAINER2_HXX
+
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include &quot;cppuhelper/weakref.hxx&quot;
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include &quot;osl/mutex.hxx&quot;
+#endif
+#ifndef _RTL_REF_HXX_
+#include &quot;rtl/ref.hxx&quot;
+#endif
+#ifndef _SAL_TYPES_H_
+#include &quot;sal/types.h&quot;
+#endif
+
+#ifndef INCLUDED_HASH_MAP
+#include &lt;hash_map&gt;
+#define INCLUDED_HASH_MAP
+#endif
+
+namespace rtl {
+    class OUString;
+    struct OUStringHash;
+}
+namespace ucb { namespace cachemap { class Object2; } }
+
+namespace ucb { namespace cachemap {
+
+class ObjectContainer2
+{
+public:
+    ObjectContainer2();
+
+    ~ObjectContainer2() SAL_THROW(());
+
+    rtl::Reference&lt; Object2 &gt; get(rtl::OUString const &amp; rKey);
+
+private:
+    typedef <A HREF="#hashmap">std::hash_map</A>&lt; rtl::OUString,
+                           com::sun::star::uno::WeakReference&lt; Object2 &gt;,
+                           rtl::OUStringHash &gt;
+    Map;
+
+    ObjectContainer2(ObjectContainer2 &amp;); // not implemented
+    void operator =(ObjectContainer2); // not implemented
+
+    Map m_aMap;
+    osl::Mutex m_aMutex;
+};
+
+} }
+
+#endif // INCLUDED_UCB_CACHEMAPOBJECTCONTAINER2_HXX</PRE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0.1cm"><A NAME="hashmap"></A>Here, a (de facto standard?)
+				<FONT SIZE=2><FONT FACE="Courier New, monospace">std::hash_map</FONT></FONT>
+				is used instead of a <FONT SIZE=2><FONT FACE="Courier New, monospace">std::map</FONT></FONT>
+				as used for <FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer1</FONT></FONT>:
+				We do not need any guarantees about iterators, so there is no reason
+				not to use the (potentially faster) <FONT SIZE=2><FONT FACE="Courier New, monospace">std::hash_map</FONT></FONT>.</P>
+			</UL>
+			<P STYLE="margin-bottom: 0.1cm">The solution to the implementation problems is hidden in the
+			implementation of <FONT SIZE=2><FONT FACE="Courier New, monospace">cppu::OWeakObject</FONT></FONT>
+			and <FONT SIZE=2><FONT FACE="Courier New, monospace">com::sun::star::uno::WeakReference</FONT></FONT>,
+			so the implementation file
+			 <A HREF="http://www.openoffice.org/source/browse/ucb/ucb/workben/cachemap/cachemapobjectcontainer2.cxx"><FONT SIZE=2><FONT FACE="Courier New, monospace">cachemapobjectcontainer2.cxx</FONT></FONT></A>
+			is quite simple, too:</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+<PRE>#ifndef INCLUDED_UCB_CACHEMAPOBJECTCONTAINER2_HXX
+#include &quot;cachemapobjectcontainer2.hxx&quot;
+#endif
+
+#ifndef INCLUDED_UCB_CACHEMAPOBJECT2_HXX
+#include &quot;cachemapobject2.hxx&quot;
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include &quot;com/sun/star/uno/Reference.hxx&quot;
+#endif
+#ifndef _COM_SUN_STAR_UNO_XWEAK_HPP_
+#include &quot;com/sun/star/uno/XWeak.hpp&quot;
+#endif
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include &quot;cppuhelper/weakref.hxx&quot;
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include &quot;osl/mutex.hxx&quot;
+#endif
+#ifndef _RTL_REF_HXX_
+#include &quot;rtl/ref.hxx&quot;
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include &quot;rtl/ustring.hxx&quot;
+#endif
+
+using namespace com::sun;
+using ucb::cachemap::Object2;
+using ucb::cachemap::ObjectContainer2;
+
+ObjectContainer2::ObjectContainer2()
+{}
+
+ObjectContainer2::~ObjectContainer2() SAL_THROW(())
+{}
+
+rtl::Reference&lt; Object2 &gt; ObjectContainer2::get(rtl::OUString const &amp; rKey)
+{
+    rtl::Reference&lt; Object2 &gt; xElement;
+    {
+        osl::MutexGuard aGuard(m_aMutex);
+        Map::iterator aIt(m_aMap.find(rKey));
+        if (aIt != m_aMap.end())
+            xElement = static_cast&lt; Object2 * &gt;(
+                           star::uno::Reference&lt; star::uno::XWeak &gt;(
+                                   aIt-&gt;second.get(), star::uno::UNO_QUERY).
+                               get());
+        if (!xElement.is())
+        {
+            xElement = new Object2;
+            m_aMap[rKey]
+                = star::uno::WeakReference&lt; Object2 &gt;(xElement.get());
+        }
+    }
+    return xElement;
+}</PRE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">The main trick (hack?) here is to translate from a
+			<FONT SIZE=2><FONT FACE="Courier New, monospace">com::sun::star::uno::WeakReference&lt;
+			Object2 &gt;</FONT></FONT> via a <FONT SIZE=2><FONT FACE="Courier New, monospace">com::sun::star::uno::Reference&lt;
+			com::sun::star::uno::XWeak &gt;</FONT></FONT> to an <FONT SIZE=2><FONT FACE="Courier New, monospace">rtl::Reference&lt;
+			Object2 &gt;</FONT></FONT> (in general, you must go from a
+			<FONT SIZE=2><FONT FACE="Courier New, monospace">com::sun::star::uno::WeakReference&lt;
+			<I>T</I> &gt;</FONT></FONT> to a <FONT SIZE=2><FONT FACE="Courier New, monospace">com::sun::star::uno::Reference&lt;
+			<I>T</I> &gt;</FONT></FONT>, but it is not possible to have a
+			<FONT SIZE=2><FONT FACE="Courier New, monospace">com::sun::star::uno::Reference&lt;
+			Object2 &gt;</FONT></FONT>, so we must go via the base class <FONT SIZE=2><FONT FACE="Courier New, monospace">XWeak</FONT></FONT>
+			here).</P>
+			<P STYLE="margin-bottom: 0.1cm">The drawback of this solution is that it is not faster than the
+			initial one (even slower on some platforms). The overhead of using
+			the (generic) mechanism of weak references when requesting objects
+			outweights the benefits of the faster refcounting.</P>
+			<P STYLE="margin-bottom: 0.1cm">Another point that can well be a drawback of this solution is that
+			a weak reference to a destroyed object is not removed from the map;
+			it is replaced with a weak references to a living object the next
+			time <FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer2::get()</FONT></FONT>
+			requests that object, but it is never erased from the map. Therefore,
+			the map itself keeps growing over the lifetime of the
+			<FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer2</FONT></FONT>
+			instance.</P>
+			<P ALIGN=LEFT><BR></P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="Solution3"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Solution 3 (Best of Both Worlds)</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">If exploiting the generic facilities in the second solution did
+			not give any performance advantage, let us try to become faster with
+			a hand-crafted version (i.e, combining the hand-crafted framework of
+			the first solution with the implementation details of the second
+			one).</P>
+			<P STYLE="margin-bottom: 0.1cm">The header file
+			<A HREF="http://www.openoffice.org/source/browse/ucb/ucb/workben/cachemap/cachemapobject3.hxx"><FONT SIZE=2><FONT FACE="Courier New, monospace">cachemapobject3.hxx</FONT></FONT></A>
+			is almost identical to the header file from the first solution
+			(differences are in <FONT COLOR="#008000">green</FONT>):</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+<PRE>#ifndef INCLUDED_UCB_CACHEMAPOBJECT3_HXX
+#define INCLUDED_UCB_CACHEMAPOBJECT3_HXX
+
+#ifndef _OSL_INTERLOCK_H_
+#include &quot;osl/interlck.h&quot;
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include &quot;osl/mutex.hxx&quot;
+#endif
+#ifndef _RTL_REF_HXX_
+#include &quot;rtl/ref.hxx&quot;
+#endif
+#ifndef _SAL_TYPES_H_
+#include &quot;sal/types.h&quot;
+#endif
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include &quot;salhelper/simplereferenceobject.hxx&quot;
+#endif
+
+#ifndef INCLUDED_MAP
+#include &lt;map&gt;
+#define INCLUDED_MAP
+#endif
+#ifndef INCLUDED_MEMORY
+#include &lt;memory&gt;
+#define INCLUDED_MEMORY
+#endif
+
+namespace rtl { class OUString; }
+namespace ucb { namespace cachemap { class Object3; } }
+
+namespace ucb { namespace cachemap {
+
+class ObjectContainer3: public salhelper::SimpleReferenceObject
+{
+public:
+    ObjectContainer3();
+
+    virtual ~ObjectContainer3() SAL_THROW(());
+
+    rtl::Reference&lt; Object3 &gt; get(rtl::OUString const &amp; rKey);
+
+private:
+    typedef std::map&lt; rtl::OUString, Object3 * &gt; Map;
+
+    Map m_aMap;
+    osl::Mutex m_aMutex;
+
+    void releaseElement(Object3 * pElement) SAL_THROW(());
+
+    friend class Object3; // to access Map, releaseElement()
+};
+
+class Object3
+{
+public:
+    inline void acquire() SAL_THROW(())
+    { osl_incrementInterlockedCount(&amp;m_nRefCount); }
+
+    <FONT COLOR="#008000">void release() SAL_THROW(());</FONT>
+
+private:
+    rtl::Reference&lt; ObjectContainer3 &gt; m_xContainer;
+    ObjectContainer3::Map::iterator m_aContainerIt;
+    oslInterlockedCount m_nRefCount;
+
+    inline Object3(rtl::Reference&lt; ObjectContainer3 &gt; const &amp; rContainer);
+
+    inline ~Object3() SAL_THROW(());
+
+    Object3(Object3 &amp;); // not implemented
+    void operator =(Object3); // not implemented
+
+    friend class ObjectContainer3;
+        // to access m_aContainerIt, m_nRefCount, Object3(), ~Object3()
+#if defined WNT
+    friend struct std::auto_ptr&lt; Object3 &gt;; // to access ~Object3()
+#else // WNT
+    friend class std::auto_ptr&lt; Object3 &gt;; // to access ~Object3()
+#endif // WNT
+};
+
+} }
+
+#endif // INCLUDED_UCB_CACHEMAPOBJECT3_HXX</PRE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">Also, the implementation file
+			<A HREF="http://www.openoffice.org/source/browse/ucb/ucb/workben/cachemap/cachemapobject3.cxx"><FONT SIZE=2><FONT FACE="Courier New, monospace">cachemapobject3.cxx</FONT></FONT></A>
+			has a strong resemblence to the implementation file from the first
+			solution (again, differences in <FONT COLOR="#008000">green</FONT>):</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+<PRE>#ifndef INCLUDED_UCB_CACHEMAPOBJECT3_HXX
+#include &quot;cachemapobject3.hxx&quot;
+#endif
+
+#ifndef _OSL_DIAGNOSE_H_
+#include &quot;osl/diagnose.h&quot;
+#endif
+#ifndef _OSL_INTERLOCK_H_
+#include &quot;osl/interlck.h&quot;
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include &quot;osl/mutex.hxx&quot;
+#endif
+#ifndef _RTL_REF_HXX_
+#include &quot;rtl/ref.hxx&quot;
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include &quot;rtl/ustring.hxx&quot;
+#endif
+
+#ifndef INCLUDED_MEMORY
+#include &lt;memory&gt;
+#define INCLUDED_MEMORY
+#endif
+
+using ucb::cachemap::Object3;
+using ucb::cachemap::ObjectContainer3;
+
+inline
+Object3::Object3(rtl::Reference&lt; ObjectContainer3 &gt; const &amp; rContainer):
+    m_xContainer(rContainer),
+    m_nRefCount(0)
+{
+    OSL_ASSERT(m_xContainer.is());
+}
+
+inline Object3::~Object3() SAL_THROW(())
+{}
+
+<FONT COLOR="#008000">void Object3::release() SAL_THROW(())</FONT>
+<FONT COLOR="#008000">{</FONT>
+<FONT COLOR="#008000">    if (osl_decrementInterlockedCount(&amp;m_nRefCount) == 0)</FONT>
+<FONT COLOR="#008000">    {</FONT>
+<FONT COLOR="#008000">        m_xContainer-&gt;releaseElement(this);</FONT>
+<FONT COLOR="#008000">        delete this;</FONT>
+<FONT COLOR="#008000">    }</FONT>
+<FONT COLOR="#008000">}</FONT>
+
+void ObjectContainer3::releaseElement(Object3 * pElement) SAL_THROW(())
+{
+    OSL_ASSERT(pElement);
+    <FONT COLOR="#008000">osl::MutexGuard aGuard(m_aMutex);</FONT>
+<FONT COLOR="#008000">    if (pElement-&gt;m_aContainerIt != m_aMap.end())</FONT>
+<FONT COLOR="#008000">        m_aMap.erase(pElement-&gt;m_aContainerIt);</FONT>
+}
+
+ObjectContainer3::ObjectContainer3()
+{}
+
+ObjectContainer3::~ObjectContainer3() SAL_THROW(())
+{}
+
+rtl::Reference&lt; Object3 &gt; ObjectContainer3::get(rtl::OUString const &amp; rKey)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+    Map::iterator aIt(m_aMap.find(rKey));
+<FONT COLOR="#008000">    if (aIt == m_aMap.end())</FONT>
+<FONT COLOR="#008000">    {</FONT>
+<FONT COLOR="#008000">        std::auto_ptr< Object3 > xElement(new Object3(this));</FONT>
+<FONT COLOR="#008000">        aIt = m_aMap.insert(Map::value_type(rKey, xElement.get())).first;</FONT>
+<FONT COLOR="#008000">        aIt->second->m_aContainerIt = aIt;</FONT>
+<FONT COLOR="#008000">        xElement.release();</FONT>
+<FONT COLOR="#008000">        return aIt->second;</FONT>
+<FONT COLOR="#008000">    }</FONT>
+<FONT COLOR="#008000">    else if (osl_incrementInterlockedCount(&aIt->second->m_nRefCount) > 1)</FONT>
+<FONT COLOR="#008000">    {</FONT>
+<FONT COLOR="#008000">        rtl::Reference< Object3 > xElement(aIt->second);</FONT>
+<FONT COLOR="#008000">        osl_decrementInterlockedCount(&aIt->second->m_nRefCount);</FONT>
+<FONT COLOR="#008000">        return xElement;</FONT>
+<FONT COLOR="#008000">    }</FONT>
+<FONT COLOR="#008000">    else</FONT>
+<FONT COLOR="#008000">    {</FONT>
+<FONT COLOR="#008000">        osl_decrementInterlockedCount(&aIt->second->m_nRefCount);</FONT>
+<FONT COLOR="#008000">        aIt->second->m_aContainerIt = m_aMap.end();</FONT>
+<FONT COLOR="#008000">        aIt->second = new Object3(this);</FONT>
+<FONT COLOR="#008000">        aIt->second->m_aContainerIt = aIt;</FONT>
+<FONT COLOR="#008000">        return aIt->second;</FONT>
+<FONT COLOR="#008000">    }</FONT>
+}</PRE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">This implementation does not need to lock a mutex in every call to
+			<FONT SIZE=2><FONT FACE="Courier New, monospace">Object3::release()</FONT></FONT>.
+			Only if the refcount drops to zero is the mutex of the
+			<FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer3</FONT></FONT>
+			locked and the object removed from the map. It is possible that an
+			<FONT SIZE=2><FONT FACE="Courier New, monospace">ObjectContainer3::get()</FONT></FONT>
+			gets in the way between dropping the refcount to zero and locking the
+			mutex. But the <FONT SIZE=2><FONT FACE="Courier New, monospace">get()</FONT></FONT>
+			method notices that (it goes through a cycle of incrementing and
+			decrementing the refcount itself, and if the refcount is not larger
+			than 1, the object is about to be deleted) and leaves alone the
+			to-be-deleted object and inserts into the map a fresh instance
+			instead.</P>
+			<P STYLE="margin-bottom: 0.1cm">Note that this implementation also does not have the drawback of
+			an ever-growing map, because each object is removed from the map as
+			soon as its refcount drops to zero.</P>
+			<P ALIGN=LEFT><BR></P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="Measurements"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Performance Measurements</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">A simple test file
+			(<A HREF="http://www.openoffice.org/source/browse/ucb/ucb/workben/cachemap/cachemaptest.cxx"><FONT SIZE=2><FONT FACE="Courier New, monospace">cachemaptest.cxx</FONT></FONT></A>)
+			makes 200000 <FONT SIZE=2><FONT FACE="Courier New, monospace">get()</FONT></FONT>
+			requests, half of which find objects already present in the map. The
+			refcount of each requested object is incremented and decremented 50
+			times in a row. Only 100 different identifiers are used for the
+			objects, so that the second solution does not suffer from the problem
+			of an ever-growing map. The measurements for two of our production
+			platforms (Solaris Sparc with Forte compiler and Windows x86 with
+			Microsoft compiler) are as follows (all times in miliseconds; because
+			of different machines used, only comparisions within each column are
+			meaningful):</P>
+			<TABLE WIDTH=100% BORDER=1 CELLPADDING=4 CELLSPACING=3 STYLE="page-break-inside: avoid">
+				<COL WIDTH=85*>
+				<COL WIDTH=85*>
+				<COL WIDTH=85*>
+				<TR VALIGN=TOP>
+					<TD WIDTH=33%>
+						<P><BR>
+						</P>
+					</TD>
+					<TD WIDTH=33%>
+						<P>unxsols3.pro</P>
+					</TD>
+					<TD WIDTH=33%>
+						<P>wntmsci7.pro</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD WIDTH=33% VALIGN=TOP>
+						<P>Solution 1</P>
+					</TD>
+					<TD WIDTH=33% VALIGN=BOTTOM SDVAL="9137" SDNUM="1031;">
+						<P ALIGN=RIGHT>9137</P>
+					</TD>
+					<TD WIDTH=33% VALIGN=BOTTOM SDVAL="3846" SDNUM="1031;">
+						<P ALIGN=RIGHT>3846</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD WIDTH=33% VALIGN=TOP>
+						<P>Solution 2</P>
+					</TD>
+					<TD WIDTH=33% VALIGN=BOTTOM SDVAL="8634" SDNUM="1031;">
+						<P ALIGN=RIGHT>8634</P>
+					</TD>
+					<TD WIDTH=33% VALIGN=BOTTOM SDVAL="5598" SDNUM="1031;">
+						<P ALIGN=RIGHT>5598</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD WIDTH=33% VALIGN=TOP>
+						<P>Solution 3</P>
+					</TD>
+					<TD WIDTH=33% VALIGN=BOTTOM SDVAL="3166" SDNUM="1031;">
+						<P ALIGN=RIGHT>3166</P>
+					</TD>
+					<TD WIDTH=33% VALIGN=BOTTOM SDVAL="2704" SDNUM="1031;">
+						<P ALIGN=RIGHT>2704</P>
+					</TD>
+				</TR>
+			</TABLE>
+			<P ALIGN=LEFT><BR></P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<P ALIGN=LEFT><FONT COLOR="#ffffff">Author: <A HREF="mailto:bergmann@sun.com">Stephan
+			Bergmann</A> ($Date: 2001/06/14 14:49:37 $)<BR><I>Copyright 2001
+			OpenOffice.org Foundation. All Rights Reserved.</I></FONT>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 NOSHADE>
+</body>
+</HTML>

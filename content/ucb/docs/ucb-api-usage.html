@@ -1,0 +1,1833 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>How To Use The Universal Content Broker API</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="CREATED" CONTENT="20010110;19410735">
+	<META NAME="CHANGEDBY" CONTENT="Kai Sommerfeld">
+	<META NAME="CHANGED" CONTENT="20010511;15364025">
+	<STYLE>
+	<!--
+		A:link { color: #444488 }
+		A:visited { color: #444488 }
+	-->
+	</STYLE>
+</head>
+<body LINK="#444488" VLINK="#444488">
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 STYLE="page-break-before: always">
+	<COL WIDTH=75>
+	<TR>
+		<TD BGCOLOR="#666699">
+			<H1 ALIGN=CENTER STYLE="margin-top: 0cm; text-decoration: none"><A HREF="http://www.openoffice.org/"><IMG SRC="../images/open_office_org_logo.gif" NAME="Graphic1" ALT="OpenOffice.org" ALIGN=RIGHT WIDTH=126 HEIGHT=53 BORDER=0></A><FONT COLOR="#ffffff"><FONT SIZE=6>How
+			To Use The Universal Content Broker API</FONT></FONT></H1>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 NOSHADE>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 STYLE="page-break-before: always">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><FONT COLOR="#ffffff"><FONT SIZE=4>Contents</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm"><A HREF="#Abstract">Abstract</A><BR><A HREF="#AccessUCB">Getting
+			access to the UCB</A><BR><A HREF="#CreateContent">Creating a UCB
+			Content for a given URL</A><BR><A HREF="#RunCommand">Executing a
+			command at a UCB Content</A><BR><A HREF="#QueryCommands">Querying
+			the commands supported by a UCB Content</A><BR><A HREF="#QueryProperties">Querying
+			the properties supported by a UCB Content</A><BR><A HREF="#GetPropertyValues">Obtaining
+			property values from a UCB Content</A><BR><A HREF="#SetPropertyValues">Setting
+			property values of a UCB Content</A><BR><A HREF="#AccessChildren">Accessing
+			the children of a UCB Folder Content</A><BR><A HREF="#GetDataStream">Accessing
+			(loading) the content data stream of a UCB Document
+			Content</A><BR><A HREF="#SetDataStream">Setting (storing) the
+			content data stream of a UCB Document Content</A><BR><A HREF="#CreateResource">Creating
+			a new resource</A><BR><A HREF="#DeleteResource">Deleting a
+			resource</A><BR><A HREF="#TransferResource">Copying, Moving and
+			Creating links to a resource</A></P>
+			<P><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="Abstract"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Abstract</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">This document describes how
+			software developers can access the functionality of the Universal
+			Content Broker (UCB). There are code snippets in several sections
+			that demonstrate the usage of the UCB API, as well as the usage of
+			the <A HREF="http://www.openoffice.org/source/browse/ucb/ucbhelper/">UCBHELPER</A>
+			library. That library was designed especially to simplify UCB
+			usage.</P>
+			<P STYLE="margin-bottom: 0.1cm">An example for an application that
+			uses the native UCB API can be found at
+			<A HREF="http://www.openoffice.org/source/browse/ucb/ucb/workben/ucb/">http://www.openoffice.org/source/browse/ucb/ucb/workben/ucb/</A>.
+			An application that uses the UCBHELPER library can be found at
+			<A HREF="http://www.openoffice.org/source/browse/ucb/ucbhelper/workben/ucbexplorer/">http://www.openoffice.org/source/browse/ucb/ucbhelper/workben/ucbexplorer/</A>.
+			A complete description of the UCB's UNO interfaces and UNO
+			services can be found in the <A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/index.html">UCB
+			API Reference</A>.</P>
+			<P ALIGN=LEFT><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="AccessUCB"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Getting access to the UCB</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm">Before a process can
+			use the UCB, it needs to do the following steps once:</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0.1cm">Create and set the UNO
+				Service Manager.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">Create an instance of the UNO
+				service &quot;com.sun.star.ucb.UniversalContentBroker&quot;,
+				passing the keys identifying a predefined UCB configuration.</P>
+			</UL>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><B>Note:</B> There are
+			several predefined UCB configurations. Each configuration contains
+			data that describe a set of UCPs. All UCPs contained in a
+			configuration will be registered at the UCB that shall be created
+			using this configuration. A UCB configuration is identified by two
+			keys, which are strings. The standard configuration is &quot;Local&quot;
+			and &quot;Office&quot;, which generally allows access to all UCPs.</P>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			1 (C++)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+bool initUCB()
+{
+    /////////////////////////////////////////////////////////////////////
+    // Create Process Service Manager. This needs to be done only once
+    // per process! Afterwards it is accessable via
+    // comphelper::getProcessServiceFactory().
+    /////////////////////////////////////////////////////////////////////
+
+    uno::Reference&lt; lang::XMultiServiceFactory &gt; xServiceFactory;
+    try
+    {
+        xServiceFactory = cppu::createRegistryServiceFactory(
+                                  comphelper::getPathToSystemRegistry(),
+                                  rtl::OUString(),
+                                  true );
+    }
+    catch ( uno::Exception const &amp; ) {}
+
+    if ( !xServiceFactory.is() )
+        return false;
+
+    comphelper::setProcessServiceFactory( xServiceFactory );
+
+    /////////////////////////////////////////////////////////////////////
+    // Create UCB. This needs to be done only once per process!
+    /////////////////////////////////////////////////////////////////////
+
+    // Supply configuration to use for this UCB instance...
+    uno::Sequence&lt; uno::Any &gt; aArgs( 2 );
+    aArgs[ 0 ] &lt;&lt;= rtl::OUString::createFromAscii( &quot;Local&quot; );
+    aArgs[ 1 ] &lt;&lt;= rtl::OUString::createFromAscii( &quot;Office&quot; );
+
+    uno::Reference&lt; uno::XInterface &gt; xUCB;
+    try
+    {
+        xUCB = xServiceFactory-&gt;createInstanceWithArguments(
+                    rtl::OUString::createFromAscii(
+                        &quot;com.sun.star.ucb.UniversalContentBroker&quot; ),
+                    aArgs );
+    }
+    catch ( uno::Exception const &amp; ) {}
+
+    if ( !xUCB.is() )
+        return false;
+
+    return true;
+}</PRE>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			2 (C++, using UCBHELPER library)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+bool initUCB()
+{
+    /////////////////////////////////////////////////////////////////////
+    // Create Process Service Manager. This needs to be done only once
+    // per process! Afterwards it is accessable via
+    // comphelper::getProcessServiceFactory().
+    /////////////////////////////////////////////////////////////////////
+
+    uno::Reference&lt; lang::XMultiServiceFactory &gt; xServiceFactory;
+    try
+    {
+        xServiceFactory = cppu::createRegistryServiceFactory(
+                                  comphelper::getPathToSystemRegistry(),
+                                  rtl::OUString(),
+                                  true );
+    }
+    catch ( uno::Exception const &amp; ) {}
+
+    if ( !xServiceFactory.is() )
+        return false;
+
+    comphelper::setProcessServiceFactory( xServiceFactory );
+
+    /////////////////////////////////////////////////////////////////////
+    // Create UCB. This needs to be done only once per process!
+    /////////////////////////////////////////////////////////////////////
+
+    // Supply configuration to use for this UCB instance...
+    uno::Sequence&lt; uno::Any &gt; aArgs( 2 );
+    aArgs[ 0 ] &lt;&lt;= rtl::OUString::createFromAscii(
+                                  UCB_CONFIGURATION_KEY1_LOCAL );
+    aArgs[ 1 ] &lt;&lt;= rtl::OUString::createFromAscii(
+                                  UCB_CONFIGURATION_KEY2_OFFICE );
+
+    return ::ucb::ContentBroker::initialize( xServiceFactory, aArgs );
+}</PRE><P>
+			<BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="CreateContent"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Creating a UCB Content for a
+			given URL</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm">Each UCB Content can be
+			identified using a URL. To create a content object for a given
+			URL:</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0.1cm">Obtain access to the UCB.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">Let the UCB create a content
+				identifier object for the requested URL
+				(createContentIdentifier).</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">Let the UCB create a content
+				object for the just created content identifier object
+				(queryContent).</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">The UCB dispatches the
+				queryContent-call to the appropriate UCP. The UCP will be
+				selected according to the URL contained in the identifier object.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">The UCP creates the content
+				implementation object.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">The UCB returns the content
+				object returned from the UCP to the original queryContent-caller.</P>
+			</UL>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			1 (C++)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    /////////////////////////////////////////////////////////////////////
+    // Obtain access to UCB...
+    /////////////////////////////////////////////////////////////////////
+
+    uno::Reference&lt; uno::XInterface &gt; xUCB = ...
+
+    // Obtain required UCB interfaces...
+    uno::Reference&lt; ucb::XContentIdentifierFactory &gt; xIdFactory(
+                                                  xUCB, uno::UNO_QUERY );
+    if ( !xIdFactory.is() )
+        ... error ...
+
+    uno::Reference&lt; ucb::XContentProvider &gt; xProvider(
+                                                  xUCB, uno::UNO_QUERY );
+    if ( !xProvider.is() )
+        ... error ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Obtain content object from UCB...
+    /////////////////////////////////////////////////////////////////////
+
+    // Create identifier object.
+    uno::Reference&lt; ucb::XContentIdentifier &gt; xId
+        = xIdFactory-&gt;createContentIdentifier( rURL );
+
+    if ( !xId.is() )
+        ... error ...
+
+    uno::Reference&lt; ucb::XContent &gt; xContent
+        = xProvider-&gt;queryContent( xId );
+
+    if ( !xContent.is() )
+        ... error ...
+}</PRE>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			2 (C++, using UCBHELPER library)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    rtl::OUString aURL = ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Create an empty content object. ucb::Content::create(...)
+    // will associate that content with the requested URL...
+    /////////////////////////////////////////////////////////////////////
+
+    ::ucb::Content aContent;
+    bool bSuccess = ::ucb::Content::create(
+        aURL, uno::Reference&lt; ucb::XCommandEnvironment &gt;(), aContent );
+    if ( bSuccess )
+    {
+        // content is ready for usage now...
+    }
+}</PRE><P>
+			<BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="RunCommand"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Executing a command at a UCB
+			Content</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">Each UCB Content is able to
+			execute commands. Once you have created a content object, you can
+			execute commands at it using its <A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/XCommandProcessor.html">XCommandProcessor</A>
+			interface. For a complete list of predefined commands, refer to
+			the description of the UNO service <A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/Content.html">Content</A>.</P>
+			<P STYLE="margin-bottom: 0.1cm">If executing a command cannot
+			proceed because of some error condition, the following happens: If
+			the execute-call was supplied with an <A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/XCommandEnvironment.html">XCommandEnvironment</A>
+			that contains an <A HREF="http://api.openoffice.org/common/ref/com/sun/star/task/XInteractionHandler.html">XInteractionHandler</A>,
+			this interaction handler is used to resolve the problem. If no
+			interaction handler is supplied (or if it cannot resolve the
+			problem), an exception describing the error condition is thrown.</P>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			1 (C++)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+uno::Any executeCommand( const uno::Reference&lt; ucb::XContent &gt; &amp; xContent,
+                         const rtl::OUString &amp; rCommandName,
+                         const uno::Any &amp; rArgument )
+    throw ( ucb::CommandAbortedException, uno::Exception )
+{
+    /////////////////////////////////////////////////////////////////////
+    // Obtain command processor interface from given content.
+    /////////////////////////////////////////////////////////////////////
+
+    ucb::XCommandProcessor xCmdProcessor( xContent, uno::UNO_QUERY );
+
+    /////////////////////////////////////////////////////////////////////
+    // Assemble command to execute.
+    /////////////////////////////////////////////////////////////////////
+
+    ucb::Command aCommand;
+    aCommand.Name     = rCommandName;
+    aCommand.Handle   = -1; // not available
+    aCommand.Argument = rArgument;
+
+    // Note: throws ucb::CommandAbortedException, uno::Exception
+    return xCmdProcessor-&gt;execute(
+            aCommand, 0, uno::Reference&lt; ucb::XCommandEnvironment &gt;() );
+}</PRE>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			2 (C++, using UCBHELPER library)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+uno::Any executeCommand( const ::ucb::Content &amp; rContent,
+                         const rtl::OUString &amp; rCommandName,
+                         const uno::Any &amp; rArgument )
+    throw ( ucb::CommandAbortedException, uno::Exception )
+{
+    // Note: throws ucb::CommandAbortedException, uno::Exception
+    return rContent.executeCommand( rCommandName, rCommandArgument );
+}</PRE><P>
+			<BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="QueryCommands"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Querying the commands supported
+			by a UCB Content</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">Each UCB Content supports the
+			command <B>getCommandInfo</B>. This command takes a <B>void
+			argument</B> and returns an implementation of the interface
+			<A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/XCommandInfo.html">XCommandInfo</A>
+			that can be used to obtain information on the supported commands.
+			</P>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			1 (C++)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+uno::Reference&lt; ucb::XCommandInfo &gt; getCommandInfo(
+                 const uno::Reference&lt; ucb::XContent &gt; &amp; xContent )
+{
+    // Execute command &quot;getCommandInfo&quot;.
+
+    uno::Reference&lt; ucb::XCommandInfo &gt; xInfo;
+    try
+    {
+        executeCommand( xContent,
+                        rtl::OUString::createFromAscii(
+                                                &quot;getCommandInfo&quot; ),
+                        uno::Any() ) &gt;&gt;= xInfo;
+    {
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+
+    return xInfo;
+}</PRE>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			2 (C++, using UCBHELPER library)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+uno::Reference&lt; ucb::XCommandInfo &gt; getCommandInfo(
+                             const ::ucb::Content &amp; rContent )
+{
+    uno::Reference&lt; ucb::XCommandInfo &gt; xInfo;
+    try
+    {
+        // UCBHELPER Content has a special method for this command.
+        xInfo = rContent.getCommands();
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+
+    return xInfo;
+}</PRE><P>
+			<BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="QueryProperties"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Querying the properties
+			supported by a UCB Content</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">Each UCB Content supports the
+			command <B>getPropertySetInfo</B>. This command takes a <B>void
+			argument</B> and returns an implementation of the interface
+			<A HREF="http://api.openoffice.org/common/ref/com/sun/star/beans/XPropertySetInfo.html">XPropertySetInfo</A>
+			that can be used to obtain information on the supported
+			properties.
+			</P>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			1 (C++)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+uno::Reference&lt; beans::XPropertySetInfo &gt; getPropertySetInfo(
+                 const uno::Reference&lt; ucb::XContent &gt; &amp; xContent )
+{
+    uno::Reference&lt; beans::XPropertySetInfo &gt; xInfo;
+    try
+    {
+        // Execute command &quot;getPropertySetInfo&quot;.
+        executeCommand( xContent,
+                        rtl::OUString::createFromAscii(
+                                            &quot;getPropertySetInfo&quot; ),
+                        uno::Any() ) &gt;&gt;= xInfo;
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+
+    return xInfo;
+}</PRE>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			2 (C++, using UCBHELPER library)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+uno::Reference&lt; beans::XPropertySetInfo &gt; getPropertySetInfo(
+                         const ::ucb::Content &amp; rContent )
+{
+    uno::Reference&lt; beans::XPropertySetInfo &gt; xInfo;
+    try
+    {
+        // UCBHELPER Content has a special method for this command.
+        xInfo = rContent.getProperties();
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+
+    return xInfo;
+}</PRE><P>
+			<BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="GetPropertyValues"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Obtaining property values from
+			a UCB Content</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">A UCB Content maintains a set of
+			properties. It supports the command <B>getPropertyValues</B>,
+			which can be used to obtain one or more property values from a
+			content. This command takes an argument of type sequence&lt;
+			<A HREF="http://api.openoffice.org/common/ref/com/sun/star/beans/Property.html">Property</A>
+			&gt; and returns an implementation of the interface <A HREF="http://api.openoffice.org/common/ref/com/sun/star/sdbc/XRow.html">XRow</A>,
+			which is very similar to a row of a JDBC resultset. To obtain
+			property values from a UCB Content:</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0.1cm">Define a sequence of
+				properties for which you want to obtain the values.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">Let the UCB Content execute
+				the command getPropertyValues.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">Obtain the property values
+				from the returned row object.</P>
+			</UL>
+			<P STYLE="margin-bottom: 0.1cm">Note that there are additional
+			methods available at the Content class of the UCBHELPER library
+			that can be used to obtain a single property value as uno::Any or
+			to obtain multiple values as a sequence of uno::Any.</P>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			1 (C++)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    uno::Reference&lt; ucb::XContent &gt; xContent = ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Obtain value of the string property Title and the boolean property
+    // IsFolder from xContent...
+    /////////////////////////////////////////////////////////////////////
+
+    // Define property sequence.
+
+    uno::Sequence&lt; beans::Property &gt; aProps( 2 );
+    aProps[ 0 ].Name = rtl::OUString::createFromAscii( &quot;Title&quot; );
+    aProps[ 0 ].Handle = -1; // n/a
+    aProps[ 1 ].Name = rtl::OUString::createFromAscii( &quot;IsFolder&quot; );
+    aProps[ 1 ].Handle = -1; // n/a
+
+    uno::Reference&lt; sdbc::XRow &gt; xValues;
+    try
+    {
+        // Execute command &quot;getPropertyValues&quot;.
+        executeCommand( xContent,
+                        rtl::OUString::createFromAscii(
+                                            &quot;getPropertyValues&quot; ),
+                        makeAny( aProps ) ) &gt;&gt;= xValues;
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+
+    if ( !xValues.is() )
+        ... error ...
+
+    // Extract values from row object. Note that that the
+    // first column is 1, not 0.
+
+    // Title: Obtain value of column 1 as string.
+    rtl::OUString aTitle = xValues-&gt;getString( 1 ) );
+    if ( aTitle.Len() == 0 &amp;&amp; xValues-&gt;wasNull() )
+        ... error ...
+
+    // IsFolder: Obtain value of column 2 as boolean.
+    sal_Bool bFolder = xValues-&gt;getBoolean( 2 );
+    if ( !bFolder &amp;&amp; xValues-&gt;wasNull() )
+        ... error ...
+}</PRE>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			2a (C++, using UCBHELPER library)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    ::ucb::Content aContent = ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Obtain value of the string property Title and the boolean property
+    // IsFolder from xContent...
+    /////////////////////////////////////////////////////////////////////
+
+    // Define property sequence.
+
+    uno::Sequence&lt; rtl::OUString &gt; aProps( 2 );
+    aProps[ 0 ] = rtl::OUString::createFromAscii( &quot;Title&quot; );
+    aProps[ 1 ] = rtl::OUString::createFromAscii( &quot;IsFolder&quot; );
+
+    uno::Reference&lt; sdbc::XRow &gt; xValues;
+
+    try
+    {
+        // Obtain property values.
+        xValues = aContent.getPropertyValuesInterface( aProps );
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+
+    // Extract values from row object. Note that that the
+    // first column is 1, not 0.
+
+    // Title: Obtain value of column 1 as string.
+    rtl::OUString aTitle = xValues-&gt;getString( 1 ) );
+    if ( aTitle.getLength() == 0 &amp;&amp; xValues-&gt;wasNull() )
+        ... error ...
+
+    // IsFolder: Obtain value of column 2 as boolean.
+    sal_Bool bFolder = xValues-&gt;getBoolean( 2 );
+    if ( !bFolder &amp;&amp; xValues-&gt;wasNull() )
+        ... error ...
+}</PRE>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			2b (C++, using UCBHELPER library)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    ::ucb::Content aContent = ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Obtain value of the string property Title and the boolean property
+    // IsFolder from xContent...
+    /////////////////////////////////////////////////////////////////////
+
+    // Define property sequence.
+
+    uno::Sequence&lt; rtl::OUString &gt; aProps( 2 );
+    aProps[ 0 ] = rtl::OUString::createFromAscii( &quot;Title&quot; );
+    aProps[ 1 ] = rtl::OUString::createFromAscii( &quot;IsFolder&quot; );
+
+    uno::Sequence&lt; uno::Any &gt; aValues;
+
+    try
+    {
+        // Obtain property values.
+        aValues = aContent.getPropertyValues( aProps );
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+
+    // Extract values from sequence.
+
+    // Title:
+    rtl::OUString aTitle;
+    if ( !( aValues[ 0 ] &gt;&gt;= aTitle ) )
+        ... error ...
+
+    // IsFolder:
+    sal_Bool bFolder;
+    if ( !( aValues[ 1 ] &gt;&gt;= bFolder ) )
+        ... error ...
+}</PRE><P>
+			<BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="SetPropertyValues"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Setting property values of a
+			UCB Content</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">A UCB Content maintains a set of
+			properties. It supports the command <B>setPropertyValues</B>,
+			which can be used to set one or more property values of a content.
+			This command takes an argument of type sequence&lt; <A HREF="http://api.openoffice.org/common/ref/com/sun/star/beans/PropertyValue.html">PropertyValue</A>
+			&gt; and returns <B>void</B>. To set property values of a UCB
+			Content:</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0.1cm">Define a sequence of property
+				values you want to set.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">Let the UCB Content execute
+				the command setPropertyValues.</P>
+			</UL>
+			<P STYLE="margin-bottom: 0.1cm">Note that the command will not be
+			aborted if one or more of the property values cannot be set
+			(because the requested property is not supported by the content or
+			because it is read-only). Currently there is no other way to check
+			whether a property value was set successfully than to obain the
+			property value after a set-operation. This may change in the near
+			future, when status information could be returned by the command
+			setPropertyValues.</P>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			1 (C++)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    uno::Reference&lt; ucb::XContent &gt; xContent = ...
+    rtl::OUString aNewTitle
+            = rtl::OUString::createFromAscii( &quot;NewTitle&quot; );
+
+    /////////////////////////////////////////////////////////////////////
+    // Set value of the string property Title...
+    /////////////////////////////////////////////////////////////////////
+
+    // Define property value sequence.
+
+    uno::Sequence&lt; beans::PropertyValue &gt; aProps( 1 );
+    aProps[ 0 ].Name   = rtl::OUString::createFromAscii( &quot;Title&quot; );
+    aProps[ 0 ].Handle = -1; // n/a
+    aProps[ 0 ].Value  &lt;&lt;= aNewTitle;
+
+    try
+    {
+        // Execute command &quot;setPropertyValues&quot;.
+        executeCommand( xContent,
+                        rtl::OUString::createFromAscii(
+                                            &quot;setPropertyValues&quot; ),
+                        makeAny( aProps );
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+}</PRE>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			2a (C++, using UCBHELPER library)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    ::ucb::Content aContent = ...
+    rtl::OUString aNewTitle
+            = rtl::OUString::createFromAscii( &quot;NewTitle&quot; );
+
+    /////////////////////////////////////////////////////////////////////
+    // Set value of the string property Title...
+    /////////////////////////////////////////////////////////////////////
+
+    // Define property name sequence.
+    uno::Sequence&lt; rtl::OUString &gt; aProps( 1 );
+    aProps[ 0 ] = rtl::OUString::createFromAscii( &quot;Title&quot; );
+
+    // Define property value sequence.
+    uno::Sequence&lt; uno::Any &gt; aValues;
+    aValues[ 0 ] &lt;&lt;= aNewTitle;
+
+    try
+    {
+        // Set property values.
+        aContent.setPropertyValues( aProps, aValues );
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+}</PRE>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			2b (C++, using UCBHELPER library)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    ::ucb::Content aContent = ...
+    rtl::OUString aNewTitle
+            = rtl::OUString::createFromAscii( &quot;NewTitle&quot; );
+
+    /////////////////////////////////////////////////////////////////////
+    // Set value of the string property Title...
+    /////////////////////////////////////////////////////////////////////
+
+    try
+    {
+        // Set property value.
+        aContent.setPropertyValue(
+                    rtl::OUString::createFromAscii( &quot;Title&quot; ),
+                    makeAny( aNewTitle ) );
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+}</PRE><P>
+			<BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="AccessChildren"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Accessing the children of a UCB
+			Folder Content</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">A UCB Content that is a folder
+			(which means that the value of the required property <B>IsFolder</B>
+			is true) should support the command <B>open</B>. This command
+			takes an argument of type <A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/OpenCommandArgument2.html">OpenCommandArgument2</A>.
+			The value returned is an implementation of the service
+			<A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/ContentResultSet.html">ContentResultSet</A>.
+			This resultset can be understood as a table, where each row
+			contains a child content of the folder content. You may travel
+			through the rows by using the resultset's interface <A HREF="http://api.openoffice.org/common/ref/com/sun/star/sdbc/XResultSet.html">XResultSet</A>.
+			The children may be accessed by traveling to the appropriate row
+			and using the interface <A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/XContentAccess.html">XContentAccess</A>,
+			which is also implemented by the resultset. You may supply a
+			sequence&lt; <A HREF="http://api.openoffice.org/common/ref/com/sun/star/beans/Property.html">Property</A>
+			&gt; as part of the argument of the open command. In this case,
+			the resultset will contain an additional column for each property
+			value that was requested. You may access the property values by
+			traveling to the appropriate row and calling methods of the
+			interface <A HREF="http://api.openoffice.org/common/ref/com/sun/star/sdbc/XRow.html">XRow</A>.
+			There may also other parameters be passed to the open command.
+			Refer to the documentation of <A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/OpenCommandArgument2.html">OpenCommandArgument2</A>
+			for more information.</P>
+			<P STYLE="margin-bottom: 0.1cm">To access the children of a UCB
+			Content:</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0.1cm">Fill the OpenCommandArgument2
+				structure according to your needs.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">Let the UCB Content execute
+				the command open.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">Access the children and the
+				requested property values using the returned resultset.</P>
+			</UL>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			1 (C++)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    uno::Reference&lt; ucb::XContent &gt; xContent = ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Open a folder content, request property values for the string
+    // property Title and the boolean property IsFolder...
+    /////////////////////////////////////////////////////////////////////
+
+    // Fill argument structure...
+
+    ucb::OpenCommandArgument2 aArg;
+
+    aArg.Mode = ucb::OpenMode::ALL; // FOLDER, DOCUMENTS -&gt; simple filter
+    aArg.Priority = 32768; // Ignored by most implementations
+
+    // Fill info for the properties wanted.
+    uno::Sequence&lt; beans::Property &gt; aProps( 2 );
+    aProps[ 0 ].Name   = rtl::OUString::createFromAscii( &quot;Title&quot; );
+    aProps[ 0 ].Handle = -1; // n/a
+    aProps[ 1 ].Name   = rtl::OUString::createFromAscii( &quot;IsFolder&quot; );
+    aProps[ 1 ].Handle = -1; // n/a
+
+    aArg.Properties = aProps;
+
+    uno::Reference&lt; ucb::XDynamicResultSet &gt; xSet;
+    try
+    {
+        // Execute command &quot;open&quot;.
+        executeCommand( xContent,
+                        rtl::OUString::createFromAscii( &quot;open&quot; ),
+                        makeAny( aArg ) &gt;&gt;= xSet;
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+
+    if ( !xSet.is() )
+        ... error ...
+
+    uno::Reference&lt; sdbc::XResultSet &gt; xResultSet(
+                                    xSet-&gt;getStaticResultSet() );
+
+    if ( !xResultSet.is() )
+        ... error ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Iterate over children, access children and property values...
+    /////////////////////////////////////////////////////////////////////
+
+    try
+    {
+        // Move to begin.
+        if ( xResultSet->first() )
+        {
+            uno::Reference&lt; ucb::XContentAccess &gt; xContentAccess(
+                                          xResultSet, uno::UNO_QUERY );
+            uno::Reference&lt; sdbc::XRow &gt; xRow(
+                                          xResultSet, uno::UNO_QUERY );
+
+            do
+            {
+                // Obtain URL of child.
+                rtl::OUString aId
+                    = xContentAccess-&gt;queryContentIdentifierString();
+
+//                ucb::XContent xChild
+//                    = xContentAccess-&gt;queryContent();
+
+                // First column: Title ( column numbers are 1-based! )
+                rtl::OUString aTitle = xRow-&gt;getString( 1 );
+                if ( aTitle.getLength() == 0 &amp;&amp; xRow-&gt;wasNull() )
+                    ... error ...
+
+                // Second column: IsFolder
+                sal_Bool bFolder = xRow-&gt;getBoolean( 2 );
+                if ( !bFolder &amp;&amp; xRow-&gt;wasNull() )
+                    ... error ...
+            }
+            while ( xResultSet-&gt;next() ) // next child
+        }
+    }
+    catch ( ucb::ResultSetException const &amp; )
+    {
+        ... error ...
+    }
+}</PRE>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			2 (C++, using UCBHELPER library)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    ::ucb::Content aContent = ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Open a folder content, request property values for the string
+    // property Title and the boolean property IsFolder...
+    /////////////////////////////////////////////////////////////////////
+
+    // Define property name sequence.
+    uno::Sequence&lt; OUString &gt; aProps( 2 );
+    aProps[ 0 ] = rtl::OUString::createFromAscii( &quot;Title&quot; );
+    aProps[ 1 ] = rtl::OUString::createFromAscii( &quot;IsFolder&quot; );
+
+    uno::Reference&lt; sdbc::XResultSet &gt; xResultSet;
+    try
+    {
+        xResultSet = aContent.createCursor(
+                        aProps, ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS );
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+
+    if ( !xResultSet.is() )
+        ... error ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Iterate over children, access children and property values...
+    /////////////////////////////////////////////////////////////////////
+
+    try
+    {
+        // Move to begin.
+        if ( xResultSet->first() )
+        {
+            uno::Reference&lt; ucb::XContentAccess &gt; xContentAccess(
+                                          xResultSet, uno::UNO_QUERY );
+            uno::Reference&lt; sdbc::XRow &gt; xRow(
+                                          xResultSet, uno::UNO_QUERY );
+
+            do
+            {
+                // Obtain URL of child.
+                rtl::OUString aId
+                    = xContentAccess-&gt;queryContentIdentifierString();
+
+//                ucb::XContent xChild
+//                    = xContentAccess-&gt;queryContent();
+
+                // First column: Title ( column numbers are 1-based! )
+                rtl::OUString aTitle = xRow-&gt;getString( 1 );
+                if ( aTitle.getLength() == 0 &amp;&amp; xRow-&gt;wasNull() )
+                    ... error ...
+
+                // Second column: IsFolder
+                sal_Bool bFolder = xRow-&gt;getBoolean( 2 );
+                if ( !bFolder &amp;&amp; xRow-&gt;wasNull() )
+                    ... error ...
+            }
+            while ( xResultSet-&gt;next() ) // next child
+        }
+    }
+    catch ( ucb::ResultSetException const &amp; )
+    {
+        ... error ...
+    }
+}</PRE><P>
+			<BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="GetDataStream"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Accessing (loading) the content
+			data stream of a UCB Document Content</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">A UCB Content that is a document
+			(which means that the value of the required property <B>IsDocument</B>
+			is true) should support the command <B>open</B>. The command takes
+			an argument of type <A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/OpenCommandArgument2.html">OpenCommandArgument2</A>.
+			Note that this command (with the same argument type) is also used
+			to access the children of a folder. Whether you get access to the
+			children or the data stream (or even both, for contents that
+			support both) is controlled by the argument's <I>Mode</I> member,
+			as can be seen in the examples. If you are only interested in the
+			data stream, you can ignore the command's return value (which will
+			presumably be a null resultset, anyway).</P>
+			<P STYLE="margin-bottom: 0.1cm">The caller needs to supply the
+			implementation of a data sink with the arguments in order to get
+			access to the document's data stream. Generally there are two
+			different types of data sinks: <A HREF="http://api.openoffice.org/common/ref/com/sun/star/io/XActiveDataSink.html">XActiveDataSink</A>
+			and <A HREF="http://api.openoffice.org/common/ref/com/sun/star/io/XOutputStream.html">XOutputStream</A>.</P>
+			<P STYLE="margin-bottom: 0.1cm"><B>XActiveDataSink:</B> If this
+			type of data sink is supplied, the caller of the command is
+			active. The implementation of the command will supply an
+			implementation of the interface <A HREF="http://api.openoffice.org/common/ref/com/sun/star/io/XInputStream.html">XInputStream</A>
+			to the given XActiveDataSink (setInputStream) and return. Once the
+			execute-call has returned, the caller can access the input stream
+			(getInputStream) and read the data using that stream (readBytes,
+			readSomeBytes).</P>
+			<P STYLE="margin-bottom: 0.1cm"><B>XOutputStream:</B> If this type
+			of data sink is supplied, the caller of the command is passive.
+			The implementation of the command will write all data to the
+			output stream (writeBytes) and close it (closeOutput) after all
+			data were successfully written. Only then will the open command
+			return.</P>
+			<P STYLE="margin-bottom: 0.1cm">Which type to use highly depends
+			on the logic of the client application. If the application can be
+			designed so that it passively processes the data supplied by an
+			XOutputStream, using an XOutputStream as sink is advantageous,
+			because many content providers can implement this case efficiently
+			without buffering any data. If, on the other hand, the application
+			is designed so that it actively reads the data, you should use an
+			XActiveDataSink; any necessary buffering will then take place in
+			the implementation of the open command.</P>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			1 (C++)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+/////////////////////////////////////////////////////////////////////////
+// XActiveDataSink interface implementation.
+/////////////////////////////////////////////////////////////////////////
+
+class MyActiveDataSink : public cppu::OWeakObject,
+                         public io::XActiveDataSink
+{
+    uno::Reference&lt; io::XInputStream &gt; m_xStream;
+
+public:
+    // XInterface methods
+    ... queryInterface ... acquire ... release ...
+
+    // XActiveDataSink methods.
+    virtual void SAL_CALL
+    setInputStream( const uno::Reference&lt; io::XInputStream &gt;&amp; aStream )
+        throw( uno::RuntimeException )
+    { m_xStream = aStream; }
+
+    virtual uno::Reference&lt; io::XInputStream &gt; SAL_CALL
+    getInputStream()
+        throw( uno::RuntimeException )
+    { return m_xStream; }
+};
+
+{
+    uno::Reference&lt; ucb::XContent &gt; xContent = ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Read the document data stream of a document content using a
+    // XActiveDataSink implementation as data sink....
+    /////////////////////////////////////////////////////////////////////
+
+    // Fill argument structure...
+
+    ucb::OpenCommandArgument2 aArg;
+    aArg.Mode = ucb::OpenMode::DOCUMENT;
+    aArg.Priority = 32768; // Ignored by most implementations
+
+    // Create data sink implementation object.
+    uno::Reference&lt; io::XActiveDataSink &gt; xDataSink
+                                                = new MyActiveDataSink;
+    aArg.Sink = xDataSink;
+
+    try
+    {
+        // Execute command &quot;open&quot;. The implementation of the command will
+        // supply an XInputStream implementation to the data sink.
+        executeCommand( xContent,
+                        rtl::OUString::createFromAscii( &quot;open&quot; ),
+                        makeAny( aArg ) );
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+
+    // Get input stream supplied by the open command implementation.
+    uno::Reference&lt; io::XInputStream &gt; xData
+                                        = xDataSink-&gt;getInputStream();
+    if ( !xData.is() )
+        ... error ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Read data from input stream...
+    /////////////////////////////////////////////////////////////////////
+
+    try
+    {
+        // Data buffer. Will be allocated by input stream implementation!
+        uno::Sequence&lt; sal_Int8 &gt; aBuffer;
+
+        sal_Int32 nRead = xData-&gt;readSomeBytes( aBuffer, 65536 );
+        while ( nRead &gt; 0 )
+        {
+            // Process data contained in buffer.
+            ...
+
+            nRead = xData-&gt;readSomeBytes( aBuffer, 65536 );
+        }
+
+        // EOF.
+    }
+    catch ( io::NotConnectedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( io::BufferSizeExceededException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( io::IOException const &amp; )
+    {
+        ... error ...
+    }
+}</PRE>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			2 (C++, using UCBHELPER library)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+/////////////////////////////////////////////////////////////////////////
+// XActiveDataSink interface implementation.
+/////////////////////////////////////////////////////////////////////////
+
+class MyActiveDataSink : public cppu::OWeakObject,
+                         public io::XActiveDataSink
+{
+    uno::Reference&lt; io::XInputStream &gt; m_xStream;
+
+public:
+    // XInterface methods
+    ... queryInterface ... acquire ... release ...
+
+    // XActiveDataSink methods.
+    virtual void SAL_CALL
+    setInputStream( const uno::Reference&lt; io::XInputStream &gt;&amp; aStream )
+        throw( uno::RuntimeException )
+    { m_xStream = aStream; }
+
+    virtual uno::Reference&lt; io::XInputStream &gt; SAL_CALL
+    getInputStream()
+        throw( uno::RuntimeException )
+    { return m_xStream; }
+};
+
+{
+    ::ucb::Content aContent = ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Read the document data stream of a document content using a
+    // XActiveDataSink implementation as data sink....
+    /////////////////////////////////////////////////////////////////////
+
+    uno::Reference&lt; io::XActiveDataSink &gt; xDataSink
+                                                = new MyActiveDataSink;
+    try
+    {
+        aContent.openStream( xDataSink );
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+
+    // Get input stream supplied by the open command implementation.
+    uno::Reference&lt; io::XInputStream &gt; xData
+                                        = xDataSink-&gt;getInputStream();
+    if ( !xData.is() )
+        ... error ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Read data from input stream...
+    /////////////////////////////////////////////////////////////////////
+
+    try
+    {
+        // Data buffer. Will be allocated by input stream implementation!
+        uno::Sequence&lt; sal_Int8 &gt; aBuffer;
+
+        sal_Int32 nRead = xData-&gt;readSomeBytes( aBuffer, 65536 );
+        while ( nRead &gt; 0 )
+        {
+            // Process data contained in buffer.
+            ...
+
+            nRead = xData-&gt;readSomeBytes( aBuffer, 65536 );
+        }
+
+        // EOF.
+    }
+    catch ( io::NotConnectedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( io::BufferSizeExceededException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( io::IOException const &amp; )
+    {
+        ... error ...
+    }
+}</PRE><P>
+			<BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="SetDataStream"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Setting (storing) the content
+			data stream of a UCB Document Content</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">A UCB Content that is a document
+			(which means that the value of the required property <B>IsDocument</B>
+			is true) should support the command <B>insert</B>. This command
+			can be used to (over)write the document's data stream. The command
+			requires an argument of type <A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/InsertCommandArgument.html">InsertCommandArgument</A>
+			and returns <B>void</B>. The caller needs to supply the
+			implementation of an <A HREF="http://api.openoffice.org/common/ref/com/sun/star/io/XInputStream.html">XInputStream</A>
+			with the command argument. This stream contains the data to be
+			written. An additional flag indicating whether a possibly existing
+			content (and its data) shall be overwritten may be supplied with
+			the command argument. Implementations that are not able to detect
+			whether there are previous data may ignore this parameter and will
+			always write the new data!</P>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			1 (C++)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    uno::Reference&lt; ucb::XContent &gt; xContent = ...
+    uno::Reference&lt; io::XInputStream &gt; xData = ... // The data to write.
+
+    /////////////////////////////////////////////////////////////////////
+    // Write the document data stream of a document content...
+    /////////////////////////////////////////////////////////////////////
+
+    // Fill argument structure...
+
+    ucb::InsertCommandArgument aArg;
+    aArg.Data = xData;
+    aArg.ReplaceExisting = true;
+
+    try
+    {
+        // Execute command &quot;insert&quot;.
+        executeCommand( xContent,
+                        rtl::OUString::createFromAscii( &quot;insert&quot; ),
+                        makeAny( aArg ) );
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+}</PRE>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			2 (C++, using UCBHELPER library)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    ::ucb::Content aContent = ...
+    uno::Reference&lt; io::XInputStream &gt; xData = ... // The data to write.
+
+    /////////////////////////////////////////////////////////////////////
+    // Write the document data stream of a document content...
+    /////////////////////////////////////////////////////////////////////
+
+    try
+    {
+        aContent.writeStream( xData, true /* replaceexisting */  );
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+}</PRE><P>
+			<BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="CreateResource"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Creating a new resource</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">A UCB Content that implements the
+			interface <A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/XContentCreator.html">XContentCreator</A>
+			can act as a factory for new resources. For example, a file system
+			folder could be a creator for other file system folders and files.</P>
+			<P STYLE="margin-bottom: 0.1cm">A new content object created by
+			the XContentCreator implementation can be considered as an <I>empty
+			hull</I> for a content object of a special type. So this new
+			content object may need to be filled with some property values in
+			order to become fully functional. For example, a file system
+			folder could require a name, which is represented by the property
+			&quot;Title&quot; in the UCB. The interface XContentCreator offers
+			ways to determine what contents can be created and what properties
+			need to be set to get them alive. You may also obtain information
+			on the general kind (FOLDER, DOCUMENT, LINK) of that objects.
+			After all required property values are set, the creation process
+			needs to be committed. This is done using the command <B>insert</B>.
+			Note that this command is always executed at the new content, not
+			at the content creator! This is because the creator is not
+			necessarily the parent of the new content. For a description of
+			the insert-command refer to section <A HREF="#SetDataStream">Setting
+			(storing) the content data stream of a UCB Document Content</A>.
+			One noticeable fact here is that the flag <I>ReplaceExisting</I>
+			in the insert-command argument usually will be false (the caller
+			generally does not want to destroy an already existing resource).
+			The insert-command implementation will make the new content
+			persistent in the appropriate storage medium.</P>
+			<P STYLE="margin-bottom: 0.1cm">To create a new resource:</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0.1cm">Obtain the interface
+				XContentCreator from a suitable UCB Content.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">Call createNewContent at the
+				content creator. Supply information on the type of content to
+				create with the arguments.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">Obtain and set the property
+				values that are mandatory for the content just created.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">Let the new content execute
+				the command insert to complete the creation process.</P>
+			</UL>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			1 (C++)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    uno::Reference&lt; ucb::XContent &gt; xContent = ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Create a new file system file object...
+    /////////////////////////////////////////////////////////////////////
+
+    // Obtain content creator interface.
+    uno::Reference&lt; XContentCreator &gt; xCreator(
+                                            xContent, uno::UNO_QUERY );
+
+    if ( !xCreator.is() )
+        ... error ...
+
+    // Note: The data for aInfo may have been obtained using
+    //       XContentCreator::queryCreatableContentsInfo().
+
+    ucb::ContentInfo aInfo;
+    aInfo.Type = rtl::OUString::createFromAscii(
+                        &quot;application/vnd.sun.staroffice.fsys-file&quot; );
+    aInfo.Attributes = 0;
+
+    // Create new, empty content.
+    uno::Reference&lt; ucb::XContent &gt; xNewContent
+                        = xCreator-&gt;createNewContent( aInfo );
+
+    if ( !xNewContent.is() )
+        ... error ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Set mandatory properties...
+    /////////////////////////////////////////////////////////////////////
+
+    // Obtain a name for the new file.
+    rtl::OUString aFilename = ...
+
+    // Define property value sequence.
+    uno::Sequence&lt; beans::PropertyValue &gt; aProps( 1 );
+    aProps[ 0 ].Name   = rtl::OUString::createFromAscii( &quot;Title&quot; );
+    aProps[ 0 ].Handle = -1; // n/a
+    aProps[ 0 ].Value  &lt;&lt;= aFilename;
+
+    try
+    {
+        // Execute command &quot;setPropertyValues&quot;.
+        executeCommand( xNewContent,
+                        rtl::OUString::createFromAscii(
+                                            &quot;setPropertyValues&quot; ),
+                        makeAny( aProps );
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Write the new file to disk...
+    /////////////////////////////////////////////////////////////////////
+
+    // Obtain document data for the new file.
+    uno::Reference&lt; io::XInputStream &gt; xData = ...
+
+    // Fill argument structure...
+    ucb::InsertCommandArgument aArg;
+    aArg.Data = xData;
+    aArg.ReplaceExisting = false;
+
+    try
+    {
+        // Execute command &quot;insert&quot;.
+        executeCommand( xNewContent,
+                        rtl::OUString::createFromAscii( &quot;insert&quot; ),
+                        makeAny( aArg ) );
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+}</PRE>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			2 (C++, using UCBHELPER library)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    ::ucb::Content aContent = ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Create, setup and commit a new file system file object...
+    /////////////////////////////////////////////////////////////////////
+
+    // Obtain a name for the new file.
+    rtl::OUString aFilename = ...
+
+    // Obtain document data for the new file.
+    uno::Reference&lt; io::XInputStream &gt; xData = ...
+
+    uno::Sequence&lt; rtl::OUString &gt; aProps( 1 );
+    aProps[ 0 ] = rtl::OUString::createFromAscii( &quot;Title&quot; );
+
+    uno::Sequence&lt; uno::Any &gt; aValues( 1 );
+    aValues[ 0 ] &lt;&lt;= aFilename;
+
+    ::ucb::Content aNewContent;
+    try
+    {
+        aContent.insertNewContent(
+                    rtl::OUString::createFromAscii(
+                        &quot;application/vnd.sun.staroffice.fsys-file&quot; ),
+                    aProps,
+                    aValues,
+                    xData,
+                    aNewContent ); // out parameter!
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+}</PRE><P>
+			<BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="DeleteResource"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Deleting a resource</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">Executing the command <B>delete</B>
+			on a UCB Content will destroy the resource it represents. This
+			command takes a boolean parameter. If it is set to <I>true</I>,
+			the resource will be immediately and physically destroyed. <B>The
+			command will also destroy all existing sub resources of the
+			resource to be destroyed! </B>If <I>false</I> is passed to this
+			command, then the caller only wants to delete the resource
+			&quot;logically.&quot; This means that the resource can be either
+			restored or physically destroyed later. A soft-deleted Content
+			needs to support the command <B>undelete</B>. This command will
+			bring it back to life. The implementation of the delete command
+			can ignore the parameter and may opt to always destroy the
+			resource physically.</P>
+			<P STYLE="margin-bottom: 0.1cm"><B>Note: Currently we do not have
+			a Trash Service that could be used by UCB clients to manage
+			soft-deleted Contents.</B></P>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			1 (C++)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    uno::Reference&lt; ucb::XContent &gt; xContent = ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Destroy a resource physically...
+    /////////////////////////////////////////////////////////////////////
+
+    try
+    {
+        sal_Bool bDeletePhysically = sal_True;
+
+        // Execute command &quot;delete&quot;.
+        executeCommand( xContent,
+                        rtl::OUString::createFromAscii( &quot;delete&quot; ),
+                        makeAny( bDeletePhysically ) );
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+}</PRE>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			2 (C++, using UCBHELPER library)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    ::ucb::Content aContent = ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Destroy a resource physically...
+    /////////////////////////////////////////////////////////////////////
+
+    try
+    {
+        sal_Bool bDeletePhysically = sal_True;
+
+        // There is no special wrapper method for this simple command.
+        // Use generic command invocation method.
+        aContent.executeCommand(
+                        rtl::OUString::createFromAscii( &quot;delete&quot; ),
+                        makeAny( bDeletePhysically ) );
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+}</PRE><P>
+			<BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="TransferResource"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Copying, Moving and Creating
+			links to a resource</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">Copying, moving and creating links
+			to a resource works a little differently from the other operations
+			available for UCB Contents. This is because there are <B>three UCB
+			Contents</B> involved in these operations (the source object, the
+			target folder, the target object), not just one. There may even
+			participation by <B>two Content Providers</B> (e.g., when moving a
+			file located on an FTP server to the local file system of a
+			workstation). Each implementation of the <A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/UniversalContentBroker.html">UniversalContentBroker</A>
+			service must support the <A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/XCommandProcessor.html">XCommandProcessor</A>
+			interface. This command processor must implement the command
+			<B>globalTransfer</B> that can be used to copy and move UCB
+			Contents and to create links to UCB Contents. The command takes an
+			argument of type <A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/GlobalTransferCommandArgument.html">GlobalTransferCommandArgument</A>.
+			To copy, move or create a link to a resource simply execute the
+			globalTransfer command at the UCB.</P>
+			<P STYLE="margin-bottom: 0.1cm"><B>Note:</B> The reasons for the
+			different handling are mainly technical. We did not want to force
+			every single implementation of the transfer command of a UCB
+			Content to be able to accept (nearly) all types of Contents.
+			Instead, we wanted to have one single implementation that would be
+			able to handle all types of Contents. However, the UCBHELPER
+			library encapsulates this exception and offers a special method
+			for this functionality at the Content helper class. It must be
+			called at the UCB Content representing the target folder of the
+			operation.</P>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			1 (C++)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    rtl::OUString aSourceURL = ...       // URL of the source object
+    rtl::OUString aTargetFolderURL = ... // URL of the target folder
+
+    /////////////////////////////////////////////////////////////////////
+    // Obtain access to UCB...
+    /////////////////////////////////////////////////////////////////////
+
+    uno::Reference&lt; uno::XInterface &gt; xUCB = ...
+
+    // Obtain XCommandProcessor interface from UCB...
+    uno::Reference&lt; ucb::XCommandProcessor &gt; xCmdProc(
+                                                  xUCB, uno::UNO_QUERY );
+    if ( !xProcessor.is() )
+        ... error ...
+
+    /////////////////////////////////////////////////////////////////////
+    // Copy a resource to another location...
+    /////////////////////////////////////////////////////////////////////
+
+    try
+    {
+        ucb::GlobalTransferCommandArgument aArg;
+        aArg.TransferCommandOperation = TransferCommandOperation_COPY;
+        aArg.SourceURL                = aSourceURL;
+        aArg.TargetURL                = aTargetFolderURL;
+
+        // object keeps it current name
+        aArg.NewTitle                 = rtl::OUString();
+
+        // fail, if object with same name exists in target folder
+        aArg.NameClash                = NameClash::ERROR;
+
+        // Let UCB execute the command &quot;globalTransfer&quot;.
+        executeCommand( xCmdProc,
+                        rtl::OUString::createFromAscii(
+                                            &quot;globalTransfer&quot; ),
+                        makeAny( aArg ) );
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+}</PRE>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			2 (C++, using UCBHELPER library)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+{
+    ::ucb::Content aSourceContent = ...       // source content
+    ::ucb::Content aTargetFolderContent = ... // target folder content
+
+    /////////////////////////////////////////////////////////////////////
+    // Copy a resource...
+    /////////////////////////////////////////////////////////////////////
+
+    ::ucb::Content aNewContent;
+    try
+    {
+        aTargetFolderContent.insertNewContent(
+                                aSourceContent,
+                                InsertOperation_COPY, // MOVE | LINK
+                                aNewContent ); // out parameter!
+    }
+    catch ( ucb::CommandAbortedException const &amp; )
+    {
+        ... error ...
+    }
+    catch ( uno::Exception const &amp; )
+    {
+        ... error ...
+    }
+}</PRE><P>
+			<BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<P ALIGN=LEFT><FONT COLOR="#ffffff">Author: <A HREF="mailto:kai.sommerfeld@germany.sun.com">Kai
+			Sommerfeld</A> ($Date: 2002/08/29 10:43:19 $)<BR><I>Copyright 2001
+			OpenOffice.org Foundation. All Rights Reserved.</I></FONT>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 NOSHADE>
+</body>
+</HTML>

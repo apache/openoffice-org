@@ -1,0 +1,467 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>Universal Content Broker Configuration</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="CREATED" CONTENT="20010110;19410735">
+	<META NAME="CHANGEDBY" CONTENT="Kai Sommerfeld">
+	<META NAME="CHANGED" CONTENT="20010308;12010592">
+	<STYLE>
+	<!--
+		A:link { color: #444488 }
+		A:visited { color: #444488 }
+	-->
+	</STYLE>
+</head>
+<body LINK="#444488" VLINK="#444488">
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 STYLE="page-break-before: always">
+	<COL WIDTH=75>
+	<TR>
+		<TD BGCOLOR="#666699">
+			<H1 ALIGN=CENTER STYLE="margin-top: 0cm; text-decoration: none"><A HREF="http://www.openoffice.org/"><IMG SRC="../images/open_office_org_logo.gif" NAME="Graphic1" ALT="OpenOffice.org" ALIGN=RIGHT WIDTH=126 HEIGHT=53 BORDER=0></A><FONT COLOR="#ffffff"><FONT SIZE=6>Universal
+			Content Broker Configuration</FONT></FONT></H1>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 NOSHADE>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 STYLE="page-break-before: always">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><FONT COLOR="#ffffff"><FONT SIZE=4>Contents</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0cm"><A HREF="#Abstract">Abstract</A><BR><A HREF="#UCPRegistrationInformation">UCP
+			Registration Information</A><BR><A HREF="#UnconfiguredUCBs">Unconfigured
+			UCBs</A><BR><A HREF="#PreconfiguredUCBs">Preconfigured UCBs</A><BR><A HREF="#UCBConfigurations">UCB
+			Configurations</A><BR><A HREF="#ContentProviderProxies">Content
+			Provider Proxies</A></P>
+			<P><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="Abstract"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Abstract</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">This document describes ways to
+			configure the Universal Content Broker (UCB). Before a process can
+			use the UCB, it needs to configure it. Configuring the UCB means
+			to register a set of Universal Content Providers (UCPs) at a
+			Content Broker instance. Only UCPs known to the UCB can be used by
+			it to provide content. Generally we provide two ways to configure
+			a UCB:</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0.1cm">Create a &quot;raw&quot; UCB
+				with no UCPs registered and register all needed UCPs manually.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">Define a UCB configuration
+				and create a UCB automatically configured with the UCPs given in
+				that configuration.</P>
+			</UL>
+			<P ALIGN=LEFT><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="UCPRegistrationInformation"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>UCP Registration Information</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">To register a Content Provider at
+			the UCB you need the following information that must have been
+			provided be the implementer of the UCP:</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0.1cm">The <B>UNO service name</B>
+				to use to instantiate the UCP (for example
+				<I>com.sun.star.ucb.FileContentProvider</I>). Each UCP must be
+				implemented and registered as a UNO service. Refer to the <A HREF="http://udk.openoffice.org/">UNO
+				Development Kit Project</A> for more information on UNO services.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">An <B>URL template,</B> used
+				by the UCB to select among the registered UCPs the one that best
+				'fits' an incomming URL (<A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/XContentIdentifier.html">XContentIdentifier</A>).
+				This can be either the name of an URL scheme (e.g., <FONT SIZE=2><FONT FACE="Courier New, monospace">file</FONT></FONT>
+				will select the given UCP for all file URLs) or a 'limited'
+				regular expression (e.g., <FONT SIZE=2><FONT FACE="Courier New, monospace">&quot;http://&quot;[^/?#]*&quot;.com&quot;([/?#].*)?</FONT></FONT>
+				will select the given UCP for all http URLs in the com domain).
+				See the documentation of <A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/XContentProviderManager.html">XContentProviderManager</A>'s
+				<A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/XContentProviderManager.html#registerContentProvider">registerContentProvider</A>
+				method for details about those regular expressions.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm"><B>Additional arguments</B>
+				that may be needed by the UCP.</P>
+			</UL>
+			<P><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="UnconfiguredUCBs"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Unconfigured UCBs</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm">A UCB is called
+			&quot;unconfigured&quot; if it has no Content Providers. Thus it
+			is not able to provide any contents. Each UCB implements the
+			interface <A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/XContentProviderManager.html">XContentProviderManager</A>.
+			This interface offers (among others) the functionality to register
+			UCPs at runtime.</P>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm">To create an
+			unconfigured UCB and configure it manually:
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0.1cm">Create and set the UNO
+				Service Manager.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">Create an instance of the UNO
+				service &quot;com.sun.star.ucb.UniversalContentBroker&quot;.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">Register the appropriate UCPs
+				by using the UCB's XContentProviderManager interface.</P>
+			</UL>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			1 &#150; Unconfigured UCB </B></FONT>
+			</P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+bool initUCB()
+{
+    /////////////////////////////////////////////////////////////////////
+    // Create Process Service Manager. This needs to be done only once
+    // per process! Afterwards it is accessable via
+    // comphelper::getProcessServiceFactory().
+    /////////////////////////////////////////////////////////////////////
+
+    uno::Reference&lt; lang::XMultiServiceFactory &gt; xServiceFactory;
+    try
+    {
+        xServiceFactory = cppu::createRegistryServiceFactory(
+                                  comphelper::getPathToSystemRegistry(),
+                                  rtl::OUString(),
+                                  true );
+    }
+    catch ( uno::Exception const &amp; ) {}
+
+    if ( !xServiceFactory.is() )
+        return false;
+
+    comphelper::setProcessServiceFactory( xServiceFactory );
+
+    /////////////////////////////////////////////////////////////////////
+    // Create UCB. This needs to be done only once per process!
+    /////////////////////////////////////////////////////////////////////
+
+    uno::Reference&lt; uno::XInterface &gt; xUCB;
+    try
+    {
+        xUCB = xServiceFactory-&gt;createInstance(
+                    rtl::OUString::createFromAscii(
+                        &quot;com.sun.star.ucb.UniversalContentBroker&quot; ) );
+    }
+    catch ( uno::Exception const &amp; ) {}
+
+    if ( !xUCB.is() )
+        return false;
+
+    /////////////////////////////////////////////////////////////////////
+    // Instanciate UCPs and register them at UCB.
+    /////////////////////////////////////////////////////////////////////
+
+    uno::Reference&lt; ucb::XContentProvider &gt; xFileProvider;
+    try
+    {
+        xFileProvider = uno::Reference&lt; ucb::XContentProvider &gt;(
+            xServiceFactory-&gt;createInstance(
+                rtl::OUString::createFromAscii(
+                    &quot;com.sun.star.ucb.FileContentProvider&quot; ) ),
+                uno::UNO_QUERY );
+    }
+    catch ( uno::Exception const &amp; ) {}
+
+    if ( !xFileProvider.is() )
+        return false;
+
+    try
+    {
+        xUcb-&gt;registerContentProvider(
+                         xFileProvider,
+                         rtl::OUString::createFromAscii( &quot;file&quot; ),
+                         sal_False );
+    }
+    catch ( ucb::DuplicateProviderException const &amp; {}
+
+    // Create/register other UCPs...
+
+    return true;
+}</PRE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="PreconfiguredUCBs"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Preconfigured UCBs</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm">A UCB is called
+			&quot;preconfigured&quot; if it was given a <A HREF="#UCBConfigurations">UCB
+			configuration</A> at the time it was instantiated. A UCB
+			configuration contains a set of <A HREF="#UCPRegistrationInformation">UCP
+			registration informations</A>.
+			</P>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm">To create a
+			preconfigured UCB:
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0.1cm">Create and set the UNO
+				Service Manager.</P>
+				<LI><P STYLE="margin-bottom: 0.1cm">Create an instance of the UNO
+				service &quot;com.sun.star.ucb.UniversalContentBroker&quot;. Pass
+				the configuration to use as parameters to the creation function.
+				The UCB instance returned will have registered all UCPs defined
+				in the given configuration.</P>
+			</UL>
+			<P STYLE="margin-bottom: 0.1cm"><B>Note:</B> There is a helper
+			function (ucb::configureUcb) available in the <A HREF="http://www.openoffice.org/source/browse/ucb/ucbhelper/">UCBHELPER</A>
+			library, which contains all code necessary to instantiate a
+			preconfigured UCB.</P>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			2 &#150; Preconfigured UCB</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>using namespace com::sun::star;
+
+bool initUCB()
+{
+    /////////////////////////////////////////////////////////////////////
+    // Create Process Service Manager. This needs to be done only once
+    // per process! Afterwards it is accessable via
+    // comphelper::getProcessServiceFactory().
+    /////////////////////////////////////////////////////////////////////
+
+    uno::Reference&lt; lang::XMultiServiceFactory &gt; xServiceFactory;
+    try
+    {
+        xServiceFactory = cppu::createRegistryServiceFactory(
+                                  comphelper::getPathToSystemRegistry(),
+                                  rtl::OUString(),
+                                  true );
+    }
+    catch ( uno::Exception const &amp; ) {}
+
+    if ( !xServiceFactory.is() )
+        return false;
+
+    comphelper::setProcessServiceFactory( xServiceFactory );
+
+    /////////////////////////////////////////////////////////////////////
+    // Create UCB. This needs to be done only once per process!
+    /////////////////////////////////////////////////////////////////////
+
+    // Supply configuration to use for this UCB instance...
+    uno::Sequence&lt; uno::Any &gt; aArgs( 2 );
+    aArgs[ 0 ] &lt;&lt;= rtl::OUString::createFromAscii( &quot;Local&quot; );
+    aArgs[ 1 ] &lt;&lt;= rtl::OUString::createFromAscii( &quot;Office&quot; );
+
+    uno::Reference&lt; uno::XInterface &gt; xUCB;
+    try
+    {
+        xUCB = xServiceFactory-&gt;createInstanceWithArguments(
+                    rtl::OUString::createFromAscii(
+                        &quot;com.sun.star.ucb.UniversalContentBroker&quot; ),
+                    aArgs );
+    }
+    catch ( uno::Exception const &amp; ) {}
+
+    if ( !xUCB.is() )
+        return false;
+
+    return true;
+}</PRE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="UCBConfigurations"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>UCB Configurations</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm">Each UCB configuration
+			contains data that describe a set of UCPs (<A HREF="#UCPRegistrationInformation">UCP
+			registration information</A>). All UCPs contained in a
+			configuration will be registered at the UCB that shall be created
+			using this configuration. A UCB configuration is identified by <B>two
+			keys</B>, which are strings.</P>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm">UCB configurations are
+			defined in XML. The predefined configurations for OpenOffice are
+			defined in the file
+			<A HREF="http://www.openoffice.org/source/browse/util/officecfg/data/org/openoffice/ucb/Configuration.xcd">officecfg/data/org/openoffice/ucb/Configuration.xcd</A>.
+			This file must be adapted to add configurations or to edit
+			existing configurations. The XCD file will be used by the
+			OpenOffice build process to generate an appropriete XML file. This
+			XML file is part of an OpenOffice installation. The UCB will
+			always try to get configuration data from that XML file.</P>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><B>Note:</B> There are
+			several predefined UCB configurations. The standard configuration
+			is &quot;Local&quot; and &quot;Office&quot;, which generally
+			allows access to all UCPs.</P>
+			<HR SIZE=1 NOSHADE>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0.1cm"><FONT SIZE=4><B>Example
+			3 &#150; UCB Configuration (org/openoffice/ucb/Configuration.xcd)</B></FONT></P>
+			<HR SIZE=1 NOSHADE>
+			<PRE>&lt;!DOCTYPE schema:package SYSTEM &quot;../schema/schema.description.dtd&quot;&gt;
+&lt;schema:package package-id=&quot;org.openoffice.ucb.Configuration&quot; xml:lang=&quot;en-US&quot;
+    xmlns:schema=&quot;http://openoffice.org/2000/registry/schema/description&quot;
+    xmlns:default=&quot;http://openoffice.org/2000/registry/schema/default&quot;
+    xmlns:cfg=&quot;http://openoffice.org/2000/registry/instance&quot;&gt;
+
+  &lt;schema:templates template-id=&quot;org.openoffice.ucb.Configuration&quot;&gt;
+
+    &lt;!-- ContentProvider --&gt;
+    &lt;schema:group cfg:name=&quot;ContentProviderData&quot;&gt;
+      &lt;schema:value cfg:name=&quot;ServiceName&quot; cfg:type=&quot;string&quot;&gt;
+      &lt;/schema:value&gt;
+      &lt;schema:value cfg:name=&quot;URLTemplate&quot; cfg:type=&quot;string&quot;&gt;
+      &lt;/schema:value&gt;
+      &lt;schema:value cfg:name=&quot;Arguments&quot; cfg:type=&quot;string&quot;&gt;
+      &lt;/schema:value&gt;
+    &lt;/schema:group&gt;
+
+    &lt;!-- ContentProvidersDataSecondaryKeys --&gt;
+    &lt;schema:group cfg:name=&quot;ContentProvidersDataSecondaryKeys&quot;&gt;
+      &lt;schema:set cfg:name=&quot;ProviderData&quot;
+          cfg:element-type=&quot;ContentProviderData&quot;/&gt;
+    &lt;/schema:group&gt;
+
+    &lt;!-- ContentProvidersDataPrimaryKeys --&gt;
+    &lt;schema:group cfg:name=&quot;ContentProvidersDataPrimaryKeys&quot;&gt;
+      &lt;schema:set cfg:name=&quot;SecondaryKeys&quot;
+          cfg:element-type=&quot;ContentProvidersDataSecondaryKeys&quot;/&gt;
+    &lt;/schema:group&gt;
+  &lt;/schema:templates&gt;
+
+  &lt;schema:component cfg:writable=&quot;true&quot;
+      component-id=&quot;org.openoffice.ucb.Configuration&quot;
+      cfg:notified=&quot;true&quot; cfg:localized=&quot;false&quot;&gt;
+    &lt;schema:set cfg:name=&quot;ContentProviders&quot;
+        cfg:element-type=&quot;ContentProvidersDataPrimaryKeys&quot;&gt;
+      &lt;default:group cfg:name=&quot;Local&quot;&gt;
+        &lt;default:set cfg:name=&quot;SecondaryKeys&quot;
+            cfg:element-type=&quot;ContentProvidersDataSecondaryKeys&quot;&gt;
+          &lt;default:group cfg:name=&quot;Office&quot;&gt;
+            &lt;default:set cfg:name=&quot;ProviderData&quot;
+                cfg:element-type=&quot;ContentProviderData&quot;&gt;
+
+              &lt;!-- Hierarchy UCP --&gt;
+              &lt;default:group cfg:name=&quot;Provider1&quot;&gt;
+                &lt;default:value cfg:name=&quot;ServiceName&quot; cfg:type=&quot;string&quot;&gt;
+                  &lt;default:data&gt;com.sun.star.ucb.HierarchyContentProvider&lt;/default:data&gt;
+                &lt;/default:value&gt;
+                &lt;default:value cfg:name=&quot;URLTemplate&quot; cfg:type=&quot;string&quot;&gt;
+                  &lt;default:data&gt;vnd.sun.star.hier&lt;/default:data&gt;
+                &lt;/default:value&gt;
+                &lt;default:value cfg:name=&quot;Arguments&quot; cfg:type=&quot;string&quot;&gt;
+                  &lt;default:data/&gt;
+                &lt;/default:value&gt;
+              &lt;/default:group&gt;
+
+              &lt;!-- File UCP --&gt;
+              &lt;default:group cfg:name=&quot;Provider2&quot;&gt;
+                &lt;default:value cfg:name=&quot;ServiceName&quot; cfg:type=&quot;string&quot;&gt;
+                  &lt;default:data&gt;com.sun.star.ucb.FileContentProvider&lt;/default:data&gt;
+                &lt;/default:value&gt;
+                &lt;default:value cfg:name=&quot;URLTemplate&quot; cfg:type=&quot;string&quot;&gt;
+                  &lt;default:data&gt;file&lt;/default:data&gt;
+                &lt;/default:value&gt;
+                &lt;default:value cfg:name=&quot;Arguments&quot; cfg:type=&quot;string&quot;&gt;
+                  &lt;default:data/&gt;
+                &lt;/default:value&gt;
+              &lt;/default:group&gt;
+
+              &lt;!-- Other UCPs go here --&gt;
+
+            &lt;/default:set&gt;
+          &lt;/default:group&gt;
+        &lt;/default:set&gt;
+      &lt;/default:group&gt;
+    &lt;/schema:set&gt;
+  &lt;/schema:component&gt;
+&lt;/schema:package&gt;</PRE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="ContentProviderProxies"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Content Provider Proxies</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0.1cm">As the reader may have noticed,
+			the UNO service implementing a UCP must be instantiated at the
+			time the Content Provider is registered at the UCB Again, this is
+			done using <A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/XContentProviderManager.html">XContentProviderManager</A>'s
+			<A HREF="http://api.openoffice.org/common/ref/com/sun/star/ucb/XContentProviderManager.html#registerContentProvider">registerContentProvider</A>
+			method. In some cases this can consume to much resources, because
+			instantiating a UNO service means loading the libraries containing
+			its code. And as a convention each UNO component should reside in
+			its own library.</P>
+			<P STYLE="margin-bottom: 0.1cm">That's why we offer a special UNO
+			service, that provides a generic proxy for a UCP. It's main
+			purpose is to delay loading of the real UCP's code until it is
+			really needed. Generally this will be not the case before the
+			first createContentIdentifier/queryContent calls are done at the
+			proxy.</P>
+			<P STYLE="margin-bottom: 0.1cm">Instead of registering the real
+			instantiated UCP at the UCB, a proxy will be created for the UCP.
+			The UCP registration information will be passed to the proxy. The
+			proxy will use this information to instantiate the real UCP on
+			demand only. There is almost no performance overhead with this
+			mechanism.</P>
+			<P><B>Note:</B> When using preconfigured UCBs, the UCB
+			implementation will use proxies instead of the real UCPs to avoid
+			wasting resources.
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<P ALIGN=LEFT><FONT COLOR="#ffffff">Author: <A HREF="mailto:kai.sommerfeld@germany.sun.com">Kai
+			Sommerfeld</A> ($Date: 2001/04/20 11:13:50 $)<BR><I>Copyright 2001
+			OpenOffice.org Foundation. All Rights Reserved.</I></FONT>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<HR SIZE=1 NOSHADE>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 NOSHADE>
+</body>
+</HTML>

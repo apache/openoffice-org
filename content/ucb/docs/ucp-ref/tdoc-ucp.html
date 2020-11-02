@@ -1,0 +1,394 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<head>
+<title>The Transient Document Content Provider</title>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 7  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Kai Sommerfeld">
+	<META NAME="CREATED" CONTENT="20000714;12280500">
+	<META NAME="CHANGED" CONTENT="20040219;9184776">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm; margin: 2cm }
+		P { margin-bottom: 0.21cm }
+		H1 { margin-bottom: 0.21cm }
+		H1.western { font-family: "Arial", sans-serif; font-size: 16pt }
+		H1.cjk { font-family: "Andale Sans UI"; font-size: 12pt; font-weight: medium }
+		H1.ctl { font-family: "Tahoma"; font-size: 12pt; font-weight: medium }
+		H2 { margin-bottom: 0.21cm }
+		H2.western { font-family: "Arial", sans-serif; font-size: 14pt; font-style: italic }
+		H2.cjk { font-family: "Andale Sans UI"; font-size: 12pt; font-weight: medium }
+		H2.ctl { font-family: "Tahoma"; font-size: 12pt; font-weight: medium }
+		TD P { margin-bottom: 0.21cm }
+		TH P { margin-bottom: 0.21cm }
+		TH P.western { font-style: italic }
+		TH P.cjk { font-weight: medium }
+		TH P.ctl { font-weight: medium }
+	-->
+	</STYLE>
+</head>
+<body LANG="de-DE" DIR="LTR">
+<H1 LANG="en-US" CLASS="western">The Transient Document Content
+Provider</H1>
+<P LANG="en-US"><BR><BR>
+</P>
+<H2 LANG="en-US" CLASS="western">Preface</H2>
+<P LANG="en-US">The Transient Document Content Provider (TDCP)
+implements a Content Provider for the Universal Content Broker (UCB).
+It provides access to the hierachical structure of the documents that
+are active in a running OpenOffice.org process. As long as a document
+was not closed, the TDCP can access it. All documents that have been
+loaded &ndash; regardless of their persistent document format--- or
+that have been created but not yet saved to any storage medium, are
+supported. The TDCP is not able to load any documents itself. This is
+exclusively done by the OpenOffice.org document handling framework.
+The document contents provided by the TDCP represent live data, which
+may differ from any persistent representation of the document, for
+instance, because the user modified the document after loading, but
+did not yet save it.</P>
+<H2 LANG="en-US" CLASS="western">TDCP Contents</H2>
+<P LANG="en-US">The TDCP provides four different types of contents:
+<B>Stream</B>, <B>Folder, Document </B>and <B>Root</B>.</P>
+<OL>
+	<LI><P LANG="en-US">A TDCP Stream is a content which represents a
+	data stream of an Office document. It is  contained in a TDCP Folder
+	or TDCP Document. A TDCP Stream has no children.</P>
+	<LI><P LANG="en-US">A TDCP Folder is a container for other TDCP
+	Folders and TDCP Streams. It may be contained in another TDCP Folder
+	or in a TDCP Document.</P>
+	<LI><P LANG="en-US">A TDCP Document represents the root folder of a
+	transient document. It is a container for other TDCP Folders and
+	TDCP Streams. It is always a child of the TDCP Root.</P>
+	<LI><P LANG="en-US">There is at most one instance of a TDCP Root at
+	a time. All other TDCP contents are children of  this folder. The
+	TDCP Root Folder can contain only TDCP Documents. It has the fixed
+	URL &bdquo;<B>vnd.sun.star.tdoc:/</B><SPAN STYLE="font-weight: medium">&ldquo;.</SPAN></P>
+</OL>
+<P LANG="en-US"><BR><BR>
+</P>
+<P LANG="en-US"><IMG SRC="tdoc-contents.gif" NAME="DrawObject" ALT="DrawObject" ALIGN=LEFT><BR><BR>
+</P>
+<P LANG="en-US"><BR><BR>
+</P>
+<P LANG="en-US"><BR><BR>
+</P>
+<P LANG="en-US"><BR><BR>
+</P>
+<H2 LANG="en-US" CLASS="western"><BR><BR>
+</H2>
+<H2 LANG="en-US" CLASS="western"><BR><BR>
+</H2>
+<H2 LANG="en-US" CLASS="western"><BR><BR>
+</H2>
+<H2 LANG="en-US" CLASS="western"><BR><BR>
+</H2>
+<H2 LANG="en-US" CLASS="western"><BR><BR>
+</H2>
+<H2 LANG="en-US" CLASS="western"><BR><BR>
+</H2>
+<H2 LANG="en-US" CLASS="western">Creation Of New TDCP Contents</H2>
+<P LANG="en-US">TDCP Folders and TDCP Documents implement the
+interface XContentCreator. TDCP Streams and TDCP Folders support the
+command &bdquo;insert&ldquo;; the TDCP Root and TDCP Documents do
+not. TDCP Folders and TDCP Documents can create new TDCP Folders and
+TDCP Streams. To create a new child of a  TDCP Folder or TDCP
+Document:</P>
+<OL>
+	<LI><P LANG="en-US">Let the parent folder create a new content by
+	calling its createNewContent-method. The content type to use for new
+	folders is <B>application/vnd.sun.star.tdoc-folder</B><SPAN STYLE="font-weight: medium">.
+	To create a new stream, use the type string
+	</SPAN><B>application/vnd.sun.star.tdoc-stream</B><SPAN STYLE="font-weight: medium">.</SPAN></P>
+	<LI><P LANG="en-US" STYLE="font-weight: medium">Set a title at the
+	new folder/stream. ( Let the new child execute a setPropertyValues &ndash;
+	command, which sets at least the property &bdquo;Title&ldquo; to a
+	non-empty value ).
+	</P>
+	<LI><P LANG="en-US" STYLE="font-weight: medium">Let the new child (
+	not the parent! ) execute the command &bdquo;insert&ldquo;. This
+	will commit the creation process. For streams, you need to supply
+	the implementation of an XInputStream with the command's parameters,
+	that provides access to the stream data.</P>
+</OL>
+<P LANG="en-US"><BR><BR>
+</P>
+<P LANG="en-US" STYLE="font-weight: medium">Another, <B>more
+convenient way for creating streams</B> is simply to assemble the URL
+for the new content ( last part of the path will become the title of
+the new stream ) and to obtain a Content object for that URL from the
+UCB. Then let the content execute the command &quot;insert&quot;. The
+command will fail, if you set the command's parameter
+&quot;ReplaceExisting&quot; to false and there is already a stream
+with the title given by the content's URL.</P>
+<P LANG="en-US" STYLE="font-weight: medium"><BR><BR>
+</P>
+<H2 LANG="en-US" CLASS="western">URL Scheme for TDCP Contents</H2>
+<P LANG="en-US">Each TDCP content has an identifier corresponding to
+the following scheme:</P>
+<P LANG="en-US"><FONT FACE="Courier New, monospace">tdcp-URL      =
+&quot;vnd.sun.star.tdoc:&quot; abs-path</FONT></P>
+<P LANG="en-US"><FONT FACE="Courier New, monospace">abs-path      =
++( &quot;/&quot; segment )</FONT></P>
+<P LANG="en-US"><FONT FACE="Courier New, monospace">segment       =
+*( pchar )</FONT></P>
+<P LANG="en-US"><FONT FACE="Courier New, monospace">pchar         =
+unreserved | escaped | &quot;:&quot; | &quot;@&quot; | &quot;&amp;&quot;
+| &quot;=&quot; </FONT>
+</P>
+<P LANG="en-US">                <FONT FACE="Courier New, monospace">|
+&quot;+&quot; | &quot;$&quot; | &quot;,&quot;</FONT></P>
+<P LANG="en-US"><FONT FACE="Courier New, monospace">unreserved    =
+alphanum | mark</FONT></P>
+<P LANG="en-US"><FONT FACE="Courier New, monospace">mark          =
+&quot;-&quot; | &quot;_&quot; | &quot;.&quot; | &quot;!&quot; | &quot;~&quot;
+| &quot;*&quot; | &quot;'&quot; | &quot;(&quot;</FONT></P>
+<P LANG="en-US">                <FONT FACE="Courier New, monospace">|
+&quot;)&quot;</FONT></P>
+<P LANG="en-US"><FONT FACE="Courier New, monospace">escaped       =
+&quot;%&quot; hex hex</FONT></P>
+<P LANG="en-US"><BR><BR>
+</P>
+<P LANG="en-US" STYLE="font-weight: medium">Examples:</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=159*>
+	<COL WIDTH=97*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=62%>
+				<P CLASS="western">URL</P>
+			</TH>
+			<TH WIDTH=38%>
+				<P CLASS="western">Comment</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62%>
+				<P LANG="en-US" STYLE="font-weight: medium"><FONT FACE="Courier New, sans-serif">vnd.sun.star.tdoc:/</FONT></P>
+			</TD>
+			<TD WIDTH=38%>
+				<P LANG="en-US" STYLE="font-weight: medium">The TDCP Root
+				</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62%>
+				<P LANG="en-US" STYLE="font-weight: medium"><FONT FACE="Courier New, sans-serif">vnd.sun.star.tdoc:/22</FONT></P>
+			</TD>
+			<TD WIDTH=38%>
+				<P LANG="en-US" STYLE="font-weight: medium">The document with the
+				id 22</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62%>
+				<P LANG="en-US" STYLE="font-weight: medium"><FONT FACE="Courier New, sans-serif">vnd.sun.star.tdoc:/22/</FONT></P>
+			</TD>
+			<TD WIDTH=38%>
+				<P LANG="en-US" STYLE="font-weight: medium">The document with the
+				id 22</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62%>
+				<P LANG="en-US" STYLE="font-weight: medium"><FONT FACE="Courier New, sans-serif">vnd.sun.star.tdoc:/42/folder/subfolder</FONT></P>
+			</TD>
+			<TD WIDTH=38%>
+				<P LANG="en-US" STYLE="font-weight: medium">The folder/stream
+				named subfolder contained in folder named folder, which is
+				contained in the document with the id 42</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62%>
+				<P LANG="en-US" STYLE="font-weight: medium"><FONT FACE="Courier New, sans-serif">vnd.sun.star.tdoc:/42/folder/subfolder/</FONT></P>
+			</TD>
+			<TD WIDTH=38%>
+				<P LANG="en-US" STYLE="font-weight: medium">The folder named
+				subfolder contained in folder named folder, which is contained in
+				the document with the id 42 (final slash identifies that resource
+				is a folder)</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=62%>
+				<P LANG="en-US" STYLE="font-weight: medium"><FONT FACE="Courier New, sans-serif">vnd.sun.star.tdoc:/1/content.xml</FONT></P>
+			</TD>
+			<TD WIDTH=38%>
+				<P LANG="en-US" STYLE="font-weight: medium">The stream/folder
+				named content.xml contained in the document with the id 1</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P LANG="en-US" STYLE="font-weight: medium"><BR><BR>
+</P>
+<H2 CLASS="western">Appendix</H2>
+<P LANG="en-US">The following table gives an overview of the
+different TDCP contents.</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=35*>
+	<COL WIDTH=54*>
+	<COL WIDTH=64*>
+	<COL WIDTH=51*>
+	<COL WIDTH=51*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=14%>
+				<P LANG="en-US" CLASS="western"><BR>
+				</P>
+			</TH>
+			<TH WIDTH=21%>
+				<P LANG="en-US" CLASS="western">UCB Type</P>
+				<P LANG="en-US" CLASS="western">(returned by
+				XContent::getContentType )</P>
+			</TH>
+			<TH WIDTH=25%>
+				<P LANG="en-US" CLASS="western">Properties</P>
+			</TH>
+			<TH WIDTH=20%>
+				<P LANG="en-US" CLASS="western">Commands</P>
+			</TH>
+			<TH WIDTH=20%>
+				<P LANG="en-US" CLASS="western">Interfaces</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=14%>
+				<P LANG="en-US">Stream
+				</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P LANG="en-US">application/vnd.sun.star.tdoc-stream</P>
+			</TD>
+			<TD WIDTH=25%>
+				<P LANG="en-US">[readonly] string ContentType</P>
+				<P LANG="en-US">[readonly] boolean IsDocument</P>
+				<P LANG="en-US">[readonly] boolean IsFolder</P>
+				<P LANG="en-US">string Title</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P LANG="en-US">getCommandInfo</P>
+				<P LANG="en-US">getPropertySetInfo</P>
+				<P LANG="en-US">getPropertyValues</P>
+				<P LANG="en-US">setPropertyValues</P>
+				<P LANG="en-US">insert</P>
+				<P LANG="en-US">delete</P>
+				<P LANG="en-US">open
+				</P>
+				<P LANG="en-US"><BR>
+				</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P LANG="en-US">lang::<B>XTypeProvider</B>,</P>
+				<P LANG="en-US">lang::<B>XServiceInfo</B>,</P>
+				<P LANG="en-US">lang::<B>XComponent</B>,</P>
+				<P LANG="en-US">ucb::<B>XContent</B>,</P>
+				<P LANG="en-US">ucb::<B>XCommandProcessor</B>,</P>
+				<P LANG="en-US">beans::<B>XPropertiesChangeNotifier</B>,</P>
+				<P LANG="en-US">beans::<B>XPropertyContainer</B>,</P>
+				<P LANG="en-US">beans::<B>XPropertySetInfoChangeNotifier</B>,</P>
+				<P LANG="en-US">ucb::<B>XCommandInfoChangeNotifier</B>,</P>
+				<P LANG="en-US">container::<B>XChild</B></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=14%>
+				<P LANG="en-US">Folder</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P LANG="en-US">application/vnd.sun.star.tdoc-folder</P>
+			</TD>
+			<TD WIDTH=25%>
+				<P LANG="en-US">[readonly] string ContentType</P>
+				<P LANG="en-US">[readonly] boolean IsDocument</P>
+				<P LANG="en-US">[readonly] boolean IsFolder</P>
+				<P LANG="en-US">string Title</P>
+        <P LANG="en-US">[readonly] embed::XStorage Storage**</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P LANG="en-US">getCommandInfo</P>
+				<P LANG="en-US">getPropertySetInfo</P>
+				<P LANG="en-US">getPropertyValues</P>
+				<P LANG="en-US">setPropertyValues</P>
+				<P LANG="en-US">insert</P>
+				<P LANG="en-US">delete</P>
+				<P LANG="en-US">open</P>
+				<P LANG="en-US">transfer*</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P LANG="en-US"><B>same as TDCP Stream </B>
+				</P>
+				<P LANG="en-US">plus ucb::<B>XContentCreator</B></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=14%>
+				<P LANG="en-US">Document</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P LANG="en-US">application/vnd.sun.star.tdoc-document</P>
+			</TD>
+			<TD WIDTH=25%>
+				<P LANG="en-US">[readonly] string ContentType</P>
+				<P LANG="en-US">[readonly] boolean IsDocument</P>
+				<P LANG="en-US">[readonly] boolean IsFolder</P>
+				<P LANG="en-US">[readonly] string Title</P>
+        <P LANG="en-US">[readonly] frame::XModel DocumentModel</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P LANG="en-US">getCommandInfo</P>
+				<P LANG="en-US">getPropertySetInfo</P>
+				<P LANG="en-US">getPropertyValues</P>
+				<P LANG="en-US">setPropertyValues</P>
+				<P LANG="en-US">open</P>
+				<P LANG="en-US">transfer*</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P LANG="en-US"><B>same as TDCP Stream </B>
+				</P>
+				<P LANG="en-US">plus ucb::<B>XContentCreator</B></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=14%>
+				<P LANG="en-US">Root</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P LANG="en-US">application/vnd.sun.star.tdoc-root</P>
+			</TD>
+			<TD WIDTH=25%>
+				<P LANG="en-US">[readonly] string ContentType</P>
+				<P LANG="en-US">[readonly] boolean IsDocument</P>
+				<P LANG="en-US">[readonly] boolean IsFolder</P>
+				<P LANG="en-US">[readonly] string Title (value: always an empty
+				string)</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P LANG="en-US">getCommandInfo</P>
+				<P LANG="en-US">getPropertySetInfo</P>
+				<P LANG="en-US">getPropertyValues</P>
+				<P LANG="en-US">setPropertyValues</P>
+				<P LANG="en-US">open</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P LANG="en-US"><B>same as TDCP Stream (not Folder!)</B></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P LANG="en-US" STYLE="font-weight: medium">*) The  &bdquo;transfer&ldquo;
+command only transfers TDCP documents, TDCP folders and TDCP streams
+to TDCP folders or TDCP documents. It does not handle contents with a
+URL scheme other than the TDOC URL scheme.</P>
+<P LANG="en-US" STYLE="font-weight: medium">**) always a reference to
+a storage opened in read-only mode. No write operations are possible.
+UCB content must be used for operations that modify the storage (if
+equivalent functionality is available) or a writable storage must be
+obtained from somewhere else.</P>
+</body>
+</HTML>

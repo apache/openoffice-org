@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<head>
+    <TITLE>Be Careful with file URLs</TITLE>
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="4">
+    <TR>
+        <TD BGCOLOR="#666699">
+            <H1 ALIGN="CENTER" STYLE="margin-top: 0in; text-decoration: none"><A HREF="http://www.openoffice.org"><IMG SRC="../images/open_office_org_logo.gif" ALT="OpenOffice.org" ALIGN="RIGHT" BORDER="0"></A><FONT COLOR="White">Be Careful with file URLs</FONT></H1>
+        </TD>
+    </TR>
+</TABLE>
+<HR NOSHADE SIZE="3">
+
+<H2>Different Ways to Name Files</H2>
+
+<P>There are (at least) five ways to name files:</P>
+<OL>
+    <LI>
+        <P>The platform-specific notation, called <B>pathnames</B> here
+        (e.g., <CODE>/abc/def/ghi.txt</CODE> on Unix,
+        <CODE>a:\bcd\efg\hij.txt</CODE> on DOS and Windows, and
+        <CODE>abc:def:ghi.txt</CODE> on Macintosh).</P>
+    </LI>
+    <LI>
+        <P>A UNC-like notation, called <B>UNC names</B> here (e.g.,
+        <CODE>//./abc/def/ghi.txt</CODE> or
+        <CODE>//./a:/bcd/efg/hij.txt</CODE>).  The osl layer used to make
+        heavy use of these as a platform-independent notation, but since osl
+        has shifted to file URLs as the platform-independent notation (see
+        below), UNC names have been deprecated and became pretty much useless
+        (and are only mentioned here for completeness).</P>
+    </LI>
+    <LI>
+        <P>The file URLs used by the osl layer as a platform-independent
+        notation, called <B>osl URLs</B> here (e.g.,
+        <CODE>file:///abc/def/ghi.txt</CODE> or
+        <CODE>file:///a:/bcd/efg/hij.txt</CODE>).  Read on to learn why it is
+        important to explicitly label these file URLs as <EM>osl</EM>
+        URLs.</P>
+    </LI>
+    <LI>
+        <P>The file URLs used by the File Content Provider (FCP) within the
+        Universal Content Broker (UCB), called <B>FCP URLs</B> (e.g.,
+        <CODE>file:///home/usr123/work/abc.txt</CODE> or
+        <CODE>file:///user/work/abc.txt</CODE>).  Normally, osl URLs and FCP
+        URLs are the same (after all, the FCP uses osl to access the files).
+        But the FCP has a feature called <EM>mount points</EM> that allows it
+        to restrict access to only certain files (those that lie below a given
+        set of mount points in the file system hierarchy), and to give names
+        to these files that hide their real locations.<P>
+
+        <P>For example, if you have a mount point named <code>user</code> at
+        the osl URL <code>file:///home/usr123</code>, the osl URL
+        <code>file:///home/usr123/work/abc.txt</code> corresponds to the FCP
+        URL <code>file:///user/work/abc.txt</code>.  If you only have that
+        single mount point, the osl URL
+        <code>file:///home/usr567/work/def.txt</code> has no corresponding FCP
+        URL (and cannot be accessed via the FCP).</P>
+    </LI>
+    <LI>
+        <P>The URLs used by the UCB, called <B>UCB URLs</B> (e.g.,
+        <CODE>file:///a:/bcd/efg/hij.txt</CODE> or
+        <CODE>vnd.sun.star.wfs:///user/work/abc.txt</CODE>).  Normally, FCP
+        URLs and UCB URLs are the same, because the UCB hands file URLs
+        directly to the FCP.  But there is a special content provider, the
+        Remote Access Content Provider (RAP), that allows to rewrite URLs
+        before passing them on to other content providers.  This is used, for
+        example, in the Sun ONE Webtop (S1W), where there are typically two
+        file systems: a client file system accessed via normal (FCP) file URLs
+        (i.e., there is no rewriting RAP between the UCB and the client FCP),
+        and a server file system accessed via (FCP) URLs where the
+        <CODE>file</CODE> scheme has been replaced with
+        <CODE>vnd.sun.star.wfs</CODE> (i.e., there is a rewriting RAP between
+        the UCB and the server FCP).</P>
+    </LI>
+</OL>
+
+<P>The last two notations (FCP URLs and UCB URLs) are relatively unknown,
+because in a plain OpenOffice installation neither mount points nor the RAP
+are used, so that osl URLs, FCP URLs and UCB URLs are all identical.  But when
+you want to write correct code that also works in unusal deployments (or in
+the S1W, which should be regarded not too unusal), you have to be well aware
+of these different notations all labeled as "URLs."</P>
+
+<H2>Where Different Notations are Used</H2>
+
+<P>As mentioned before, use of UNC names is deprecated.  Also, since most code
+accesses the FCP not directly, but via the UCB, FCP URLs are only of interest
+to hard core UCB users (who should know what they are doing, anyway).  So, in
+the following we can concentrate on three different notations: pathnames, osl
+URLs, and UCB URLs.</P>
+
+<H3>Where Pathnames are Used</H3>
+
+<P>Pathnames are used in only a few places, because the default notation used
+by osl (the lowest level of concern to us) already are osl URLs (which are a
+level above pathnames).  It can be argued that interfaces that use pathnames
+should use osl URLs instead, and that pathnames are only of interest when
+communicating with the external world (other processes, or the human
+user).</P>
+
+<P>One place where pathnames are used is class <code>utl::TempFile</code>.</P>
+
+<H3>Where osl URLs are Used</H3>
+
+<P>The osl file system functions (in <code>osl/file.h</code> and
+<code>osl/file.hxx</code>) now generally use osl URLs in their interfaces.</P>
+
+<P>There should be few places above osl where osl URLs instead of UCB URLs are
+used (because generally all file access should be done through the UCB, and
+not directly via osl).  One notable exception is the handling of temporary
+files (see above).</P>
+
+<H3>Where UCB URLs are Used</H3>
+
+<P>Generally, all interfaces that are designed to communicate resource names
+within the OpenOffice framework should use UCB URLs, and all implemenations
+that access resources by these names should do so via the UCB.  Another
+advantage of this is that without any extra effort not only file resources can
+be accessed, but also other resources like HTTP and FTP (by using appropriate
+URLs, but these URLs can be opaque to the code, only interpreted by the
+UCB).</P>
+
+<H2>Converting between Different Notations</H2>
+
+<P>Sometimes it may be necessary to convert between different notations, and
+the routines to do so are well available:</P>
+<UL>
+    <LI>
+        <P>The methods <code>osl::FileBase::getFileURLFromSystemPath()</code>
+        and <code>osl::FileBase::getSystemPathFromFileURL()</code> (and their
+        plain C counterparts in <code>osl/file.h</code>) convert between
+        pathnames (called "system paths" here) and osl URLs.</P>
+    </LI>
+    <LI>
+        <P>The methods
+        <code>utl::LocalFileHelper::ConvertSystemPathToURL()</code> and
+        <code>utl::LocalFileHelper::ConvertURLToSystemPath()</code> convert
+        between pathnames (again called "system paths" here) and UCB URLs.</P>
+
+        <P>Because there can be scenarios where you have multiple FCPs on
+        different file systems, it can be ambigious how to convert from a
+        pathname (that does not contain any information identifying a specific
+        file system) to a UCB URL.  Therefore,
+        <code>ConvertSystemPathToURL()</code> requires an additional parameter
+        <code>BaseURL</code> that identifies the FCP to be used.</P>
+    </LI>
+    <LI>
+        <P>There are convenience methods
+        <code>utl::LocalFileHelper::ConvertPhysicalNameToURL()</code> and
+        <code>utl::LocalFileHelper::ConvertURLToPhysicalName()</code> that
+        choose the <EM>local</EM> FCP as <code>BaseURL</code> and then forward
+        to the above <code>LocalFileHelper</code> methods.</P>
+
+        <P>For this to work, the UCB maintains a notion of <EM>locality</EM>
+        of content providers.  This is an heuristic algorithm based on how the
+        UCB accesses individual content providers (within the same process,
+        via a pipe on the same machine, via a socket over a network).  The net
+        effect is that the UCB should always choose as most local the FCP
+        running on the same machine as the UCB, and using these
+        <code>LocalFileHelper</code> methods will then always convert between
+        UCB URLs and pathnames that are valid on this machine.</P>
+
+        <P><code>ConvertURLToPhysicalName()</code> also makes sure to do the
+        conversion only if the given UCB URL corresponds to a local pathname
+        (and not to a pathname on a non-local file system).</P>
+    </LI>
+</UL>
+
+<P>There is no direct way to convert between osl URLs and UCB URLs.  To
+convert from an osl URL to a UCB URL, use
+<code>osl::FileBase::getSystemPathFromFileURL()</code> followed by
+<code>utl::LocalFileHelper::ConvertPhysicalNameToURL()</code>.  To convert
+from a UCB URL to an osl URL, use
+<code>utl::LocalFileHelper::ConvertURLToPhysicalName()</code> followed by
+<code>osl::FileBase::getFileURLFromSystemPath</code>.  But be aware that this
+only works if the osl URL and the UCB URL shall denote files within the same
+file system.</P>
+
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="4">
+    <TR>
+        <TD BGCOLOR="#666699">
+            <P><FONT COLOR="White">Author: <A HREF="mailto:stephan.bergmann@sun.com"><FONT COLOR="White">Stephan Bergmann</FONT></A> (Last modification $Date: 2003/12/06 22:37:31 $).  Copyright 2001 <A HREF="http://www.openoffice.org"><FONT COLOR="White">OpenOffice.org</FONT></A> Foundation.  All Rights Reserved.</FONT></P>
+        </TD>
+    </TR>
+</TABLE>
+</body>
+</HTML>
