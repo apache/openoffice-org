@@ -1,0 +1,310 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.0  (Solaris Sparc)">
+	<META NAME="CREATED" CONTENT="20020626;15244200">
+	<META NAME="CHANGEDBY" CONTENT="Alexis Ledoux">
+	<META NAME="CHANGED" CONTENT="20020628;16180400">
+	<STYLE>
+	<!--
+		@page { margin-left: 3.18cm; margin-right: 3.18cm; margin-top: 2.54cm; margin-bottom: 2.54cm }
+	-->
+	</STYLE>
+</head>
+<body LANG="en-US">
+<BR><B>Process
+of creating a macro and assigning it to an event</B>
+<BR><BR>
+
+<BR>Assign a
+macro that was created and saved in the Standard Library of
+OpenOffice called Test().
+<BR>The
+directory <FONT SIZE=2><FONT FACE="Courier, monospace">soffice.cfg
+is created in the <FONT SIZE=2><FONT FACE="Courier, monospace">user/config
+directory once you assign a macro to a key.
+<BR>An xml
+file per context is created and contains all the bindings.
+<BR>Because
+the macro is in the Standard Library of OpenOffice and that the
+binding is only applied to a key in Writer:
+<BR>  The file
+<FONT SIZE=2><FONT FACE="Courier, monospace">writerkeybinding.xml
+is created
+<BR><BR>
+
+<BR><B>Content
+of</B> <FONT SIZE=2><FONT FACE="Courier, monospace">writerkeybinding.xml
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;?xml
+version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!DOCTYPE
+accel:acceleratorlist PUBLIC &quot;-//OpenOffice.org//DTD
+OfficeDocument 1.0//EN&quot; &quot;accelerator.dtd&quot;&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;accel:acceleratorlist
+xmlns:accel=&quot;http://openoffice.org/2001/accel&quot;
+xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>
+  ...
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>
+  &lt;accel:item accel:code=&quot;KEY_F10&quot;
+xlink:href=&quot;macro:///Standard.Module1.Alexis()&quot;/&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>
+  ...
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;/accel:acceleratorlist&gt;
+<BR><BR>
+
+<BR><B>Content
+of</B> <FONT SIZE=2><FONT FACE="Courier, monospace">Accelerator.dtd
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ENTITY
+% boolean	&quot;(true|false)&quot;&gt;
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ELEMENT
+accel:acceleratorlist (accel:item*)&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ATTLIST
+accel:acceleratorlist
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	xmlns:accel
+CDATA #FIXED &quot;http://openoffice.org/2001/accel&quot;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	xmlns:xlink
+CDATA #FIXED &quot;http://www.w3.org/1999/xlink&quot;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&gt;
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ELEMENT
+accel:item EMPTY&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ATTLIST
+accel:item
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	accel:code
+CDATA #REQUIRED
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	accel:shift
+%boolean; &quot;false&quot;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	accel:mod1
+%boolean; &quot;false&quot;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	accel:mod2
+%boolean; &quot;false&quot;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	xlink:href
+CDATA #REQUIRED
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&gt;
+<BR><BR>
+
+<BR>The
+content of <FONT SIZE=2><FONT FACE="Courier, monospace">user/basic
+is formed by a directory per library you modified (in that case
+Standard was modified) and 2 files .xlc.
+<BR><FONT SIZE=2><FONT FACE="Courier, monospace">Script.xlc
+is the file that will be explained:
+<BR><BR>
+
+<BR><B>Content
+of the file</B> <FONT SIZE=2><FONT FACE="Courier, monospace">script.xlc
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;?xml
+version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!DOCTYPE
+library:libraries PUBLIC &quot;-//OpenOffice.org//DTD OfficeDocument
+1.0//EN&quot; &quot;libraries.dtd&quot;&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>
+&lt;library:libraries
+xmlns:library=&quot;http://openoffice.org/2000/library&quot;
+xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>
+ &lt;library:library library:name=&quot;Standard&quot;
+xlink:href=&quot;file:///home/al91857/StarOffice6.0/user/basic/Standard/script.xlb/&quot;
+xlink:type=&quot;simple&quot; library:link=&quot;false&quot;/&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>
+ &lt;library:library library:name=&quot;WebWizard&quot;
+xlink:href=&quot;file:///usr/dist/share/staroffice,v6.0/share/basic/WebWizard/script.xlb/&quot;
+xlink:type=&quot;simple&quot; library:link=&quot;true&quot;
+library:readonly=&quot;false&quot;/&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>
+ ...
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>
+&lt;/library:libraries&gt;
+<BR><BR>
+
+<BR><B>Content
+of </B><FONT SIZE=2><FONT FACE="Courier, monospace">Libraries.dtd
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ENTITY
+% boolean &quot;(true|false)&quot;&gt;
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ELEMENT
+library:libraries (library:library)*&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ATTLIST
+library:libraries
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	xmlns:library
+CDATA #FIXED &quot;http://openoffice.org/2000/library&quot;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	xmlns:xlink
+CDATA #FIXED &quot;http://www.w3.org/1999/xlink&quot;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&gt;
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ELEMENT
+library:library EMPTY&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ATTLIST
+library:library
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	library:name
+CDATA #REQUIRED
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	xlink:href
+CDATA #IMPLIED
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	xlink:type
+CDATA #IMPLIED
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	library:link
+%boolean; #REQUIRED
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	library:readonly
+%boolean; #IMPLIED
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&gt;
+<BR><BR>
+
+<BR>You can
+see that the <FONT SIZE=2><FONT FACE="Courier, monospace">xlink:href
+of the <FONT SIZE=2><FONT FACE="Courier, monospace">library:name=&quot;Standard&quot;
+is locating as file in the home directory because I modified that
+library.
+<BR><BR>
+
+<BR><B>Content
+of the file</B> <FONT SIZE=2><FONT FACE="Courier, monospace">script.xlb
+<B>in</B> <FONT SIZE=2><FONT FACE="Courier, monospace">file:///home/al91857/StarOffice6.0/user/basic/Standard
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;?xml
+version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!DOCTYPE
+library:library PUBLIC &quot;-//OpenOffice.org//DTD OfficeDocument
+1.0//EN&quot; &quot;library.dtd&quot;&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;library:library
+xmlns:library=&quot;http://openoffice.org/2000/library&quot;
+library:name=&quot;Standard&quot; library:readonly=&quot;false&quot;
+library:passwordprotected=&quot;false&quot;&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>
+&lt;library:element library:name=&quot;Module1&quot;/&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;/library:library&gt;
+<BR><BR>
+
+<BR><B>Content
+of</B> <FONT SIZE=2><FONT FACE="Courier, monospace">Library.dtd
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ENTITY
+% boolean &quot;(true|false)&quot;&gt;
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ELEMENT
+library:library (library:element)*&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ATTLIST
+library:library
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	xmlns:library
+CDATA #FIXED &quot;http://openoffice.org/2000/library&quot;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	
+library:name CDATA #REQUIRED
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	
+library:readonly %boolean; #REQUIRED
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	
+library:passwordprotected %boolean; #REQUIRED
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&gt;
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ELEMENT
+library:element EMPTY&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ATTLIST
+library:element
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	library:name
+CDATA #REQUIRED
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&gt;
+<BR><BR>
+
+<BR><B>Content
+of the file where my macro was saved:</B> <FONT SIZE=2><FONT FACE="Courier, monospace">Module1.xba
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;?xml
+version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!DOCTYPE
+script:module PUBLIC &quot;-//OpenOffice.org//DTD OfficeDocument
+1.0//EN&quot; &quot;module.dtd&quot;&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;script:module
+xmlns:script=&quot;http://openoffice.org/2000/script&quot;
+script:name=&quot;Module1&quot; script:language=&quot;StarBasic&quot;&gt;REM
+ *****  BASIC  *****
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>Sub
+Main
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>End
+Sub
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>Sub
+Alexis
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>print
+&amp;quot;alexis&amp;quot;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>End
+Sub&lt;/script:module&gt;
+<BR><BR>
+
+<BR><B>Content
+of</B> <FONT SIZE=2><FONT FACE="Courier, monospace">Module.dtd
+<BR><BR>
+
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ELEMENT
+script:module (#PCDATA)&gt;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&lt;!ATTLIST
+script:module
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	xmlns:script
+CDATA #FIXED &quot;http://openoffice.org/2000/script&quot;
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	script:name
+CDATA #REQUIRED
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>	script:language
+CDATA #REQUIRED
+<BR><FONT FACE="Courier, monospace"><FONT SIZE=2>&gt;
+<BR><BR>
+
+<BR>When
+you save the document including the macro, everything is in a Zip
+file with the same hierarchy than explained above.
+<BR><BR>
+
+<BR>The
+file hierarchy is:
+<BR><BR>
+
+<BR>Archive:
+ test.sxw
+<BR>
+   testing: content.xml
+<BR>
+   testing: Basic/Standard/Module1.xml
+<BR>
+   testing: Basic/Standard/script-lb.xml
+<BR>
+   testing: Basic/script-lc.xml
+<BR>
+   testing: styles.xml
+<BR>
+   testing: meta.xml
+<BR>
+   testing: settings.xml
+<BR>
+   testing: META-INF/manifest.xml
+<BR><BR>
+
+<BR>So
+the script-lb.xml file is the equivalent to the script.xlb file
+explained above
+<BR>The
+script-lc.xml file is the equivalent to the script.xlc file explained
+Above.
+</body>
+</HTML>

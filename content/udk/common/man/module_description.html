@@ -1,0 +1,309 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>Module Description</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="CLASSIFICATION" CONTENT="Module Description">
+	<META NAME="KEYWORDS" CONTENT="UNO,Module,Component,Description">
+</head>
+<body LINK="#444488" VLINK="#444488" BGCOLOR="#eeeeff">
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 STYLE="page-break-before: always">
+	<COL WIDTH=75>
+	<TR>
+		<TD BGCOLOR="#666699">
+			<H1 ALIGN=CENTER STYLE="margin-top: 0cm; text-decoration: none"><A HREF="http://www.openoffice.org/"><IMG SRC="../../images/open_office_org_logo.gif" NAME="Grafik1" ALT="OpenOffice" ALIGN=RIGHT WIDTH=109 HEIGHT=54 BORDER=0></A><FONT COLOR="#ffffff"><FONT SIZE=6>Module Description</FONT></FONT></H1>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 noshade>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 STYLE="page-break-before: always">
+	<COL WIDTH=75*>
+	<COL WIDTH=130*>
+	<COL WIDTH=51*>
+	<TR>
+		<TD COLSPAN=3 WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><FONT COLOR="#ffffff"><FONT SIZE=4>Contents</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=3 WIDTH=100%>
+			<A HREF="#Overview">Overview</A><BR>
+			<A HREF="#Description">Description of module-description.dtd</A><BR>
+			<A HREF="#Integration_of_the_component_description_in_the_component">Integration 
+			of the module description in the component</A><BR>
+			<A HREF="#Example">Example</A><BR>
+		</TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=3 WIDTH=100% BGCOLOR="#666699">
+			<H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="Overview"></A>
+			<FONT COLOR="#ffffff"><FONT SIZE=4>Overview</FONT></FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=3 WIDTH=100%>
+			
+      <P>A module description provides detailed information about the module and 
+        its supported components, which is accessible in different manners. The included 
+				description is available by reading directly, by generating a short html-description, or by 
+				making an environment check for supported components to check if all 
+				needed types and services are available in the environment where they will be 
+				used. This environment check could take place during registration/installation 
+				or during a separate consistency check for a component. </P>
+		</TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=3 WIDTH=100% BGCOLOR="#666699">
+			<H3><A NAME="Description"></A><FONT COLOR="#ffffff">Description of
+			module-description.dtd</FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=3 WIDTH=100%>
+			<P><CODE>module-description.dtd</CODE></P>
+			
+      <P><CODE>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<BR>
+        &lt;!-- ... --&gt;<BR>
+        </CODE></P>
+      <P><CODE>&lt;!ENTITY % component-description-optional &quot;reference-docu|service-dependency|type&quot;&gt;<br>
+        &lt;!ENTITY % module-description-optional &quot;project-build-dependency|runtime-module-dependency|(%component-description-optional;)&quot;&gt;<br>
+        &lt;!ELEMENT module-description (module-name,component-description+,(%module-description-optional;)*)&gt; 
+        <BR>
+        &lt;!ELEMENT component-description (author,name,description,loader-name,supported-service+,(%component-description-optional;)*) 
+        &gt;<BR>
+        <BR>
+        &lt;!ELEMENT author (#PCDATA)&gt;<br>
+        &lt;!ELEMENT name (#PCDATA)&gt;<BR>
+        &lt;!ELEMENT description (#PCDATA)&gt;<br>
+        <BR>
+        &lt;!ELEMENT reference-docu EMPTY&gt;<br>
+        &lt;!ATTLIST reference-doc<br>
+        xmlns:xlink CDATA #FIXED &quot;http://www.w3.org/1999/xlink/Namespace&quot;<br>
+        xlink:type (simple) #FIXED &quot;simple&quot;<br>
+        xlink:href CDATA #REQUIRED<br>
+        xlink:role NMTOKEN #IMPLIED<br>
+        xlink:title CDATA #IMPLIED &gt;<br>
+        <br>
+        &lt;!ELEMENT module-name (#PCDATA)&gt;<BR>
+        &lt;!ELEMENT loader-name (#PCDATA)&gt;<BR>
+        &lt;!ELEMENT supported-service (#PCDATA)&gt;<BR>
+        &lt;!ELEMENT service-dependency (#PCDATA)&gt;<BR>
+        &lt;!ELEMENT project-build-dependency (#PCDATA)&gt;<BR>
+        &lt;!ELEMENT runtime-module-dependency (#PCDATA)&gt;<BR>
+        &lt;!ELEMENT language (#PCDATA)&gt;<BR>
+        &lt;!ELEMENT status EMPTY &gt;<BR>
+        &lt;!ATTLIST status value (under_construction | alpha | beta | final) 
+        #REQUIRED&gt;<BR>
+        &lt;!ELEMENT type (#PCDATA)&gt;</CODE></P>
+		<br>
+      <table width=95% border=1 cellpadding=5 cellspacing=3>
+        <tr valign=TOP> 
+          <td width=23%>author</td>
+          <td width=77%>The name of the person who has implemented the component</td>
+        </tr>
+        <tr valign=TOP> 
+          <td width=23%>name</td>
+          <td width=77%> 
+            <p>The implementation name of a component. <br>
+              (e.g., com.sun.star.comp.stoc.ORegistryServiceManager)</p>
+          </td>
+        </tr>
+        <tr valign=TOP> 
+          <td width=23%>description</td>
+          <td width=77%> 
+            <p>A short description which should be understandable to all people in 
+              the development process.</p>
+          </td>
+        </tr>
+        <tr valign=TOP> 
+          <td width=23%>reference-docu</td>
+          <td width=77%>specify an xlink to further documentation.</td>
+        </tr>
+        <tr valign=TOP> 
+          <td width=23%>module-name</td>
+          <td width=77%> 
+            <p>The name of a shared library without the system prefix (lib) or 
+              postfix (.so, .dll, ...)<br>
+              (e.g., smgr). An executable name. A Java class file name or the 
+              JAR name.</p>
+          </td>
+        </tr>
+        <tr valign=TOP> 
+          <td width=23%>loader-name</td>
+          <td width=77%> 
+            <p>The service name of the loader, which should be used to load the component.<br>
+              (e.g., com.sun.star.loader.SharedLibrary)</p>
+          </td>
+        </tr>
+        <tr valign=TOP> 
+          <td width=23%>supported-service</td>
+          <td width=77%> 
+            <p>All services supported by this component.<br>
+              (e.g., com.sun.star.registry.SimpleRegistry)</p>
+          </td>
+        </tr>
+        <tr valign=TOP> 
+          <td width=23%>service-dependency</td>
+          <td width=77%> 
+            <p>All services need this implementation.<br>
+              (e.g., com.sun.star.lang.RegistryServiceManager (very often the 
+              service manager component is used) )</p>
+          </td>
+        </tr>
+        <tr valign=TOP> 
+          <td width=23%>project-build-dependency</td>
+          <td width=77%> 
+            <p>All projects which are necessary.<br>
+              (e.g., cppuhelper, cppu, vos, sal, stl)</p>
+          </td>
+        </tr>
+        <tr valign=TOP> 
+          <td width=23%>runtime-module-dependency</td>
+          <td width=77%> 
+            <p>All projects which are used at runtime <br>
+              (e.g., cppu1, vos1$(COM), sal1)</p>
+          </td>
+        </tr>
+        <tr valign=TOP> 
+          <td width=23%>language</td>
+          <td width=77%> 
+            <p>The language in which the component is implemented.<br>
+              (e.g., C++)</p>
+          </td>
+        </tr>
+        <tr valign=TOP> 
+          <td width=23%>status</td>
+          <td width=77%> 
+            <p>The implementation state of the component.<br>
+              (under construction, alpha, beta, or final)</p>
+          </td>
+        </tr>
+        <tr valign=TOP> 
+          <td width=23%>type</td>
+          <td width=77%> 
+            <p>Which type descriptions are necessary to enable communication 
+              with other environments. To ensure that the bridges can create proxies 
+              and stubs, they must get the type description of the used types.<br>
+              The special term "comprehensive" means that all type descriptions 
+              are built into the component.<br>
+              The type descriptions must be installed in the type repository (applicat.rdb).</p>
+          </td>
+        </tr>
+      </table>
+      <P><i>*$(COM) is the extension of the C++ compiler.</i><br>
+        <i>*$(SUPDCP) is the extension of a module which depends on an SUPD and the 
+        platform.</i></P>
+      <p>All components written in C++ need the bridge library from uno to C++ for 
+        scripting or remote communication. These are the <i>msci_uno.dll</i> with 
+        the MSC4.2 and the MSC6.0; and the <i>libsunpro5_uno.so</i> library with the 
+        SunPro 5.0 compiler.</p>
+      </TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=3 WIDTH=100% BGCOLOR="#666699">
+			
+      <H3><A NAME="Integration_of_the_component_description_in_the_component"></A> 
+        <FONT COLOR="#ffffff">Integration of the module description in the module(component)</FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=3 WIDTH=100%>
+			
+      <P>Normally, the module description should also be available by calling the 
+        module itself. In case of an implementation as a shared library, the shared 
+        library should export a C-function which provides this xml description 
+        as a return value of type <I>sal_Char*</I>. This function could be generated 
+        from the xml description by using the tool <A HREF="tools.html#xml2cmp">xml2cmp</A>. 
+        The generated source file must be built with the component and the C-function 
+        <CODE>component_getDescriptionFunc</CODE> must be exported.</P>
+			<P>Example for a simple registry component:</P>
+			<P><CODE><A HREF="tools.html#xml2cmp">xml2cmp</A>
+			-func simreg_desc.cxx simreg.xml</CODE>
+			</P>
+			<br>
+		</TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=3 WIDTH=100% BGCOLOR="#666699">
+			<H3><A NAME="Example"></A><FONT COLOR="#ffffff">Example:</FONT></H3>
+		</TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=3 WIDTH=100%>
+			<P>Description for the simple registry component, simreg.xml:
+			</P>
+			
+      <P><CODE>&lt;?xml version='1.0' encoding=&quot;UTF-8&quot;?&gt;<BR>
+        &lt;!DOCTYPE module-description PUBLIC &quot;-//W3C//DTD HTML 3.2//EN&quot; 
+        &quot;module-description.dtd&quot;&gt;<BR>
+        <BR>
+        &lt;module-description xmlns:xlink=&quot;&quot;http://www.w3.org/1999/xlink&quot;&gt;<br>
+        &lt;module-name&gt; simreg &lt;/module-name&gt;<br>
+        &lt;component-description&gt;<br>
+        <br>
+        &lt;author&gt; Juergen Schmidt &lt;/author&gt;<BR>
+        &lt;name&gt; com.sun.star.comp.stoc.SimpleRegistry &lt;/name&gt;<BR>
+        <BR>
+        &lt;description&gt;<BR>
+        This component provides access to a simple hierarchical registry. The registry 
+        based on one registry file.<BR>
+        &lt;/description&gt;<BR>
+        <BR>
+        &lt;loader-name&gt; com.sun.star.loader.SharedLibrary &lt;/loader-name&gt;<BR>
+        &lt;language&gt; c++ &lt;/language&gt;<br>
+        &lt;status value=&quot;final&quot;/&gt;<br>
+        </CODE></P>
+      <P><CODE>&lt;supported-service&gt; com.sun.star.registry.SimpleRegistry 
+        &lt;/supported-service&gt;<BR>
+        </CODE></P>
+      <P><CODE>&lt;type&gt; com.sun.star.lang.XTypeProvider &lt;/type&gt;<br>
+        &lt;type&gt; com.sun.star.lang.XServiceInfo &lt;/type&gt;<br>
+        &lt;type&gt; com.sun.star.lang.XSingleServiceFactory &lt;/type&gt;<br>
+        &lt;type&gt; com.sun.star.lang.XMultiServiceFactory &lt;/type&gt;<br>
+        &lt;type&gt; com.sun.star.registry.XSimpleRegistry &lt;/type&gt;<br>
+        &lt;type&gt; com.sun.star.registry.XRegistryKey &lt;/type&gt;<br>
+        &lt;type&gt; com.sun.star.uno.XAggregation &lt;/type&gt;<br>
+        &lt;type&gt; com.sun.star.uno.XWeak &lt;/type&gt;<br>
+        &lt;type&gt; com.sun.star.uno.TypeClass &lt;/type&gt;<br>
+        </CODE></P>
+      <P><CODE>&lt;/component-description&gt;</CODE></P>
+      <P><CODE> &lt;project-build-dependency&gt; cppuhelper &lt;/project-build-dependency&gt;<BR>
+        &lt;project-build-dependency&gt; cppu &lt;/project-build-dependency&gt;<BR>
+        &lt;project-build-dependency&gt; registry &lt;/project-build-dependency&gt;<BR>
+        &lt;project-build-dependency&gt; store &lt;/project-build-dependency&gt;<BR>
+        &lt;project-build-dependency&gt; vos &lt;/project-build-dependency&gt;<BR>
+        &lt;project-build-dependency&gt; sal &lt;/project-build-dependency&gt;<BR>
+        <BR>
+        &lt;runtime-module-dependency&gt; cppuhelper &lt;/runtime-module-dependency&gt;<BR>
+        &lt;runtime-module-dependency&gt; cppu1 &lt;/runtime-module-dependency&gt;<BR>
+        &lt;runtime-module-dependency&gt; reg1 &lt;/runtime-module-dependency&gt;<BR>
+        &lt;runtime-module-dependency&gt; store1 &lt;/runtime-module-dependency&gt;<BR>
+        &lt;runtime-module-dependency&gt; vos1$(COM) &lt;/runtime-module-dependency&gt;<BR>
+        &lt;runtime-module-dependency&gt; sal1 &lt;/runtime-module-dependency&gt;<BR>
+        <BR>
+        &lt;/module-description&gt; </CODE> </P>
+		</TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=3 WIDTH=100%>
+			<HR SIZE=1 noshade>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=50% BGCOLOR="#666699">
+			
+      <P ALIGN=LEFT><FONT COLOR="#ffffff"> Author: <A HREF="mailto:juergen.schmidt@germany.sun.com"><FONT COLOR="#ffffff">J&uuml;rgen 
+        Schmidt</FONT></A> ($Date: 2004/10/29 07:25:34 $)<BR>
+			<I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I></FONT>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=3 WIDTH=100%>
+			<HR SIZE=1 noshade>
+		</TD>
+	</TR>
+</TABLE>
+</body>
+</HTML>

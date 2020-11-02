@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1" />
+	<TITLE>Interprocess bridges</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)" />
+	<META NAME="CLASSIFICATION" CONTENT="Interprocess bridges" />
+	<META NAME="KEYWORDS" CONTENT="UNO,interprocess bridge" />
+	<style type="text/css">
+	<!--
+h1 { text-align:center; margin-top: 0.2cm; text-decoration: none; color: #ffffff; font-size: 6; margin-top: 0.2cm}
+h3 { margin-top: 0.2cm; margin-bottom=0.1cm; color: #ffffff;}
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm;}
+dt {margin-bottom: 0.2cm;}
+-->
+</style>
+
+</head>
+<body LINK="#444488" VLINK="#444488" BGCOLOR="#eeeeff">
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 STYLE="page-break-before: always">
+	<TR>
+		<TD BGCOLOR="#666699">
+			<H1> Interprocess bridges </H1>
+			</td><td bgcolor="#666699" width=200>
+			<A HREF="http://www.openoffice.org/"><IMG SRC="../../../images/open_office_org_logo.gif" NAME="Grafik1" ALT="OpenOffice.org" ALIGN=right BORDER=0 /></A>
+		</TD>
+	</TR>
+</TABLE>
+<br/>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 STYLE="page-break-before: always">
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<h3> Contents </h3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+		  <p style="Margin-left: 1cm">
+			<A HREF="#Overview">Overview</A><br/>
+			<A HREF="#Description">Description</A><br/>
+			<A HREF="#Technical_details">Technical details</A><br/>
+			<A HREF="#Profiling">Profiling OpenOffice.org</A><br/>
+		  </p>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<h3><A NAME="Overview"></A> Overview </h3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0cm">Interprocess bridges
+			allow executing UNO-calls in a remote process via a
+			byte-stream-connection. Currently, two protocols are
+			available :  IIOP(<I>Internet inter-orb-protocol</I>) and
+			URP (<I>uno remote protocol</I>). The IIOP-protocol is still
+			under development, while URP is final.
+			After
+			bootstrapping the bridge and retrieving the first object, uno
+			programming becomes "remote transparent".</P>
+			<P>"Remote transparency" means that the caller does not
+			need to distinguish between remote and local UNO-calls ( and in
+			general, the caller has no way of knowing whether the call is
+			executed remotely or not).</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<h3><A NAME="Description"></A> Description </h3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<H4>Bootstrapping the bridge</H4>
+			<P><FONT SIZE=3><I>Fig. 1</I> shows all necessary services (and
+			their exported interfaces ) to create and use an interprocess bridge</FONT>.
+			An interprocess bridge can be instantiated via the service
+			com.sun.star.bridge.BridgeFactory using the call
+			XBridgeFactory.createBridge(). The caller needs to pass 4
+			Arguments to the bridge factory.</P>
+			<P>The first argument is the name of the bridge. When no name is
+			given, an exclusive bridge is created, which means that the bridge
+			cannot be retrieved via the getBridge() method. Giving the bridge
+			a certain name allows another component to reuse the bridge via
+			the getBridge() passing the same name. Unnamed bridges can be
+			safely disposed without bothering other possible users, while named
+			bridges can be reused.</P>
+			<P>The second argument is the protocol string. Up to now,
+			"iiop" and "urp" is supported.
+			Internally, the bridgefactory
+			searches for a service "com.sun.star.bridge.Bridge.protocolname "
+			and creates it. You may provide parameters, following the protocolname and
+			separated with comma(s), to the bridge (currently, there are no
+			parameters supported).</P>
+			<P>The third argument is a reference to an
+			XConnection-interface. The XConnection interface offers simple
+			read/write functions to exchange data with an arbitrary process.
+			The UDK supplies two services to build up a connection between two
+			processes (see acceptor/connector documentation), but one is
+			welcome to use their own implementation. Note that the
+			XConnection-interface does not have methods to initiate a
+			connection, it expects to receive a fully functional connection.
+			Note also, that the bridge expects to be the ONLY USER of the
+			connection, it can't cope with any, in between, read/write calls.</P>
+			<P>The createBridge()-caller may optionally pass an
+			XInstanceProvider-implementation. When the first request from the
+			remote process comes in, the bridge will call the
+			XInstanceProvider.getInstance() method to resolve the
+			first-object. At least one process must provide an
+			XInstanceProvider-implementation ( in general the
+			"server-process").</P>
+			<P>The resulting object, which is only a wrapper around a
+			C-Interface, exports an XBridge interface.
+			</P>
+			<P>The bridge has three methods, the getInstance() method is the
+			most important one. It allows the "client-process" to
+			retrieve the primary object from the remote process. The passed
+			string may be used to distinguish between different primary
+			objects. The bridge in the remote process will call
+			XInstanceProvider.getInstance( ) to resolve the requested object.</P>
+			<P>On client side, the bridge returns a proxy for the remote
+			object. The uno-programmer cannot distinguish between a proxy
+			object or an original object.</P>
+			<P>The primary object supports, in general, an interface that
+			allows for retrieving other objects (for instance
+			XMultiServiceFactory, XNamingService, or etc.)</P>
+			<P>The bridge also supports the XComponent interface. Calling
+			dispose immediately cancels all ongoing remote calls. See below
+			for further information.</P>
+			<P>Note that "client" and "server" is here
+			used only for convenience. In a distributed environment, one
+			process may act as client and as server at the same time.</P>
+
+			<H4> Lifetime of the bridge </H4>
+			<P>The bridge remains active as long as there are proxies or stubs
+			(which implicitly hold the bridge). When the last proxy dies, the
+			bridge will dispose itself and close the connection.</P>
+			<P>The bridge can be actively disposed by querying for the
+			XComponent-interface and calling a dispose. This will initiate the
+			shutdown procedure described below. The same procedure is done,
+			when the connection is closed for any external reason.</P>
+			<P>Hard shutdown procedure:</P>
+			<P>The connection is closed immediately. All pending requests
+			will receive a RuntimeException. After all threads have left the
+			bridge, the bridge explicitly deletes all stubs, so that original
+			objects held by the stubs are released. The bridge itself is
+			deleted when the last proxy dies.</P>
+			<P>Note that the main thread may need to synchronize with the
+			other threads in order to safely shutdown an application. Waiting
+			for a certain amount of time after disposing is a dirty but quick
+			solution for the problem.
+			</P>
+			<P>Note that all components must be able to cope with a
+			RuntimeException as a result of an arbitrary UNO-call to allow a
+			safe shutdown.</P>
+			<P ALIGN=center><IMG SRC="../images/iiopbridge.gif" NAME="Grafik2" ALIGN=middle WIDTH=642 HEIGHT=893 BORDER=0 alt="Interfaces for building a bridge" /></P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<h3><A NAME="Technical_details"></A> Technical details </h3>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100%>
+			<P STYLE="margin-bottom: 0cm">This section describes some
+			technical details about an interprocess bridge, that may be important to
+			know for remote programming.</P>
+			<H4>Multi-threading</H4>
+			<P STYLE="margin-bottom: 0cm">The whole bridge is threadsafe and
+			allows multiple threads to execute remote calls. The dispatcher
+			thread inside the bridge cannot block because it never executes
+			calls, instead it passes the requests to worker threads.</P>
+			<H4>Synchron/Asynchron calls</H4><!-- rh: In english: Synchronous/Asynchronous -->
+			<P STYLE="margin-bottom: 0cm">For a synchron call the bridge sends
+			the request via the connection and lets the requesting thread wait
+			for the reply. All calls that have a return value, an out
+			parameter, or throw exceptions different from the RuntimeException,
+			MUST be synchron.</P>
+			<P STYLE="margin-bottom: 0cm"><br/>
+			</P>
+			<P STYLE="margin-bottom: 0cm">An asynchron ( or oneway ) call
+			sends the request via the connection and immediately returns, not
+			waiting for a reply.It is currently specified at the
+			IDL-interface, whether a request is synchron or asynchron.</P>
+			<P STYLE="margin-bottom: 0cm"><br/>
+			</P>
+			<P STYLE="margin-bottom: 0cm">For <B>synchron</B> requests, <B>thread
+			identity</B> is guaranteed. When process A calls process B and
+			process B calls again process A, the same thread waiting in
+			process A will take over the new request. This avoids deadlocks
+			when the same mutex is locked again.</P>
+			<P STYLE="margin-bottom: 0cm"><br/>
+			</P>
+			<P>For <B>asynchron</B> requests, this is not possible because
+			there is no thread waiting in process A. Such requests are
+			executed in a new thread. The <B>series of calls</B> between two
+			processes is guaranteed. If two asynchron requests from process A
+			are sent to process B, the second request will wait until the
+			first request is finished.</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#666699">
+			<h3><A NAME="Profiling"></A> Profiling OpenOffice.org </h3>
+		</TD>
+	</TR>
+
+	<TR>
+		<TD WIDTH=100%>
+		When your Java or C++ extension for OpenOffice.org is too slow, this can often be solved by reducing
+		redundant API calls. Each API call (Java-C++ inprocess, Java-C++ outofprocess,
+		C++-C++ outofprocess) involves a bridging overhead, which is about one milli second per call.
+		(Note that C++-C++ inprocess is not bridged at all and cannot be logged, but it is either way
+		very fast !).
+
+		<p>By using a specially built interprocess bridge, you can log the interprocess calls into a file,
+		in order to analyze them later. I have prepared for Linux,Solaris and windows a shared library,
+		which you simply should copy into the office-program directory (make sure, you have moved away
+		the original one before). They can be downloaded from the
+		<a href="http://udk.openoffice.org/servlets/ProjectDocumentList">files section</a>. They
+		have been built in a OpenOffice.org 1.0 source tree, but should also work in later OpenOffice.org builds and
+		in StarOffice builds.
+
+		<p>
+		In order to activate logging, you need to set the following environment variables :
+		<table summary="Environment variables">
+		<tr>
+		<td> PROT_REMOTE_ACTIVATE</td>
+		<td> 1 </td>
+		</tr>
+
+		<tr>
+		<td>PROT_REMOTE</td>
+		<td>/system-path/to/logfile</td>
+		</tr>
+		</table>
+
+		so e.g. on windows
+		<pre>
+		set PROT_REMOTE_ACTIVATE=1
+		set PROT_REMOTE=c:\mylog
+		</pre>
+
+		After you have started the office out of this shell, for each newly established bridge a file is
+		created, e.g. c:\mylog_pid1023_0 for an interprocess bridge and c:\mylog_pid1023_1 for the
+		Java-C++ inprocess. Note, that this is only an example, in fact, the last number in the
+		file name gives the order in which the bridges get used. E.g. when you connect from another
+		process to the office, the _0 file will be this interprocess bridge. When you then instantiate
+		a Java service in the office process, the _1 file will appear. In general, a quick look at the
+		methods names in the files tells you, which bridge belongs to which file.
+
+		<p>
+		Each log file contains the time of calling in milliseconds (since an arbitrary point of time), the bytesize of
+		each call, whether it was synchron or asynchron, and the name of the method, which has been called.
+
+		e.g.
+		<pre>
+		015572: calling [size=128(usedata=3)] [synchron=1] [name=queryInterface]
+		015743: getting reply [size=264(usedata=240)][name=queryInterface]
+		015752: serving request [size=125(usedata=31)] [synchron=1] [name=queryInterface]
+		015754: replying [size=93(usedata=59)] [name=queryInterface]
+		</pre>
+		The log is created in the C++ remote bridge. Therefor the output means e.g. for the Java-C++ inprocess
+		bridge : 'calling' means a call is initiated from the C++-office to an Java object, 'getting reply'
+		means that the call has returned from Java, 'serving request' means that from the Java side a call
+		to a C++ object has been initiated and replying means that this call is now going back to Java.
+
+		<p>
+		Happy profiling :o).
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=50% BGCOLOR="#666699">
+			<P ALIGN=left><FONT COLOR="#ffffff">
+			Author: <A HREF="mailto:joerg.budischewski@germany.sun.com"><FONT COLOR="#ffffff">Joerg Budischewski</FONT></A> ($Date: 2004/12/15 12:49:52 $)<br/>
+			<I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I></FONT>
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+</body>
+</html>

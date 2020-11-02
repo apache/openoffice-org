@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<HTML>
+<head>
+    <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+    <TITLE>Naming UNO Components</TITLE>
+</head>
+<body>
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="4">
+    <TR>
+        <TD BGCOLOR="#666699">
+            <H1 ALIGN="CENTER" STYLE="margin-top: 0in; text-decoration: none"><A HREF="http://www.openoffice.org"><IMG SRC="../../../images/open_office_org_logo.gif" ALT="OpenOffice.org" ALIGN="RIGHT" BORDER="0"></A><FONT COLOR="White">Naming UNO Components</FONT></H1>
+        </TD>
+    </TR>
+</TABLE>
+<HR NOSHADE SIZE="3">
+
+
+[This document is intended to become part of the Developers Guide; once that is
+done and available online, this document can be removed again.]
+
+
+<H1>Naming Scheme</H1>
+
+<P>UNO components that come in the form of a shared library (<CODE>.so</CODE> on
+Linux and Solaris, <CODE>.dll</CODE> on Windows, <CODE>.dylib</CODE> on Mac)
+should be named as
+<PRE>
+<VAR><CODE>NAME</CODE></VAR>[<VAR><CODE>VERSION</CODE></VAR>]<!--
+  --><CODE>.uno.</CODE>(<CODE>so</CODE>|<CODE>dll</CODE>|<CODE>dylib</CODE>)
+</PRE>
+that is a descriptive <VAR><CODE>NAME</CODE></VAR>, followed by an optional
+<VAR><CODE>VERSION</CODE></VAR>, followed by the characters
+&ldquo;<CODE>.uno</CODE>&rdquo; and the platform-specific extension
+(&ldquo;<CODE>.so</CODE>&rdquo;, &ldquo;<CODE>.dll</CODE>&rdquo;,
+&ldquo;<CODE>.dylib</CODE>&rdquo;, etc.).  The optional
+<VAR><CODE>VERSION</CODE></VAR> should be of the form
+<PRE>
+<VAR><CODE>VERSION</CODE></VAR>  =  <VAR><CODE>MAJOR</CODE></VAR> <!--
+  -->[<CODE>.</CODE><VAR><CODE>MINOR</CODE></VAR> <!--
+  -->[<CODE>.</CODE><VAR><CODE>MICRO</CODE></VAR>]]
+<VAR><CODE>MAJOR</CODE></VAR>  =  <VAR><CODE>NUMBER</CODE></VAR>
+<VAR><CODE>MINOR</CODE></VAR>  =  <VAR><CODE>NUMBER</CODE></VAR>
+<VAR><CODE>MICRO</CODE></VAR>  =  <VAR><CODE>NUMBER</CODE></VAR>
+<VAR><CODE>NUMBER</CODE></VAR>  =  <CODE>0</CODE>  |  <!--
+  --><CODE>1</CODE>&ndash;<CODE>9</CODE> <CODE>0</CODE>&ndash;<CODE>9</CODE>*
+</PRE></P>
+
+<P>How to use the <VAR><CODE>VERSION</CODE></VAR> scheme, if at all, to number
+different versions of a given component shared library (e.g., only using the
+<VAR><CODE>MAJOR</CODE></VAR> and increasing it whenever the code is changed, or
+using all of <VAR><CODE>MAJOR</CODE></VAR>, <VAR><CODE>MINOR</CODE></VAR>, and
+<VAR><CODE>MICRO</CODE></VAR>) is not specified here.</P>
+
+<P>Examples of component shared library names are
+<PRE>
+<CODE>component.uno.so</CODE>
+<CODE>component1.uno.dll</CODE>
+<CODE>component0.1.3.uno.dylib</CODE>
+</PRE></P>
+
+<P>Rationale:  The <VAR><CODE>VERSION</CODE></VAR> is optional and is mainly
+intended to be useful to humans (e.g., when communicating to others that a
+certain <VAR><CODE>VERSION</CODE></VAR> of a component has a bug); see below for
+some suggestions when it might be useful to use the optional
+<VAR><CODE>VERSION</CODE></VAR> and when not.  The
+<VAR><CODE>VERSION</CODE></VAR> is consistently placed before the
+(platform-specific) extension, never after it; on Linux and Solaris, there is a
+convention to add a version number after the &ldquo;<CODE>.so</CODE>&rdquo;, but
+that version number has different semantics from the
+<VAR><CODE>VERSION</CODE></VAR> number used here (in short, such a version
+number changes whenever the shared library's interface changes, but that
+interface of a component shared library&mdash;the few functions
+<CODE>component_getFactory</CODE> etc.&mdash;never changes).</P>
+
+<P>The &ldquo;<CODE>.uno</CODE>&rdquo; is placed next to the platform-specific
+extension to emphasize that this is a special sort of shared library (its shared
+library interface consists of only the few functions
+<CODE>component_getFactory</CODE> etc., and the shared library has to be
+registered with UNO to be useful).  As the given naming scheme is only a
+suggestion, there might be violations of the rule where a component shared
+library does not contain &ldquo;<CODE>.uno</CODE>&rdquo; in its name.
+Therefore, no tool should build assumptions on whether a shared library name
+contains &ldquo;<CODE>.uno</CODE>&rdquo; or not (e.g., when <CODE>pkgchk</CODE>
+installs a <CODE>zip</CODE> file component, it should not simply register with
+UNO all those contained shared libraries that contain
+&ldquo;<CODE>.uno</CODE>&rdquo; in their names, but should rather use some other
+mechanism like a manifest file explicitly listing all the contained shared
+libraries that need to be registered).</P>
+
+<P>For UNO components that are not shared libraries (e.g., a Java component
+resulting in a <CODE>jar</CODE> file), it can also be useful to add
+&ldquo;<CODE>.uno</CODE>&rdquo; (and the optional
+<VAR><CODE>VERSION</CODE></VAR>) to the component's name (e.g.,
+<CODE>component.uno.jar</CODE>, or <CODE>component1.5.uno.jar</CODE>), for the
+same reasons as for component shared libraries: to emphasize that it is a UNO
+component.  Again, this is a suggestion, not a hard rule.</P>
+
+
+<H1>Kinds of Components</H1>
+
+<P>When deciding whether to add an optional <VAR><CODE>VERSION</CODE></VAR> to a
+component shared library's name, it might be useful to consider the following
+kinds of components:</P>
+
+<UL>
+    <LI>Those component shared libraries that are considered part of OOo (part
+    of an OOo installation set, placed into the program directory during setup,
+    and registered during setup).  Their versions are already well defined by
+    the version of the installed OOo itself (as they are part of the OOo build).
+    And because adding explicit version strings to such shared libraries might
+    cause maintenance problems within the OOo build process (e.g., the
+    <CODE>scp</CODE> projects refer to a shared library with its complete name,
+    so this would have to be adapted whenever a component's
+    <VAR><CODE>VERSION</CODE></VAR> changes), it might be best to leave the
+    versioning out for this sort of component shared libraries.</LI>
+
+    <LI>Those component shared libraries that are part of a larger component
+    <CODE>zip</CODE> file (installed by <CODE>pkgchk</CODE>).  Here, any
+    versioning can be put into the name of the <CODE>zip</CODE> file (e.g.,
+    <CODE>component1.5.zip</CODE>); <CODE>pkgchk</CODE> will unpack the
+    component shared library into a directory path from which the name of the
+    <CODE>zip</CODE> file can be deduced, so a human can always track what
+    version of the component <CODE>zip</CODE> file is in use.  So, in this case
+    it might also be sensible to not use the versioning for the component shared
+    libraries.</LI>
+
+    <LI>Those component shared libraries that are not part of a larger component
+    <CODE>zip</CODE> file, but are rather components made up of a single shared
+    library (installed by <CODE>pkgchk</CODE>).  In this case, it might well
+    make sense to use the versioning, so that a human can easily track what
+    version of such a component got installed (e.g., to mention it in a bug
+    report).</LI>
+</UL>
+
+
+<H1>Ways Components Can Evolve</H1>
+
+<UL>
+    <LI>A component shared library's interface (the few functions
+    <CODE>component_getFactory</CODE> etc.) is assumed to be stable.</LI>
+
+    <LI>A component's service interface (i.e., the UNO services offered by a
+    component) can change:
+    <UL>
+        <LI>compatibly, by adding a new implementation name, or by adding a new
+        UNO service name to an implementation name;</LI>
+
+        <LI>incompatibly, by removing an implementation name, or by removing a
+        UNO service name from an implementation name;</LI>
+
+        <LI>indirectly compatibly, when one of the named UNO services changes
+        compatibly (by adding additional optional interfaces to it).
+        <STRONG>[TODO: Adding optional interfaces to a service is probably
+        <EM>not</EM> a compatible change, see the mail &ldquo;Extending
+        Published Services with Optional Interfaces Considered Harmful&rdquo;
+        from August 14, 2003 at
+        <CODE>dev@udk.openoffice.org</CODE>.]</STRONG></LI>
+    </UL></LI>
+
+    <LI>A component shared library's implementation itself can change (bug
+    fixes).  Such changes will typically be compatible, unless a known bug is
+    fixed on whose observable behavior clients of the component depend (which,
+    in effect, considered the bug a feature instead).</LI>
+
+    <LI>A component shared library can change its dependencies on other shared 
+    libraries (C/C++ runtime libraries like <CODE>libc.so.6</CODE>,
+    <CODE>libstdc++.so.3.0.1</CODE>, and <CODE>libstlport_gcc.so</CODE>; UNO
+    runtime libraries like <CODE>libcppu.so.3.1.0</CODE> and
+    <CODE>libcppuhelpergcc3.so.3.1.0</CODE>; OOo libraries like
+    <CODE>libsvx644li.so</CODE>).  These changes are typically incompatible, as
+    they rely on (compatible or incompatible) changes of the component's
+    environment.</LI>
+</UL>
+
+
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="4">
+    <TR>
+        <TD BGCOLOR="#666699">
+            <P><FONT COLOR="White">Author: <A HREF="mailto:stephan.bergmann@sun.com"><FONT COLOR="White">Stephan Bergmann</FONT></A> (Last modification $Date: 2003/08/21 13:27:10 $).  Copyright 2003 <A HREF="http://www.openoffice.org"><FONT COLOR="White">OpenOffice.org</FONT></A> Foundation.  All Rights Reserved.</FONT></P>
+        </TD>
+    </TR>
+</TABLE>
+</body>
+</HTML>

@@ -1,0 +1,401 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1"/>
+	<TITLE>Writing a simple UNO component</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)"/>
+	<META NAME="CLASSIFICATION" CONTENT="Writing a simple UNO component"/>
+	<META NAME="KEYWORDS" CONTENT="UNO,component"/>
+  <style type="text/css">
+<!--
+li {margin-bottom: 0.2cm;}
+h1 {color:#ffffff;font-size:20pt;font-weight:bold;font-family:Arial,sans-serif;
+    margin-top: 0.2cm; margin-bottom: 0.2cm}
+h2 {color:#ffffff;font-size:16pt;font-family:Arial,sans-serif;
+    padding-left: 0.1cm; padding-top: 0.2cm; padding-bottom: 0.2cm;
+    margin-right: 0.1cm;
+    background-color: #666699; width: 100%}
+-->
+</style>
+</head>
+<body LINK="#444488" VLINK="#444488">
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 bgcolor=#666699
+     summary=Header>
+	<TR>
+		<TD>
+			<h1 align=center> Writing a simple UNO component </h1>
+		</td><td>
+			<A HREF="http://www.openoffice.org/"><IMG SRC="../../images/open_office_org_logo.gif" NAME="Grafik1" ALT="OpenOffice" ALIGN=right BORDER=0 /></A>
+		</TD>
+	</TR>
+</TABLE>
+
+<h2> Contents </h2>
+<blockquote>
+			<A HREF="#Interfaces">Interfaces</A><br/>
+			<A HREF="#Services">Services</A><br/>
+			<A HREF="#Implementation">Implementation</A>
+</blockquote>
+
+<h2> Introduction </h2>
+
+<p>This tutorial is a general example of how to write a UNO component and how
+to use it in applications, for example StarOffice or OpenOffice.org. This
+example is written in C++, however differences for implementing the component in
+Java will be mentioned.</P>
+
+<P>The component is a basic counter, whose value can be set, read,
+incremented and decremented.</p>
+
+<h2><A NAME="Interfaces"></A> Interfaces </h2>
+
+<P>The first step, in writing any component (in almost any language
+environment) is to specify one or more interfaces that the
+component must implement.</p>
+
+<p>Interfaces are the key to hiding
+implementation details in any modern development environment. They
+are contracts between a client that wants to use a components'
+functionality and the component (serving this functionality). In
+UNO terminology, UNO components are called <I>services</I>.</P>
+
+<p>Interfaces separate the specific implementation (there can more than one for
+a service) from the usage. The client using the component does not
+have any insight how the component is implemented.</p>
+
+<P>Interfaces are specified using an Interface definition language (IDL). UNO
+uses UNO-IDL as the interface definition language. An interface
+for a Counter might look like this:</P>
+
+<P>file counter.idl:</P>
+
+<PRE>
+#include &lt;com/sun/star/uno/XInterface.idl&gt;
+module foo
+{
+   /**
+     * Interface to count things.
+     */
+    [ uik(3806AFF0-75A0-11d3-87B300A0-24494732), ident("XCountable", 1.0) ]
+    interface XCountable : com::sun::star::uno::XInterface
+    {
+        long getCount();
+        void setCount( [in] long nCount );
+        long increment();
+        long decrement();
+    };
+};
+</PRE>
+
+<P>Any interface that is specified is derived from XInterface, the basic
+interface in UNO. The XInterface has methods for lifetime control of the
+interface (<CODE><I>acquire()</I></CODE> and <CODE><I>release()</I></CODE>) and
+the ability to query for further interfaces of the UNO object
+(<CODE><I>queryInterface()</I></CODE>).  Once you have an interface of an
+object, you can query for any others the object provides. If there are no
+acquired interfaces (references) left on an UNO object, the object might
+disappear.  Interfaces (and services) can be grouped in modules to avoid
+pollution of the global namespace.</P>
+
+<h2><a name="Services"></A> Services </H2>
+
+<p>Any UNO component (service) exports one or more interfaces that the
+clients are using. All services are specified using the service
+directive in an IDL file: </P>
+
+<PRE>
+module foo 
+
+{
+    service Counter
+    {
+        // exported interfaces:
+        interface XCountable;
+    };
+};
+</PRE>
+
+<P>The service declaration introduces a service called foo.Counter
+which supports the XCountable interface.</p>
+
+<p>There are some more IDL features, e.g. attributes, structs, enums, that are
+omitted at this time. All IDL declarations are put into a typelibrary file (rdb
+file). This speeds up the back end generation of the language specific
+files.</p>
+
+<p>To implement the interfaces, the appropriate interface code for the
+implementation language has to be generated from the rdb file.</p>
+
+<p>In C++ a tool called cppumaker generates pure abstract classes that the
+component has to implement. This is a common way to describe interfaces in C++.
+The Java language directly supports interfaces as a language feature (javamaker
+will generate Java interfaces).</P>
+
+<h2><a name="Implementation"></a> Implementation </h2>
+
+<p>A component that is implemented in C++ is normally packaged in a shared
+library. This shared lib exports two symbols, which are explained 
+further below. Java implementations are normally packaged in a JAR
+file. In this case the manifest file identifies a class
+implementing two methods with similar semantics.</P>
+
+<p>A simple implementation of the counting UNO service foo.Counter might be:</p>
+
+<P><CODE>file foo.cxx:</CODE></P>
+
+<PRE>
+#include &lt;rtl/ustring.hxx&gt;
+#include &lt;cppuhelper/implbase1.hxx&gt;
+#include &lt;cppuhelper/factory.hxx&gt;
+#include &lt;com/sun/star/lang/XSingleServiceFactory.hpp&gt;
+#include &lt;com/sun/star/lang/XMultiServiceFactory.hpp&gt;
+#include &lt;com/sun/star/registry/XRegistryKey.hpp&gt;
+#include &lt;foo/XCountable.hpp&gt;
+
+using namespace rtl;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::registry;
+using namespace foo;
+
+//==================================================================================================
+class MyCounterImpl : public cppu::WeakImplHelper1&lt; XCountable &gt;
+{
+	// to obtain other services if needed
+	Reference&lt; XMultiServiceFactory &gt; _xServiceManager;
+	
+	sal_Int32 _nCount;
+	
+	Reference&lt; XText &gt; _xText;
+	void dump( sal_Int32 nValue ) const;
+	
+public:
+	MyCounterImpl( const Reference&lt; XMultiServiceFactory &gt; &amp; xServiceManager );
+	virtual ~MyCounterImpl();
+	
+	// XCountable implementation
+	virtual sal_Int32 SAL_CALL getCount() throw (RuntimeException);
+	virtual void SAL_CALL setCount( sal_Int32 nCount ) throw (RuntimeException);
+	virtual sal_Int32 SAL_CALL increment() throw (RuntimeException);
+	virtual sal_Int32 SAL_CALL decrement() throw (RuntimeException);
+};
+//__________________________________________________________________________________________________
+MyCounterImpl::MyCounterImpl( const Reference&lt; XMultiServiceFactory &gt; &amp; xServiceManager )
+	: _xServiceManager( xServiceManager )
+{
+	cerr &lt;&lt; "&lt; MyCounterImpl ctor called &gt;" &lt;&lt; endl;
+
+	if (_xServiceManager.is())
+	{
+		Reference&lt; XComponentLoader &gt; xLoader( _xServiceManager->createInstance(
+			L"com.sun.star.frame.Desktop" ), UNO_QUERY );
+		if (xLoader.is())
+		{
+			Reference&lt; XTextDocument &gt; xDoc( xLoader->loadComponentFromURL(
+				L"private:scalc/factory", L"_blank", 0, Sequence&lt; PropertyValue &gt;() ), UNO_QUERY );
+			if (xDoc.is())
+				_xText = xTextDoc->getText();
+		}
+	}
+}
+//__________________________________________________________________________________________________
+MyCounterImpl::~MyCounterImpl()
+{
+	cerr &lt;&lt; "&lt; MyCounterImpl dtor called &gt;" &lt;&lt; endl;
+}
+//__________________________________________________________________________________________________
+void MyCounterImpl::dump( sal_Int32 nValue ) const
+{
+	if (_xText.is())
+		_xText->setValue( nValue );
+	else
+		cerr &lt;&lt; endl &lt;&lt; nValue;
+}
+
+// XCountable implementation
+//__________________________________________________________________________________________________
+sal_Int32 MyCounterImpl::getCount() throw (RuntimeException)
+{
+	return _nCount;
+}
+//__________________________________________________________________________________________________
+void MyCounterImpl::setCount( sal_Int32 nCount ) throw (RuntimeException)
+{
+	_nCount = nCount;
+	dump( _nCount );
+}
+//__________________________________________________________________________________________________
+sal_Int32 MyCounterImpl::increment() throw (RuntimeException)
+{
+	++_nCount;
+	dump( _nCount );
+	return _nCount;
+}
+//__________________________________________________________________________________________________
+sal_Int32 MyCounterImpl::decrement() throw (RuntimeException)
+{
+	--_nCount;
+	dump( _nCount );
+	return _nCount;
+}
+
+/**
+ * Function to create a new component instance; is needed by factory helper implementation.
+ * @param xMgr service manager to if the components needs other component instances
+ */
+Reference&lt; XInterface &gt; MyCounterImpl_create(
+	const Reference&lt; XMultiServiceFactory &gt; &amp; xMgr )
+{
+	return Reference&lt; XInterface &gt;( new MyCounterImpl( xMgr ) );
+}
+</PRE>
+
+<P>The generated header file declares an abstract C++ class and a function
+called <I>getCppuType()</I>. Any generated type has its <I>getCppuType()</I>
+describing the type, for example.</P>
+
+<PRE>
+const com::sun::star::uno::Type &amp; SAL_CALL getCppuType( const com::sun::star::uno::Reference&lt; foo::XCountable &gt; * );
+</PRE>
+
+<P>describes the <code>XCountable</code> interface. Only the type of the
+parameter is of importance. By using overloaded <I>getCppuType()</I> functions
+for any type, it is possible to get runtime type information. It is also
+possible to use little helpers like a template <I>queryInterface()</I>
+function used for the implementation of
+<CODE>XInterface::queryInterface()</CODE>.</p>
+
+<p>So how is the UNO component instantiated? As mentioned above, four symbols 
+are exported by the shared library, providing four functions: <I> component_getDescriptionFunc(), 
+component_getImplementationEnvironment(), component_writeInfo() and component_getFactory().</I></p>
+
+<p>The first is called to get a description of the component. This function
+returns a XML formatted string which describes the component. This function
+could be generated from the XML description with the <A HREF="xml2cmp.html">xml2cmp</A>
+tool. Each component should provide such a XML description. The
+second is called from a loader service to get information about
+the used environment of the component. The third is called
+whenever the component is registered in some registry file and the
+latter is called to obtain a factory to get instances of the
+component.</P>
+
+<P>They are typically implemented as follows:</P>
+
+<PRE>
+/**
+ * This function returns the name of the used environment.
+ * @param ppEnvTypeName name of the environment
+ * @param ppEnv could be point to a special environment, this parameter is normally set to null
+ */
+extern "C" void SAL_CALL component_getImplementationEnvironment(
+    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+  
+/**
+ * This function creates an implementation section in the registry and another subkey
+ * for each supported service.
+ * @param pServiceManager generic uno interface providing a service manager
+ * @param pRegistryKey generic uno interface providing registry key to write
+ */
+extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
+{
+    if (pRegistryKey)
+    {
+        try
+        {
+           Reference&lt; XRegistryKey &gt; xNewKey(
+              reinterpret_cast&lt; XRegistryKey * &gt;( pRegistryKey )->createKey(
+                 OUString( RTL_CONSTASCII_USTRINGPARAM("/foo.MyCounterImpl/UNO/SERVICES") ) ) );
+           xNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM("foo.Counter") ) );
+           return sal_True;
+        }
+    }
+    return sal_False;
+} 
+</PRE>
+
+<P><CODE>component_writeInfo()</CODE> will write information about all service
+implementations that are in the shared library. Each service implementation is
+registered under its implementation name in the implementation section,
+followed by its service name. The hierarchical structure of the registry is as
+follows:</P>
+
+<pre>
+/IMPLEMENTATIONS/
+    /foo.MyCounterImpl                    // implementation name
+        /UNO
+            /SERVICES
+                /foo.Counter        // service name
+    /bar.AnotherCounterImpl           // implementation name
+       /UNO
+           /SERVICES
+               /foo.Counter        // service name
+    ...
+</pre>
+
+<pre>
+/**
+ * Function to create a new component instance; is needed by factory helper implementation.
+ * @param xMgr service manager to if the components needs other component instances
+ */
+Reference&lt; XInterface &gt; MyCounterImpl_create( const Reference&lt; XMultiServiceFactory &gt; &amp; xMgr )
+{
+    return Reference&lt; XInterface &gt;( new MyCounterImpl( xMgr ) );
+}
+
+/**
+ * This function is called to get service factories for an implementation.
+ * @param pImplName name of implementation
+ * @param pServiceManager generic uno interface providing a service manager to instantiate components
+ * @param pRegistryKey registry data key to read and write component persistent data
+ * @return a component factory (generic uno interface)
+ */
+extern "C" void * SAL_CALL component_getFactory(
+    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+{
+    void * pRet = 0;
+    // which implementation is required?
+    if (pServiceManager &amp;&amp; rtl_str_compare( pImplName, "foo.MyCounterImpl" ))
+    {
+        rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("foo.Counter") );
+        Reference&lt; XSingleServiceFactory &gt; xFactory(
+           cppu::createSingleFactory( // helper function from cppuhelper lib
+           reinterpret_cast&lt; XMultiServiceFactory * &gt;( pServiceManager ),
+           OUString( RTL_CONSTASCII_USTRINGPARAM("foo.MyCounterImpl") ),
+           MyCounterImpl_create,
+           Sequence&lt; rtl::OUString &gt;( &amp;aServiceName, 1 ) ) );
+        if (xFactory.is())
+        {
+           xFactory.acquire();
+           pRet = xFactory.get();
+        }
+    }
+    return pRet;
+}
+</pre>
+<P><CODE>component_getFactory()</CODE> demands a certain implementation from
+the shared library. The
+returned uno interface is a component factory that is used to
+produce service instances of the component implementation. The
+first parameter identifies the name of the required
+implementation. This name must correspond to the registered one
+from <CODE>component_writeInfo()</CODE>. The second parameter
+provides a service manager instance, components can use this for
+getting further components. The last parameter provides a registry
+key to the implementation section of the component, so it can read
+and write persistent data to the registry, e.g. for booting.</P>
+
+<table summary="Footer">
+	<TR>
+		<TD BGCOLOR="#666699">
+			<P><FONT COLOR="#ffffff">
+			Author: <A HREF="mailto:daniel.boelzle@germany.sun.com"><FONT COLOR="#ffffff">Daniel B&ouml;lzle</FONT></A> ($Date: 2004/11/17 12:41:00 $)<br/>
+			<I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I></FONT>
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+</body>
+</HTML>

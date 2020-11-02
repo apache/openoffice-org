@@ -1,0 +1,421 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1"/>
+	<TITLE>Binary UNO Specification</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)"/>
+	<META NAME="CLASSIFICATION" CONTENT="UNO C++ Specification"/>
+	<META NAME="KEYWORDS" CONTENT="UNO,C++,Specification"/>
+<style type="text/css">
+	<!--
+h1 { text-align:center; margin-top: 0.2cm; text-decoration: none; color: #ffffff; font-size: 6; margin-top: 0.2cm}
+h2 { margin-top: 0.2cm; margin-bottom=0.1cm; color: #ffffff;
+     background-color: #666699 }
+li {margin-bottom: 0.2cm;}
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm;}
+dt {margin-bottom: 0.2cm;}
+-->
+</style>
+</head>
+<body>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 BGCOLOR=#666699
+     summary=header>
+<TR>
+	<TD BGCOLOR="#666699">
+
+      <h1> Binary UNO Specification </h1>
+	</TD>
+	<td>
+      <A HREF="http://www.openoffice.org/"><IMG SRC="../../images/open_office_org_logo.gif" NAME="Grafik1" ALT="OpenOffice" ALIGN=right BORDER=0 /></A>
+	<td>
+</TR>
+</TABLE>
+
+<h2> Contents </h2>
+      <DL>
+        <DD><A HREF="#Abstract">Abstract</A> <br/>
+          <A HREF="#TypeSpecification">Type Specification</A><br/>
+          <A HREF="#Interface">Interfaces</A><br/>
+        </DD>
+      </DL>
+
+<h2 id="Abstract"> Abstract </h2>
+
+<P>This document contains the specification of the types mapped from the
+   IDL to binary (C) UNO.
+
+<p>You should be familiar with the document <A HREF="uno_the_idea.html">the
+   idea of UNO</A>. A slight knowledge about interfaces, C/C++, and a background
+   about an object model like COM is helpful.</p>
+
+<h2 id="TypeSpecification"> Type Specification </h2>
+
+<P>All types which can be used in the IDL language are specified in this
+  paragraph. The representation of the types is machine, language, and operating
+  system dependent. The base types are swapped if the processor has little
+  or big-endian format. The size of the types may vary depending on the
+  processor bus size. The size of types may depend on the operating system.
+  Another problem is the alignment of data structures: the alignment is
+  processor and bus dependent. Alignment is defined through the following
+  algorithm:</P>
+
+<P>Structure members are stored sequentially by the order in which they are
+declared. Every data object has an <I>alignment-requirement</I>. For
+structures, the requirement is the largest of its members. Every object then
+has an allocated <I>offset</I> so that</P>
+
+<pre>
+    <i>offset</i> <b>%</b> <i>alignment-requirement</i> <b>==</b> 0
+</pre>
+
+<P>If it is possible that the maximum alignment can be restricted (e.g.
+Microsoft Visual C++ compiler) then the maximum alignment is set to 8. Under
+this condition the alignment is set to</p>
+
+<pre>
+    min( <i>n</i>, <b>sizeof</b>( <i>item</i> ) ).
+</pre>
+
+<p>The size is rounded up to the largest integral base type.</P>
+
+      <P>The following table shows the IDL type, size, and layout:</P>
+
+      <TABLE BORDER=1 CELLPADDING=5 CELLSPACING=0 summary="UNO types and thier mapping">
+        <COL WIDTH=20%/> <COL WIDTH=40%/> <COL WIDTH=40%/> <THEAD>
+        <TR VALIGN=top>
+          <TH WIDTH=128>
+            <P>IDL Type</P>
+          </TH>
+          <TH>
+            <P>32 Bit UNO</P>
+          </TH>
+          <TH>
+            <P>64 Bit UNO</P>
+          </TH>
+        </TR>
+        </THEAD> <TBODY>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>byte</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Signed 8 Bit (sal_Int8)</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Signed 8 Bit (sal_Int8)</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>short</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Signed 16 Bit (sal_Int16)</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Signed 16 Bit (sal_Int16)</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>unsigned short</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Unsigned 16 Bit (sal_uInt16)</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Unsigned 16 Bit (sal_uInt16)</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>long</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Signed 32 Bit (sal_Int32)</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Signed 32 Bit (sal_Int32)</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>unsigned long</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Unsigned 32 Bit (sal_uInt32)</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Unsigned 32 Bit (sal_uInt32)</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>hyper</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Signed 64 Bit (sal_Int64)</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Signed 64 Bit (sal_Int64)</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>unsigned hyper</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Unsigned 64 Bit (sal_uInt64)</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Unsigned 64 Bit (sal_uInt64)</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>float</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Processor dependent: Intel, Sparc = IEEE float (float)</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Processor dependent: Intel, Sparc = IEEE float (float)</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>double</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Processor dependent: Intel, Sparc = IEEE double (double)</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>Processor dependent: Intel, Sparc = IEEE double (double)</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>enum</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>A 32 bit value</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>A 32 bit value</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>boolean</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>A 8 bit value (sal_Bool)</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>A 8 bit value (sal_Bool)</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>char</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>16 Bit Unicode (sal_UniCode)</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>16 Bit Unicode (sal_UniCode)</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>string</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>A pointer to <a
+	    href="../../cpp/ref/names/c-_rtl_uString.html"
+	    >rtl_uString struct</a></P>
+          </TD>
+          <TD>
+            <P ALIGN=center>A pointer to <a
+	    href="../../cpp/ref/names/c-_rtl_uString.html"
+	    >rtl_uString struct</a></P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>struct</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>The struct contains the members in the order of their
+              declaration. The memory layout is described at the beginning of
+              this section. </P>
+          </TD>
+          <TD>
+            <P ALIGN=center>The struct contains the members in the order of the
+              declaration. The memory layout is described at the beginning of
+              this section. </P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>union (unsupported for now)</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>The size is 8+ size of the largest type. The first
+              64 bit values denotes the discriminant.</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>The size is 8+ size of the largest type. The first
+              64 bit values denotes the discriminant.</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>sequence</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>A pointer to <a
+	    href="../../cpp/ref/names/c-_sal_Sequence.html"
+	    >sal_Sequence struct</a> directly appending the elements.</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>A pointer to <a
+	    href="../../cpp/ref/names/c-_sal_Sequence.html"
+	    >sal_Sequence struct</a> directly appending the elements.</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>exception</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>is struct</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>is struct</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>interface</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>A pointer to <a
+	    href="../../cpp/ref/names/c-_uno_Interface.html"
+	    >uno_Interface struct</a>.</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>A pointer to <a
+	    href="../../cpp/ref/names/c-_uno_Interface.html"
+	    >uno_Interface struct</a>.</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>any</P>
+          </TD>
+          <TD>
+            <P ALIGN=center><a
+	    href="../../cpp/ref/names/c-_uno_Any.html"
+	    >uno_Any struct</a>:</P>
+		<p><em>Any</em>s cannot be nested, i.e. no <em>any</em> can contain an
+		<em>any</em>!</P>
+          </TD>
+          <TD>
+            <P ALIGN=center><a
+	    href="../../cpp/ref/names/c-_uno_Any.html"
+	    >uno_Any struct</a>:</P>
+		<p><em>Any</em>s cannot be nested, i.e. no <em>any</em> can contain an
+		<em>any</em>!</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>type</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>A pointer to <a
+	    href="../../cpp/ref/names/c-_typelib_TypeDescriptionReference.html"
+	    >typelib_TypeDescriptionReference struct</a>.</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>A pointer to <a
+	    href="../../cpp/ref/names/c-_typelib_TypeDescriptionReference.html"
+	    >typelib_TypeDescriptionReference struct</a>.</P>
+          </TD>
+        </TR>
+        <TR VALIGN=top>
+          <TD>
+            <P ALIGN=center>void</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>No memory representation</P>
+          </TD>
+          <TD>
+            <P ALIGN=center>No memory representation</P>
+          </TD>
+        </TR>
+        </TBODY>
+      </TABLE>
+
+      <P>Remarks:</P>
+
+      <UL>
+        <LI>
+          <P>16 Bit UNO is not supported</P>
+      </UL>
+
+<h2 id="Interface"> Interfaces </h2>
+<P>All interfaces are derived from the interface
+<a href="http://api.openoffice.org/common/ref/com/sun/star/uno/XInterface.html">com.sun.star.uno.XInterface</a>.
+This interface is specified in the IDL language:</P>
+
+<pre>
+interface XInterface
+{
+    any queryInterface( [in] type aType );
+    [oneway] void acquire();
+    [oneway] void release();
+};
+</pre>
+
+<p>In contrast to C++ vtable calling, binary UNO calls on a generic dispatcher
+function to perform calls on interfaces.</p>
+
+<pre>
+typedef void (SAL_CALL * uno_DispatchMethod)(
+    uno_Interface * pUnoI,
+    const typelib_TypeDescription * pMemberType,
+    void * pReturn,
+    void * pArgs[],
+    uno_Any ** ppException );
+
+/** The binary C uno interface description. */
+typedef struct _uno_Interface
+{
+    void (SAL_CALL * acquire)( uno_Interface * pInterface );
+    void (SAL_CALL * release)( uno_Interface * pInterface );
+    uno_DispatchMethod pDispatcher;
+} uno_Interface;
+</pre>
+
+<p>The lifetime of interfaces are controlled by acquire() and release().
+      Beware that the dispatch function expects an array of pointers to the parameter values (pArgs),
+      which is for interfaces uno_Interface ** (pointer to interface reference
+      storing an acquired pointer to the uno_Interface struct).
+      To signal, that no exception has to be thrown, *ppException has to set to 0 before
+      returning.
+
+<table summary=footer>
+  <TR>
+    <TD WIDTH=50% BGCOLOR="#666699">
+      <P><FONT COLOR="#ffffff"> Author: <A HREF="mailto:daniel.boelzle@germany.sun.com"><FONT COLOR="#ffffff">Daniel
+        B&ouml;lzle</FONT></A> ($Date: 2004/11/27 05:48:04 $)<br/>
+        <I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I></FONT>
+      </P>
+    </TD>
+  </TR>
+</TABLE>
+</body>
+</HTML>

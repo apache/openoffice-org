@@ -1,0 +1,364 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>How to access OpenOffice or Sun ONE Webtop from remote</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="CLASSIFICATION" CONTENT="Writing a simple UNO component">
+	<META NAME="KEYWORDS" CONTENT="UNO,component">
+</head>
+<body LINK="#444488" VLINK="#444488" BGCOLOR="#eeeeff">
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=75>
+	<TR>
+		
+    <TD BGCOLOR="#666699"> 
+      <H1 ALIGN=CENTER STYLE="margin-top: 0cm; text-decoration: none"><A HREF="http://www.openoffice.org/"><IMG SRC="../../images/open_office_org_logo.gif" NAME="Grafik1" ALT="OpenOffice" ALIGN=RIGHT WIDTH=109 HEIGHT=54 BORDER=0></A><font color="#ffffff">How 
+        to access OpenOffice or Sun ONE Webtop from remote </font></H1>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=3 noshade>
+<TABLE BORDER=0 CELLPADDING=4 CELLSPACING=0 WIDTH=100%>
+  <COL WIDTH=194*> <COL WIDTH=31*> <COL WIDTH=31*> 
+  <TR> 
+    <TD COLSPAN=3 BGCOLOR="#666699"> 
+      <H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><FONT COLOR="#ffffff"><FONT SIZE=4>Contents</FONT></FONT></H3>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 height="47"> 
+      <p><a href="#Introduction">Introduction</a><br>
+        <a href="#UnoUrlResolver">Using the component UnoUrlResolver</a><br>
+        <a href="#Summary"></a><a href="#Bridge">Create an interprocess bridge</a><br>
+        <a href="#Summary">Summary</a></p>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 BGCOLOR="#666699"> 
+      <H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><FONT COLOR="#ffffff"><font color="#ffffff"><font size=4><a name="Introduction"></a><font color="#ffffff"></font></font></font><FONT SIZE=4>Introduction</FONT></FONT></H3>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3> 
+      <P STYLE="margin-bottom: 0cm">If you want to access an Office service from 
+        a program written in the programming language Java, first both environments 
+        should be connected with each other. Java and Office act as a client-server 
+        environment. Office plays the role of the server while the Java program 
+        figures as the client.</P>
+      <P STYLE="margin-bottom: 0cm">Because you don't want to distinguish between 
+        local and remote UNO calls, you have to create an <a href="http://udk.openoffice.org/common/man/spec/remotebridge.html">interprocess 
+        bridge</a>.</P>
+      <P STYLE="margin-bottom: 0cm"><img src="images/GetRemoteObject.jpg" width="564" height="556" alt="Get a remote object"></P>
+    </TD>
+  </TR>
+  <tr> 
+    <td colspan=3 bgcolor="#666699"> 
+      <h3><a name="Summary"></a><font color="#ffffff">Using the component UnoUrlResolver</font></h3>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3 height="740"> 
+      <p style="margin-bottom: 0cm">At first, a simple service manager will be 
+        created by calling the static method createSimpleServiceManager() from 
+        the class <a href="../ref/com/sun/star/comp/helper/Bootstrap.html">com.sun.star.comp.helper.Bootstrap</a>.</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="2"> 
+            <pre>XMultiServiceFactory xmultiservicefactory =<br>  com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p style="margin-bottom: 0cm">The created service manager is able to create 
+        the service <a href="../ref/com/sun/star/comp/urlresolver/package-tree.html">UnoUrlResolver</a>, 
+        if this service was registered before.</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="2"> 
+            <pre>Object objectUrlResolver = xmultiservicefactory.createInstance(<br>  &quot;com.sun.star.bridge.UnoUrlResolver&quot; );</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p style="margin-bottom: 0cm">Comparable to casting in C++ the class <a href="../ref/com/sun/star/uno/UnoRuntime.html">UnoRuntime</a> 
+        provides a method queryInterface() for getting an object that has all 
+        methods from the interface <a href="http://api.openoffice.org/common/ref/com/sun/star/bridge/XUnoUrlResolver.html">XUnoUrlResolver</a>.</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="14"> 
+            <pre>XUnoUrlResolver xurlresolver = ( XUnoUrlResolver )<br>  UnoRuntime.queryInterface( XUnoUrlResolver.class, objectUrlResolver );</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p style="margin-bottom: 0cm"> Now, the object xurlresolver resolves the 
+        object that is specified as follow:<br>
+        uno:&lt;connection description&gt;;&lt;protocol description&gt;;&lt;initial 
+        object name&gt;</p>
+      <p style="margin-bottom: 0cm">At this point the Java program (client) will 
+        connect to the office (server) that was run with the command: <br>
+        soffice -accept=socket,host=localhost,port=8100;urp<br>
+      </p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="21"> 
+            <pre>Object objectInitial = xurlresolver.resolve(<br>  &quot;uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager&quot; );</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p style="margin-bottom: 0cm">Finally a <a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XMultiServiceFactory.html">XMultiServiceFactory</a> 
+        will be created, which allows the acces to the running office.<br>
+      </p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="25"> 
+            <pre>xmultiservicefactory = ( XMultiServiceFactory )<br>  UnoRuntime.queryInterface( XMultiServiceFactory.class, objectInitial );</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p style="margin-bottom: 0cm">All program fragments described above are 
+        summarized in the following. </p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="134"> 
+            <pre>XMultiServiceFactory xmultiservicefactory =<br>  com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();<br>      <br>Object objectUrlResolver = xmultiservicefactory.createInstance(<br>  &quot;com.sun.star.bridge.UnoUrlResolver&quot; );<br>      <br>XUnoUrlResolver xurlresolver = ( XUnoUrlResolver )<br>  UnoRuntime.queryInterface( XUnoUrlResolver.class, objectUrlResolver );<br>      <br>Object objectInitial = xurlresolver.resolve(<br>  &quot;uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager&quot; );<br>      <br>xmultiservicefactory = ( XMultiServiceFactory )<br>  UnoRuntime.queryInterface( XMultiServiceFactory.class, objectInitial );</pre>
+            </td>
+        </tr>
+        </tbody> 
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3 bgcolor="#666699"> 
+      <h3 align=LEFT style="margin-top: 0cm; text-decoration: none"><font color="#ffffff"><font size=4><a name="Bridge"></a><font color="#ffffff"></font>Creating 
+        an interprocess bridge</font></font></h3>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3> 
+      <p style="margin-bottom: 0cm">First of all the <a href="http://udk.openoffice.org/common/man/concept/unointro.html#servicemanager">servicemanager</a> 
+        is needed because the servicemanager allows to instantiate the service 
+        <a href="http://api.openoffice.org/common/ref/com/sun/star/connection/Connector.html">Connector</a>. 
+        The class <a href="../ref/com/sun/star/comp/helper/Bootstrap.html">Bootstrap</a> 
+        provides a method that will create a simple servicemanager.</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td> 
+            <pre>
+XMultiServiceFactory xmultiservicefactoryServiceManager = 
+  com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
+</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p style="margin-bottom: 0cm">The servicemanager creates a new instance 
+        of the service Connector, which allows to establish a connection to another 
+        process (in that case: Office).</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="26"> 
+            <pre>Object objectConnector  = xmultiservicefactoryServiceManager.createInstance( 
+  &quot;com.sun.star.connection.Connector&quot; );</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p style="margin-bottom: 0cm">The method <a href="http://api.openoffice.org/common/ref/com/sun/star/uno/XInterface.html#queryInterface">queryInterface</a> 
+        queries for the new interface <a href="http://api.openoffice.org/common/ref/com/sun/star/connection/XConnector.html">XConnector</a> 
+        to the existing UNO object objectConnector.</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td> 
+            <pre>
+XConnector xconnector = ( XConnector ) UnoRuntime.queryInterface( 
+  XConnector.class, objectConnector );</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p style="margin-bottom: 0cm">The client (Java code) will contact the server 
+        (running office) if the office is launched for example with the following 
+        option: &quot;soffice -accept=socket,host=localhost,port=8100;urp&quot;. 
+        Here, the <a href="http://udk.openoffice.org/common/man/spec/urp.html">UNO 
+        Remote Protocol</a> is used to transmit UNO calls via process-boundaries 
+        ( comparable to iiop in CORBA). The connection description contains the 
+        kind of the connection plus a comma seperated list of attributes. In this 
+        case a TCP/IP connection is specified.</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td> 
+            <pre>
+XConnection xconnection = xconnector.connect( &quot;socket,host=localhost,port=8100&quot; );</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p style="margin-bottom: 0cm">The service <a href="http://api.openoffice.org/common/ref/com/sun/star/uno/NamingService.html">NamingService</a> 
+        provides a collection of global reachable objects. Normally an UNO application 
+        exposes its external reachable objects through this service. The StarOffice 
+        naming service can be addressed as &quot;StarOffice.NamingService&quot;.</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td> 
+            <pre>
+String stringRootOid = &quot;StarOffice.NamingService&quot;;
+</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p style="margin-bottom: 0cm">In order to create a new bridge between the 
+        environment Java and the environment Office the method &quot;getBridgeByName&quot; 
+        of the class UnoRuntime should be called. That method needs five arguments: 
+      </p>
+      <ul>
+        <li>the name of the source environment, </li>
+        <li>the context of the source environment, </li>
+        <li>the name of the target environment, </li>
+        <li>the context of the target environment and </li>
+        <li>the initial arguments for the bridge (using the <a href="http://udk.openoffice.org/common/man/spec/urp.html">UNO 
+          Remote Protocol</a> and the given connection).</li>
+      </ul>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td> 
+            <pre>
+com.sun.star.uno.IBridge ibridge = UnoRuntime.getBridgeByName( 
+  &quot;java&quot;, 
+  null, 
+  &quot;remote&quot;,
+  null, 
+  new Object[]{ &quot;urp&quot;, xconnection, null } );
+</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p style="margin-bottom: 0cm">The interface IBridge maps an object from 
+        the destination environment (Office) to the source environment (Java). 
+        The name of the object, which should be mapped, and the interface, under 
+        which the object should be mapped, are passed on to the bridge.</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td> 
+            <pre>
+Object objectInitial = ibridge.mapInterfaceFrom( stringRootOid, 
+  new com.sun.star.uno.Type( XInterface.class ) );</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p style="margin-bottom: 0cm">The method <a href="http://api.openoffice.org/common/ref/com/sun/star/uno/XInterface.html#queryInterface">queryInterface</a> 
+        queries for the new interface <a href="http://api.openoffice.org/common/ref/com/sun/star/uno/XNamingService.html">XNamingService</a> 
+        to the existing UNO object objectInitial.</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td> 
+            <pre>XNamingService xnamingservice = ( XNamingService ) UnoRuntime.queryInterface(
+  XNamingService.class, objectInitial );
+</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+      <p>The method <i><a href="http://api.openoffice.org/common/ref/com/sun/star/uno/XNamingService.html#getRegisteredObject">getRegisteredObject</a></i> 
+        of the interface XNamingService provides a previous registered object: 
+        The service manager of the currrent office. Furthermore, there is a query 
+        for the interface <a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XMultiServiceFactory.html">XMultiServiceFactory</a> 
+        to the existing service manager.</p>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td> 
+            <pre>if( xnamingservice != null ) {<br>  Object objectServiceManager = xnamingservice.getRegisteredObject(&quot;StarOffice.ServiceManager&quot; );</pre>
+            <pre>  xmultiservicefactory = ( XMultiServiceFactory )
+    UnoRuntime.queryInterface( XMultiServiceFactory.class, objectServiceManager );
+}</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+    </td>
+  </tr>
+  <TR> 
+    <TD COLSPAN=3 BGCOLOR="#666699"> 
+      <H3><A NAME="Summary"></A><font color="#ffffff">Summary</font></H3>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3> 
+      <P STYLE="margin-bottom: 0cm">All program fragments described above are 
+        summarized in the following. </P>
+      <table width="100%" bgcolor=#ffffcc>
+        <tbody> 
+        <tr> 
+          <td height="386"> 
+            <pre>
+XMultiServiceFactory xmultiservicefactoryServiceManager = 
+  com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
+<br>Object objectConnector  = xmultiservicefactoryServiceManager.createInstance( 
+  &quot;com.sun.star.connection.Connector&quot; );<br>XConnector xconnector = ( XConnector ) UnoRuntime.queryInterface( 
+  XConnector.class, objectConnector );</pre>
+            <pre>XConnection xconnection = xconnector.connect( &quot;socket, host=localhost,port=8100&quot; );</pre>
+            <pre>String stringRootOid = &quot;StarOffice.NamingService&quot;;
+com.sun.star.uno.IBridge ibridge = UnoRuntime.getBridgeByName( &quot;java&quot;, null, &quot;remote&quot;,
+  null, new Object[]{ &quot;urp&quot;, xconnection, null } );
+Object objectInitial = ibridge.mapInterfaceFrom( stringRootOid, 
+  new com.sun.star.uno.Type( XInterface.class ) );</pre>
+            <pre>XNamingService xnamingservice = ( XNamingService ) UnoRuntime.queryInterface(
+  XNamingService.class, objectInitial );</pre>
+            <pre>if( xnamingservice != null ) {<br>  Object objectServiceManager = xnamingservice.getRegisteredObject(&quot;StarOffice.ServiceManager&quot; );</pre>
+            <pre>  xmultiservicefactory = ( XMultiServiceFactory )
+    UnoRuntime.queryInterface( XMultiServiceFactory.class, objectServiceManager );
+}
+</pre>
+          </td>
+        </tr>
+        </tbody> 
+      </table>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3> 
+      <P>&nbsp; </P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3> 
+      <HR SIZE=1 noshade>
+    </TD>
+  </TR>
+  <TR> 
+    <TD BGCOLOR="#666699"> 
+      <P ALIGN=LEFT><FONT COLOR="#ffffff"> Author: <A HREF="mailto:Bertram.Nolte@sun.com"><FONT COLOR="#ffffff">Bertram 
+        Nolte</FONT></A> (Fri 3 Aug 2001 15:46:08)<BR>
+        <I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I></FONT> 
+      </P>
+    </TD>
+  <TR> 
+    <TD COLSPAN=3> 
+      <HR SIZE=1 noshade>
+    </TD>
+  </TR>
+</TABLE>
+<HR SIZE=3 noshade>
+</body>
+</HTML>

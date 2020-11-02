@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1"/>
+<title> UNO Language Binding : What is it about? </title>
+<style type="text/css">
+	<!--
+h1 { text-align:center; margin-top: 0.2cm; text-decoration: none; color: #ffffff; font-size: 6; margin-top: 0.2cm}
+h2 { margin-top: 0.2cm; margin-bottom=0.1cm; color: #ffffff;
+     background-color: #666699 }
+ul {margin-bottom: 0cm;}
+li {margin-bottom: 0cm;}
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm;}
+dt {margin-bottom: 0.2cm;}
+-->
+</style>
+</HEAD>
+
+<body>
+<table width=100% border=0 cellpadding=4 cellspacing=0 bgcolor="#666699"
+   summary="Header">
+<TR><TD>
+      <h1> UNO Language Binding : What is it about? </h1>
+	  </td><td>
+	  <A HREF="http://www.openoffice.org/"> 
+        <img src="../../../images/open_office_org_logo.gif" name="Grafik1" alt="OpenOffice.org" align=right width=109 height=54 border=0/></A>
+    </TD></TR>
+</TABLE>
+
+<h2 id=contents> Contents </h2>
+<blockquote>
+   <a href="#intro">Introduction</a><br/>
+   <a href="#def">Definitions:</a>
+   <ul>
+     <li><a href="#env">UNO Runtime Environment (URE)</a></li>
+     <li><a href="#langspec">Language Specification and Glue Code</a></li>
+     <li><a href="#codegen">Code Generator</a></li>
+     <li><a href="#bridge">UNO Bridge</a>
+	 <ul>
+	    <li><a href="#mapping">Mapping</a></li>
+		<li><a href="#engine">Environment/ Engine Access</a></li>
+	</ul>
+	</li>
+    <li><a href="#loader">UNO Component Loader</a></li>
+    <li><a href="#bootstrap">Bootstrapping</a></li>
+    <li><a href="#initobject">Initial Object</a></li>
+   </ul>
+</blockquote>
+
+<h2 id="intro"> Introduction </h2>
+
+<p>
+The objective of this document is to get a general notion of a UNO language
+binding and
+define terminology of the parts that language binding consists.
+For <a href="http://wiki.services.openoffice.org/wiki/Uno/Cpp/Tutorials/Introduction_to_Cpp_Uno">general UNO programming</a> or details
+ about <a href="../../../cpp/man/cpp_bridges.html">building up a C++ bridge</a>,
+for example for a specific C++ compiler please read the specific documents.</p>
+
+<p>A UNO language binding is simply said the infrastructure enabling communication between
+UNO components from different language or runtime environments.
+More over a language binding not only let components, for example written with different
+programming languages, to interoperate, it also provides the UNO programming environment
+for a specific language/ environment.
+Despite the fact that a language binding may not only connect different programming languages
+(for example when connecting to object models like COM), we use the term of a "language
+binding" for simplicity. Though, the term "Environment binding" would have been more general.</p>
+
+<p>The following section presents several definitions of what parts a UNO
+language binding consists. Some parts are optional, though.
+
+<h2 id="def"> Definitions </h2>
+
+<p><i><b><a name="env"></a>UNO Runtime Environment (URE).</b></i>
+A UNO component runs in an environment which serves as the platform to run
+components (UNO Runtime Environment).
+A language binding connects two environments for interoperation.
+<p>
+The runtime prerequisites for components in an environment may be different,
+for example a java component needs a java virtual machine, a COM component the COM libraries.
+An environment need not denote a specific programming language to interoperate with,
+it can even be a language independent object model like COM.
+</p>
+
+<p><b><i><a name="langspec"></a>Language Specification and Glue Code.</i></b>
+The language specification defines the mapping of any UNO type (for example IDL long)
+to its corresponding environment specific type (for example java int).
+More over, the handling of complex types (for example structs, sequences, any, interfaces)
+is defined with respective support by a runtime API.
+If a programming language does not support a specific UNO feature (for example no
+"direct"/ convenient exception support), additional glue code (part of the runtime API)
+has to be defined balancing out these weaknesses.
+</p>
+
+<p><i><b><a name="codegen"></a>Code Generator.</b></i>
+The language specification defines the representation of UNO IDL types.
+
+<p>A code generator produces the appropriate programming language constructs as
+defined in the language specification.
+It commonly reads from a binary type library and writes out files for each type.
+</p>
+
+<p><i><b><a name="bridge"></a>UNO Bridge.</b></i>
+A bridge is the core instance connecting two environments.
+
+<p>A bridge is bidirectional in the way that it can map interfaces from one
+environment
+to another and vice versa, thus providing two unidirectional mappings.</p>
+
+<blockquote>
+<p><i><b><a name="mapping"></a>Mapping.</b></i>
+Mapping an interface involves in depth knowledge of both environments
+to emulate arbitrary interfaces.
+
+<p>Calls on an emulated interface are delegated (including marshalling) via the
+bridge and lead to a method invocation on the target interface.
+Any return values, out parameters or exceptions have to be converted to the calling environment.
+For this task the complementary mapping is needed,
+thus both mappings of a bridge are tied closely together.
+</p>
+
+<p><i><b><a name="engine"></a>Environment/ Engine Access.</b></i>
+The bridge needs runtime environment access, for interpreting environments
+also access to the executing engine (for example java, javascript).
+<p>The bridge connecting to the environment commonly needs engine access, too.
+</p>
+</blockquote>
+
+<p><i><b><a name="loader"></a>UNO Component Loader.</b></i>
+The UNO component loader loads a UNO component implemented for a specific UNO runtime environment.
+<p>Besides loading the component and preparing the runtime environment (like scripting engine access),
+this process eventually includes raising an appropriate bridge to connect to the environment.
+
+<p>When loading a component, the component may define own types it needs to execute.
+These types may be introduced to the runtime by the component dynamically at startup
+or those types have been merged to a central binary typelib file prior to application execution
+(which has been most commonly used for now).
+</p>
+
+<p><i><b><a name="bootstrap"></a>Bootstrapping.</b></i>
+The bootstrapping process starts up the UNO core system up to the point that components
+can be loaded and executed.
+
+<p>Components are dependent on each other. For loading components you most commonly need to have
+a component loader component from scratch. This is the first problem: You need to load
+it manually.
+Among other things it is necessary to have a type system providing type information used
+in components. The latter issue may includes typelib files to be known.
+So this process requires inside implementation knowledge of the initial components,
+despite the fact that you normally need not know how a service is implemented.
+As a result of the bootstrapping process, it is possible to raise further components
+without knowing any implementation details.
+
+<p>
+It is not intended to define a <i>general</i> bootstrap process here, if this is possible at all.
+Although, we will present a default scheme applications using
+the C++ implementations of base services from code module <code>stoc</code>.
+It is part of the UNO language binding to provide a mechanism to bootstrap an initial
+UNO system in a specific UNO runtime environment.
+</p>
+
+<p><i><b><a name="initobject"></a>Initial Object.</b></i>
+First object provided by a UNO runtime environment.
+
+<p>This may be necessary in inter-process communication, if the component
+loader needs to
+have a "special" initial object like a service manager.
+The language binding has to define the initial communication protocol to get the initial object.
+</p>
+
+<table summary=Footer bgcolor=#666699 width=100%>
+<TR><TD><P><FONT COLOR="#ffffff">
+Author: <A HREF="mailto:Daniel.Boelzle@germany.sun.com">
+<FONT COLOR="#ffffff">Daniel B&ouml;lzle</font></A>. ($Date: 2007/05/25 14:38:49 $)<br/>
+ <I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I>
+</FONT>
+</TD></tr>
+</TABLE>
+</BODY>
+</HTML>

@@ -1,0 +1,296 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+       	                  
+  <meta http-equiv="CONTENT-TYPE"
+ content="text/html; charset=iso-8859-1">
+  <title>Building Scripting</title>
+                         	 	                  
+  <meta name="GENERATOR" content="OpenOffice.org 1.0  (Solaris Sparc)">
+       	                  
+  <meta name="CREATED" content="20020626;15244200">
+       	                  
+  <meta name="CHANGEDBY" content="Alexis Ledoux">
+       	                  
+  <meta name="CHANGED" content="20020628;16180400">
+       	                  
+  <style>
+	<!--
+		@page { margin-left: 3.18cm; margin-right: 3.18cm; margin-top: 2.54cm; margin-bottom: 2.54cm }
+	-->
+	</style>
+</head>
+  <body lang="en-US">
+              
+<h2>Building the Scripting Framework &nbsp;for &nbsp;OpenOffice.org</h2>
+         
+<h3>Contents:</h3>
+     
+<ol>
+     <li><a href="#Requirements">Requirements</a></li>
+     <li><a href="#cvs">CVS</a></li>
+     <li><a href="#env">Setting up environment</a></li>
+     <li><a href="#modify">Modifying modules</a></li>
+     <li><a href="#build">Building</a></li>
+     <li><a href="#pkg">Create package</a></li>
+     <li><a href="#install">Manual&nbsp;install</a><br>
+     </li>
+     
+</ol>
+   <br>
+   <br>
+           
+<h3><a name="Requirements"></a>Requirements:</h3>
+           
+<ul>
+        <li>JDK1.3 or greater</li>
+        <li>ANT which is available from <a
+ href="http://jakarta.apache.org/builds/jakarta-ant/release">http://jakarta.apache.org/builds/jakarta-ant/release</a></li>
+        <li>Full OO643C or later solver and installation set</li>
+        <li>OO643C or greater OpenOffice build environment (see: <a
+ href="http://www.openoffice.org/dev_docs/source/643/index.html/ondownloads">Downloading
+   and Building the Source</a>, currently this is for 643 not OO643C )</li>
+           
+</ul>
+           
+<h3><a name="cvs"></a>Projects to get from CVS</h3>
+Backup your unoil and offapi modules and then checkout the following:<br>
+ <br>
+      Modules to be checkout from CVS head:<br>
+           
+<ul>
+        <li><i>scripting</i></li>
+        <li><i>unoil/drafts/com/sun/star/script (drafts/com/sun/star/script,
+     </i>needs to be in the <i>unoil </i>&nbsp;module)</li>
+        <li><i>offapi/drafts/com/sun/star/script&nbsp;</i><i>(drafts/com/sun/star/script,
+     </i>needs to be in the <i>offapi </i>&nbsp;module)</li>
+           
+</ul>
+      If you only have solvers, you will also need to checkout the following
+  modules  on a tag that is appropriate to the release, you are building
+for:<br>
+           
+<ul>
+        <li><i>unoil</i></li>
+        <li><i>offapi</i></li>
+           
+</ul>
+           
+<h3><a name="env"></a>Setting up build environment for Scripting</h3>
+      <b>Assumption: </b>That you have a build environment set-up to build
+ OpenOffice.org   or components for OpenOffice.org, otherwise please read
+the guide on  <a
+ href="http://www.openoffice.org/dev_docs/source/643/index.html/ondownloads">Downloading
+   and Building the Source</a><br>
+      <br>
+      If you have configured your environment with Java and Ant, please skip 
+ on  to ...... , otherwise you will need to re-run the configure script from
+  the  <i>config_office</i> project &nbsp;and include the options <i>--with-jdk-home=&lt;PATH
+   TO JAVA&gt; &nbsp;--with-ant-home=&lt;PATH TO ANT&gt;</i> and source or
+ run  the environment set-up script.<br>
+      <br>
+      <b>NOTE: </b>If configure can not get Ant, after you have sourced or
+ run   the environment set-up script, &nbsp;you will need add all jarfiles
+ under  <i>&lt;PATH  TO ANT&gt;/lib</i> to your <i>$CLASSPATH</i><br>
+      <br>
+           
+<h3><a name="modify"></a>Modifying offapi, unoil and scripting modules for 
+ building</h3>
+      You will need to modify the offapi and unoil modules so that the services
+   and interfaces for scripting are available.<br>
+           
+<h4>offapi &nbsp;module:</h4>
+           
+<ol>
+        <li>Ensure that you have the drafts/com/sun/star/script directory 
+under   the offapi module, if you don't, you will need to check it out from 
+CVS head</li>
+        <li>Modify the prj/build.lst, you will need to add the following
+lines</li>
+                     
+  <ul>
+        <li><i>oa&nbsp; offapi\drafts\com\sun\star\script\framework&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   nmake&nbsp;&nbsp; -&nbsp;&nbsp; all oa_scriptf_drafts NULL</i></li>
+        <li><i>oa&nbsp; offapi\drafts\com\sun\star\script\framework\provider&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   nmake&nbsp;&nbsp; - all oa_sfprovider_drafts NULL</i></li>
+        <li><i>oa&nbsp; offapi\drafts\com\sun\star\script\framework\storage&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   nmake&nbsp;&nbsp; -&nbsp;&nbsp; all oa_sfstorage_drafts NULL</i></li>
+        <li>and add "<i>oa_sfprovider_drafts oa_sfstorage_drafts oa_scriptf_drafts</i>"
+ to the last line before "<i>NULL</i>"</li>
+                     
+  </ul>
+      <li> Modify the util/makefile.mk and add the following to UNOIDLDBFILES 
+  list&nbsp;</li>
+       
+  <ol>
+      <li>$(UCR)$/dcssscriptframework.db \&nbsp;</li>
+      <li>$(UCR)$/dcsssfprovider.db \&nbsp;</li>
+      <li>$(UCR)$/dcsssfstorage.db   </li>
+       
+  </ol>
+              
+</ol>
+                   
+<h2></h2>
+       
+<h4>unoil module:</h4>
+       
+<ol>
+      <li>Ensure that you have the drafts/com/sun/star/script directory under
+   the unoil module, if you don't, you will need to check it out from CVS
+head</li>
+      <li>Modify the makefile.mk in the top level directory of the module 
+-</li>
+               
+  <ol>
+        <li>Change the line <i>RDB &nbsp;= &nbsp;$(SOLARBINDIR)/offapi.rdb</i>
+  to <i>RDB = $(PRJ)$/..$/offapi$/$(INPATH)$/ucr$/offapi.db</i></li>
+               
+  </ol>
+      <li>Modify prj/build.lst</li>
+               
+  <ol>
+        <li>Add the following line:<i> ul&nbsp; unoil\drafts\com\sun\star\script\framework&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  nmake&nbsp;&nbsp; -&nbsp;&nbsp; all ul_scriptf_drafts ul_ucb ul_frame NUL</i>L&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <br>
+        </li>
+        <li>Add <i>ul_scriptf_drafts </i>to the last line before <i>NULL</i></li>
+               
+  </ol>
+       
+</ol>
+       
+<h4>scripting module:</h4>
+       
+<ol>
+      <li>Remove the comments from the lines in source/cppumaker.mk:</li>
+               
+  <ol>
+        <li>UNOUCRDEP=$(PRJ)/../offapi/$(INPATH)/ucr/offapi.db $(SOLARBINDIR)$/udkapi.rdb
+  $(SOLARBINDIR)$/offapi.rdb</li>
+        <li>UNOUCRRDB=$(PRJ)/../offapi/$(INPATH)/ucr/offapi.db $(SOLARBINDIR)$/udkapi.rdb
+  $(SOLARBINDIR)$/offapi.rdb<br>
+        </li>
+               
+  </ol>
+      <li>Comment out the lines in source/cppumaker.mk</li>
+               
+  <ol>
+        <li>UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb</li>
+        <li>UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb</li>
+               
+  </ol>
+      <li>Remove the comment from the following line in java/build.xml:</li>
+               
+  <ol>
+        <li>&lt;!-- &lt;pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/&gt;
+  --&gt;</li>
+               
+  </ol>
+  <li>Comment out the line in java/build.xml:</li>
+  <ol>
+    <li>&lt;pathelement location="${solar.jar}/unoil.jar"/&gt;<br>
+    </li>
+  </ol>
+       
+</ol>
+           
+<h3><a name="build"></a>Building scripting</h3>
+       
+<ol>
+      <li>Execute <i>build</i> in the <i>offapi</i> module</li>
+      <li>Execute <i>build </i>in the <i>unoil</i> module</li>
+      <li>Execute <i>build</i> in the <i>scripting</i> module</li>
+       
+</ol>
+       
+<h3><a name="pkg"></a>Creating the UNO Package:</h3>
+  Please read the <a
+ href="http://api.openoffice.org/DevelopersGuide/DevelopersGuide.html">Developer's
+ Guide</a> for more information on UNO packages<br>
+       
+<ol>
+      <li>Create a separate directory (<i>$pkg)</i></li>
+      <li>In this directory, create directories called <i>$pkg/&lt;PLATFORM&gt;.plt
+      </i>and <i>$pkg/</i><i>skip_registration (</i>Where <i>&lt;PLATFORM&gt;</i>
+ is like  linux_x86)</li>
+     <li><b>NOTE</b>: A list of supported directories is available in the 
+source  file desktop/source/pkgchk/pkgchk_packages.cxx, you may need to modify 
+this,  if your platform is not supported<br>
+      </li>
+      <li>Copy in the libraries from <i>scripting/&lt;platform&gt;/lib </i>to
+      <i>$pkg/</i><i>&lt;PLATFORM&gt;.plt</i></li>
+          <li>Copy in <i>ScriptRuntimeForJava.jar</i> from <i>scripting/&lt;platform&gt;/class</i>
+  into the top level directory,&nbsp;<i>$pkg</i></li>
+    <li>Copy in <i>unoil.jar </i>from <i>$pkg/</i><i>unoil/&lt;platform&gt;/class
+     </i>&nbsp;to      <i>skip_registration</i> directory<br>
+      </li>
+      <li>Merge the following registries from <i>offapi/&lt;platform&gt;/ucr 
+     </i>into one registry called <i>ooscript.rdb</i> under the top level 
+directory,&nbsp;<i>$pkg</i></li>
+           
+  <ol>
+       <li><i>dcssscriptframework.db</i></li>
+       <li><i>dcsssfprovider.db</i></li>
+       <li><i>dcsssfstorage.db</i></li>
+           
+  </ol>
+     <li>Now, zip up all files in this directory,&nbsp;<i>$pkg</i></li>
+       
+</ol>
+     
+<h3><a name="install"></a>Manual Installation of the Scripting Framework</h3>
+     
+<ol>
+     <li>Copy the zip file into your OpenOffice installation under the user/uno_packages 
+ directory&nbsp;<font color="#ff0000"></font></li>
+     <li>In the program directory, run pkgchk on the zip file</li>
+  <li>Copy from the solver<i> ($SRC_ROOT)/solver/643/&lt;platform&gt;/bin/</i><i>regsingleton</i>
+to your OpenOffice installation under the program directory<br>
+  </li>
+     <li>Execute the following:&nbsp;<font color="#ff0000"></font></li>
+           
+  <ol>
+       <li><i>./regsingleton &lt;OpenOffice Path&gt;/user/uno_packages/cache/services.rdb 
+ drafts.com.sun.star.script.framework.storage.theScriptStorageManager=drafts.com.sun.star.script.framework.storage.ScriptStorageManager</i></li>
+       <li><i>./regsingleton &lt;OpenOffice Path&gt;/user/uno_packages/cache/services.rdb
+  drafts.com.sun.star.script.framework.theScriptRuntimeForJava=drafts.com.sun.star.script.framework.ScriptRuntimeForJava</i></li>
+           
+  </ol>
+     <li>Modify the the <i>ProtocolHandler.xcu</i> file under<i> &lt;OpenOffice 
+ Path&gt;/share/registry/data/org/openoffice/Office/</i>, add the following 
+ lines:</li>
+           
+  <ol>
+       <li>&lt;node oor:name="com.sun.star.comp.ScriptProtocolHandler" oor:op="replace"&gt;<br>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+ &lt;prop oor:name="Protocols"&gt;<br>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+ &lt;value&gt;script:*&lt;/value&gt;<br>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+ &lt;/prop&gt;<br>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+ &lt;/node&gt;<br>
+   Under the HandlerSet Tag</li>
+           
+  </ol>
+     
+</ol>
+   Unzip <i>HighlightTextParcel.sxp</i> from <i>scripting/examples/java </i>into 
+ <i>&lt;OpenOffice Path&gt;/user</i>, this should create a directory under 
+ <i>user </i>&nbsp;called <i>Scripts/java/HighlightText</i><br>
+   <br>
+   Now, run OpenOffice and under the <i>Tools-&gt;Configure</i> menu add
+a  new menu which is bound to the macro <i>Standard.Main</i>, then shut down
+ OpenOffice and modify the file <i>&lt;OpenOffice&gt;/user/config/soffice.cfg/writermenubar.cfg</i> 
+ and change <i>macro://Standard.main()</i> to <i>script://HighlightText.showForm. 
+ </i>Start OpenOffice again and select the menu item you have added, this 
+should bring up a Java dialog box call <i>HighlightText</i><br>
+   <br>
+   If you have any problems, please post your problem to <b><i>dev@framework.openoffice.org</i></b><br>
+   <br>
+        <br>
+  <br>
+ <br>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Framework Problem &amp; Issues</title>
+                    
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+</head>
+  <body>
+     
+<h1>Scripting Framework Problem Areas &amp; High-Level Issues</h1>
+     
+<h2>Runtime Container</h2>
+ <u>  Problem Statement:  </u><br>
+ Scripts are executed within a language specific script runtime. We need
+to  define the features of this runtime container and the contract between
+the  container and the scripts run in it, with regard to threading, symbol
+resolution  and persistence of script related data.    <br>
+ <br>
+ <u>Requirements:</u>    <br>
+ 
+<ul>
+   <li>define the contract between the script container and a script, this 
+contract should be language neutral&nbsp;</li>
+   <li>define the threading model that script containers should use</li>
+   <li>define how symbols are resolved within the script container</li>
+   <li>define how symbols conflicts are handled</li>
+   <li>define the services the container provides to the script for saving 
+state</li>
+ 
+</ul>
+ <u>Issues:    </u><br>
+ 
+<ul>
+   <li>the requirement for language neutrality will impose restrictions on
+  how the contract between the script runtime container  and scripts run
+ &nbsp;in the container can be defined</li>
+   <li>it would be impossible evaluate our contract against all scripting
+languages, so we must select a subset of languages to  use&nbsp;</li>
+ 
+</ul>
+<u>Further analysis:</u><br>
+<ul>
+  <li><a href="thread-management.html">Thread management</a></li>
+  <li><a href="persistence.html">Persistence of script data</a></li>
+  <li><a href="symbol-resolution.html">Symbol/Dependency Resolution</a></li>
+</ul>
+ 
+<h2>Code Management</h2>
+ <u>Problem Statement:</u>    <br>
+ Scripts can be in many formats, source or binary, encrypted or obfuscated.
+  They can be stored in many locations, eg. a filesystem or a webserver.
+They   can be stored as files, or embedded within a file. They can be protected
+  by security features such as digital signing.    <br>
+ Clients of the scripting framework (eg. StarOffice, IDEs) need to be able 
+ to  access these scripts without concerning themselves with where and how 
+the  scripts are stored. The Application Scripting Framework needs to provide 
+ a  set of services and interfaces which will allow these clients such access.
+    <br>
+ <br>
+ <u>Requirements:</u>    <br>
+ 
+<ul>
+   <li>research current StarOffice script location/load/store interfaces</li>
+   <li>define the digital signing service for scripts</li>
+   <li>define the script location service</li>
+   <li>define the script loading/storing service&nbsp;</li>
+ 
+</ul>
+<u>Further analysis:</u><br>
+<ul>
+  <li><a href="code-management.html">Code management</a><br>
+  </li>
+</ul>
+ 
+<h2>IDE related Issues      </h2>
+ 
+<ul>
+   <li>Do we want a scripting IDE as part of SO&nbsp; (I will call this internal 
+ IDE for  simplicity) or an external one plugging into SO? One option could 
+be to have an  internal IDE for StarBasic and an external IDE for the new 
+scripting languages.  The external editor should be NetBeans (Forte for JAVA?). 
+NetBeans already  has  some support for BeanShell, Dynamic Java and Jython. 
+This support definitely  needs further improvements. If we go with NetBeans 
+then we might need to  cooperate with NetBeans developers. NetBeans has a 
+framework for plugging  in new  scripting interpreters into the IDE.&nbsp;</li>
+   <li>The main issues are debugging and editing scripts, code browsing,
+ configuration.</li>
+   <li>We need possibilities to edit and debug scripts from simple command 
+line  applications.&nbsp;</li>
+ 
+</ul>
+ <u>Code editing:</u><br>
+ &nbsp;We need the script storage and script loading and storing interfaces 
+as  described above. This needs to be able to retrieve and store a script 
+source  and its context (document, application). Both the IDE (internal and 
+external)  and the command line application need to use these interfaces to
+edit scripts  and their contexts.    <br>
+ NetBeans has an API that abstracts storage of files and file like objects. 
+ This  could use the script loading and storing interfaces to edit scripts. 
+Context  editing could be done with Nodes, the DataSystems API and the Explorer 
+API,  but  this needs to be investigated.    <br>
+ <u>Debugging:</u><br>
+ Main issues are launching, setting breakpoints and evaluating variables.
+   <br>
+ The IDE has to be able to launch the language specific debugger/interpreter 
+ and  load the binary/script source and its context in it, an interface has 
+to  be  defined for this.      <br>
+ OpenOffice already has an <a
+ href="http://api.openoffice.org/common/ref/com/sun/star/script/XDebugging.html">interface</a> 
+for setting/clearing breakpoints and evaluating  variables. This could be 
+the interface the debugger/interpreter plug-in of a new language  will have 
+to implement. An IDE will have to use this interface to implement  the  debugging 
+tasks and implement a Watch and Output windows to display various  information.
+    <br>
+ (If we go with NetBeans) the JVM and NetBeans are already integrated and 
+ they do  not use this interface so without a language agnostic framework 
+most of the work  would be done. If we want a language agnostic framework 
+we will have to add  extra implementation for languages not supported by NetBeans.
+This would  be  different from the way the JVM is integrated.<br>
+ If we go with one or more Java based scripting language(s) as part of our
+  implementation then we need to investigate ways of translating script code 
+ line  numbers to Java code line numbers and script variables to underlying 
+Java  variables.    Command line debugging does not need much here, the user 
+will have to launch  the  language specific debugger and configure it (to 
+find the SO libraries). A  command line utility will need to be developed 
+that will load the script  in the  debugger/interpreter and make it aware 
+of the script context.    <br>
+ <u>Code browsing:</u><br>
+ This is not as important as the previous ones.    <br>
+ We need an interface that would return object and method names from a script.
+  This will need language specific implementations. The IDE will have to
+use  this  to display and navigate through the code structure.    <br>
+ There would be no command line functionality here.<br>
+ <u>Configuration</u>:<br>
+ This has already been described as "runtime-related user interfaces".  We
+  need a way to provide similar functionality when debugging from the command
+  line.      <br><br>
+<u>Further analysis:</u><br>
+<ul>
+  <li><a href="ide.txt">IDE requirements</a><br>
+  </li>
+</ul>
+ 
+<h2>Macro Recording</h2>
+ Macro recording is not a very big issue in the investigation phase. The
+main   issue is whether we can generate macros made of UNO API calls or we
+have  to stay  with the dispatch APIs. The investigation should be about
+whether this is  possible or not and how to do it.    It is very simple to
+write macro recorders for any language if the recorded  macros use the dispatch 
+API. Considering that for UNO API based macro recording  we would probably 
+have to write UNO API based macros for all the dispatch  calls  in all the 
+languages that we support, UNO API based macro recording might  not be  feasible. 
+But this should be the subject of the investigation.      <br>
+ 
+<h2>Runtime related security</h2>
+ <u>Problem domain definition:</u><br>
+ The language runtime security subsystem is a set of restrictions  which
+are applied by the language runtime to a script  during loading and execution.
+  <br>
+ Restrictions could be applied to:<br>
+ 
+<ul>
+   <li>the type of the script</li>
+   <li>the source of the script</li>
+   <li>the length of life of the script</li>
+   <li>the amount of resource available to the script</li>
+   <li>the availability of a service by the type of the service</li>
+   <li>the availability of the specific service by the type  of&nbsp;the
+request</li>
+   <li>the availability of the specific service by the content  of the request</li>
+ 
+</ul>
+ <u>Participants:</u><br>
+ 
+<ul>
+   <li>the script execution sandbox<br>
+ an implementation of the language  neutral runtime security  &nbsp;subsystem</li>
+   <li>the language runtime (the runtime container)&nbsp;<br>
+  language specific binding to the execution engine (VM)</li>
+   <li>the language execution context<br>
+ static and runtime data available  to a script during execution</li>
+   <li>the code management subsystem<br>
+ script finder/explorer/loader</li>
+   <li>UI of security configuration</li>
+   <li>debugger&nbsp;</li>
+ 
+</ul>
+ 
+<h2>Script lifecycle services</h2>
+ <u>Problem domain definition:</u><br>
+ The script lifecycle services is a subsystem of the execution  engine (VM) 
+which is responsible for:<br>
+ 
+<ul>
+   <li>creation and maintains of the script execution context</li>
+   <li>control over the script length of life</li>
+   <li>accounting of the script acquired resources</li>
+   <li>clean up after the script end of life.    &nbsp;&nbsp;&nbsp;&nbsp;</li>
+ 
+</ul>
+ <u>Participants:</u><br>
+ 
+<ul>
+   <li>the code management subsystem  <br>
+ script finder/explorer/loader</li>
+   <li>the language runtime (the runtime container)<br>
+ language specific binding to the execution engine (VM)</li>
+   <li>the language execution context  <br>
+ static and runtime data available  to a script during  &nbsp;execution 
+       </li>
+ 
+</ul>
+ <br>
+</body>
+</html>

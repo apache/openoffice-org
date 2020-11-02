@@ -1,0 +1,538 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http:://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+<head>
+    <TITLE>UNO Type System</TITLE>
+    <META http-equiv="content-type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+<TABLE width="100%" border="0" cellspacing="0" cellpadding="4">
+    <TR><TD bgcolor="#666699">
+        <H1 align="center" style="margin-top: 0in; text-decoration: none"><!--
+            --><A href="http://www.openoffice.org"><IMG
+            src="../../images/open_office_org_logo.gif" alt="OpenOffice.org"
+            align="right" border="0"></A><FONT color="White">UNO Type
+            System</FONT></H1>
+    </TD></TR>
+</TABLE>
+<HR noshade size="3"/>
+
+<H1>The UNO Type System</H1>
+
+<P>This document describes the type system of core UNO, a distributed
+computation model.  It should not be confused with the larger type system of
+UNOIDL, a description language used to notate core UNO types and related,
+non&ndash;core-UNO entities like modules, typedefs, and constants.</P>
+
+<P>The UNO type system comprises two kinds of <DFN>entities</DFN>, namely
+<DFN>types</DFN> and <DFN>polymorphic struct type templates</DFN>.  Each entity
+has a unique <DFN>name</DFN>.</P>
+
+<P>The names of UNO type system entities are taken from an alphabet consisting
+of the Latin capital letters
+&ldquo;<CODE>A</CODE>&rdquo;&ndash;&ldquo;<CODE>Z</CODE>&rdquo;, the Latin small
+letters &ldquo;<CODE>a</CODE>&rdquo;&ndash;&ldquo;<CODE>z</CODE>&rdquo;, the
+digits &ldquo;<CODE>0</CODE>&rdquo;&ndash;&ldquo;<CODE>9</CODE>&rdquo;, the low
+line&nbsp;&ldquo;<CODE>_</CODE>&rdquo;, the full
+stop&nbsp;&ldquo;<CODE>.</CODE>&rdquo;, the
+comma&nbsp;&ldquo;<CODE>,</CODE>&rdquo;, the left square
+bracket&nbsp;&ldquo;<CODE>[</CODE>&rdquo;, the right square
+bracket&nbsp;&ldquo;<CODE>]</CODE>&rdquo;, the less-than
+sign&nbsp;&ldquo;<CODE>&lt;</CODE>&rdquo;, the greater-than
+sign&nbsp;&ldquo;<CODE>&gt;</CODE>&rdquo;, and the space&nbsp;&ldquo; &rdquo;.
+The names of certain entities are built from <DFN>identifiers</DFN>, which are
+specified by the following grammar:</P>
+
+<P>&nbsp;<VAR>identifier</VAR> &rarr; <VAR>segment</VAR>
+    (<CODE>.</CODE> <VAR>segment</VAR>)<SUP>*</SUP><BR/>
+&nbsp;<VAR>segment</VAR> &rarr; <VAR>blocks</VAR> | <VAR>block</VAR><BR/>
+&nbsp;<VAR>blocks</VAR> &rarr; <VAR>capital</VAR> <VAR>other</VAR><SUP>*</SUP>
+    (<CODE>_</CODE> <VAR>block</VAR>)<SUP>*</SUP><BR/>
+&nbsp;<VAR>block</VAR> &rarr; <VAR>other</VAR><SUP>+</SUP><BR/>
+&nbsp;<VAR>other</VAR> &rarr; <VAR>capital</VAR> |
+    <CODE>a</CODE>&ndash<CODE>z</CODE> | <CODE>0</CODE>&ndash<CODE>9</CODE><BR/>
+&nbsp;<VAR>capital</VAR> &rarr; <CODE>A</CODE>&ndash<CODE>Z</CODE></P>
+
+<P>(Since the names of UNO type system entities are unique, and some entities
+have certain fixed names that match the grammar for identifiers, and other
+entities have names that are arbitrary identifiers, it follows that those
+entities of the latter kind may not have as names identifiers that are already
+reserved by entities of the first kind&mdash;namely
+&ldquo;<CODE>void</CODE>&rdquo;, &ldquo;<CODE>boolean</CODE>&rdquo;,
+&ldquo;<CODE>byte</CODE>&rdquo;, &ldquo;<CODE>short</CODE>&rdquo;,
+&ldquo;<CODE>long</CODE>&rdquo;, &ldquo;<CODE>hyper</CODE>&rdquo;,
+&ldquo;<CODE>float</CODE>&rdquo;, &ldquo;<CODE>double</CODE>&rdquo;,
+&ldquo;<CODE>char</CODE>&rdquo;, &ldquo;<CODE>string</CODE>&rdquo;,
+&ldquo;<CODE>type</CODE>&rdquo;, and &ldquo;<CODE>any</CODE>&rdquo;.)</P>
+
+<P>Each UNO type&nbsp;<VAR>t</VAR> has a non-empty set of
+<DFN>values</DFN>&nbsp;<VAR>V</VAR><SUB><VAR>t</VAR></SUB>, and a
+<DFN>default value</DFN> <VAR>d</VAR><SUB><VAR>t</VAR></SUB> &isin;
+<VAR>V</VAR><SUB><VAR>t</VAR></SUB>.  Two UNO values are <DFN>equal</DFN> if and
+only if they have the same type&nbsp;<VAR>t</VAR> and both denote the same
+element of&nbsp;<VAR>V</VAR><SUB><VAR>t</VAR></SUB>.</P>
+
+<P>The UNO type system consists of the following (sets of) types:</P>
+<DL>
+    <DT><CODE>VOID</CODE></DT><DD>Values: {<CODE>unit</CODE>}.  Default value:
+    <CODE>unit</CODE>.  Name: &ldquo;<CODE>void</CODE>&rdquo;.</DD>
+
+    <DT><CODE>BOOLEAN</CODE></DT><DD>Values: {<CODE>false</CODE>,
+    <CODE>true</CODE>}.  Default value: <CODE>false</CODE>.  Name:
+    &ldquo;<CODE>boolean</CODE>&rdquo;.</DD>
+
+    <DT><CODE>BYTE</CODE></DT><DD>Values: [&minus;2<SUP>7</SUP> &hellip;
+    2<SUP>7</SUP>&nbsp;&minus;&nbsp;1].  Default value:&nbsp;0.  Name:
+    &ldquo;<CODE>byte</CODE>&rdquo;.</DD>
+
+    <DT><CODE>SHORT</CODE></DT><DD>Values: [&minus;2<SUP>15</SUP> &hellip;
+    2<SUP>15</SUP>&nbsp;&minus;&nbsp;1].  Default value:&nbsp;0.  Name:
+    &ldquo;<CODE>short</CODE>&rdquo;.</DD>
+
+    <DT><CODE>UNSIGNED SHORT</CODE></DT><DD>Values: [0 &hellip;
+    2<SUP>16</SUP>&nbsp;&minus;&nbsp;1].  Default value:&nbsp;0.  Name:
+    &ldquo;<CODE>unsigned short</CODE>&rdquo;.</DD>
+
+    <DT><CODE>LONG</CODE></DT><DD>Values: [&minus;2<SUP>31</SUP> &hellip;
+    2<SUP>31</SUP>&nbsp;&minus;&nbsp;1].  Default value:&nbsp;0.  Name:
+    &ldquo;<CODE>long</CODE>&rdquo;.</DD>
+
+    <DT><CODE>UNSIGNED LONG</CODE></DT><DD>Values: [0 &hellip;
+    2<SUP>32</SUP>&nbsp;&minus;&nbsp;1].  Default value:&nbsp;0.  Name:
+    &ldquo;<CODE>unsigned long</CODE>&rdquo;.</DD>
+
+    <DT><CODE>HYPER</CODE></DT><DD>Values: [&minus;2<SUP>63</SUP> &hellip;
+    2<SUP>63</SUP>&nbsp;&minus;&nbsp;1].  Default value:&nbsp;0.  Name:
+    &ldquo;<CODE>hyper</CODE>&rdquo;.</DD>
+
+    <DT><CODE>UNSIGNED HYPER</CODE></DT><DD>Values: [0 &hellip;
+    2<SUP>64</SUP>&nbsp;&minus;&nbsp;1].  Default value:&nbsp;0.  Name:
+    &ldquo;<CODE>unsigned hyper</CODE>&rdquo;.</DD>
+
+    <DT><CODE>FLOAT</CODE></DT><DD>Values: IEEE-754 single precision.  Default
+    value:&nbsp;0.  Name: &ldquo;<CODE>float</CODE>&rdquo;.</DD>
+
+    <DT><CODE>DOUBLE</CODE></DT><DD>Values: IEEE-754 double precision.  Default
+    value:&nbsp;0.  Name: &ldquo;<CODE>double</CODE>&rdquo;.</DD>
+
+    <DT><CODE>CHAR</CODE></DT><DD>Values: individual UTF-16 code units (see
+    definition&nbsp;D28a in
+    <A href="http://www.unicode.org/versions/Unicode4.0.0/ch03.pdf"><CITE>The
+    Unicode Standard, Version&nbsp;4.0; Chapter&nbsp;3:
+    Conformance</CITE></A>).  Default value: the UTF-16 code unit&nbsp;0.  Name:
+    &ldquo;<CODE>char</CODE>&rdquo;.</DD>
+
+    <DT><CODE>STRING</CODE></DT><DD>Values: arbitrary-length sequences of
+    Unicode scalar values (see definition&nbsp;D28 in
+    <A href="http://www.unicode.org/versions/Unicode4.0.0/ch03.pdf"><CITE>The
+    Unicode Standard, Version&nbsp;4.0; Chapter&nbsp;3:
+    Conformance</CITE></A>).  Default value: the zero-length sequence.  Name:
+    &ldquo;<CODE>string</CODE>&rdquo;.</DD>
+
+    <DT><CODE>TYPE</CODE></DT><DD>The values of this type are the disjoint union
+    of the following six sets of type descriptions:
+    <OL>
+        <LI>The set of descriptions for the simple types {<CODE>void</CODE>,
+        <CODE>boolean</CODE>, <CODE>byte</CODE>, <CODE>short</CODE>,
+        <CODE>unsigned short</CODE>, <CODE>long</CODE>, <CODE>unsigned
+        long</CODE>, <CODE>hyper</CODE>, <CODE>unsigned hyper</CODE>,
+        <CODE>float</CODE>, <CODE>double</CODE>, <CODE>char</CODE>,
+        <CODE>string</CODE>, <CODE>type</CODE>, <CODE>any</CODE>}.</LI>
+
+        <LI>The set of descriptions for sequence types, recursively consisting
+        of all the values of type <CODE>TYPE</CODE>.</LI>
+
+        <LI>The set of descriptions for enum types, consisting of all names of
+        enum types.</LI>
+
+        <LI>The set of descriptions for struct types, consisting of all names of
+        struct types.</LI>
+
+        <LI>The set of descriptions for exception types, consisting of all names
+        of exception types.</LI>
+
+        <LI>The set of descriptions for interface types, consisting of all names
+        of interface types.</LI>
+    </OL>  Default value: the description for the simple type <CODE>void</CODE>
+    (taken from the first of the six sets).  Name:
+    &ldquo;<CODE>type</CODE>&rdquo;.</DD>
+
+    <DT><CODE>ANY</CODE></DT><DD>The values of this type are the disjoint union
+    of the values of all non-any types.  Default value:
+    <VAR>d</VAR><SUB><CODE>VOID</CODE></SUB>.  Name:
+    &ldquo;<CODE>any</CODE>&rdquo;.<BR/>
+    A value of type <CODE>ANY</CODE> might be written as the tuple
+    &lang;<VAR>t</VAR>,&nbsp;<VAR>v</VAR>&rang;, where <VAR>t</VAR> is a non-any
+    type, and <VAR>v</VAR> is a value of type&nbsp;<VAR>t</VAR>.</DD>
+
+    <DT>Sequence types</DT><DD>For each non-void, non-exception
+    type&nbsp;<VAR>t</VAR>, there is a corresponding sequence type, whose values
+    are arbitrary-length sequences of values of the corresponding component
+    type&nbsp;<VAR>t</VAR>, and whose default value is the zero-length sequence.
+    The name of a sequence type is &ldquo;[]&rdquo; followed by the name of the
+    component type.<BR/>
+    A value of the sequence type with component type&nbsp;<VAR>t</VAR> might be
+    written as the sequence (<VAR>v</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>v</VAR><SUB><VAR>k</VAR></SUB>), where <VAR>k</VAR> &ge; 0 is the
+    length, and each <VAR>v</VAR><SUB><VAR>i</VAR></SUB> is a value of
+    type&nbsp;<VAR>t</VAR>, for 0 &le; <VAR>i</VAR> &lt; <VAR>k</VAR>.</DD>
+
+    <DT>Enum types</DT><DD>For a (user-defined) enum type that contains members
+    of numeric values <VAR>n</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>n</VAR><SUB><VAR>k</VAR></SUB>, (where <VAR>k</VAR> &gt; 0, and each
+    <VAR>n</VAR><SUB><VAR>i</VAR></SUB> is in the range [&minus;2<SUP>31</SUP>
+    &hellip; 2<SUP>31</SUP>&nbsp;&minus;&nbsp;1]), the values of that type are
+    {<VAR>n</VAR><SUB>1</SUB>, &hellip;, <VAR>n</VAR><SUB><VAR>k</VAR></SUB>}.
+    Default value:&nbsp;<VAR>n</VAR><SUB>1</SUB>.  The name of an enum type is
+    an identifier.<BR/>
+    An enum type might be written as the set {<VAR>n</VAR><SUB>1</SUB>, &hellip;
+    <VAR>n</VAR><SUB><VAR>k</VAR></SUB>}, where <VAR>k</VAR> &gt; 0, and
+    <VAR>n</VAR><SUB><VAR>i</VAR></SUB> &isin; [&minus;2<SUP>31</SUP> &hellip;
+    2<SUP>31</SUP>&nbsp;&minus;&nbsp;1], for 0 &le; <VAR>i</VAR> &lt;
+    <VAR>k</VAR>.  A value of that type might be written as <VAR>n</VAR> &isin;
+    {<VAR>n</VAR><SUB>1</SUB>, &hellip;
+    <VAR>n</VAR><SUB><VAR>k</VAR></SUB>}.</DD>
+
+    <DT>Struct types</DT><DD>The set of struct types is partitioned into the set
+    of <DFN>plain struct types</DFN> and the set of <DFN>instantiated
+    polymorphic struct types</DFN>.<BR/>
+    A (user-defined) <DFN>plain struct type</DFN> has an optional <DFN>direct
+    base</DFN>&nbsp;<VAR>b</VAR>, where <VAR>b</VAR> is a plain struct type, and
+    a list of <DFN>direct members</DFN> &lang;<VAR>m</VAR><SUB>1</SUB>,
+    &hellip;, <VAR>m</VAR><SUB><VAR>km</VAR></SUB>&rang;, <VAR>km</VAR> &ge; 0,
+    where each <VAR>m</VAR><SUB><VAR>i</VAR></SUB> has a name and a non-void,
+    non-exception type.  The name of a plain struct type is an identifier.<BR/>
+    A (user-defined) <DFN>polymorphic struct type template</DFN> has a list of
+    <DFN>type parameters</DFN> &lang;<VAR>&tau;</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>&tau;</VAR><SUB><VAR>k&tau;</VAR></SUB>&rang;, <VAR>k&tau;</VAR> &gt;
+    0, and a list of <DFN>direct members</DFN> &lang;<VAR>m</VAR><SUB>1</SUB>,
+    &hellip;, <VAR>m</VAR><SUB><VAR>km</VAR></SUB>&rang;, <VAR>km</VAR> &ge; 0,
+    where each <VAR>m</VAR><SUB><VAR>i</VAR></SUB> has a name and either an
+    <DFN>explicit type</DFN> (a non-void, non-exception type) or a
+    <DFN>parameterized type</DFN> (a <VAR>&tau;</VAR><SUB><VAR>i</VAR></SUB>
+    with 0 &le; <VAR>i</VAR> &lt; <VAR>k&tau;</VAR>).  The name of a polymorphic
+    struct type template is an identifier.<BR/>
+    An <DFN>instantiated polymorphic struct type</DFN> is an instantiation of a
+    polymorphic struct type template:  Let <VAR>s</VAR> be a polymorphic struct
+    type template with type parameters &lang;<VAR>&tau;</VAR><SUB>1</SUB>,
+    &hellip;, <VAR>&tau;</VAR><SUB><VAR>k&tau;</VAR></SUB>&rang;,
+    <VAR>k&tau;</VAR> &gt; 0, and direct members &lang;<VAR>m</VAR><SUB>1</SUB>,
+    &hellip;, <VAR>m</VAR><SUB><VAR>km</VAR></SUB>&rang;, <VAR>km</VAR> &ge; 0.
+    Let &lang;<VAR>a</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>a</VAR><SUB><VAR>k&tau;</VAR></SUB>&rang;, where each
+    <VAR>a</VAR><SUB><VAR>i</VAR></SUB> is a non-void, non-exception type that
+    is not an unsigned type, be a list of <DFN>type arguments</DFN>.  Then the
+    instantiated polymorphic struct type
+    <VAR>s</VAR>&lang;<VAR>a</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>a</VAR><SUB><VAR>k&tau;</VAR></SUB>&rang; has a list of <DFN>direct
+    members</DFN> &lang;<VAR>m</VAR>&prime;<SUB>1</SUB>, &hellip;,
+    <VAR>m</VAR>&prime;<SUB><VAR>km</VAR></SUB>&rang;, where each
+    <VAR>m</VAR>&prime;<SUB><VAR>i</VAR></SUB> has the same name as
+    <VAR>m</VAR><SUB><VAR>i</VAR></SUB> and the following type: if
+    <VAR>m</VAR><SUB><VAR>i</VAR></SUB> has the explicit type&nbsp;<VAR>t</VAR>,
+    then <VAR>m</VAR>&prime;<SUB><VAR>i</VAR></SUB> has type&nbsp;<VAR>t</VAR>;
+    otherwise, if <VAR>m</VAR><SUB><VAR>i</VAR></SUB> has the parameterized
+    type&nbsp;<VAR>&tau;</VAR><SUB><VAR>j</VAR></SUB>, then
+    <VAR>m</VAR>&prime;<SUB><VAR>i</VAR></SUB> has
+    type&nbsp;<VAR>a</VAR><SUB><VAR>j</VAR></SUB>.  (An instantiated polymorphic
+    struct type may not have a direct base, and may not be the direct base of a
+    struct type.)  The name of <VAR>s</VAR>&lang;<VAR>a</VAR><SUB>1</SUB>,
+    &hellip;, <VAR>a</VAR><SUB><VAR>k&tau;</VAR></SUB>&rang; is the name
+    of&nbsp;<VAR>s</VAR>, followed by&nbsp;&ldquo;<CODE>&lt;</CODE>&rdquo;,
+    followed by the names of <VAR>a</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>a</VAR><SUB><VAR>k&tau;</VAR></SUB>, separated from one another
+    by&nbsp;&ldquo;<CODE>,</CODE>&rdquo;, followed
+    by&nbsp;&ldquo;<CODE>&gt;</CODE>&rdquo;.<BR/>
+    The set of <DFN>members</DFN> of a struct type is the union of the set of
+    direct members and the set of members of the optional direct base (if
+    present).  No two different members of a given struct type may have the same
+    name.<BR/>
+    For a struct type with a list of members
+    &lang;<VAR>m</VAR><SUP>+</SUP><SUB>1</SUB>, &hellip;,
+    <VAR>m</VAR><SUP>+</SUP><SUB><VAR>km</VAR><SUP>+</SUP></SUB>&rang;,
+    <VAR>km</VAR><SUP>+</SUP> &ge; 0 (containing both the direct members and the
+    members of an optional direct base, if present, with associated types
+    <VAR>t</VAR><SUB><VAR>i</VAR></SUB>), the values of that type are
+    <VAR>km</VAR><SUP>+</SUP>-tuples of values of the types
+    <VAR>t</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>t</VAR><SUB><VAR>km</VAR><SUP>+</SUP></SUB>.  The default value of that
+    type is &lang;<VAR>d</VAR><SUB><VAR>t</VAR><SUB>1</SUB></SUB>, &hellip;,
+    <VAR>d</VAR><SUB><VAR>t</VAR><SUB><VAR>km</VAR><SUP>+</SUP></SUB></SUB><!--
+    -->&rang;.<BR/>
+    A struct type may not be derived from itself, and may not recursively
+    contain itself as a member.  More formally: consider the directed
+    graph&nbsp;<VAR>G</VAR>, with the set of struct types as nodes, and with the
+    set of arcs defined as follows.  For each pair of struct types
+    <VAR>t</VAR><SUB>1</SUB>, <VAR>t</VAR><SUB>2</SUB>, where
+    type&nbsp;<VAR>t</VAR><SUB>1</SUB> is the base of
+    type&nbsp;<VAR>t</VAR><SUB>2</SUB>, there is a directed arc from
+    node&nbsp;<VAR>t</VAR><SUB>2</SUB> to node&nbsp;<VAR>t</VAR><SUB>1</SUB>.
+    For each pair of struct types <VAR>t</VAR><SUB>1</SUB>,
+    <VAR>t</VAR><SUB>2</SUB>, where type&nbsp;<VAR>t</VAR><SUB>1</SUB> has a
+    member of type&nbsp;<VAR>t</VAR><SUB>2</SUB>, there is a directed arc from
+    node&nbsp;<VAR>t</VAR><SUB>2</SUB> to
+    node&nbsp;<VAR>t</VAR><SUB>1</SUB>.  The resulting graph&nbsp;<VAR>G</VAR>
+    must not be cyclic.<BR/>
+    A struct type might be written as the tuple &lang;<VAR>t</VAR><SUB>1</SUB>,
+    &hellip;, <VAR>t</VAR><SUB><VAR>km</VAR><SUP>+</SUP></SUB>&rang;, where
+    <VAR>km</VAR><SUP>+</SUP> &ge; 0, and each
+    <VAR>t</VAR><SUB><VAR>i</VAR></SUB> is a non-void, non-exception type, for 0
+    &le; <VAR>i</VAR> &lt; <VAR>km</VAR><SUP>+</SUP>.  A value of that type
+    might be written as the tuple &lang;<VAR>v</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>v</VAR><SUB><VAR>km</VAR><SUP>+</SUP></SUB>&rang;, where each
+    <VAR>v</VAR><SUB><VAR>i</VAR></SUB> is of
+    type&nbsp;<VAR>t</VAR><SUB><VAR>i</VAR></SUB>, for 0 &le; <VAR>i</VAR> &lt;
+    <VAR>km</VAR><SUP>+</SUP>.</DD>
+
+    <DT>Exception types</DT><DD>A (user-defined) exception type has an optional
+    <DFN>direct base</DFN>&nbsp;<VAR>b</VAR>, where <VAR>b</VAR> is an exception
+    type, and a list of <DFN>direct members</DFN>
+    &lang;<VAR>m</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>m</VAR><SUB><VAR>km</VAR></SUB>&rang;, <VAR>km</VAR> &ge; 0, where each
+    <VAR>m</VAR><SUB><VAR>i</VAR></SUB> has a name and a non-void, non-exception
+    type.  The name of an exception type is an identifier.  There is an
+    exception type named &ldquo;<CODE>com.sun.star.uno.Exception</CODE>&rdquo;
+    which does not have a direct base.  There is also an exception type named
+    &ldquo;<CODE>com.sun.star.uno.RuntimeException</CODE>&rdquo; for which it is
+    unspecified whether it has no direct base or has
+    <CODE>com.sun.star.uno.Exception</CODE> as its base.  All other exception
+    types have a direct base.<BR/>
+    The set of <DFN>members</DFN> of an exception type is the union of the set
+    of direct members and the set of members of the optional direct base (if
+    present).  No two different members of a given exception type may have the
+    same name.<BR/>
+    For an exception type with a list of members
+    &lang;<VAR>m</VAR><SUP>+</SUP><SUB>1</SUB>, &hellip;,
+    <VAR>m</VAR><SUP>+</SUP><SUB><VAR>km</VAR><SUP>+</SUP></SUB>&rang;,
+    <VAR>km</VAR><SUP>+</SUP> &ge; 0 (containing both the direct members and the
+    members of an optional direct base, if present, with associated types
+    <VAR>t</VAR><SUB><VAR>i</VAR></SUB>), the values of that type are
+    <VAR>km</VAR><SUP>+</SUP>-tuples of values of the types
+    <VAR>t</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>t</VAR><SUB><VAR>km</VAR><SUP>+</SUP></SUB>.  The default value of that
+    type is &lang;<VAR>d</VAR><SUB><VAR>t</VAR><SUB>1</SUB></SUB>, &hellip;,
+    <VAR>d</VAR><SUB><VAR>t</VAR><SUB><VAR>km</VAR><SUP>+</SUP></SUB></SUB><!--
+    -->&rang;.<BR/>
+    An exception type may not be derived from itself.  More formally: consider
+    the directed graph&nbsp;<VAR>G</VAR>, with the set of exception types as
+    nodes, and with the set of arcs defined as follows.  For each pair of
+    exception types <VAR>t</VAR><SUB>1</SUB>, <VAR>t</VAR><SUB>2</SUB>, where
+    type&nbsp;<VAR>t</VAR><SUB>1</SUB> is the base of
+    type&nbsp;<VAR>t</VAR><SUB>2</SUB>, there is a directed arc from
+    node&nbsp;<VAR>t</VAR><SUB>2</SUB> to node&nbsp;<VAR>t</VAR><SUB>1</SUB>.
+    The resulting graph&nbsp;<VAR>G</VAR> must not be cyclic.<BR/>
+    An exception type might be written as the tuple
+    &lang;<VAR>t</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>t</VAR><SUB><VAR>km</VAR><SUP>+</SUP></SUB>&rang;, where
+    <VAR>km</VAR><SUP>+</SUP> &ge; 0, and each
+    <VAR>t</VAR><SUB><VAR>i</VAR></SUB> is a non-void, non-exception type, for 0
+    &le; <VAR>i</VAR> &lt; <VAR>km</VAR><SUP>+</SUP>.  A value of that type
+    might be written as the tuple &lang;<VAR>v</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>v</VAR><SUB><VAR>km</VAR><SUP>+</SUP></SUB>&rang;, where each
+    <VAR>v</VAR><SUB><VAR>i</VAR></SUB> is of
+    type&nbsp;<VAR>t</VAR><SUB><VAR>i</VAR></SUB>, for 0 &le; <VAR>i</VAR> &lt;
+    <VAR>km</VAR><SUP>+</SUP>.</DD>
+
+    <DT>Interface types</DT><DD>For a (user-defined) interface type, the values
+    of that type are the null reference plus references to any UNO objects that
+    implement that interface type, and the default value is the null reference.
+    Each interface type has a list of <DFN>direct bases</DFN>
+    &lang;<VAR>b</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>b</VAR><SUB><VAR>kb</VAR></SUB>&rang;, <VAR>kb</VAR> &ge; 0, where each
+    <VAR>b</VAR><SUB><VAR>i</VAR></SUB> is an interface type, and all the
+    <VAR>b</VAR><SUB><VAR>i</VAR></SUB> are mutually different.  Each interface
+    type has a list of <DFN>direct attributes</DFN>
+    &lang;<VAR>a</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>a</VAR><SUB><VAR>ka</VAR></SUB>&rang;, <VAR>ka</VAR> &ge; 0, and a list
+    of <DFN>direct methods</DFN>, &lang;<VAR>m</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>m</VAR><SUB><VAR>km</VAR></SUB>&rang;, <VAR>km</VAR> &ge; 0.
+    Collectively, the direct attributes and direct methods of an interface type
+    are called the <DFN>direct members</DFN> of that interface type.<BR/>
+    The name of an interface type is an identifier.  There is an interface type
+    named &ldquo;<CODE>com.sun.star.uno.XInterface</CODE>&rdquo;, which has an
+    empty list of direct bases, an empty list of direct attributes, and an empty
+    list of direct methods.  All other interface types have a non-empty list of
+    direct bases.<BR/>
+    Each direct attribute of an interface type has a name, a non-void,
+    non-exception type, and is either <DFN>read&ndash;write</DFN> or
+    <DFN>read-only</DFN>.<BR/>
+    Each direct method of an interface type has a name, a list of arguments
+    &lang;<VAR>r</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>r</VAR><SUB><VAR>kr</VAR></SUB>&rang;, <VAR>kr</VAR> &ge; 0, a
+    non-exception return type, a list of exception types
+    &lang;<VAR>e</VAR><SUB>1</SUB>, &hellip;,
+    <VAR>e</VAR><SUB><VAR>ke</VAR></SUB>&rang;, <VAR>ke</VAR> &ge; 0, and is
+    either <DFN>synchronous</DFN> or <DFN>one-way</DFN>.  Each
+    argument&nbsp;<VAR>r</VAR><SUB><VAR>i</VAR></SUB> has a name, a non-void,
+    non-exception type, and is either <DFN>in</DFN>, <DFN>out</DFN>, or
+    <DFN>in&ndash;out</DFN>.  No two different arguments of a given method may
+    have the same name.  For a method that is one-way, none of the arguments may
+    be out or in&ndash;out, the return type must be <CODE>VOID</CODE>, and the
+    list of exception types must be empty.<BR/>
+    The set of <DFN>members</DFN> of an interface type is the union of the set
+    of direct members and the set of <DFN>inherited members</DFN>.  The set of
+    inherited members of an interface type is the union of the sets of members
+    of all its direct bases.  No two different members of a given interface type
+    may have the same name.<BR/>
+    An interface type may not be derived from itself.  More formally: consider
+    the directed graph&nbsp;<VAR>G</VAR>, with the set of interface types as
+    nodes, and with the set of arcs defined as follows.  For each pair of
+    interface types <VAR>t</VAR><SUB>1</SUB>, <VAR>t</VAR><SUB>2</SUB>, where
+    type&nbsp;<VAR>t</VAR><SUB>1</SUB> is a direct base of
+    type&nbsp;<VAR>t</VAR><SUB>2</SUB>, there is a directed arc from
+    node&nbsp;<VAR>t</VAR><SUB>2</SUB> to node&nbsp;<VAR>t</VAR><SUB>1</SUB>.
+    The resulting graph&nbsp;<VAR>G</VAR> must not be cyclic.<BR/>
+    An interface type may not have as direct base a type that it also has as
+    indirect base.  More formally: define the set of <DFN>bases</DFN> of an
+    interface type&nbsp;<VAR>t</VAR> to be the union of the set of the direct
+    bases of&nbsp;<VAR>t</VAR> and the sets of bases of all the direct bases
+    of&nbsp;<VAR>t</VAR>.  Then, for any interface type&nbsp;<VAR>t</VAR>, none
+    of the direct bases of&nbsp;<VAR>t</VAR> must be a member of the set of
+    bases of any of the direct bases of&nbsp;<VAR>t</VAR>.</DD>
+</DL>
+
+<P>The <DFN>non-void, non-exception</DFN> UNO types are <CODE>BOOLEAN</CODE>,
+<CODE>BYTE</CODE>, <CODE>SHORT</CODE>, <CODE>UNSIGNED SHORT</CODE>,
+<CODE>LONG</CODE>, <CODE>UNSIGNED LONG</CODE>, <CODE>HYPER</CODE>,
+<CODE>UNSIGNED HYPER</CODE>, <CODE>FLOAT</CODE>, <CODE>DOUBLE</CODE>,
+<CODE>CHAR</CODE>, <CODE>STRING</CODE>, <CODE>TYPE</CODE>, <CODE>ANY</CODE>, the
+sequence types, the enum types, the struct types, and the interface types.</P>
+
+<P>The <DFN>non-any</DFN> UNO types are <CODE>VOID</CODE>, <CODE>BOOLEAN</CODE>,
+<CODE>BYTE</CODE>, <CODE>SHORT</CODE>, <CODE>UNSIGNED SHORT</CODE>,
+<CODE>LONG</CODE>, <CODE>UNSIGNED LONG</CODE>, <CODE>HYPER</CODE>,
+<CODE>UNSIGNED HYPER</CODE>, <CODE>FLOAT</CODE>, <CODE>DOUBLE</CODE>,
+<CODE>CHAR</CODE>, <CODE>STRING</CODE>, <CODE>TYPE</CODE>, the sequence types,
+the enum types, the struct types, the exception types, and the interface
+types.</P>
+
+<P>The <DFN>non-exception</DFN> UNO types are <CODE>VOID</CODE>,
+<CODE>BOOLEAN</CODE>, <CODE>BYTE</CODE>, <CODE>SHORT</CODE>, <CODE>UNSIGNED
+SHORT</CODE>, <CODE>LONG</CODE>, <CODE>UNSIGNED LONG</CODE>, <CODE>HYPER</CODE>,
+<CODE>UNSIGNED HYPER</CODE>, <CODE>FLOAT</CODE>, <CODE>DOUBLE</CODE>,
+<CODE>CHAR</CODE>, <CODE>STRING</CODE>, <CODE>TYPE</CODE>, <CODE>ANY</CODE>, the
+sequence types, the enum types, the struct types, and the interface types.</P>
+
+<P>The <DFN>basic</DFN> UNO types are <CODE>VOID</CODE>, <CODE>BOOLEAN</CODE>,
+<CODE>BYTE</CODE>, <CODE>SHORT</CODE>, <CODE>UNSIGNED SHORT</CODE>,
+<CODE>LONG</CODE>, <CODE>UNSIGNED LONG</CODE>, <CODE>HYPER</CODE>,
+<CODE>UNSIGNED HYPER</CODE>, <CODE>FLOAT</CODE>, <CODE>DOUBLE</CODE>, and
+<CODE>CHAR</CODE>.
+
+<P>The <DFN>simple</DFN> UNO types are <CODE>VOID</CODE>,
+<CODE>BOOLEAN</CODE>, <CODE>BYTE</CODE>, <CODE>SHORT</CODE>,
+<CODE>UNSIGNED SHORT</CODE>, <CODE>LONG</CODE>, <CODE>UNSIGNED LONG</CODE>,
+<CODE>HYPER</CODE>, <CODE>UNSIGNED HYPER</CODE>, <CODE>FLOAT</CODE>,
+<CODE>DOUBLE</CODE>, <CODE>CHAR</CODE>, <CODE>STRING</CODE>, <CODE>TYPE</CODE>,
+and <CODE>ANY</CODE>.  The <DFN>complex</DFN> UNO types are the sequence types,
+the enum types, the struct types, the exception types, and the interface
+types.</P>
+
+<P>The <DFN>primitive</DFN> UNO types are <CODE>VOID</CODE>,
+<CODE>BOOLEAN</CODE>, <CODE>BYTE</CODE>, <CODE>SHORT</CODE>,
+<CODE>UNSIGNED SHORT</CODE>, <CODE>LONG</CODE>, <CODE>UNSIGNED LONG</CODE>,
+<CODE>HYPER</CODE>, <CODE>UNSIGNED HYPER</CODE>, <CODE>FLOAT</CODE>,
+<CODE>DOUBLE</CODE>, <CODE>CHAR</CODE>, <CODE>STRING</CODE>, <CODE>TYPE</CODE>,
+and the enum types.  The <DFN>structured</DFN> UNO types are <CODE>ANY</CODE>,
+the sequence types, the struct types, and the exception types.  Note that the
+interface types are considered neither primitive nor structured.</P>
+
+<P>The <DFN>aggregating</DFN> UNO types are the struct types and the exception
+types.</P>
+
+<P>The <DFN>fundamental</DFN> UNO types are <CODE>VOID</CODE>,
+<CODE>BOOLEAN</CODE>, <CODE>BYTE</CODE>, <CODE>SHORT</CODE>, <CODE>UNSIGNED
+SHORT</CODE>, <CODE>LONG</CODE>, <CODE>UNSIGNED LONG</CODE>, <CODE>HYPER</CODE>,
+<CODE>UNSIGNED HYPER</CODE>, <CODE>FLOAT</CODE>, <CODE>DOUBLE</CODE>,
+<CODE>CHAR</CODE>, <CODE>STRING</CODE>, <CODE>TYPE</CODE>, <CODE>ANY</CODE>, and
+the sequence types.  The <DFN>named</DFN> UNO types are the enum types, the
+struct types, the exception types, and the interface types.</P>
+
+<P>The <DFN>unsigned</DFN> UNO types are <CODE>UNSIGNED SHORT</CODE>,
+<CODE>UNSIGNED LONG</CODE>, <CODE>UNSIGNED HYPER</CODE>, and each sequence type
+whose component type is an unsigned type.</P>
+
+<H2>Function Indices</H2>
+
+<P>Often, a mapping between the members of a given interface type and a subset
+of the integers (so called <DFN>function indices</DFN>) is needed.  In the
+following, one such mapping is defined, to be consistently used wherever the
+concept of function indices is needed in conjunction with UNO.</P>
+
+<P>For an interface type&nbsp;<VAR>t</VAR>, define the list of direct bases
+&lang;<VAR>b</VAR><SUB>1</SUB>, &hellip;,
+<VAR>b</VAR><SUB><VAR>kb</VAR></SUB>&rang;, <VAR>kb</VAR> &ge; 0, the list of
+direct attributes &lang;<VAR>a</VAR><SUB>1</SUB>, &hellip;,
+<VAR>a</VAR><SUB><VAR>ka</VAR></SUB>&rang;, <VAR>ka</VAR> &ge; 0, and the list
+of direct methods &lang;<VAR>m</VAR><SUB>1</SUB>, &hellip;,
+<VAR>m</VAR><SUB><VAR>km</VAR></SUB>&rang;, <VAR>km</VAR> &ge; 0, as above.
+Additionally, define the list of <DFN>direct attribute functions</DFN>
+of&nbsp;<VAR>t</VAR>, written &lang;<VAR>af</VAR><SUB>1</SUB>, &hellip;,
+<VAR>af</VAR><SUB><VAR>kaf</VAR></SUB>&rang;, <VAR>kaf</VAR> &ge; 0, as the
+result of substituting in the list &lang;<VAR>a</VAR><SUB>1</SUB>, &hellip;,
+<VAR>a</VAR><SUB><VAR>ka</VAR></SUB>&rang; each element
+<VAR>a</VAR><SUB><VAR>i</VAR></SUB> with either one or two new elements,
+retaining the overall order.  If the argument
+<VAR>a</VAR><SUB><VAR>i</VAR></SUB> is read&ndash;write, then it is replaced
+with the two elements <VAR>G</VAR>(<VAR>a</VAR><SUB><VAR>i</VAR></SUB>) and
+<VAR>S</VAR>(<VAR>a</VAR><SUB><VAR>i</VAR></SUB>), in that order; if the
+argument <VAR>a</VAR><SUB><VAR>i</VAR></SUB> is read-only, then it is replaced
+with the single element <VAR>G</VAR>(<VAR>a</VAR><SUB><VAR>i</VAR></SUB>).  (The
+attribute function <VAR>G</VAR>(<VAR>a</VAR>) represents a getter function for
+the attribute&nbsp;<VAR>a</VAR>, while the attribute function
+<VAR>S</VAR>(<VAR>a</VAR>) represents a setter function for&nbsp;<VAR>a</VAR>.)
+Additionally, define the set of <DFN>member functions</DFN> of&nbsp;<VAR>t</VAR>
+to be the set of members of&nbsp;<VAR>t</VAR>, but with all attributes replaced
+with the respective attribute functions.</P>
+
+<P>The algorithm <VAR>functionIndices</VAR>, to construct a bijective mapping
+from function indices (a subset of the integers) to member functions of a given
+interface type, in pseudo-code notation:</P>
+
+<P>&nbsp;type <VAR>S</VAR>: set of interface type<BR/>
+&nbsp;type <VAR>M</VAR>: map from integer to member function<BR/>
+&nbsp;function <VAR>fI</VAR>(<VAR>t</VAR>: interface type, <VAR>T</VAR>:
+    <VAR>S</VAR>, <VAR>n</VAR>: integer, <VAR>&mu;</VAR>: <VAR>M</VAR>):
+    &lang;<VAR>S</VAR>, integer, <VAR>M</VAR>&rang;<BR/>
+&nbsp;&nbsp;if <VAR>t</VAR> &notin; <VAR>T</VAR><BR/>
+&nbsp;&nbsp;&nbsp;for <VAR>i</VAR> &larr; 1 &hellip; <VAR>kb</VAR><BR/>
+&nbsp;&nbsp;&nbsp;&nbsp;&lang;<VAR>T</VAR>, <VAR>n</VAR>, <VAR>&mu;</VAR>&rang;
+    &larr; <VAR>fI</VAR>(<VAR>b</VAR><SUB><VAR>i</VAR></SUB>, <VAR>T</VAR>,
+    <VAR>n</VAR>, <VAR>&mu;</VAR>)<BR/>
+&nbsp;&nbsp;&nbsp;for <VAR>i</VAR> &larr; 1 &hellip; <VAR>kaf</VAR><BR/>
+&nbsp;&nbsp;&nbsp;&nbsp;<VAR>&mu;</VAR> &larr; <VAR>&mu;</VAR> &cup;
+    {<VAR>n</VAR> + <VAR>i</VAR> &minus; 1 &rarr;
+    <VAR>af</VAR><SUB><VAR>i</VAR></SUB>}<BR/>
+&nbsp;&nbsp;&nbsp;for <VAR>i</VAR> &larr; 1 &hellip; <VAR>km</VAR><BR/>
+&nbsp;&nbsp;&nbsp;&nbsp;<VAR>&mu;</VAR> &larr; <VAR>&mu;</VAR> &cup;
+    {<VAR>n</VAR> + <VAR>kaf</VAR> + <VAR>i</VAR> &minus; 1 &rarr;
+    <VAR>m</VAR><SUB><VAR>i</VAR></SUB>}<BR/>
+&nbsp;&nbsp;&nbsp;<VAR>T</VAR> &larr; <VAR>T</VAR> &cup; {<VAR>t</VAR>}<BR/>
+&nbsp;&nbsp;&nbsp;<VAR>n</VAR> &larr; <VAR>n</VAR> + <VAR>kaf</VAR> +
+    <VAR>km</VAR><BR/>
+&nbsp;&nbsp;return &lang;<VAR>T</VAR>, <VAR>n</VAR>, <VAR>&mu;</VAR>&rang;<BR/>
+&nbsp;function <VAR>functionIndices</VAR>(<VAR>t</VAR>: interface type):
+    <VAR>M</VAR><BR/>
+&nbsp;&nbsp;&lang;<VAR>T</VAR>, <VAR>n</VAR>, <VAR>&mu;</VAR>&rang; &larr;
+    <VAR>fI</VAR>(<VAR>t</VAR>, &empty;, 3, &empty;)<BR/>
+&nbsp;&nbsp;return <VAR>&mu;</VAR></P>
+
+<P><EM>That the function indices start at three, instead of at zero, has
+historic reasons:  Indices 0&ndash;2 are reserved for the three pseudo methods
+of <CODE>com.sun.star.uno.XInterface</CODE> (<CODE>queryInterface</CODE>,
+<CODE>acquire</CODE>, and <CODE>release</CODE>).</EM></P>
+
+<TABLE width="100%" border="0" cellspacing="0" cellpadding="4">
+    <TR><TD bgcolor="#666699">
+        <P><FONT color="White">Author:
+        <A href="mailto:stephan.bergmann@sun.com"><FONT color="White">Stephan
+        Bergmann</FONT></A> (last modification $Date: 2006/02/17 14:02:45 $).
+        Copyright 2003 <A href="http://www.openoffice.org"><FONT
+        color="White">OpenOffice.org</FONT></A> Foundation.  All rights
+        reserved.</FONT></P>
+    </TD></TR>
+</TABLE>
+
+</body>
+</HTML>

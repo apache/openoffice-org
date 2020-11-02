@@ -1,0 +1,641 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
+<title>Library Unloading</title>
+<style type="text/css">
+<!--
+body,p,li,td {font-family:Arial,sans-serif;}
+h1 {text-align:center;color:#ffffff;font-size:20pt;font-weight:bold;font-family:Arial,sans-serif;}
+h2 {color:#ffffff;font-size:16pt;font-family:Arial,sans-serif;}
+h3 {color:#000000;font-size:14pt;font-family:Arial,sans-serif;}
+
+.sample_code { font-family:"Courier New",monospace;
+        font-size:10pt;
+	white-space:nowrap;}
+.code_key {font-family:"Courier New",monospace; font-style:normal;color:blue;}
+
+.code_deftype {font-family:"Courier New",monospace; font-style:normal;color:black;}
+.code_type {font-family:"Courier New",monospace; font-style:normal;color:black;}
+.code_defparam {font-family:"Courier New",monospace; font-style:italic; color:black;}
+.code_param {font-family:"Courier New",monospace; font-style:normal; color:black;}
+.code_comment {font-family:"Courier New",monospace; font-style:normal;color:green;}
+.code_defid {font-family:"Courier New",monospace; font-style:normal;color:black;}
+
+.code_var {font-family:"Courier New",monospace; font-style:normal;color:black;}
+th.func {font-family:"Courier New",monospace; text-align:left;color:blue;}
+th.normal {font-weight:bold:font-family:Arial,sans-serif;}
+-->
+</style>
+</head>
+
+<body>
+
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+<TR><TD BGCOLOR="#666699">
+		<h1>Library Unloading API</h1>
+	</td><td bgcolor="#666699" width=200>
+      <A HREF="http://www.openoffice.org/"> 
+        <IMG SRC="../../../images/open_office_org_logo.gif" NAME="Grafik1" ALT="OpenOffice" ALIGN=right BORDER=0 /> 
+        </A>
+    </TD></TR>
+
+</TABLE>
+
+<p>The API enables an effective way of unloading libraries in a centralized way.
+The mechanism ensures that libraries, which are being used are not unloaded. This prevents
+crashes, if someone tries to execute library code after the library has been
+unloaded. The unloading
+mechanism currently only works with libraries which contain UNO services. A
+library cannot be unloaded if one of the following conditions apply:</p>
+
+<ul>
+  <li>An instance is still referenced</li>
+  <li>A module has been loaded without registering it</li>
+  <li>The library contains a one-instance-service which has been instantiated</li>
+  <li>A service instance has been added to an UNO context</li>
+  <li>A factory has been registered with the service manager ( XSet::insert)</li>
+</ul>
+
+
+<h3>Risks</h3>
+
+<p>The API is not entirely thread safe. Therefore, using this API might cause an
+application to crash. This problem originates in the implementation of
+<code>component_canUnload</code>. The function returns <code>sal_True</code> if the module can be unloaded,
+which suggests that all component instances have died. But that makes it
+necessary to recognize when an instance is about to destroy itself. This can be
+easily achieved by employing a module wide counter, whose value represents the
+number of running instances. A C++ component would increment the counter in its
+constructor and decrement it in its destructor. A thread which is running a
+destructor might be suspended after decreasing the counter. If now, the counter's
+value is null, the module will be unloaded by the unloading mechanism when
+someone called <code>rtl_unloadUnusedLibraries</code>. Then, when the suspended thread is
+being scheduled again, it tries to run code which does not exist any longer, and
+the application crashes. This is obviously a synchronization problem. But
+synchronizing every call that could destroy a component, that is, synchronizing
+<code>XInterface::release</code>, would entail a big performance loss. To solve this problem
+one needs a mechanism that notices when a thread is out of the component's
+library. There are ways of achieving this, but they all require
+additional code on the client's side. Since that complicates the use of UNO and
+is error prone as well, it would be desirable to encapsulate that mechanism
+within proxy instances. This way, a client would interact with a proxy rather than
+with the actual component. The proxy solution, however, takes up a lot of
+performance and memory.</p>
+
+<h3>Library Requirements</h3>
+<p>
+A library which supports unloading has to implement and 
+export a function called <code>component_canUnload</code>.</p>
+
+<div class="sample_code">
+<span class="code_type">sal_Bool</span> SAL_CALL * component_canUnload( <span class="code_type">TimeValue</span>* <span class="code_defparam">pTime</span>);
+</div>
+
+<table border="1" width="100%" cellspacing="0" cellpadding="3">
+  <tr>
+    <th class="func" width="9%" valign="top">Parameter</th>
+    <td width="91%">pTime - time since the module has not been used</td>
+  </tr>
+  <tr>
+    <th class="func" width="9%" valign="top">Return</th>
+    <td width="91%">sal_True - module can be
+      unloaded, sal_False otherwise</td>
+  </tr>
+</table>
+
+
+<p>If the function returns <code>sal_True</code> then the module can be safely unloaded. That
+is the case when there are no external references to code within the library. In
+case a module houses UNO components, then the function must return <code>sal_False</code>
+after the first factory has been handed out. The function then continues to
+return <code>sal_False</code> as long as there is at least one object (factory or service
+instance) which originated from the module.<br/>
+Libraries which not only contain UNO components (or none at all), have to provide a means to control
+whether they can be unloaded or not; however, there is no concept of this, as yet.</p>
+
+
+<p>The argument <code>pTime</code> is an optional out-parameter and can be NULL. If the return value is
+<code>sal_True</code> then <code>pTime</code> reflects a point in time, since when the module could have
+been unloaded. Since that time, the function would have continually returned
+<code>sal_True</code> up to the present. The value of <code>pTime</code> is important for the decision as
+to whether a module will be unloaded. When someone initiates the unloading of modules by
+calling <code>rtl_unloadUnusedModules</code>, then the caller can specify a time span to the
+effect that only those modules are unloaded which have not been used at least for that
+amount of time. If <code>component_canUnload</code> does not fill in <code>pTime</code> 
+and returns <code>sal_True</code>, then the module is
+unloaded immediately.</p>
+
+<p><code>component_canUnload</code> is implicitly called by <code>rtl_unloadUnusedModules</code>. There is
+no need to call the function directly.
+</p>
+
+<h3>Registering Modules </h3>
+
+
+<p>By registering a module, one declares that a module supports the unloading
+mechanism. One registers a module by calling</p>
+
+<div class="sample_code">
+<span class="code_type">sal_Bool</span> SAL_CALL rtl_registerModuleForUnloading( <span class="code_type">oslModule</span> <span class="code_defparam">module</span>);
+</div>
+
+<table border="1" width="100%" cellspacing="0" cellpadding="3">
+  <tr>
+    <th class="func" width="9%" valign="top">Parameter</th>
+    <td width="91%">module - a module handle as is obtained by osl_loadModule</td>
+  </tr>
+  <tr>
+    <th class="func" width="9%" valign="top">Return</th>
+    <td width="91%">sal_True - the module could be registered for unloading,
+      sal_False otherwise</td>
+  </tr>
+</table>
+
+
+<p>A module can only be unloaded from memory when it has been registered as many
+times as it has been loaded. The reason is that a library can be
+&quot;loaded&quot; several times by <code>osl_loadModule</code> within the same process. The
+function will then return the same module handle because the library will
+effectively only be loaded once. To remove the library from memory it is
+necessary to call <code>osl_unloadModule</code> as often as <code>osl_loadModule</code> was called. The
+function <code>rtl_unloadUnusedModules</code> calls <code>osl_unloadModule</code> for a module as many
+times as it was registered. If, for example, a module has been registered one
+time less than <code>osl_loadModule</code> has been called and the module can be unloaded,
+then it needs a call to <code>rtl_unloadUnusedModules</code>, and an explicit call to
+<code>osl_unloadModule</code> to remove the module from memory.</p>
+
+
+<p><b><i>A module must be registered every time it has been loaded; otherwise, the
+unloading mechanism is not effective.</i></b></p>
+
+
+<p>Before a module is registered, one has to make sure that the module is in a
+state that prevents it from being unloaded. In other words,
+<code>component_canUnload</code>  must return <code>sal_False.</code>
+Assuming that <code>component_canUnload</code> returns <code>sal_True</code>
+and it is registered, regardless, then a call to <code>rtl_unloadUnusedModules</code> causes
+the module to be unloaded. This unloading can be set off by a different thread,
+and the thread which registered the module is &quot;unaware&quot; of this. Then, 
+when the first thread tries to obtain a factory or calls another function in the
+module, the application will crash -- because the module has already been unloaded.
+Therefore, one has to ensure that the module cannot be unloaded before it is
+registered. This is done by simply obtaining a factory from the module. As long
+as a factory or some other object, which has been created by the factory, is
+alive, the <code>component_canUnload</code> function will return <code>sal_False</code>.</p>
+
+
+<p> Loading and registering have to be done in
+this order:</p>
+
+
+<ol>
+  <li>load a library (<code>osl_loadModule</code>)</li>
+  <li>get the <code>component_getFactory</code> function and get a factory</li>
+  <li>register the module (<code>rtl_registerModuleForUnloading</code></li>
+</ol>
+<p>Usually, the service manager is used to obtain an instance of a service. The
+service manager registers all modules which support the unloading mechanism.
+When the service manager is used to get service instances, then one does not have
+to bother about registering.
+</p>
+
+<p>The function</p>
+
+<div class="sample_code">
+<span class="code_key">void</span> SAL_CALL rtl_unregisterModuleForUnloading( <span class="code_type">oslModule</span> <span class="code_defparam">module</span>);
+</div>
+
+<table border="1" width="100%" cellspacing="0" cellpadding="3">
+  <tr>
+    <th class="func" width="9%" valign="top">Parameter</th>
+    <td width="91%">module - a module handle as is obtained by osl_loadModule</td>
+  </tr>
+</table>
+
+
+<p>revokes the registration of a module. By calling the function for a
+previously registered module, one prevents the module from being unloaded by this
+unloading mechanism; however, in order to completely unregister the module it is still 
+necessary to call the function as often as the module has been registered.</p>
+
+
+<p><code>rtl_unloadUnusedModules</code> unregisters the modules which it unloads; 
+therefore, there is no need to call this function unless one means to prevent the
+unloading of a module.</p>
+
+<h3>Notification Mechanism </h3>
+
+<p>The notification mechanism is provided for clients which need to do clean up,
+such as, releasing cached references in order to allow modules to be unloaded.
+As long as someone holds a reference to an object whose housing module supports
+unloading, the module cannot be unloaded.
+<p>Because of the inherent danger of crashing the application by using this API, all
+instances which control threads should be registered listeners. On notification, 
+they have to ensure that their threads assume a safe state, that is, they
+run outside of modules which could be unloaded and do not jump back into module
+code as a result of a finished function call. In other words, there must not be
+an address of the module on the thread's stack.
+<p>Since current operating systems lack APIs in respect to controlling the position
+of threads within libraries, it would be a major effort to comply with that
+recommendation. The best and most efficient way of handling the unloading
+scenario is to let all threads, except for the main thread, die in case of a
+notification.</p>
+<p>Listeners ( the callback functions) must be unregistered before the listener
+code becomes invalid. That is, if a module contains listener code, namely
+callback functions of type <code>rtl_unloadingListenerFunc</code>, then those functions must
+not be registered when <code>component_canUnload</code> returns <code>sal_True</code>.</p>
+<p>Listeners are registered with the following function:</p>
+
+<div class="sample_code">
+<pre>
+<span class="code_type">sal_Int32</span> SAL_CALL rtl_addUnloadingListener( <span class="code_type">rtl_unloadingListenerFunc</span> <span class="code_defparam">callback</span>,
+                                             <span class="code_key">void</span>* <span class="code_defparam">this</span>);
+</pre>					     
+</div>
+
+<table border="1" width="100%" cellspacing="0" cellpadding="3">
+  <tr>
+    <th class="func" width="9%" valign="top" rowspan="2">Parameter</th>
+    <td width="91%">callback - a function that is
+      called to notify listeners.</td>
+  </tr>
+  <tr>
+    <td width="91%">this - a value to
+      distinguish different listener instances
+    </td>
+  </tr>
+  <tr>
+    <th class="func" width="9%" valign="top">Return</th>
+    <td width="91%">identifier which is used in
+      rtl_removeUnloadingListener
+    </td>
+  </tr>
+</table>
+
+
+<p>callback is a function which is called when the unloading procedure has
+been initiated by a call to <code>rtl_unloadUnusedLibraries</code>. The second argument is
+used to distinguish between different listener instances and may be NULL. It will
+be passed as an argument when the callback function is being called. The return
+value identifies the registered listener and will be used for removing the
+listener later on. If the same listener is added more then once, then every
+registration is treated as if made for a
+different listener. That is, a different cookie is returned and the callback
+function will be called as many times as it has been registered.</p>
+
+<p>The callback function is defined as follows:</p>
+
+<div class="sample_code">
+<span class="code_key">typedef void</span> (SAL_CALL *rtl_unloadingListenerFunc)( <span class="code_key">void</span>*
+<span class="code_defparam">id</span>);
+</div>
+
+<table border="1" width="100%" cellspacing="0" cellpadding="3">
+  <tr>
+    <th class="func" width="9%" valign="top">Parameter</th>
+    <td width="91%">id - The value that has been passed
+      as second argument to rtl_addUnloadingListener</td>
+  </tr>
+</table>
+
+<p>To unregister a listener call</p>
+
+<div class="sample_code">
+<span class="code_key">void</span> SAL_CALL rtl_removeUnloadingListener( <span class="code_type">sal_Int32</span>
+<span class="code_defparam">cookie</span> );
+</div>
+
+<table border="1" width="100%" cellspacing="0" cellpadding="3">
+  <tr>
+    <th class="func" width="9%" valign="top">Parameter</th>
+    <td width="91%">
+cookie is an identifier as returned by rtl_addUnloadingListener function.
+</td>
+  </tr>
+</table>
+
+
+<p>
+The callback functions can reside in modules which support the unloading
+mechanism; therefore, a listener must revoke itself as listener, before it becomes
+invalid, and the module can be unloaded.
+
+
+<p>The service manager as obtained by <code>createRegistryServiceFactory</code>
+(cppuhelper/servicefactory.hxx), <code>createServiceFactory</code>
+(cppuhelper/servicefactory.hxx), <code>bootstrap_initialComponentContext</code>
+(cppuhelper/bootstrap.hxx), and <code>defaultBootstrap_initialComponentContext</code>
+(cppuhelper/bootstrap.hxx), registers itself as unloading listener. On being
+notified, it releases references to factories which
+
+<ul>
+  <li>have not been registered with the manager by calling <code>XSet::insert</code></li>
+  <li>do not implement <code>XUnloadingPreference</code></li>
+  <li>implement <code>XUnloadingPreference</code> and
+    <code>XUnloadingPreference::releaseOnNotification</code> returns <code>true</code></li>
+</ul>
+
+
+<h3> Unloading </h3>
+
+<p>To trigger the unloading of modules call the function</p>
+
+<div class="sample_code">
+<span class="code_key">void</span> SAL_CALL rtl_unloadUnusedModules( <span class="code_type">TimeValue</span>*
+<span class="code_defparam">libUnused</span>);
+</div>
+
+<table border="1" width="100%" cellspacing="0" cellpadding="3">
+  <tr>
+    <th class="func" width="9%" valign="top">Parameter</th>
+    <td width="91%">
+libUnused - span of time that a module must be
+unused to be unloaded. The argument is optional.
+</td>
+  </tr>
+</table>
+
+
+<p>The function notifies the unloading listeners in order to give them a chance to do
+cleanup and get their threads in a safe state. Then, all registered modules are asked if they can be unloaded. 
+That is, the function calls <code>component_canUnload</code> on every registered module. 
+If <code>sal_True</code> is returned then <code>osl_unloadModule</code> is called for 
+each module as often as it was registered.
+</p>
+
+<p><i><b> A call to <code>osl_unloadModule</code> does not
+guarantee that the module is unloaded even if its <code>component_canUnload</code> function
+returns <code>sal_True</code>.</b></i>
+</p>
+
+<p>The optional in-parameter <code>libUnused</code> specifies a period of time, for which a
+library must be unused, in order to qualify for being unloaded. By using this
+argument, one can counter the multithreading problem as described above.
+It is the responsibility of the user of this function to provide a timespan
+long enough to ensure that all threads are out of modules ( see
+<code>component_canUnload</code>).
+</p>
+
+<p>The service managers which have been created by functions such as <code>createRegistryServiceFactory</code>
+(declared in cppuhelper/servicefactory.hxx) are registered listeners and
+release the references to factories on notification. Some factories are treated
+differently, see paragraph about one-instance-services.
+</p>
+
+<h3> Default Factories </h3>
+
+<p>Default factories can be obtained by means of helper functions, such as
+<code>createSingleComponentFactory</code>. They keep a pointer to a function within a module that
+creates a service instance; therefore, a library must not be unloaded as long as
+there are default factories around. This is achieved by the factories which
+increase the module counter on instantiation. When a factory is about to destroy
+itself, then it decreases the counter. In order to realize this new functionality,
+the relevant creator functions now have another parameter. These are the
+new signatures ( for complete declarations refer to cppuhelper/factory.hxx). </p>
+
+<div class="sample_code">
+<pre>
+<span class="code_type">Reference</span>&lt; <span class="code_type">XSingleComponentFactory</span> &gt; SAL_CALL createSingleComponentFactory(
+	<span class="code_type">ComponentFactoryFunc</span> <span class="code_param">fptr</span>,
+	<span class="code_type">OUString</span> <span class="code_key">const</span> &amp; <span class="code_param">rImplementationName</span>,
+	<span class="code_type">Sequence</span>&lt; <span class="code_type">OUString</span> &gt; <span class="code_key">const</span> &amp; <span class="code_param">rServiceNames</span>,
+	<b><span class="code_type">rtl_ModuleCount</span> * <span class="code_param">pModCount</span> = 0</b> )
+	SAL_THROW( () );
+	
+<span class="code_type">Reference</span>&lt; <span class="code_type">XSingleServiceFactory</span>&gt; SAL_CALL createSingleFactory(
+	<span class="code_key">const</span> <span class="code_type">Reference</span>&lt; <span class="code_type">XMultiServiceFactory</span> &gt; &amp; <span class="code_param">rServiceManager</span>,
+	<span class="code_key">const</span> <span class="code_type">OUString</span> &amp; <span class="code_param">rImplementationName</span>,
+	<span class="code_type">ComponentInstantiation</span> <span class="code_param">pCreateFunction</span>,
+	<span class="code_key">const</span> <span class="code_type">Sequence</span>&lt; <span class="code_type">OUString</span> &gt; &amp; <span class="code_param">rServiceNames</span>,
+	<b><span class="code_type">rtl_ModuleCount</span> * <span class="code_param">pModCount</span> = 0 </b> )
+	SAL_THROW( () );
+	
+<span class="code_type">Reference</span>&lt; <span class="code_type">XSingleServiceFactory</span> &gt; SAL_CALL createOneInstanceFactory(
+	<span class="code_key">const</span> <span class="code_type">Reference</span>&lt; <span class="code_type">XMultiServiceFactory</span> &gt; &amp; <span class="code_param">rServiceManager</span>,
+	<span class="code_key">const</span> <span class="code_type">OUString</span> &amp; <span class="code_param">rComponentName</span>, 
+	<span class="code_type">ComponentInstantiation</span> <span class="code_param">pCreateFunction</span>,
+	<span class="code_key">const</span> <span class="code_type">Sequence</span>&lt; <span class="code_type">OUString</span> &gt; &amp; <span class="code_param">rServiceNames</span>,
+	<b><span class="code_type">rtl_ModuleCount</span> * <span class="code_param">pModCount</span> = 0 </b> )
+	SAL_THROW( () );
+</pre>
+</div>
+<p> <code>rtl_ModuleCount</code> is declared in sal/rtl. See paragraph Implementation below for further
+information.
+</p>
+
+<h3>Custom Factories</h3>
+
+<p>Custom factories have to be implemented in such a way that the <code>component_canUnload</code>
+function of the module containing the service returns <code>sal_False</code>, as long as a
+factory exists. Because programmers have full control over the factory
+implementation they can choose whatever mechanism they think fit.</p>
+
+<h3> One-Instance-Services </h3>
+
+<p>A factory of a one-instance-service (OIS) always returns the same instance. So far, 
+the service manager caches references to the factories with the effect that an
+instance lives as least as long as the service manager; the service manager
+keeps the factory alive, which in turn keeps the service instance alive. That
+fact has been taken advantage of by some developers to implement services whose
+instances must not die; otherwise, important data would be lost. Now with the
+advent of the unloading mechanism, we face the problem that factories do not
+tell what kind of service they provide. But that is important for the service
+manager to decide whether it releases a factory when being notified during the
+unloading process. The service manager must not release the OIS; otherwise, the
+following could happen:
+
+<ul>
+<li>An OIS instance is being referenced by its factory and
+other clients.
+<li>The service manager gets a notification and releases the factories.
+<li> Now, the factory could die and release the OIS, or the factory lives on
+because it is kept by other clients or the OIS itself.
+<li>Either way, when the service manager is asked to create the service again,
+  then it will create a new instance and there are in
+fact two instances of an OIS around.
+<li>Consider that the former instance may contain crucial data, but a client cannot get to
+them via the service manager anymore.
+</ul>
+
+<p>The service manager currently keeps hard references to factories. To relieve
+this problem with OISs the manager could keep weak references, but then the OIS
+instance must keep a reference to its factory so that the weak reference, as kept
+by the service manager, remains valid. That was not necessary, so far, and
+developers were negligent, in this regard, with the result that a lot of OISs
+needed to be changed. There is also a design flaw with the default OIS
+factory ( <code>createOneInstanceFactory</code>), namely, the factory keeps a hard reference
+to the OIS instance. If the instance is properly implemented and keeps a
+reference to the factory, then there is a ring reference which causes a memory
+leak. That, actually, calls for a new type of default factory which keeps a weak
+reference to the service OIS instance.
+</p>
+
+<p>But even then, there is a problem that some OISs rely on the fact that they
+stay alive once they have been created. An that is not achieved with the
+idea as outlined above.
+</p>
+
+<p>To prevent the factory of an OIS from being released by the
+service manager, it implements a new interface.
+</p>
+
+<div class="sample_code">
+<pre>
+<span class="code_key">module</span> com { <span class="code_key">module</span> sun { <span class="code_key">module</span> star { <span class="code_key">module</span> uno { 
+<span class="code_key">interface</span> XUnloadingPreference: com::sun::star::uno::XInterface
+{ 
+    <span class="code_type">boolean</span> releaseOnNotification();
+}; 
+};};};};
+</pre>
+</div>
+
+<p>The interface contains a function
+<code>releaseOnNotification</code>, whose return value indicates whether a
+notification listener should release its references to the implementing object, 
+in case of a notification. A listener should always ask objects for this
+interface, be it factories or other objects. If objects do not implement that
+interface then the listener should release references to those objects as is the
+case when <code>XUnloadingPreference::releaseOnNotification</code> returns true.</p>
+
+<p> This interface will be implemented by the default
+factories. releaseOnNotification will return false when called on the 
+default one-instance-factory. The table shows what the other implementations
+return:</p>
+
+<table border="1" width="100%" cellspacing="0" cellpadding="3">
+  <tr>
+    <th class="normal" width="9%" valign="top">Function that
+      creates the factory</th>
+    <th class="normal"width="91%">Return value of
+XUnloadingPreference::releaseOnNotification</th>
+  </tr>
+  <tr>
+    <td width="9%" valign="top"><font size="-1">createSingleComponentFactory</font></td>
+    <td width="91%">
+<font size="-1">sal_True</font></td>
+  </tr>
+  <tr>
+    <td width="9%" valign="top"><font size="-1">createSingleFactory</font></td>
+    <td width="91%">
+<font size="-1">sal_True</font></td>
+  </tr>
+  <tr>
+    <td width="9%" valign="top"><font size="-1">createOneInstanceFactory</font></td>
+    <td width="91%"><font size="-1">
+sal_False</font></td>
+  </tr>
+  <tr>
+    <td width="9%" valign="top"><font size="-1">createFactoryProxy</font></td>
+    <td width="91%">
+<font size="-1">Delegates call to the wrapped factory if it implements
+XUnloadingPreference; otherwise, sal_True is returned.</font></td>
+  </tr>
+  <tr>
+    <td width="9%" valign="top"><font size="-1">createSingleRegistryFactory</font></td>
+    <td width="91%">
+<font size="-1">sal_True as long as the actual factory has not been loaded; otherwise, the call is
+delegated to the loaded factory. If that factory does not implement
+XUnloadingPreference, then sal_True is returned.</font></td>
+  </tr>
+  <tr>
+    <td width="9%" valign="top"><font size="-1">createOneInstanceRegistryFactory</font></td>
+    <td width="91%">
+<font size="-1">sal_True as long as the actual factory has not been loaded. When
+the factory has been loaded and has created an instance, then the return value is
+sal_False; otherwise, sal_True.</font></td>
+  </tr>
+</table>
+
+<p>The service manager releases references to factories, even if they do not
+implement this interface. This makes it necessary that custom factories of
+one-instance-services need to implement this interface in order to guarantee 
+proper behavior of the service.</p>
+
+<h3> Implementation </h3>
+
+<p>To facilitate the implementation of modules and default factories which
+support the unloading mechanism, we will introduce new types.
+</p>
+
+<div class="sample_code">
+<pre>
+<span class="code_comment">// rtl/unload.h</span>
+<span class="code_key">typedef struct</span> _rtl_ModuleCount
+{
+    <span class="code_key">void</span> ( SAL_CALL * acquire ) ( <span class="code_key">struct</span> <span class="code_type">_rtl_ModuleCount</span> * <span class="code_param">that</span> );
+    <span class="code_key">void</span> ( SAL_CALL * release ) ( <span class="code_key">struct</span> <span class="code_type">_rtl_ModuleCount</span> * <span class="code_param">that</span> );
+} rtl_ModuleCount;
+</pre>
+</div>
+
+<p>Currently, this type is only used with the creator functions of default
+factories. If default factories are used, then the module should have one
+instance of <code>rtl_ModuleCount</code> that is initialized, while the module is being
+loaded. The UDK will provide helper types and default function
+implementations.
+</p>
+
+<div class="sample_code">
+<pre>
+<span class="code_comment">// rtl/unload.h</span>
+<span class="code_key">typedef struct</span> _rtl_StandardModuleCount
+{
+    <span class="code_type">rtl_ModuleCount</span> <span class="code_defid">modCount</span>;
+    <span class="code_type">sal_Bool</span> ( *canUnload ) ( <span class="code_key">struct</span> <span class="code_type">_rtl_StandardModuleCount</span>* <span class="code_param">this</span>, 
+                               <span class="code_type">TimeValue</span>* <span class="code_param">libUnused</span>);
+    <span class="code_type">oslInterlockedCount</span> <span class="code_defid">counter</span>;
+    <span class="code_type">TimeValue</span> <span class="code_defid">unusedSince</span>;
+} <span class="code_var">rtl_StandardModuleCount</span>;
+</pre>
+<pre>
+<span class="code_key">#define</span> MODULE_COUNT_INIT \
+         { {rtl_moduleCount_acquire,rtl_moduleCount_release}, \
+            rtl_moduleCount_canUnload, 0, {0, 0} };
+</pre>
+</div>
+
+<p>
+<code>rtl_moduleCount_acquire</code>, <code>rtl_moduleCount_release</code>, and
+<code>rtl_moduleCount_canUnload</code> are default implementations.
+</p>
+
+<p>To support unloading, one has to provide this code in a module.</p>
+
+<div class="sample_code">
+<pre>
+<span class="code_comment">//one global instance of rtl_StandardModuleCount</span>
+<span class="code_type">rtl_StandardModuleCount</span> <span class="code_var">g_moduleCount</span>= MODULE_COUNT_INIT;
+
+sal_Bool SAL_CALL  component_canUnload( <span class="code_type">TimeValue</span>* <span class="code_param">libUnused</span>)
+{
+    <span class="code_key">return</span> g_moduleCount.canUnload( &amp;g_moduleCount, libUnused);
+}
+
+<span class="code_comment">// Example class for a service implementation</span>
+MyService::MyService()
+{
+    g_moduleCount.modCnt.acquire( &amp;g_moduleCount.modCnt);
+    ...
+}
+
+MyService::~MyService()
+{
+    ...
+    g_moduleCount.modCnt.release( &amp;g_moduleCount.modCnt);
+}
+
+...
+</pre>
+</div>
+
+<table cellpadding="4" width="100%"><TR><TD WIDTH=100% BGCOLOR="#666699">
+      <FONT COLOR="#ffffff"> Author: <A HREF="mailto:Joachim.Lingner@germany.sun.com"> 
+        <FONT COLOR="#ffffff">Joachim Lingner</font></A>. ($Date: 2004/12/15 12:49:51 $)<br/>
+	<I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I> </FONT> 
+    </TD></tr>
+</TABLE>
+</body>
+</html>

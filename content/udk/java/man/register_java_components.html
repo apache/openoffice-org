@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+  <head>
+	<meta HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<title>Registering java components</title>
+	<meta NAME="KEYWORDS" CONTENT="java components">
+  </head>
+  <body LINK="#444488" VLINK="#444488" bgcolor="#eeeeff"><A NAME="__Top__"></A>
+
+    <table WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+	  <col WIDTH=75>
+	  <tr>
+		<td bgcolor="#666699">
+          <h1 ALIGN=CENTER STYLE="margin-top: 0cm; text-decoration: none">
+	        <font COLOR="#ffffff" SIZE=6>Registering java components</font>
+		  </h1>
+		</td>
+	  </tr>
+    </table>
+
+
+	
+<p>As there are many ways to Rom, there many ways to register a component. But 
+  what all ways have in common, is that an ImplementationRegistration instance 
+  is needed. </p>
+<p>So, a service can be registered via star basic creating the service <a href="http://api.openoffice.org/common/ref/com/sun/star/registry/ImplementationRegistration.html">ImplementationRegistration</a> 
+  and calling the method <a href="http://api.openoffice.org/common/ref/com/sun/star/registry/XImplementationRegistration.html#registerImplementation">registerImplementation</a>. 
+</p>
+Basic example: 
+<table width="100%" bgcolor=#ffffcc>
+  <tbody> 
+  <tr> 
+    <td height="71"> 
+      <pre>
+
+regImpl = createUnoService("com.sun.star.registry.ImplementationRegistration")
+regImpl.registerImplementation("com.sun.star.loader.Java2", "file:///home/testComponent.jar", null)</pre>
+    </td>
+  </tr>
+  </tbody> 
+</table>
+<p>Another way is to use the binary UNO bound tool <a href="http://udk.openoffice.org/common/man/tools.html#regcomp">regcomp</a>. 
+  This tool needs to create a java virtual machine, which it does by the service 
+  <a href="http://api.openoffice.org/common/ref/com/sun/star/java/JavaVirtualMachine.html">JavaVirtualMachine</a>. 
+</p>
+Binary exmaple (UNIX):<br>
+<table width="100%" bgcolor=#ffffcc>
+  <tbody> 
+  <tr> 
+    <td height="71"> 
+      <pre>
+
+setenv OO_JAVA_PROPERTIES RuntimeLib=/usr/java1.2/jre/lib/sparc/native_threads/libjvm.so<br>setenv CLASSPATH $UDK/ridljar:$UDK/jurt.jar:$UDK/java_uno.jar <br>regcomp -register -br applicat.rdb -c file:///home/testComponent.jar -l com.sun.star.loader.Java2 
+</pre>
+    </td>
+  </tr>
+  </tbody> 
+</table>
+<p>Unfortunatley this service <a href="http://api.openoffice.org/common/ref/com/sun/star/java/JavaVirtualMachine.html">JavaVirtualMachine</a> 
+  often needs some hints, to find the java installation to use. To avoid this, 
+  there is another java based tool. </p>
+<p> Java example: <br>
+
+<table width="100%" bgcolor=#ffffcc>
+  <tbody> 
+  <tr> 
+    <td height="71"> 
+      <pre>
+
+java com.sun.star.tools.uno.RegComp applicat.rdb register file:///home/testComponent.jar 
+  com.sun.star.loader.Java2 
+</pre>
+    </td>
+  </tr>
+  </tbody> 
+</table>
+<p>&nbsp;
+<p>&nbsp;
+</body>
+</html>

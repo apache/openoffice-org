@@ -1,0 +1,565 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1"/>
+<TITLE>
+C UNO Language Specification
+</TITLE>
+<style type="text/css">
+<!--
+h1 { text-align:center; margin-top: 0.2cm; text-decoration: none; color: #ffffff; font-size: 6; margin-top: 0.2cm}
+h2 { margin-top: 0.2cm; margin-bottom=0.1cm; color: #ffffff; background-color: #666699 }
+li {margin-bottom: 0.2cm;}
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm;}
+dt {margin-bottom: 0.2cm;}
+pre {background-color: #ffffcc; padding: 0.2cm; }
+-->
+</style>
+</HEAD>
+<body>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 bgcolor=#666699 summary=header>
+<tr><td>
+      <h1> C UNO Language Specification </h1>
+	</td><td>  
+	  <A HREF="http://www.openoffice.org/"> 
+        <img src="../../../images/open_office_org_logo.gif" name="Grafik1" alt="OpenOffice.org" align=right width=109 height=54 border=0/></A>
+      </TD></TR>
+</TABLE>
+
+<h2><A NAME="intro"></A> Introduction </h2>
+
+<p>
+      This document describes the C representation of UNO IDL types as generated 
+      by the <a href="../../../common/man/tools.html#cunomaker"><code>cunomaker</code> 
+      tool</a>. Each C UNO type is generated into a corresponding <code>.h</code> 
+      header file and optional a .c source file if a special type function is 
+      wanted.
+
+<p>   A <code>getCUnoType_&lt;full_qualified_typename&gt;() func</code>tion is 
+      available for each UNO type in the <code>.h</code> file if the special type 
+      function is generated. Calling this function you can obtain the meta type 
+      of a type, i.e. a value describing the type. Using this type (reference) 
+      you can get comprehensive description of the type using the C++ runtime 
+      (<code>cppu</code> library; have a look at <code>typelib/typedescription.h</code>).
+
+<p>The <code>getCUnoType_&lt;typename&gt;()</code> function has the following 
+      signature: 
+
+<pre>
+typelib_TypeDescriptionReference ** SAL_CALL getCUnoType_com_sun_star_uno_TypeClass();
+</pre>
+
+<p>The following sections define all types and UNO IDL constructs, which includes 
+      the binary memory layout, too.
+<ul>
+	<li><a href="#modules">Modules, Constants</A></li>
+	<li><a href="#basic_types">basic Types</A></li>
+	<li><a href="#enum">Enum</A></li>
+	<li><a href="#sequence">Sequence</A></li>
+	<li><a href="#array">Array</A>
+	<li><a href="#interface">Interface</A></li>
+	<li><a href="#struct">Struct</a></li><li>
+	<a href="#struct"></a><a href="#exception">Exception</A></li>
+	<li><a href="#union">union</A>
+      </ul>
+
+<h2><A NAME="modules"></A> Modules, Constants </h2>
+
+<p>
+      An IDL module definition is mapped only in the name of an IDL type definition 
+      within the module. All IDL type definition within the module are mapped 
+      to their corresponding C type declarations with a full qualified type name. 
+<p>
+      IDL constant groups are mapped in the same way as modules. All defined constants 
+      in this constant group are mapped to static const variables with type, name 
+      and value of the IDL equivalent. 
+<p>
+Example:
+
+<pre>
+module foo
+{
+    constants group
+    {
+        const long BAR = 0xdb0;
+    };
+};
+</pre>
+
+<p>is generated to
+
+<pre>
+file foo/bar.h:
+
+static const sal_Int32 foo_group_BAR = (sal_Int32)0xdb0;
+</pre>
+
+<h2><A NAME="basic_types"></A> basic Types </h2>
+
+<p>
+      The binary representation of UNO types is machine (e.g. big-/little-endian), 
+      language and operating system dependent. Alignment of data structures complicates 
+      even more, and is also processor and bus dependent. The alignment used for 
+      C UNO types is defined by the following algorithm: 
+
+      <p>
+Structure members are stored sequentially by the order they are declared.
+Every data object has an <i>alignment-requirement</i>.
+For structures, the requirement is the largest size of its members.
+Every object then has an allocated <i>offset</i> so that
+
+<pre>
+<i>offset</i> % <i>alignment-requirement</i> == 0
+</pre>
+
+<p>If it is possible that the maximum <code>alignment-requirement</code> can be
+restricted
+(Microsoft C/C++ compiler, IBM C/C++ compiler using a compiler pragma),
+then it is set to 8.
+Under this condition the alignment-requirement is
+
+<pre>
+alignment-requirement := min( 8, sizeof( <i>type</i> ) ).
+struct-alignment-requirement := min( 8, sizeof( <i>largest-member-type</i> ) ).
+</pre>
+
+<p>The size of the struct is ceiled up to the largest integral member type.
+
+<p>In general, if the maximal <code>alignment-requirement</code> can be restricted
+to <i>max-alignment</i>,
+then it is
+
+<pre>
+alignment-requirement := min( <i>max-alignment</i>, sizeof( <i>type</i> ) ).
+struct-alignment-requirement := min( <i>max-alignment</i>, sizeof( <i>largest-member-type</i> ) ).
+</pre>
+
+<p>The size of the struct is ceiled up to the largest integral member type.
+
+<p>The following table shows the IDL type, size and layout of the basic C++ UNO specification.
+Only 32-Bit C++ UNO is specified and tested for now.
+Basic type definitions like <code>sal_Int32</code> are defined in header
+<code>sal/types.h</code>.
+
+<TABLE WIDTH=904 BORDER=1 CELLPADDING=5 CELLSPACING=0 summary="IDL types and their size">
+<thead> 
+<tr>
+    <th>IDL type</th>
+    <th>Size [byte]</th>
+    <th>C type</th>
+</TR>
+</THEAD><TBODY> 
+<TR>
+    <td><code>void</code></TD>
+    <td><code>-</code></TD>
+    <td>void</TD>
+</TR>
+<tr>
+    <td><code>byte</code></td>
+    <td><code>1</code></td>
+    <td>signed 8 bit integer (<code>sal_Int8</code>)</td>
+</TR>
+<tr>
+    <td><code>short</code></td>
+    <td><code>2</code></td>
+    <td>signed 16 bit integer (<code>sal_Int16</code>)</td>
+</TR>
+<tr>
+    <td><code>unsigned short</code></td>
+    <td><code>2</code></td>
+    <td>unsigned 16 bit integer (<code>sal_uInt16</code>)</td>
+</TR>
+<tr>
+    <td><code>signed long</code></td>
+    <td><code>4</code></td>
+    <td>signed 32 bit integer (<code>sal_Int32</code>)</td>
+</TR>
+<tr>
+    <td><code>unsigned long</code></td>
+    <td><code>4</code></td>
+    <td>unsigned 32 bit integer (<code>sal_uInt32</code>)</td>
+</TR>
+<tr>
+    <td><code>hyper</code></td>
+    <td><code>8</code></td>
+    <td>signed 64 bit integer (<code>sal_Int64</code>)</td>
+</TR>
+<tr>
+    <td><code>unsigned hyper</code></td>
+    <td><code>8</code></td>
+    <td>unsigned 64 bit integer (<code>sal_uInt64</code>)</td>
+</TR>
+<tr>
+    <td><code>float</code></td>
+    <td><code>sizeof (float)</code></td>
+    <td>processor dependent: Intel, Sparc = IEEE float (<code>float</code>)</td>
+</TR>
+<tr>
+    <td><code>double</code></td>
+    <td><code>sizeof (double)</code></td>
+    <td>processor dependent: Intel, Sparc = IEEE double (<code>double</code>)</td>
+</TR>
+<tr>
+    <td><code>boolean</code></td>
+    <td><code>1</code></td>
+    <td>8 bit unsigned char (<code>sal_Bool { 0, 1 }</code>)</td>
+</TR>
+<tr>
+    <td><code>char</code></td>
+    <td><code>2</code></td>
+    <td>16 bit Unicode char (<code>sal_Unicode</code>)</td>
+</TR>
+<tr>
+    <td><code>string</code></td>
+    <td><code>4</code></td>
+    <td>struct <code>rtl_uString</code> * (header <code>rtl/ustring.h</code>)</td>
+</TR>
+<tr>
+    <td><code>type</code></td>
+    <td><code>4</code></td>
+    <td>struct <code>typelib_TypeDescriptionReference * </code> 
+              (header <code>typelib/typedescription.h</code>). A default constructed 
+              meta type refers to type <code>VOID</code>.
+          </TD>
+</TR>
+<tr>
+    <td><code>any</code></td>
+    <td><code>sizeof (uno_Any)</code></td>
+    <td>struct <code>uno_Any</code> (header <code>uno/any2.h</code>): 
+<pre>
+typedef struct _uno_Any
+{
+    typelib_TypeDescriptionReference * pType;
+    void *                             pData;
+} uno_Any;
+</pre>
+<p>The struct contains a pointer to the type and value that is
+held by the any. Anies cannot be nested, i.e. no any can contain an any!
+</TD></TR>
+</TBODY></TABLE>
+
+<h2><A NAME="enum"></A> Enum </h2>
+
+<p>An IDL enumeration is mapped to a C typedef to a C enumeration type (<code>enum</code>). 
+      The name of the enumeration is used as prefix for each enumeration label. 
+      The enumeration labels will be initialized with the defined values in IDL 
+      or by default in ascending order beginning with 0. The last label (<i>EnumName</i><code>_MAKE_FIXED_SIZE 
+      = SAL_MAX_ENUM</code>) is appended to fix the size of the enumeration type 
+      to the compiler's <code>sizeof(int)</code>.
+
+<p>Example:
+
+<pre>
+module foo
+{
+    enum Bar
+    {
+        JOHN, DOE
+    };
+};
+</pre>
+
+<p>is generated to
+
+<pre>
+file foo/Bar.h:
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef enum _foo_Bar
+{
+    foo_Bar_John = 0,
+    foo_Bar_DOE = 1,
+    foo_Bar_MAKE_FIXED_SIZE = SAL_MAX_ENUM
+} foo_Bar;
+
+#ifdef __cplusplus
+}
+#endif
+</pre>
+
+<h2><A NAME="sequence"></A> Sequence </h2>
+
+<p>C UNO sequences are reference counted. The value type of a sequence is handled 
+      by a pointer to uno_Sequence which is of the following structure (headers 
+      <code>uno/sequence2.h</code> and <code>sal/types.h</code>): 
+
+<pre>
+typedef struct _sal_Sequence
+{
+    sal_Int32 nRefCount;
+    sal_Int32 nElements;
+    char      elements[1];
+} sal_Sequence;
+
+typedef sal_Sequence uno_Sequence;
+</pre>
+
+<p>Elements of the sequence follow up directly to the elements array.
+API functions to cope with sequences are in header <code>uno/sequence2.h</code>.
+<p> Sequences are used generically in UNO, i.e. nothing has to be generated 
+        for a specific sequence (e.g. used in an interface method declaration) 
+        by the <a href="../../../common/man/tools.html#cunomaker"><code>cunomaker</code> 
+        tool</a>. A UNO IDL type usage of <code>sequence< long ></code> will last 
+        in a C UNO <code>uno_Sequence *</code>.
+
+<h2><A NAME="array"></A> Array </h2>
+
+<p>XXX TODO:
+The array has yet to be specified, but is in work.
+Ask <a href="mailto:Juergen.Schmidt@germany.sun.com">Juergen Schmidt</a>
+for current status.
+<p>
+Thus the array specification is not fixed, to give an outlook:
+It will follow C array specification and generated to a C array of given element type.
+Arrays will allow multiple dimensions.
+In contrast to <a href="#sequence">sequences</a> C arrays are <b>not</b> reference
+counted, thus copying big arrays may be time consuming.
+
+<h2><A NAME="interface"></A> Interface </h2>
+
+<p>Interfaces are generated to C structs containing function pointers for each 
+      function. C interfaces are reference counted and are represented by an interface 
+      pointer.
+
+      <p>Each function contains as first parameter a pointer to the implemented 
+        object itself and as second parameter (out parameter) a pointer to an 
+        uno_Any representing a possible thrown exception. Note that this parameter 
+        will not be valid if no exception occurred. While return values are passed 
+        as pure out parameters (the third parameter if the function doesn't return 
+        void), each function returns a cuno_ErrorCode. This error code is used 
+        to signal if an exception was thrown or not. 
+
+      <p>The three different types of parameters are generated as follows: 
+
+      <ul>
+        <li><i>in</i>: the parameter is pure in parameter; it is passed as call-by-value 
+          for ordinal and float types or passed as pointer for complex types (e.g. 
+          structs, interfaces, sequences, strings). </li>
+		  
+        <li><i>out</i>: the parameter is pure out parameter; it is anytime passed 
+          as pointer (e.g. base types, structs) or pointer pointer for reference 
+          counted types (e.g. interfaces, sequences, strings). </li>
+
+        <li><i>inout</i>: the parameter is inout parameter; it is anytime passed 
+          as pointer or pointer pointer for reference counted types. </li>
+
+      </ul>
+
+      <p>out parameters and return values are pure out parameters that means that 
+        you give only the memory for this types in the function but the types 
+        must not be constructed. If an exception occurred these parameters are 
+        not valid.</p>
+
+      <ul>
+        <li> a struct must be a pointer to the necessary memory</li>
+
+        <li> an interface must be a pointer to an interface pointer.</li>
+      </ul>
+
+      <p>If the UNO IDL interface declares an attribute, the corresponding C struct 
+        gets an additional <code>function pointer for get</code><i>AttributeName</i><code>()</code> 
+        and <code>set</code><i>AttributeName</i><code>()</code> (if non-<code>readonly</code>).
+
+<p>Any interface method can declare <a href="#exception">exceptions</a> that 
+        may be thrown upon invocation of it. Implicitly any method may throw <code>com.sun.star.uno.RuntimeException</code> 
+        (generated C struct <code>com_sun_star_uno_RuntimeException</code>). For 
+        exceptions using in C function an additional parameter (uno_Any *) is 
+        generated which transport the necessary exception information.
+
+<p>The latter said is valid except for <code>com.sun.star.XInterface::acquire()</code> 
+        and <code>com.sun.star.XInterface::release()</code> which never throw 
+        any exception.
+
+      <p>Note: The queryInterface method will be changed in C. The return value 
+        specified in IDL of type any will be changed in the C type declaration 
+        to a pure out parameter of type com_sun_star_uno_XInterface pointer.</p>
+
+<p>Interface inheritance is done by expanding the generated function table 
+        with function pointers of all inherited functions. All interfaces inherit 
+        from UNO IDL interface <code>com.sun.star.XInterface.</code> </p>
+
+      <p> Example: <code>com.sun.star.lang.XMultiServiceFactory</code> 
+
+<pre>
+module com {  module sun {  module star {  module lang {
+
+interface XMultiServiceFactory: com::sun::star::uno::XInterface
+{ 
+    com::sun::star::uno::XInterface createInstance(
+        [in] string aServiceSpecifier ) 
+        raises( com::sun::star::uno::Exception );
+	
+    com::sun::star::uno::XInterface createInstanceWithArguments(
+        [in] string ServiceSpecifier, 
+        [in] sequence&lt;any&gt; Arguments ) 
+        raises( com::sun::star::uno::Exception );
+	
+    sequence&lt;string&gt; getAvailableServiceNames(); 
+}; 
+
+}; }; }; };
+</pre>
+
+<p>will be generated to (.h file) 
+
+<pre>
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifndef COM_SUN_STAR_LANG_XMULTISERVICEFACTORY
+#define COM_SUN_STAR_LANG_XMULTISERVICEFACTORY
+struct _com_sun_star_lang_XMultiServiceFactory_ftab;
+typedef struct _com_sun_star_lang_XMultiServiceFactory_ftab * com_sun_star_lang_XMultiServiceFactory;
+#endif
+
+typedef struct _com_sun_star_lang_XMultiServiceFactory_ftab
+{
+    /* Methods of com_sun_star_uno_XInterface */
+    cuno_ErrorCode (SAL_CALL *queryInterface)( com_sun_star_uno_XInterface *, uno_Any *,
+                                              com_sun_star_uno_XInterface **, typelib_TypeDescriptionReference * );
+    cuno_ErrorCode (SAL_CALL *acquire)( com_sun_star_uno_XInterface * );
+    cuno_ErrorCode (SAL_CALL *release)( com_sun_star_uno_XInterface * );
+
+    /* Methods of com_sun_star_lang_XMultiServiceFactory */
+    cuno_ErrorCode (SAL_CALL *createInstance)( com_sun_star_lang_XMultiServiceFactory *, uno_Any *,
+                                              com_sun_star_uno_XInterface **, rtl_uString * );
+    cuno_ErrorCode (SAL_CALL *createInstanceWithArguments)( com_sun_star_lang_XMultiServiceFactory *, uno_Any *,
+                                                           com_sun_star_uno_XInterface **, rtl_uString *, 
+                                                           /*sequence< any >*/ uno_Sequence * );
+    cuno_ErrorCode (SAL_CALL *getAvailableServiceNames)( com_sun_star_lang_XMultiServiceFactory *, uno_Any *,
+                                                        /*sequence< string >*/ uno_Sequence ** );
+} com_sun_star_lang_XMultiServiceFactory_ftab;
+
+#ifdef __cplusplus
+}
+#endif</pre>
+
+<h2><A NAME="struct"></A> Struct </h2>
+
+<p>
+      UNO IDL Structs are generated to C typedefs to C structs declaring the C 
+      UNO types and members in the same order. The member names are identical. 
+      Struct inheritance is done by an additional member (the first member) with 
+      the inherited type. Note that the maximal alignment-requirement for structures 
+      for the OS/2 and Microsoft Visual C++ compiler is 8.
+
+<p>Example: <code>com.sun.star.lang.Locale</code>
+
+<pre>
+module com {  module sun {  module star {  module lang {
+
+struct Locale
+{
+    string Language;
+    string Country;
+    string Variant;
+};
+
+}; }; }; };
+</pre>
+
+<p>will be generated to (<code>.h</code> file) 
+
+<pre>
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifdef SAL_W32
+#   pragma pack(push, 8)
+#elif defined(SAL_OS2)
+#   pragma pack(8)
+#endif
+
+typedef struct _com_sun_star_lang_Locale
+{
+    rtl_uString * Language;
+    rtl_uString * Country;
+    rtl_uString * Variant;
+} com_sun_star_lang_Locale;
+
+#ifdef SAL_W32
+#   pragma pack(pop)
+#elif defined(SAL_OS2)
+#   pragma pack()
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+</pre>
+
+<h2><A NAME="exception"></A> Exception </h2>
+
+<p>Exceptions are generated similarly to <a href="#struct">structs</a>, meaning 
+they have identical binary layout. Exceptions are thrown by instance.
+<p>Exceptions need not inherit from any base exception, though UNO API conventions
+want any exception ([in-]directly) inherit from <code>com.sun.star.uno.Exception</code>.
+
+<p>
+Example: <code>com.sun.star.lang.IllegalArgumentException</code>
+
+<pre>
+module com {  module sun {  module star {  module lang {  
+ 
+exception IllegalArgumentException: com::sun::star::uno::Exception
+{ 
+    short ArgumentPosition; 
+}; 
+ 
+}; }; }; };  
+</pre>
+
+<p>will be generated to (<code>.h</code> file)
+
+<pre>
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifdef SAL_W32
+#   pragma pack(push, 8)
+#elif defined(SAL_OS2)
+#   pragma pack(8)
+#endif
+
+typedef struct _com_sun_star_lang_IllegalArgumentException
+{
+    com_sun_star_uno_Exception _Base;
+    sal_Int16 ArgumentPosition;
+} com_sun_star_lang_IllegalArgumentException;
+
+#ifdef SAL_W32
+#   pragma pack(pop)
+#elif defined(SAL_OS2)
+#   pragma pack()
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+</pre>
+
+<h2><A NAME="union"></A> Union </h2>
+
+<p>XXX TODO: Currently, unions are not supported by the 
+<a href="../../../common/man/tools.html#cunomaker"><code>cunomaker</code> 
+      tool</a>, but nevertheless the runtime can cope with it. Union will be passed 
+      by a pointer. Unions will be generated as structs having a 64 bit discriminant 
+      as first member followed by a C union declaration. Alignment is as for structs. 
+
+<table summary=footer width=100% bgcolor=#666699>
+<tr><td>
+      <FONT COLOR="#ffffff"> Author: <A HREF="mailto:Juergen.Schmidt@germany.sun.com"> 
+        <FONT COLOR="#ffffff">J&uuml;rgen Schmidt</font></A>.<br/>
+	<I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I> </FONT> 
+    </TD></tr>
+
+</TABLE>
+</BODY>
+</html>

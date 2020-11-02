@@ -1,0 +1,830 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML>
+<head>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1"/>
+<TITLE>
+UNO Contexts
+</TITLE>
+<style type="text/css">
+	<!--
+h1 { text-align:center; margin-top: 0.2cm; text-decoration: none; color: #ffffff; font-size: 6; margin-top: 0.2cm}
+h2 { margin-top: 0.2cm; margin-bottom=0.1cm; color: #ffffff;
+     background-color: #666699 }
+li {margin-bottom: 0.2cm;}
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm;}
+dt {margin-bottom: 0.2cm;}
+-->
+</style>
+</head>
+<body>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 BGCOLOR="#666699">
+<TR><TD>
+      <h1> UNO Contexts </h1>
+  </td><td>
+	  <A HREF="http://www.openoffice.org/">
+        <IMG SRC="../../../images/open_office_org_logo.gif" NAME="Grafik1" ALT="OpenOffice.org" ALIGN=right WIDTH=109 HEIGHT=54 BORDER=0 alt="OpenOffice.org"/>
+        </A>
+    </TD></TR>
+
+</TABLE>
+
+<h2> Contents </h2>
+
+      <p><a href="#abstract">Abstract</a></p>
+      <p><a href="#intro">Introduction to Contexts</a></p>
+      <p><a href="#component_context">Component Context</a>
+      <ul>
+      <li><a href="#context_interface">Context Interface</a></li>
+      <li><a href="#factory_context">Factory Context</a></li>
+      <li><a href="#instance_context">Instance Context</a></li>
+      </ul>
+      <p><a href="#current_context">Current Context</a></p>
+      <p><a href="#component_descr">Extensions to the XML Component Description</a></p>
+      <p><a href="#oneinstance">Migration path for existing OneInstance services</a></p>
+      <p><a href="#todos">Things left to do...</a></p>
+
+<h2 id="abstract">Abstract </h2>
+
+<p>This draft is about UNO contexts; what they are, how and under what condition
+        they make sense, and when you should use them. UNO contexts are generic
+        containers for storing arbitrary values that are either used by components
+        to get their deployment settings or control the runtime behavior of a
+        component.</p>
+        <p>Contexts are classified into static (component) contexts and dynamic (current)
+        contexts. A component context provides a component's deployment values;
+        a current context provides task-local values, such as values that are transferred
+        implicitly via a chain of calls excluding other tasks having access to
+        these values.</p>
+        <p>The following section, <a href="#intro"><i>Introduction</i></a>,
+        introduces the topic with an example.
+				The next two sections (<a href="#component_context"><i>Component
+        Context</i></a> and <a href="#current_context"><i>Current Context</i></a>)
+        present a definition and API proposal for the component and current context
+        as well as a migration path for the current API.</p>
+        <p>Finally, the last section proposes <a href="#component_descr"><i>Extensions to the XML Component Description</i></a>, 
+        
+	<a href="http://udk.openoffice.org/common/man/module_description.html">component description</a> by describing deployment properties of a component
+        implementation and invariants.
+      </p>
+
+<h2 id="intro"> Introduction </h2>
+
+	  <p>A component implements a service (defined in UNO-IDL), that is, at
+	    least the defined set of supported
+        interfaces of the service. The service builds up the contract
+        between component implementor and component user which is the way a component
+        can be accessed and used. In general, interfaces abstract from system
+        and implementation details to allow that a component implementation may
+        be exchanged for another. Therefore, component users should generally
+        not rely on a actually running component implementation. This is a desired
+        feature of components: handle them as isolated as possible. Changing
+        an interface or in general changing the way a component's functionality
+        is accessed is difficult, because client code has to be revisited
+        even for minor changes.
+		This is not always possible, if, for example, software has been
+		developed by 3rd party engineers.  </p>
+      <p><img src="../images/context_example1.gif" align=right hspace=60 alt="context example"/> For
+        further explanations, consider the following example:
+	A DataService is providing
+        data in a generic way, abstracting from the specific sources from which it gets
+        the data.  This approach is often chosen in software systems, because
+	it is a flexible way of extending to unknown data sources, thus avoiding
+	the need to touch the DataService.</p>
+	<p>Specific DataProvider components are plugged under
+	the generic DataService. The user runs the DataService giving a uniform
+	address for the data he wants to access, not knowing which specific
+	DataProvider is performing the request. The latter concerns
+	deployment aspects of actually existing data sources on the machine.</p>
+    <p>Running the example component on a big machine, you may want to switch
+        on caching of data to speed up access. Also, in keeping the set of interfaces
+        small, the service should not directly export an interface like <code>XCache</code>
+        or have interfaces polluted by caching flags in its access methods. The
+        set of interfaces and their methods should be kept minimal for extensive
+        use.</p>
+     <p>You also don't want to be implementing another set of interfaces
+        just to support caching functionality. It is even worse if the
+        DataProviders access further sub-services that should take caching into
+        account. In the latter case, every calling instance has to manage the
+        caching settings being propagated to the called instance. Eventually,
+        not all sub-services support caching functionality, but need
+        to forward the setting without knowing anything about it.</p>
+     <p>Last, you want a sensible (thus often different) caching policy being
+	deployed, if your application is being installed on a small or a big machine.
+	</p>
+      <p><b>Consequences</b></p>
+	  <p>You want to parameterize a components' implementation, even if it is
+	     accessed indirectly in a somehow weaker way than thru IDL interfaces.</p>
+	  <p>To state clearly: Of course, it is always the best solution to
+	    specify a component
+        comprehensively by IDL interfaces, but it is also common sense to keep
+        a service description as minimal (but sufficient) and generic as possible,
+        and avoid specifics of the underlying system.</p>
+       <p>This creates a conflict: In general, it is forbidden to use anything
+        out of a service's implementation that is not part of the service description.
+        So, by definition, you can only depend (and rely) on the service description.
+        On the other hand, as stated above, you may want it for convenience and
+        API design reasons. So there is no silver bullet, for the minority
+        of cases where one needs a possibility to customize a component's implementation
+        in a documented way.</p>
+      <p><b>Solution Proposal</b></p>
+      <p>A convenient (extendable) solution would be, if each component were
+		granted a set of named properties when it is raised. This is called a
+		UNO context. It provides deployment data to the component.</p>
+	  <p>Upon raising further component
+		instances, the set of properties (context) is forwarded.  The actually
+		affected component of a property takes it into account and behaves as
+		documented (see <a href="#component_descr">
+	extensions to the XML component description</a>). All other instances, in the
+        chain of raised components, ignore settings that are unknown to them. So
+        the modification of a property requires global knowledge about what
+        components get affected. You have to know if a specific property will
+        be taken into account, but <b>not</b> necessarily by which component
+        instance, in general, you don't know what further components are instantiated
+		when raising a specific component (this is an implementation detail).
+		The latter point requires a clear documentation scheme of a component's
+		deployment properties.
+	  </p>
+	  <p>The previous example states the deployment of a component, that is
+		when the component is installed for example by an application
+		installation. Enabling or disabling caching, the cache size, et cetera
+		-- these properties are basically
+        of a static nature, because the underlying system won't change during execution
+        of the application. For flexibility, there may be the need to switch it
+        on or off depending on the current system load. You may do this on a per-instance
+        basis (customizing a component instance) or  per-call basis (customizing for the
+        current execution only). The latter aspect is clearly of a dynamic nature.
+      An example usage case may be a low-level socket API, extended by error handling
+      capabilities without changing the socket API.
+      </p>
+      <p>
+        To summarize the above:</p>
+      <ul>
+        <li><p>deployment properties for component implementations,</p></li>
+        <li><p>public definition and documentation of properties (this may include
+          invariants to test consistent deployment),</p></li>
+        <li><p>implicit propagation of properties when raising further components,</li>
+        <li><p>static customization: per component class (deployment) and per instance,</p></li>
+        <li><p>dynamic customization: per call.</p></li>
+      </ul>
+      <p>All of the mentioned customization of UNO components
+        is referred to as "UNO contexts". A UNO context delivers additional
+        runtime information for component execution. UNO contexts provide a set
+        of named values like a property bag. You can retrieve values by
+		their names; this is flexible for modifications without changing the
+		context interface.</p>
+	  <p>There is a distinction between static and dynamic contexts: A static
+	    context
+        (also referred as the "component context") may be used simultaneously
+	(e.g. by multiple threads), is immutable,
+        and is commonly given when a component is instantiated. The component
+        context is divided into a factory context that is accessible by all instances
+        of a component and provides persistent values to the component.
+        In addition, there is the specific component context given at instantiation
+        time, which was eventually customized by the caller that raised the component
+        instance.
+        In contrast, a dynamic context (also referred as the "current context")
+        is implicitly provided by a calling task (e.g. a calling thread)
+        to the component.</p>
+	   <p>The previous example sketched again, modifying the DataProvider's
+	    caching behavior on a per-instance basis:</p>
+        <p>
+        <img src="../images/context_example2.gif" hspace=60 alt="another context example"/>
+        </p>
+	   <p>The caller prepares a context, putting the caching entry
+	    "DataProvider.CacheOn = true" before raising the DataService.</p>
+       <p>A subsequently called DataProvider1 recognizes a "DataProvider.CacheOn"
+        flag. DataProvider2 ignores the caching properties, because it does not
+        support caching at all.</p>
+       <p>The caching property is defined as "optional", meaning it need not be
+        set and the affected component may choose a default behavior if it is
+        not set. Another attribute for a customization property is "mandatory", 
+        stating that a property must be configured for running a component.</p>
+      <p>An automatic consistency test for a deployment involves, at least, the testing
+      of all invariants specified for properties. In general, invariants should
+      be implemented by the component that uses the involved properties.
+      Simple invariants may also be specified in the component description of
+      the implementation, e.g. <code>&lt;invariant type="min" value="128"/&gt;</code>.
+      For further details, have a look at the <a href="#component_descr">extensions
+      to the XML component description</a>.
+        </p>
+	<p>
+        In general, the following figure sketches context propagation along to several instances
+	(single factory context for all components):
+    <img src="../images/context_propagation.gif" hspace=20 alt="Context propogation" />
+
+<h2 id="component_context"> Component Context </h2>
+
+      <p><a name="context_interface"><b>Component Context Interface</b></a></p>
+	  <p> The
+	  <a href="http://api.openoffice.org/common/ref/com/sun/star/uno/XComponentContext.html">
+	  component context interface</a> is basically an interface for getting
+	  arbitrary values by their name.  A value once retrieved via the context
+	  interface will remain unmodified, which means, you retrieve the same
+	  value by calling it a second time (immutable).  Method
+	  <code>getServiceManager()</code> has been added, because the service
+	  manager instance is often needed by component implementations: </p>
+      <table width="100%" bgcolor="#ffffaa">
+        <tr>
+          <td>
+            <pre>
+module com { module sun { module star { module uno {
+
+interface XComponentContext : com::sun::star::uno::XInterface
+{
+    any getValueByName( [in] string Name );
+    com::sun::star::lang::XMultiComponentFactory getServiceManager();
+};
+
+}; }; }; };
+</pre>
+          </td>
+        </tr>
+      </table>
+      <p> The following enumeration shows common values of a static component
+        context, though not all properties need to be provided. If a component
+        could not run because of a missing property, it has to throw an exception,
+        for instance, <code>CannotActivateComponentException</code>. </p>
+      <ul>
+        <li><p><b>ServiceManager (<code>context property name="/singletons/com.sun.star.lang.theServiceManager"</code>)
+          : <code>type com.sun.star.lang.XMultiComponentFactory</code></b><br/>
+          A service manager to create and use further component instances. Every
+          <code>createInstance[WithContext]()</code> call will provide a distinct instance, no one-instance services
+          should be provided any longer. This is currently not possibly, because
+          of existing component implementations.</p>
+        </li>
+
+        <li><p><b>TypeDescriptionManager (<code>context property name="/singletons/com.sun.star.reflection.theTypeDescriptionManager"</code>)
+          : <code>type com.sun.star.container.XHierarchicalNameAccess</code></b><br/>
+          This singleton accesses the type library providing type information for UNO-IDL types
+	  </p>
+        </li>
+
+        <li><p><b>AccessController (<code>context property name="/singletons/com.sun.star.security.theAccessController"</code>)
+          : <code>type com.sun.star.security.XAccessController</code></b><br/>
+          An access controller instance to perform permission checks.
+	  This instance will use the policy singleton object to obtain user permission sets.
+	  </p>
+        </li>
+
+        <li><p><b>User Access Policy (<code>context property name="/singletons/com.sun.star.security.thePolicy"</code>)
+          : <code>type com.sun.star.security.XPolicy</code></b><br/>
+          A user policy object reading from some persistent storage providing user permission sets, such as, permissions granted to a user.
+	  </p>
+        </li>
+
+		<li><p><a name="singleton">Global</a> singleton objects are accessible
+		by their name which is prepended by <code>/singletons/</code>.  This
+		should further on be used for IDL declared singleton services, for
+		example,</p>
+      <table width="100%" bgcolor="#ffffaa">
+        <tr>
+          <td>
+            <pre>
+module com { module sun { module star { module reflection {
+
+singleton theTypeDescriptionManager
+{
+    service TypeDescriptionManager;
+};
+
+}; }; }; };
+</pre>
+          </td>
+        </tr>
+      </table>
+	  <p>declares a context entry
+	  <code>/singletons/com.sun.star.reflection.theTypeDescriptionManager</code>
+	  of an <code>TypeDescriptionManager</code> service object at runtime.  It
+	  is part of the deployment that this singleton is available and installed
+	  into the initial factory context at runtime.</p>
+	  <p>This service object will be raised "late" on first use and disposed
+	  when the component context is closed down (i.e. is disposed).  By
+	  default, each new component context wrapping an existing one (i.e.
+	  delegating unknown property requests to it) should add itself as event
+	  listener to dispose itself when the previous one is disposed (=&gt;
+	  chaining).</p>
+        </li>
+      <li>Additional properties of any type may
+        be provided by the context.
+	Those properties should be prefixed by <code>/implementations/<em>implementation-name</em></code> or <code>/services/<em>service-name</em></code>.
+	In the latter case, they need to be documented in the service description.
+      </li>
+      </ul>
+      <p><a name="factory_context"><b>Factory Context</b></a></p>
+	  <p>The factory context of a component is initialized when the system is
+	  started.
+        Commonly one factory context for all components is read out of a central
+        configuration database at startup of the service manager. All persistent properties
+        have to be provided to all factories, because it is in general <b>not</b>
+        known which component will use a property.</p>
+	   <p>Details about getting up the factory (deployment) context are not
+	   discussed
+        here, because this involves specific knowledge of the underlying storage
+        and the way the system is initialized.
+	Common storage formats
+        for OpenOffice.org are the applicat.rdb or the OpenOffice.org
+	<a href="http://util.openoffice.org/common/configuration/concepts.html">Configuration service</a>.
+	</p>
+	<p>A common cppuhelper API to bootstrap using a registry database (e.g. the applicat.rdb)
+	is presented <a href="http://wiki.services.openoffice.org/wiki/Uno/Cpp/Tutorials/Introduction_to_Cpp_Uno#Bootstrapping_the_initial_component_context_.28factory_context.29">here</a>.
+	Java support is also implemented.
+	</p>
+    <p><a name="instance_context"><b>Instance Context</b></a> </p>
+    <p>The service manager implementation is extended by supporting the
+	<code>XMultiComponentFactory</code> interface. The factory helpers are
+	extended by supporting
+	<a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XSingleComponentFactory.html"><code>XSingleComponentFactory</code></a>
+	interface, too.
+	It has to be assured that the factory implementations acknowledge a given
+	context and
+	service manager instance at runtime (thus not referencing statically, but
+	on every <code>createInstanceWithContext()</code> call).</p>
+    <p>The user is creating a component instance by calling on the
+	<a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XMultiServiceFactory.html"><code>XMultiServiceFactory</code></a>
+        (old) or
+	<a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XMultiComponentFactory.html"><code>XMultiComponentFactory</code></a>
+	interface:</p>
+
+      <table width="100%" bgcolor="#ffffaa">
+        <tr>
+          <td>
+            <pre>
+module com { module sun { module star { module lang {
+
+interface XMultiComponentFactory : com::sun::star::uno::XInterface
+{
+    com::sun::star::uno::XInterface createInstanceWithContext(
+        [in] string ServiceSpecifier,
+        [in] com::sun::star::uno::XComponentContext Context )
+        raises (com::sun::star::uno::Exception);
+    com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext(
+        [in] string ServiceSpecifier,
+        [in] sequence< any > Arguments,
+        [in] com::sun::star::uno::XComponentContext Context )
+        raises (com::sun::star::uno::Exception);
+    sequence< string > getAvailableServiceNames();
+};
+
+interface XSingleComponentFactory : com::sun::star::uno::XInterface
+{
+    com::sun::star::uno::XInterface createInstanceWithContext(
+        [in] com::sun::star::uno::XComponentContext Context )
+        raises (com::sun::star::uno::Exception);
+    com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext(
+        [in] sequence< any > Arguments,
+        [in] com::sun::star::uno::XComponentContext Context )
+        raises (com::sun::star::uno::Exception);
+};
+
+}; }; }; };
+</pre>
+          </td>
+        </tr>
+      </table>
+      <ol>
+		<li><p>The callee of <code>createInstanceWithContext()</code> will
+		    prepare a context with its current one (that it is running on) as
+		    described here:
+		  </p>
+          <table width="100%" bgcolor="#ffffaa">
+            <tr>
+              <td>
+                <pre>
+any getValueByName( [in] string Name )
+{
+    if (new_properties.hasElement( Name ))
+    {
+        return new_properties.getElement( Name );
+    }
+    else
+    {
+        return factory_context.getValueByName( Name );
+    }
+}
+</pre>
+              </td>
+            </tr>
+          </table>
+        </li>
+        <li><p>The component factory's method <code>createInstanceWithContext()</code>
+          is called with the new context.</p>
+        </li>
+		<li><p>The component factory directly instantiates a component
+		   forwarding the context to use.</p></li>
+      </ol>
+      <p><i>Backward Compatibility: </i>If the user is calling <code>XMultiServiceFactory::createInstance()</code>
+        (old), then the service manager's context is provided to <code>XSingleComponentFactory::createInstanceWithContext()</code>.</p>
+	  <p>The service manager is the only instance that is used by older component implementations,
+        thus it is the only instance that knows the context to be propagated to
+        further component instances (implicitly calling old <code>XSingleServiceFactory::createInstance()</code>).
+	  This is a potential problem, because the only solution for proper context
+	  propagation would be to clone the service manager and install the new context;
+	although, one-instance component implementation (using static initializers)
+	will fatally hinder the propagation of the correct context.</p>
+	<p>For performance reasons, the current stoc service manager implementation does <b>not</b> clone <!-- xxx todo: will be implemented-->
+	the service manager in case of an <code>XSingleComponentFactory::createInstanceWithContext()</code> call.
+	This means that only directly launched service instances get the correct context.
+	In most cases, this should be no problem, because all up-to-date component implementations using component context
+	entries will call on <code>XSingleComponentFactory</code>, from entry-point service
+	objects to back-end service objects.
+      </p>
+<!--      <p><i><font color="#ff0000">What will be done, if a
+        context is given calling <code>createInstanceWithContext()</code> but
+        the component factory does not provide <code>XComponentFactory</code>?</font>:</i>
+        I propose throwing an exception, e.g. a <code>CannotActivateComponentException</code>,
+        because the component does not support context initialization.
+      </p>
+      -->
+
+<h2 id="current_context"> Current Context </h2>
+
+	<p>The dynamic context, also known as &quot;Current Context&quot;, is bound
+	   to the current execution task. A task denotes not only a process thread
+	   of execution, but the current context of a task remains for dispatched
+	   threads or inter-process invocation threads, for instance, a child
+	   thread inherits its initial current context from its parent thread.</p>
+	<p>The current context can be accessed via the UNO runtime which is part of
+	   the
+      <a href="../concept/uno_langbind.html#langspec">language binding specification</a>.
+      The runtime grants read access to the current context as well as installing
+      a different context for subsequent callers.
+      There is
+      <a href="http://wiki.services.openoffice.org/wiki/Uno/Cpp/Tutorials/Introduction_to_Cpp_Uno#Setting.2F_Retrieving_the_Current_Context">support for C/C++ by the <code>cppu</code> runtime</a> and the Java UNO runtime, although currently the context is not bridged.
+      The current context's interface is
+      <a href="http://api.openoffice.org/common/ref/com/sun/star/uno/XCurrentContext.html"><code>com.sun.star.uno.XCurrentContext</code></a>:
+      </p>
+      <table width="100%" bgcolor="#ffffaa">
+        <tr>
+          <td>
+            <pre>
+module com { module sun { module star { module uno {
+
+interface XCurrentContext : com::sun::star::uno::XInterface
+{
+    any getValueByName( [in] string Name );
+};
+
+}; }; }; };
+</pre>
+          </td>
+        </tr>
+      </table>
+
+      <p>It is always recommended to use an interface method to pass parameters,
+      due to explicit passing and type safety of parameters (caller's and
+      callee's contract). Though there are very few sensible cases for a current
+      context, common properties of the context are:</p>
+      <ul>
+        <li><p><b>access control restriction ("access-control.restriction") :
+	     <code>type com.sun.star.security.XAccessControlContext</code></b></p>
+		 <p>This property provides a task-local access control restriction
+		 taken into account during permission checks.  For details, have a look
+		 at <a href="uno_security.html#dynamic_restrictions">the dynamic
+		 restrictions</a> section of the security document.</p>
+	</li>
+	<li><p><b>access control user credentials ("access-control.user-credentials.*")</b></p>
+		<p>These properties relate to the calling user, e.g.
+		<code>access-control.user-credentials.id</code>.  For details, have a
+		look at <a href="uno_security.html#dynamic_restrictions">the dynamic
+		restrictions</a> section of the security document.</p>
+	</li>
+    <li><p>arbitrary values for higher stack levels which occur in an
+		  "optional" manner (could be described as "nice to have if set at the
+		  current context") like callback/ error handlers.</p>
+        </li>
+      </ul>
+	  <p>The current context interface reference must not be shared with other
+	  threads.
+      In general, you should also take care to not share values you got from the
+      current context with other threads.</p>
+	  <p>When calling across process boundaries, there is a question of what
+	  happens to
+      the dynamic context. Of course, remote transparency is a wishful feature.
+      On the other hand, remote access on the context has to be optimized for 
+      performance.</p>
+
+<!--        <i><font color="#ff0000">Open</font>:</i> Security and inter process
+        calls?<br/>
+        I propose that security relevant properties like the AccessController or
+	the authenticated Subject are not
+	transmitted, because this leads to a potential security hole (refer to
+	<a href="uno_security.html#remote">security draft</a>).<br/>
+      A process for handling this via remote may be establishing a lasting authentication
+      (over multiple calls) for a user. A previous authentication process (including
+      password dialogs, etc.) will establish a ticket on both sides (aka secure
+      association). This ticket builds up the subject. When transferring via remote,
+      only the ticket is transferred, then any authorization has to be performed
+      on the (locally authenticated) user's behalf. <br/>
+-->
+
+<h2 id="component_descr"> Extensions to the XML Component Description </h2>
+
+<p>In this section, I propose extensions to the current <a href="http://udk.openoffice.org/common/man/module_description.html">XML
+        component description</a> describing deployment properties of a component
+        implementation and invariants.
+	Invariants allow testing of a specific deployment, that is, if the specific values
+	make sense.
+        All elements appear as sub element of <code>component-description</code> which, now, may
+        also contain a <code>component-properties</code> element:</p>
+
+      <table width="100%" bgcolor="#ffffaa">
+        <tr>
+          <td>
+            <pre>
+&lt;!ELEMENT component-description
+          (author,name,description,loader-name,supported-service+,
+           <b>component-properties?</b>,(%component-description-optional;)*)&gt;
+
+&lt;!ELEMENT component-properties property*&gt;
+&lt;!ELEMENT property description? invariant*&gt;
+&lt;!ATTLIST property name CDATA #REQUIRED
+                   optional (true|false) #IMPLIED
+                   value-type (boolean|string|number) #IMPLIED
+                   default-value CDATA #IMPLIED&gt;
+
+&lt;!ELEMENT invariant EMPTY&gt;
+&lt;!ATTLIST invariant type (valid|invalid|min|max) #REQUIRED
+                    value CDATA #IMPLIED&gt;
+</pre>
+          </td>
+        </tr>
+      </table>
+
+	  <p>Properties are described by their <code>name</code>,
+	  <code>value-type</code>, <code>optional</code> attributes, and a number
+	  of optional <code>invariant</code>s.  The <code>name</code> denotes the
+	  property's name as it will appear in contexts.  The <code>optional</code>
+	  attribute denotes whether the property can optionally
+	  be set in a deployment or is mandatory (i.e. if not set, the component
+	  implementation
+      cannot run).  An optional <code>default-value</code> can also be set.
+      Invariants follow up as sub elements
+	  to check whether a given property value makes sense. The invariants given
+	  <code>value</code>
+      must always be convertible to the property's <code>value-type</code>.</p>
+	  <p>Current invariant <code>type</code>s have been chosen for the
+	  following strings:</p>
+      <ul>
+      <li><code>valid</code> -- denotes a valid value of the property overriding all other invariants</li>
+      <li><code>invalid</code> -- denotes an invalid value of the property overriding all other invariants except the
+      <code>valid</code> invariant</li>
+      <li><code>min</code> -- denotes a lower boundary for a property number value</li>
+      <li><code>max</code> -- denotes a upper boundary for a property number value</li>
+      </ul>
+
+      <p>Example:</p>
+      <table width="100%" bgcolor="#ffffaa">
+        <tr>
+          <td>
+            <pre>
+...
+&lt;component-properties&gt;
+ &lt;property name="DataProvider1.CacheOn" value-type="boolean"/&gt;
+ &lt;property name="DataProvider1.CacheSize" value-type="number" default-value="256"&gt;
+  &lt;invariant type="min" value="128"/&gt;
+  &lt;invariant type="max" value="512"/&gt;
+  &lt;description&gt;
+  Property CacheOn controls whether caching of data should be performed.
+  Property CacheSize controls the size of the cache.  The CacheSize is limited to a range
+  between 128 and 512.
+  &lt;/description&gt;
+ &lt;/property&gt;
+&lt;/component-properties&gt;
+...
+</pre>
+          </td>
+        </tr>
+      </table>
+
+      <p>
+      <i><font color="#ff0000">Attention: Proposal only!</font></i>
+      The previous component description extensions
+      are yet to be discussed and extended -- and implemented -- 
+      with respect to further tools performing tests.
+      </p>
+
+<h2 id="oneinstance"> Migration path for existing OneInstance services </h2>
+
+<p>Formerly, a service decided to be a one instance service by choosing the appropriate factory
+( in general cppu::createOneInstanceFactory() ). When the service is first instantiated,
+the factory keeps a hard reference to the service. All subsequent createInstance()-calls
+return the same object. When the servicemanager got disposed, it disposed all factories,
+which released the reference.
+
+<p> The former OneInstance services can be separated into the following categories :
+
+<ol>
+<li><p>Services that have state or instantiate other services.</p></li>
+<li><p>Services that don't have state and that don't instantiate further
+     services.
+     These services are OneInstance for optimization reasons
+     ( it would be a waste of heap to have multiple instances).
+	 A classical example is the TypeConverter services, which offers simple
+	 conversion functions.
+   </p></li>
+</ol>
+
+Each group must be treated differently when moving to the context concept.
+
+<ol>
+<li><p>These are
+<a href="#singleton">singletons</a>.
+These objects should be placed into the context.
+You use a normal factory, so that it is possible to instantiate multiple instances.
+You add a singleton entry to the idl-file. All clients, that previously accessed the object
+via the servicemanager, must switch to accessing it via a context. This is a required change.
+</p>
+<p> If there is not time to make the changes immediately, then stick to the OneInstance
+service, as it is currently, and schedule a task force for it.
+</p>
+
+<p> There may be exceptions, for instance, the javavm service can only be started once per process and
+    it must not die (because the javavm can not be released once it has been started).
+	Such conditions should be handled by the component internally, that is, the javavm-service
+	will hold its self or it will keep a list of the contexts it is used in, and adds itself as
+	disposing listeners. These exceptions should be really rare !
+	</p>
+
+<p> Another possibility may be to make it a normal service.</p>
+
+<li><p>These services can be reused over all contexts, so a single instance per
+process is
+desired. These services should use a normal factory, but within the dll-local createInstance()
+function, they keep a static weak reference on the object. For every createInstance()-call,
+it first checks the weak reference. Otherwise, it instantiates the implementation and assigns
+it to the weak reference.
+</p></li>
+</ol>
+
+<h2 id="registries"> Registry considerations for context-information </h2>
+<p>The following deployment issues arise when introducing contexts:</p>
+
+<ol>
+<li><p>There is need for a place to store the singleton information (i.e. the
+     name of the service
+     to be instantiated when a singleton gets accessed the first time).</p></li>
+<li><p>There is need for a place to store implementation-dependent context settings.</p></li>
+</ol>
+
+<h4>Singleton</h4>
+<p>A singleton gets a service-name assigned in an idl-file (which means at
+specification time). For example, the com.sun.star.theBridgeFactory-singleton
+is assigned to the com.sun.star.bridge.BridgeFactory service and can be
+instantiated at runtime using this name.</p>
+<p>But the specification in idl is only minimal, the singleton instance must,
+<b>at least</b>, support this service. Take a look at the service-manager;
+something that we call a service-manager must at least support the
+
+<a href="http://api.openoffice.org/common/ref/com/sun/star/lang/MulitServiceFactory.html">
+com.sun.star.lang.MultiServiceFactory</a>
+
+service, so this is specified in IDL. However, in OpenOffice.org, we need a
+<a href="http://api.openoffice.org/common/ref/com/sun/star/lang/RegistryServiceFactory.html">
+com.sun.star.lang.RegistryServiceFactory</a>
+service, which additionally supports the MultiServiceFactory.
+This information can't be retrieved from IDL anymore, it must be defined at
+deployment time.</p>
+
+<p>
+The initial routine, that creates the context, must be able to access the
+singleton-information.  This information should be provided in an .rdb-file
+(the only persistent storage we have on the UDK-level).  The following kinds of
+information is currently stored in an .rdb-file:</p>
+
+<ol>
+<li><p>Types (needed by the typeprovider),</p></li>
+<li><p>Service registrations (needed by the RegistryServiceManager),</li>
+<li><p>Singleton information (needed by the initial routine that creates the
+context).</p></li>
+</ol>
+
+<p>I think a good strategy is to have one .rdb-file for each category. This
+avoids unnecessary nesting of registries and gives the most flexibility when
+multiple processes shall share registries (though it always needs to be taken
+into account that a registry can only be opened with write access, when no
+other process have read or write access to the same registry). To reflect this,
+we should introduce the following bootstrap-variables :</p>
+
+<ul>
+<li><p>UNO_TYPESRDB    (contains a list of registry-names that contain type information
+                      [read-only-access])</p></li>
+<li><p>UNO_SERVICESRDB (contains a list of registry-names that contain the registered services
+                      [read-only-access])</p></li>
+<li><p>UNO_CONTEXTRDB  (contains a list of registry-names that contain the singleton-information
+                      [read-only-access])</p></li>
+<li><p>UNO_SERVICESRDB_RW (contains exactly one registry name where service information
+                      can be written)</p></li>
+</ul>
+
+Note that you still can have one registry, that holds all information (types,services, and contexts).
+This registry would get opened three times, which bears no problem as long as it is
+opened for read only.
+
+<h4>Additional context settings</h4>
+<p>The context contains (besides singletons) component specific values. This
+information
+must be available when the context is created, so, it seems a good idea to insert this information
+into the above suggested .rdb-file.</p>
+
+<p> The registry does not offer to store all possible UNO-types, since it must store the value as
+a byte-sequence ( with some routines such as any2Sequence() and sequence2Any() in cppu).</p>
+
+<p> There needs to be a command line-tool, that inserts values into a rdb.</p>
+
+<h4>Integration into the build process</h4>
+<p>There is no comprehensive solution-suggestion currently, so here are listed
+some thoughts.</p>
+
+<ul>
+<li><p>The singleton-information specified in IDL must be available outside
+	 udkapi/offapi project.  This should be delivered as its own .rdb-file
+	 (maybe udk_singleton.rdb).</p></li>
+<li><p>If we come to the conclusion
+	 that the creation of the service-manager will probably always be hardcoded, it should be
+	 sufficient, currently, for most tools not to have a context .rdb-file.</p></li>
+<li><p>How do we get a context.rdb for an application? The knowledge on what
+     should be in the
+     context.rdb is distributed.</p>
+	 <ul>
+	 <li> The component developer wants to give some sensible defaults to context values.
+	 <li> At the time the setup for a certain application is built, one wants to insert
+	      only those context values that could be needed in the deployed application.
+		  Here it will be very difficult to avoid redundancies for multiple applications.
+     <li> The setup wants to install only context values for installed components and it
+	      wants to omit other ones.
+     <li> The user/deployer wants to modify or add context values.
+	 </ul>
+
+</ul>
+
+<h4>Registry limitations</h4>
+<p>A lot of deployment problems arise from storing information into an
+.rdb-file. We definitely need a database in core UNO as soon as possible.
+It is planned to use the configuration services for this and to move component
+registration into it.  This will ease getting overviews about components,
+implementations, properties, singletons, location, et cetera.
+Registry database files (rdb) are only used for type access.</p>
+<p>The coming structure of the configuration (which is read-only accessible via
+the component context) will look like this:</p>
+
+<table width="100%" bgcolor="#ffffaa"><tr><td><pre>
+/singletons/theFoobar/
+    service = Foobar
+    [arguments = { ... }]
+...
+
+/services/Foobar/
+    available-implementations = { FbImpl[, ...] }
+    uses-implementation = FbImpl
+    [&lt;arbitrary conceptional properties&gt;]
+...
+
+/implementations/FbImpl/
+    supports-services = { Foobar[, ...] }
+    url = libfoobar.so
+    activator = com.sun.star.loader.SharedLibrary
+    [&lt;arbitrary properties&gt;]
+...
+</pre></td></tr></table>
+<p>
+<em>
+(last two sections co-edited by <a href="mailto:joerg.budischewski@sun.com">Joerg
+Budischewski</a>.)</em></p>
+
+<h2 id="todos">Things left to do... </h2>
+
+<p>The following things are left to do:</p>
+
+<ul>
+<li><p><b>[high priority]: </b>
+There is currently no persistent storage for component context values,
+singleton object specifications, services, and implementations.  This includes
+switching service registration to this storage format.</p>
+<p>We have to use the configuration services as soon as possible, that is,
+bring configuration into UDK.</p>
+</li>
+<li><p><b>[mid priority]: </b>
+Supporting <code>XMultiServiceFactory</code> the service manager has to be
+revisited.  The service manager has to clone itself (changes
+<code>DefaultContext</code> property) when a
+<code>createInstanceWithContext</code> changes the context of the component to
+be raised.</p>
+</li>
+<li><p><b>[low priority]: </b>
+The current context is not transferred via the URP-UNO interprocess bridge.
+This has to be fixed with no lack of performance.</p>
+</li>
+</ul>
+<table width=100% summary="Footer">
+<tr>
+<td bgcolor="#666699">
+ <p><font color="#ffffff"> Author: <a href="mailto:Daniel.Boelzle@sun.com">
+<font color="#ffffff">Daniel B&ouml;lzle</font></a><br/>
+  <i>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</i></font
+</p>
+</td>
+</tr>
+</table>
+</body>
+</html>

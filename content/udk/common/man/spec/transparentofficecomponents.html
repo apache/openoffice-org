@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <title>Transparent Use of Office UNO Components</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<style type="text/css">
+<!--
+h1 { text-align:center; margin-top: 0.2cm; text-decoration: none; color: #ffffff; background-color: #666699; font-size: 6; margin-top: 0.2cm; }
+h2 { margin-top: 0.2cm; margin-bottom=0.1cm; color: #ffffff; background-color: #666699 }
+li {margin-bottom: 0.2cm;}
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm;}
+dt {margin-bottom: 0.2cm;}
+-->
+</style>
+</head>
+<body>
+
+
+<h1>Transparent Use of Office UNO Components</h1>
+
+<h2>Introduction</h2>
+
+<p>This document is about making the use of office UNO components transparent
+to the user.</p>
+
+<p>If some client code wants to use office UNO components, then the typical use 
+case is, that the client code is first looking for an existing office
+installation. If an installation is found, it is checked if the office process
+is already running. If no office process is running, an office process is
+started. After that the client code connects to the running office using remote
+UNO mechanisms in order to get the remote component context of that office.
+After this, the client code can use the remote component context to access
+arbitrary office UNO components. From the perspective of the client code there
+is no difference between local and remote components.</p>
+
+<p>The idea is, that the component context is provided in a more transparent
+way. Especially the location of an existing office installation and the
+detection of a running office process should be hidden from the user.</p>
+
+
+<h2>Transparent Use from Java</h2>
+	
+<p>The UNO component context is the root object for all UNO client applications.
+It must be passed to a component during its instantiation and therefore
+basically provides an environment for components. The component context also
+provides the service manager, which is used to create components. The idea is,
+that a bootstrap method is provided, which bootstraps the component context from
+a UNO installation. A simple client application may then look like:</p>
+
+<blockquote>
+<pre>
+// get the remote office component context
+XComponentContext xContext = 
+ com.sun.star.comp.helper.Bootstrap.bootstrap();
+
+// get the remote office service manager
+XMultiComponentFactory xServiceManager =
+ xContext.getServiceManager();
+
+// get an instance of the remote office desktop UNO service
+Object desktop = xServiceManager.createInstanceWithContext(
+  &quot;com.sun.star.frame.Desktop&quot;, xContext );
+
+// query the XComponentLoader interface from the desktop
+XComponentLoader xComponentLoader =
+  (XComponentLoader)UnoRuntime.queryInterface(
+    XComponentLoader.class, desktop );
+
+// load a spreadsheet document
+String loadURL = &quot;private:factory/scalc&quot;;
+PropertyValue[] loadProps = new PropertyValue[0];
+xComponentLoader.loadComponentFromURL(
+ loadURL, &quot;_blank&quot;, 0, loadProps);
+</pre>
+</blockquote>
+
+<p>One of the requirements for a Java client application is, that Java finds the
+<code>com.sun.star.comp.helper.Bootstrap</code> class and all the UNO types
+(e.g. UNO interfaces) and other Java UNO language binding classes (e.g.
+<code>com.sun.star.uno.AnyConverter</code>) used by the client code. A natural
+approach would be to add the UNO jar files to the Java CLASSPATH, but this
+requires the knowledge of the location of a UNO installation. Other approaches
+would be to use the Java extension mechanism or to deploy the jar files
+containing the UNO types in the client jar file. Both of those approaches have
+several drawbacks, the most important one is the problem of type conflicts, e.g.
+if a deployed component adds new UNO types. We therefore decided to use a more
+dynamic approach, namely to provide a customized class loader. The customized
+class loader will have an extended search path, which will also include the path
+to a UNO installation. The UNO installation will be auto-detected on the system
+by a provided search algorithm.</p>
+
+
+<h3>Customized Class Loader</h3>
+
+<p>The concept is based on the requirement that every class that uses UNO types
+or other classes that come with a office installation gets loaded by a
+customized class loader. This customized class loader knows the location of a
+UNO installation and loads every class from a jar or class file that belongs to
+the office installation. That means, the customized class loader must be
+instantiated and initialized before the first class that uses UNO is loaded.</p>
+
+<p>For convenience we will provide some tooling in the SDK, which allows to
+build a client jar file, which can be invoked by</p>
+
+<blockquote>
+<code>java -jar MyApplication.jar</code>
+</blockquote>
+
+<p>A client application created by using the SDK tooling will automatically load
+the class <code>com.sun.star.lib.loader.Loader</code>, which sets up the
+customized class loader for loading the application class. In order to achieve
+this, the SDK tooling creates a manifest file that contains the following
+<code>Main-Class</code> entry</p>
+
+<blockquote>
+<code>Main-Class: com.sun.star.lib.loader.Loader</code>
+</blockquote>
+
+<p>The customized loader needs a special entry in the manifest file that
+specifies the name of the class that contains the client application code:</p>
+
+<blockquote>
+<pre>
+Name: com/sun/star/lib/loader/Loader.class
+Application-Class: MyApplication
+</pre>
+</blockquote>
+
+<p>The implementation of <code>com.sun.star.lib.loader.Loader.main</code> will
+read this entry and call the main method of the application class after the
+customized class loader has been created and set up properly. The SDK tooling
+will take over the task to write the correct manifest entry for the application
+class.</p>
+
+
+<h3>Finding a UNO installation</h3>
+
+<p>The location of a UNO installation can be specified by the Java system
+property <code>com.sun.star.lib.loader.unopath</code>. The system property can
+be passed to the client application by using the <code>-D</code> flag, e.g</p> 
+
+<blockquote>
+<code>java -Dcom.sun.star.lib.loader.unopath=/opt/OpenOffice.org/program -jar
+MyApplication.jar</code>
+</blockquote>
+
+<p>In addition, it is possible to specify a UNO installation by setting the
+environment variable <code>UNO_PATH</code> to the program directory of a UNO
+installation, e.g.</p>
+
+<blockquote>
+<code>setenv UNO_PATH /opt/OpenOffice.org/program</code>
+</blockquote>
+
+<p>Note, that this is not working with Java 1.3.1 and Java 1.4, because
+environment variables are not supported in those Java versions.</p>
+
+<p>If no UNO installation is specified by the user, the default UNO installation
+on the system is searched for. The search algorithm is platform dependent.</p>
+
+<p>On the Windows platform, the UNO installation is found by reading the default
+value of the key &quot;Software\OpenOffice.org\UNO\InstallPath&quot; from the
+root key HKEY_CURRENT_USER in the Windows Registry. If this key is missing,
+the key is read from the root key HKEY_LOCAL_MACHINE. One of those keys is
+always written during the installation of an office. In a single user
+installation the key is written to HKEY_CURRENT_USER, in a multi-user
+installation of an administrator to HKEY_LOCAL_MACHINE. Note, that the default
+installation is the last installed office, but with the restriction, that
+HKEY_CURRENT_USER has a higher priority than HKEY_LOCAL_MACHINE. The reading
+from the Windows Registry requires, that the native library unowinreg.dll is
+part of the application jar file or can be found in the
+<code>java.library.path</code>. The SDK tooling automatically will put the
+native library into the jar file containing the client application.</p>
+
+<p>On the Unix/Linux platforms, the UNO installation is found from the
+<code>PATH</code> environment variable. Note, that for Java 1.3.1 and Java 1.4
+the installation is found by using the <code>which</code> command, because
+environment variables are not supported with those Java versions. Both methods
+require that the <code>soffice</code> executable or a symbolic link is in one of
+the directories listed in the <code>PATH</code> environment variable. For older
+versions than OOo 2.0 the above described methods may fail. In this case the UNO
+installation is taken from the .sversionrc file in the user's home directory.
+The default installation is the last entry in the .sversionrc file which points
+to a UNO installation. Note, that there won't be a .sversionrc file with OOo 2.0
+anymore.</p>
+
+
+<h3>The bootstrap method</h3>
+
+<p>The <code>com.sun.star.comp.helper.Bootstrap.bootstrap()</code> method is
+implemented in that way, that it first bootstraps a local component context by
+calling the method
+<code>com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(null)</code>.
+Then it tries to establish a named pipe connection to a running
+office by using the <code>com.sun.star.bridge.UnoUrlResolver</code> service. If
+the connection fails, an office process is started. After that, it
+tries to connect to the running office again. If the connection
+succeeds, it gets the remote component context, which is returned.</p>
+
+<p>Note, that the office process can only be started, if the
+<code>juh.jar</code> file is located in the classes directory of an office
+installation. If the <code>juh.jar</code> file is copied to another location,
+the bootstrap method fails.</p>
+
+
+<h2>Transparent Use from C++</h2>
+
+<p>Also for C++ a bootstrap function is provided, which bootstraps the component
+context from a UNO installation. An example for a simple client application
+shows the following code snipplet:</p>
+
+<blockquote>
+<pre>
+// get the remote office component context
+Reference< XComponentContext > xContext( ::cppu::bootstrap() );
+
+// get the remote office service manager
+Reference< XMultiComponentFactory > xServiceManager(
+  xContext->getServiceManager() );
+
+// get an instance of the remote office desktop UNO service
+// and query the XComponentLoader interface
+Reference < XComponentLoader > xComponentLoader(
+  xServiceManager->createInstanceWithContext( OUString(
+  RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ),
+  xContext ), UNO_QUERY );
+
+// open a spreadsheet document
+Reference< XComponent > xComponent(
+  xComponentLoader->loadComponentFromURL(
+  OUString( RTL_CONSTASCII_USTRINGPARAM( "private:factory/scalc" ) ),
+  OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" ) ), 0,
+  Sequence &lt; ::com::sun::star::beans::PropertyValue >() ) );
+</pre>
+</blockquote>
+
+<p>A C++ client application which uses UNO is linked to the C++ UNO libraries,
+which can be found in the program directory of a UNO installation. When running
+the client application, the C++ UNO libraries are found only, if the UNO
+program directory is included in the <code>PATH</code> (Windows) or
+<code>LD_LIBRARY_PATH</code> (Unix/Linux) environment variable.</p>
+
+
+<h3>Application Loader</h3>
+
+<p>As this requires the knowledge of the location of a UNO installation, we
+will provide an application loader (<code>unoapploader.exe</code> for
+Windows, <code>unoapploader</code> for Unix/Linux), which detects
+a UNO installation on the system and adds the program directory of the UNO
+installation to the <code>PATH</code> / <code>LD_LIBRARY_PATH</code> environment
+variable. After that, the application process is loaded and started, whereby the
+new process inherits the environment of the calling process, including
+the modified <code>PATH</code> / <code>LD_LIBRARY_PATH</code> environment
+variable.</p>
+
+<p>For convenience we will provide some tooling in the SDK, which allows to
+build a client executable file (e.g. <code>myapplication</code> for
+Unix/Linux), which can be invoked by</p>
+
+<blockquote>
+<code>./myapplication</code>
+</blockquote>
+
+<p>In this case, the <code>myapplication</code> executable is simply the renamed
+<code>unoapploader</code> executable. All the application code is part of a
+second executable file, which must have the same name as the first executable,
+but prefixed by a underscore '_', that means in the example above the
+second executable is named <code>_myapplication</code>.</p>
+
+<p>On the Unix/Linux platforms the application loader writes error messages to
+the <code>stderr</code> stream. On the Windows platform error messages are
+written to the error file <code>&lt;application name&gt;-error.log</code> in
+the application's executable file directory. If this fails, the error file is
+written to the directory designated for temporary files.</p>
+
+<p>Note, that the C++ application loader is only available with OOo 2.0.</p>
+
+
+<h3>Finding a UNO installation</h3>
+
+<p>A UNO installation can be specified by the user by setting the
+<code>UNO_PATH</code> environment variable to the program directory of a UNO
+installation, e.g.</p>
+
+<blockquote>
+<code>setenv UNO_PATH /opt/OpenOffice.org/program</code>
+</blockquote>
+
+<p>If no UNO installation is specified by the user, the default installation
+on the system is taken.</p>
+
+<p>On the Windows platform, the default installation is read from the default
+value of the key &quot;Software\OpenOffice.org\UNO\InstallPath&quot; from the
+root key HKEY_CURRENT_USER in the Windows Registry. If this key is missing,
+the key is read from the root key HKEY_LOCAL_MACHINE.</p>
+
+<p>On the Unix/Linux platforms, the default installation is found from the
+<code>PATH</code> environment variable. This requires that the
+<code>soffice</code> executable or a symbolic link is in one of the directories
+listed in the <code>PATH</code> environment variable.</p>
+
+
+<h3>The bootstrap function</h3>
+
+<p>The <code>::cppu::bootstrap()</code> function is implemented in a similar
+way as the Java <code>com.sun.star.comp.helper.Bootstrap.bootstrap()</code>
+method. It first bootstraps a local component context by calling the
+<code>::cppu::defaultBootstrap_InitialComponentContext()</code> function and
+then tries to establish a named pipe connection to a running office by using
+the <code>com.sun.star.bridge.UnoUrlResolver</code> service. If the connection
+fails, an office process is started. After that, it tries to connect to the
+running office again. If the connection succeeds, it gets the remote component
+context, which is returned.</p>
+
+<p>Author: Thomas Benisch.  Last changed: $Date: 2004/12/05 13:42:29 $.</p>
+
+</body>
+</html>

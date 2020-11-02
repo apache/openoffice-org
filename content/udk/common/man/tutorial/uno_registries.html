@@ -1,0 +1,410 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+   <meta name="Author" content="Gast"/>
+   <title>Registries in UNO</title>
+<style type="text/css">
+	<!--
+h1 { text-align:center; margin-top: 0.2cm; text-decoration: none; color: #ffffff; font-size: 6; margin-top: 0.2cm}
+h2 { margin-top: 0.2cm; margin-bottom=0.1cm; color: #ffffff;
+     background-color: #666699 }
+li {margin-bottom: 0.2cm;}
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm;}
+dt {margin-bottom: 0.2cm;}
+-->
+</style>
+</head>
+
+<body>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4 WIDTH="100%" BGCOLOR="#666699"
+    summary="header">
+<tr>
+<td>
+<h1> Registries in UNO </h1>
+</td>
+</tr>
+</table>
+
+<h2> Contents </h2>
+
+<!-- ************************ OVERVIEW ***************************************    -->
+<a href="#Overview">Overview</a><br/>
+<a href="#view">Viewing registries</a><br/>
+<a href="#tools">Command line registry tools</a><br/>
+<a href="#office">Adding components to the office</a><br/>
+<a href="#bootstrap">Bootstrapping arbitrary UNO C++ processes</a><br/>
+
+<h2 id="Overview"> Overview </h2>
+<p>This document provides information about meaning and usage of UNO-registries
+within arbitrary UNO processes.
+
+<p>
+UNO-registries store binary data in a tree-like structure. It has nothing to do
+with the windows registry (except that they follow a similar concept). UNO-registries mainly
+store two types of data
+
+<ol>
+<li> Type-library<br/>
+     In order to be able to invoke UNO-calls from BASIC or invoke UNO-calls via a
+     interprocess-connection, the core UNO bridges need information about the used datatypes.
+     <p>UNO has chosen to store these information into a typelibrary, so that the same
+     data is reusable from any bridge. This is in opposite to for instance the CORBA approach,
+     where for every datatype C-code is generated which needs to be compiled and linked into
+     huge libraries.
+<li> Information about registered components<br/>
+     One basic concept of UNO is to simply be able to create an instance of a service by name
+     via a so called ServiceManager.
+     The association between the service name and the shared-library (where the necessary
+     compiled code is to be found) is stored into a UNO-registry.
+</ol>
+
+<p>Both types of data are <strong>absolutely necessary to run a UNO-C++
+process</strong>. Lack of the
+one or the other information generally leads to fast termination or crash of the program,
+so please avoid this. UNO processes in general open there registries during startup and
+close them when the process terminates.
+
+<p>
+Both types of data are in general stored into a file with a <em>.rdb</em>-suffix (
+<strong>r</strong>egistry <strong>d</strong>ata<strong>b</strong>ase ).
+
+<p> This documents explains more details about the two types of data, explains the
+tools how to prepare a proper registry and the different possibilities about how to
+bootstrap a C++ process with a registry. Another chapter deals with the registries used
+in OpenOffice.org.
+
+<h2 id="view"> Viewing registries </h2>
+
+<h3> UNO typelibrary</h3>
+
+To be useable by a UNO C++ process, all type descriptions must be available within the registry
+under the /UCR main key (UCR = <strong>U</strong>no <strong>C</strong>ore <strong>R</strong>eflection).
+
+You can have a look at the file office-install/program/applicat.rdb using the regview tool, which
+comes with the office development kit.
+
+
+For instance <br/>
+<p>
+<code>
+$ regview applicat.rdb /UCR
+</code> <br/>
+<p>
+dumps all type descriptions used within the office to stdout. One can check if a certain type
+is included within the registry by invoking the following command
+
+<pre>
+$ regview applicat.rdb /UCR/com/sun/star/bridge/XUnoUrlResolver
+
+/UCR/com/sun/star/bridge/XUnoUrlResolver
+ Value: Type = RG_VALUETYPE_BINARY
+        Size = 461
+        Data = minor version: 0
+               major version: 1
+               type: 'interface'
+               uik: { 0x00000000-0x0000-0x0000-0x00000000-0x00000000 }
+               name: 'com/sun/star/bridge/XUnoUrlResolver'
+               super name: 'com/sun/star/uno/XInterface'
+               Doku: ""
+               IDL source file: "O:\UDK303\src\udkapi\com\sun\star\bridge\XUnoUrlResolver.idl"
+               number of fields: 0
+               number of methods: 1
+               method #0: com/sun/star/uno/XInterface resolve([in] string sUnoUrl)
+	           raises com/sun/star/connection/NoConnectException,
+		          com/sun/star/connection/ConnectionSetupException,
+			  com/sun/star/lang/IllegalArgumentException
+	       Doku: ""
+               number of references: 0
+</pre>
+<p>
+The regview-tool knows the format of the binary blob containing the typedescription and
+dumps it in a human readable form.
+
+
+<h3>Registered services</h3>
+Only the UNO component itself provides the data about its implementations.
+To save loading each available UNO component into memory when starting a UNO
+process,
+the data is assembled once (e.g. during setup) and stored into a registry. This process
+is called <em>component registration</em>. Tools for performing this task are discussed below.
+
+<p>For an installed OpenOffice.org, the applicat.rdb contains the registry information. The data
+is stored within the /IMPLEMENTATIONS and /SERVICES key. Below you can find a sample
+SERVICES key for the <code>com.sun.star.io.Pipe</code>-service.
+
+<pre>
+$ regview applicat.rdb /SERVICES/com.sun.star.io.Pipe
+
+/SERVICES/com.sun.star.io.Pipe
+ Value: Type = RG_VALUETYPE_STRINGLIST
+        Size = 38
+        Len  = 1
+        Data = 0 = "com.sun.star.comp.io.stm.Pipe"
+</pre>
+
+<p>
+It just contains one <em>implementation name</em> (it may contain more than one, but in
+general only the first is used). Within the IMPLEMENTATIONS section, you can find the following
+entry :
+
+<pre>
+$ regview applicat.rdb /IMPLEMENTATIONS/com.sun.star.comp.io.stm.Pipe
+
+/IMPLEMENTATIONS/com.sun.star.comp.io.stm.Pipe
+ / UNO
+   / ACTIVATOR
+     Value: Type = RG_VALUETYPE_STRING
+            Size = 34
+            Data = "com.sun.star.loader.SharedLibrary"
+
+   / SERVICES
+     / com.sun.star.io.Pipe
+   / LOCATION
+     Value: Type = RG_VALUETYPE_STRING
+            Size = 8
+            Data = "stm.dll"
+</pre>
+
+<p>
+The implementations section holds three types of data.
+<ol>
+<li> The loader to be used when the component is requested at runtime (here
+<code>com.sun.star.loader.SharedLibrary</code>).
+<li> The services, which are supported by this implementation.
+<li> The URL to the file, which the loader uses to access the library (the URL
+may be given relative as it is in this case).
+</ol>
+
+<h2 id="tools"> Command line registry tools </h2>
+
+<p>There are various tools to create, modify and use registries. The command
+line options are discussed in detail <a href="../tools.html">here</a>. This
+chapter shows some common use cases.</p>
+
+<h3>General</h3>
+
+<p>The <strong>regmerge</strong> tool is used to merge multiple registries into
+a subkey of an existing or new registry. For instance
+
+<ol>
+<li>
+<pre>
+$ regmerge new.rdb / test1.rdb test2.rdb
+</pre>
+
+<p> merges the contents of test1.rdb and test2.rdb into the file new.rdb. The names of the
+keys are preserved, because both registries are merged into the root-key. In case new.rdb
+existed before, the previous contents remain in new.rdb unless there exist identical keynames
+in either test1.rdb and test2.rdb. In this case, the content of these keys is overwritten with
+the ones in test1.rdb or test2.rdb. So the above command is semantically identical to
+
+<pre>
+$ regmerge new.rdb / test1.rdb
+$ regmerge new.rdb / test2.rdb
+</pre>
+
+
+<li><pre>
+$ regmerge myapp_types.rdb /UCR test1.urd test2.urd
+</pre>
+<p>
+merges the contents of test1.urd and test2.urd into the file myapp_types.rdb. The names of the
+keys in test1.urd and test2.urd get a /UCR prepended. ( The files produced by the idl-compiler
+have a .urd-suffix. The regmerge tool needs to be run before the typelibrary can be used in a
+program, because the /UCR key must be prepended ).
+</ol>
+
+<h3 id="registration"> Component registration</h3>
+<p>
+Components can be registered using the <a href="../tools.html#regcomp">regcomp</a>-tool.
+In the example below the components necessary to establish an interprocess
+connection (e.g. to a running
+OpenOffice.org) get registered into the myapp_services.rdb.
+
+<pre>
+$ regcomp -register -r myapp_services.rdb \
+                    -c uuresolver.dll     \
+                    -c brdgfctr.dll       \
+                    -c acceptor.dll       \
+                    -c connectr.dll       \
+		    -c remotebridge.dll
+</pre>
+(\ means here command line continuation).
+<p>The option -r gives the registry, where the information shall be written to.
+If it doesn't exist, it is created, otherwise the new data is added (in case
+there are older keys, they get overwritten). The option -c can be given multiple
+times, it is followed by a single library name, that shall be registered.
+
+<p>
+Registering a <strong>java-component</strong> is currently more complicated (we are
+working on improving the process). It works only in a installed office environment
+(office-install/program must be your current working directory),
+the office setup must point to a valid java installation (you may start jvmsetup from
+the office/program directory to verify this), and java must be enabled (see
+Extras/Options/General/Security). On Windows, you MUST copy the regcomp.exe into
+the office/program directory.
+
+<pre>
+$ regcomp -register -br applicat.rdb \
+                    -l com.sun.star.loader.Java2 \
+                    -r applict.rdb \
+                    -c file:///i:/o641d3pro/program/JavaTestComponent.jar 
+</pre>
+<p>
+The -br option is used to give the regcomp-tool a registry to work on, because the regcomp-tool
+doesn't know, in which library the java-loader is to be found. The -l option gives the
+service name of the loader to use for the component (it must be com.sun.star.loader.Java2 ).
+The option can be omitted for C++ components, because regcomp defaults to the
+com.sun.star.loader.SharedLibrary loader. The option -c gives the (MANDATORY ABSOLUTE) file URL to the
+java component.
+
+<h3>UNO typelibrary</h3>
+<p>There are several tools, that currently access the typelibrary directly, they are mainly
+used during building. 
+
+<ul>
+<li> <a href="../tools.html#idlc">idlc</a><br/>
+   Compiles .idl into .urd-registry-files.
+<li> <a href="../tools.html#cppumaker">cppumaker</a><br/>
+   Generates C++ header for a given UNO typelist.
+<li> <a href="../tools.html#cunomaker">cunomaker</a><br/>
+   Generates C for a given UNO typelist.
+<li> <a href="../tools.html#javamaker">javamaker</a><br/>
+   Generates java-files for a given typelist.
+<li> <a href="../tools.html#rdbmaker">rdbmaker</a><br/>
+   Create a new registry by extracting given types (including dependent types) from
+   another registry.
+<li> regcompare<br/>
+   Compares a typelibrary to a reference typelibrary and checks for compatibility.
+</ul>
+
+<h2 id="office"> Adding components to the office </h2>
+
+<p>StarOffice 6.0 (or OpenOffice.org 1.0) uses 2 registries, the applicat.rdb (which can be found
+at office-install/program/applicat.rdb) and the user60.rdb (which can be found in the home
+directory on Unix and within the application data directory of your personal windows profile).
+
+<p>
+The applicat.rdb contains all types which are used by the office. During setup, all
+chosen components get registered also into the applicat.rdb.
+
+<p> The user-specific user60.rdb is opened for write access and is by default empty.
+
+<h3>How to add a component to an office installation ?</h3>
+A component may bring along new types and new component registration information.
+There are multiple ways how
+to integrate a new component into the office (with different advantages/disadvantages) :
+
+<ol>
+<li> merge new types into the applicat.rdb and register the component into the applicat.rdb
+<p>
+Merged types can't be removed anymore. It offers maximal startup performance, as there
+is only one registry. In a network installation, the component is available for EVERY user.
+This may lead to problems in a network installation, in case there are running offices
+using the applicat.rdb during the merge process. This should be avoided.
+
+<li> put the new types and component registration information registry into a separate file
+somewhere in the file system and modify the bootstrap variables.
+
+<p> The new component can then be easily removed later on (by changing the bootstrap
+variables to there original values). It
+maybe a little slower during startup (as type lookups are now performed over two registries).
+No matter how the bootstrap variables are modified (see below), it is safe to do it in a network
+installation also with running user-offices. 
+
+<p> There are multiple ways to modify the bootstrap variables (see therefor the 
+<a href="../concept/uno_default_bootstrapping.html">
+UNO bootstrapping document</a>). Here are only two suggestions.
+<ul>
+<li> modify the uno.ini
+<p>after installation, the uno.ini contains the following lines
+<pre>
+[Bootstrap]
+UNO_TYPES=$SYSBINDIR/applicat.rdb
+UNO_SERVICES=$SYSBINDIR/applicat.rdb
+</pre>
+Please change this to something like
+<pre>
+[Bootstrap]
+UNO_TYPES=$SYSBINDIR/applicat.rdb $SYSBINDIR/mycomponent_types.rdb
+UNO_SERVICES=$SYSBINDIR/applicat.rdb $SYSBINDIR/mycomponent_services.rdb
+</pre>
+The new component then gets available as soon as the offices get restarted (note
+that also the quickstarter needs to be terminated to really terminate the office process !).
+
+<li> pass the new values for the bootstrap variables via the command line
+<p> e.g.<br/>
+<pre>
+soffice "-env:UNO_TYPES=$SYSBINDIR/applicat.rdb file:///path/to/local/mycomponent_types.rdb" \
+ "-env:UNO_SERVICES=$SYSBINDIR/applicat.rdb file:///path/to/local/mycomponent_services.rdb" 
+</pre>
+Here only this office is started with the new component enabled (make sure, the office
+really has terminated before !!). 
+
+</ul>
+<li> register the new component via StarBasic.
+<p>In the ODK examples can be found a BASIC library called regcomp, which can simply be imported
+into the office via Tools/Macro/Organizer/Libraries/Append. Starting the first basic macro from
+this library opens a dialog which allows to select a component to be registered. (This is a
+very new feature, it may not yet be within your version of the ODK).
+
+<p>In this case, registration data will be written into the user60.rdb and is therefor available
+only for the current office-user. The component is useable directly after registration. You
+currently cannot add new types via this method, in case your component needs this, you need to do
+it in one of the ways described above.
+
+</ol>
+
+<h2 id="bootstrap"> Bootstrapping arbitrary UNO C++ processes </h2>
+
+<p>There are many ways to bootstrap an UNO C++ application (probably too many). For every way
+you need to properly prepare one or multiple registry files.
+
+<h3>Preparing registries</h3>
+In general you should have different files for registered components and typelibraries.
+There are multiple reasons therefor
+<ul>
+<li> Typelibraries and component registration data are very different kind of data and are
+     used from different core components ( servicemanager and registrytypeprovider ).
+<li> Often typelibraries are more static than component registration registries, meaning
+that during development phases, the types are often fixed while libraries are changed or
+added. Therefor typelibraries in general need less frequent updates.
+<li> In order to write into a registry, you need exclusive access. No other process may
+read or write from this registry during this time.
+<li> Often two different applications may share the type registry but have different
+component registries.
+</ul>
+
+So no matter which of the below bootstrapmethods you choose, you should prepare two registries,
+one which contains the types and the other one which contains the registered components. The
+type registry should be the applicat.rdb found in the ODK plus additional self defined types
+(in fact you may not need all types from the applicat.rdb, in case you are
+looking for a minimal solution, you can use the rdbmaker tool to reduce the
+types to an absolute minimum).
+<!-- The service-registry should be (unfinished thought) -->
+
+
+
+<h3>Bootstrapping mechanisms</h3>
+In the following all ways of bootstrapping an UNO component context are explained. 
+
+<h4>The uno.exe tool</h4>
+TODO
+<h4>C++ UNO bootstrapping via cppu::defaultBootstrap_InitialComponentContext()</h4>
+TODO
+<h4>C++ UNO bootstrapping via cppu::createRegistryServiceFactory()</h4>
+TODO
+<h4>Java UNO bootstrapping via com.sun.star.comp.helper.Bootstrap.createInitialComponentContext()</h4>
+<p>TODO</p>
+
+<table width=100% summary="Footer">
+<tr>
+<td BGCOLOR="#666699"><font color="#FFFFFF">Author: <a href="mailto:joerg.budischewski@germany.sun.com">Joerg
+Budischewski</a> ($Date: 2004/11/27 04:05:11 $)
+<br/><I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I></font></td>
+</tr>
+</table>
+</body>
+</html>

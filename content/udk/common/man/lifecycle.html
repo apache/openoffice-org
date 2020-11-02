@@ -1,0 +1,308 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http:://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+<head>
+    <TITLE>UNO Object Life Cycle Model</TITLE>
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="4">
+    <TR><TD BGCOLOR="#666699">
+        <H1 ALIGN="CENTER" STYLE="margin-top: 0in; text-decoration: none"><!--
+            --><A HREF="http://www.openoffice.org"><IMG
+            SRC="../../images/open_office_org_logo.gif" ALT="OpenOffice.org"
+            ALIGN="RIGHT" BORDER="0"></A><FONT COLOR="White">UNO Object Life
+            Cycle Model</FONT></H1>
+    </TD></TR>
+</TABLE>
+<HR NOSHADE SIZE="3"/>
+
+<H1>Specification</H1>
+
+<P>This model is built on four abstractions: threads, objects, data items, and
+time.</P>
+
+<P>There is a set of <DFN>threads</DFN>, which are not further specified here
+(see <A href="execution.html"><CITE>UNO Execution Model</CITE></A> for
+details).  At any time, this thread pool owns a specific set of data items.</P>
+
+<P>For simplicity (but without loss of generality), a fixed, infinite set of
+<DFN>objects</DFN>,&nbsp;<VAR>O</VAR>, is assumed.  At any time, each object
+owns a specific set of data items.</P>
+
+<P><DFN>Data items</DFN> consist of values of the primitive and structured UNO
+types (see <A HREF="typesystem.html"><CITE>UNO Type System</CITE></A>), and of
+object references (representing the interface types).  An object reference is
+either the null reference or a reference to any object <VAR>o</VAR> &isin;
+<VAR>O</VAR>.</P>
+
+<P>At any time&nbsp;<VAR>t</VAR>, <VAR>TRef</VAR><SUB><VAR>t</VAR></SUB> &sube;
+<VAR>O</VAR> is the set of <DFN>objects directly referenced from the thread
+pool</DFN>.  These are all the objects referenced from the data items owned by
+the thread pool at time&nbsp;<VAR>t</VAR>.</P>
+
+<P>At any time&nbsp;<VAR>t</VAR>, for each object <VAR>o</VAR> &isin;
+<VAR>O</VAR>, <VAR>ref</VAR><SUB><VAR>t</VAR></SUB>(<VAR>o</VAR>) &sube;
+<VAR>O</VAR> is the set of <DFN>objects directly referenced from
+object&nbsp;<VAR>o</VAR></DFN>.  These are all the objects referenced from the
+data items owned by object&nbsp;<VAR>o</VAR> at time&nbsp;<VAR>t</VAR>.
+The function <VAR>ref</VAR><SUP>+</SUP><SUB><VAR>t</VAR></SUB> is the transitive
+hull of the function <VAR>ref</VAR><SUB><VAR>t</VAR></SUB>; at any
+time&nbsp;<VAR>t</VAR>,
+<VAR>ref</VAR><SUP>+</SUP><SUB><VAR>t</VAR></SUB>(<VAR>o</VAR>) represents the
+set of <DFN>objects referenced from object&nbsp;<VAR>o</VAR></DFN>.  Viewed as
+a relation, <VAR>ref</VAR><SUB><VAR>t</VAR></SUB> describes a directed graph
+with objects as vertices and object references as edges.  An <DFN>object
+reference circle</DFN> is a strongly connected component of that graph, with the
+restriction that it must contain at least one edge.  (Informally, an object
+reference circle is a maximal set of objects where each object can be reached
+from every other object via one or more object references.)</P>
+
+<P>At any time&nbsp;<VAR>t</VAR>,
+<VAR>TRef</VAR><SUP>+</SUP><SUB><VAR>t</VAR></SUB> :=
+<VAR>TRef</VAR><SUB><VAR>t</VAR></SUB> &cup;
+<FONT SIZE="+1">&cup;</FONT><SUB><VAR>o</VAR> &isin;
+<VAR>TRef</VAR><SUB><VAR>t</VAR></SUB></SUB>
+<VAR>ref</VAR><SUP>+</SUP><SUB><VAR>t</VAR></SUB>(o) is the set of <DFN>objects
+referenced from the thread pool</DFN>.</P>
+
+<P>At any time&nbsp;<VAR>t</VAR>, <VAR>O</VAR> can be partitioned into four
+disjoint subsets: the <DFN>immaterial objects</DFN>
+<VAR>Imm</VAR><SUB><VAR>t</VAR></SUB>, the <DFN>active objects</DFN>
+<VAR>Act</VAR><SUB><VAR>t</VAR></SUB>, the <DFN>done objects</DFN>
+<VAR>Don</VAR><SUB><VAR>t</VAR></SUB>, and the <DFN>unreachable objects</DFN>
+<VAR>Unr</VAR><SUB><VAR>t</VAR></SUB>.  Two of these are derived as follows:
+<VAR>Act</VAR><SUB><VAR>t</VAR></SUB> :=
+<VAR>TRef</VAR><SUP>+</SUP><SUB><VAR>t</VAR></SUB>, and
+<VAR>Unr</VAR><SUB><VAR>t</VAR></SUB> := <VAR>O</VAR> \
+(<VAR>Imm</VAR><SUB><VAR>t</VAR></SUB> &cup;
+<VAR>Act</VAR><SUB><VAR>t</VAR></SUB> &cup;
+<VAR>Don</VAR><SUB><VAR>t</VAR></SUB>).</P>
+
+<P>Initial state:</P>
+<UL>
+    <LI><VAR>TRef</VAR><SUB>0</SUB> := &empty;</LI>
+
+    <LI>for all <VAR>o</VAR> &isin; <VAR>O</VAR>,
+    <VAR>ref</VAR><SUB>0</SUB>(<VAR>o</VAR>) := &empty;</LI>
+
+    <LI><VAR>Imm</VAR><SUB>0</SUB> := <VAR>O</VAR></LI>
+
+    <LI><VAR>Don</VAR><SUB>0</SUB> := &empty;</LI>
+</UL>
+
+<P>Transitions:</P>
+<DL>
+    <DT><STRONG>adjust threads</STRONG></DT>
+    <DD><VAR>s</VAR> &sube;
+    <VAR>TRef</VAR><SUP>+</SUP><SUB><VAR>t</VAR></SUB>&emsp;&rarr;<BR/>
+    &emsp;<VAR>TRef</VAR><SUB><VAR>t</VAR> + 1</SUB> := <VAR>s</VAR><BR/>
+    &emsp;<VAR>Don</VAR><SUB><VAR>t</VAR> + 1</SUB> :=
+    <VAR>Don</VAR><SUB><VAR>t</VAR></SUB> &cup; {<VAR>o</VAR> &isin;
+    <VAR>TRef</VAR><SUP>+</SUP><SUB><VAR>t</VAR></SUB> \
+    <VAR>TRef</VAR><SUP>+</SUP><SUB><VAR>t</VAR> + 1</SUB> | <VAR>o</VAR>
+    &notin;
+    <VAR>ref</VAR><SUP>+</SUP><SUB><VAR>t</VAR> + 1</SUB>(<VAR>o</VAR>)}</DD>
+
+    <DT><STRONG>adjust object</STRONG></DT>
+    <DD><VAR>o</VAR> &isin; <VAR>TRef</VAR><SUP>+</SUP><SUB><VAR>t</VAR></SUB>,
+    <VAR>s</VAR> &sube;
+    <VAR>TRef</VAR><SUP>+</SUP><SUB><VAR>t</VAR></SUB>&emsp;&rarr;<BR/>
+    &emsp;<VAR>ref</VAR><SUB><VAR>t</VAR> + 1</SUB>(<VAR>o</VAR>) :=
+    <VAR>s</VAR><BR/>
+    &emsp;<VAR>Don</VAR><SUB><VAR>t</VAR> + 1</SUB> :=
+    <VAR>Don</VAR><SUB><VAR>t</VAR></SUB> &cup; {<VAR>o</VAR> &isin;
+    <VAR>TRef</VAR><SUP>+</SUP><SUB><VAR>t</VAR></SUB> \
+    <VAR>TRef</VAR><SUP>+</SUP><SUB><VAR>t</VAR> + 1</SUB> | <VAR>o</VAR>
+    &notin;
+    <VAR>ref</VAR><SUP>+</SUP><SUB><VAR>t</VAR> + 1</SUB>(<VAR>o</VAR>)}</DD>
+
+    <DT><STRONG>create object</STRONG></DT>
+    <DD><VAR>o</VAR> &isin;
+    <VAR>Imm</VAR><SUB><VAR>t</VAR></SUB>&emsp;&rarr;<BR/>
+    &emsp;<VAR>TRef</VAR><SUB><VAR>t</VAR> + 1</SUB> :=
+    <VAR>TRef</VAR><SUB><VAR>t</VAR></SUB> &cup; {<VAR>o</VAR>}<BR/>
+    &emsp;<VAR>Imm</VAR><SUB><VAR>t</VAR> + 1</SUB> :=
+    <VAR>Imm</VAR><SUB><VAR>t</VAR></SUB> \ {<VAR>o</VAR>}</DD>
+</DL>
+
+<H1>Explanation</H1>
+
+<P>Over time, each individual object can transition from <VAR>Imm</VAR> to
+<VAR>Act</VAR>, and then to either <VAR>Don</VAR> or <VAR>Unr</VAR>.  Each
+object starts out as immaterial.  The set of data items owned by an immaterial
+object (and hence its set of directly referenced objects) is empty.  An object
+becomes active once it has been created, and stays active as long as it is
+referenced from the thread pool.  The set of data items owned by an object (and
+hence its set of directly referenced objects) can only change while the object
+is active.  An object becomes done once neither it is referenced from the thread
+pool, nor is it a member of an object reference circle.  An object becomes
+unreachable once it is no longer referenced from the thread pool, but is a
+member of an object reference circle.  Unreachable objects are a problem, as
+they can cause resource leaks.  A desired strategy is to keep
+<VAR>Unr</VAR><SUB><VAR>t</VAR></SUB> empty at all times.</P>
+
+<P>Concepts from different language bindings map to the model's abstractions in
+different ways.  Two prototypical languages are C++ (providing constructors and
+destructors of objects, but no garbage collection) and Java (providing
+constructors and finalizers of objects, with automatic garbage collection).  To
+implement the UNO object life cycle model, the C++ language binding uses
+reference counting for both internal and external (bridged) objects.  The Java
+language binding relies on garbage collection for internal objects, and uses
+garbage collection together with reference counting for external (bridged)
+objects.</P>
+
+<P>For C++, the relation is as follows.  Calling the constructor of an object
+coincides with the object's transition from immaterial to active.  After an
+object's transition from active to done, the destructor of that object will
+eventually be called.  The destructor is called immediately if the object is
+only referenced locally, but it can be delayed arbitrarily if the object is
+referenced externally (over a bridge).  Unreachable objects cause memory leaks,
+as their destructors are never called.</P>
+
+<P>For Java, the relation is slightly different.  Again, calling the constructor
+of an object coincides with the object's transition from immaterial to active.
+After an object's transition from active to done, the finalizer of that object
+will eventually be called.  For an unreachable object, the finalizer will
+eventually be called if the object is only referenced locally; the finalizer
+will not be called (and the object will cause a memory leak) if the object is
+referenced externally (over a bridge).</P>
+
+<P>This has two implications:</P>
+<OL>
+    <LI>Object reference circles have to be avoided, as they can cause objects
+    to become unreachable.</LI>
+
+    <LI>Neither the C++ destructor, nor the Java finalizer of an object are good
+    places to release any resources held by an object, as calling the destructor
+    or finalizer can be delayed arbitrarily.</LI>
+</OL>
+
+<H1>Application</H1>
+
+<P>There are various strategies how to avoid or break object reference circles,
+and how to make objects release resources in a timely fashion.</P>
+
+<H2>Object Ownership</H2>
+
+<P>One strategy to cope with object reference circles is to allow them, but to
+ensure that they are broken before the involved objects become unreachable.
+Lets assume that {<VAR>o</VAR><SUB>1</SUB>, &hellip;,
+<VAR>o</VAR><SUB><VAR>n</VAR></SUB>}, <VAR>n</VAR> &ge; 1, form an object
+reference circle.  Exactly one of the objects in the circle is required to have
+a so-called <DFN>owner</DFN> <VAR>o</VAR>&prime; &notin;
+{<VAR>o</VAR><SUB>1</SUB>, &hellip;, <VAR>o</VAR><SUB><VAR>n</VAR></SUB>};
+assume that <VAR>o</VAR>&prime; is the owner of&nbsp;<VAR>o</VAR><SUB>1</SUB>.
+As long as there are <EM>any</EM> references to the circle (from objects outside
+the circle, or from the thread pool), it is required that <VAR>o</VAR>&prime;
+has a reference to <VAR>o</VAR><SUB>1</SUB>.</P>
+
+<P>Whenever the reference from the owner&nbsp;<VAR>o</VAR>&prime; to
+<VAR>o</VAR><SUB>1</SUB> is the only outside reference to the circle, there is a
+choice.  Either, the owner decides to keep the circle active, so that other
+outside references to the circle can be made in the future.  Or, the owner
+decides to be done with the circle.  In that case, <VAR>o</VAR>&prime; must
+ensure that the circle does not become unreachable when it cuts its last outside
+reference to&nbsp;<VAR>o</VAR><SUB>1</SUB>.  The easiest solution is that
+<VAR>o</VAR>&prime; tells <VAR>o</VAR><SUB>1</SUB> to break the circle, by
+clearing all references from <VAR>o</VAR><SUB>1</SUB> to any of
+{<VAR>o</VAR><SUB>1</SUB>, &hellip;, <VAR>o</VAR><SUB><VAR>n</VAR></SUB>}.  Note
+that this only works if the circle is sufficiently simple, i.e., if removing the
+references from <VAR>o</VAR><SUB>1</SUB> does not introduce any new (smaller)
+object reference circles.</P>
+
+<P>There are two difficulties with this approach:</P>
+<OL>
+    <LI>The owner has to notice when it has the only outside reference to the
+    circle, so that it can decide whether to keep the circle active or to be
+    done with it.</LI>
+
+    <LI>When the owner tells the circle to break, it has to be ensured that the
+    chosen algorithm causes no objects to become unreachable (by introducing any
+    smaller object reference circles).</LI>
+</OL>
+
+<H2>Components</H2>
+
+<P>The approach of <CODE>com.sun.star.lang.XComponent</CODE> is an adaptation of
+the object ownership strategy, that tries to avoid the two difficulties
+mentioned above.</P>
+
+<P>First, the owned object&nbsp;<VAR>o</VAR><SUB>1</SUB> (implementing
+<CODE>com.sun.star.lang.XComponent</CODE>) has a special <DFN>disposed</DFN>
+state (to which it transitions when the owner calls the <CODE>dispose</CODE>
+method).  In that state, it is still active, but behaves more or less as if it
+was done.  This allows the owner to initiate breaking the circle even while
+there are still other outside references to it.  Via those other references,
+<VAR>o</VAR><SUB>1</SUB> can still be reached, but it will be in its disposed
+state.</P>
+
+<P>That way, the owner does not need to notice exactly when it has the only
+outside reference to the circle.  Of course, users
+of&nbsp;<VAR>o</VAR><SUB>1</SUB> now have to cope with the disposed state.
+Generally, it should still be ensured that there is as little access as possible
+to the object after it has been disposed.</P>
+
+<P>Second, the <CODE>XComponent</CODE> approach is designed for simple
+(subject&ndash;observer) patterns of object reference circles, where
+<VAR>o</VAR><SUB>1</SUB> (the <DFN>subject</DFN>) has a reference to each of
+{<VAR>o</VAR><SUB>2</SUB>, &hellip;, <VAR>o</VAR><SUB><VAR>n</VAR></SUB>} (the
+<DFN>observers</DFN>), and each of the observers has a reference to the subject.
+To break such a circle without introducing any new circles, it suffices to clear
+all the references from the subject to the observers, for example.</P>
+
+<H2>Weak References</H2>
+
+<P>The combination of <CODE>com.sun.star.uno.XWeak</CODE>/<!--
+--><CODE>XAdapter</CODE>/<CODE>XReference</CODE> allows to have weak references
+to objects.  As long as the weakly referenced object is active,
+<CODE>XAdapter</CODE>'s <CODE>queryAdapted</CODE> returns a (true) reference to
+the object.  Once the weakly referenced object is done or unreachable,
+<CODE>queryAdapted</CODE> returns either a (true) reference to the object (thus
+effectively resurrecting the object), or a null reference.  Weak references can
+be used to avoid creating object reference circles, by replacing sufficiently
+many (true) references with weak references.</P>
+
+<P><EM>It has to be further investigated how weak references fit in with the UNO
+object life cycle model, and the object ownership and <CODE>XComponent</CODE>
+strategies presented above.</EM></P>
+
+<H2>Disposing</H2>
+
+<P>As explained, a UNO object that has acquired any references should release
+them well before the language binding has determined that the object is no
+longer active (e.g., via a destructor or finalizer call), as there can be an
+arbitrarily long time span between the object becoming done or unreachable, and
+the destructor or finalizer being called.  The UNO object should offer an
+explicit mechanism to release its resources, probably as a method of a supported
+interface.</P>
+
+<P>This is similar to the object ownership/<CODE>XComponent</CODE> strategy, in
+that in both cases some entity has to determine when to dispose an object
+(typically, a method named <CODE>dispose</CODE>, or similar, is used in both
+cases: in the <CODE>XComponent</CODE> case, disposing is used to break object
+reference circles; in this case, disposing is used to make an object release its
+resources).  A theoretically appealing solution would be that the last user of
+an object holding resources calls <CODE>dispose</CODE> once it has finished
+using it, but it can be difficult to determine when this condition occurs.
+Again, a simple solution is to introduce a special <DFN>disposed</DFN> state for
+the object holding the resources.  Then, some entity can call
+<CODE>dispose</CODE> on the object without knowing exactly whether there are
+still other references to it (but those other references then have to cope with
+the object being in disposed state).</P>
+
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="4">
+    <TR><TD BGCOLOR="#666699">
+        <P><FONT COLOR="White">Author:
+        <A HREF="mailto:stephan.bergmann@sun.com"><FONT COLOR="White">Stephan
+        Bergmann</FONT></A> (last modification $Date: 2004/10/29 07:16:43 $).
+        Copyright 2003 <A HREF="http://www.openoffice.org"><FONT
+        COLOR="White">OpenOffice.org</FONT></A> Foundation.  All rights
+        reserved.</FONT></P>
+    </TD></TR>
+</TABLE>
+
+</body>
+</HTML>

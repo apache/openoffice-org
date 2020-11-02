@@ -1,0 +1,333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
+<title>Automating OpenOffice.org</title>
+
+<style type="text/css">
+<!--
+a.content:active {color:blue;text-decoration:underline;}   /* selected link */
+a.content:visited {color:#8b008b;text-decoration:underline;}  /* visited link */
+a.content:link {color:blue;text-decoration:underline;}     /* unvisited link */
+a.content:hover {color:blue;background-color:#ffe4c4;text-decoration:underline;}   /* mouse over link */
+body { font-family:Helvetica,sans-serif;font-size:10pt;}
+p {font-family:Helvetica,sans-serif;font-size:10pt;}
+h1 { font-size:180%;color:black;}
+h2 { font-size:150%;color:black;margin-top: 0.4cm;}
+h3 { font-size:120%;color:black;font-weight:bold;}
+.code {white-space:nowrap;color:black;font-family:monospace;font-size:9pt;}
+.code_key {white-space:nowrap;color:blue;font-family:monospace;font-size:9pt;}
+.code_comment {white-space:nowrap;color:green;font-family:monospace;font-size:9pt;}
+-->
+</style>
+</head>
+
+<body>
+
+<h1>Automating OpenOffice.org</h1>
+<h2>Introduction</h2>
+<p>The OpenOffice.org (OOo) supports Microsoft's Automation technology on different Windows platforms ( Windows
+95,98, ME, 2000, NT4). It enables clients to control the office externally.
+Client programs can be contained within executables or scripts. In order to make
+use of the Automation capability, a client must be coded in a programming
+language that supports Automation. There are a variety of appropriate languages
+and development environments available, such as Visual C++, Visual Basic, Delphi,
+VBScript and JScript. In order to use a scripting language one needs a script
+controller that executes the script. Common controllers are the Internet
+Explorer as well as the Windows Script Host (WSH).</p>
+<p>To give you an impression on how Automation works with OOo, here is a quick
+example:</p>
+
+<p class="code">
+<span class="code_comment">'The service manager is always the starting point</span><br />
+<span class="code_comment">'If there is no office running then an office is started up</span><br />
+<span class="code_key">Set</span> objServiceManager= WScript.CreateObject(&quot;com.sun.star.ServiceManager&quot;)<br />
+
+<span class="code_comment">'Create the Desktop</span><br />
+<span class="code_key">Set</span> objDesktop= objServiceManager.createInstance(&quot;com.sun.star.frame.Desktop&quot;)<br />
+
+<span class="code_comment">'Open a new empty writer document</span><br />
+<span class="code_key">Dim</span> args()<br />
+<span class="code_key">Set</span> objDocument= objDesktop.loadComponentFromURL(&quot;private:factory/swriter&quot;,_<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&quot;_blank&quot;, 0, args)<br />
+
+<span class="code_comment">'Create a text object</span><br />
+<span class="code_key">Set</span> objText= objDocument.getText<br />
+
+<span class="code_comment">'Create a cursor object</span><br />
+<span class="code_key">Set</span> objCursor= objText.createTextCursor<br />
+
+<span class="code_comment">'Inserting some Text</span><br />
+objText.insertString objCursor, &quot;The first line in the newly created text document.&quot;&amp;_<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vbLf, false<br />
+</p>
+<p>
+This script opens a new writer document and inserts some text. If OOo is not already
+running, then an instance is started up automatically. <br />
+To run this example put the code into a file named test.vbs and run it with the
+Windows Script Host (WSH). That can be done by entering the command line:
+</p>
+<pre>
+   cscript test.vbs
+</pre>
+<p>in a command line window. Alternatively one can double click the file entry
+in the Explorer (if in doubt, look at the documentation at <a class="content" href="http://msdn.microsoft.com/scripting/default.htm">http://msdn.microsoft.com/scripting/default.htm</a>).
+As you may have noticed, this examples is written in VBScript but you can also
+use JScript with the WSH.</p>
+
+<h2>Automation Objects</h2>
+<p>In order to do automating tasks by an external client one needs to know what
+automation objects are offered by the server. Currently the The <a class="content" href="http://api.openoffice.org/basic/man/tutorial/tutorial.pdf">StarOffice
+Programmers Tutorial</a> provides this information.</p>
+<h2>Service Manager</h2>
+<p>As shown in the example at the beginning of this document, one creates a
+service manager first. The service manager is the starting point for all
+external automation tasks. It can be instantiated as every ordinary ActiveX
+control. How this is done, depends on the programming language being used. The
+WSH, for example, provides a function on the WScript object that performs
+instantiation.
+</p>
+<p class="code">
+<span class="code_key">Set</span> objServiceManager= WScript.CreateObject(&quot;com.sun.star.ServiceManager&quot;)
+</p>
+<p>
+This function can also be used in JScript when it is run by the WSH.
+Alternatively one can use the <code>ActiveXObject</code> object.
+</p>
+<p class="code">
+<span class="code_key">var</span> objServiceManager= <span class="code_key">new</span> ActiveXObject(&quot;com.sun.star.ServiceManager&quot;);
+</p>
+<p>
+Once instantiated, the service manager allows access to different office components,
+for example
+</p>
+<p class="code">
+<span class="code_key">Set</span>  objDesktop= objServiceManager.createInstance(&quot;com.sun.star.frame.Desktop&quot;)
+</p>
+<p>
+This is essentially the same as calling
+</p>
+<p class="code">
+objDesktop= createunoservice(&quot;com.sun.star.frame.Desktop&quot;)
+</p>
+<p>
+as is done within StarBasic (see <a class="content" href="http://api.openoffice.org/basic/man/tutorial/tutorial.pdf"> StarOffice Programmers
+Tutorial</a>).
+</p>
+
+<h2>Creation of Types in untyped Languages</h2>
+<p>Languages, such as VBScript and JScript, do not provide types. That is, the
+declaration of variables do not require a type specifier:
+</p>
+<p class="code">
+<span class="code_comment">//JScript</span>&nbsp;
+<span class="code_key"><br />
+var</span> variableOfFloat;<br />
+<span class="code_key">var</span> variableOfBool;<br />
+<br />
+<span class="code_comment">'VBScript</span>&nbsp;
+<span class="code_key"><br />
+Dim</span> variableOfFloat<br />
+<span class="code_key">Dim</span> variableOfBool<br />
+<br />
+<span class="code_comment">// C++</span>&nbsp;
+<span class="code_key"><br />
+float</span> variableOfFloat;<br />
+<span class="code_key">bool</span> variableOfBool;
+</p>
+<p>In some rare situations you might need to have a concrete type. One can
+create them in two ways:</p>
+<p class="code">
+<span class="code_key">Set</span> objServiceManager= WScript.CreateObject(&quot;com.sun.star.ServiceManager&quot;)<br />
+<span class="code_comment">'Create the CoreReflection service that is later used to create structs</span><br />
+<span class="code_key">Set</span> objCoreReflection= objServiceManager.createInstance(_<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&quot;com.sun.star.reflection.CoreReflection&quot;)<br />
+<span class="code_comment">'get a type description class for float</span><br />
+<span class="code_key">Set</span> classSize= objCoreReflection.forName(<b>&quot;float&quot;</b>)<br />
+<span class="code_comment">'create the actual object</span><br />
+<span class="code_key">Dim</span> <b>aFloat</b><br />
+classSize.createObject aFloat<br />
+</p>
+<p>
+The other way goes like this:
+</p>
+<p class="code">
+<span class="code_key">Set</span>  objServiceManager= WScript.CreateObject(&quot;com.sun.star.ServiceManager&quot;)<br />
+<span class="code_key">Set</span> aFloat= objServiceManager.Bridge_GetValueObject()<br />
+aFloat.Set &quot;float&quot;, 3.14<br />
+</p>
+<p>
+The second approach uses a special object, which was dubbed
+<code>&quot;ValueObject&quot;</code>, that can be obtained from any office object by calling
+<code>Bridge_GetValueObject</code>. This value must be explicitly told what type it
+represents, for more information about this object see the <a class="content" href="../spec/ole_bridge.html#a7">documentation
+about the OLE bridge</a>.
+</p>
+<p>You should try to use concrete types when a function that takes an <code>any</code>
+argument produces an error. Such an error could indicate a type mismatch.</p>
+
+<h3>Background Information</h3>
+<p>The interfaces of the office usually take parameters of concrete types.
+However, there is a type, the <code>&quot;any&quot;</code>, that can contain values of
+different types, much as the <code>VARIANT</code> type. When a function expects an <code>any</code> then
+the OLE bridge does not know what exactly has to be in the <code>any</code> but it tries to
+convert the scripting parameter according to fixed rules (e.g. <code>long</code> to <code>long</code>,
+<code>double</code> to <code>double</code>). Let us have a look at these two functions:</p>
+<p class="code">
+<span class="code_key">void</span> funcA( <span class="code_key">float</span> f);<br />
+<span class="code_key">void</span> funcB( any a);<br />
+</p>
+<p>When funcA is called in a script, then the OLE bridge receives a <code>VARIANT</code>
+argument. The bridge knows that <code>funcA</code> expects a <code>float</code>, therefore it converts
+the <code>VARIANT</code> into a <code>float</code> value. When <code>funcB</code> is called, the bridge needs to
+convert the value within the <code>any</code>. However, the available type information about
+the function only tells the argument type, which is an <code>any</code> in this case. Without
+type information for the contained type, the bridge converts the value into an
+UNO type according to build-in conversion rules.</p>
+<p>An example:</p>
+<p class="code">someObj.funcB 3.14<br />
+</p>
+<p>The bridge will receive a <code>VARIANT</code> that contains a <code>double</code> (VBScript,
+JScript). The bridge will do a default conversion into a <code>double</code> and create
+an <code>any</code> which is being assigned the <code>double</code>. The implementation of
+<code>funcB</code> receives an
+argument of type <code>any</code> that contains a value of type <code>double</code>. A tolerant
+implementation should convert an <code>any</code> into the expected type. But
+unfortunately, this
+is not always case. If <code>funcB</code> is not tolerant and expects a <code>float</code> rather then a
+<code>double</code>, then it might throw an exception.</p>
+<p>In most cases the bridge will be able to do a correct conversion. However, it
+will not work as shown in example above.</p>
+<p>A possible source of errors is the <code>XPropertySet</code> interface with its methods
+<code>setPropertyValue</code> and <code>getPropertyValue</code> which are frequently used when
+ writing
+automating programs.</p>
+
+<h2>Creation of Structs</h2>
+<p>If the OOo API requires a struct as argument then the struct has to be
+obtained from the office. It is not possible to declare a struct oneself. To
+make this more intelligible, let us assume there is an office function that
+takes a struct of type <code>Size</code>.
+</p>
+<p class="code">
+<span class="code_comment">// the interface function, that will be called from script</span><br />
+<span class="code_key">void</span> XShape::setSize( Size aSize)<br />
+</p>
+<p>and the struct is declared as follows:</p>
+
+<p class="code">
+<span class="code_comment">// idl</span><br />
+<span class="code_key">struct</span> Size<br />
+{<br />
+&nbsp; long Width;<br />
+&nbsp; long Height;<br />
+}<br />
+</p>
+<p>You cannot write code like this ( VBScript):</p>
+<p class="code">
+<span class="code_key">Class</span> Size<br />
+&nbsp;
+  <span class="code_key">Dim</span> Width<br />
+&nbsp;
+  <span class="code_key">Dim</span> Height<br />
+<span class="code_key">End Class</span><br />
+<br />
+<span class="code_comment">'obtain object that implements XShape</span><br />
+...<br />
+<span class="code_comment">'now set the size</span><br />
+<span class="code_key">call</span> objXShape.setSize( <span class="code_key">new</span> Size)<br />
+</p>
+<p>
+There are to ways to create the struct
+</p>
+<p class="code">
+<span class="code_key">Set</span> objServiceManager= WScript.CreateObject(&quot;com.sun.star.ServiceManager&quot;)<br />
+<br />
+<span class="code_comment">'Create the CoreReflection service that is later used to create structs</span><br />
+<span class="code_key">Set</span> objCoreReflection= objServiceManager.createInstance(_<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&quot;com.sun.star.reflection.CoreReflection&quot;)<br />
+<span class="code_comment">'get a type description class for Size</span><br />
+<span class="code_key">Set</span> classSize= objCoreReflection.forName( <b>&quot;Size&quot;</b> )<br />
+<span class="code_comment">'create the actual object</span><br />
+<span class="code_key">Dim</span> aSize<br />
+classSize.createObject aStruct<br />
+<span class="code_comment">'use aSize</span><br />
+aSize.Width= 100<br />
+aSize.Height= 12<br />
+<br />
+objXShape.setSize aSize<br />
+</p>
+<p>
+And this is the other way
+</p>
+<p class="code">
+<span class="code_key">Set</span> objServiceManager= WScript.CreateObject(&quot;com.sun.star.ServiceManager&quot;)<br />
+<span class="code_key">Set</span> aSize= objServiceManager.Bridge_GetStruct(&quot;Size&quot;)<br />
+<span class="code_comment">'use aSize</span><br />
+aSize.Width= 100<br />
+aSize.Height= 12<br />
+<br />
+objXShape.setSize aSize<br />
+</p>
+<p>
+The <code>Bridge_GetStruct</code> function can be called on any OOo object. The function
+is also available in JScript.
+</p>
+<h2>Out Parameter</h2>
+<p>Lots of interface functions take out or in/out - parameter. In some languages,
+such as Jscript and Java, those function arguments are not supported. To use
+those functions regardless, we specified that in/out and out parameters are
+passed as arrays. The example below shows how this is done in JScript.</p>
+<p class="code">
+<span class="code_comment">// the function takes an out-parameter</span><br />
+<span class="code_key">var</span> out= <span class="code_key">new</span> Array();<br />
+object.functionOut(out);<br />
+<span class="code_key">var</span> value= out[0];<br />
+<br />
+<span class="code_comment">// the function takes an in/out-parameter</span><br />
+<span class="code_key">var</span> inout= <span class="code_key">new</span> Array();<br />
+inout[0]=123;<br />
+object.functionInOut( inout);<br />
+<span class="code_key">var</span> value= inout[0];<br />
+</p>
+<p>As one can tell from the examples, the value of the out-parameter is accessible
+at index 0 within the array. For in/out - parameters, one puts the in - value at
+index 0 of the array.
+</p>
+<p>One can also use <code>ValueObjects</code> as in/out and out parameter. See the <a class="content" href="http://udk.openoffice.org/common/man/spec/ole_bridge.html#a7">documentation
+about the OLE bridge</a> for more details.</p>
+
+<h2>Listener Objects (Event Sinks)</h2>
+<p>Some components send events. In order to receive events, one has to implement
+a listener. A listener is distinguished by implementing a listener interface. To
+receive those events, one has to connect the event source with the listener. An
+event source usually offers a function, that takes the listener interface as
+argument. One only has to implement the listener interface and pass an instance
+of the listener as argument to the appropriate function.&nbsp;</p>
+<p>This does not only work with listeners. It is possible to implement all other
+interfaces an pass them to the office component. Currently, those interfaces can
+only be implemented in C++ and in JScript.&nbsp;</p>
+<p>You can find more details in the <a class="content" href="http://udk.openoffice.org/common/man/spec/ole_bridge.html#a10">documentation
+about the OLE bridge</a>.</p>
+
+<h2>Visual Basic specific hints</h2>
+<p>The UNO&nbsp; interface functions which do not have a return value (i.e.
+return <code><span class="code_key">void</span></code>), are mapped to sub routines, for example:</p>
+<p class="code">
+<span class="code_comment">// definition of UNO function</span><br />
+<span class="code_key">void</span> func( long val);<br />
+<br />
+<span class="code_comment">'VBScript call</span><br />
+func val<br />
+<span class="code_comment">'or</span><br />
+<span class="code_key">call</span> func( val)<br />
+</p>
+<h2>Examples</h2>
+<p>
+<a class="content" href="writerdemo.html">WriterDemo.vbs</a>
+</p>
+</body>
+</html>

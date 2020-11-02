@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>How to design C++ classes that are part of the SDK
+    salhelper/cppuhelper API</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+<p>Author: Stephan Bergmann.  Last changed: $Date: 2004/10/28 13:05:15 $.</p>
+
+<h1>How to design C++ classes that are part of the SDK
+<code>salhelper</code>/<code>cppuhelper</code> API</h1>
+
+<p>The following list gives instructions how to design a C++ class that shall be
+part of the API of either <code>salhelper</code> or <code>cppuhelper</code>
+(i.e., of any SDK shared library that has a C++ API that is not all-inline).
+The motivating force behind those instructions is to minimize the amount of
+global symbols (especially weak ones).  The list also explains exactly which
+symbols corresponding to a class to export on which platform; see
+<a href="http://udk.openoffice.org/common/man/libraryversioning.html"><cite>SDK
+Dynamic Library Versioning</cite></a> for details about adding exported symbols
+to dynamic libraries.</p>
+
+<ol>
+<li>
+<p>Never define inline functions.  (Neither explicitly nor
+implicitly, by defining a function within its class.  Inline functions,
+especially constructors and destructors, often make it necessary to export
+certain symbols that could otherwise be left unexported.)</p>
+</li>
+<li>
+<p>Make sure that the compiler does not declare any implicit
+functions.  (To avoid any implicitly defined inline functions, see point&nbsp;1.
+Potential implicit functions are default constructors, copy constructors,
+destructors, and copy assignment operators.  The easiest way to avoid them is to
+declare a destructor, at least one copy constructor, and at least one copy
+assignment operator for each class; those declared functions that shall not be
+available can be declared private and left undefined.)</p>
+</li>
+<li>
+<p>Define every destructor that is declared.  (Even a destructor
+that is declared pure virtual, to avoid any implicitly defined inline functions,
+see point&nbsp;1.)</p>
+</li>
+<li>
+<p>If a class type (possibly <em>cv</em>-qualified, and possibly
+nested within pointer or reference types) is ever used either</p>
+<ul>
+    <li>as a <em>type-id</em> within a <code>dynamic_cast</code> expression that
+    needs to be evaluated at runtime,</li>
+
+    <li> as the static type of an <em>expression</em> within a
+    <code>dynamic_cast</code> expression that needs to be evaluated at
+    runtime,</li>
+
+    <li>as a <em>type-id</em> within a <code>typeid</code> expression,</li>
+
+    <li>as the static type of an <em>expression</em> within a
+    <code>typeid</code> expression,</li>
+
+    <li>as the static type of an <em>assignment-expression</em> within a
+    <code>throw</code> expression, or</li>
+
+    <li>within the <em>exception-declaration</em> of a <code>catch</code>
+    handler,</li>
+</ul>
+<p>then declare its destructor virtual.  (To have a dedicated place where RTTI
+for that class is generated.  Since in general you cannot control the ways a
+class is used, the best advice probably is to do this for each class that is
+intended to be either used as an exception or subclassed.)</p>
+</li>
+<li>
+<p>If the destructor of a class is declared virtual, declare the
+destructors of all its base classes virtual.  (To have a dedicated place where
+RTTI for the base classes is generated, which is referenced by the RTTI for the
+derived class.  Since in general you cannot control the ways a class is used,
+the best advice probably is to do this for each class that is intended to be
+subclassed.)</p>
+</li>
+<li>
+<p>Special symbols to be exported for GCC&nbsp;3:</p>
+<ul>
+    <li>For each constructor that shall be available outside the dynamic
+    library, export any corresponding <code>C1</code> and <code>C2</code>
+    variant symbols.</li>
+
+    <li>For each destructor that shall be available outside the dynamic library,
+    export any corresponding <code>D0</code>, <code>D1</code>, and
+    <code>D2</code> variant symbols.  (The <code>D0</code> variant seems to be
+    never called directly, but only be referenced from the vtable, but that is
+    no guarantee that this will not change in a future GCC version.)</li>
+
+    <li>For each class that is used outside the dynamic library in ways covered
+    by point&nbsp;4 plus recursive application of point&nbsp;5, export the
+    corresponding <code>_ZTI</code> and <code>_ZTS</code> symbols.  (Strictly
+    speaking, the <code>_ZTS</code> symbol need only be exported if the type is
+    ever used as an incomplete type.)</li>
+
+    <li>It is known that some classes are used in ways covered by point&nbsp;4
+    plus recursive application of point&nbsp;5, and those classes have no
+    dedicated place where RTTI for them is generated, and thus weak RTTI symbols
+    are emitted wherever needed (classes affected by this are, for example, the
+    all-inline classes representing UNO exception types, and all-inline
+    exception classes like <code>rtl::MalformedUriException</code>; specifically
+    <em>not</em> affected are the standard exception classes
+    <code>std::bad_alloc</code>, <code>std::bad_cast</code>,
+    <code>std::bad_exception</code>, <code>std::bad_typeid</code>,
+    <code>std::domain_error</code>, <code>std::exception</code>,
+    <code>std::invalid_argument</code>, <code>std::ios_base::failure</code>,
+    <code>std::length_error</code>, <code>std::logic_error</code>,
+    <code>std::out_of_range</code>, <code>std::overflow_error</code>,
+    <code>std::range_error</code>, <code>std::runtime_error</code>, and
+    <code>std::underflow_error</code>, as they all have dedicated places for
+    their RTTI symbols in <code>libstlport_gcc.so</code> or
+    <code>libstdc++.so.5</code>).  To make those uses work under GCC&nbsp;3, all
+    involved load objects have to bind the same definitions of those symbols at
+    runtime.  To achieve this, the OOo build environment enforces that
+    <em>all</em> global <code>_ZTI</code> and <code>_ZTS</code> symbols defined
+    within a load object (as either weak or normal symbols) are indeed exported
+    (with version <code>GCC_3_0_0</code>, in case the respective load object
+    uses symbol versioning).  This implies that any <code>_ZTI</code> and
+    <code>_ZTS</code> symbols covered by the previous point are always exported
+    with version <code>GCC_3_0_0</code>, which defeats the correct use of
+    versioning for those symbols.</li>
+</ul>
+</li>
+<li>
+<p>Special symbols to be exported for Sun C++ 5:</p>
+<ul>
+    <li>For each constructor that shall be available outside the dynamic
+    library, export any corresponding plain and <code>#Nvariant&nbsp;1</code>
+    variant symbols.</li>
+
+    <li>For each destructor that shall be available outside the dynamic library,
+    export any corresponding plain and <code>#Nvariant&nbsp;1</code> variant
+    symbols.</li>
+
+    <li>For each class that is used outside the dynamic library in ways covered
+    by point&nbsp;4 plus recursive application of point&nbsp;5, export the
+    corresponding <code>__RTTI__</code> symbols (of which there are three, one
+    for the class itself, one for an unqualified pointer to the class, and one
+    for a <code>const</code>-qualified pointer to the class).</li>
+</ul>
+</li>
+<li>
+<p>Special symbols to be exported for Microsoft Visual C++:</p>
+<ul>
+    <li>For each constructor that shall be available outside the dynamic
+    library, export the corresponding symbol.</li>
+
+    <li>For each destructor that shall be available outside the dynamic library,
+    export the corresponding symbol (do not export any <code>`scalar deleting
+    destructor'</code> or <code>`vector deleting destructor'</code>
+    symbols).</li>
+</ul>
+</ol>
+
+</body>
+</html>

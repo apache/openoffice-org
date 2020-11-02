@@ -1,0 +1,1523 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1"/>
+	<TITLE>Implementing an C++ - UNO bridge</TITLE>
+	<META NAME="KEYWORDS" CONTENT="UNO,Bridge,Stubs"/>
+  <style type="text/css">
+<!--
+li {margin-bottom: 0.2cm;}
+h1 {color:#ffffff;font-size:20pt;font-weight:bold;font-family:Arial,sans-serif;
+    margin-top: 0.2cm; margin-bottom: 0.2cm}
+h2 {color:#ffffff;font-size:16pt;font-family:Arial,sans-serif;
+    padding-left: 0.1cm; padding-top: 0.2cm; padding-bottom: 0.2cm;
+    margin-right: 0.1cm;
+    background-color: #666699; width: 100%}
+-->
+</style>
+</HEAD>
+<body link="#444488" vlink="#444488">
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 bgcolor=#666699
+   summary="Header">
+	<TR>
+	<TD>
+      <h1 align=center> Implementing a C++ - UNO bridge </h1>
+	</td><td>
+	  <A HREF="http://www.openoffice.org/"><IMG SRC="../../images/open_office_org_logo.gif" NAME="Grafik1" ALT="OpenOffice.org" ALIGN=right BORDER=0 /></A>
+		</TD>
+	</TR>
+</TABLE>
+
+<h2>Contents</h2>
+<blockquote>
+      <a href="#objective">Objective</a><br/>
+      <a href="#terminology">Terminology</a><br/>
+      <a href="#loading">Loading a bridge</a><br/>
+      <a href="#env">Environment</a><br/>
+      <a href="#mapping">Mapping</a> <br/>
+      <a href="#msci">Microsoft Visual C++ - UNO bridge</a>
+</blockquote>
+
+<h2><a name="objective"></a> Objective </h2>
+
+<p>This document is written for developers implementing a bridge from C++ to
+binary UNO. The last paragraph covers the
+<a href="#msci">Microsoft Visual C++ - UNO bridge</a> in detail.</p>
+
+<h2><a name="terminology"></a> Terminology </h2>
+
+<ul>
+    <li><i>Environment</i><br/>
+        <p>An environment is specific to a programming language/ the compiler in 
+        which interfaces are implemented, e.g. the name &quot;msci&quot; for 
+        a C++ environment using the Microsoft Visual C++ compiler. It can also 
+        be session specific for some reasons, e.g. when running multiple JVM 
+        (Java virtual machines) in one process.</p>
+         
+    <li> <i>Mapping</i><br/>
+		<p>A mapping is the directed way to publish an interface into another
+		environment, i.e. you map an interface from a source environment to a
+		target environment.  So you can invoke methods on a mapped interface
+		(relating to the target environment) which are delegated to the
+		originating interface in the source environment. The delegation/
+		invocation is performed by the <i>bridge</i>.  A mapped interface is
+		called a <i>proxy</i>.</p>
+
+    <li><i>Bridge</i><br/>
+		<p>A bridge denotes the infrastructure to exchange interfaces between 
+        two environments and is bidirectional, supporting a mapping for each 
+        direction.</p>
+
+		<p>Example: The language binding Visual C++/UNO supports two mappings
+		to exchange interfaces from the environment "Visual C++" to the 
+        UNO environment and vice versa.</p>
+</ul>
+
+<h2><a name="loading"></a> Loading a bridge </h2>
+
+<P>Each bridge is implemented in a separate shared library loaded by the UNO
+runtime. The naming scheme of the library is a concatenation with the
+following:</p>
+
+<p>[<i>purpose_</i>]<i>SourceEnvName_DestEnvName</i></p>
+
+<p>The optional purpose denotes the purpose of the bridge, e.g. protocol 
+traffic between two environments. If no purpose is given, then the bridge 
+just maps interfaces from source to destination environment.</p>
+
+<p>Windows examples: prot_uno_uno.dll, msci_uno.dll<br/>
+  Solaris examples: libprot_uno_uno.so, libsunpro5_uno.so</p>
+<p>The bridge library exports two functions called
+<code>uno_ext_getMapping()</code> and <code>uno_initEnvironment()</code>.  The
+latter is currently implemented by the bridge library for pragmatic reasons.
+The runtime will lookup an initialization library of an environment by loading
+a library with name <i>EnvName</i>_uno. <code>uno_getEnvironment()</code>
+initializes the environment, e.g. raises the JVM, sets a disposing callback
+etc. C++ environments usually do nothing.</p>
+
+<pre>void SAL_CALL uno_initEnvironment(
+    uno_Environment * pEnv ); </pre>
+
+<p>The first function, <code>uno_ext_getMapping()</code>, is called by the UNO
+runtime to get the mappings for both directions. The
+<code>uno_ext_getMapping()</code> call receives a source and destination
+environment handle to distinguish which mapping is demanded. It is quite clear
+that the bridge library cannot be unloaded while any code of it is still
+needed, i.e. interfaces are held.  So both mappings and any wrapped interface
+(proxy) that is exported needs to modify a shared library wide reference
+count.</p>
+
+<pre>
+void SAL_CALL uno_ext_getMapping(
+    uno_Mapping ** ppMapping,
+    uno_Environment * pFrom, uno_Environment * pTo );
+</pre>
+
+<h2><a name="env"></a> Environment </h2>
+
+<P>The intention of an environment (and programmatically 
+environment handles) is to identify (given by its type name and context 
+pointer) and optionally to provide extra functionality like interface 
+registration.</p>
+
+<p>In specific the latter point is very important, because of the object 
+identity of an interface. Any UNO object is defined to provide the <u>same</u> 
+instance of XInterface any time it is queried for it. This specification 
+has been made to test whether two interfaces belong to the same object 
+(e.g. when testing the source object of an incoming event). So 
+when interfaces are mapped around to some environments outer space, they 
+must provide the <u>same</u> XInterface in each environment (e.g. in C++, 
+equal XInterface pointers).</p>
+
+<p>Also it is recommended to reuse any interface you can, i.e. reducing the 
+construction of proxy interfaces as often as you can, because each constructed 
+proxy interface leads among the acquisition of resources to another indirection 
+when called.</p>
+
+<p>The structure of an environment is split into 
+the simple common &quot;identity&quot; part which can easily be implemented 
+by bridges that handle object identity issues in their own way. If the 
+environment implementation supports interface registration functionality 
+etc. then the optional pointer is set. Optional functionality is interface 
+registration, acquiring/ releasing interfaces of the environment and obtaining 
+object identifiers for an interface.</p>
+
+<p>Interface registration is divided into registration of proxy and original 
+interfaces. Obviously proxies have to be held unacquired, otherwise mapped 
+interfaces will never die. The rule for a reference counted C++ proxy 
+is, that it registers itself when reference count increments from 0 to 
+1 and revokes itself when the count decrements from 1 
+to 0. To synchronize registration access while not granting internal locks 
+on the interface registration, the proxy will be explicitly freed by the 
+environment by its given freeProxy() function at registration.</p>
+
+<pre>/** The binary specification of an UNO environment. */
+typedef struct _uno_Environment
+{
+    /** reserved for future use (0 if not used)
+    */
+    void *               pReserved;
+    
+    /** type name of environment
+    */
+    rtl_uString *        pTypeName;
+    
+    /** free context pointer to be used for specific classes of environments (e.g., a JVM pointer)
+    */
+    void *               pContext;
+    
+    /** pointer to extended environment (interface registration functionality), if supported
+    */
+    uno_ExtEnvironment * pExtEnv;
+    
+    /** Acquires this environment.
+        @param pEnv this environment
+    */
+    void (SAL_CALL * acquire)( uno_Environment * pEnv );
+    
+    /** Releases this environment;
+        last release of environment will revoke the environment from runtime.
+        @param pEnv this environment
+    */
+    void (SAL_CALL * release)( uno_Environment * pEnv );
+    
+    /** Call this function to <b>explicitly</b> dispose this environment
+        (e.g., release all interfaces).
+	You might want to call this function before shutting down due to a runtime error.
+	@param pEnv this environment
+    */
+    void (SAL_CALL * dispose)( uno_Environment * pEnv );
+    
+    /* ===== the following part will be late initialized by a matching bridge ===== *
+     * ===== and is NOT for public use.                                       ===== */
+    
+    /** <b>CALLBACK</b>
+        Disposing callback function pointer that can be set to get signalled before the environment
+        is destroyed.
+	@param pEnv environment that is being disposed
+    */
+    void (SAL_CALL * environmentDisposing)( uno_Environment * pEnv );
+} uno_Environment;
+
+/** Generic function pointer declaration to free a proxy object if it is not needed
+    by the environment anymore.
+    Any proxy object must register itself on first acquire() call and revoke
+    itself on last release() call.
+    This can happen several times because the environment caches proxy objects
+    until the environment <b>explicitly</b> frees the proxy object calling this function.
+    @param pEnv environment
+    @param pProxy proxy pointer
+*/
+typedef void (SAL_CALL * uno_freeProxyFunc)( uno_ExtEnvironment * pEnv, void * pProxy );
+
+/** Generic function pointer declaration to allocate memory. Used with getRegisteredInterfaces().
+    @param nBytes amount of memory in bytes
+    @return pointer to allocated memory
+*/
+typedef void * (SAL_CALL * uno_memAlloc)( sal_uInt32 nBytes );
+
+/** The binary specification of an UNO environment supporting interface registration.
+*/
+typedef struct _uno_ExtEnvironment
+{
+    /** inherits all members of an uno_Environment
+    */
+    uno_Environment aBase;
+    
+    /** Registers an interface of this environment.
+        @param pEnv            this environment
+        @param ppInterface     inout parameter of interface to be registered
+        @param pOId            object id of interface
+        @param pTypeDescr      type description of interface
+    */
+    void (SAL_CALL * registerInterface)(
+        uno_ExtEnvironment * pEnv,
+        void ** ppInterface,
+        rtl_uString * pOId,
+        typelib_InterfaceTypeDescription * pTypeDescr );
+    
+    /** Registers a proxy interface of this environment that can be reanimated and is
+        freed <b>explicitly</b> by this environment.
+	@param pEnv            this environment
+        @param ppInterface     inout parameter of interface to be registered
+        @param freeProxy       function to free proxy object
+        @param pOId            object id of interface
+        @param pTypeDescr      type description of interface
+    */
+    void (SAL_CALL * registerProxyInterface)(
+        uno_ExtEnvironment * pEnv,
+        void ** ppProxy,
+        uno_freeProxyFunc freeProxy,
+        rtl_uString * pOId,
+        typelib_InterfaceTypeDescription * pTypeDescr );
+    
+    /** Revokes an interface from this environment.
+        You have to revoke <b>any</b> interface that has been registered via this method.
+	@param pEnv            this environment
+        @param pInterface      interface to be revoked
+    */
+    void (SAL_CALL * revokeInterface)(
+        uno_ExtEnvironment * pEnv,
+        void * pInterface );
+    
+    /** Provides the object id of a given interface.
+        @param ppOut         inout oid
+        @param pInterface    interface of object
+    */
+    void (SAL_CALL * getObjectIdentifier)(
+        uno_ExtEnvironment * pEnv,
+        rtl_uString ** ppOId,
+        void * pInterface );
+    
+    /** Retrieves an interface identified by its object id and type from this environment.
+        Interfaces are retrieved in the same order as they are registered.
+	@param pEnv            this environment
+        @param ppInterface     inout parameter for the registered interface; (0) if none was found
+        @param pOId            object id of interface to be retrieved
+        @param pTypeDescr      type description of interface to be retrieved
+    */
+    void (SAL_CALL * getRegisteredInterface)(
+        uno_ExtEnvironment * pEnv,
+        void ** ppInterface,
+        rtl_uString * pOId,
+        typelib_InterfaceTypeDescription * pTypeDescr );
+    
+    /** Returns all currently registered interfaces of this environment.
+        The memory block allocated might be slightly larger than (*pnLen * sizeof(void *)).
+	@param pEnv            this environment
+        @param pppInterfaces   out param; pointer to array of interface pointers
+        @param pnLen           out param; length of array
+        @param memAlloc        function for allocating memory that is passed back
+    */
+    void (SAL_CALL * getRegisteredInterfaces)(
+        uno_ExtEnvironment * pEnv,
+        void *** pppInterfaces,
+        sal_Int32 * pnLen,
+        uno_memAlloc memAlloc );
+    
+    
+    /* ===== the following part will be late initialized by a matching bridge ===== *
+     * ===== and is NOT for public use.                                       ===== */
+    
+    /** Computes an object id of the given interface; is called by the environment
+        implementation.
+	@param pEnv            corresponding environment
+        @param ppOId           out param: computed id
+        @param pInterface      an interface
+    */
+    void (SAL_CALL * computeObjectIdentifier)(
+        uno_ExtEnvironment * pEnv,
+        rtl_uString ** ppOId, void * pInterface );
+    
+    /** Function to acquire an interface.
+        @param pEnv            corresponding environment
+        @param pInterface      an interface
+    */
+    void (SAL_CALL * acquireInterface)( uno_ExtEnvironment * pEnv, void * pInterface );
+    
+    /** Function to release an interface.
+        @param pEnv            corresponding environment
+        @param pInterface      an interface
+    */
+    void (SAL_CALL * releaseInterface)( uno_ExtEnvironment * pEnv, void * pInterface );
+} uno_ExtEnvironment;
+</pre>
+
+<p>There is a distinction between registered environments 
+and anonymous environments. You can obtain an existing environment by 
+calling <code>uno_getEnvironment()</code>. 
+If there is no existing one, then <code>uno_getEnvironment()</code> 
+creates and registers a default one providing the additional functionality 
+(interface registration etc.). This is the common way.</p>
+
+<p>In contrast to this you can call <code>uno_createEnvironent()</code> 
+to create an anonymous environment giving an environment's type name
+(e.g. &quot;msci&quot;) and a context pointer. Creating anonymous environments 
+is sensible if you need more than one environment of the same type. 
+You may want to protocol any calls from/ to your component and one
+possibility is the following approach:</p>
+
+<ol>
+    <li>Create an anonymous environment of type &quot;uno&quot;.</li>
+
+	<li>Connect the registered uno environment and the anonymous environment via
+	    the protocol bridge &quot;prot_uno_uno&quot;.</li>
+
+	<li>Connect the anonymous UNO environment with the environment of your
+		component using the C++ bridge of choice (compiler that compiled the
+		component code).</li>
+
+	<li>Connect your launching environment (the environment from within calls
+	    are put) with the registered uno environment.</li>
+
+	<li>Launch your component.</li>
+</ol>
+
+<h2><a name="mapping"></a> Mapping </h2>
+
+<p>A bridge consists of two mappings. Each mapping is dependent 
+on its counterpart mapping, because performing a call may bring up the 
+need to convert interfaces from one environment to the other (e.g., in 
+parameter interface) and vice versa (e.g., return values).</p>
+
+<p>Mapping an interface from environment A to environment B involves several 
+steps to keep track of object identities:</p>
+
+<ol>
+    <li>First the object identifier of an interface is determined by calling 
+        getObjectIdentifier() of environment A (source environment).
+    <li>Then the destination environment is asked with the object identifier 
+        and type, if there is a already a registered interface in use. If this 
+        is the case you can use that one and end up here.
+    <li>If there is no such interface in use, the bridge will 
+        produce a proxy of that type delegating all calls to the given source 
+        interface of environment A.
+    <li>The source interface will be registered at environment 
+        A and the proxy interface will be introduced as a new proxy at environment 
+        B (registerProxyInterface()).
+</ol>
+
+<p>The whole scenario is shown in the
+<a href="images/mapping_scenario.jpg"> big picture</a>.</p>
+
+<h2> Microsoft Visual C++ - UNO bridge</h2>
+
+<p>This is a short, source code based description of an UNO bridge
+implementation for C++ objects compiled with the Microsoft Visual C++ 4-6.  It
+covers the rudimentary calling stuff which is very similar to other compilers
+but omits exception handling.</p>
+
+<p><b>Mapping</b></p>
+
+<p>Mapping an interface from one environment to another is transparently done 
+via the right mapping, e.g. like the following XFoo interface from UNO to 
+the Microsoft Visual C++ environment:</p>
+
+<pre>
+Mapping aMapping( "uno", "msci" );
+XFoo * pFoo = (XFoo *)aMapping.mapInterface(
+    pUnoFoo, ::getCppuType( (const Reference< XFoo > *)0 ) );
+...
+pFoo->bar();
+...
+pFoo->release();
+</pre>
+
+<p>The given UNO interface is mapped to the Microsoft 
+world transparently, so you can call methods and catch exceptions as if 
+the calls are performed on an &quot;original&quot; Visual C++ object.</p>
+
+<p>To claim this goal, the underlying bridge has to emulate the behaviour 
+and keep the correct object layout of its compiler. This example explains 
+the bridge from the Microsoft Visual C++ compiler to the binary (C-) UNO
+specification which is system dependent, but not compiler dependent. You can
+communicate with UNO objects compiled with another compiler just by having 
+an appropriate bridge to UNO.</p>
+
+<p><b>C++ Proxy</b></p>
+
+<p>Under the hood the call <code>bar()</code> that is performed on the mapped
+interface will call on a proxy C++ object that delegates the call to its
+corresponding UNO interface (the one given to <code>mapInterface()</code>).  To
+create a C++ proxy, there is already a proxy class you can modify for your
+needs (header file
+<a href="http://www.openoffice.org/source/browse/udk/bridges/inc/cpp_uno/bridge.h">bridges/inc/cpp_uno/bridge.h</a>).
+You usually instantiate this class and modify the vtable pointer, giving your
+generic vtable. For Microsoft Visual C++ you can use a generic one, because the
+objects' this pointer is anytime the second stack parameter. On gcc or sunpro5
+the first parameter may be the pointer to a struct return space.  So for those
+compilers you have to generated a vtable for each type that is used.</p>
+
+<p>When the proxy interface is called, the vtable index is determined
+by the generic vtable and based on this, the method type description.
+This is the information to get the values from the processor 
+call stack and perform a dispatch call on the target UNO interface 
+that the C++ proxy is wrapping.</p>
+
+<p>After the dispatch call has been done, the returned exception information 
+is checked whether a C++ exception has to be generated and raised.
+If no exception has occurred, the inout/ out parameters have to be 
+reconverted (which is only important for values representing interfaces 
+or values containing interfaces though, because all UNO values are 
+binary compatible on a specific computing architecture).</p>
+
+<p>The C++ proxy object holds the interface origin (i.e. the target uno
+interface) so it can register itself at the environment on its first acquire()
+and revoke itself on its last release() from its environment.</p>
+
+<pre>
+struct cppu_cppInterfaceProxy : public ::com::sun::star::uno::XInterface
+{
+    oslInterlockedCount                  nRef;
+    cppu_Bridge *                        pBridge;
+    
+    // mapping information
+    uno_Interface *                      pUnoI; // wrapped interface
+    typelib_InterfaceTypeDescription *   pTypeDescr;
+    ::rtl::OUString                      oid;
+    
+    // non virtual methods called on incoming vtable calls #1, #2
+    inline void SAL_CALL acquireProxy();
+    inline void SAL_CALL releaseProxy();
+    
+    // XInterface: these are only here for dummy, there will be a patched vtable!
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        const ::com::sun::star::uno::Type &amp; )
+        { return ::com::sun::star::uno::Any(); } // don't use this, use cppu_queryInterface()!
+    virtual void SAL_CALL acquire() {} // don't use this, use cppu_acquire()!
+    virtual void SAL_CALL release() {} // don't use this, use cppu_release()!
+    
+    // ctor
+    inline cppu_cppInterfaceProxy( cppu_Bridge * pBridge_,
+                                   uno_Interface * pUnoI_,
+                                   typelib_InterfaceTypeDescription * pTypeDescr_,
+                                   const ::rtl::OUString &amp; rOId_ );
+};
+</pre>
+
+<p>The proxy manages its reference count, a pointer to its bridge to get the
+counterpart mapping, the uno interface it delegates calls to, the (interface)
+type it is emulating and an object identifier (oid).</p>
+
+<p>The type and object identifier are needed to manage objects from several
+environments and prove for object identity and to improve performance (no new
+interface is needed if there is already a registered interface in the
+environment).</p>
+
+<p>Essentially if a proxy object is created by the Visual C++ compiler, its
+vtable is patched, which is the very first pointer in the object layout:</p>
+
+<pre>
+void SAL_CALL cppu_cppInterfaceProxy_patchVtable(
+    XInterface * pCppI, typelib_InterfaceTypeDescription * pTypeDescr )
+{
+    static MediateVtables * s_pMediateVtables = 0;
+    if (! s_pMediateVtables)
+    {
+        MutexGuard aGuard( Mutex::getGlobalMutex() );
+        if (! s_pMediateVtables)
+        {
+            static MediateVtables s_aMediateVtables;
+            s_pMediateVtables = &amp;s_aMediateVtables;
+        }
+    }
+    // nMapFunctionIndexToMemberIndex: minimum size of demanded vtable
+    *(const void **)pCppI = s_pMediateVtables->getMediateVtable(
+        pTypeDescr->nMapFunctionIndexToMemberIndex );
+}
+</pre>
+
+<p>The call stack of a virtual function call looks like this:</p>
+
+<table width=50% border=1 cellpadding=4 cellspacing=0 summary="Virtual call stack">
+        <col width=1*/> <col width=1*/> <thead> 
+        <tr valign=top> 
+          <td width=20%> 
+            <p>Offset:</p>
+          </td>
+          <td width=80%> 
+            <p>Value:</p>
+          </td>
+        </tr>
+        </thead> <tbody> 
+        <tr> 
+          <td valign=bottom> 
+            <p>0</p>
+          </td>
+          <td width=50% valign=top> 
+            <p>return address</p>
+          </td>
+        </tr>
+        <tr> 
+          <td valign=bottom> 
+            <p>4</p>
+          </td>
+          <td valign=top> 
+            <p>this pointer</p>
+          </td>
+        </tr>
+        <tr> 
+          <td valign=bottom> 
+            <p>[if struct] 8</p>
+          </td>
+          <td valign=top> 
+            <p>[if struct] pointer to return struct</p>
+          </td>
+        </tr>
+        <tr> 
+          <td valign=bottom> 
+            <p>8 | 12</p>
+          </td>
+          <td valign=top> 
+            <p>parameter 0</p>
+          </td>
+        </tr>
+        <tr valign=top> 
+          <td> 
+            <p>...</p>
+          </td>
+          <td> 
+            <p>...</p>
+          </td>
+        </tr>
+        </tbody> 
+</table>
+
+<p>The proxy vtable (i.e. function pointer array 
+to perform polymorphic calls on C++ objects) determines which function 
+should be called (there is an initial vtable of 256 function 
+slots that is used for any proxy while no proxy demands a larger one):</p>
+
+<table width=50% border=1 cellpadding=4 cellspacing=0 summary="Proxy vtable">
+        <col width=1*/> <col width=1*/> <thead> 
+        <tr valign=top> 
+          <td width=20%> 
+            <p>Offset:</p>
+          </td>
+          <td width=80%> 
+            <p>Function pointer:</p>
+          </td>
+        </tr>
+        </thead> <tbody> 
+        <tr> 
+          <td valign=bottom> 
+            <p>0</p>
+          </td>
+          <td width=50% valign=top> 
+            <p><code>queryInterface()</code>
+              (XInterface member)</p>
+          </td>
+        </tr>
+        <tr> 
+          <td valign=bottom> 
+            <p>4</p>
+          </td>
+          <td valign=top> 
+            <p><code>acquire()</code>
+              (XInterface member)</p>
+          </td>
+        </tr>
+        <tr> 
+          <td valign=bottom> 
+            <p>8</p>
+          </td>
+          <td valign=top> 
+            <p><code>release()</code> 
+              (XInterface member)</p>
+          </td>
+        </tr>
+        <tr> 
+          <td valign=bottom> 
+            <p>12</p>
+          </td>
+          <td valign=top> 
+            <p><code>bar()</code> 
+              (XFoo member)</p>
+          </td>
+        </tr>
+        <tr valign=top> 
+          <td> 
+            <p>...</p>
+          </td>
+          <td> 
+            <p>...</p>
+          </td>
+        </tr>
+        </tbody> 
+</table>
+
+<p>The only task of the proxy vtable for Visual C++ is to determine the call
+index of the uno method that is to be called, so the proxy vtable looks
+like:</p>
+
+<table width=50% border=1 cellpadding=4 cellspacing=0 summary="Proxy vtable">
+        <col width=1*/> <col width=1*/> <thead> 
+        <tr valign=top> 
+          <td width=20%> 
+            <p>Offset:</p>
+          </td>
+          <td width=80%> 
+            <p>Function pointer to code:</p>
+          </td>
+        </tr>
+        </thead> <tbody> 
+        <tr> 
+          <td valign=top> 
+            <p>0</p>
+          </td>
+          <td valign=top>
+<code>
+mov eax, 0<br/>
+jmp cpp_vtable_call
+</code>
+          </td>
+        </tr>
+        <tr> 
+          <td valign=top> 
+            <p>4</p>
+          </td>
+          <td valign=top> 
+<code>
+mov eax, 1<br/>
+jmp cpp_vtable_call
+</code>
+          </td>
+        </tr>
+        <tr> 
+          <td valign=top> 
+            <p>8</p>
+          </td>
+          <td valign=top>
+<code>
+mov eax, 2<br/>
+jmp cpp_vtable_call
+</code>
+          </td>
+        </tr>
+        <tr valign=top> 
+          <td> 
+            <p>...</p>
+          </td>
+          <td> 
+            <p>...</p>
+          </td>
+        </tr>
+        </tbody> 
+</table>
+
+<p>First the <code>bar()</code> call reaches the assembler snippet which
+determines the vtable slot and jumps to a function called
+<code>cpp_vtable_call()</code>:</p>
+
+<pre>
+/**
+ * is called on incoming vtable calls
+ * (called by asm snippets)
+ */
+static __declspec(naked) void __cdecl cpp_vtable_call(void)
+{
+__asm
+    {
+        sub        esp, 8         // space for immediate return type
+        push       esp
+        push       eax            // vtable index
+        mov        eax, esp
+        add        eax, 16
+        push       eax            // original stack ptr
+
+        call       cpp_mediate
+        add        esp, 12
+
+        cmp        eax, typelib_TypeClass_FLOAT
+        je         Lfloat
+        cmp        eax, typelib_TypeClass_DOUBLE
+        je         Ldouble
+        cmp        eax, typelib_TypeClass_HYPER
+        je         Lhyper
+        cmp        eax, typelib_TypeClass_UNSIGNED_HYPER
+        je         Lhyper
+        // rest is eax
+        pop        eax
+        add        esp, 4
+        ret
+Lhyper:
+        pop        eax
+        pop        edx
+        ret
+Lfloat:
+        fld        dword ptr [esp]
+        add        esp, 8
+        ret
+Ldouble:
+        fld        qword ptr [esp]
+        add        esp, 8
+        ret
+    }
+}
+</pre>
+
+<p>The <code>cpp_vtable_call()</code> function just calls
+<code>cpp_mediate()</code> providing some space for return values returned in
+registers, the vtable slot and original stack pointer.  The
+<code>cpp_mediate()</code> function returns the type class of the return value
+in eax. The type class is used to determine where to place return values.</p>
+
+<pre>
+static typelib_TypeClass __cdecl cpp_mediate(
+    void ** pCallStack, sal_Int32 nVtableCall,
+    sal_Int64 * pRegisterReturn /* space for register return */ )
+{
+    OSL_ENSHURE( sizeof(sal_Int32)==sizeof(void *), "### unexpected!" );
+    
+    // pCallStack: ret adr, this, [ret *], params
+    // _this_ ptr is patched cppu_XInterfaceProxy object
+    cppu_cppInterfaceProxy * pThis = static_cast< cppu_cppInterfaceProxy * >(
+        reinterpret_cast< XInterface * >( pCallStack[1] ) );
+    
+    typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
+    OSL_ENSHURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex,
+                 "### illegal vtable index!" );
+    if (nVtableCall >= pTypeDescr->nMapFunctionIndexToMemberIndex)
+    {
+        throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("illegal vtable index!") ),
+                                (XInterface *)pThis );
+    }
+    
+    // determine called method
+    sal_Int32 nMemberPos = pTypeDescr->pMapFunctionIndexToMemberIndex[nVtableCall];
+    OSL_ENSHURE( nMemberPos < pTypeDescr->nAllMembers, "### illegal member index!" );
+
+    TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
+
+    typelib_TypeClass eRet;
+    switch (aMemberDescr.get()->eTypeClass)
+    {
+    case typelib_TypeClass_INTERFACE_ATTRIBUTE:
+    {
+        if (pTypeDescr->pMapMemberIndexToFunctionIndex[nMemberPos] == nVtableCall)
+        {
+            // is GET method
+            eRet = cpp2uno_call(
+                pThis, aMemberDescr.get(),
+                ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef,
+                0, 0, // no params
+                pCallStack, pRegisterReturn );
+        }
+        else
+        {
+            // is SET method
+            typelib_MethodParameter aParam;
+            aParam.pTypeRef =
+                ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef;
+            aParam.bIn        = sal_True;
+            aParam.bOut        = sal_False;
+            
+            eRet = cpp2uno_call(
+                pThis, aMemberDescr.get(),
+                0, // indicates void return
+                1, &amp;aParam,
+                pCallStack, pRegisterReturn );
+        }
+        break;
+    }
+    case typelib_TypeClass_INTERFACE_METHOD:
+    {
+        // is METHOD
+        switch (nVtableCall)
+        {
+            // standard XInterface vtable calls
+        case 1: // acquire()
+            pThis->acquireProxy(); // non virtual call!
+            eRet = typelib_TypeClass_VOID;
+            break;
+        case 2: // release()
+            pThis->releaseProxy(); // non virtual call!
+            eRet = typelib_TypeClass_VOID;
+            break;
+        case 0: // queryInterface() opt
+        {
+            typelib_TypeDescription * pTD = 0;
+            TYPELIB_DANGER_GET( &amp;pTD, reinterpret_cast< Type * >( pCallStack[3] )->getTypeLibType() );
+            OSL_ASSERT( pTD );
+            
+            XInterface * pInterface = 0;
+            (*pThis->pBridge->pCppEnv->getRegisteredInterface)(
+                pThis->pBridge->pCppEnv,
+                (void **)&amp;pInterface, pThis->oid.pData, (typelib_InterfaceTypeDescription *)pTD );
+            
+            if (pInterface)
+            {
+                uno_any_construct( reinterpret_cast< uno_Any * >( pCallStack[2] ),
+                                   &amp;pInterface, pTD, cpp_acquire );
+                pInterface->release();
+                TYPELIB_DANGER_RELEASE( pTD );
+                *(void **)pRegisterReturn = pCallStack[2];
+                eRet = typelib_TypeClass_ANY;
+                break;
+            }
+            TYPELIB_DANGER_RELEASE( pTD );
+        } // else perform queryInterface()
+        default:
+            eRet = cpp2uno_call(
+                pThis, aMemberDescr.get(),
+                ((typelib_InterfaceMethodTypeDescription *)aMemberDescr.get())->pReturnTypeRef,
+                ((typelib_InterfaceMethodTypeDescription *)aMemberDescr.get())->nParams,
+                ((typelib_InterfaceMethodTypeDescription *)aMemberDescr.get())->pParams,
+                pCallStack, pRegisterReturn );
+        }
+        break;
+    }
+    default:
+    {
+        throw RuntimeException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("no member description found!") ),
+            (XInterface *)pThis );
+        // is here for dummy
+        eRet = typelib_TypeClass_VOID;
+    }
+    }
+
+    return eRet;
+}
+</pre>
+
+<p>The <code>cpp_mediate()</code> function looks up the called vtable index, gets the attribute or method type description, and calls <code>cpp2uno_call()</code>, performing the actual UNO dispatch call.</p>
+
+<p>An interesting optimization is done on <code>queryInterface()</code> (vtable
+slot 0): Instead of performing the call, the source environment is asked for a
+registered interface. If there is no registered interface, then the call has to
+be performed.</p>
+
+<pre>
+static typelib_TypeClass cpp2uno_call(
+    cppu_cppInterfaceProxy * pThis,
+    const typelib_TypeDescription * pMemberTypeDescr,
+    typelib_TypeDescriptionReference * pReturnTypeRef, // 0 indicates void return
+    sal_Int32 nParams, typelib_MethodParameter * pParams,
+    void ** pCallStack,
+    sal_Int64 * pRegisterReturn /* space for register return */ )
+{
+    // pCallStack: ret, this, [complex return ptr], params
+    char * pCppStack = (char *)(pCallStack +2);
+
+    // return
+    typelib_TypeDescription * pReturnTypeDescr = 0;
+    if (pReturnTypeRef)
+        TYPELIB_DANGER_GET( &amp;pReturnTypeDescr, pReturnTypeRef );
+    
+    void * pUnoReturn = 0;
+    void * pCppReturn = 0; // complex return ptr: if != 0 &amp;&amp; != pUnoReturn, reconversion need
+    
+    if (pReturnTypeDescr)
+    {
+        if (cppu_isSimpleType( pReturnTypeDescr ))
+        {
+            pUnoReturn = pRegisterReturn; // direct way for simple types
+        }
+        else // complex return via ptr (pCppReturn)
+        {
+            pCppReturn = *(void **)pCppStack;
+            pCppStack += sizeof(void *);
+            
+            pUnoReturn = (cppu_relatesToInterface( pReturnTypeDescr )
+                          ? alloca( pReturnTypeDescr->nSize )
+                          : pCppReturn); // direct way
+        }
+    }
+
+    // stack space
+    OSL_ENSHURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
+    // parameters
+    void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
+    void ** pCppArgs = pUnoArgs + nParams;
+    // indices of values this have to be converted (interface conversion cpp<=>uno)
+    sal_Int32 * pTempIndizes = (sal_Int32 *)(pUnoArgs + (2 * nParams));
+    // type descriptions for reconversions
+    typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
+    
+    sal_Int32 nTempIndizes = 0;
+    
+    for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
+    {
+        const typelib_MethodParameter &amp; rParam = pParams[nPos];
+        typelib_TypeDescription * pParamTypeDescr = 0;
+        TYPELIB_DANGER_GET( &amp;pParamTypeDescr, rParam.pTypeRef );
+
+        if (!rParam.bOut &amp;&amp; cppu_isSimpleType( pParamTypeDescr )) // value
+        {
+            pCppArgs[nPos] = pCppStack;
+            pUnoArgs[nPos] = pCppStack;
+            switch (pParamTypeDescr->eTypeClass)
+            {
+            case typelib_TypeClass_HYPER:
+            case typelib_TypeClass_UNSIGNED_HYPER:
+            case typelib_TypeClass_DOUBLE:
+                pCppStack += sizeof(sal_Int32); // extra long
+            }
+            // no longer needed
+            TYPELIB_DANGER_RELEASE( pParamTypeDescr );
+        }
+        else // ptr to complex value | ref
+        {
+            pCppArgs[nPos] = *(void **)pCppStack;
+
+            if (! rParam.bIn) // is pure out
+            {
+                // uno out is unconstructed mem!
+                pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize );
+                pTempIndizes[nTempIndizes] = nPos;
+                // will be released at reconversion
+                ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
+            }
+            // is in/inout
+            else if (cppu_relatesToInterface( pParamTypeDescr ))
+            {
+                uno_copyAndConvertData( pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize ),
+                                        *(void **)pCppStack, pParamTypeDescr,
+                                        &amp;pThis->pBridge->aCpp2Uno );
+                pTempIndizes[nTempIndizes] = nPos; // has to be reconverted
+                // will be released at reconversion
+                ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
+            }
+            else // direct way
+            {
+                pUnoArgs[nPos] = *(void **)pCppStack;
+                // no longer needed
+                TYPELIB_DANGER_RELEASE( pParamTypeDescr );
+            }
+        }
+        pCppStack += sizeof(sal_Int32); // standard parameter length
+    }
+    
+    // ExceptionHolder
+    uno_Any aUnoExc; // Any will be constructed by callee
+    uno_Any * pUnoExc = &amp;aUnoExc;
+
+    // invoke uno dispatch call
+    (*pThis->pUnoI->pDispatcher)( pThis->pUnoI, pMemberTypeDescr, pUnoReturn, pUnoArgs, &amp;pUnoExc );
+    
+    // in case an exception occurred...
+    if (pUnoExc)
+    {
+        // destruct temporary in/inout params
+        while (nTempIndizes--)
+        {
+            sal_Int32 nIndex = pTempIndizes[nTempIndizes];
+            
+            if (pParams[nIndex].bIn) // is in/inout => was constructed
+                uno_destructData( pUnoArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], 0 );
+            TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
+        }
+        if (pReturnTypeDescr)
+            TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
+        
+        msci_raiseException( &amp;aUnoExc, &amp;pThis->pBridge->aUno2Cpp ); // has to destruct the any
+        // is here for dummy
+        return typelib_TypeClass_VOID;
+    }
+    else // else no exception occurred...
+    {
+        // temporary params
+        while (nTempIndizes--)
+        {
+            sal_Int32 nIndex = pTempIndizes[nTempIndizes];
+            typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndizes];
+            
+            if (pParams[nIndex].bOut) // inout/out
+            {
+                // convert and assign
+                uno_destructData( pCppArgs[nIndex], pParamTypeDescr, cpp_release );
+                uno_copyAndConvertData( pCppArgs[nIndex], pUnoArgs[nIndex], pParamTypeDescr,
+                                        &amp;pThis->pBridge->aUno2Cpp );
+            }
+            // destroy temp uno param
+            uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 );
+            
+            TYPELIB_DANGER_RELEASE( pParamTypeDescr );
+        }
+        // return
+        if (pCppReturn) // has complex return
+        {
+            if (pUnoReturn != pCppReturn) // needs reconversion
+            {
+                uno_copyAndConvertData( pCppReturn, pUnoReturn, pReturnTypeDescr,
+                                        &amp;pThis->pBridge->aUno2Cpp );
+                // destroy temp uno return
+                uno_destructData( pUnoReturn, pReturnTypeDescr, 0 );
+            }
+            // complex return ptr is set to eax
+            *(void **)pRegisterReturn = pCppReturn;
+        }
+        if (pReturnTypeDescr)
+        {
+            typelib_TypeClass eRet = (typelib_TypeClass)pReturnTypeDescr->eTypeClass;
+            TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
+            return eRet;
+        }
+        else
+            return typelib_TypeClass_VOID;
+    }
+}
+</pre>
+
+<p>The <code>cpp2uno_call()</code> function reads C++ parameters from the call
+stack and converts to binary (C-) UNO, if needed (C++ and UNO values are binary
+compatible concerning the memory layout).  If the UNO dispatch call has
+returned and no exception has been signalled (<code>pUnoExc</code>), all out
+parameters are written back to C++.</p>
+
+<p><b>UNO Stub</b></p>
+
+<p>If a Visual C++ interface is be mapped to binary UNO (i.e. the intermediate
+environment), and that interface is mapped to another compiler environment,
+then an UNO stub is created , delegating all UNO dispatch calls to its
+corresponding C++ interface (in this case Microsoft Visual C++).</p>
+
+<p>Incoming calls on the UNO interface (i.e. calls of the dispatch function)
+are performed by converting the call parameters and pushing them on the
+processor stack, then calling the demanded vtable slot on the destination
+interface.<br/> Any C++ exception is caught and reported as an out parameter to
+the caller. If no exception occurred, inout/ out parameters are converted and
+written.</p>
+
+<p>The UNO stub implementation is referred as the
+<code>cppu_unoInterfaceProxy</code> class, because it functions as an UNO proxy
+of a C++ interface:</p>
+
+<pre>
+struct cppu_unoInterfaceProxy : public uno_Interface
+{
+    oslInterlockedCount                    nRef;
+    cppu_Bridge *                          pBridge;
+    
+    // mapping information
+    ::com::sun::star::uno::XInterface *    pCppI; // wrapped interface
+    typelib_InterfaceTypeDescription *     pTypeDescr;
+    ::rtl::OUString                        oid;
+    
+    // ctor
+    inline cppu_unoInterfaceProxy( cppu_Bridge * pBridge_,
+                                   ::com::sun::star::uno::XInterface * pCppI_,
+                                   typelib_InterfaceTypeDescription * pTypeDescr_,
+                                   const ::rtl::OUString &amp; rOId_ );
+};
+</pre>
+	
+<p>The UNO stub manages its reference count, a pointer to its bridge to access
+its counterpart mapping, the C++ interface it delegates incoming dispatch calls
+to, the (interface) type it is emulating and an object identifier (oid).</p>
+
+<p>The dispatch function <code>uno_Interface::pDispatcher()</code>
+distinguishes between attribute read/ write access and method calls from the
+UNO perspective, calling the correct C++ virtual function:</p>
+
+<pre>
+void SAL_CALL cppu_unoInterfaceProxy_dispatch(
+    uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
+    void * pReturn, void * pArgs[], uno_Any ** ppException )
+{
+    // is my surrogate
+    cppu_unoInterfaceProxy * pThis = static_cast< cppu_unoInterfaceProxy * >( pUnoI );
+    typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
+    
+    switch (pMemberDescr->eTypeClass)
+    {
+    case typelib_TypeClass_INTERFACE_ATTRIBUTE:
+    {
+        // determine vtable call index
+        sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
+        OSL_ENSHURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
+        
+        sal_Int32 nVtableCall = pTypeDescr->pMapMemberIndexToFunctionIndex[nMemberPos];
+        OSL_ENSHURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
+        
+        typelib_TypeDescriptionReference * pRuntimeExcRef = 0;
+        
+        if (pReturn)
+        {
+            // dependent dispatch
+            cpp_call( pThis, nVtableCall,
+                      ((typelib_InterfaceAttributeTypeDescription *)pMemberDescr)->pAttributeTypeRef,
+                      0, 0, // no params
+                      1, &amp;pRuntimeExcRef, // RuntimeException
+                      pReturn, pArgs, ppException );
+        }
+        else
+        {
+            // is SET
+            typelib_MethodParameter aParam;
+            aParam.pTypeRef =
+                ((typelib_InterfaceAttributeTypeDescription *)pMemberDescr)->pAttributeTypeRef;
+            aParam.bIn        = sal_True;
+            aParam.bOut        = sal_False;
+            
+            typelib_TypeDescriptionReference * pReturnTypeRef = 0;
+            OUString aVoidName( RTL_CONSTASCII_USTRINGPARAM("void") );
+            typelib_typedescriptionreference_new(
+                &amp;pReturnTypeRef, typelib_TypeClass_VOID, aVoidName.pData );
+            
+            // dependent dispatch
+            cpp_call( pThis, nVtableCall +1, // get, then set method
+                      pReturnTypeRef,
+                      1, &amp;aParam,
+                      1, &amp;pRuntimeExcRef,
+                      pReturn, pArgs, ppException );
+            
+            typelib_typedescriptionreference_release( pReturnTypeRef );
+        }
+        
+        break;
+    }
+    case typelib_TypeClass_INTERFACE_METHOD:
+    {
+        // determine vtable call index
+        sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
+        OSL_ENSHURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
+        
+        sal_Int32 nVtableCall = pTypeDescr->pMapMemberIndexToFunctionIndex[nMemberPos];
+        OSL_ENSHURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
+        
+        switch (nVtableCall)
+        {
+            // standard calls
+        case 1: // acquire uno interface
+            (*pUnoI->acquire)( pUnoI );
+            *ppException = 0;
+            break;
+        case 2: // release uno interface
+            (*pUnoI->release)( pUnoI );
+            *ppException = 0;
+            break;
+        case 0: // queryInterface() opt
+        {
+            typelib_TypeDescription * pTD = 0;
+            TYPELIB_DANGER_GET( &amp;pTD, reinterpret_cast< Type * >( pArgs[0] )->getTypeLibType() );
+            OSL_ASSERT( pTD );
+            
+            uno_Interface * pInterface = 0;
+            (*pThis->pBridge->pUnoEnv->getRegisteredInterface)(
+                pThis->pBridge->pUnoEnv,
+                (void **)&amp;pInterface, pThis->oid.pData, (typelib_InterfaceTypeDescription *)pTD );
+            
+            if (pInterface)
+            {
+                uno_any_construct( reinterpret_cast< uno_Any * >( pReturn ), &amp;pInterface, pTD, 0 );
+                (*pInterface->release)( pInterface );
+                TYPELIB_DANGER_RELEASE( pTD );
+                *ppException = 0;
+                break;
+            }
+            TYPELIB_DANGER_RELEASE( pTD );
+        } // else perform queryInterface()
+        default:
+            // dependent dispatch
+            cpp_call( pThis, nVtableCall,
+                      ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->pReturnTypeRef,
+                      ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->nParams,
+                      ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->pParams,
+                      ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->nExceptions,
+                      ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->ppExceptions,
+                      pReturn, pArgs, ppException );
+        }
+        break;
+    }
+    default:
+    {
+        ::com::sun::star::uno::RuntimeException aExc(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal member type description!") ),
+            pThis->pCppI );
+        
+        typelib_TypeDescription * pTD = 0;
+        const Type &amp; rExcType = ::getCppuType( (const ::com::sun::star::uno::RuntimeException *)0 );
+        TYPELIB_DANGER_GET( &amp;pTD, rExcType.getTypeLibType() );
+        uno_any_construct( *ppException, &amp;aExc, pTD, 0 );
+        TYPELIB_DANGER_RELEASE( pTD );
+    }
+    }
+}
+</pre>
+
+<p>Further on <code>cpp_call()</code> is called given the C++ interface
+pointer, vtable index and all parameters to perform the C++ virtual function
+call. The given parameters are still binary (C-) UNO values that may be
+converted to fit the compiler environment (i.e. an UNO interface must be mapped
+to a C++ interface).  The <code>cpp_call()</code> function prepares an array of
+longs (stack parameters) and calls <code>callVirtualMethod()</code>, an
+assembly function performing the Microsoft specific virtual call having the
+right registers set:</p>
+
+<pre>
+static void cpp_call(
+    cppu_unoInterfaceProxy * pThis,
+    sal_Int32 nVtableCall,
+    typelib_TypeDescriptionReference * pReturnTypeRef,
+    sal_Int32 nParams, typelib_MethodParameter * pParams,
+    sal_Int32 nExceptions, typelib_TypeDescriptionReference ** ppExceptionRefs,
+    void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc )
+{
+    // max space for: [complex ret ptr], values|ptr ...
+    char * pCppStack        = (char *)alloca( sizeof(sal_Int32) + (nParams * sizeof(sal_Int64)) );
+    char * pCppStackStart    = pCppStack;
+    
+    // return
+    typelib_TypeDescription * pReturnTypeDescr = 0;
+    TYPELIB_DANGER_GET( &amp;pReturnTypeDescr, pReturnTypeRef );
+    OSL_ENSHURE( pReturnTypeDescr, "### expected return type description!" );
+    
+    void * pCppReturn = 0; // if != 0 &amp;&amp; != pUnoReturn, needs reconversion
+    
+    if (pReturnTypeDescr)
+    {
+        if (cppu_isSimpleType( pReturnTypeDescr ))
+        {
+            pCppReturn = pUnoReturn; // direct way for simple types
+        }
+        else
+        {
+            // complex return via ptr
+            pCppReturn = *(void **)pCppStack = (cppu_relatesToInterface( pReturnTypeDescr )
+                                                ? alloca( pReturnTypeDescr->nSize )
+                                                : pUnoReturn); // direct way
+            pCppStack += sizeof(void *);
+        }
+    }
+
+    // stack space
+
+    OSL_ENSHURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
+    // args
+    void ** pCppArgs  = (void **)alloca( 3 * sizeof(void *) * nParams );
+    // indices of values this have to be converted (interface conversion cpp<=>uno)
+    sal_Int32 * pTempIndizes = (sal_Int32 *)(pCppArgs + nParams);
+    // type descriptions for reconversions
+    typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pCppArgs + (2 * nParams));
+    
+    sal_Int32 nTempIndizes   = 0;
+    
+    for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
+    {
+        const typelib_MethodParameter &amp; rParam = pParams[nPos];
+        typelib_TypeDescription * pParamTypeDescr = 0;
+        TYPELIB_DANGER_GET( &amp;pParamTypeDescr, rParam.pTypeRef );
+        
+        if (!rParam.bOut &amp;&amp; cppu_isSimpleType( pParamTypeDescr ))
+        {
+            uno_copyAndConvertData( pCppArgs[nPos] = pCppStack, pUnoArgs[nPos], pParamTypeDescr,
+                                    &amp;pThis->pBridge->aUno2Cpp );
+            
+            switch (pParamTypeDescr->eTypeClass)
+            {
+            case typelib_TypeClass_HYPER:
+            case typelib_TypeClass_UNSIGNED_HYPER:
+            case typelib_TypeClass_DOUBLE:
+                pCppStack += sizeof(sal_Int32); // extra long
+            }
+            // no longer needed
+            TYPELIB_DANGER_RELEASE( pParamTypeDescr );
+        }
+        else // ptr to complex value | ref
+        {
+            if (! rParam.bIn) // is pure out
+            {
+                // cpp out is constructed mem, uno out is not!
+                uno_constructData(
+                    *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
+                    pParamTypeDescr );
+                pTempIndizes[nTempIndizes] = nPos; // default constructed for cpp call
+                // will be released at reconversion
+                ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
+            }
+            // is in/inout
+            else if (cppu_relatesToInterface( pParamTypeDescr ))
+            {
+                uno_copyAndConvertData(
+                    *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
+                    pUnoArgs[nPos], pParamTypeDescr,
+                    &amp;pThis->pBridge->aUno2Cpp );
+                
+                pTempIndizes[nTempIndizes] = nPos; // has to be reconverted
+                // will be released at reconversion
+                ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
+            }
+            else // direct way
+            {
+                *(void **)pCppStack = pCppArgs[nPos] = pUnoArgs[nPos];
+                // no longer needed
+                TYPELIB_DANGER_RELEASE( pParamTypeDescr );
+            }
+        }
+        pCppStack += sizeof(sal_Int32); // standard parameter length
+    }
+
+    // only try-finally/ try-except statements possible...
+    __try
+    {
+        __try
+        {
+            // pCppI is msci this pointer
+            callVirtualMethod(
+                pThis->pCppI, nVtableCall,
+                pCppReturn, pReturnTypeDescr->eTypeClass,
+                (sal_Int32 *)pCppStackStart, (pCppStack - pCppStackStart) / sizeof(sal_Int32) );
+            
+            // NO exception occurred...
+            *ppUnoExc = 0;
+            
+            // reconvert temporary params
+            while (nTempIndizes--)
+            {
+                sal_Int32 nIndex = pTempIndizes[nTempIndizes];
+                typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndizes];
+                
+                if (pParams[nIndex].bIn)
+                {
+                    if (pParams[nIndex].bOut) // inout
+                    {
+                        uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 ); // destroy uno value
+                        uno_copyAndConvertData( pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
+                                                &amp;pThis->pBridge->aCpp2Uno );
+                    }
+                }
+                else // pure out
+                {
+                    uno_copyAndConvertData( pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
+                                            &amp;pThis->pBridge->aCpp2Uno );
+                }
+                // destroy temp cpp param => cpp: every param was constructed
+                uno_destructData( pCppArgs[nIndex], pParamTypeDescr, cpp_release );
+                
+                TYPELIB_DANGER_RELEASE( pParamTypeDescr );
+            }
+            // return value
+            if (pCppReturn &amp;&amp; pUnoReturn != pCppReturn)
+            {
+                uno_copyAndConvertData( pUnoReturn, pCppReturn, pReturnTypeDescr,
+                                        &amp;pThis->pBridge->aCpp2Uno );
+                uno_destructData( pCppReturn, pReturnTypeDescr, cpp_release );
+            }
+        }
+        __except (msci_filterCppException( GetExceptionInformation(),
+                                           *ppUnoExc, &amp;pThis->pBridge->aCpp2Uno ))
+        {
+            // *ppUnoExc is untouched and any was constructed by filter function
+            // __finally block will be called
+            return;
+        }
+    }
+    __finally
+    {
+        // cleanup of params was already done in reconversion loop if no exception occurred;
+        // this is quicker than getting all param descriptions twice!
+        // so cleanup only if an exception occurred:
+        if (*ppUnoExc)
+        {
+            // temporary params
+            while (nTempIndizes--)
+            {
+                sal_Int32 nIndex = pTempIndizes[nTempIndizes];
+                // destroy temp cpp param => cpp: every param was constructed
+                uno_destructData( pCppArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], cpp_release );
+                TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
+            }
+        }
+        // return type
+        if (pReturnTypeDescr)
+            TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
+    }
+}
+</pre>
+
+<p>Finally <code>callVirtualMethod()</code> performs the C++ call, copying the given stack parameters and storing return values passed back in registers.</p>
+
+<pre>
+static void callVirtualMethod(
+   void * pThis, sal_Int32 nVtableIndex,
+   void * pRegisterReturn, typelib_TypeClass eReturnTypeClass,
+   sal_Int32 * pStackLongs, sal_Int32 nStackLongs )
+{
+    // parameter list is mixed list of * and values
+    // reference parameters are pointers
+
+    OSL_ENSHURE( pStackLongs &amp;&amp; pThis, "### null ptr!" );
+    OSL_ENSHURE( (sizeof(void *) == 4) &amp;&amp;
+                 (sizeof(sal_Int32) == 4), "### unexpected size of int!" );
+    
+__asm
+    {
+        mov        eax, nStackLongs
+        test       eax, eax
+        je         Lcall
+        // copy values
+        mov        ecx, eax
+        shl        eax, 2             // sizeof(sal_Int32) == 4
+        add        eax, pStackLongs   // params stack space
+Lcopy:  sub        eax, 4
+        push       dword ptr [eax]
+        dec        ecx
+        jne        Lcopy
+Lcall:
+        // call
+        mov        ecx, pThis
+        push       ecx                // this ptr
+        mov        edx, [ecx]         // pvft
+        mov        eax, nVtableIndex
+        shl        eax, 2             // sizeof(void *) == 4
+        add        edx, eax
+        call       [edx]              // interface method call must be __cdecl!!!
+
+        // register return
+        mov        ecx, eReturnTypeClass
+        cmp        ecx, typelib_TypeClass_VOID
+        je         Lcleanup
+        mov        ebx, pRegisterReturn
+// int32
+        cmp        ecx, typelib_TypeClass_LONG
+        je         Lint32
+        cmp        ecx, typelib_TypeClass_UNSIGNED_LONG
+        je         Lint32
+        cmp        ecx, typelib_TypeClass_ENUM
+        je         Lint32
+// int8
+        cmp        ecx, typelib_TypeClass_BOOLEAN
+        je         Lint8
+        cmp        ecx, typelib_TypeClass_BYTE
+        je         Lint8
+// int16
+        cmp        ecx, typelib_TypeClass_CHAR
+        je         Lint16
+        cmp        ecx, typelib_TypeClass_SHORT
+        je         Lint16
+        cmp        ecx, typelib_TypeClass_UNSIGNED_SHORT
+        je         Lint16
+// float
+        cmp        ecx, typelib_TypeClass_FLOAT
+        je         Lfloat
+// double
+        cmp        ecx, typelib_TypeClass_DOUBLE
+        je         Ldouble
+// int64
+        cmp        ecx, typelib_TypeClass_HYPER
+        je         Lint64
+        cmp        ecx, typelib_TypeClass_UNSIGNED_HYPER
+        je         Lint64
+        jmp        Lcleanup // no simple type
+Lint8:
+        mov        byte ptr [ebx], al
+        jmp        Lcleanup
+Lint16:
+        mov        word ptr [ebx], ax
+        jmp        Lcleanup
+Lfloat:
+        fstp       dword ptr [ebx]
+        jmp        Lcleanup
+Ldouble:
+        fstp       qword ptr [ebx]
+        jmp        Lcleanup
+Lint64:
+        mov        dword ptr [ebx], eax
+        mov        dword ptr [ebx+4], edx
+        jmp        Lcleanup
+Lint32:
+        mov        dword ptr [ebx], eax
+        jmp        Lcleanup
+Lcleanup:
+        // cleanup stack (obsolete though because of function)
+        mov        eax, nStackLongs
+        shl        eax, 2            // sizeof(sal_Int32) == 4
+        add        eax, 4            // this ptr
+        add        esp, eax
+    }
+}
+</pre>
+
+<table summary="Footer" width=100%>
+
+<TR><TD BGCOLOR="#666699"><P><FONT COLOR="#ffffff">
+Author: <A HREF="mailto:Daniel.Boelzle@Germany.sun.com">
+<FONT COLOR="#ffffff">Daniel B&ouml;lzle</font></A> ($Date: 2004/12/08 11:16:23 $)<br/>
+<I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I>
+</FONT>
+</TD></tr>
+</TABLE>
+</BODY>
+</HTML>

@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>UNO Component Model</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#666699">
+        <h1 align="center" style="margin-top: 0in; text-decoration: none"><!--
+            --><a href="http://www.openoffice.org"><img
+            src="../../images/open_office_org_logo.gif" alt="OpenOffice.org"
+            align="right" border="0"></a><font color="White">UNO Component
+            Model</font></h1>
+    </td></tr>
+</table>
+<hr noshade size="3"/>
+
+<h1>Conceptual Model</h1>
+
+<p>We use the term &ldquo;component&rdquo; here in a very limited, well defined
+sense.  Unfortunately, within the broader field, and even within UNO itself, the
+term is also used with other meanings, typically to mean some form of collection
+of what is here called components.</p>
+
+<p>A <dfn>UNO component</dfn> is the smallest unit in the UNO component model.
+A UNO component is a software artifact that has the following properties:</p>
+<ul>
+    <li>A component has a <dfn>component implementation name</dfn>, by which it
+    is known to its deployment environment.  Component implementation names are
+    always relative to a given deployment environment.</li>
+
+    <li>To describe the interface that clients of a component can use, the
+    component links to a <dfn>component client interface</dfn> via a
+    <dfn>component client interface name</dfn>.</li>
+
+    <li>One of the more obvious requirements a component has on its deployment
+    environment is that the component itself will be a client of other
+    components, which it uses internally in its implementation.  To describe
+    this requirement, a component has <dfn>component dependencies</dfn>, a map
+    from <dfn>component instantiation names</dfn> to <dfn>component client
+    interface names</dfn>.<br/>
+    The component dependencies only cover <em>static</em> dependencies.  A
+    component may also have <em>dynamic</em> dependencies; for example, at
+    runtime an instance of that component may take an input&nbsp;<var>N</var>,
+    compute a service instantiation name&nbsp;<var>N</var>&prime; from it, and
+    expect to obtain a component instance with a certain component client
+    interface when passing <var>N</var>&prime; to the component manager.</li>
+</ul>
+
+<p>A <dfn>component client interface</dfn> is a set of UNO interface types
+(referenced by their&mdash;globally unique&mdash;names), together with a marker
+for each interface type, denoting it as either <dfn>mandatory</dfn> or
+<dfn>optional</dfn>, and semantic constraints on the functionality of those
+interface types and the runtime presence of any optional interface types.  There
+is one constraint on the set of interface types: no optional interface type from
+the set may be an (indirect) base type of any mandatory interface type from the
+set.</p>
+
+<p>Each component client interfaces is associated with a globally unique
+<dfn>component client interface name</dfn>.  This association must be globally
+unique; otherwise, clients of a component (who describe their expectations of
+the component by means of a component client interface name) could not be sure
+that, at runtime, they receive a component instance that meets their
+expectations.  (This requirement of globally unique names for component client
+interfaces is the same as for named UNO types.)</p>
+
+<p>At runtime, instances of UNO components can be obtained from a <dfn>component
+manager</dfn>.  The component instances are UNO objects that behave according to
+their respective component client interfaces.  A component manager works based
+on <dfn>component instantiation names</dfn>.  Each code that uses a component
+manager must document what component instances (adhering to which component
+client interfaces) it expects to obtain from the component manager, with which
+component instantiation names.  Throughout the lifetime of a component instance,
+that instance has access to a certain component manager; what other component
+instances the instance itself expects to obtain from that component manager is
+documented by the component's component dependencies (but note that this only
+covers the component's static dependencies).</p>
+
+<h1>How UNO Implements the Conceptual Model</h1>
+
+<p>Components are often also called <dfn>services</dfn> in UNO.  The conceptual
+component client interfaces are implemented as UNOIDL service descriptions,
+whose names serve as the conceptual component client interface names.  The
+conceptual properties of components are represented in UNO as follows:</p>
+<ul>
+    <li>The conceptual component implementation name breaks up into two parts.
+    First, each component has an implementation name, which must be unique
+    within the deployment environment (see
+    <code>com.sun.star.lang.XServiceInfo.getImplemenationName</code>).  Second,
+    the <code>services.rdb</code> registry associates each implementation name
+    with an activator (e.g., <code>com.sun.star.loader.SharedLibrary</code>) and
+    an activator-dependent location (e.g., a platform-dependent shared library
+    pathname, in case of the <code>com.sun.star.loader.SharedLibrary</code>
+    loader).</li>
+
+    <li>The association of a component with a component client interface is
+    again done in the <code>services.rdb</code> registry, by associating each
+    implementation name with one or more UNOIDL service description names.</li>
+
+    <li>The conceptual component dependencies are not actually recorded for a
+    UNO component.  Rather, they can implicitly be derived from the component's
+    code.  However, with the XML module description approach, they would be
+    recorded as (optional) <code>service-dependency</code> elements.  Each
+    <code>service-dependency</code> element contains the name of a UNOIDL
+    service description, serving as both the component instantiation name and
+    the component client interface name.</li>
+</ul>
+
+<p>A UNOIDL service description appears to be richer than a corresponding
+conceptual component client interface (which, after all, is little more than a
+set of UNO interface types with associated semantic constraints).  But all of
+this additional richness can be reduced to syntactic sugar:</p>
+<ul>
+    <li>A UNOIDL service description implicitly adds
+    <code>com.sun.star.uno.XWeak</code>,
+    <code>com.sun.star.lang.XTypeProvider</code>, and
+    <code>com.sun.star.lang.XServiceInfo</code> to the set of interface types,
+    with respective constraints on their functionality (e.g.,
+    <code>com.sun.star.lang.XTypeProvider.getTypes</code> must return all the
+    mandatory interface types covered by the service description).</li>
+
+    <li>A UNOIDL service description can contain property declarations.  These
+    map to functional constraints on an explicitly or implicitly exported
+    interface type like <code>com.sun.star.beans.XPropertySet</code>.  For
+    example, if a UNOIDL service description contains the property declaration
+    <code>[property] long P</code>, and exports the mandatory interface type
+    <code>com.sun.star.beans.XPropertySet</code>, then there is the functional
+    constraint that a call to <code>XPropertySet.getPropertyValue("P")</code>
+    returns an <code>ANY</code> value of type <code>LONG</code>.</li>
+
+    <li>A UNOIDL service description can contain other service descriptions,
+    marked as either mandatory or optional.  This can be considered a textual
+    inclusion mechanism (the contents of the contained service description is
+    copied into the containing service description, marking all copied entities
+    as optional in case the contained service description was marked as
+    optional), together with possible functional constraints on the resulting
+    component client interface (e.g., if an optional included service
+    description exported two mandatory interface types, then
+    <code>com.sun.star.lang.XTypeProvider.getTypes</code> at runtime must return
+    either both of them or neither of them).</li>
+</ul>
+
+<p>In UNO, the conceptual component managers are instances of
+<code>com.sun.star.lang.ServiceManager</code>.  UNO does not distinguish between
+the conceptional component client interface names and component instantiation
+names&mdash;the names of UNOIDL service descriptions are used for both
+cases.</p>
+
+<p>When a component instance is created at runtime, it is passed a
+<code>com.sun.star.uno.XComponentContext</code>, through which it has access to
+a <code>com.sun.star.lang.ServiceManager</code>.  The guarantee that this
+<code>ServiceManager</code> fulfils the component's component dependencies is
+indirect and weak: since component instantiation names are (globally unique)
+names of UNOIDL service descriptions, which in turn are the same as component
+client interface names, it is guaranteed that if a <code>ServiceManager</code>
+returns any component instance at all for a given component instantiation name
+from the component dependencies, then that instance will adhere to the
+corresponding component client interface from the component dependencies.
+However, there is no guarantee that the <code>ServiceManager</code> does not
+return null instead.  Also, there is no way to guarantee that a component's
+dynamic dependencies are satisfied.</p>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#666699">
+        <p><font color="White">Author:
+        <a href="mailto:stephan.bergmann@sun.com"><font color="White">Stephan
+        Bergmann</font></a> (last modification $Date: 2004/10/28 14:58:24 $).
+        Copyright 2004 <a href="http://www.openoffice.org"><font
+        color="White">OpenOffice.org</font></a> Foundation.  All rights
+        reserved.</font></p>
+    </td></tr>
+</table>
+
+</body>
+</html>

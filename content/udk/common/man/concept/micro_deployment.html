@@ -1,0 +1,344 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1"/>
+	<TITLE>UNO Micro Deployment</TITLE>
+<style type="text/css">
+	<!--
+h1 { text-align:center; margin-top: 0.2cm; text-decoration: none; color: #ffffff; font-size: 6; margin-top: 0.2cm}
+h2 { margin-top: 0.2cm; margin-bottom=0.1cm; color: #ffffff;
+     background-color: #666699 }
+li {margin-bottom: 0.2cm;}
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm; margin-right: 0.6cm;}
+dt {margin-bottom: 0.2cm;}
+-->
+</style>
+</head>
+<body>
+
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 BGCOLOR="#666699"
+     summary="Header">
+<tr>
+	<td>
+		<h1> Bootstrap Arguments and Micro Deployment </h1>
+	</td><td>
+              <A HREF="http://www.openoffice.org/">
+                <IMG SRC="../../../images/open_office_org_logo.gif" 
+				     NAME="Grafik1" 
+					 ALT="OpenOffice.org" 
+					 ALIGN=right 
+					 HEIGHT=54 BORDER=0/>
+              </A>
+		</TD>
+</tr>
+</table>
+
+<H2>Contents</H2>
+
+  <DL>
+	<DD><A HREF="#Abstract">Abstract</A> 
+		<br/>
+		<A HREF="#Micro_Deployment">Micro Deployment</A>
+		<br/>
+		<A HREF="#Bootstrap_Arguments">Bootstrap Arguments</A>
+		<br/>
+		<A HREF="#Application_Arguments">Application Arguments</A>
+	</DD>
+  </DL>
+
+  <H2 id="Abstract"> Abstract </H2>
+  <P>While introducing a simple concept for <a href="uno_default_bootstrapping.html">UNO bootstrapping</a>
+  I noticed that there is a need for a
+  general bootstrap-argument-passing-mechanism. At the moment, we
+  have different locations where some kind of context knowledge for
+  bootstrapping is needed:
+  </P>
+		
+<DL>
+	<DT>configuration:</DT>
+    <DD>needs a bootstraprc (bootstrap.ini) to find
+	the appropriate user configuration (e.g., local,
+	portal, remote, etc.)</DD>
+	<DD>currently a special file (bootstraprc) is used</DD>
+	<DT>UNO:</DT>
+    <DD>needs to find the appropriate rdb files to get the needed 
+	types and services (see uno default bootstrapping for a
+	more detailed discussion),
+	currently this has to be programmed by hand</DD>
+	<DT>Java:</DT>
+    <DD>needs to know the Java installation to use, this may include
+	a shared library path and needed jar files </DD>
+  </DL>
+		
+  <P>Different, but similar concepts are used (e.g., a file with an
+  entry which points to a special directory). First, I would like to
+  unify these concepts and to use one mechanism for bootstrapping. Second, 
+  I also would like to be able to configure the bootstrapping via command
+  line arguments or via environment variables (which, for instance,
+  may be set by setsolar). And third, I want not only micro deploy applications
+  but also libraries/subsystems.
+  </P>
+
+
+  <H2><A NAME="Micro_Deployment">Micro Deployment</A></H2>
+  <P>All the different mechanisms used to configure any subsystem have something
+  in common, which I would like to call MICRO DEPLOYMENT. Micro Deployment allows
+  an arbitrary component (application/library) to be configured at deployment time,
+  so that some deployment dependent parameters do not have to be compiled in.
+  </P>
+  <P>For example, a UNO service becomes typically deployed as a shared library. Because it needs
+  some minimal configuration data to work properly, every application which uses the service
+  has to pass this minimal configuration to the service. Using Micro Deployment, this
+  burden vanishes. The installer can create a minimal configuration, which the service
+  will use during runtime. This Micro Deployment is not only usable by shared libraries, but also by 
+  executables. 
+  </P>
+  <P>
+  The Micro Deployment should be as flexible and as simple as possible. It is not designed
+  to do some complex stuff during startup. Its API decomposes into three parts:
+
+  <UL>
+  <LI>Accessing Deployment/Bootstrap arguments for executables</LI>
+  <LI>Accessing Deployment/Bootstrap arguments for shared objects/shared libraries/subsystems</LI>
+  <LI>Accessing simple command line arguments</LI>
+  </UL>
+
+  <H2><A NAME="Bootstrap_Arguments">Bootstrap Arguments</A></H2>
+  <P>A mechanism to allow differentiated access to bootstrap
+  arguments at the runtime library (RTL) level is needed.</P>
+
+  <H3>Passing Bootstrap Arguments</H3>
+  Bootstrap arguments may be passed to an executable or library, in
+  different ways:
+
+  <UL>
+	<li> parameters may be passed by command line arguments </li>
+	<li> parameters may be passed by an optional .ini/rc file </li>
+	<li> parameters may be passed by environment variables </li>
+	<li> parameters may be passed by inheritance </li>
+	<li> parameters may be passed as default values for 'rtl_bootstrap_get' (see below)</li>
+  </UL>			
+
+
+  <H4>Passing Bootstrap Arguments via Command Line </H4>
+  <P>Bootstrap arguments passed via command line must have a special shape to be 
+  distinguishable from other command line arguments:
+  </P>
+
+<pre>
+    myapp.bin -env:UNO_SERVICES=service.rdb
+</pre>
+
+  <P>Here, the bootstrap parameter "UNO_SERVICES", is passed as a command line
+  parameter.</P>
+
+
+  <H4>Passing Bootstrap Arguments via .ini/rc Files </H4>
+  Bootstrap arguments may be passed by an optional .ini/rc file. 
+  Using the static methods of the Bootstrap class, an .ini/rc file
+  is searched beneath the executable. The .ini/rc file must have
+  the same name as the executable, extended with an '.ini' for 
+  windows or an 'rc' for Unix. Any executable extension
+  like '.bin' or '.exe' is stripped from the name:
+
+<pre>
+    echo 'UNO_SERVICES=service.rdb' &gt; myapprc
+	./myapp.bin
+</pre>
+  <P>
+  The name of the .ini/rc file to use can be overwritten with the
+  'setIniFileName' function.</P>
+
+  <p>It is also possible to use a custom .ini/rc file name. Particularly, when
+  using micro deployment for shared libraries, this makes sense.</P>
+
+<pre>
+	echo 'UNO_SERVICES=service.rdb' &gt; mylibrc
+	./an-app-using-mylib.so.bin
+</pre>
+
+
+  <H4>Passing Bootstrap via Inheritance </H4>
+  Bootstrap arguments may be inherited from an executable rc,
+  e.g., when using custom rc file for libraries, this custom
+  rc inherits the bootstrap variables from the executable rc
+  file.
+
+  <H4>Passing Bootstrap Arguments via Environment Variables </H4>
+  Bootstrap arguments may also be passed via environment
+  variables:
+
+<pre>
+    setenv UNO_SERVICES service.rdb
+    ./myapp.bin
+</pre>
+
+  <H3>Accessing Bootstrap Arguments via the RTL (Runtime Library)</H3>
+  To access bootstrap arguments a c and a c++ API exists. I just give
+  some brief code examples of how to use the c++ API. Please have a look
+  at the header files, bootstrap.h and bootstrap.hxx, in sal/inc/rtl for
+  the whole API.
+
+  <P>Accessing an executable bootstrap argument:</P>
+
+  <pre>
+  <font color="#0000FF">int</font> main() {
+    <font color="#0000FF">int</font> result = 0;
+    <font color="#0000FF">OUString</font> argValue;
+
+    <font color="#0000FF">if</font>(Bootstrap::get(
+	 <font color="#0000FF">OUString</font>(RTL_CONSTASCII_USTRINGPARAM("aNeededParameter")),
+         argValue)) {
+      fprintf(stderr, "found the parameter, doing something...\n");
+      do_something();
+    }
+    <font color="#0000FF">else</font> {
+      fprintf(stderr, "did not find the parameter, dying...\n");
+      result = -1;
+    }
+
+    <font color="#0000FF">return</font> result;
+  }
+</pre>
+
+<P>Accessing a library bootstrap argument:</P>
+
+<pre>
+  <font color="#0000FF">int</font> aLibraryFunction() {
+    <font color="#0000FF">OUString</font> libraryFileUrl;
+    <font color="#0000FF">Module</font>::getModuleUrl((void *)aLibraryFunction, libraryFileUrl);
+
+    // cut the library extension
+    iniName = libraryFileUrl.copy(0, 
+      libraryFileUrl.lastIndexOf((sal_Unicode)'.'));
+    // add the rc file extension
+    iniName += <font color="#0000FF">OUString</font>(RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE(""))); 
+
+    <font color="#0000FF">Bootstrap</font> bootstrap(iniName);
+
+    <font color="#0000FF">int</font> result = 0;
+    <font color="#0000FF">OUString</font> argValue;
+    <font color="#0000FF">
+    if</font>(bootstrap.getFrom(<font color="#0000FF">
+      OUString</font>(RTL_CONSTASCII_USTRINGPARAM("aNeededParameter")),
+      argValue)) 
+    {
+      fprintf(stderr, "found the parameter, doing something...\n");
+      do_something();
+    }
+    <font color="#0000FF">else</font> {
+      fprintf(stderr, "did not find the parameter, dying...\n");
+      result = -1;
+    }
+
+    <font color="#0000FF">return</font> result;
+  }
+</pre>
+
+
+  <H3><a name="misc">Miscellaneous</a></H3>
+  <H4>Conventions for Names of Bootstrap Arguments</H4>
+  Names may only include  allowable characters
+  for environment variables. This excludes '.', ' ', ';', ':' and
+  all non-ASCII characters. Names are case insensitive.
+			
+  <H4>Range of Values for Bootstrap Arguments</H4>
+  <p>
+  Values may be arbitrary Unicode strings which have to be encoded
+  using UTF8. A simple argument expansion is supported:
+  </p>
+
+  <ul>
+	<li>Allow expansion of variables on the right side of
+				assignments:
+				<br/>
+				MYVAR=hallo
+				<br/>
+				MYMYVAR=${MYVAR}/test
+				<br/>
+				The value of MYMYVAR is 'hallo/test'
+				<br/>
+				</li>
+				<li>
+				Allow indirect expansion of variables through 'osl' profiles:
+				<br/>
+				KEYVALUE=${sversionrc:versions:StarOffice6.0}
+				<br/>
+				The first part of the indirection is the file to use for
+				expansion, the second part is 
+				the section, and the third part is the key. After expansion, the
+				variable KEYVALUE has 
+				the value of the matching key of the sversionrc.
+	</li>
+  </ul>
+	
+<p>The special characters are:</p>
+  <ul>
+    <li> $ - introduces a macro name, which should become expanded </li>
+	<li> \ - quotes the next character </li>
+	<li> \uXXXX - allows the definition of an 16 bit character (Unicode) </li>
+	<li> {} - group the characters of macro name or an indirection to an ini-file </li>
+	<li> - or ; or / - delimiters, which differentiate macros, which are not grouped with {} </li>
+  </ul>
+
+
+  <H4>Special Variables</H4>
+
+ <p>There are some integral variables available:</P>
+
+ <ul>
+	  <li>SYSUSERCONFIG is mapped to osl_getConfigDir</li>
+	  <li>SYSUSERHOME is mapped to osl_getHomeDir</li>
+	  <li>SYSBINDIR is mapped to the executable's directory path</li>
+	  <li>ORIGIN is mapped to the directory path of the ini/rc file itself</li>
+ </ul>
+
+  <p>A special bootstrap argument is supported. This argument
+  defines the name of the '.ini/rc' to use for finding bootstrap
+  arguments for executables. The name of the argument is:</p>
+
+<pre>
+	INIFILENAME
+</pre>
+
+<P>This argument can only be used on the command line:</P>
+
+<pre>
+	./myapp -env:INIFILENAME=globalrc
+</pre>
+
+  <H2><A NAME="Application_Arguments">Application Arguments</A></H2>
+  <p> Application arguments are like bootstrap arguments, except, that
+  they are not specifiable via environment variables or ini-files. Application arguments
+  have to be given on the command line and are more like, the formerly called, command
+  line arguments.</p>
+
+  <p> The following two functions give access to application arguments: </p>
+  <DL>
+    <dd> oslProcessError SAL_CALL rtl_getAppCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg) </dd>
+    <dd> sal_uInt32 SAL_CALL rtl_getAppCommandArgCount() </dd>
+  </DL>
+		
+  <p>
+  The function "rtl_getAppCommandArg" also supports macro expansion as defined  
+  for bootstrap arguments. </p>
+
+  <TABLE width=100% summary="Footer">
+    <TR>
+    <TD BGCOLOR="#666699">
+	  <P>
+	    <FONT COLOR="#ffffff">Author: 
+		  <A HREF="mailto:kay.ramme@sun.com"><FONT COLOR="#ffffff">KayRamme</FONT></A>
+          ($Date: 2004/11/27 05:58:37 $)
+		  <br/>
+		  <I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</I>
+		</FONT>
+	  </P>
+	</TD>
+	</TR>
+  </TABLE>
+
+</body>
+</HTML>
+

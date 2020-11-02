@@ -1,0 +1,352 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252"/>
+	<TITLE>Stack Traces for UNO Exceptions in C++ UNO Environments</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.1 BETA1 (Win32)"/>
+	<META NAME="CREATED" CONTENT="20021120;9190757"/>
+	<META NAME="CHANGED" CONTENT="20021120;9394389"/>
+<style type="text/css">
+<!--
+h1 { text-align:center; margin-top: 0.2cm; text-decoration: none; color: #ffffff; font-size: 6; margin-top: 0.2cm}
+h2 { margin-top: 0.2cm; margin-bottom=0.1cm; color: #ffffff; background-color: #666699 }
+li {margin-bottom: 0.2cm;}
+dl {margin-bottom: 0.2cm;}
+dd {margin-bottom: 0.2cm;}
+dt {margin-bottom: 0.2cm;}
+-->
+</style>
+</head>
+<body>
+<table width=100% border=0 cellpadding=4 cellspacing=0 bgcolor=#666699 summary=header>
+	<TR>
+		<td>
+			<h1> Stack Traces for UNO Exceptions in C++ UNO Environments </H1>
+		</td><td>
+			<a href="http://www.openoffice.org/"><img src="../../../images/open_office_org_logo.gif" name="Graphic1" alt="OpenOffice.org" align=right width=168 height=71 border=0/></a>
+		</TD>
+	</TR>
+</TABLE>
+
+<P>This document describes a solution for automatically provided
+stack traces for arbitrary UNO exceptions in C++ UNO environments.
+These stack traces can be used to determine the code that actually
+threw the exception.</P>
+
+<H2>Motivation</H2>
+
+<P>When debugging Offices exiting due to <I>unexpected</I> exceptions
+it is often difficult to find the particular source line that has
+thrown the exception. A solution for this problem could be to provide
+a way to obtain a stack trace for each (UNO) exception thrown.
+Ideally, the stack trace points exactly to the source line that has
+thrown the exception. 
+</P>
+
+<P>This feature is certainly a good debugging tool, not only for the
+scenario described above.</P>
+
+<H2>Prerequisites</H2>
+
+<P>According to the Platform Technology Team it is possible to
+provide a helper function that generates a stack trace for the
+current thread for all of our supported platforms. The actual content
+of the generated stack trace depends on the compiler and linker
+options used to produce the binaries. It may contain very precise
+information like function names including line numbers or just
+function addresses.</P>
+
+<P>Additionally, performance might become a problem. Generating a
+stack trace can take up to several seconds, depending on the concrete
+platform and again, compiler and linker settings used to build the
+binaries. Further investigation and measurements must be done by the 
+Platform Technology Team.</P>
+
+<H2>Requirements</H2>
+
+<OL>
+	<LI>It shall be possible to automatically create stack traces for
+	every UNO exception created and thrown.
+	<LI>Solution should be compatible with UNO3.
+</OL>
+
+<H2>Possible Solutions</H2>
+
+<P>Cppumaker generates the C++ class com::sun::star::uno::Exception
+for exception com.sun.star.uno.Exception declared in IDL. Generally,
+it is a good approach to add a new member to class
+css::uno::Exception for holding the stack traces. This is fine, but
+we have the requirement to stay compatible with UNO3. Therefore we
+are not allowed to add another member to css::uno::Exception.</P>
+
+<P>Luckily, css::uno::Exception already has a member <I>rtl::OUString
+Message</I>, which is supposed to
+transport user supplied messages. The idea is to reuse this member
+for stack traces. This solution is compatible with UNO3. On the other
+hand we have to ensure that user messages will not get lost.
+Therefore the stack traces will simply be appended to the user
+message.</P>
+
+<P>Note: 'Message' is a public member of  class 
+com::sun::star::uno::Exception. Thus its content can be overridden by
+everyone at any time.</P>
+
+<P>To summarize, introducing a new member for holding stack traces is
+a clean solution and should be done for a successor of of UNO3 which
+can become incompatible. For a quick solution that is compatible with
+UNO3 we can reuse the existing 'Message' member.</P>
+
+<H2>Details</H2>
+
+<H3 CLASS="western">IDL Type Changes</H3>
+<P>For UNO4, a new member <I>StackTrace</I>
+must be added to com.sun.star.uno.Exception IDL specification.
+Defining the member in IDL rather as an implementation detail
+of the UNO C++ language binding has the benefit that the stack traces
+can be inspected even over (remote) UNO bridges.</P>
+
+<P>For the UNO3 solution, there are no IDL type changes necessary.</P>
+
+<H3 CLASS="western">When to generate stack traces?</H3>
+<P>cppumaker must generate special code for class 
+com::sun::star::uno::Exception. This includes generation of  the code
+that automatically generates and fills in the stack traces.</P>
+
+<P>Due to the possible performance problems with stack trace
+generation there should be a flexible mechanism for configuring this
+feature. There can be different strategies:</P>
+
+<table width=100% border=1 cellpadding=4 summary="Control mechansims and their preconditions">
+	<COL WIDTH=128*/>
+	<COL WIDTH=128*/>
+	<THEAD>
+		<tr>
+			<th> Control Mechanism </th>
+			<th> Precondition </th>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<tr>
+			<td> Stack trace generation always active </td>
+			<td> - possible to generate meaningful
+				traces for both debug and product builds<br/>
+				 - no performance problems
+			</TD>
+		</TR>
+		<tr>
+			<td> #ifdef DEBUG around stack trace generating code </td>
+			<td> - no meaningful stack traces for product build <br/>
+				 - no performance problems
+			</td>
+		</TR>
+		<tr>
+			<td> #ifdef &lt;PLATFORM&gt; around stack trace generating code </td>
+			<td> - performance problems on some platforms only </td>
+		</TR>
+		<tr>
+			<td> Control stack trace generation via
+				environment variable &ndash; default (var not present): ON
+			</TD>
+			<td> - no performance problems </td>
+		</TR>
+		<tr>
+			<td> Control stack trace generation via
+				environment variable &ndash; default (var not present): default:
+				OFF 
+			</TD>
+			<td> - performance problems </td>
+		</TR>
+	</TBODY>
+</TABLE>
+
+<P>The most flexible way is certainly to
+provide an environment variable. The default behavior depends on the
+actually performance problems. Further investigations are necessary
+for defining this.</P>
+
+<H3 CLASS="western">Where to generate stack traces?</H3>
+
+<P>Code for generating a stack trace must
+be added to <B>every constructor</B> of class
+com::sun::star::uno::Exception, including the copy constructor.</P>
+
+<P>The original idea that it is
+sufficient to add stack generating code to the copy constructor only
+turned out to be false. The assumption made was that the copy
+constructor will always be called when throwing an exception before
+leaving the current scope. But the compiler is allowed to optimize
+here and to omit the copy construction. A test on Windows using
+MSVC603 (compiler version  12.00.8168)  confirmed this. The following
+code does <B>not</B> call the copy constructor of class MyException.</P>
+
+<PRE>
+class MyException
+{
+    ...
+};
+
+{
+    ...
+
+    // MyException copy ctor not called
+    try
+    {
+        throw MyException();
+    }
+    catch ( MyException const &amp; )
+    {
+    }
+}
+</PRE>
+
+<P>In an ideal solution one would expect
+exactly one stack trace per thrown exception. The stack trace should
+point to the throwing function (or even better to the line number of
+the throwing statement). This goal is hardly to achieve without
+multiplying efforts. Reasons for this:</P>
+
+<OL>
+	<li><p>At a given time, there can exist
+	multiple valid stack traces for one exception object. That means,
+	the exception is thrown more than once. Examples:</P>
+
+	<OL>
+		<LI>One exception object may be
+		thrown by different threads at the same time. Each throw has its
+		own stack trace.
+
+		<LI>One exception may be 'active'
+		multiple times, even in one thread. Note that even in this case the
+		MSVC603 compiler does not call the MyException copy constructor.
+		Therefore there will be no stack trace generated for the rethrow in
+		the outer catch handler of <I>main.</I>
+	</OL>
+</OL>
+
+<PRE>
+class MyException
+{
+    ...
+};
+
+class MySpecializedException1 : public MyException
+{
+    ...
+};
+
+class MySpecializedException2 : public MyException
+{
+    ...
+};
+
+{    
+    ...
+
+    try
+    {
+        throw MySpecializedException1();
+    }
+    catch ( MyException const &amp; )
+    {	
+        try
+        {
+	  // rethrow to handle more detailed
+            throw;
+        }
+        catch ( MySpecializedException1 const &amp; )
+        {	
+        }
+        catch ( MySpecializedException2 const &amp; )
+        {
+        }
+    }
+}
+</PRE>
+
+<OL START=2>
+	<li><p>Due to the fact that between
+	construction (where the stack trace is generated) and throwing of an
+	object can be arbitrary code an exception object may contain more or
+	less unusable stack traces at the time it is caught. 
+	</p>
+	<OL>
+		<LI>If the object is created and
+		thrown in the same function the stack is usable. The only thing
+		that might be wrong is the source line number (if available at
+		all).
+
+		<LI>If the object was passed to
+		other functions (via reference) after construction and thrown be
+		one of these functions, the stack trace contained in the exception
+		object does not even point to the throwing function. Happily, in
+		this scenario the compiler will (must?) call the copy constructor
+		of the object to throw before throwing it and a usable stack trace
+		will be appended.
+	</OL>
+</OL>
+
+<P>Note: Catching an exception by value instead of catching it by
+reference will lead in an additional call to the copy constructor of
+the thrown object and therefore add another useless stack trace.
+Anyway, catching exceptions via value is generally bad practice,
+regardless of this proposal.</P>
+
+<P>Because of the fact 
+</P>
+<UL>
+	<LI>that one exception object can have multiple valid stack
+	traces at a time and
+
+	<LI>that the copy constructor may be called due to catching by
+	value
+</UL>
+
+<P>it is important not to omit any existing stack traces when adding
+a new trace to the exception.</P>
+
+<H3 CLASS="western">Content of a Stack Trace Entry</H3>
+
+<P>As there might be more than one stack trace for an exception there
+should be added a header for each stack trace appended to the
+exception. This header should contain a time stamp and a thread id.</P>
+
+<H2>Summary</H2>
+
+<P>The proposal provides a solution for supplying UNO exceptions with
+stack traces automatically. The solution is compatible with UNO3.
+There is a slightly cleaner solution that is incompatible but should
+be chosen for UNO4. It should be easy to migrate from the UNO3 to the
+UNO4 solution.</P>
+
+<P>Although there are even cases where a stack trace is not created
+at all when an exception is thrown, the proposed solution covers
+mainly all use cases that occur in practice. All the failing or
+problematic cases occur very seldom in real life. The most common way
+is to construct and throw an exception in the same line of code, for
+which creating a useful stack trace works fine.</P>
+
+<H2>Next Steps</H2>
+
+<UL>
+	<LI>Platform Technology Team to provide function for generating stack traces
+
+	<LI>Performance measurements for the stack trace generator
+	functions in order to define whether generation can be turned on be
+	default.
+
+	<LI>Modify cppumaker to support creation of special code for
+	com.sun.star.uno.Exception
+</UL>
+
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 bgcolor=#666699 summary=footer>
+	<TR>
+		<td>
+			<FONT COLOR="#ffffff">Author: <A HREF="mailto:kai.sommerfeld@sun.com">Kai
+			Sommerfeld</A> (Last modification $Date: 2004/12/08 11:45:30 $).
+			Copyright 2002 <A HREF="http://www.openoffice.org/"><FONT COLOR="#ffffff">OpenOffice.org</FONT></A>
+			Foundation. All Rights Reserved.</FONT>
+		</TD>
+	</TR>
+</TABLE>
+</BODY>
+</HTML>

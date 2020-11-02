@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>OOo Automation demo in Writer</title>
+<style type="text/css">
+<!--
+a:active {color:blue;text-decoration:underline;}   /* selected link */
+a:visited {color:#8b008b;text-decoration:underline;}  /* visited link */
+a:link {color:blue;text-decoration:underline;}     /* unvisited link */
+a:hover {color:blue;background-color:#ffe4c4;text-decoration:underline;}   /* mouse over link */
+body { font-family:Helvetica,sans-serif;font-size:10pt;}
+p {font-family:Helvetica,sans-serif;font-size:10pt;}
+h1 { font-size:180%;color:black;}
+h2 { font-size:150%;color:black;}
+h3 { font-size:120%;color:black;font-weight:bold;}
+.code {white-space:nowrap;color:black;font-family:monospace;font-size:9pt;}
+.code_key {white-space:nowrap;color:blue;font-family:monospace;font-size:9pt;}
+.code_comment {white-space:nowrap;color:green;font-family:monospace;font-size:9pt;}
+-->
+</style>
+
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+<p class="code">
+<span class="code_comment">'The service manager is always the starting point</span><br>
+<span class="code_comment">'If there is no office running then an office is started up</span><br>
+<span class="code_key">Set</span> objServiceManager= WScript.CreateObject("com.sun.star.ServiceManager")<br>
+<br>
+<span class="code_comment">'Create the CoreReflection service that is later used to create structs</span><br>
+<span class="code_key">Set</span> objCoreReflection= objServiceManager.createInstance("com.sun.star.reflection.CoreReflection")<br>
+<br>
+<span class="code_comment">'Create the Desktop</span><br>
+<span class="code_key">Set</span> objDesktop= objServiceManager.createInstance("com.sun.star.frame.Desktop")<br>
+<br>
+<span class="code_comment">'Open a new empty writer document</span><br>
+<Span Class="Code_Key">Dim</Span> args()<br>
+<span class="code_key">Set</span> objDocument= objDesktop.loadComponentFromURL("private:factory/swriter", "_blank", 0, args)<br>
+<br>
+<span class="code_comment">'Create a text object</span><br>
+<span class="code_key">Set</span> objText= objDocument.getText<br>
+<br>
+<span class="code_comment">'Create a cursor object</span><br>
+<span class="code_key">Set</span> objCursor= objText.createTextCursor<br>
+<br>
+<span class="code_comment">'Inserting some Text</span><br>
+objText.insertString objCursor, "The first line in the newly created text document." & vbLf, false<br>
+<br>
+<span class="code_comment">'Inserting a second line</span><br>
+objText.insertString objCursor, "Now we're in the second line", false<br>
+<br>
+<span class="code_comment">'Create instance of a text table with 4 columns and 4 rows</span><br>
+<span class="code_key">Set</span> objTable= objDocument.createInstance( "com.sun.star.text.TextTable")<br>
+objTable.initialize 4, 4<br>
+<br>
+<span class="code_comment">'Insert the table</span><br>
+objText.insertTextContent objCursor, objTable, false<br>
+<br>
+<span class="code_comment">'Get first row</span><br>
+<span class="code_key">Set</span> objRows= objTable.getRows<br>
+<span class="code_key">Set</span> objRow= objRows.getByIndex( 0)<br>
+<br>
+<span class="code_comment">'Set the table background color</span><br>
+objTable.setPropertyValue "BackTransparent", false<br>
+objTable.setPropertyValue "BackColor", 13421823<br>
+<br>
+<span class="code_comment">'Set a different background color for the first row</span><br>
+objRow.setPropertyValue "BackTransparent", false<br>
+objRow.setPropertyValue "BackColor", 6710932<br>
+<br>
+<span class="code_comment">'Fill the first table row</span><br>
+insertIntoCell "A1","FirstColumn", objTable <br>
+insertIntoCell "B1","SecondColumn", objTable<br>
+insertIntoCell "C1","ThirdColumn", objTable<br>
+insertIntoCell "D1","SUM", objTable<br>
+<br>
+objTable.getCellByName("A2").setValue 22.5<br>
+objTable.getCellByName("B2").setValue 5615.3<br>
+objTable.getCellByName("C2").setValue -2315.7<br>
+objTable.getCellByName("D2").setFormula"sum <A2:C2>"<br>
+<br>
+objTable.getCellByName("A3").setValue 21.5<br>
+objTable.getCellByName("B3").setValue 615.3<br>
+objTable.getCellByName("C3").setValue -315.7<br>
+objTable.getCellByName("D3").setFormula "sum <A3:C3>"<br>
+<br>
+objTable.getCellByName("A4").setValue 121.5<br>
+objTable.getCellByName("B4").setValue -615.3<br>
+objTable.getCellByName("C4").setValue 415.7<br>
+objTable.getCellByName("D4").setFormula "sum <A4:C4>"<br>
+<br>
+<span class="code_comment">'Change the CharColor and add a Shadow</span><br>
+objCursor.setPropertyValue "CharColor", 255<br>
+objCursor.setPropertyValue "CharShadowed", true<br>
+<br>
+<span class="code_comment">'Create a paragraph break</span><br>
+<span class="code_comment">'The second argument is a com::sun::star::text::ControlCharacter::PARAGRAPH_BREAK constant</span><br>
+objText.insertControlCharacter objCursor, 0 , false<br>
+<br>
+<span class="code_comment">'Inserting colored Text.</span><br>
+objText.insertString objCursor, " This is a colored Text - blue with shadow" & vbLf, false<br>
+<br>
+<span class="code_comment">'Create a paragraph break ( ControlCharacter::PARAGRAPH_BREAK).</span><br>
+objText.insertControlCharacter objCursor, 0, false <br>
+<br>
+<span class="code_comment">'Create a TextFrame.</span><br>
+<span class="code_key">Set</span> objTextFrame= objDocument.createInstance("com.sun.star.text.TextFrame")<br>
+<br>
+<span class="code_comment">'Create a Size struct.</span><br>
+<span class="code_key">Set</span> objSize= createStruct("com.sun.star.awt.Size")<br>
+objSize.Width= 15000<br>
+objSize.Height= 400<br>
+objTextFrame.setSize( objSize)<br>
+<br>
+<span class="code_comment">' TextContentAnchorType.AS_CHARACTER = 1</span><br>
+objTextFrame.setPropertyValue "AnchorType", 1<br>
+<br>
+<span class="code_comment">'insert the frame</span><br>
+objText.insertTextContent objCursor, objTextFrame, false<br>
+<br>
+<span class="code_comment">'Get the text object of the frame</span><br>
+<span class="code_key">Set</span> objFrameText= objTextFrame.getText<br>
+<br>
+<span class="code_comment">'Create a cursor object</span><br>
+<span class="code_key">Set</span> objFrameTextCursor= objFrameText.createTextCursor<br>
+<br>
+<span class="code_comment">'Inserting some Text</span><br>
+objFrameText.insertString objFrameTextCursor, "The first line in the newly created text frame.", _<br>
+                          false<br>
+objFrameText.insertString objFrameTextCursor, _<br>
+                          vbLf & "With this second line the height of the frame raises.", false <br>
+<br>
+<span class="code_comment">'Create a paragraph break</span><br>
+<span class="code_comment">'The second argument is a com::sun::star::text::ControlCharacter::PARAGRAPH_BREAK constant</span><br>
+objFrameText.insertControlCharacter objCursor, 0 , false<br>
+<br>
+<span class="code_comment">'Change the CharColor and add a Shadow</span><br>
+objCursor.setPropertyValue "CharColor", 65536<br>
+objCursor.setPropertyValue "CharShadowed", false<br>
+<br>
+<span class="code_comment">'Insert another string</span><br>
+objText.insertString objCursor, " That's all for now !!", false<br>
+<br>
+<span class="code_key">On Error Resume Next</span><br>
+<span class="code_key">&nbsp;&nbsp;If</span> Err <span class="code_key">Then</span><br>
+&nbsp;&nbsp;MsgBox "An error occurred"<br>
+<span class="code_key">End If</span><br>
+<br>
+<br>
+<span class="code_key">Sub</span> insertIntoCell( strCellName, strText, objTable) <br>
+&nbsp;&nbsp; <span class="code_key">Set</span> objCellText= objTable.getCellByName( strCellName)<br>
+&nbsp;&nbsp; <span class="code_key">Set</span> objCellCursor= objCellText.createTextCursor<br>
+&nbsp;&nbsp; objCellCursor.setPropertyValue "CharColor",16777215<br>
+&nbsp;&nbsp; objCellText.insertString objCellCursor, strText, false<br>
+<span class="code_key">End Sub</span><br>
+<br>
+<span class="code_key">Function</span> createStruct( strTypeName)<br>
+&nbsp;&nbsp; <span class="code_key">Set</span> classSize= objCoreReflection.forName( strTypeName)<br>
+&nbsp;&nbsp; <Span Class="Code_Key">Dim</Span> aStruct<br>
+&nbsp;&nbsp; classSize.createObject aStruct<br>
+&nbsp;&nbsp; <span class="code_key">Set</span> createStruct= aStruct<br>
+<span class="code_key">End Function</span><br>
+</p>
+</body>
+</html>
