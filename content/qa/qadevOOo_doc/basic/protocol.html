@@ -1,0 +1,126 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+  <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+  <TITLE>Communication Protocol</TITLE>
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/qa/">qa</a>&nbsp;&raquo;&nbsp;<a href="/qa/qadevOOo_doc/">qadevOOo_doc</a>&nbsp;&raquo;&nbsp;<a href="/qa/qadevOOo_doc/basic/">basic</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1>Communication Protocol</H1>
+
+<H2>Commands</H2>
+<P>In this section commands that are understandable by BasicBridge
+are described. 
+</P>
+
+<OL>
+  <LI>BASIC 'commands'. These commands
+  can be send to java by calling basicHandler.insertByName(cmd, arg):<br>
+  <FONT SIZE=2><FONT FACE="Courier New, monospace">(&quot;Connected&quot;,
+  boolean)</FONT></FONT> - a notification that BasicHandler instance
+  and listeners were created successfully.<br>
+  <FONT SIZE=2><FONT FACE="Courier New, monospace">(&quot;BASIC_Done&quot;,
+  PropertyValue(String functionName, Any result))</FONT></FONT> -
+  means that function finished it's execution.<br>
+  <FONT SIZE=2><FONT FACE="Courier New, monospace">(&quot;BASIC_MethodTested&quot;,
+  PropertyValue(String methodName, Boolean result))</FONT></FONT> -
+  means that property/method was tested.<br>
+  <FONT SIZE=2><FONT FACE="Courier New, monospace">(&quot;BASIC_Log&quot;,
+  String)</FONT></FONT> - the string should be written to log file.<br></LI>
+  <LI>Java 'commands':<br>
+  <FONT SIZE=2><FONT FACE="Courier New, monospace">(&quot;SetValue&quot;,
+  String)</FONT></FONT> - execute an expression. Usually passed string
+  should be like &quot;VarName = Value&quot;. Variable VarName should
+  be defined as Global.<br>
+  <FONT SIZE=2><FONT FACE="Courier New, monospace">(&quot;CreateObject&quot;,
+  String)</FONT></FONT> - create object with specified name<br>
+  <FONT SIZE=2><FONT FACE="Courier New, monospace">(&quot;TestInterface&quot;,
+  [][]Any)</FONT></FONT> - test interface. Description of
+  methods/properties is passed in parameter.<br>
+  <FONT SIZE=2><FONT FACE="Courier New, monospace">(&quot;DisposeObject&quot;,
+  NULL)</FONT></FONT> - dispose current object.<br></LI>
+</OL>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="p1.gif" NAME="Graphic1"/>
+<BR><BR>
+</P><P STYLE="font-weight: medium">
+Runner just tells BasicBridge that oan bject should be created
+and this will establish the connection between BASIC and Java.
+For this, the method <B>CreateObject()</B> of
+BasicBridge.sxw will be called. This method will load the appropriate library 
+with the object-creation code and call the <B>CreateObj()</B> procedure. As a
+result, BASIC's global variable <B>oObj</B> will be set to the created
+object. 
+</P>
+<H2>BasicBridge.sxw</H2>
+<P>The <B>BasicBridge.sxw</B> includes several Basic modules. Two of them -
+<B>runner</B> and <B>test</B> are used to control the execution of tests
+(establishing connection, loading required modules, calling of BASIC
+methods). There are also some helper modules. Functions from these
+modules are available from any other module (also from the BASIC tests
+modules) and should be used in tests. The main helper module is
+<B>utils</B>. It has functions for loading documents, converting paths
+to URLs and back among others. So, to create a writer document one
+should call the method <B>utils.createDocument(&quot;swriter&quot;,
+&quot;Doc_Name&quot;)</B>. Module <B>out</B> is used for logging. To
+write some information to a log file one should use the <B>out.Log(info)</B>
+method. One very important module is the <B>PropertyTester</B>.
+It is used for testing properties (see the &quot;Service file&quot;
+section).</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="p2.gif" NAME="Graphic1"/>
+
+<H2>Timeouts and exceptions.</H2>
+<P>When the <B>BasicBridge</B> calls a BASIC function, it waits until this
+function is done. So, BASIC should send a &quot;<B>BASIC_Done</B>&quot;
+notification to java. Basic can send any kind of information to java
+(log, or result of method testing), and this will call the appropriate
+methods of the Runner. But the main thread of Runner will wait until
+&quot;<B>BASIC_Done</B>&quot; notification. 
+</P>
+<P>To determine that OpenOffice.org crashes or hangs, timeouts are
+used. This means that if there is no call from the BASIC tests
+for <B>n</B> seconds, an <B>InterruptedTestException</B> will be
+thrown to Runner and that will cause the killing and restarting of
+the Office.
+<P>BASIC tests can throw exceptions to Java. For this, a <B>Basic_Log</B>
+command should be sent with string parameter that starts with
+&quot;<B>Exception: </B>&quot;. This will raise a <B>BasicException</B>
+in Runner.</P>
+<P>To make things easier a procedure <B>Exception()</B> exists in
+<B>test</B> module of <B>BasicBridge.sxw</B>. This procedure will
+write information about the exception to the log file. This information
+contains method name, where the exception occurred and the line number. To
+store the current method name, <B>BasicBridge.sxw</B> uses a global variable,
+<B>cCurrMethodName</B> (see &quot;Interface file&quot; section).
+Usually the exception handling in basic should be performed as follows:</P>
+<PRE>Sub ...()
+On Error Goto ErrHndl
+    ...
+End Sub
+ErrHndl:
+    Test.Exception()
+    resume next
+End Sub</PRE>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
