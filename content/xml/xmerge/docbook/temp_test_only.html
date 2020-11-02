@@ -1,0 +1,252 @@
+<html>
+<head>
+<title>DocBook Filters - Read and write docbook xml using OpenOffice.org</title>
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+
+<body>
+<a name="top"></a>
+
+<h1>DocBook Filters - Read and write docbook xml using OpenOffice.org</h1>
+
+<p>Goal is to explore the possibility of using OpenOffice.org as a WYSIWYG editor of XML content.
+The principle is to edit structured documents using styles.  These styles are then transformed to XML tags on export.</p>
+
+<p>This page shows how to enable and use the DocBook filters.  It also shows the location of the stylesheets so that users can download and use the latest transformations.</p>
+
+
+<p>Initially the project used OpenOffice.org sections to enforce nesting of DocBook sections.
+Feedback has shown that authors wish to use the common word processing styles such as Heading1, Heading2, etc.  The stylesheets and templates shipped with OOo1.1 Beta use OpenOffice.org sections.
+Links are available below for stylesheets which use OOo headings and instructions on how to install these stylesheets.
+Stylesheets currently only support DocBook Articles. Book and Chapter support is planned.</p>
+
+
+<p>Currently stylesheets are packaged in a JAR.  The content of the JAR is explained later in this document. It is planned that future OOo will be able to use the import and export XSLTs directly.</p>
+
+
+<p>To see what is available and get an impression of how it works look at :<p> 
+
+
+<ol>
+   <li>A <!--<a href="http://xml.openoffice.org/xmerge/downloads/docbooktemplate.xml">--><a href="http://xml.openoffice.org/xmerge/downloads/gedit.xml">Sample DocBook </a>Document</li>
+   <li>The corresponding <!--<a href="http://xml.openoffice.org/xmerge/downloads/docbooktemplate.sxw>">--><a href="http://xml.openoffice.org/xmerge/downloads/gedit.sxw">Writer (.sxw) file</a> after importing the docbook file.<br><b> Note :</b> Nested sections supported. See applied or custom styles in the stylist for DocBook tags which have been supported. </li>
+<!--
+   <li><a href="http://xml.openoffice.org/xmerge/downloads/gedit.html">HTML generated</a> from the sample DocBook file for supported tags. <br><b>Note :</b> this is a one-way transformation as there is information loss. </li>
+-->
+</ol>
+
+
+<p><b>Note :</b> See also Eric Bellot's <a href="http://www.chez.com/ebellot/ooo2sdbk">OOo2sdbk</a></p>
+
+
+
+<h2>How to Enable DocBook in OpenOffice1.1 Beta</h2>
+
+<p>The DocBook filters are installed during OpenOffice.org setup by selecting "<font face="Arial">Custom Installation</font>" and in the "<font face="Arial">Optional Components</font>" section, selecting the "<font face="Arial">Mobile Device Filters</font>".</p>
+
+<p>To enable the DocBook filter, the following file must be edited: <br> <b>&lt;OOo Install Dir&gt;/share/registry/data/org/openoffice/Office/TypeDetection.xcu;</b></p>
+
+
+<ul>
+   <li>Search for the line &lt;node oor:name="DocBook File" oor:op="replace"&gt; </li>
+   <li>Before the corresponding &lt;/node&gt; tag add the following lines:</li>
+</ul>
+<ul>
+   &lt;prop oor:name="Installed" oor:type="xs:boolean"&gt;
+   <ul>
+      &lt;value>true&lt;/value&gt;
+   </ul>
+   &lt;/prop&gt;
+</ul>
+<ul>
+   <li>Similarly for XHTML except search for the line &lt;node oor:name="XHTML File" oor:op="replace"&gt; </li>
+   <li>Similarly for Flat XML File except search for the line &lt;node oor:name="Flat XML File" oor:op="replace"&gt; </li>
+</ul>
+
+<p>Once the filter has been enabled, run OOo to see DocBook available in the OpenOffice.org "File of Type" comb-box in both the Open and Save/As dialogs. <b>Hint :</b> Type D in the "File of Type" combo-box maybe more than once.</p>
+
+<p><b>NOTE :</b> In order for the Java based filters to work correctly, and Java Runtime Environment needs to be specified during setup.
+JRE1.4 or greater is recommended as it contains an XML Parser (Crimson) and an XSLT processor (Xalan).
+JRE1.3 can also be used, if a parser e.g. Xerces or Crimson, and the Xalan XSLT processor are made available.</p>
+
+
+
+
+<h2>Using OpenOffice.org to create and edit DocBook XML</h2>
+
+<h3>Creating a DocBook Template</h3>
+
+It is not possible to use a predefined template to supply the DocBook styles in OpenOffice.org. To do this you must do the following:
+
+<ul>
+<!--   <li>Save a blank Writer document as DocBook</li>
+   <li>Open the document again in Writer</li> -->
+
+   <!-- <li>Download a simple <a href="http://xml.openoffice.org/xmerge/downloads/gedit.xml">DocBook XML Document</a></li> -->
+   <li>Download the associated <a href="http://xml.openoffice.org/xmerge/downloads/DocBookTemplate.stw">template</a></li>
+   <!-- <li>Open the document in OOo. as DocBook(*.xml)</li> -->
+   <li>Open the template on OOo</li>
+   <li>Press F11 and choose 'All Styles', so that all available DocBook styles are displayed.</li>
+</ul>
+
+<p>Review the <a href="http://xml.openoffice.org/xmerge/docbook/UserGuide.html">UserGuide</a> for information on using the filter.</p>
+
+
+
+
+<h2>Sections/Headings</h2>
+
+<h3>How to change the Stylesheet</h3>
+
+<p>The docbook filter uses the XMerge framework's XSLT processing functionality. The <a href="http://xml.openoffice.org/xmerge/downloads/docbook.jar">docbook.jar</a> contains a set of <!-- <a href="http://framework.openoffice.org/source/browse/framework/filter/source/docbook/">--> <a href="http://xml.openoffice.org/source/browse/xml/xmerge/java/org/openoffice/xmerge/converter/xml/xslt/docbook/">two XSLT style-sheets</a>, one for transforming from docbook to OpenOffice and one for transforming from OpenOffice to docbook. </p>
+
+<p>The file also contains a converter.xml file in the META-INF directory that contains information describing the supported mime-types, the style-sheet names and the XMerge plugin that it uses.</p>
+
+<p>To make changes:</p>
+<ul>
+  <li>Create a temp directory.
+  <ul>
+     <li>mkdir temp </li>
+  </ul></li>
+  <li>Unpack the jar to the temp directory: 
+  <ul>
+     <li>jar -xvf docbook.jar temp </li>
+  </ul></li>
+  <li>This will produce the following files in the temp directory:
+  <ul>
+     <li>META-INF/MANIFEST.MF </li>
+     <li>META-INF/converter.xml</li>
+<!--     <li>sofftodocbookheadings.xsl</li>
+     <li>docbooktosoffheadings.xsl</li>
+-->
+     <li>sofftodocbook.xsl</li>
+     <li>docbooktosoff.xsl</li>
+  </ul></li>
+</ul>
+
+<p>The two stylesheets can now be edited as required, or download the latest copies from <!--<a href="http://framework.openoffice.org/source/browse/framework/filter/source/docbook/">--><a href="http://xml.openoffice.org/source/browse/xml/xmerge/java/org/openoffice/xmerge/converter/xml/xslt/docbook/">here</a>. </p>
+
+<p>Repacking the jar:</p>
+<ul>
+  <li>cd temp</li>
+  <li>jar -cvf ../docbook.jar *</li>
+  <li>Copy the jar to &lt;OOo installation&gt;/program/class directory 
+  <li>Restart OpenOffice.org</a>
+</ul>
+
+<p>For example, to use the new XSLT stylesheets, replace the stylesheets in temp with the downloaded versions. The converter.xml file contains info regarding the file conversions that the filter supports. This information is used by XMerge when a conversion has been requested.</p>
+<ul>
+&lt;converters&gt;
+   <ul>   
+   &lt;converter type="staroffice/sxw" version="1.0"&gt;
+      <ul>
+      &lt;converter-display-name&gt;
+         <ul>
+         XSLT Transformation sxw
+         </ul>
+      &lt;/converter-display-name&gt;
+      </ul>
+      <ul>
+      &lt;converter-description&gt;
+         <ul>
+         Converter which performs xslt transformations
+         </ul>
+      &lt;/converter-description&gt;
+      </ul>
+      <ul>
+      &lt;converter-vendor&gt;
+         <ul>
+         OpenOffice.org 
+         </ul>
+      &lt;/converter-vendor&gt;
+      </ul>
+      <ul>
+      &lt;converter-class-impl&gt;
+         <ul>
+         org.openoffice.xmerge.converter.xml.xslt.PluginFactoryImpl
+         </ul>
+      &lt;/converter-class-impl&gt;
+      </ul>
+      <ul>
+      &lt;converter-xslt-serialize&gt;
+         <ul>
+         sofftodocbookheadings.xsl
+         </ul>
+      &lt;/converter-xslt-serialize&gt;
+      </ul>
+      <ul>
+      &lt;converter-xslt-deserialize&gt;
+         <ul>
+         docbooktosoffheadings.xsl
+         </ul>
+      &lt;/converter-xslt-deserialize&gt;
+      </ul>
+      <ul>
+      &lt;converter-target type="application/x-docbook" /&gt;
+      </ul>
+   &lt;/converter&gt;
+   </ul>
+&lt;/converters&gt;
+</ul>
+
+<h3>Currently Supported Tags</h3>
+
+<p>Click <a href="http://xml.openoffice.org/xmerge/docbook/DocBookTags.html">here</a> to obtain a list of currently supported DocBook tags.</p>
+
+
+<h3>ToDo</h3>
+<ul>
+   <li>Increase coverage of supported DocBook tags</li>
+   <li>XML Entity support. Entity references are lost currently. It may be possible to preserve them by treating them as fields.</li>
+   <li>ArticleInfo - Initially was going to use document properties but too many tags so this would probably be another section.</li>
+   <li>Images. (We have placeholders for required information).</li>
+   <li>Hyperlinks.</li>
+   <li>Chapters</li>
+   <li>References</li>
+</ul>
+
+
+<h3>Limitations</h3>
+<p>These are limitations which should be highlighted but are not blockers. In fact, sufficient interest in this project should drive requirements for enhancements.</p>
+
+<p>- No support in OOo for user as to which styles (tags) to use when. Must create and follow guidelines.</p>
+
+<p>- No validation for export.</p>
+
+
+<h3>Open Issues</h3>
+<ul>
+   <li>Do not support nested tags in text spans. 
+      <ul>
+      e.g Use:
+         <ul>
+            &lt;menuchoice&gt;&lt;guimenu&gt;File&lt;/guimenu&gt;&lt;guimenuitem&gt;New&lt;/guimenuitem&gt;&lt;/menuchoice&gt;
+         </ul>
+      to which in HTML appears as:
+         <ul>
+            Use File ->New
+         </ul>
+      </ul>
+   </li>
+   <li> Importing comments (Parser ignores, may have to use comment tag).  </li>
+   <li> Nested lists are split into three separate lists in SO and have to be exported as three separate lists. Breaks the round trip.</li>
+   <li> Styles are defined in the import stylesheet. </li>
+   <li>Would like to be able to import into an existing template.  </li>
+</ul>
+
+<!-- The Converter.xml file -->
+
+
+
+
+
+
+
+
+<br>
+
+<hr>
+
+</body>
+</html>

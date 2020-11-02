@@ -1,0 +1,375 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Document Editing on Small Devices - XMerge</title>
+
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+<h1>Document Editing on Small Devices - XMerge</h1>
+<!-- no current top news!
+<h2><strong>Top News</strong>: <a href="xml_specification_draft.pdf">XML File Format Specification Updated</a></h2>
+-->
+<a href="background.html" class="ProjectName">Background</a> | <a
+ href="index.html#overview" class="ProjectName">Overview</a> | <a
+ href="index.html#status" class="ProjectName">News and Updates</a> | <a
+ href="index.html#future" class="ProjectName">Proposed Future Projects</a>
+| <a href="index.html#plugin-ins" class="ProjectName">Plugins</a> | <a
+ href="index.html#doc" class="ProjectName">Documentation and Resources</a>
+| <a href="index.html#build" class="ProjectName">Building XMerge</a>
+<p align="justify"><strong>Project Owner:</strong> <a
+ href="mailto:Svante.Schubert [AT].sun.com">Svante Schubert</a><br>
+<small>(Please use the provided <a
+ href="http://xml.openoffice.org/servlets/ProjectMailingListList">mailing
+lists</a> for discussion of the XML based file format and related
+issues.)</small> </p>
+<a name="overview"></a>
+<br>
+<h2>Overview</h2>
+<p> </p>
+<p>The goals of the Document Editing on Small Devices project is to:<br>
+</p>
+<ul>
+  <li>Allow for the editing of rich format documents on small devices,
+using 3rd party applications native to the device to do the editing.</li>
+  <li>Support the most widely used small devices, namely:</li>
+  <ul>
+    <li>Palm</li>
+    <li>PocketPC</li>
+  </ul>
+  <li>Provide the ability to merge edits made in the small device's
+lossy format back into the original richer format document maintaining
+it's original style.</li>
+  <li>Take advantage of the open and well defined OpenOffice.org XML
+document format.</li>
+  <li>Provide a framework with the ability to have plugin-able Convert,
+Diff and Merge implementations. It should be possible determine a
+converter's capabilities at run-time.</li>
+</ul>
+<p> </p>
+<p> The XMerge SDK provides a Java-based framework for converting
+documents between different formats using conversion plugins to read
+and write each format. More about what plugins are available can be
+found in the <a href="#plug-ins">plugin section</a> below.</p>
+<p>In addition to format conversion, the XMerge SDK provides a
+framework for merging changes in one document format (usually a simpler
+or lower quality format) into an original document (typically in a
+richer format). The benefit of merging &nbsp;is that richer styles or
+content in the original document are retained, while the edits made to
+the simpler format can be applied or merged into the original document.<br>
+</p>
+<p> To meet these goals there are two significant interfaces in XMerge:</p>
+<ul>
+  <li>the Conversion API's, used by applications to use a supported
+format conversion</li>
+  <li>the Plugin SPI, which is used by developers who want to add
+conversion support for a new document format.</li>
+</ul>
+All plugins are designed to support the OpenOffice.org
+XML file format on one side and the device format on the other, the
+framework is able to support "chaining" of conversions, also known as
+an "Any-to-Any" conversion, eg. convert from a Palm document to a
+PocketPC document through the intermediate OpenOffice.org XML file
+format.<br>
+<p> </p>
+<a name="status"></a>
+<h2>News and updates</h2>
+<ul>
+  <li><b>Mobile Device Support in OpenOffice</b><br>
+The Mobile Device Support Pack for OpenOffice 1.0 is now available.
+Grab it <a href="downloads/index.html">here</a><br>
+This mini-install integrates XMerge plugins into OpenOffice using the
+upcoming
+XmlFilterAdapter. Try it out and let us know how it goes. </li>
+  <li><b>ActiveSync and OpenOffice</b><br>
+ActiveSync Support has been added. &nbsp;You can now sync OpenOffice
+Writer and Calc documents to and from a Pocket PC device. ActiveSync
+will
+automatically invoke XMerge plugins to perform the appropriate
+conversions.
+&nbsp;You can get the filter from the <a href="downloads/index.html">downloads
+section</a>. </li>
+  <li><b>Nokia Communication Word Processor Format Support</b><br>
+Nick Richards has taken on the writing of a plugin for the PsiWord
+format.
+PsiWord is the format used by the word processor on the <a
+ href="http://www.nokia.com/phones/9210/">Nokia 9210 Communicator</a>,
+the Symbian based PDA/phone and other PDA's running the EPOC OS. <br>
+Nick is looking for others to help in writing the plugin, so if you can
+spare the time he can be reached at <a
+ href="mailto:nedrichards@openoffice.org">nedrichards@openoffice.org</a>
+  </li>
+  <li><b>Writer2LaTeX XMerge Plugin</b><br>
+    <a>Henrik Just has now implemented his </a><a
+ href="http://www.hj-gym.dk/%7Ehj/writer2latex/">Writer2LaTeX </a>converter
+as an XMerge plugin. This means that now his converter can now be used
+as an OpenOffice.org export filter as well as being able to perform
+standalone command line conversions. For more information and the
+latest versions, visit <a
+ href="http://www.hj-gym.dk/%7Ehj/writer2latex/">Henrik's web-page.</a></li>
+</ul>
+<a name="future"></a><br>
+<h2>Proposed future projects</h2>
+<ul>
+  <li>Synchronisation support for devices, could be any of the
+following:</li>
+  <ul>
+    <li>Application on small device that pulls down a document in
+desired format and synchronises back.</li>
+    <li>Desktop synchronisation integration (eg. HotSync).<em></em></li>
+  </ul>
+  <li>New plugins for other small document formats.</li>
+  <li>Enhancements to existing plugins</li>
+  <li>Alternate implementations to the diff and merge engines</li>
+  <li>Support for OpenOffice.org presentations.</li>
+  <li>Provision of a parser independent "XMLWriter". This would in
+theory allow XMerge to work with any XML parser with DOM level
+2 support.</li>
+</ul>
+<a name="plug-ins"></a>
+<h2>Plugins</h2>
+<table cellpadding="4" cellspacing="1" bgcolor="#f0f0f0" width="100%">
+  <tbody>
+    <tr align="center">
+      <th bgcolor="#99ccff" width="20%"><font color="#00315a"
+ face="Arial, Helvetica" size="2"><b> Platform</b></font></th>
+      <th bgcolor="#99ccff" width="20%"><font color="#00315a"
+ face="Arial, Helvetica" size="2"><b> Plug-in Name</b></font></th>
+      <th bgcolor="#99ccff"><font color="#00315a"
+ face="Arial, Helvetica" size="2"><b> Description</b></font></th>
+      <td valign="top" bgcolor="#99ccff">Current Status<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Any<br>
+      </td>
+      <td valign="top" width="20%">XSLT<br>
+      <code></code></td>
+      <td valign="top">The XSLT plug-in, makes use of the <a
+ href="http://xml.apache.org/xalan-j/index.html">Xalan XSLT</a>
+processor, in order to translate an xml document to and from a
+specified xml/xhtml format.<br>
+      </td>
+      <td valign="top">Source Available<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Palm<br>
+      </td>
+      <td bgcolor="#f0f0f0" valign="top" width="20%"><a
+ href="plugins/aportisdoc.html">AportisDoc</a><br>
+      </td>
+      <td bgcolor="#f0f0f0" valign="top">Plugin for editing StarWriter
+documents in the AportisDoc format originally developed by Aportis
+Technology Corporation.&nbsp; However Aportis as of 31st Dec 2002 were
+acquired by <a href="http://www.ultrasoft.com/BrainForest/">UltraSoft</a>.
+There are still<a
+ href="http://www.google.com/search?hl=en&amp;lr=&amp;ie=UTF-8&amp;oe=UTF-8&amp;q=aportisdoc+format+palm&amp;spell=1">
+many palm applications</a> that use the Aportisdoc format. This plugin
+supports merging of textual changes. </td>
+      <td valign="top" bgcolor="#f0f0f0">Source Available<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Palm<br>
+      </td>
+      <td valign="top" bgcolor="#f0f0f0"><a href="plugins/minicalc.html">MiniCalc</a><br>
+      </td>
+      <td valign="top" bgcolor="#f0f0f0">Sample implementation for
+editing StarCalc spreadsheets with <a
+ href="http://www.solutionsinhand.com">MiniCalc</a> on the Palm. This
+plugin
+supports merging of textual changes.<br>
+      </td>
+      <td valign="top" bgcolor="#f0f0f0">Source Available<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">PocketPC<br>
+      </td>
+      <td valign="top"><a href="plugins/pocketword.html">Pocket
+Word</a><br>
+      </td>
+      <td valign="top">Support of editing text documents through
+PocketWord<br>
+      </td>
+      <td valign="top">Source Available</td>
+    </tr>
+    <tr>
+      <td valign="top">PocketPC<br>
+      </td>
+      <td valign="top"><a href="plugins/pocketexcel.html">Pocket
+Excel</a><br>
+      </td>
+      <td valign="top">Support for editing spreadsheets in PocketExcel<br>
+      </td>
+      <td valign="top">Source Available<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<i>*Follow links for more information and screen-shots.</i> <a
+ name="doc"></a>
+<h2>Documentation and Resources</h2>
+<table cellpadding="4" cellspacing="1" bgcolor="#ffffff" width="100%">
+  <tbody>
+    <tr>
+      <td colspan="3" bgcolor="#00315a" align="center"><font
+ color="#ffffff" face="arial, helvetica" size="2"><b> Documentation for
+the XMerge SDK</b></font></td>
+    </tr>
+    <tr>
+      <th bgcolor="#99ccff" align="center"><font color="#00315a"
+ face="arial, helvetica" size="2"><b> Document</b></font></th>
+      <th bgcolor="#99ccff" align="center"><font color="#00315a"
+ face="arial, helvetica" size="2"><b> Summary</b></font></th>
+      <th bgcolor="#99ccff" align="center"><font color="#00315a"
+ face="arial, helvetica" size="2"><b> Format and Size</b></font></th>
+    </tr>
+    <tr>
+      <td bgcolor="#f0f0f0" valign="top"><a href="docs/XMerge_sdk.pdf">XMerge
+Document Conversion SDK</a> <br>
+      </td>
+      <td bgcolor="#f0f0f0" valign="top">A developer's guide for the
+XMerge SDK. Describes how to use the client API, implement plugins,
+testing and installing plug-ins.<br>
+      </td>
+      <td bgcolor="#f0f0f0" valign="top"> PDF, 180K<br>
+      </td>
+    </tr>
+    <tr>
+      <td bgcolor="#f0f0f0" valign="top"><a href="docs/XSLTPlugin.pdf">XSLT
+Plugin Implementation</a><br>
+      </td>
+      <td bgcolor="#f0f0f0" valign="top">Describes the XSLT converter
+plugin, how to use it and also how to implement further XSLT plugins.<br>
+      </td>
+      <td bgcolor="#f0f0f0" valign="top"> PDF, 11K<br>
+      </td>
+    </tr>
+    <tr>
+      <td bgcolor="#f0f0f0" valign="top"><a
+ href="docs/xmerge_javadoc.zip"> XMerge JavaDocs</a> <br>
+      </td>
+      <td bgcolor="#f0f0f0" valign="top"> Generated from JavaDoc
+comments in the sources.<br>
+      </td>
+      <td bgcolor="#f0f0f0" valign="top"> ZIP, &nbsp;364K<br>
+      </td>
+    </tr>
+<!--
+<tr>
+<td bgcolor="#f0f0f0" valign="top"><a href="...">...</a></td>
+<td bgcolor="#f0f0f0" valign="top">...</td>
+<td bgcolor="#f0f0f0" valign="top">...</td>
+</tr>
+-->
+  </tbody>
+</table>
+<!--<p><br>
+       </p>
+
+<p><br>
+       </p>
+         <a name="build"></a>-->
+<a name="build"></a><br>
+<h2>Building XMerge</h2>
+<p> The following document describes the process for building the
+OpenOffice.org XMerge project, either standalone or as part of the
+OpenOffice.org build environment. </p>
+<h3>Requirements</h3>
+The following tools are necessary in order to build the XMerge project.<br>
+<ul>
+  <li><a href="http://java.sun.com/j2se/1.3/" target="_blank"> Java 1.3
+or 1.4</a> </li>
+  <li><a href="http://java.sun.com/xml/archive.html" target="_blank">JAXP
+1.0</a> or <a href="http://xml.apache.org/xerces-j/index.html"
+ target="_blank"> Xerces-J</a> </li>
+  <li><a href="http://jakarta.apache.org/ant/index.html" target="_blank">Ant</a>
+  </li>
+  <li><a href="http://xml.apache.org/xalan-j/index.html" target="_blank">Xalan-J
+2.2</a> </li>
+</ul>
+<p><b>Note:</b> Java 1.4 includes the Crimson XML parser and Xalan. If
+using
+Java 1.4 the only requirement is Ant.</p>
+<p><b>N.B.</b> Xalan 2.3 splits the XSLT classes between two JAR files.
+The build environment expects the XSLT classes to be contained in <code>xalan.jar</code>
+only.</p>
+<h3>Obtaining the source</h3>
+The source for XMerge is maintained under CVS control as part of the
+XML project. &nbsp;<br>
+<br>
+See the XML Project's <a
+ href="http://xml.openoffice.org/servlets/ProjectSource" target="_blank">
+Source page</a> for information on obtaining and contributing to source
+code.<br>
+<br>
+If using CVS, setup your CVS access according to the
+Source page and checkout the <tt>xmerge</tt> module.<br>
+<pre>  <tt>% cvs -d:pserver:anoncvs@anoncvs.services.openoffice.org:/cvs co oo/xml/xmerge</tt></pre>
+<br>
+The source can also be downloaded as a ZIP file <a
+ href="xmerge_src.zip"> here.</a><br>
+<h3>Building in a Standalone Environment<br>
+</h3>
+<p> To build XMerge in a standalone environment, copy all of the jar
+files mentioned above and the Xalan-J archive into a directory.</p>
+<p>You will need to include the Ant binary directory in your PATH.
+&nbsp;Ant requires that the JAVA_HOME variable also be set.<br>
+</p>
+<p> Wrapper scripts have been provided to execute the build. &nbsp; On
+a UNIX based system use:</p>
+<pre>&nbsp;&nbsp;&nbsp; <tt>% build_xmerge -jars &lt;jar_location&gt; </tt><tt>[-debug | optimize]</tt></pre>
+<p>and on Windows use :<br>
+</p>
+<pre>    <tt>C:\XMerge&gt; build_xmerge.bat -jars &lt;jar_location&gt;</tt><tt> [-debug | -optimize]</tt></pre>
+<p>where &lt;jar_location&gt; is the directory containing the required
+JAR files.</p>
+<p><b>Note:</b> If using Java 1.4 the jar file location can be given as
+any
+directory as Java 1.4 includes the XML and XSLT class files.</p>
+<p>The scripts also support building a debug version and an optimized
+version. &nbsp;Simply specify <tt>-debug</tt> or <tt>-optimize</tt>
+as options. &nbsp; These options are mutually exclusive. &nbsp;If both
+are set, the first one encountered will be used for build purposes.</p>
+<br>
+<h3>Building as part of OpenOffice.org</h3>
+<p> Setup your OpenOffice.org build environment as detailed in the <a
+ href="http://www.openoffice.org/documentation.html#guides">OpenOffice.org
+build documents</a>.<br>
+</p>
+<p> To build XMerge, you will also need to copy the Ant and Xalan-J Jar
+files into your solver's bin directory, e.g.
+${SOLARVER}/642/{platform}/bin.<br>
+</p>
+<p> Once these files are present simply execute the build:<br>
+</p>
+<pre>    <tt>% build</tt></pre>
+<p>The build will execute and JAR files and documentation will be
+contained in a platform-named directory created in the <i>xmerge</i>
+directory.<br>
+</p>
+<h3>Running the Test Driver command-line utility<br>
+</h3>
+<p>Once the sources have been built, you can test the plugins using the
+test Driver command-line utility.&nbsp;<br>
+<br>
+To this you will need to know the location of all the JAR files that
+were built, this will vary depending on the mechanism used to build.
+You
+will also need the location of the JAR files that you downloaded as
+stated
+in the Requirements section above. <br>
+</p>
+<p>Once you have all of this, you execute the &nbsp;test Driver as
+follows:<br>
+</p>
+<pre>    % java -cp &lt;jar_location&gt; org.openoffice.xmerge.test.Driver -from &lt;mime-type&gt; -to &lt;mime-type&gt; [-merge &lt;original file&gt;] &lt;file&gt;... <br></pre>
+<p>The from and to mime-types to use will depend on the type of
+documents being converted. The "-merge" option is only usable when
+converting from the device format to the OpenOffice.org document.<br>
+</p>
+<br>
+</body>
+</html>

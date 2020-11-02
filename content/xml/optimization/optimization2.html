@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>Possible optimizations in the xml module</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 8 PreAlpha (Win32)">
+	<META NAME="AUTHOR" CONTENT="Sascha Ballach">
+	<META NAME="CREATED" CONTENT="20031021;10425905">
+	<META NAME="CHANGEDBY" CONTENT="Sascha Ballach">
+	<META NAME="CHANGED" CONTENT="20031021;12355280">
+	<STYLE>
+	<!--
+		@page { size: 29.7cm 21cm; margin: 2cm }
+		P { margin-bottom: 0.21cm }
+		TD P { margin-bottom: 0.21cm }
+	-->
+	</STYLE>
+</head>
+<body LANG="de-DE" DIR="LTR">
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=44*>
+	<COL WIDTH=171*>
+	<COL WIDTH=20*>
+	<COL WIDTH=22*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P LANG="en-US"><B>Optimization</B></P>
+			</TD>
+			<TD WIDTH=67%>
+				<P LANG="en-US"><B>Description</B></P>
+			</TD>
+			<TD WIDTH=8%>
+				<P LANG="en-US"><B>Modules</B></P>
+			</TD>
+			<TD WIDTH=8%>
+				<P LANG="en-US"><B>State</B></P>
+			</TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P LANG="en-US">Use of ANY and uno::Reference</P>
+			</TD>
+			<TD WIDTH=67%>
+				<P LANG="en-US">Like in the Mail of Daniel B&ouml;lzle in the
+				dev.OpenOffice.org mailing list from 16.10.2003 13:30 described
+				the use of Anys can be optimized. A test in the SC project
+				increased the performance by 10 percent, so every module should
+				do this change in the load and save methods.</P>
+				<P LANG="en-US">The main improvements are to use uno::makeAny()
+				in queryInterface instead of</P>
+				<P LANG="en-US">uno::Any aR; aR &lt;&lt;=
+				uno::Reference&lt;x&gt;(this); return aR;</P>
+				<P LANG="en-US">like this:</P>
+				<P LANG="en-US">return uno::makeAny( uno::Reference&lt;x&gt;(this));</P>
+				<P LANG="en-US">I did also all other in the mail described
+				changes. See also
+				<A HREF="http://api.openoffice.org/TipsAndTricks/cpp_uno_coding_hints.html">http://api.openoffice.org/TipsAndTricks/cpp_uno_coding_hints.html</A></P>
+			</TD>
+			<TD WIDTH=8%>
+				<P LANG="en-US">All</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P LANG="en-US">In progress</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P LANG="en-US">2 runs to find EditCells</P>
+			</TD>
+			<TD WIDTH=67%>
+				<P LANG="en-US">At the moment we have to go over all text cells
+				to find out whether this cells are simple text cells or EditCells
+				where we have to collect the autostyles for. This could be done
+				by a special Interface in the API. So we can use the much time
+				faster core, which knows where the EditCells are instead of
+				getting all text cells, getting the implementation and test
+				whether it is a EditCell. A fast test showed a possible
+				improvement of 20 percent, while commenting out the complete run.
+				A real possible improvement should be 10 percent, because there
+				is something to do to find the EditCells, but it is much faster
+				to make it directly.</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P LANG="en-US">SC</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P LANG="en-US">Planned</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P LANG="en-US">Nothing to do in ScDocument::IdleCalcTextWidth()</P>
+			</TD>
+			<TD WIDTH=67%>
+				<P LANG="en-US">At the moment the method IdleCalcTextWidth is
+				called and does a lot of unnecessary things. In a test the method
+				returns directly after calling and the test document is saved 10
+				percent faster. This is a very simple change and we should do it.</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P LANG="en-US">SC</P>
+			</TD>
+			<TD WIDTH=8%>
+				<P LANG="en-US">Planned</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+</body>
+</HTML>

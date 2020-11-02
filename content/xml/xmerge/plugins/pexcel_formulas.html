@@ -1,0 +1,330 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+	      
+  <meta http-equiv="CONTENT-TYPE"
+ content="text/html; charset=iso-8859-1">
+  <title>Supporting Formula in Pocket Excel plugin for xMerge</title>
+      	 	      
+  <meta name="GENERATOR" content="StarOffice 6.0  (Solaris Sparc)">
+	      
+  <meta name="CREATED" content="20020912;17575800">
+	      
+  <meta name="CHANGEDBY" content="Martin Maher">
+	      
+  <meta name="CHANGED" content="20020917;12581300">
+	      
+  <style>
+	<!--
+		@page { size: 21.59cm 27.94cm; margin-left: 3.18cm; margin-right: 3.18cm; margin-top: 2.54cm; margin-bottom: 2.54cm }
+	-->
+	</style>
+</head>
+<body lang="en-US">
+<p style="margin-bottom: 0cm; text-decoration: none;"><font size="4"
+ style="font-size: 16pt;"><b>Supporting Formula in Pocket Excel plugin for
+xMerge</b></font></p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><font size="4"><b>Overview</b></font></p>
+<p style="margin-bottom: 0cm;">The difficulty in supporting formula conversion
+from xml in StarOffice to binary equivalents in Excel comes from the fact
+that there are very basic differences between the two formats. Pocket Excel
+uses obviously binary records to store formula, StarOffice uses a String.
+In the case of Pocket Excel, postfix (Reverse Polish) notation is used and
+in StarOffice the formula is stored infix notation. This means that we must
+identify the operators and operands (as well as functions) in the formula
+in order to convert from one notation to another. This process we call parsing
+and in many ways is similar to what a compiler does when interpreting source
+code. The next step is to convert to and from postfix notation. This can
+be done in three  ways using either stacks, binary trees or combinations
+of both. Once this has been done all that remains is token substitution where
+a String is converted to or from a series of bytes.</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><font size="4"><b>The Issues</b></font></p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><b>Parsing</b></p>
+<p style="margin-bottom: 0cm;">Parsing is the first operation to be performed
+on any formula encountered in either Pocket Excel or StarOffice. Parsing
+is the single most important aspect of formula conversion because all tokens
+must be correctly identified in order for the following two steps to be successful.
+The parser must be able to correctly identify operators, operands. Operands
+in there simplest terms consist of either a numeric value or a cell reference.
+Operators include binary operators (+,-,*,/) or unary operators(-). These
+are the simplest as</p>
+<p style="margin-bottom: 0cm;">the operands are easily identified. A more
+complicated type of operator however is the function. These are more difficult
+as they can contain any number of parameters. The parameters can be of almost
+any type, numeric, cell references, cell ranges, or other functions. Consider
+the following formula :-</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">=SUM(AA11:AA22, 1000, C3+4, AVERAGE(D44:D55))</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">This is a valid formula and the parser needs
+to be able to identify each token</p>
+<p style="margin-bottom: 0cm;">in order for the RPN conversion to be correctly
+completed.</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><i>Pocket Excel Formula Parsing</i></p>
+<p style="margin-bottom: 0cm;">In the case of pocket excel the formula must
+be parsed from a series of bytes in postfix (Reverse Polish) notation to
+a string in infix notation. This is not really a parser as we simply convert
+the bytes to their equivalent string representations. Tokens in this way
+can easily be identified and no lexical scanning is required. Postfix notation
+does not have to concern itself with operator precedence or parenthesis hence
+this must be taken care of during paring. For example consider the following
+postfix statement </p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">=AB+C*</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">This would be translated to infix notation
+</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">=A+B*C</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">However because of operator precedence it
+is required the we used parenthesis</p>
+<p style="margin-bottom: 0cm;">to ensure that it is calculated in the right
+order.</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">=(A+B)*C</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><i>StarCalc Formula Parsing</i></p>
+<p style="margin-bottom: 0cm;">In the case of StarOffice formula Parsing
+the formula must be parsed from a String to a series of bytes. Again operators
+precedence is important along with the use of parenthesis. Also the parser
+must have the ability to parse nested functions and complex arguments (eg.
+=A1*3-(SUM(C1:A1, D1+40, AVERAGE(D2:D5))) ).</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><b>RPN Conversion</b></p>
+<p style="margin-bottom: 0cm;">Consider the formula </p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">SUM(A1, A2, 3+4*SUM(B3:B9),D1)</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">this notation is called infix and is the one
+that is used in StarCalc. However in Pocket Excel this formula would appear
+in postfix notation (also called Reverse Polish)</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">A1 A2 3 4  B3:B9 SUM * + D1 SUM</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">There are two ways in which postfix can be
+converted from/to infix. One is to use a Binary tree and read the tree from
+right to left to get postfix and from left to right to get infix. The problem
+with this method is it doesn't take into account functions which can have
+more than two parameters. </p>
+<p style="margin-bottom: 0cm;">The other way of implementing conversion is
+to use Stacks. This solves the problem of function parameters but the code
+is more complex. For example in order to take into account that natural operator
+precedence might be overruled by parenthesis the Stack method will need to
+take into account parenthesis (possibly nested). </p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><b>Token substitution</b></p>
+<p style="margin-bottom: 0cm;">Token substitution must take account of the
+different ways in which data is stored in each format. For example in StarOffice
+cell references are stored as Strings in the same way as they appear in the
+spreadsheet (e.g. A12, C23, B4:B12). However in Pocket Excel Cell references
+are stored as 0 based indexes so A1 is represented in binary as</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">44&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; 00&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; C0&nbsp;&nbsp;
+&nbsp; &nbsp;&nbsp; 00</p>
+<p style="margin-bottom: 0cm;">Cell Ref.&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; Row	&nbsp;&nbsp;&nbsp;
+Column (bits 0-7)</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">This is just a substitution for a simple cell
+reference. There are other types of cell references, cell ranges and functions.
+This needs to well designed code as it will need to be expanded as additional
+features are supported. Also due to the large amount of objects it is not
+practical to have an object for each operator and operand. Obviously token
+substitution needs to be supported in both directions.</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><font size="4"><b>Proposed Solution</b></font></p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><b>Parsing</b></p>
+<p style="margin-bottom: 0cm;">We have written a top-down parser that will
+be able to handle infix to postfix parsing with one addition. This  addition
+is handling parameters within functions.  This is not a trivial addition
+as there can be any number of parameters and the parameters themselves can
+be any combination of cell references, cell ranges, functions or other formula.
+The BNF notation for this parser is</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><i>&lt;expression&gt; ::= &lt;unary op&gt;
+&lt;term&gt; [&lt;addop&gt; &lt;term&gt;]</i></p>
+<p style="margin-bottom: 0cm;"><i>&lt;term&gt;       ::= &lt;factor&gt; [&lt;mulop&gt;
+factor]</i></p>
+<p style="margin-bottom: 0cm;"><i>&lt;factor&gt;     ::= &lt;integer&gt; |
+&lt;variable&gt; | &lt;expression&gt; | &lt;function&gt;</i></p>
+<p style="margin-bottom: 0cm;"><i>&lt;function&gt; ::= &lt;ident&gt; [ &lt;expression&gt;
+]</i></p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">Parsing from postfix to infix is made simpler
+by the fact that we will be reading in a series of bytes which will give
+the  exact content of each token. In this case what is required is a converter
+as opposed to a parser. This will generate a series of objects (see token
+substitution) which are passed to the RPN converter.</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><b>RPN Conversion</b></p>
+<p style="margin-bottom: 0cm;">In order to overcome the problem with Binary
+trees and function parameters we have decided to write a Stack implementation.
+This means the code to implement this is more complicated but is flexible
+enough to handle most formula.</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><i>From Infix to Postfix</i></p>
+<p style="margin-bottom: 0cm;">In this case we push operators on to a Stack.
+When we come across an operator we check for precedence with the next operand
+and if it is greater we also push this onto the stack.</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">=A1+SUM(3*B1+4, C1)</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<ul>
+	<li>         
+    <p style="margin-bottom: 0cm;">First token is A1 which we put 	into our
+output string</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">the next token is + which we push 	on
+the stack</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">The next token is the function SUM 	with
+two arguments which again is an operator which we put on the 	stack</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">Next is 3 which as an operand we 	put
+in the output string  	</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">Next is * which goes on the stack</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">B1 is an operand we put in the 	output
+string  	</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">+ but this has less precedence so 	we
+pop * off the stack  into the output string and + goes on the 	stack</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">4 operand in the output strings</p>
+  </li>
+</ul>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><i>From Postfix to Infix</i></p>
+<p style="margin-bottom: 0cm;">From postfix to infix we again use stack.
+In this case however we use it as a temporary storage space for operands.
+We push operands onto the stack and when we come across a operator we pop
+the operands off the stack and use them as operands for that operator. If
+the completed statement is a parameter to a function it needs to be pushed
+back onto the stack and the remainder of the function parsed.</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">=A1 A2 3 4 B3:B9 SUM * + D1 SUM 3 +</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<ul>
+	<li>         
+    <p style="margin-bottom: 0cm;">First token A1 is an operand it 	goes
+on the stack</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">next is A2 again on the stack</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">next is 3 again on the stack</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">next is 4 again on the stack</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">next is B3:B9 again on the stack</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">next is SUM with 1 argument so pop 	one
+operand off the stack B3:B9 and insert it into the SUM function</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">The next is a * operator so we 	prepend
+that to the SUM statement and pop another operand 4 off the 	stack</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">The next is a + operator so we 	prepend
+that to the SUM statement and pop another operand 3 off the 	stack</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">The next is another operand so 	know that
+parameter is finished so we push it onto the stack and 	then push D1 onto
+the stack as well.</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">The next is SUM with 3 arguments 	so we
+pop 3 arguments of the stack</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">The next is an operand so we know 	to
+push the statement completed in the last step needs to be pushed 	onto the
+stack and then we push on  3 as well</p>
+	</li>
+  <li>         
+    <p style="margin-bottom: 0cm;">the last token is a plus so we end 	up
+with</p>
+  </li>
+</ul>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;">=SUM(A1, A2, 3+4*SUM(BS:B9), D1)+3</p>
+<p style="margin-bottom: 0cm;">  </p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><b>Token Substitution</b></p>
+<p style="margin-bottom: 0cm;">The best solution is to use generic objects
+for tokens. We will have two basic object classes. One called OperatorToken
+and one called OperandToken. Each of these will have a value variable as
+well as type. The type will describe forms of an operator or operand e.g.
++ , A1, SUM(). The parser will parse a string or a series of bytes into a
+Vector of these objects which will be used by the RPN converter to convert
+to or from postfix notation. These classes will be derived from a Token interface
+to facilitate this. </p>
+<p style="margin-bottom: 0cm;">We will also have to describe a Constants
+interface to describe the various hex codes that exist for each object. One
+area we have not decided what to do yet is converting to or from bytes. Obviously
+we need a separate one for each operator but it is not practical to have
+one object  for each operator.</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<br>
+</body>
+</html>

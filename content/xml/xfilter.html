@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html><head>
+<title>XML Filter Tools</title>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+<h1>XML Filter Tools</h1>
+
+<p>It's the purpose of these tools to load XML-based filter components
+and to execute them stand-alone. The basic concept of XML-based filter
+components are described in the <a href="filter/">OOo Guide to XML
+Filters</a>.</p>
+
+<p><strong>Note:</strong> There have been some questions on what you
+can actually do with xfilter. <em>If</em> a filter was written
+according to the <a href="filter/">XML-based filter</a> concept, then
+it can be used with the tool. Unfortunately, OpenOffice.org currently
+does <em>not</em> include any such filters. The reason is that the
+concept is fairly new, and most filters (including the MS filters)
+have been developed before that. StarOffice 6.0, which is based on
+OpenOffice.org but includes (among others; see FAQ) some additional
+filters has three new filters that can be used with the xfilter
+tool.</p>
+
+
+<h2>Use</h2>
+
+<ol>
+
+ <li>You need:
+  <ul>
+   <li>an installed OOo</li>
+   <li>xfilter binaries for that build</li>
+   <li>the regcomp binary from the ODK</li>
+  </ul>
+ </li>
+
+ <li>Copy the files for your platform into the OOo program directory</li>
+
+ <li>Call the starter script with parameters for the component name
+ and input file. The starter script will register the libraries and
+ then call the actual xfilter program.</li>
+
+</ol>
+
+<p>Example:</p>
+
+<ul>
+ <li>Windows:
+<pre>
+&gt; copy xfilter.exe xfiltermi.dll xfilter.bat <i>&lt;OOo directory&gt;</i>\program
+&gt; cd <i>&lt;OOo directory&gt;</i>\program
+&gt; xfilter.bat com.sun.comp.hwpimport.HwpImportFilter input.hwp
+  </pre>
+ </li>
+ <li>*nix:
+  <pre>
+&gt; cp xfilter libxfilter??.so xfilter.sh <i>&lt;OOo directory&gt;</i>/program
+&gt; cd <i>&lt;OOo directory&gt;</i>/program
+&gt; xfilter.sh  com.sun.comp.hwpimport.HwpImportFilter input.hwp
+  </pre>
+ </li>
+</ul>
+
+
+<h2>Implementation Detail</h2>
+
+<p>The program consists of a starter application, which initializes
+the <a href="http://udk.openoffice.org/">UNO runtime</a> and the <a
+href="http://ucb.openoffice.org/">UCB</a> to provide for UNO component
+instantiation and input/output functionality, respectively. Then, the
+starter program instantiates the filter component (as given on the
+command line), and imitates the use of the component through the <a
+href="http://api.openoffice.org/common/ref/com/sun/star/document/XImporter.html">XImporter</a>
+and <a
+href="http://api.openoffice.org/common/ref/com/sun/star/document/XFilter.html">XFilter</a>
+interfaces.</p>
+
+<p>Limitations in the emulation of the OOo filter invocation are:
+ <ul>
+  <li>The <code>XImporter::setTargetDocument()</code> call received an
+  empty reference where the document model is expected</li>
+
+  <li>The <code>XFilter::filter()</code> call receives a
+  <a href="http://api.openoffice.org/common/ref/com/sun/star/document/MediaDescriptor.html">MediaDescriptor</a>,
+  which contains only an URL and an opened
+  XInputStream for the input file.</li>
+  <li>Additional services or components usually provided for and
+  initialized by OOo may not be available.</li>
+ </ul>
+<p>
+
+<p>In order to generate output on the console, the <code>com.sun.comp.Writer.XMLImporter</code> component, which is usually instantiated by the filter component, needs to be replaced by a dummy implementation that simply outputs the XML data to the standard console output. This dummy implementation is given in the xfilter DLL/lib (xfiltermi.dll/libxfilter??.so).</p>
+
+<p>StarOffice Filter components, on which the xfilter tool has been tested:
+ <ul>
+  <li><code>com.sun.comp.hwpimport.HwpImportFilter</code></li>
+  <li><code>com.sun.comp.WPSimport.IWPSImportFilter</code></li>
+  <li><code>com.sun.comp.jsimport.IchitaroImportFilter</code></li>
+ </ul>
+</p>
+
+
+<h2>Source code</h2>
+
+<p>The source code for this probably isn't very interesting, but you
+can obtain it from the <code>xml/filtertools</code> directory in the
+CVS archive. You can also browse it <a
+href="http://xml.openoffice.org/source/browse/xml/filtertools/source/">online</a>.</p>
+
+<h2>Binaries</h2>
+
+<p>Binaries for a few platforms can be downloaded here:
+
+<ul>
+ <li><a href="xfilter/xfilter.641.wntmsci7.pro.zip">Windows, SRC641</a> 
+     (OpenOffice.org 1.0, StarOffice 6.0)</li>
+</ul>
+
+<hr>
+
+<p>
+ <small>
+  Please direct comments and suggestions to the <a href="mailto:dev@xml.openoffice.org">xml-dev</a> mailing list (<a href="http://xml.openoffice.org/servlets/SummarizeList?listName=dev">archive</a>) or to <a href="mailto:dvo@openoffice.org">dvo</a>.
+ </small>
+</p></body>
+</html>
+
