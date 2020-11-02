@@ -1,0 +1,146 @@
+IDE requirements
+================
+
+Author: Laszlo Kovacs
+
+This document contains the main issues related to IDE development
+and integration into StarOffice in the context  of  the  language
+agnostic scripting framework.
+
+1. External IDEs
+----------------
+
+StarOffice  currently  has an internal IDE for StarBasic code ma-
+nipulation. With multiple script language support introduced  in-
+tegration  of StarOffice with a robust external IDE will be need-
+ed. It is feasible to adopt an existing IDE rather than  develop-
+ing one from scratch. The two IDEs considered are NetBeans (Forte
+for Java) and JBuilder.
+
+1.1. NetBeans
+-------------
+
+NetBeans is both an IDE platform and a Java IDE developed on this
+platform.  Unfortunately there is an obvious naming problem here,
+the NetBeans web site calls them NetBeans IDE (for the Java  IDE)
+and  NetBeans platform (for the IDE framework that can be used to
+develop IDEs for any application).  While  NetBeans  is  an  open
+source  project,  Forte for Java is the commercial implementation
+of the NetBeans Java IDE.
+
+For Java and Java based scripting languages Forte for Java should
+be  used  as  the  external IDE. The NetBeans IDE has rudimentary
+support for three Java based scripting languages  (environments),
+they  are  Jython, Dynamic Java and BeanShell. These could be en-
+hanced and moved into Forte for Java.
+
+Integration of StarBasic and other  scripting  languages  in  the
+Forte  environment  depends  on  the  extensibility policy of the
+Forte environment. Forte 7 provides one unified IDE based on Net-
+Beans  for all the Forte environments (Java, C, C++, Fortran). If
+Forte extensibility by Sun for Starbasic and by third parties for
+other languages is not feasible because of marketing reasons then
+the NetBeans JAVA IDE can be used for IDE integration.
+
+1.2. JBuilder
+-------------
+
+JBuilder is a very popular Java environment, there could be  mar-
+keting reasons for adapting it as the external StarOffice IDE. It
+is extensible through the so called OpenTools add-ins.  There  is
+an open source project for extending JBuilder with Jython support
+(needs enhancements). Support for other Java based scripting lan-
+guages can be developed in a similar way.
+
+While JBuilder provides similar extensibility to NetBeans in cer-
+tain areas, the main drawback is that it does not allow  replace-
+ment  of  Java with other languages. Various Java runtimes can be
+used, but runtimes of other languages can not be plugged in. They
+all  have  to  integrate  with  the Java debugger that is part of
+JBuilder. This might  change  as  the  Open  Tools  documentation
+states  that  the debugging and building APIs will be extensively
+changed in the future (I could not find out  anything  about  the
+nature of the changes).
+
+The  only  languages  that could be supported in this context are
+Java and Java based scripting  languages.  Support  for  non-Java
+based  scripting languages (including StarBasic) is not possible.
+
+2. Internal vs external IDE
+---------------------------
+
+Considering the various types of user groups and the scripts they
+develop  a  large external IDE might not be feasible to cover the
+needs and a simple internal IDE could be provided.
+
+The sharing of responsibilities between the external and internal
+IDE has to be defined. As currently StarOffice has only an inter-
+nal IDE, this provides all the needed functionality. In a  multi-
+ple  scripting language context (where one of the languages could
+be Java) adding complete IDE functionality to the internal IDE in
+a  language agnostic way would mean duplicating a large amount of
+features of the external IDE in the internal one. Identifying the
+user  groups  for the two IDEs and clearly separating their needs
+will reduce the amount of duplication. For example assuming  that
+the  internal  IDE  would be used for writing very small scripts,
+complete debugging support might not be provided by the  internal
+IDE.
+
+The current Starbasic IDE should be revised along these lines.
+
+3. Implementation of functionality needed by the IDE(s)
+-------------------------------------------------------
+
+In  the  various  scenarios discussed above StarOffice might have
+both an external and an internal IDE. Depending on  the  internal
+IDE  functionalities  a  number  of  underlying  services will be
+shared by the two IDEs. An obvious approach would be to define  a
+set  of  UNO  interfaces for the functionalities (like debugging,
+compiling, storage access etc). These would be implemented by un-
+derlying components and used by both IDEs according to needs.
+
+In  the  context of NetBeans as an external IDE and Java and Java
+based scripting language support (among other languages)  several
+issues have to be mentioned:
+
+(a) NetBeans (and Forte for Java) is already integrated with Java
+so this integration would not happen through the above  mentioned
+UNO  interfaces.  If  the languages supported would be Java, Java
+based scripting languages and Starbasic then only the new, refac-
+tored StarBasic integration would use the UNO interfaces.
+
+(b) The NetBeans IDE framework provides an extensive Java API for
+integration of other languages environments. If an UNO  layer  is
+attached  below this, that will result in two similar APIs on top
+of each other with the only benefit that  the  various  scripting
+language  integrations  can  be developed in any language. If the
+UNO layer is not added then other scripting languages (like Star-
+Basic) could be integrated in Java only.
+
+4. Integration between the IDEs and the binding UI
+--------------------------------------------------
+
+The binding UI has to run a selected script's selected method. If
+the script has syntax errors in it or breakpoints have been  set,
+execution has to stop and the (internal or external IDE) activat-
+ed. For Java and Java based scripting languages this  can  easily
+be  achieved  through  JPDA (the Java Platform Debugger Architec-
+ture, an infrastructure needed to develop end-user  debugger  ap-
+plications).
+
+Integration  of  other scripting languages has to be done through
+UNO interfaces that provide JPDA-like features.  The  development
+environment  of  the language needs similar degree of cooperation
+as between the JVM and the Java debugger for this.
+
+5. GUI building
+---------------
+
+An important feature of an IDE is a GUI  builder.  Modern  script
+environments  include GUI builders. In the language agnostic con-
+text the main issues  are  whether  a  language  independent  GUI
+building  framework  is  feasible  (effort), and what effort will
+this put on developers to learn yet another UI API. Alternatively
+the GUI builder can be deferred to the individual language imple-
+mentations. The possibility to achieve similar look and  feel  to
+StarOffice is important in this case.
