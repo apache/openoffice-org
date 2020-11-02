@@ -1,8 +1,8 @@
 type=page
 title=Waarom OpenOffice.org: IT-bedrijven
 notice=https://www.apache.org/licenses/LICENSE-2.0
-![why apache openoffice=IT business](/why/images/why_oem.png) # {.rfloatimg}
 ~~~~~~
+![why apache openoffice=IT business](/why/images/why_oem.png) # {.rfloatimg}
 Bouw uw bedrijf op rondom Apache OpenOffice. Als u actief bent in de IT kan OpenOffice goede zaken voor u doen. De **flexibele tekstbewerker**, **krachtige werkbladen**, **dynamische afbeeldingen**, **toegang tot databases** en meer voldoen aan alle vereisten voor een software kantoorpakket.
 
 Gebruik OpenOffice om waarde voor uw cliënten toe te voegen, zonder licentiekosten en benauwende voorwaarden in licenties.

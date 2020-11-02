@@ -1,8 +1,8 @@
 type=page
 title=ODF-documenten (*.odt, *.ods, *.odp) lezen met Apache OpenOffice
 notice=https://www.apache.org/licenses/LICENSE-2.0
-![why apache openoffice=OpenDocument Format](/why/images/shell.png) # {.rfloatimg}
 ~~~~~~
+![why apache openoffice=OpenDocument Format](/why/images/shell.png) # {.rfloatimg}
 ##"Windows kan dit bestand niet openen"
 
 Herkent u dit?
