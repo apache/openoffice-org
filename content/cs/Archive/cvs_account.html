@@ -1,0 +1,292 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+    <meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+	<title>Návod na práci s CVS projektu OpenOffice.org</title>
+  
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/cs/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/cs/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/cs/">cs</a>&nbsp;&raquo;&nbsp;<a href="/cs/Archive/">Archive</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+    <table width="100%">
+      <tr>
+	<td valign=top>
+<h2>Návod na práci s CVS projektu OpenOffice.org</h2>
+
+<p>
+  Pokud se chcete plnohodnotně podílet na vývoji OpenOffice.org, buď jako překladatel nebo dokonce
+  vývojář kódu, potřebujete mít zřízen přístup do CVS. Použitá metoda je malinko nestandardní, ale
+  je nutná, protože u tak velkého projektu je nutné citlivě řídit přístupová práva k jednotlivým
+  částem kódu.
+</p>
+
+<p>
+  Přístup do CVS je řízen jednak pomocí autorizace ssh klíčem a jednak jménem a heslem k CVS jako
+  takovému.  Jméno a heslo používáte stejné jako pro přístup na portál www.openoffice.org, do
+  IssueZilly a podobně.  SSH klíč si vygenerujete podle následujícího návodu.
+</p>
+
+<p>Návod se zabývá postupem pod operačním systémem GNU/Linux, pod Microsoft
+Windows jsou principy podobné, nicméně je třeba použít jiné nástroje.
+</p>
+<h3>Založení CVS účtu pro OpenOffice.org</h3>
+
+<ol>
+  <li>Pro přístup do CVS projektu OpenOffice.org je nutné mít vygenerován SSH2 klíč. tento klíč si
+  můžete vygenerovat např. pomocí příkazu <tt>ssh-keygen -d</tt>. Klíč ochráníte heslem, které budete
+  muset zadávat při každém jeho použití, nebo si nakonfigurujete tzv. ssh-agenta a ten bude klíč poskytovat
+  bez potřeby zadávat heslo opakovaně, zadáte jej pouze jednou při nahrání klíče do agenta.</li>
+
+  <li>Dále je nutné, abyste měl vytvořen účet na serveru <a
+  href="http://www.openoffice.org/">www.openoffice.org</a> a tedy byl zaregistrován.</li>
+
+  <li>Přihlašte se na <a href="http://www.openoffice.org">http://www.openoffice.org</a>,
+    vyberte <em>Issue Tracker -> Enter an Issue</em>, klikněte na <em>cs</em>, <em>Assigned To</em>
+    vyplňte <tt>pjanik@openoffice.org</tt>, do <em>Summary</em> napište My SSH public key,
+    do <em>Description</em> nějakou hezkou žádost a hlavně své jméno, klikněte na <em>Submit Issue</em>.</li>
+
+  <li>Klikněte na <em>My Issues</em> a na číslo toho issue, kde najdete <em>Create new
+      attachment</em>, klikněte na <em>Browse</em> (nebo podobně) a z&nbsp;disku vyberte soubor
+      s <strong>veřejným</strong> klíčem (obvykle <tt>~/.ssh/id_dsa.pub</tt>),
+      do <em>Description</em> napište např. "My public key" a zvolte typ "text/plain" a nakonec
+      klikněte na <em>Submit</em>.</li>
+
+  <li>Počkejte, až vám zařídí klíč. Obvykle to netvá déle než jeden den.</li>
+  </ol>
+
+  <p>Nyní jste úspěšně prošli první fází a stáváte se plnohodnotným členem týmu 
+  projektu OpenOffice.org.</p>
+
+<h3>Příprava pracovního prostředí</h3>
+  <p>Vytvoříme si pracovní prostředí. Každý má vlastní názor, jak by
+  mělo vypadat, takže tohle je takové nezávazné doporučení.</p>
+  <p>Pokud nevíte jak nastavit ssh-agenta, zkuste, zda již není nakonfigurován. Většina moderních
+  distribucí totiž ssh-agenta obsahuje implicitně a jediné co musíte udělat je zkusit zadat příkaz
+  <kbd>ssh-add</kbd>. Pokud uvidíte dotaz <kbd>Enter passphrase for /home/dan/.ssh/id_rsa:</kbd>
+  máte agenta funkčního a zadáním hesla do něj můžete uploadnout klíč. Zda se vám to povedlo uvidíte podle
+  odpovědi, v&nbsp;případě úspěchu by měla vypadat takto: <kbd>Identity added: /home/dan/.ssh/id_rsa (/home/dan/.ssh/id_rsa)</kbd>. 
+  To vám ušetří mnoho práce v&nbsp;budoucnu. Klíč do agenta je nutné nahrát při každém startu Xserveru.</p>
+  <p>Dále budeme potřebovat dávku, kterou si vytvoříme tunel na CVS server.
+  Vstoupíme proto do adresáře, kam si dáváme vlastní spustitelné soubory (pravděpodobně ~/bin) a
+  vytvoříme tam nový script jménem ootunnel. Bude mít tento obsah:
+  </p>
+  <p><pre>#!/bin/bash
+ssh -2 -x -L 2401:localhost:2401 tunnel@openoffice.org</pre>
+  </p>
+  <p>jak prosté, jen dva řádky.
+  </p>
+  <p>Nastavíme si, že script je spustitelný, chmod u+x ootunnel a jdeme dále.
+  </p>
+  <p>Vytvoříme si v&nbsp;domovském adresáři adresář pro vývoj.
+  </p>
+  <p><pre>mkdir ~/OOo</pre>
+  </p>
+  <p>a provedeme do něj checkout modulů, které budeme používat. U&nbsp;překladatelů se jedná o&nbsp;modul cs/po.
+  Abysme to mohli udělat, tak
+  potřebujeme mít zaregistrovaný náš ssh klíč na cvs serveru. Tento krok tedy nelze provést před 
+  dokončením registrace popsané v&nbsp;první části. Pokud registraci máme, pokračujeme dále:
+  </p>
+  <p>Otevřeme si xterm, v&nbsp;něm zadáme příkaz
+  </p>
+  <p><pre>dan@dan:~> ~/bin/ootunnel</pre>
+  </p>
+  <p>Je možné že budeme dotázáni na heslo (passphrase) k&nbsp;privátními ssh klíči. Při prvním spuštění budeme navíc
+  muset akceptovat identitu vzdáleného stroje. Na tuto výzvu je nutné odpovědět "yes", skutečně celým slovem, pouhé Y nefunguje.
+  Pokud je vše v&nbsp;pořádku, dozvíme se:
+  </p>
+  <p><pre>Tunnel established.  Type ctrl-c to exit.</pre>
+  </p>
+  <p>Otevřeme si další xterm a zadáme:
+  </p>
+  <p><pre>cd ~/OOo</pre>
+  </p><p><pre>cvs -d:pserver:moje_jmeno_z_portalu@localhost:/cvs login</pre>
+  </p><p>.. zadáme heslo, kterým se přihlašujeme na www.openoffice.org
+  </p><p><pre>cvs -z3 -d:pserver:moje_jmeno_z_portalu@localhost:/cvs checkout cs/po</pre>
+  </p><p><kbd>cs/po</kbd> je modul s&nbsp;překlady, pokud budete pracovat na něčem jiném, příslušné jméno
+  modulu Vám sdělí ten, kdo Vás pro danou činnost naverboval.</p>
+  <p>Nyní jsme dosáhli tzv. checkoutu souborů k&nbsp;překladu či jiným účelům. Ten se provádí jen
+  jednou. Nyní již budeme pokaždé provádět jen cvs up, abychom stáhli do svého
+  adresáře kopie aktuální verze souborů. cvs up se zadává již přímo v&nbsp;adresáři
+  ~/OOo/cs/po nebo v&nbsp;některém z&nbsp;podadresářů.
+  </p>
+
+  <h3>Každodenní práce s&nbsp;CVS</h3>  
+  <p>Každou práci s&nbsp;CVS zahájíme opět spuštěním scriptu ootunnel, jak je popsáno výše.</p>  
+  <p>Když tunel běží, používáme zcela běžné CVS příkazy, tedy pro aktualizaci lokální kopie příkaz
+  <kbd>cvs up</kbd> a pro uložení provedených změn do CVS <kbd>cvs ci</kbd>.</p>
+  <p>Po ukončení práce uzavřete tunel stisknutím CTRL+C. Tunel spotřebovává prostředky serveru,
+  proto je vhodné mít jej aktivní jen když jej potřebujete. Tedy u&nbsp;příležitostného uživatele není dobré
+  spouštět je automaticky při každém startu počítače.</p>
+  
+  <h3>Překlady</h3>
+  <p>Nyní si popíšeme jak budeme provádět překlad. Vhodný na to je kbabel, ale použít je možné
+cokoliv, co umí pracovat s .po soubory. Třeba i&nbsp;textový editor, ale tam je
+velké riziko chyby. Pokud budeme editovat soubor ručně, tak je nutné před
+jeho uploadem zkusit příkazem "<kbd>msgfmt --statistics prekladanysoubor</kbd>" jestli
+soubor neobsahuje syntaktickou chybu, která by způsobila chaos při dalším
+zpracování souborů.
+</p>
+<p>V&nbsp;Kbabelu provedeme následující nastavení:
+</p>
+<p>V&nbsp;menu Projekt-Nový založte nový projekt. Název projektu si vyplňte libovolný, stejně tak Název souboru s nastavením, Jazyk Czech a Typ projektu Jiný. Základní složku PO souborů můžete vyplnit, pokud budete chtít používat Správce katalogů.</p>
+<p>Po vytvoření projektu, zvolte Projekt-Nastavit a nastavte:
+</p><p>Identita:<br>
+Jméno - vlastní<br>
+Plný název jazyka - Czech<br>
+kód jazyka - cs<br>
+mailling list - dev@cs.openoffice.org<br>
+<br>
+Ukládání:<br>
+Kódování UTF8<br>
+<br>
+Různé:<br>
+znak klávesových zkratek: ~<br>
+</p>
+<p>a to by mělo z&nbsp;nastavení stačit.
+</p>
+<p>Při příštím spuštění musíte KBabelu říct, že má načíst nastavení tohoto projektu. Buď jej spustíte příkazem
+<kbd>kbabel --project cesta/k/souboru/s/nastavením</kbd>
+nebo po spuštění KBabelu vyberte Projekt-Načíst.</p>
+<p>A můžeme začít překládat.</p>
+<p>Když máme daný soubor přeložen zadáme:
+</p>
+<p><pre>EDITOR=joe cvs ci</pre>
+</p><p>kde místo joe můžeme zadat jiný oblíbený editor.
+</p>
+<p>Vybafne na nás stránka vypadající nějak takto:
+</p>
+<p><pre>Issue number:
+Submitted by:
+Reviewed by:
+CVS: ----------------------------------------------------------------------
+CVS: Issue number:
+CVS:   If this change addresses one or more issues,
+CVS:   then enter the issue number(s) here.
+CVS: Submitted by:
+CVS:   If this code has been contributed to the project by someone else; i.e.,
+CVS:   they sent us a patch or a set of diffs, then include their name/email
+CVS:   address here. If this is your work then delete this line.
+CVS: Reviewed by:
+CVS:   If we are doing pre-commit code reviews and someone else has
+CVS:   reviewed your changes, include their name(s) here.
+CVS:   If you have not had it reviewed then delete this line.
+CVS: ----------------------------------------------------------------------
+</pre></p>
+<p>a tak pokračuje dále. všechny řádky začínající "CVS:" budou odstraněny, do nich
+nemá smysl nic psát. Do ostatních je potřeba uvést kdo a proč změny
+prováděl. Vezmeme to popořadě:
+</p>
+<p>Issue number: ponecháme a doplníme číslo chyby, kterou odstraňujeme, pokud
+se jedná o&nbsp;chyby hlášenou v&nbsp;IZ. Při běžném překladu ponecháváme nevyplněné.
+</p>
+<p>Submitted by: tento řádek odstraníme, pokud se nejedná o&nbsp;případ, kdy
+submitujeme překlad, který provedl někdo jiný.
+
+</p><p>Reviewed by: opět odstraníme, ledaže bysme měli spolupachatele, který náš
+překlad kontroloval.
+</p>
+<p>Tyto dva řádky jsou určeny spíše pro submity kódu, než překladů.
+
+</p><p>Na další nový řádek uvedeme důvod, proč děláme commit. Pokud jen tak
+překládáte, není tam prakticky co napsat. Ale pokud již provádíte revizi
+nebo opravujete chybu, je velmi důležité tam uvést, co se dělo. Např.
+</p>
+<p>Změna horké klávesy kvůli kolizi
+</p>
+<p>nebo něco podobného, aby bylo vždy vidět, co a jak se se souborem dělo a
+případně se dalo dohledat, proč akci, která nevypadá logicky, autor dělal.
+</p>
+<p>Po ukončení editace tohoto souboru opustíme editor a uvidíme něco jako:
+</p>
+<p><pre>File /tmp/cvsXtzIe4 saved.
+Checking in schedule.po;
+/cvs/cs/po/wizards/source/schedule.po,v  &lt;--  schedule.po
+new revision: 1.2; previous revision: 1.1
+done
+</pre></p>
+<p>Můžeme si gratulovat, náš překlad byl vložen do CVS a při dalším překladu
+OOo bude automaticky jeho součástí.
+</p>
+<p>Při práci se držte několika zásad:
+</p>
+<ul><li><p>Před zahájením překladu oznamte co překládádáte v&nbsp;konferenci vývojářů, aby se nestalo,
+že budou zbytečně dva dělat totéž. Teoreticky si můžete editovaný soubor v&nbsp;CVS zamknout, ale nepoužíváme
+to, protože to ani nijak zvlášť dobře nefunguje.
+</p></li>
+<li><p>Vždy než začnete pracovat, udělejte cvs up v&nbsp;adresáři, kde chcete pracovat,
+máte tak záruku, že začnete s&nbsp;aktuálními soubory. Není tragédie, pokud
+použijete starší, ale budete mít problémy při commitu a budete muset ručně
+řešit případné nesoulady.</p></li>
+
+<li><p>Po skončení práce udělejte commit, (cvs ci), nenechávejte to na další den,
+opět by mohlo dojít ke kolizím.
+</p></li>
+<li><p>Pokud budete updatovat více souborů najednou, nevadí, commit je inteligentní
+a najde všechny a provede commit najednou. To je výhoda při běžném překladu,
+kdy nemusíte ten popisný soubor vyplňovat pro každý změněný soubor, ale jen
+pro všechny najednou. Naopak pokud opravujete chyby hlášené v&nbsp;IZ a mající
+číslo, dělejte commit po každé změně, aby bylo možné jednoznačně přiřadit
+opravu k&nbsp;chybě v&nbsp;IZ.</p></li>
+</ul>
+<p>Po skončení práce vstupte do okna, kde jste otevřeli tunel a ukončete
+jej stiskem Ctrl+C.</p>
+
+    </td>
+    <td width="180px" valign="top">
+      <table border=1 cellspacing=0 cellpadding=2 width="100%" bgcolor="#ffffff">
+	<tr><td bgcolor="#00315A"><font size=-1 color="white"><b>Projekt</b></font></td></tr>
+	<tr><td bgcolor="#dddddd" style="padding: 5px;"><font size=-1 color="black">
+	      <a href="/index.html">Úvod</a><br>
+	      <a href="/people.html">O nás</a><br>
+	      <a href="/sponsorship.html">Sponzoring</a><br>
+	</font></td></tr>
+	<tr><td bgcolor="#00315A"><font size=-1 color="white"><b>Pro uživatele</b></font></td></tr>
+	<tr><td bgcolor="#dddddd" style="padding: 5px;"><font size=-1 color="black">
+	      <a href="http://www.OpenOffice.cz">Portál www.OpenOffice.cz</a><br>
+	</font></td></tr>
+	<tr><td bgcolor="#00315A" ><font size=-1 color="white"><b>Pro vývojáře</b></font></td></tr>
+	<tr><td bgcolor="#dddddd" style="padding: 5px;"><font size=-1 color="black">
+	      <a href="http://www.openoffice.org/project/www/issues/query.cgi">Issuezilla</a><br>
+	      <a href="/issuezilla/index.html">Návod k používání Issuezilly</a><br>
+	      <a href="/cvs_account.html">Překlady v CVS</a><br>
+	      <a href="http://cs.openoffice.org/source/browse/cs/">CVS</a><br>
+	      <a href="http://cs.openoffice.org/qa/">Statistiky QA</a><br>
+	      <a href="http://cs.openoffice.org/qa/howto.html">Návod ke kontrole</a><br>
+	      <a href="http://cs.openoffice.org/stats/">Statistiky překladů</a><br>
+	      <a href="/builds.html">Testovací a debug buildy, UPX buildy</a><br>
+	      <a href="/servlets/SummarizeList?listName=dev">Konference vývojářů</a><br>
+	      <a href="/bugs.html">Oznámení chyby</a><br>
+	      <a href="/issues/buglist.cgi?component=cs&issue_status=NEW&issue_status=STARTED&issue_status=REOPENED">Seznam chyb</a><br>
+	      <br>
+	      <a href="/roadmap/index.html">Roadmap</a><br>
+	      <a href="/how_to_help.html">Jak mohu pomoci?</a><br>
+	      <a href="/links.html">Odkazy</a><br>
+	      <br><br>
+	      <a href="/news.rss"><img border=0 src="/img/xml.gif"></a>
+	</font></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
