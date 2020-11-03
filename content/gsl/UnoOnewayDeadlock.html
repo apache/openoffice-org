@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 6.0  (Win32)">
+	<META NAME="CREATED" CONTENT="20011026;8104200">
+	<META NAME="CHANGED" CONTENT="20011026;10241300">
+	<STYLE>
+	<!--
+		@page { margin: 2cm }
+	-->
+	</STYLE>
+</head>
+<body>
+<P ALIGN=CENTER STYLE="margin-bottom: 0cm"><FONT SIZE=4 STYLE="font-size: 16pt"><B>UNO
+oneway call deadlocks using a remote bridge shown at a clipboard API
+scenario</B></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Normally a deadlock can only occur in
+conjunction with at least two threads acquiring at least two
+synchronisation objects concurrently.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">But using oneway methods of UNO
+interfaces through a remote bridge can cause a deadlock even if only
+one thread is running and only one synchronisation object is used.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">One key feature of UNO is that it
+preserves the order of method calls of any kind (synchronous, oneway)
+over every bridge. Using an inprocess bridge to an interface this is
+quite easy because the order is preserved by the callstack of the
+current thread. Actually a oneway call is synchronous to.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">But using an interface through a remote
+bridge changes the situation. When calling a oneway method the remote
+bridge accepts the call of the caller and returns immediatly. The
+call is delivered to the remote end of the bridge and executed. If
+the caller now calls further oneway methods on that interface in the
+same thrwead context the calls are delivered to the remote end of the
+bridge and the caller thread continues execution. But on the remote
+side of the bridge the the call is scheduled until all previous
+oneway calls are executed.</P>
+<P STYLE="margin-bottom: 0cm">If the caller now calls a synchronous
+method on the interface not only the cally thread on the remote side
+of the bridge has to wait until all previous oneway calls are
+finished but also the caller blocks until all previous oneway calls
+of the thread are finished.</P>
+<P STYLE="margin-bottom: 0cm">This behaviour ensures the call order
+when using a remote bridge.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">But there is a caveat. The remote
+bridge implies an additonal synchronisation object and an additional
+thread on cally side that can cause a deadlock scenario that is not
+even evident.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Let me explain the problem by an
+scenario using the clipboard API. The interface
+<A HREF="http://com.sun.star.datatransfer.XClipboard/">com.sun.star.datatransfer.XClipboard</A>
+has a method setContens to put some content into the clipboard. This
+method is declared oneway because the client must not wait until the
+clipboard has finished. The method getContents on the other hand is
+synchronous because it needs the clipboard content to return.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Assume one thread on caller side calls
+XClipboard::setContents. The caller thread continues executing while
+the call is delivered to the remote interface. Now the caller wants
+to ensure that the data has arrived in the clipboard, locks the
+formerly know SolarMutex and calls XClipboard::getContents. The call
+blocks on caller side because the cally still executes the
+setContents call and as you remember UNO wants to preserve the call
+order.</P>
+<P STYLE="margin-bottom: 0cm">Now the cally &#150; the clipboard
+implementation on remote side &#150; puts the new data into the
+clipboard and wants to inform the previous clipboard owner that he's
+not longer the owner of the clipboard. It calls back to the cally
+side through a XClipboardOwner interface. This call is not executed
+in the origin thread on cally side because the thread has continued
+execution after the oneway call. Therefore UNO executes the callback
+in a new thread. Now the clipboard owner recognizes that content
+change of the clipboard and wants to update his state and tries to
+lock the SolarMutex. Unfortunately the SolarMutex is already locked
+and owned by the origin thread. The result is that the callback waits
+for the SolarMutex and blocks the termination of the oneway call and
+the synchronous getContents call block too becuase he waits for the
+termination of the oneway call.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">This situation is a deadlock.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">How to prevent from this situation ?
+Well, actually the implementation of clipboard services do not rely
+on the call order of the oneway calls of setContens. Each oneway call
+received is marshalled into one dispatcher thread and the oneway call
+returns immediatly. This prevents from the situation that subsequent
+synchronous calls have to wait for the completion of the oneway
+calls.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">There are two issues to care about:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">If you are implementing a oneway method
+of an UNO interface try to return immedialty and deliver execution in
+an extra thread if you use other interfaces to call back inside the
+implementation of the oneway method. This is what the clipboard does.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">If you are using a oneway method and
+the call order is not relevant, do call oneway methods in the same
+thread you are using to call synchronous methods but rather do the
+oneway calls in an extra thread. This is quite neccessary if you know
+of the implementation of the interface that it does callbacks through
+other interfaces during execution of oneway methods.</P>
+<P STYLE="margin-bottom: 0cm">If you are not aware what the
+implementation does or even worse you have to rely on call order make
+sure you don't own any mutex or other synchronisation object that
+maybe accessed in a callback during a oneway method execution.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+</body>
+</HTML>
