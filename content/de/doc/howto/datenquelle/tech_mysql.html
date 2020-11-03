@@ -1,0 +1,275 @@
+<html><head>
+<title>Arbeiten mit Datenquellen</title>
+	<!-- Start de-header -->
+	<link rel="stylesheet" href="../../../styles/de.css" media="screen" type="text/css" />
+	<link rel="stylesheet" href="../../../styles/de_print.css" media="print" type="text/css" />
+	<link rel="stylesheet" title="mit Navbar" href="../../../styles/de_navbar.css" media="screen" type="text/css" />
+	<link rel="alternate stylesheet" title="ohne Navbar" media="screen" href="../../../styles/de_nonavbar.css" type="text/css" />
+	<!-- >
+	Kommentare zur Seite
+	$Id: tech_mysql.html 2003/12/25 13:17 cmarkgraf
+	< -->
+	<!-- End de-header -->
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+<body onload="loginfocus()" marginwidth="0" marginheight="0" class="composite">
+<!-- "Erste Schritte"-Header -->
+<table cellpadding="2" cellspacing="2" border="0" width="100%">
+<tr>
+	<td width="33%">
+		<a href="db_grundlagen.html">[zur&uuml;ck]</a>
+	</td>
+	<td width="33%">
+		<a href="index.html">[Hauptmen&uuml;]</a>
+        </td>
+	<td width="33%">
+		<a href="tech_sapdb.html">[weiter]</a>
+        </td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>
+		<a href="pdf/tech_mysql.pdf">[PDF]</a>
+    </td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<hr size="1" />
+<div id="body_de">
+<h2>MySQL per JDBC anbinden</h2>
+<p style="text-align: right; color:#c30000;">
+Wie verbinde ich
+Star/OpenOffice.org mit einer MYSQL Datenbank via JDBC ohne ODBC?</p>
+<p>Dieses Dokument soll eine einfache Anleitung sein,
+wie Sie eine MySQL-Datenbank mit OpenOffice.org (ab Version 1.0.2)
+benutzen k&ouml;nnen, ohne &uuml;ber ODBC darauf zugreifen zu m&uuml;ssen.</p>
+<h3>MySQL besorgen und installieren</h3>
+<p>Unter <u><a href="http://www.mysql.com">www.mysql.com</a></u>
+gibt es die Datenbank und ein grafisches Frontend <em>MySQLGUI</em>,
+au&szlig;erdem die aktuellen JDBC-Treiber, Connect/J. Stellen Sie
+sicher, dass Sie eine Version ab 3.0.3-Beta verwenden, da Sie mit
+dieser Version Auto-Increment Felder verwenden k&ouml;nnen und auch
+vollen Schreibzugriff auf die Daten erhalten.</p>
+<table width="100%" border="1" cellpadding="5" cellspacing="2">
+		<tr>
+			<td width="7%">
+				<p>
+				<img src="../pics/win.png"  name="Grafik4" vspace="14" border="0" width="50" height="21" alt="" /></p>
+			</td>
+			<td width="93%">
+				<p>Eine wirklich gute M&ouml;glichkeit, MySQL zu
+				verwalten, ist <em>PHPMyAdmin</em>, wozu man
+				allerdings einen laufenden Webserver braucht. Aber auch das ist
+				&uuml;berhaupt kein Problem, wenn man z.B. <em>PHPTriad</em>
+				oder <em>Foxserver</em> benutzt. Beide sind dazu
+				da, um unter Windows m&ouml;glichst einfach einen
+				Apache-Webserver, eine MySQL-DB und PHP mit <em>PHPMyAdmin</em>
+				zu installieren.</p>
+				<p>Beide findet man unter
+				<u><a href="http://sourceforge.net/projects/foxserv">sourceforge.net/projects/foxserv</a></u>
+				bzw. <u><a href="http://sourceforge.net/projects/phptriad">sourceforge.net/projects/phptriad</a></u>.</p>
+				<p>Hier beschreibe ich <em>PHPTriad</em>
+				, da dieses Paket kleiner ist und bis auf die JDBC-Treiber
+				bereits alles dabei ist.</p>
+				<p>Nach Ausf&uuml;hren des
+				Installationsprogrammes besitzt man einen f&uuml;r lokale Belange
+				(weil ziemlich ungesch&uuml;tzt) geeigneten Apache Webserver mit
+				PHP, PHPMyAdmin und einer MySQL Datenbank. Dieses ist aber f&uuml;r
+				unsere Zwecke hervorragend geeignet. Als Hauptbenutzer ist
+				standardm&auml;&szlig;ig <em>root</em> mit leerem
+				Passwort vergeben. Also evtl. &auml;ndern bzw. neue Benutzer
+				erstellen und entsprechende Passw&ouml;rter vergeben. (Aber erst
+				<em><b>nachdem</b></em> alles mal l&auml;uft und
+				man sich mit einer richtigen Datenbank und mit deren
+				M&ouml;glichkeiten besser auskennt.)</p>
+				<p>Mit einem Browser und der Adresse localhost
+				sollte man &uuml;berpr&uuml;fen, ob Apache und PHP l&auml;uft.
+				Auch PHPMyAdmin aufrufen, ob MySQL l&auml;uft.</p>
+				<p>
+				Ansonsten
+				&uuml;ber <b>Start&nbsp;-&nbsp;Programme&nbsp;-&nbsp;PHPTriad&nbsp;-&nbsp;Apache</b>
+				und <b>MySQL</b>
+				starten. Au&szlig;erdem sind bei einer Standard-Installation
+				evtl. die Programme <em>winmysqladmin.exe</em>
+				und <em>mysqlmanager.exe</em> sowie evtl.
+				<em>mysql.exe</em> (aus einer DOS-Konsole
+				aufzurufen) hilfreich. Diese finden wir im <em>/bin</em>
+				Verzeichnis also <em>c:\apache\mysql\bin</em> .</p>
+				<p>
+				Diese
+				Programme benutzen wir aber nur solange, bis MySQL l&auml;uft, da
+				das Frontend &uuml;ber PHPMyAdmin wesentlich einfacher zu
+				bedienen ist.</p>
+			</td>
+		</tr>
+</table>
+<table width="100%" border="1" cellpadding="5" cellspacing="2">
+		<tr>
+			<td width="7%">
+				<p>
+				<img src="../pics/linux.png" name="Grafik1" vspace="14" border="0" width="50" height="21" alt="" /></p>
+			</td>
+			<td width="93%">
+				<p>
+				Die
+				meisten Linux Distributionen enthalten bereits Apache, MySQL and
+				PHPAdmin. Lesen Sie in der Dokumentation Ihrer Distribution, wie
+				Sie diese Pakete installieren.</p>
+				<p>
+				Falls
+				jemand eine entsprechende Anleitung schreibt, k&ouml;nnen wir
+				diese hier mit aufnehmen.</p>
+			</td>
+		</tr>
+</table>
+<p>Ab OpenOffice.org 1.0.2 k&ouml;nnen Tabellen recht
+einfach direkt aus dem Officepaket heraus erstellt werden. Alles, was
+Sie vorher noch tun m&uuml;ssen, ist, die Datenbank zu erzeugen.</p>
+<p>Erstellen Sie &uuml;ber PHPMyAdmin eine neue
+Datenbank, z.B. &bdquo;mydb&ldquo;. Das ist alles, was Sie in
+PHPMyAdmin tun m&uuml;ssen. Mit  PHPMyAdmin steht Ihnen aber ein
+gutes Werkzeug zur Seite, falls einmal mit OpenOffice.org nicht alles
+auf Anhieb funktioniert.</p>
+<h3>JDBC-Treiber installieren</h3>
+<p>Als N&auml;chstes gilt es den JDBC-Treiber zu
+installieren. Wir haben uns eine Datei geladen, die ungef&auml;hr
+&bdquo;<em>mysql-connector-java-3.0.3-beta.zip</em> &ldquo;
+hei&szlig;t. Dies ist eine gepackte Datei, die sowohl die eigentliche
+Treiber-Datei als auch die Source-Codes dazu beinhaltet (falls jemand
+das ganze selber kompilieren m&ouml;chte). Zum Entpacken kann man
+FILZIP (<u><a href="http://www.filzip.de/">www.filzip.de</a></u><a href="http://www.filzip.de/">
+</a>) hernehmen, falls man noch keinen Entpacker hat.</p>
+<p>Wir haben dann irgendwo ein Verzeichnis
+<em>&bdquo;mysql-connector-java-3.0.3-beta&ldquo;</em>.
+Darin befindet sich neben den Sourcen auch der eigentliche Treiber
+<em>&bdquo;mysql-connector-java-3.0.3-beta-bin.jar&ldquo;</em>
+. Diese Datei kopieren wir einfach in irgendein Verzeichnis,
+vorzugsweise in das <em>lib/ext</em> -Verzeichnis der
+installierten Java-Runtimeumgebung, dann er&uuml;brigt sich das
+umst&auml;ndliche Setzen der ClassPath - Variablen.</p>
+<p>Damit das funktioniert, sollte man aber
+sicherstellen, dass die jeweilige java.exe geladen wird. Falls sich
+unter Windows im system32 - Verzeichnis eine java.exe befindet, diese
+einfach l&ouml;schen oder umbenennen.</p>
+<h3>MySQL in OpenOffice.org einbinden</h3>
+<p>Falls man nicht den Weg &uuml;ber das  <em>lib/ext</em>
+-Verzeichnis geht, muss dieser Treiber dann noch OpenOffice.org
+bekannt gemacht werden.</p>
+<p>Seit Version 641D geht das ganze ziemlich einfach.</p>
+<ul>
+	<li><p>Unter:<b>
+	Extras&nbsp;-&nbsp;Optionen</b> , Bereich
+	<b>&bdquo;OpenOffice.org&ldquo;</b>
+	, <b>&bdquo;Sicherheit&ldquo;</b>
+		</p></li>
+	<li><p>Bei: <b>&bdquo;ClassPath&ldquo;</b>
+	den Pfad auf die jeweilige <em>&bdquo;mysql-connector-java-3.0.3-beta-bin.jar&ldquo;</em>
+	Datei hinzuf&uuml;gen.</p></li>
+</ul>
+<table width="100%" border="1" cellpadding="5" cellspacing="2">
+		<tr>
+			<td width="7%">
+				<p>
+				<img src="../pics/achtung.png" name="Grafik3" vspace="14" border="0" width="32" height="32" alt="" /></p>
+			</td>
+			<td width="93%">
+					<p>Wirklich diese Datei und nicht nur das
+					Verzeichnis, in der sie sich befindet, angeben!</p>
+			</td>
+		</tr>
+</table>
+<p>Anschlie&szlig;end OpenOffice.org komplett
+beenden. Achtung, den Quickstarter in der Taskleiste (Windows) nicht
+vergessen!</p>
+<p>Nun k&ouml;nnen wir OpenOffice.org wieder starten.</p>
+<ul>
+	<li><p>&Uuml;ber
+	<b>Extras&nbsp;-&nbsp;Datenquellen</b>
+	kommen wir in das Men&uuml; zur Datenbankverwaltung.</p></li>
+	<li><p>Dort w&auml;hlen wir <b>&bdquo;Neue
+	Datenquelle&ldquo;</b> .</p></li>
+	<li><p>Unter Allgemein:</p></li>
+	<li><p>Name: JDBCTest1
+	(=frei zu vergeben)</p></li>
+	<li><p>Verbindung:</p></li>
+	<li><p>Datenbanktyp: JDBC
+		</p></li>
+	<li><p>Datenquellen-URL:
+	jdbc:mysql://localhost/mydb<br />Wobei
+	localhost auch ein DNS-Name im Netz oder der DNS-Name des eigenen
+	Rechners ist. <em>&bdquo;mydb&ldquo;</em> ist der
+	Name der Datenbank, die wir vorher &uuml;ber PHPMyAdmin erstellt
+	haben.</p></li>
+	<li><p>Unter JDBC:</p></li>
+	<li><p>JDBC Treiberklasse: com.mysql.jdbc.Driver</p></li>
+	<li><p>URL:
+	jdbc:mysql://localhost/mydb?useHostsInPrivileges=false</p></li>
+</ul>
+<table width="100%" border="1" cellpadding="5" cellspacing="2">
+		<tr>
+			<td width="7%">
+				<p>
+				<img src="../pics/achtung.png" name="Grafik2" vspace="14" border="0" width="32" height="32" alt="" /></p>
+			</td>
+			<td width="93%">
+				<p>Ohne
+				den Parameter useHostsInPrivileges=false
+				erhalten Sie keinen Schreibzugriff &uuml;ber den JDBC-Treiber.</p>
+			</td>
+		</tr>
+</table>
+<ul>
+	<li><p>Benutzername: root
+	(falls Sie in der Benutzerverwaltung von MySQL noch nichts ge&auml;ndert
+	haben)</p></li>
+	<li><p>Passwort erforderlich:
+	lassen wir dann <em><b>frei</b></em> .</p></li>
+	<li><p>Zeichensatz: System
+	(kann man sp&auml;ter bei Bedarf immer noch &auml;ndern)</p></li>
+</ul>
+<p>Wenn man nun auf
+<b>&bdquo;Tabellen&ldquo;</b>
+geht, kann man neue Tabellen, Abfragen und Verkn&uuml;pfungen
+erstellen. Speichern Sie eine neue Tabelle unter einem beliebigen
+Namen (ohne Leerzeichen) z.B. &bdquo;MeineTabelle1&ldquo;. In dieses
+Men&uuml; kommt man &uuml;brigens sehr leicht mit <b>&lt;F4&gt;</b>.</p>
+<p>Jetzt ben&ouml;tigen
+Sie nur noch die korrekten Einstellungen in der MySQL-Tabelle
+<em>&bdquo;tables_priv&ldquo;</em>. Um diese zu
+setzen, klicken Sie mit der rechten Maustaste auf Ihre Datenquelle
+und w&auml;hlen Sie <b>SQL...</b>
+Sie erhalten einen Dialog, in dem Sie direkt SQL-Kommandos an Ihre
+Datenbank schicken k&ouml;nnen.</p>
+<p>Geben Sie folgende
+Zeile ein:</p>
+<p><kbd>grant
+all privileges on MeineTabelle1 to root</kbd></p>
+<p>(Falls Ihr Nutzename
+Root und der Tabellenname  MeineTabelle1 ist, wie oben beschrieben).
+Beachten Sie, dass Sie diese Anweisung f&uuml;r alle Tabellen
+eingeben m&uuml;ssen, die Sie &uuml;ber OpenOffice.org anlegen.</p>
+<p>Sie besitzen jetzt
+eine lauff&auml;hige MySQL-Datenbank, die Sie per JDBC in
+OpenOffice.org f&uuml;r Ihre Arbeit benutzen k&ouml;nnen.</p>
+<div id="Credits">
+	<p>Sollten Sie Fehler
+	in dieser Anleitung entdecken oder Verbesserungsvorschl&auml;ge
+	haben, wenden Sie sich an den Autor.</p>
+	<h3>Credits</h3>
+	<p>Autor
+	:	Hermann Kienlein	(<u><a href="mailto:hermann@kienlein.com">hermann@kienlein.com</a></u>)</p>
+	<p>Korrektur
+	gelesen:	Andr&eacute; Schnabel	(<u><a href="mailto:AndreSchnabel@openoffice.org">AndreSchnabel@openoffice.org</a></u>)</p>
+	<p>letzte
+	&Auml;nderung:	09.02.2003</p>
+	<p>Kontakt
+	:	OpenOffice.org Documentation Project	<u><a href="documentation.openoffice.org">documentation.openoffice.org</a></u></p>
+	<p>	OpenOffice.org
+	deutschsprachig		<u><a href="http://de.openoffice.org/">de.openoffice.org</a></u></p>
+	<p>	OpenOffice.org bei
+	Hermann Kienlein	<u><a href="http://www.kienlein.com/pages/oo.html">www.kienlein.com</a></u></p>
+</div>
+</div>
+</body>
+</html>
+
