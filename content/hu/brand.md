@@ -11,3 +11,4 @@ divid=bannera
 announce=Megjelent az Apache OpenOffice 4.1.7!
 announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.7+Release+Notes
 announcetip=Megjelent az Apache OpenOffice 4.1.7!
+~~~~~~

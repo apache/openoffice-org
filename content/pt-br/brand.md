@@ -11,3 +11,4 @@ divid=bannera
 announce=Saiba como PARTICIPAR do projeto
 announceurl=/pt-br/participe.html
 announcetip=Leia o anúncio
+~~~~~~

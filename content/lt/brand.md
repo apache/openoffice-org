@@ -12,3 +12,4 @@ announce=Išleistas „Apache OpenOffice“ 4.1.7!
 announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-13
 announcetip=Gauti „Apache OpenOffice“ 4.1.7
 ~~~~~~
+~~~~~~

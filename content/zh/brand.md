@@ -10,3 +10,4 @@ announce=Apache OpenOffice 4.0.1 正式發表
 announceurl=https://cwiki.apache.org/confluence/pages/viewpage.action?pageId
 announcetip=閱讀佈告
 ~~~~~~
+~~~~~~

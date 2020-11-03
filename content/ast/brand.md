@@ -11,3 +11,4 @@ divid=bannera
 announce=Espublizada Apache OpenOffice 4.1.7
 announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.7+Release+Notes
 announcetip=Espublizada Apache OpenOffice 4.1.7
+~~~~~~

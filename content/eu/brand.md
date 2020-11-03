@@ -11,3 +11,4 @@ divid=bannera
 announce=Apache OpenOffice 4.1.7 eskuragarri dagoeneko!
 announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-13
 announcetip=Irakur ezazu iragarkia
+~~~~~~

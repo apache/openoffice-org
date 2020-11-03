@@ -11,3 +11,4 @@ divid=bannera
 announce=Byla vydána nová verze Apache OpenOffice 4.1.7!
 announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-13
 announcetip=Byla ohlášena verze Apache OpenOffice 4.1.7
+~~~~~~

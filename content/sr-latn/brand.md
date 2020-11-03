@@ -9,3 +9,4 @@ divid=bannera
 announce=Apache OpenOffice 4.0.1 je objavljen!
 announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0+Release+Notes
 announcetip=Pročitajte saopštenje
+~~~~~~

@@ -11,3 +11,4 @@ divid=bannera
 announce=Apache OpenOffice 4.1.7 正式发布了！
 announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.7+Release+Notes
 announcetip=阅读发布说明
+~~~~~~

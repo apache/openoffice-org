@@ -11,3 +11,4 @@ divid=bannera
 announce=Apache OpenOffice 4.1.7 जारी
 announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-13
 announcetip=The Apache OpenOffice प्रोजैक्ट नेApache OpenOffice 4.1.7 का ऐलान किया
+~~~~~~

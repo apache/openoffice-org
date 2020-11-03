@@ -10,3 +10,4 @@ divid=bannera
 announce=2018-11-18: Κυκλοφόρησε η 4.1.7 ανανεωμένη έκδοση!
 announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.7+Release+Notes
 announcetip=Πληροφορίες για τη νέα διανομή
+~~~~~~

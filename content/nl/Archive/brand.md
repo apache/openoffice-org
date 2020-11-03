@@ -10,3 +10,4 @@ announce=OpenOffice graduates from the Apache Incubator!
 announceurl=http://blogs.apache.org/OOo/entry/openoffice_graduates_from_the_apache
 announcetip=Read the announcement
 ~~~~~~
+~~~~~~
