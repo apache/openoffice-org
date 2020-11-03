@@ -27,4 +27,7 @@ BEGIN {
     }
 }
 END {
+    if ( META > 0 ) {
+	print "~~~~~~";
+    }	
 }
