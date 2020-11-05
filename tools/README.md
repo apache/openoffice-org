@@ -1,4 +1,6 @@
-## Editing the Git Site
+# Migration from CMS to Github/JBake
+
+## Git Repository
 
 1. Clone the Git Repository
 
@@ -11,31 +13,22 @@ git pull
 git checkout main
 ```
 
-2. Modify Pages
+- Content goes here:
 
 ```
 cd ~/Development/openoffice/ooo-sit.git/content/
 ```
 
-* Html pages are `*.html` and `*.htm`
-  - Full html pages are rewrapped.
-  - Html fragments are wrapped.
-* Markdown pages are `*.md`
-* Special purpose Markdown which also need to be delcared in `templates/ssi_paths.gsp`
-  - `brand.md` are specialised translations for the website header.
-  - `topnav.md` is the top navigator.
-  - `leftnav.md` is the left navigator.
-  - `rightnav.md` is the right naviagator
+  These files are processed by templates
 
-3. Modify Assets
+- Assets go here:
 
 ```
 cd ~/Development/openoffice/ooo-sit.git/assets/
 ```
 
-- These are copied to the site unmodified.
+  These are copied to the site unmodified.
 
-## Migration Instructions
 
 1. Checkout Old SVN CMS version of site.
 
@@ -54,15 +47,15 @@ export SVNPATH="~/Development/openoffice/ooo-site/content"
 export GITPATH="~/Development/openoffice/ooo-site.git"
 ```
 
-2. List of Folders.
-   It is likely that these won't be done in one session. Make the list and track what you've migrated.
+1. List of Folders.
+   These won't be done in one session. Make the list and track what you've migrated.
 
 ```
 cd ${SVNPATH}
 find . -type d -depth 1 -print | sed -e 's!./!!' | sort
 ```
 
-You could compare with the git targets with:
+   You could compare with the git targets with:
 
 ```
 cd ${GITPATH}/assets
@@ -71,12 +64,26 @@ cd ${GITPATH}/content
 find . -type d -depth 1 -print | sed -e 's!./!!' | sort
 ```
 
-3. Migration of a Folder.
+1. Migration of a Folder.
 
 ```
 cd ${SVNPATH}
 ${GITPATH}/tools/migration2git.sh downloads
 ```
+
+   Some folders are larger than others. Pay attention to the running count.
+
+1. Periodic Builds
+
+```
+cd ${GITPATH}
+./build_staging.sh
+# on asf-staging branch
+./copy_staging.sh
+# on asf-site branch
+```
+
+   This is done so that the commits in asf-staging and asf-site do not get too large.
 
 ## Tool Scripts
 
@@ -130,11 +137,11 @@ ${GITPATH}/tools/commit2git.sh content ${1} 'html content'
 echo
 # 5 - Brand
 echo 'Convert brand'
-find ${1} -name "brand.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh brand {} \; -exec ${GITPATH}/tools/commit2git.sh assets {} 'brand' \;
+find ${1} -name "brand.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh brand {} \;
 echo
 # 6 - Navigators
 echo 'Convert navigators'
-find ${1} -name "*nav.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh navigator {} \; -exec ${GITPATH}/tools/commit2git.sh assets {} 'navigator' \;
+find ${1} -name "*nav.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh navigator {} \;
 echo
 # 7 - Markdown
 echo 'Convert markdown pages'

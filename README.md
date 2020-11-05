@@ -1,6 +1,56 @@
-## Editing the Git Site
+# Apache OpenOffice Website - OpenOffice.org
 
-1. Clone the Git Repository
+This is the content and build scripts for https:/www.openoffice.org/
+
+## Contributing to the website content
+
+You can fork from https://github.com/apache/incubator, test your changes as described below
+and raise a pull request.
+
+Use the [dev@openoffice.a.o](https://lists.apache.org/list.html?dev@openoffice.apache.org) mailing list to contact
+the OpenOffice PMC which manages this website.
+
+## Automated staging
+
+Commits to the `main` branch are automatically checked out and built using `build_staging.sh` by the 
+[OpenOffice-org-Staging-Site-Build](https://ci-builds.apache.org/job/OpenOffice/job/OpenOffice-org-Staging-Site-Build/)
+Jenkins job. The results are pushed to the [`content` folder of the `asf-staging` branch](https://github.com/apache/openoffice-org/tree/asf-staging/content)
+which is in turn published automatically to https://openoffice-org.staged.apache.org/ by the ASF's `.asf.yaml` mechanism.
+
+## Manual publishing
+
+Once the staged content is correct then the `asf-staging` branch's `content` folder is copied to the `asf-site` branch
+using `copy_staging.sh` by the [OpenOffice-org-Publish-Site](https://ci-builds.apache.org/job/OpenOffice/job/OpenOffice-org-Publish-Site/)
+Jenkins job. This job will need to be started manually.
+
+Any build failures are reported to *[commits@openoffice.a.o](https://lists.apache.org/list.html?commits@openoffice.apache.org)*
+mailing list.
+
+## Quick updates to a single file
+
+Updating a single file should proceed as follows. I'll use the most commonly updated file (the weekly download numbers) as an example:
+
+- Navigate to the [`assets/stats` folder](https://github.com/apache/openoffice-org/tree/main/assets/stats)
+- Click on [`aoo-downloads.txt` file] and edit it.
+- Commit changes.
+- Wait for the [OpenOffice-org-Staging-Site-Build](https://ci-builds.apache.org/job/OpenOffice/job/OpenOffice-org-Staging-Site-Build/) to complete. This will take 5-6 minutes unless another build is using the server.
+- Check the [`Download Stats page`](https://openoffice-org.staged.apache.org/stats/downloads.html)
+- Go to the [OpenOffice-org-Publish-Site](https://ci-builds.apache.org/job/OpenOffice/job/OpenOffice-org-Publish-Site/) Jenkins job and press the `Build Now` button. This will take from 4-6 minutes unless another build is using the server.
+
+## Prerequisites for building the website locally
+
+The website is built using [JBake](https://jbake.org/) and Groovy templates.
+The builds for the website do require internet access.
+
+- Install JBake from http://jbake.org/download.html
+  - Currently it looks like version 2.6.3 or greater is required.
+- Create an environment variable `JBAKE_HOME` pointing to your JBake installation, e.g.
+  - `export JBAKE_HOME=/usr/local/Cellar/jbake/2.6.4`
+- Ensure that you have a JVM locally, e.g. [OpenJDK](http://openjdk.java.net/install/)
+
+## Clone the Git Repository
+
+To get a copy of the repository you can either point to `Gitbox` or `GitHub`.
 
 ```
 cd ~/Development/openoffice
@@ -11,146 +61,55 @@ git pull
 git checkout main
 ```
 
-2. Modify Pages
+## Building & testing the site locally
 
-```
-cd ~/Development/openoffice/ooo-sit.git/content/
-```
+To test the site locally, use 
 
-* Html pages are `*.html` and `*.htm`
-  - Full html pages are rewrapped.
-  - Html fragments are wrapped.
-* Markdown pages are `*.md`
-* Special purpose Markdown which also need to be delcared in `templates/ssi_paths.gsp`
-  - `brand.md` are specialised translations for the website header.
-  - `topnav.md` is the top navigator.
-  - `leftnav.md` is the left navigator.
-  - `rightnav.md` is the right naviagator
+    ./build_local.sh
+    
+This builds the site, serves it locally at  http://localhost:8820/ and rebuilds the content fairly
+quickly if any changes are made.
 
-3. Modify Assets
+Note that serving the site through JBake does not properly include the SSI which means that branding, navigation, and footers will be missing. If you wish to set up an HTTPD server on your local you do that too.
 
-```
-cd ~/Development/openoffice/ooo-sit.git/assets/
-```
+Modify that script andd call `bake.sh`  with any of the [arguments you would pass to jbake](https://jbake.org/docs/2.6.4/#bake_command).
 
-- These are copied to the site unmodified.
+## Markdown and HTML
 
-## Migration Instructions
+Most of the pages in the site are written using HTML. Many more recent pages are written using Markdown
+While it is a form of Markdown, JBake uses Flexmark/Java which implements Pegdown. It does have some [syntax differences that are worth reviewing](https://github.com/sirthias/pegdown/)
 
-1. Checkout Old SVN CMS version of site.
+The css style insertion syntax used on our `why` and `product` pages is not supported. I researching workarounds for the two use cases.
 
-```
-cd ~/Development/openoffice
-rm -rf ooo-site
-svn co https://svn.apache.org/repos/asf/openoffice/ooo-site/trunk ooo-site
-```
+## Groovy Templates
 
-1. Setup Environment variables.
+The site templates are written in groovy scripts.
+Even though the files end with `.gsp` they are not GSP files and do not have access to tag libraries.
+You can run custom code in them. See [Templates Read Me](templates/README.md) for details.
 
-```
-# location of CMS content
-export SVNPATH="~/Development/openoffice/ooo-site/content"
-# location of Git repository checkout
-export GITPATH="~/Development/openoffice/ooo-site.git"
-```
+## Pages are in the Content Tree.
 
-2. List of Folders.
-   It is likely that these won't be done in one session. Make the list and track what you've migrated.
+`.html` and `.md` files in the content tree are processed by templates as directed within `jbake.properties`.
 
-```
-cd ${SVNPATH}
-find . -type d -depth 1 -print | sed -e 's!./!!' | sort
-```
+    https://github.com/apache/openoffice-org/tree/main/content
 
-You could compare with the git targets with:
+### Branding and Navigation
 
-```
-cd ${GITPATH}/assets
-find . -type d -depth 1 -print | sed -e 's!./!!' | sort
-cd ${GITPATH}/content
-find . -type d -depth 1 -print | sed -e 's!./!!' | sort
-```
+- The page header comes from `brand.md` files. The [`brand` template](https://github.com/apache/openoffice-org/blob/main/templates/brand.gsp) is html with markdown metadata insertions.
+- Navigators are `*nav.md` files. The [`navigator` template](https://github.com/apache/openoffice-org/blob/main/templates/navigator.gsp) is markdown with metadata selecting the css class.
+- All `brand.md`, `topnav.md`, `leftnav.md`, and `rightnav.md` files must be registered in
+[`templates/ssi_paths.gsp`](https://github.com/apache/openoffice-org/blob/main/templates/ssi_paths.gsp) in order to be included in that subtree of the site.
 
-3. Migration of a Folder.
+## Assets are in the Assets Tree.
 
-```
-cd ${SVNPATH}
-${GITPATH}/tools/migration2git.sh downloads
-```
+Every file in the assets tree is copied as is during baking.
 
-## Tool Scripts
+    https://github.com/apache/openoffice-org/tree/main/assets
 
-1. tools/commit2git.sh ${1} ${2} ${3}
+Please do not add any `.exe` binaries. Files larger then 100MB are not allowed and over 50MB are not recommended. Only one file was too large to migrate.
 
-```
-# ${1} Category 'assets','content'
-# ${2} Path to commit
-# ${3} Description for commit message - 'assets','large asset','html content','Markdown pages','brand','navigator'
-cd ${GITPATH}
-git add ${1}/${2}
-git commit -m 'Migration of ${2} ${3}'
-```
+### Footer
 
-2. tools/convert2md.sh ${1} ${2}
+The site footer is an html asset and is found here: [`footer.html`](https://github.com/apache/openoffice-org/blob/main/assets/footer.html).
 
-```
-# ${1} Template type 'brand','navigator','page'
-# ${2} Path of mdtext file to convert to md file
-echo 'type=${1}' > ${GITPATH}/content/${2}
-nawk -f ${GITPATH}/tools/convert2md.awk ${2} >> ${GITPATH}/content/${2}
-```
-
-3. tools/migration2git.sh ${1}
-
-```
-# ${1} Site folder to migrate
-cd ${SVNPATH}
-echo 'Migrating ${SVNPATH}/${1} to ${GITPATH}
-echo
-# 1 - Tree structure
-echo 'copy directory structure to assets and content trees'
-find ${1} -type d ! -empty -exec mkdir -p ${GITPATH}/assets/{} \; -exec mkdir -p ${GITPATH}/content/{} \;
-# git does not commit empty directories
-echo
-# 2 - Large Assets
-echo 'copy assets larger than 3M as separate commits'
-find ${1} -type f -size +3M -exec cp {} ${GITPATH}/assets/{} \; -exec ${GITPATH}/tools/commit2git.sh assets {} 'large asset' \;
-echo
-# 3 - Assets
-echo 'copy assets not (html and mdtext) to assets tree'
-find ${1} -type f ! -name "*.html" ! -name "*.htm" ! -name "*.mdtext" ! -size +3M -exec cp -p {} ${GITPATH}/assets/{} \;
-# commit and push
-${GITPATH}/tools/commit2git.sh assets ${1} 'assets'
-echo
-# 4 - HTML
-echo 'copy html to content tree'
-find ${1}  -type f \( -name "*.html" -or -name "*.htm" \) ! -size +3M -exec cp -p {} ${GITPATH}/content/{} \;
-# commit and push
-${GITPATH}/tools/commit2git.sh content ${1} 'html content'
-echo
-# 5 - Brand
-echo 'Convert brand'
-find ${1} -name "brand.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh brand {} \; -exec ${GITPATH}/tools/commit2git.sh assets {} 'brand' \;
-echo
-# 6 - Navigators
-echo 'Convert navigators'
-find ${1} -name "*nav.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh navigator {} \; -exec ${GITPATH}/tools/commit2git.sh assets {} 'navigator' \;
-echo
-# 7 - Markdown
-echo 'Convert markdown pages'
-find ${1} -name "*.mdtext" ! -name "brand.mdtext" ! -name "*nav.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh page {} \;
-# commit and push
-${GITPATH}/tools/commit2git.sh content ${1} 'Markdown pages'
-echo
-# 8 - Push to git
-echo 'Push to Gitbox'
-${GITPATH}/tools/push2git.sh
-```
-
-4. tools/push2git.sh
-
-```
-cd ${GITPATH}
-git push
-```
 

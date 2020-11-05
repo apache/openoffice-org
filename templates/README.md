@@ -48,7 +48,7 @@ This describes the Simple Groovy templates (GSP) that are used to build the site
    The CSS file that is used for these pages is `/css/ooo.css`
    
 1. `brand.gsp`
-   This template is used to generate the top / branding portion of each page included with SSI.
+   This template is used to generate the top / branding portion of each page, and is included with SSI.
    These files are used to provide translated versions of the brand.
    brand.md files cause the creation of these html SSIs using metadata to be filled into the template.
 
@@ -97,4 +97,127 @@ divid=topnava
 [m5]: https://openoffice.apache.org/get-involved.html	"Get involved in Apache OpenOffice"
 [m6]: /projects/accepted.html				"Apache OpenOffice development focus areas"
 [m7]: /projects/native-lang.html		 	"Apache OpenOffice in your Native Language"
+```
+
+## Helper Templates
+
+1. `html_extract.gsp`
+   This template is to extract content model data from an html file.
+   * `content.header` is the portion of the html between <head>...</head>
+   * `content.bodytag` is any attributes with the <body...> tag.
+   * `content.extracted_body` is the page content within <body>...</body> or after <body>...$ 
+
+```
+<%
+  // Extract the body attributes as content.bodytag
+  def matcher0 = content.body =~ "<body(.*?)>";
+  assert matcher0 instanceof java.util.regex.Matcher;
+  if (!matcher0) {
+    // bare html not wrapped in a <body> tag
+    content.extracted_body = content.body
+    content.bodytag = null
+    content.header = null
+  } else {
+    //assert matcher0.matches();
+    content.bodytag = matcher0.group(1);
+
+    // Extract the head content as content.header
+    def matcher1 = content.body =~ "<head.*?>([\\S\\s]*?)</head>";
+    assert matcher1 instanceof java.util.regex.Matcher;
+    if (!matcher1) {
+      // no head found.
+      content.header = null
+    } else {
+      //assert matcher1.matches();
+      content.header = matcher1.group(1);
+    }
+
+    // Extract the body content as content.extracted_body
+    def matcher2 = content.body =~ "<body.*?>([\\S\\s]*?)</body>";
+    assert matcher2 instanceof java.util.regex.Matcher;
+    if (!matcher2) {
+      matcher2 = content.body =~ "<body.*?>([\\S\\s]*?)";
+      if (!matcher2) {
+        throw new RuntimeException("content body not found");
+      }
+    }
+    //assert matcher2.matches();
+    content.extracted_body= matcher2.group(1);
+  }
+%>
+```
+
+1. `breadcrumbs.gsp`
+   This template processes the content's uri to create breadcrumbs and a set of paths.
+   * `content.breadcrumbs` is html for the page's breaqdcrumbs.
+   * `content.ssi` is an array of paths for the breadcrumbs and ssi includes.
+
+```
+<%
+String[] dirs = content.uri.split("/")
+// start the breadcrumbs
+def path = "/"
+def breadcrumbs = "<a href=\"${path}\">home</a>"
+// save each breadcrumb path for ssi analysis
+def ssi = new String[dirs.length]
+ssi[0] = path
+def n = dirs.length - 1;
+// only proceed if the page is in a directory
+if (n > 0) {
+   for (int i=0; i < n; i++) {
+       // breadcrumb and path for each directory
+       path += dirs[i]+"/";
+       breadcrumbs += "&nbsp;&raquo;&nbsp;<a href=\"${path}\">${dirs[i]}</a>";
+       ssi[i+1] = path
+   }
+}
+content.breadcrumbs=breadcrumbs;
+content.ssi=ssi;
+%>
+```
+
+1. `ssi_paths.gsp`
+   This template determines the ssi paths to include for branding and navigation.
+   If you add either type of content then you will need to update this template.
+
+```
+<%
+  // default values
+  content.brand='/brand.html';
+  content.topnav='/topnav.html';
+  content.leftnav=null;
+  content.rightnav=null;
+
+  def brand = [:]
+	brand["/"] = "/brand.html"
+	brand["/af/"] = "/af/brand.html"
+	...
+	brand["/zh/"] = "/zh/brand.html"
+
+  def topnav = [:]
+	topnav["/"] = "/topnav.html"
+	topnav["/af/"] = "/af/topnav.html"
+	...
+	topnav["/zh/"] = "/zh/topnav.html"
+
+  def leftnav = [:]
+	leftnav["/api/"] = "/api/leftnav.html"
+	leftnav["/da/product/"] = "/da/product/leftnav.html"
+	leftnav["/da/why/"] = "/da/why/leftnav.html"
+	...
+	leftnav["/xx/product/"] = "/xx/product/leftnav.html"
+	leftnav["/xx/why/"] = "/xx/why/leftnav.html"
+
+  def rightnav = [:]
+	rightnav["/l10n/"]="/l10n/rightnav.html"
+
+  def n=content.ssi.length;
+  for (int i=0; i<n; i++ ) {
+      def key = content.ssi[i]
+      if ( brand[key] ) content.brand = brand[key];
+      if ( topnav[key] ) content.topnav = topnav[key];
+      if ( leftnav[key] ) content.leftnav = leftnav[key];
+      if ( rightnav[key] ) content.rightnav = rightnav[key];
+  }
+%>
 ```
