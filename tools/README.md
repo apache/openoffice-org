@@ -1,8 +1,6 @@
 # Migration from CMS to Github/JBake
 
-## Git Repository
-
-1. Clone the Git Repository
+## Clone the Git Repository
 
 ```
 cd ~/Development/openoffice
@@ -30,7 +28,7 @@ cd ~/Development/openoffice/ooo-sit.git/assets/
   These are copied to the site unmodified.
 
 
-1. Checkout Old SVN CMS version of site.
+## Checkout Old SVN CMS version of site.
 
 ```
 cd ~/Development/openoffice
@@ -38,7 +36,7 @@ rm -rf ooo-site
 svn co https://svn.apache.org/repos/asf/openoffice/ooo-site/trunk ooo-site
 ```
 
-1. Setup Environment variables.
+## Setup Environment variables.
 
 ```
 # location of CMS content
@@ -47,15 +45,16 @@ export SVNPATH="~/Development/openoffice/ooo-site/content"
 export GITPATH="~/Development/openoffice/ooo-site.git"
 ```
 
-1. List of Folders.
-   These won't be done in one session. Make the list and track what you've migrated.
+## List of Folders.
+
+These won't be done in one session. Make the list and track what you've migrated.
 
 ```
 cd ${SVNPATH}
 find . -type d -depth 1 -print | sed -e 's!./!!' | sort
 ```
 
-   You could compare with the git targets with:
+You could compare with the git targets with:
 
 ```
 cd ${GITPATH}/assets
@@ -64,16 +63,16 @@ cd ${GITPATH}/content
 find . -type d -depth 1 -print | sed -e 's!./!!' | sort
 ```
 
-1. Migration of a Folder.
+## Migration of a Folder.
 
 ```
 cd ${SVNPATH}
 ${GITPATH}/tools/migration2git.sh downloads
 ```
 
-   Some folders are larger than others. Pay attention to the running count.
+Some folders are larger than others. Pay attention to the running count.
 
-1. Periodic Builds
+## Periodic Builds
 
 ```
 cd ${GITPATH}
@@ -83,11 +82,11 @@ cd ${GITPATH}
 # on asf-site branch
 ```
 
-   This is done so that the commits in asf-staging and asf-site do not get too large.
+This is done so that the commits in asf-staging and asf-site do not get too large.
 
-## Tool Scripts
+# Tool Scripts
 
-1. tools/commit2git.sh ${1} ${2} ${3}
+1. `tools/commit2git.sh ${1} ${2} ${3}`
 
 ```
 # ${1} Category 'assets','content'
@@ -98,7 +97,7 @@ git add ${1}/${2}
 git commit -m 'Migration of ${2} ${3}'
 ```
 
-2. tools/convert2md.sh ${1} ${2}
+2. `tools/convert2md.sh ${1} ${2}`
 
 ```
 # ${1} Template type 'brand','navigator','page'
@@ -107,7 +106,7 @@ echo 'type=${1}' > ${GITPATH}/content/${2}
 nawk -f ${GITPATH}/tools/convert2md.awk ${2} >> ${GITPATH}/content/${2}
 ```
 
-3. tools/migration2git.sh ${1}
+3. `tools/migration2git.sh ${1}`
 
 ```
 # ${1} Site folder to migrate
@@ -154,7 +153,7 @@ echo 'Push to Gitbox'
 ${GITPATH}/tools/push2git.sh
 ```
 
-4. tools/push2git.sh
+4. `tools/push2git.sh`
 
 ```
 cd ${GITPATH}

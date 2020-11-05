@@ -4,7 +4,7 @@ This is the content and build scripts for https:/www.openoffice.org/
 
 ## Contributing to the website content
 
-You can fork from https://github.com/apache/incubator, test your changes as described below
+You can fork from https://github.com/apache/openoffice-org, test your changes as described below
 and raise a pull request.
 
 Use the [dev@openoffice.a.o](https://lists.apache.org/list.html?dev@openoffice.apache.org) mailing list to contact
@@ -23,7 +23,7 @@ Once the staged content is correct then the `asf-staging` branch's `content` fol
 using `copy_staging.sh` by the [OpenOffice-org-Publish-Site](https://ci-builds.apache.org/job/OpenOffice/job/OpenOffice-org-Publish-Site/)
 Jenkins job. This job will need to be started manually.
 
-Any build failures are reported to *[commits@openoffice.a.o](https://lists.apache.org/list.html?commits@openoffice.apache.org)*
+Any build failures are reported to [commits@openoffice.a.o](https://lists.apache.org/list.html?commits@openoffice.apache.org)
 mailing list.
 
 ## Quick updates to a single file
@@ -31,7 +31,7 @@ mailing list.
 Updating a single file should proceed as follows. I'll use the most commonly updated file (the weekly download numbers) as an example:
 
 - Navigate to the [`assets/stats` folder](https://github.com/apache/openoffice-org/tree/main/assets/stats)
-- Click on [`aoo-downloads.txt` file] and edit it.
+- Click on [`aoo-downloads.txt` file](https://github.com/apache/openoffice-org/blob/main/assets/stats/aoo-downloads.txt) and edit it.
 - Commit changes.
 - Wait for the [OpenOffice-org-Staging-Site-Build](https://ci-builds.apache.org/job/OpenOffice/job/OpenOffice-org-Staging-Site-Build/) to complete. This will take 5-6 minutes unless another build is using the server.
 - Check the [`Download Stats page`](https://openoffice-org.staged.apache.org/stats/downloads.html)
@@ -70,7 +70,7 @@ To test the site locally, use
 This builds the site, serves it locally at  http://localhost:8820/ and rebuilds the content fairly
 quickly if any changes are made.
 
-Note that serving the site through JBake does not properly include the SSI which means that branding, navigation, and footers will be missing. If you wish to set up an HTTPD server on your local you do that too.
+Note that serving the site through JBake does not properly include the SSI which means that branding, navigation, and footers will be missing. If you wish to set up an HTTPD server on your local you can do that too.
 
 Modify that script andd call `bake.sh`  with any of the [arguments you would pass to jbake](https://jbake.org/docs/2.6.4/#bake_command).
 
@@ -106,7 +106,8 @@ Every file in the assets tree is copied as is during baking.
 
     https://github.com/apache/openoffice-org/tree/main/assets
 
-Please do not add any `.exe` binaries. Files larger then 100MB are not allowed and over 50MB are not recommended. Only one file was too large to migrate.
+* Files larger than 100MB are not allowed and over 50MB are not recommended. Only one file in the CMS site was too large to migrate.
+* Please do not add any `.exe` binaries.
 
 ### Footer
 
