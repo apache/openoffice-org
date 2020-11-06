@@ -1,0 +1,323 @@
+<html>
+<head>
+<title>Interface XInputStream</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XInputStream-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">io</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XInputStream</td>
+</tr>
+<tr>
+<td/></tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>This is the basic interface to read data from a stream.
+ </dd>
+<dd><p>
+ See the <a href="http://udk.openoffice.org/common/man/concept/streams.html">
+ streaming document</a> for further information on chaining and piping streams.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readBytes">readBytes</a></td>
+<td class="imsum_right">reads the specified number of bytes in the given sequence. 
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readSomeBytes">readSomeBytes</a></td>
+<td class="imsum_right">reads the available number of bytes, at maximum
+ <var>nMaxBytesToRead</var>. 
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#skipBytes">skipBytes</a></td>
+<td class="imsum_right">skips the next <var>nBytesToSkip</var> bytes (must be positive). 
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#available">available</a></td>
+<td class="imsum_right">states how many bytes can be read or skipped without blocking. 
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#closeInput">closeInput</a></td>
+<td class="imsum_right">closes the stream. 
+ 
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readBytes" class="membertitle">readBytes</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">long</td>
+</tr>
+<tr>
+<td valign="top"><b>readBytes</b>(</td>
+<td valign="top">[out] sequence&lt; byte &gt;</td>
+<td valign="bottom">&nbsp;aData,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nBytesToRead )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="NotConnectedException.html">NotConnectedException</a>,<br>
+<a href="BufferSizeExceededException.html">BufferSizeExceededException</a>,<br>
+<a href="IOException.html">IOException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads the specified number of bytes in the given sequence. 
+ 
+ </dd>
+<dd><p>The return value specifies the number of bytes which have been 
+ put into the sequence. A difference between <var>nBytesToRead</var> 
+ and the return value indicates that EOF has been reached. This means 
+ that the method blocks until the specified number of bytes are
+ available or the EOF is reached. </p>
+ </dd>
+<dt><b>Parameter aData</b></dt>
+<dd>after the call, the byte sequence contains the requested number
+ of bytes (or less as a sign of EOF).
+
+ <p>
+ C++ only : Note that for unbridged (e.g., in-process) 
+ calls, using the same sequence for repetive readBytes()-calls
+ can bear a performance advantage. The callee can put the data
+ directly into the sequence so that no buffer reallocation is
+ necessary.
+ But this holds only when
+ <ol>
+ <li> neither caller nor callee keep a second reference to the same
+ sequence.
+ <li> the sequence is pre-allocated with the requested number of bytes.
+ <li> the same sequence is reused ( simply preallocationg a new
+ sequence for every call bears no advantage ).
+ <li> the call is not bridged (e.g., betweeen different compilers
+ or different processes ).
+ </ol>
+
+ If the same 'optimized' code runs against an interface in a different process,
+ there is an unnecessary memory allocation/deallocation (the out parameter
+ is of course NOT transported over the connection), but this should
+ be negligible compared to a synchron call.
+ </dd>
+<dt><b>Parameter nBytesToRead</b></dt>
+<dd>the total number of bytes to read
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readSomeBytes" class="membertitle">readSomeBytes</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">long</td>
+</tr>
+<tr>
+<td valign="top"><b>readSomeBytes</b>(</td>
+<td valign="top">[out] sequence&lt; byte &gt;</td>
+<td valign="bottom">&nbsp;aData,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nMaxBytesToRead )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="NotConnectedException.html">NotConnectedException</a>,<br>
+<a href="BufferSizeExceededException.html">BufferSizeExceededException</a>,<br>
+<a href="IOException.html">IOException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads the available number of bytes, at maximum
+ <var>nMaxBytesToRead</var>. 
+ 
+ </dd>
+<dd><p>This method is very similar to the readBytes method, except that
+ it has different blocking behaviour.
+ The method blocks as long as at least 1 byte is available or
+ EOF has been reached. EOF has only been reached, when the method
+ returns 0 and the corresponding byte sequence is empty.
+ Otherwise, after the call, aData contains the available,
+ but no more than nMaxBytesToRead, bytes.
+ </dd>
+<dt><b>Parameter aData</b></dt>
+<dd>contains the data read from the stream.
+ </dd>
+<dt><b>Parameter nMaxBytesToRead</b></dt>
+<dd>The maximum number of bytes to be read from this
+ stream during the call.
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="XInputStream.html">XInputStream</a>::<a href="XInputStream.html#readBytes">readBytes</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="skipBytes" class="membertitle">skipBytes</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>skipBytes</b>(</td>
+<td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nBytesToSkip )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="NotConnectedException.html">NotConnectedException</a>,<br>
+<a href="BufferSizeExceededException.html">BufferSizeExceededException</a>,<br>
+<a href="IOException.html">IOException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>skips the next <var>nBytesToSkip</var> bytes (must be positive). 
+ 
+ </dd>
+<dd><p>It is up to the implementation whether this method is
+ blocking the thread or not. </p>
+ </dd>
+<dt><b>Parameter nBytesToSkip</b></dt>
+<dd>number of bytes to skip
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="available" class="membertitle">available</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">long</td>
+</tr>
+<tr>
+<td valign="top"><b>available</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="NotConnectedException.html">NotConnectedException</a>,<br>
+<a href="IOException.html">IOException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>states how many bytes can be read or skipped without blocking. 
+ 
+ </dd>
+<dd><p>Note: This method offers no information on whether the EOF
+ has been reached. </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="closeInput" class="membertitle">closeInput</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>closeInput</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="NotConnectedException.html">NotConnectedException</a>,<br>
+<a href="IOException.html">IOException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>closes the stream. 
+ 
+ </dd>
+<dd><p>Users must close the stream explicitly when no further
+ reading should be done. (There may exist ring references to
+ chained objects that can only be released during this call.
+ Thus not calling this method would result in a leak of memory or
+ external resources.) </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

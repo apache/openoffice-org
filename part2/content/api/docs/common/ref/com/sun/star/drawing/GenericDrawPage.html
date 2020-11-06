@@ -1,0 +1,536 @@
+<html>
+<head>
+<title>Service GenericDrawPage</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="GenericDrawPage-xref.html" class="navimain">Use</a></td>
+<td class="navimain"><a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Page_Formatting" class="navimain">Devguide</a></td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub">Services' Summary</td>
+<td class="navisub"><a href="#InterfacesSummary" class="navisub">Interfaces' Summary</a></td>
+<td class="navisub"><a href="#PropertiesSummary" class="navisub">Properties' Summary</a></td>
+<td class="navisub">Services' Details</td>
+<td class="navisub"><a href="#InterfacesDetails" class="navisub">Interfaces' Details</a></td>
+<td class="navisub"><a href="#PropertiesDetails" class="navisub">Properties' Details</a></td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">drawing</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">service GenericDrawPage</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>This abstract service is implemented by every page of a
+ <a href="DrawingDocument.html">DrawingDocument</a>. 
+ 
+ 
+ 
+ </dd>
+<dt><b>Example</b></dt>
+<dd>create and insert a couple of <a href="LineShape.html">LineShape</a>s:
+ 
+ <pre>
+ xPage = xDoc.DrawPages(0)
+ for x% = 0 to 200
+ xShape = xProv.createInstance( "com::sun::star::drawing::LineShape" )
+ xShape.LineColor = rgb( 255, 0, n%+20 )
+ xShape.LineWidth = 20
+ xShape.Position = Point( x%, 2*x% )
+ xShape.Size = Size( 300-x%, 20 )
+ xPage.add( xShape )
+ next x%
+ </pre>
+ </dd>
+</dl>
+<a name="devmanual"> </a><dl>
+<dt><b>Developers Guide</b></dt>
+<dd><a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Page_Formatting">Drawings - Page Formatting</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="InterfacesSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Exported Interfaces - Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XShapes.html">XShapes</a></td>
+<td class="imsum_right"><p>manages the <a href="Shape.html">Shape</a>s of this page. 
+ 
+ (<a href="#XShapes">details</a>)</p>
+</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XShapeGrouper.html">XShapeGrouper</a></td>
+<td class="imsum_right"><p>With this interface you can group/ungroup a collection of 
+ <a href="Shape.html">Shape</a>s.
+ </p>
+</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XShapeCombiner.html">XShapeCombiner</a></td>
+<td class="imsum_right"><p>With this interface you can combine/split a collection of 
+ <a href="Shape.html">Shape</a>s.
+ (<a href="#XShapeCombiner">details</a>)</p>
+</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XShapeBinder.html">XShapeBinder</a></td>
+<td class="imsum_right"><p>With this interface you can bind/unbind a collection of 
+ <a href="Shape.html">Shape</a>s.
+ (<a href="#XShapeBinder">details</a>)</p>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../container/module-ix.html">container</a>::<a href="../container/XNamed.html">XNamed</a></td>
+<td class="imsum_right"><p>Gets or sets the name of this page. 
+ 
+ (<a href="#XNamed">details</a>)</p>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XServiceInfo.html">XServiceInfo</a></td>
+<td class="imsum_right"><p>returns the services implemented by this 
+ instance.
+ </p>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../beans/module-ix.html">beans</a>::<a href="../beans/XPropertySet.html">XPropertySet</a></td>
+<td class="imsum_right"><p>gives you access to the properties of this 
+ <a href="DrawPage.html">DrawPage</a>.
+ (<a href="#XPropertySet">details</a>)</p>
+</td>
+</tr>
+</table>
+<a name="PropertiesSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Properties' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left">long<br>
+<a href="#BorderBottom">BorderBottom</a></td>
+<td class="imsum_right"><b>[ OPTIONAL ]<br>
+</b>This is the border at the bottom.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left">long<br>
+<a href="#BorderLeft">BorderLeft</a></td>
+<td class="imsum_right"><b>[ OPTIONAL ]<br>
+</b>This is the border at the left.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left">long<br>
+<a href="#BorderRight">BorderRight</a></td>
+<td class="imsum_right"><b>[ OPTIONAL ]<br>
+</b>This is the border at the right.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left">long<br>
+<a href="#BorderTop">BorderTop</a></td>
+<td class="imsum_right"><b>[ OPTIONAL ]<br>
+</b>This is the border at the top.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left">long<br>
+<a href="#Height">Height</a></td>
+<td class="imsum_right"><b>[ OPTIONAL ]<br>
+</b>This is the height.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left">long<br>
+<a href="#Width">Width</a></td>
+<td class="imsum_right"><b>[ OPTIONAL ]<br>
+</b>This is the width.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left">[ readonly ] short<br>
+<a href="#Number">Number</a></td>
+<td class="imsum_right"><b>[ OPTIONAL ]<br>
+</b>This is the number of this page, starting with 1.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../view/module-ix.html">view</a>::<a href="../view/PaperOrientation.html">PaperOrientation</a><br>
+<a href="#Orientation">Orientation</a></td>
+<td class="imsum_right"><b>[ OPTIONAL ]<br>
+</b>This is the orientation of this page.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../container/module-ix.html">container</a>::<a href="../container/XNameContainer.html">XNameContainer</a><br>
+<a href="#UserDefinedAttributes">UserDefinedAttributes</a></td>
+<td class="imsum_right"><b>[ OPTIONAL ]<br>
+</b>this property stores xml attributes.
+ They will be saved to and restored from automatic styles inside xml files.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left">[ readonly ] boolean<br>
+<a href="#IsBackgroundDark">IsBackgroundDark</a></td>
+<td class="imsum_right"><b>[ OPTIONAL ]<br>
+</b>this property is true if the avveraged background filling colors luminance
+ is belove an application specified threshold value. This can be used to
+ determine the actuall value of an auto color.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../container/module-ix.html">container</a>::<a href="../container/XIndexAccess.html">XIndexAccess</a><br>
+<a href="#NavigationOrder">NavigationOrder</a></td>
+<td class="imsum_right"><b>[ OPTIONAL ]<br>
+</b>this index access defines a navigation order for the top level shapes
+ inside this page.
+ By default this is equal to the index access of the slide itself,
+ making the z-order the default navigation order for top level shapes.
+ &nbsp;</td>
+</tr>
+</table>
+<a name="InterfacesDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Exported Interfaces - Details</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XShapes" class="membertitle"><a href="XShapes.html">XShapes</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>manages the <a href="Shape.html">Shape</a>s of this page. 
+ 
+ </dd>
+<dd><p>It also lets you add new <a href="Shape.html">Shape</a>s. The program currently 
+ requires that these <a href="Shape.html">Shape</a>s be created by the factory of 
+ the document. 
+ 
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="DrawingDocument.html">DrawingDocument</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XShapeGrouper" class="membertitle"><a href="XShapeGrouper.html">XShapeGrouper</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>With this interface you can group/ungroup a collection of 
+ <a href="Shape.html">Shape</a>s.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XShapeCombiner" class="membertitle"><a href="XShapeCombiner.html">XShapeCombiner</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>With this interface you can combine/split a collection of 
+ <a href="Shape.html">Shape</a>s.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XShapeBinder" class="membertitle"><a href="XShapeBinder.html">XShapeBinder</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>With this interface you can bind/unbind a collection of 
+ <a href="Shape.html">Shape</a>s.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XNamed" class="membertitle">::com::sun::star::<a href="../container/module-ix.html">container</a>::<a href="../container/XNamed.html">XNamed</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>Gets or sets the name of this page. 
+ 
+ </dd>
+<dd><p>Duplicated pagenames inside a document are not allowed.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XServiceInfo" class="membertitle">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XServiceInfo.html">XServiceInfo</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>returns the services implemented by this 
+ instance.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XPropertySet" class="membertitle">::com::sun::star::<a href="../beans/module-ix.html">beans</a>::<a href="../beans/XPropertySet.html">XPropertySet</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>gives you access to the properties of this 
+ <a href="DrawPage.html">DrawPage</a>.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="PropertiesDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Properties' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="BorderBottom" class="membertitle">BorderBottom</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>long <b>BorderBottom</b>;<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>This is the border at the bottom.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="BorderLeft" class="membertitle">BorderLeft</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>long <b>BorderLeft</b>;<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>This is the border at the left.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="BorderRight" class="membertitle">BorderRight</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>long <b>BorderRight</b>;<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>This is the border at the right.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="BorderTop" class="membertitle">BorderTop</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>long <b>BorderTop</b>;<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>This is the border at the top.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="Height" class="membertitle">Height</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>long <b>Height</b>;<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>This is the height.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="Width" class="membertitle">Width</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>long <b>Width</b>;<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>This is the width.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="Number" class="membertitle">Number</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>[ readonly ] short <b>Number</b>;<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>This is the number of this page, starting with 1.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="Orientation" class="membertitle">Orientation</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>::com::sun::star::<a href="../view/module-ix.html">view</a>::<a href="../view/PaperOrientation.html">PaperOrientation</a> <b>Orientation</b>;<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>This is the orientation of this page.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="UserDefinedAttributes" class="membertitle">UserDefinedAttributes</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>::com::sun::star::<a href="../container/module-ix.html">container</a>::<a href="../container/XNameContainer.html">XNameContainer</a> <b>UserDefinedAttributes</b>;<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>this property stores xml attributes.
+ They will be saved to and restored from automatic styles inside xml files.
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd>::com::sun::star::<a href="../xml/module-ix.html">xml</a>::<a href="../xml/AttributeContainer.html">AttributeContainer</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="IsBackgroundDark" class="membertitle">IsBackgroundDark</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>[ readonly ] boolean <b>IsBackgroundDark</b>;<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>this property is true if the avveraged background filling colors luminance
+ is belove an application specified threshold value. This can be used to
+ determine the actuall value of an auto color.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="NavigationOrder" class="membertitle">NavigationOrder</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>::com::sun::star::<a href="../container/module-ix.html">container</a>::<a href="../container/XIndexAccess.html">XIndexAccess</a> <b>NavigationOrder</b>;<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>this index access defines a navigation order for the top level shapes
+ inside this page.
+ By default this is equal to the index access of the slide itself,
+ making the z-order the default navigation order for top level shapes.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<br>&nbsp;<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

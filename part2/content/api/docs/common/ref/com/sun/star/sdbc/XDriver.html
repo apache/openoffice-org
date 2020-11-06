@@ -1,0 +1,350 @@
+<html>
+<head>
+<title>Interface XDriver</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XDriver-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">sdbc</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XDriver</td>
+</tr>
+<tr>
+<td/></tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>is the interface that every driver class must implement.
+ 
+ 
+ 
+ </dd>
+<dd><p>
+ Each driver should supply a service that implements
+ the Driver interface.
+ 
+ </p>
+ <p>The DriverManager will try to load as many drivers as it can
+ find, and then for any given connection request, it will ask each
+ driver in turn to try to connect to the target URL.
+ 
+ </p>
+ <p>
+ It is strongly recommended that each Driver object should be
+ small and standalone so that the Driver object can be loaded and
+ queried without bringing in vast quantities of supporting code.
+ 
+ </p>
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="XDriverManager.html">XDriverManager</a>, <a href="XConnection.html">XConnection</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#connect">connect</a></td>
+<td class="imsum_right">attempts to make a database connection to the given URL.
+ The driver should return 
+ <b>NULL</b>
+ if it realizes it is the wrong kind
+ of driver to connect to the given URL. This will be common, as when
+ the driver manager is asked to connect to a given URL it passes
+ the URL to each loaded driver in turn.
+ 
+ 
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#acceptsURL">acceptsURL</a></td>
+<td class="imsum_right">returns <b>true</b> if the driver thinks that it can open a connection
+ to the given URL. Typically drivers will return <b>true</b> if they
+ understand the subprotocol specified in the URL and <b>false</b> if
+ they do not.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getPropertyInfo">getPropertyInfo</a></td>
+<td class="imsum_right">gets information about the possible properties for this driver. 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getMajorVersion">getMajorVersion</a></td>
+<td class="imsum_right">gets the driver's major version number. Initially this should be 1.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getMinorVersion">getMinorVersion</a></td>
+<td class="imsum_right">gets the driver's minor version number. Initially this should be 0.
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="connect" class="membertitle">connect</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XConnection.html">XConnection</a></td>
+</tr>
+<tr>
+<td valign="top"><b>connect</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;url,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] sequence&lt; ::com::sun::star::<a href="../beans/module-ix.html">beans</a>::<a href="../beans/PropertyValue.html">PropertyValue</a> &gt;</td>
+<td valign="bottom">&nbsp;info )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>attempts to make a database connection to the given URL.
+ The driver should return 
+ <b>NULL</b>
+ if it realizes it is the wrong kind
+ of driver to connect to the given URL. This will be common, as when
+ the driver manager is asked to connect to a given URL it passes
+ the URL to each loaded driver in turn.
+ 
+ 
+ 
+ </dd>
+<dd><p>
+ The driver should raise a 
+ <a href="SQLException.html">SQLException</a>
+ if it is the right
+ driver to connect to the given URL, but has trouble connecting to
+ the database.
+ 
+ </p>
+ <p>
+ The info argument can be used to pass arbitrary
+ string tag/value pairs as connection arguments.
+ Normally at least "user" and "password" properties should be
+ included in the Properties. For a JDBC driver also the Java class must
+ be supplied in the property named JavaDriverClass, and a class path (a
+ space-separated list of URLs) needed to locate that class can optionally
+ be supplied in a property named JavaDriverClassPath.
+ Possible property value names are when supported by the driver:
+ </dd>
+<dt><b>Parameter url</b></dt>
+<dd>is the URL of the database to which to connect. 
+ </dd>
+<dt><b>Parameter info</b></dt>
+<dd>a list of arbitrary string tag/value pairs as connection arguments. Normally at least a "user" and "password" property should be included.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a Connection object that represents a connection to the URL 
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException
+ if a database access error occurs
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="ConnectionProperties.html">ConnectionProperties</a></dd>
+<dt><b>See also</b></dt>
+<dd><a href="ConnectionProperties.html">ConnectionProperties</a><br>
+</p>
+
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="acceptsURL" class="membertitle">acceptsURL</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>acceptsURL</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;url )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>returns <b>true</b> if the driver thinks that it can open a connection
+ to the given URL. Typically drivers will return <b>true</b> if they
+ understand the subprotocol specified in the URL and <b>false</b> if
+ they do not.
+
+ </dd>
+<dt><b>Parameter url</b></dt>
+<dd>is the URL of the database to which to connect. 
+ </dd>
+<dt><b>Returns</b></dt>
+<dd><b>true</b> if this driver can connect to the given URL.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getPropertyInfo" class="membertitle">getPropertyInfo</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">sequence&lt; <a href="DriverPropertyInfo.html">DriverPropertyInfo</a> &gt;</td>
+</tr>
+<tr>
+<td valign="top"><b>getPropertyInfo</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;url,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] sequence&lt; ::com::sun::star::<a href="../beans/module-ix.html">beans</a>::<a href="../beans/PropertyValue.html">PropertyValue</a> &gt;</td>
+<td valign="bottom">&nbsp;info )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>gets information about the possible properties for this driver. 
+ </dd>
+<dd><p>The getPropertyInfo method is intended to allow a generic GUI tool to 
+ discover what properties it should prompt a human for in order to get 
+ enough information to connect to a database. Note that depending on 
+ the values the human has supplied so far, additional values may become 
+ necessary, so it may be necessary to iterate though several calls 
+ to getPropertyInfo. 
+ </dd>
+<dt><b>Parameter url</b></dt>
+<dd>is the URL of the database to which to connect. 
+ </dd>
+<dt><b>Parameter info</b></dt>
+<dd>is a proposed list of tag/value pairs that will be sent on 
+ connect open. 
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>an array of DriverPropertyInfo objects describing possible 
+ properties. This array may be an empty array if no properties 
+ are required. 
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getMajorVersion" class="membertitle">getMajorVersion</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">long</td>
+</tr>
+<tr>
+<td valign="top"><b>getMajorVersion</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>gets the driver's major version number. Initially this should be 1.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>this driver's major version number
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getMinorVersion" class="membertitle">getMinorVersion</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">long</td>
+</tr>
+<tr>
+<td valign="top"><b>getMinorVersion</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>gets the driver's minor version number. Initially this should be 0.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>this driver's minor version number.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

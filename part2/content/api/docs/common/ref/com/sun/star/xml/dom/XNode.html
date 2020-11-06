@@ -1,0 +1,934 @@
+<html>
+<head>
+<title>Interface XNode</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XNode-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../../module-ix.html" class="namechain">::</a> <a href="../../../../module-ix.html" class="namechain">com</a> :: <a href="../../../module-ix.html" class="namechain">sun</a> :: <a href="../../module-ix.html" class="namechain">star</a> :: <a href="../module-ix.html" class="namechain">xml</a> :: <a href="module-ix.html" class="namechain">dom</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title"><table class="title-table" width="99%">
+<tr>
+<td width="25%" class="title2">unpublished </td>
+<td width="50%" class="title">interface XNode</td>
+<td width="*"/></tr>
+</table>
+</td>
+</tr>
+<tr>
+<td/></tr>
+<tr>
+<td><dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>not published</i></dd>
+<dt><b>Description</b></dt>
+<dd>The primary dom datatype
+
+</dd>
+<dd><p>The Node interface is the primary datatype for the entire Document Object Model. 
+It represents a single node in the document tree. While all objects implementing 
+the Node interface expose methods for dealing with children, not all objects 
+#implementing the Node interface may have children. For example, Text nodes may not 
+have children, and adding children to such nodes results in a DOMException being raised.</p>
+
+<p>The attributes nodeName, nodeValue and attributes are included as a mechanism to get at 
+node information without casting down to the specific derived interface. In cases where 
+there is no obvious mapping of these attributes for a specific nodeType (e.g., nodeValue 
+for an Element or attributes for a Comment ), this returns null. Note that the specialized 
+interfaces may contain additional and more convenient mechanisms to get and set the relevant 
+information.</p>
+
+<p>The values of nodeName, nodeValue, and attributes vary according to the node type as follows:
+<table align=left border=1>
+<tr><th>Interface </th><th>nodeName </th><th>nodeValue </th><th>attributes</th></tr>
+<tr><th>Attr </th><td>name of attribute </td><td>value of attribute </td><td>null</td></tr>
+<tr><th>CDATASection </th><td>"#cdata-section" </td><td>content of the CDATA Section </td><td>null</td></tr>
+<tr><th>Comment </th><td>"#comment" </td><td>content of the comment </td><td>null</td></tr>
+<tr><th>Document </th><td>"#document" </td><td>null </td><td>null</td></tr>
+<tr><th>DocumentFragment </th><td>"#document-fragment"</td><td>null </td><td>null</td></tr>
+<tr><th>DocumentType </th><td>document type name </td><td>null </td><td>null</td></tr>
+<tr><th>Element </th><td>tag name </td><td>null </td><td>NamedNodeMap</td></tr>
+<tr><th>Entity </th><td>entity name </td><td>null </td><td>null</td></tr>
+<tr><th>EntityReference </th><td>name of entity referenced </td><td>null </td><td>null</td></tr>
+<tr><th>Notation </th><td>notation name </td><td>null </td><td>null</td></tr>
+<tr><th>ProcessingInstruction </th><td>target </td><td>entire content excluding the target </td><td>null</td></tr>
+<tr><th>Text </th><td>"#text" </td><td>content of the text node </td><td>null</td></tr>
+</table></p>
+
+</dd>
+<dt><b>Since </b></dt>
+<dd>OOo 2.0</dd>
+<dt><b>See also</b></dt>
+<dd><a href="XNode.html#? (no identifier found)">? (no identifier found)</a><br>
+Document Object Model (DOM) Level 2 Core Specification</a> </p>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#appendChild">appendChild</a></td>
+<td class="imsum_right">Adds the node newChild to the end of the list of children of this node.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#cloneNode">cloneNode</a></td>
+<td class="imsum_right">Returns a duplicate of this node, i.e., serves as a generic copy 
+ constructor for nodes.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getAttributes">getAttributes</a></td>
+<td class="imsum_right">A NamedNodeMap containing the attributes of this node (if it is an Element) 
+ or null otherwise.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getChildNodes">getChildNodes</a></td>
+<td class="imsum_right">A NodeList that contains all children of this node.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getFirstChild">getFirstChild</a></td>
+<td class="imsum_right">The first child of this node.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getLastChild">getLastChild</a></td>
+<td class="imsum_right">The last child of this node.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getLocalName">getLocalName</a></td>
+<td class="imsum_right">Returns the local part of the qualified name of this node. 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getNamespaceURI">getNamespaceURI</a></td>
+<td class="imsum_right">The namespace URI of this node, or null if it is unspecified.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getNextSibling">getNextSibling</a></td>
+<td class="imsum_right">The node immediately following this node.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getNodeName">getNodeName</a></td>
+<td class="imsum_right">The name of this node, depending on its type; see the table above.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getNodeType">getNodeType</a></td>
+<td class="imsum_right">A code representing the type of the underlying object, as defined above.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getNodeValue">getNodeValue</a></td>
+<td class="imsum_right">The value of this node, depending on its type; see the table above.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getOwnerDocument">getOwnerDocument</a></td>
+<td class="imsum_right">The Document object associated with this node.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getParentNode">getParentNode</a></td>
+<td class="imsum_right">The parent of this node.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getPrefix">getPrefix</a></td>
+<td class="imsum_right">The namespace prefix of this node, or null if it is unspecified.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getPreviousSibling">getPreviousSibling</a></td>
+<td class="imsum_right">The node immediately preceding this node.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#hasAttributes">hasAttributes</a></td>
+<td class="imsum_right">Returns whether this node (if it is an element) has any attributes.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#hasChildNodes">hasChildNodes</a></td>
+<td class="imsum_right">Returns whether this node has any children.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#insertBefore">insertBefore</a></td>
+<td class="imsum_right">Inserts the node newChild before the existing child node refChild.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#isSupported">isSupported</a></td>
+<td class="imsum_right">Tests whether the DOM implementation implements a specific feature and
+ that feature is supported by this node.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#normalize">normalize</a></td>
+<td class="imsum_right">Puts all Text nodes in the full depth of the sub-tree underneath this 
+ Node, including attribute nodes, into a "normal" form where only structure
+ (e.g., elements, comments, processing instructions, CDATA sections, and 
+ entity references) separates Text nodes, i.e., there are neither adjacent
+ Text nodes nor empty Text nodes.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#removeChild">removeChild</a></td>
+<td class="imsum_right">Removes the child node indicated by oldChild from the list of children,
+ and returns it.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#replaceChild">replaceChild</a></td>
+<td class="imsum_right">Replaces the child node oldChild with newChild in the list of children,
+ and returns the oldChild node.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setNodeValue">setNodeValue</a></td>
+<td class="imsum_right">The value of this node, depending on its type; see the table above.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setPrefix">setPrefix</a></td>
+<td class="imsum_right">The namespace prefix of this node, or null if it is unspecified.
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="appendChild" class="membertitle">appendChild</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XNode.html">XNode</a></td>
+</tr>
+<tr>
+<td valign="top"><b>appendChild</b>(</td>
+<td valign="top">[in] <a href="XNode.html">XNode</a></td>
+<td valign="bottom">&nbsp;newChild )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="DOMException.html">DOMException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Adds the node newChild to the end of the list of children of this node.
+ </dd>
+<dt><b>Parameter newChild</b></dt>
+<dd>the new child node
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::xml::dom::DOMException
+ <p>HIERARCHY_REQUEST_ERR: Raised if this node is of a type that does 
+ not allow children of the type of the newChild node, or if the 
+ node to append is one of this node's ancestors or this node itself.</p>
+ <p>WRONG_DOCUMENT_ERR: Raised if newChild was created from a different 
+ document than the one that created this node.</p>
+ <p>NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly or if 
+ the previous parent of the node being inserted is readonly.</p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="cloneNode" class="membertitle">cloneNode</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XNode.html">XNode</a></td>
+</tr>
+<tr>
+<td valign="top"><b>cloneNode</b>(</td>
+<td valign="top">[in] boolean</td>
+<td valign="bottom">&nbsp;deep );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Returns a duplicate of this node, i.e., serves as a generic copy 
+ constructor for nodes.
+ </dd>
+<dd><p></p>
+ </dd>
+<dt><b>Parameter deep</b></dt>
+<dd><b>true</b>: clone node together with any children<br>
+ <b>false</b>: clone without children
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the cloned node
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getAttributes" class="membertitle">getAttributes</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XNamedNodeMap.html">XNamedNodeMap</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getAttributes</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>A NamedNodeMap containing the attributes of this node (if it is an Element) 
+ or null otherwise.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getChildNodes" class="membertitle">getChildNodes</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XNodeList.html">XNodeList</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getChildNodes</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>A NodeList that contains all children of this node.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getFirstChild" class="membertitle">getFirstChild</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XNode.html">XNode</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getFirstChild</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>The first child of this node.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getLastChild" class="membertitle">getLastChild</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XNode.html">XNode</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getLastChild</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>The last child of this node.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getLocalName" class="membertitle">getLocalName</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">string</td>
+</tr>
+<tr>
+<td valign="top"><b>getLocalName</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Returns the local part of the qualified name of this node. 
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getNamespaceURI" class="membertitle">getNamespaceURI</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">string</td>
+</tr>
+<tr>
+<td valign="top"><b>getNamespaceURI</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>The namespace URI of this node, or null if it is unspecified.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getNextSibling" class="membertitle">getNextSibling</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XNode.html">XNode</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getNextSibling</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>The node immediately following this node.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getNodeName" class="membertitle">getNodeName</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">string</td>
+</tr>
+<tr>
+<td valign="top"><b>getNodeName</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>The name of this node, depending on its type; see the table above.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getNodeType" class="membertitle">getNodeType</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="NodeType.html">NodeType</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getNodeType</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>A code representing the type of the underlying object, as defined above.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getNodeValue" class="membertitle">getNodeValue</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">string</td>
+</tr>
+<tr>
+<td valign="top"><b>getNodeValue</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="DOMException.html">DOMException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>The value of this node, depending on its type; see the table above.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::xml::dom::DOMException 
+ <p>DOMSTRING_SIZE_ERR: Raised when it would return more characters 
+ than fit in a DOMString variable on the implementation platform.</p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getOwnerDocument" class="membertitle">getOwnerDocument</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XDocument.html">XDocument</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getOwnerDocument</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>The Document object associated with this node.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getParentNode" class="membertitle">getParentNode</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XNode.html">XNode</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getParentNode</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>The parent of this node.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getPrefix" class="membertitle">getPrefix</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">string</td>
+</tr>
+<tr>
+<td valign="top"><b>getPrefix</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>The namespace prefix of this node, or null if it is unspecified.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getPreviousSibling" class="membertitle">getPreviousSibling</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XNode.html">XNode</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getPreviousSibling</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>The node immediately preceding this node.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="hasAttributes" class="membertitle">hasAttributes</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>hasAttributes</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Returns whether this node (if it is an element) has any attributes.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="hasChildNodes" class="membertitle">hasChildNodes</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>hasChildNodes</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Returns whether this node has any children.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="insertBefore" class="membertitle">insertBefore</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XNode.html">XNode</a></td>
+</tr>
+<tr>
+<td valign="top"><b>insertBefore</b>(</td>
+<td valign="top">[in] <a href="XNode.html">XNode</a></td>
+<td valign="bottom">&nbsp;newChild,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="XNode.html">XNode</a></td>
+<td valign="bottom">&nbsp;refChild )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="DOMException.html">DOMException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Inserts the node newChild before the existing child node refChild.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>DOMException 
+ <p>HIERARCHY_REQUEST_ERR: Raised if this node is of a type that does 
+ not allow children of the type of the newChild node, or if the 
+ node to insert is one of this node's ancestors or this node itself.
+ <p>WRONG_DOCUMENT_ERR: Raised if newChild was created from a different 
+ document than the one that created this node.
+ <p>NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly or if the 
+ parent of the node being inserted is readonly.
+ <p>NOT_FOUND_ERR: Raised if refChild is not a child of this node.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="isSupported" class="membertitle">isSupported</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>isSupported</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;feature,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ver );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Tests whether the DOM implementation implements a specific feature and
+ that feature is supported by this node.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="normalize" class="membertitle">normalize</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>normalize</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Puts all Text nodes in the full depth of the sub-tree underneath this 
+ Node, including attribute nodes, into a "normal" form where only structure
+ (e.g., elements, comments, processing instructions, CDATA sections, and 
+ entity references) separates Text nodes, i.e., there are neither adjacent
+ Text nodes nor empty Text nodes.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="removeChild" class="membertitle">removeChild</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XNode.html">XNode</a></td>
+</tr>
+<tr>
+<td valign="top"><b>removeChild</b>(</td>
+<td valign="top">[in] <a href="XNode.html">XNode</a></td>
+<td valign="bottom">&nbsp;oldChild )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="DOMException.html">DOMException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Removes the child node indicated by oldChild from the list of children,
+ and returns it.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>DOMException
+ <p>NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
+ <p>NOT_FOUND_ERR: Raised if oldChild is not a child of this node.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="replaceChild" class="membertitle">replaceChild</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XNode.html">XNode</a></td>
+</tr>
+<tr>
+<td valign="top"><b>replaceChild</b>(</td>
+<td valign="top">[in] <a href="XNode.html">XNode</a></td>
+<td valign="bottom">&nbsp;newChild,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="XNode.html">XNode</a></td>
+<td valign="bottom">&nbsp;oldChild )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="DOMException.html">DOMException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Replaces the child node oldChild with newChild in the list of children,
+ and returns the oldChild node.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>DOMException 
+ <p>HIERARCHY_REQUEST_ERR: Raised if this node is of a type that 
+ does not allow children of the type of the newChild node, or 
+ if the node to put in is one of this node's ancestors or this 
+ node itself.
+ <p>WRONG_DOCUMENT_ERR: Raised if newChild was created from a different 
+ document than the one that created this node.
+ <p>NO_MODIFICATION_ALLOWED_ERR: Raised if this node or the parent of the 
+ new node is readonly.
+ <p>NOT_FOUND_ERR: Raised if oldChild is not a child of this node.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setNodeValue" class="membertitle">setNodeValue</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setNodeValue</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;nodeValue )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="DOMException.html">DOMException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>The value of this node, depending on its type; see the table above.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>DOMException
+ <p>NO_MODIFICATION_ALLOWED_ERR: Raised when the node is readonly. 
+ <p>DOMSTRING_SIZE_ERR: Raised when it would return more characters 
+ than fit in a DOMString variable on the implementation platform.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setPrefix" class="membertitle">setPrefix</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setPrefix</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;prefix )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="DOMException.html">DOMException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>The namespace prefix of this node, or null if it is unspecified.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>DOMException 
+ <p>INVALID_CHARACTER_ERR: Raised if the specified prefix contains an illegal character, 
+ per the XML 1.0 specification .
+ <p>NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
+ <p>NAMESPACE_ERR: Raised if the specified prefix is malformed per the Namespaces 
+ in XML specification, if the namespaceURI of this node is null, if the specified 
+ prefix is "xml" and the namespaceURI of this node is different from 
+ "http://www.w3.org/XML/1998/namespace", if this node is an attribute and the 
+ specified prefix is "xmlns" and the namespaceURI of this node is different from 
+ " http://www.w3.org/2000/xmlns/", or if this node is an attribute and the qualifiedName 
+ of this node is "xmlns" .
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

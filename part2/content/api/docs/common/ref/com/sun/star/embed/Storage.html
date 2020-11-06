@@ -1,0 +1,564 @@
+<html>
+<head>
+<title>Service Storage</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="Storage-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#ServicesSummary" class="navisub">Services' Summary</a></td>
+<td class="navisub"><a href="#InterfacesSummary" class="navisub">Interfaces' Summary</a></td>
+<td class="navisub"><a href="#PropertiesSummary" class="navisub">Properties' Summary</a></td>
+<td class="navisub"><a href="#ServicesDetails" class="navisub">Services' Details</a></td>
+<td class="navisub"><a href="#InterfacesDetails" class="navisub">Interfaces' Details</a></td>
+<td class="navisub"><a href="#PropertiesDetails" class="navisub">Properties' Details</a></td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">embed</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">service Storage</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>This is a service that allows to get access to a package using storage
+ hierarchy.
+
+ </dd>
+<dd><p>
+ A root storage should be retrieved by using <a href="StorageFactory.html">StorageFactory</a>
+ service. Substorages are created through <a href="XStorage.html">XStorage</a> interface
+ of a parent storage.
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="ServicesSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Included Services - Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="BaseStorage.html">BaseStorage</a></td>
+<td class="imsum_right"><p>This service describes the base functionality of storages.
+
+ (<a href="#BaseStorage">details</a>)</p>
+</td>
+</tr>
+</table>
+<a name="InterfacesSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Exported Interfaces - Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XTransactedObject.html">XTransactedObject</a></td>
+<td class="imsum_right"><p>allows to commit or revert changes that were done for the storage.
+
+ (<a href="#XTransactedObject">details</a>)</p>
+</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XTransactionBroadcaster.html">XTransactionBroadcaster</a></td>
+<td class="imsum_right"><p>allows to track storage's transaction state.
+ </p>
+</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XEncryptionProtectedSource.html">XEncryptionProtectedSource</a></td>
+<td class="imsum_right"><p>allows to set password to a root storage.
+ 
+ (<a href="#XEncryptionProtectedSource">details</a>)</p>
+</td>
+</tr>
+</table>
+<a name="PropertiesSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Properties' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left">string<br>
+<a href="#MediaType">MediaType</a></td>
+<td class="imsum_right">allows to get and set the media type of the storage.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left">string<br>
+<a href="#Version">Version</a></td>
+<td class="imsum_right"><b>[ OPTIONAL ]<br>
+</b>allows to get and set the version of the format related to the
+ MediaType.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left">[ readonly ] boolean<br>
+<a href="#MediaTypeFallbackIsUsed">MediaTypeFallbackIsUsed</a></td>
+<td class="imsum_right">allows to detect whether mediatype is detected by using fallback
+ approach.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left">[ readonly ] boolean<br>
+<a href="#IsRoot">IsRoot</a></td>
+<td class="imsum_right">allows to detect whether the storage is a root one.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left">[ readonly ] boolean<br>
+<a href="#RepairPackage">RepairPackage</a></td>
+<td class="imsum_right"><b>[ OPTIONAL ]<br>
+</b>allows to detect whether storage is open in "repair package" mode or
+ not.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left">[ readonly ] boolean<br>
+<a href="#HasEncryptedEntries">HasEncryptedEntries</a></td>
+<td class="imsum_right"><b>[ OPTIONAL ]<br>
+</b>allows to detect if the storage contains encrypted entries.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left">[ readonly ] boolean<br>
+<a href="#HasNonEncryptedEntries">HasNonEncryptedEntries</a></td>
+<td class="imsum_right"><b>[ OPTIONAL ]<br>
+</b>allows to detect if the storage contains nonencrypted entries.
+
+ &nbsp;</td>
+</tr>
+</table>
+<a name="ServicesDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Included Services - Details</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="BaseStorage" class="membertitle"><a href="BaseStorage.html">BaseStorage</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>This service describes the base functionality of storages.
+
+ </dd>
+<dd><p>
+ Please see below the description of additional requirements for the
+ package storage implementation.
+ </p>
+
+ <dl>
+ <dt>interface ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XComponent.html">XComponent</a>
+ </dt>
+ <dd>
+ <p>
+ A root storage is created by <a href="StorageFactory.html">StorageFactory</a>
+ and is controlled by refcounting. In case refcounting
+ is decreased to zero the storage will be disposed
+ automatically. It is still strongly recommended that
+ a root storage is disposed explicitly since in garbage
+ collector based languages the refcounting can be
+ decreased too late and resources locked by the storage
+ will not be freed until then.
+ </p>
+
+ <p>
+ A substorage is created by <a href="XStorage.html">XStorage</a>
+ interface of storage. Each time a substorage is opened
+ it is locked ( in case it is opened in readonly mode
+ it is locked for writing, in case it is opened in
+ read-write mode it is locked for reading and writing )
+ until it is disposed. The lifetime of substorage is
+ also controlled by refcounting but because of mentioned
+ garbage collection specific it is strongly recommended
+ to dispose substorages explicitly.
+ </p>
+
+ <p>
+ In case a storage object is disposed all the elements
+ ( substorages and substreams ) retrieved from the
+ object are disposed. If the storage was opened in
+ read-write mode all noncommited changes will be lost.
+ </p>
+ </dd>
+ <dt>interface <a href="XStorage.html">XStorage</a></dt>
+ <dd>
+ <dl>
+ <dt><method>XStorage::openStreamElement</method></dt>
+ <dd>
+ <p>
+ This method returns <a href="StorageStream.html">StorageStream</a>
+ service implementation.
+ </p>
+
+ <p>
+ If the child stream is an encrypted one a corect
+ common storage password should be set through
+ <a href="XEncryptionProtectedSource.html">XEncryptionProtectedSource</a> interface to
+ this storage or to a one of storages in parent
+ hierarchy. In case the password is not set or is a
+ wrong one an exception will be thrown.
+ </p>
+ </dd>
+
+ <dt><method>XStorage::openEncryptedStreamElement</method></dt>
+ <dd>
+ This method allows to specify reading password for the
+ stream explicitly. The password will be used to read
+ the stream. It is possible to specify a new password
+ for stream storing through
+ <a href="XEncryptionProtectedSource.html">XEncryptionProtectedSource</a> interface. In
+ case a new password is not specified an old one will
+ be used for storing.
+ </dd>
+
+ <dt><method>XStorage::openStorageElement</method></dt>
+ <dd>
+ This method returns <a href="Storage.html">Storage</a> service
+ implementation.
+ </dd>
+
+ <dt><method>XStorage::cloneStreamElement</method></dt>
+ <dd>
+ <p>
+ This method returns <a href="StorageStream.html">StorageStream</a> service
+ implementation.
+ </p>
+
+ <p>
+ The latest flashed version of the stream will be used.
+ The stream can be flashed explicitly by
+ <method scope="com::sun::star::io">XOutputStream::flush</method>
+ call.
+ </p>
+
+ <p>
+ A storage flashes on commit all the child streams it
+ owns. So in case after the stream is changed neither
+ the storage was commited nor the stream was flushed
+ explicitly, the changes will not appear in the new
+ created stream. This method allows to retrieve copy of
+ a child stream even in case it is already opened for
+ writing.
+ </p>
+
+ <p>
+ If the child stream is an encrypted one a corect
+ common storage password should be set through
+ <a href="XEncryptionProtectedSource.html">XEncryptionProtectedSource</a> interface to
+ this storage or to a one of storages in parent
+ hierarchy. In case the password is not set or is a
+ wrong one an exception will be thrown.
+ </p>
+ </dd>
+
+ <dt><method>XStorage::cloneEncryptedStreamElement</method></dt>
+ <dd>
+ <p>
+ This method returns <a href="StorageStream.html">StorageStream</a> service
+ implementation.
+ </p>
+
+ <p>
+ The latest flashed version of the stream will be used.
+ The stream can be flashed explicitly by
+ <method scope="com::sun::star::io">XOutputStream::flush</method>
+ call.
+ </p>
+
+ <p>
+ A storage flashes on commit all the child streams it
+ owns. So in case after the stream is changed neither
+ the storage was commited nor the stream was flushed
+ explicitly, the changes will not appear in the new
+ created stream. This method allows to retrieve copy of
+ a child stream even in case it is already opened for
+ writing.
+ </p>
+ </dd>
+
+ <dt><method>XStorage::copyLastCommitTo</method></dt>
+ <dd>
+ This method gets <a href="Storage.html">Storage</a> service
+ implementation and fills it in with the latest
+ commited version of this storage. So in case the
+ storage was not commited after it was changed, the
+ changes will not appear in the new created storage.
+ </dd>
+
+ <dt><method>XStorage::copyStorageElementLastCommitTo</method></dt>
+ <dd>
+ <p>
+ This method gets <a href="Storage.html">Storage</a> service
+ implementation and fills it in with the contents of
+ the requested substorage. The latest commited version
+ of child storage will be used. So in case the child
+ storage was not commited after it was changed, the
+ changes will not appear in the new created storage. 
+ </p>
+
+ <p>
+ This method allows to retrieve copy of a child storage
+ even in case it is already opened for writing.
+ </p>
+ </dd>
+
+ <dt><method>XStorage::removeStorageElement</method></dt>
+ <dd>
+ If the element is opened the removing will fail.
+ </dd>
+ </dl>
+ </dd>
+ <dt>property URL</dt>
+ <dd>
+ If the storage is created based on url this property allows
+ to retrieve it.
+ </dd>
+ </dl>
+ 
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="InterfacesDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Exported Interfaces - Details</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XTransactedObject" class="membertitle"><a href="XTransactedObject.html">XTransactedObject</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>allows to commit or revert changes that were done for the storage.
+
+ </dd>
+<dd><p>
+ If a storage is commited all changes made to it will be integrated to
+ it's parent storage. This is recursive process, so the last commited
+ storage should be the root one. For the package based storages commit
+ of a root storage also means flashing to the related medium. If
+ a storage is not commited, no changes for it or it's child elements
+ will be stored.
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XTransactionBroadcaster" class="membertitle"><a href="XTransactionBroadcaster.html">XTransactionBroadcaster</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>allows to track storage's transaction state.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XEncryptionProtectedSource" class="membertitle"><a href="XEncryptionProtectedSource.html">XEncryptionProtectedSource</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>allows to set password to a root storage.
+ 
+ </dd>
+<dd><p>
+ This interface can be supported by a storage to allow to set
+ a common storage password. This password is used as default password
+ to decrypt all encrypted streams and to encrypt streams that are
+ marked to use common storage password on storing.
+ Specifying of the password for a storage allows to use it for the
+ whole subtree. Of course substorage can allow to overwrite the common
+ storage password for own subtree.
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="PropertiesDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Properties' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="MediaType" class="membertitle">MediaType</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>string <b>MediaType</b>;<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>allows to get and set the media type of the storage.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="Version" class="membertitle">Version</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>string <b>Version</b>;<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>allows to get and set the version of the format related to the
+ MediaType.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="MediaTypeFallbackIsUsed" class="membertitle">MediaTypeFallbackIsUsed</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>[ readonly ] boolean <b>MediaTypeFallbackIsUsed</b>;<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>allows to detect whether mediatype is detected by using fallback
+ approach.
+
+ </dd>
+<dd><p>
+ Can be set to true if the mediatype can not be detected in standard
+ way, but there is a fallback solution allows to do it.
+ </p>
+
+ <p>
+ Usually means that the document validity is questionable, although
+ the package itself is not corrupted. The decision about document
+ validity in this case is in application hands. It is up to user of
+ the storage to deside whether he accepts the fallback approach for
+ an implementation of this service, outputs a warning or an error.
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="IsRoot" class="membertitle">IsRoot</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>[ readonly ] boolean <b>IsRoot</b>;<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>allows to detect whether the storage is a root one.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="RepairPackage" class="membertitle">RepairPackage</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>[ readonly ] boolean <b>RepairPackage</b>;<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>allows to detect whether storage is open in "repair package" mode or
+ not.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="HasEncryptedEntries" class="membertitle">HasEncryptedEntries</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>[ readonly ] boolean <b>HasEncryptedEntries</b>;<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>allows to detect if the storage contains encrypted entries.
+
+ </dd>
+<dd><p>
+ In case it is set to <b>true</b> the storage itself and/or a tree of
+ substorages contain encrypted streams. Usually in case this property
+ is supported the implementation supports
+ <a href="XEncryptionProtectedSource.html">XEncryptionProtectedSource</a> interface.
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="HasNonEncryptedEntries" class="membertitle">HasNonEncryptedEntries</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>[ readonly ] boolean <b>HasNonEncryptedEntries</b>;<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>optional</i></dd>
+<dt><b>Description</b></dt>
+<dd>allows to detect if the storage contains nonencrypted entries.
+
+ </dd>
+<dd><p>
+ In case it is set to <b>true</b> the storage itself and/or a tree of
+ substorages contains nonencrypted streams. Usually in case this
+ property is supported the implementation supports
+ <a href="XEncryptionProtectedSource.html">XEncryptionProtectedSource</a> interface.
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<br>&nbsp;<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

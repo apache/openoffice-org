@@ -1,0 +1,764 @@
+<html>
+<head>
+<title>Interface XTransliteration</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XTransliteration-xref.html" class="navimain">Use</a></td>
+<td class="navimain"><a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Overview_and_Using_the_API#XTransliteration" class="navimain">Devguide</a></td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">i18n</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XTransliteration</td>
+</tr>
+<tr>
+<td/></tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>Character conversions like case folding or Hiragana to Katakana.
+
+ </dd>
+<dd><p> Transliteration is a character to character conversion but it is
+ not always a one to one mapping between characters. Transliteration
+ modules are primarily used by collation, and search and replace
+ modules to perform approximate search. It can also be used to format
+ the numbers in different numbering systems. <p/>
+
+ <p> In order to select transliteration modules for different
+ purposes, they are classified with attributes of
+ <a href="TransliterationType.html">TransliterationType</a>. <p/>
+
+ <p> For Western languages there would be three transliteration
+ modules available to compare two mixed case strings: upper to lower,
+ lower to upper, and ignore case. </p>
+
+ <p> A typical calling sequence of transliteration is
+ <ol>
+ <li> getAvailableModules() </li>
+ <li> loadModulesByImplNames() </li>
+ <li> equals() </li>
+ </ol>
+ or another one is
+ <ol>
+ <li> loadModule() </li>
+ <li> transliterate() </li>
+ </ol>
+ </p>
+
+</dd>
+</dl>
+<a name="devmanual"> </a><dl>
+<dt><b>Developers Guide</b></dt>
+<dd><a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Overview_and_Using_the_API#XTransliteration">OfficeDev - Overview and Using the API - XTransliteration</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getName">getName</a></td>
+<td class="imsum_right">Unique ASCII name to identify a module. This name is used
+ to get its localized name for menus, dialogs etc. The behavior
+ is undefined for <b>TransliterationType::CASCADE</b>
+ modules.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getType">getType</a></td>
+<td class="imsum_right">Return the attribute(s) associated with this transliterator
+ object, as defined in <a href="TransliterationType.html">TransliterationType</a>. The
+ value is determined by the transliteration modules. For example,
+ for UPPERCASE_LOWERCASE, a ONE_TO_ONE is returned, for
+ IGNORE_CASE, IGNORE is returned.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#loadModule">loadModule</a></td>
+<td class="imsum_right">Load instance of predefined module - old style method.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#loadModuleNew">loadModuleNew</a></td>
+<td class="imsum_right">Load a sequence of instances of predefined modules - supersedes
+ method <a href="XTransliteration.html">XTransliteration</a>::<a href="XTransliteration.html#loadModule">loadModule()</a>.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#loadModuleByImplName">loadModuleByImplName</a></td>
+<td class="imsum_right">Load instance of UNO registered module.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#loadModulesByImplNames">loadModulesByImplNames</a></td>
+<td class="imsum_right">Load a sequence of instances of transliteration modules.
+ Output of one module is feeded as input to the next module in
+ the sequence. The object created by this call has
+ <a href="TransliterationType.html">TransliterationType</a> CASCADE and IGNORE types.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getAvailableModules">getAvailableModules</a></td>
+<td class="imsum_right">List the available transliteration modules for a given locale.
+ It can be filtered based on its type. 
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#transliterate">transliterate</a></td>
+<td class="imsum_right">Transliterate a substring. This method can be called if the
+ object doesn't have <a href="TransliterationType.html">TransliterationType</a> IGNORE
+ attribute.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#folding">folding</a></td>
+<td class="imsum_right"><b>[ DEPRECATED ]<br>
+</b>&nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#equals">equals</a></td>
+<td class="imsum_right">Match two substrings and find if they are equivalent as per this
+ transliteration.
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#transliterateRange">transliterateRange</a></td>
+<td class="imsum_right">Transliterate one set of characters to another.
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#compareSubstring">compareSubstring</a></td>
+<td class="imsum_right">Compare 2 substrings as per this transliteration. It translates both 
+ substrings before comparing them.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#compareString">compareString</a></td>
+<td class="imsum_right">Compare 2 strings as per this transliteration. It translates both
+ strings before comparing them.
+
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getName" class="membertitle">getName</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">string</td>
+</tr>
+<tr>
+<td valign="top"><b>getName</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Unique ASCII name to identify a module. This name is used
+ to get its localized name for menus, dialogs etc. The behavior
+ is undefined for <b>TransliterationType::CASCADE</b>
+ modules.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getType" class="membertitle">getType</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">short</td>
+</tr>
+<tr>
+<td valign="top"><b>getType</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Return the attribute(s) associated with this transliterator
+ object, as defined in <a href="TransliterationType.html">TransliterationType</a>. The
+ value is determined by the transliteration modules. For example,
+ for UPPERCASE_LOWERCASE, a ONE_TO_ONE is returned, for
+ IGNORE_CASE, IGNORE is returned.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="loadModule" class="membertitle">loadModule</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>loadModule</b>(</td>
+<td valign="top">[in] <a href="TransliterationModules.html">TransliterationModules</a></td>
+<td valign="bottom">&nbsp;eModType,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/Locale.html">Locale</a></td>
+<td valign="bottom">&nbsp;aLocale );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Load instance of predefined module - old style method.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="loadModuleNew" class="membertitle">loadModuleNew</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>loadModuleNew</b>(</td>
+<td valign="top">[in] sequence&lt; <a href="TransliterationModulesNew.html">TransliterationModulesNew</a> &gt;</td>
+<td valign="bottom">&nbsp;aModType,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/Locale.html">Locale</a></td>
+<td valign="bottom">&nbsp;aLocale );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Load a sequence of instances of predefined modules - supersedes
+ method <a href="XTransliteration.html">XTransliteration</a>::<a href="XTransliteration.html#loadModule">loadModule()</a>.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="loadModuleByImplName" class="membertitle">loadModuleByImplName</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>loadModuleByImplName</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;aImplName,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/Locale.html">Locale</a></td>
+<td valign="bottom">&nbsp;aLocale );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Load instance of UNO registered module.
+
+ </dd>
+<dd><p> Each transliteration module is registered under a different
+ service name. The convention for the service name is
+ com.sun.star.i18n.Transliteration.l10n.{implName}. The
+ {implName} is a unique name used to identify a module. The
+ implName is used to get a localized name for the transliteration
+ module. The implName is used in locale data to list the
+ available transliteration modules for the locale. There are some
+ transliteration modules that are always available. The names of
+ those modules are listed as enum
+ <a href="TransliterationModules.html">TransliterationModules</a> names. For modules not
+ listed there it is possible to load them directly by their
+ implName.
+
+ </dd>
+<dt><b>Parameter aImplName</b></dt>
+<dd>The module's {implName} under which it is registered with
+ com.sun.star.i18n.Transliteration.l10n.{implName}.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="loadModulesByImplNames" class="membertitle">loadModulesByImplNames</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>loadModulesByImplNames</b>(</td>
+<td valign="top">[in] sequence&lt; string &gt;</td>
+<td valign="bottom">&nbsp;aImplNameList,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/Locale.html">Locale</a></td>
+<td valign="bottom">&nbsp;aLocale );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Load a sequence of instances of transliteration modules.
+ Output of one module is feeded as input to the next module in
+ the sequence. The object created by this call has
+ <a href="TransliterationType.html">TransliterationType</a> CASCADE and IGNORE types.
+
+ </dd>
+<dt><b>Parameter aImplNameList</b></dt>
+<dd>Only IGNORE type modules can be specified.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getAvailableModules" class="membertitle">getAvailableModules</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">sequence&lt; string &gt;</td>
+</tr>
+<tr>
+<td valign="top"><b>getAvailableModules</b>(</td>
+<td valign="top">[in] ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/Locale.html">Locale</a></td>
+<td valign="bottom">&nbsp;aLocale,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] short</td>
+<td valign="bottom">&nbsp;nType );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>List the available transliteration modules for a given locale.
+ It can be filtered based on its type. 
+
+ </dd>
+<dt><b>Parameter nType</b></dt>
+<dd>A bitmask field of values defined in
+ <a href="TransliterationType.html">TransliterationType</a>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="transliterate" class="membertitle">transliterate</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">string</td>
+</tr>
+<tr>
+<td valign="top"><b>transliterate</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;aInStr,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nStartPos,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nCount,</td>
+</tr>
+<tr>
+<td/><td valign="top">[out] sequence&lt; long &gt;</td>
+<td valign="bottom">&nbsp;rOffset );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Transliterate a substring. This method can be called if the
+ object doesn't have <a href="TransliterationType.html">TransliterationType</a> IGNORE
+ attribute.
+
+ </dd>
+<dt><b>Parameter aStr</b></dt>
+<dd>The input string.
+
+ </dd>
+<dt><b>Parameter nStartPos</b></dt>
+<dd>Start position within aStr from where transliteration starts.
+ 
+ </dd>
+<dt><b>Parameter nCount</b></dt>
+<dd>Number of codepoints to be transliterated.
+
+ </dd>
+<dt><b>Parameter rOffset</b></dt>
+<dd>To find the grapheme of input string corresponding to the
+ grapheme of output string, rOffset provides the offset array
+ whose index is the offset of output string, the element
+ containing the position within the input string before
+ transliteration.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="folding" class="membertitle">folding</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">string</td>
+</tr>
+<tr>
+<td valign="top"><b>folding</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;aInStr,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nStartPos,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nCount,</td>
+</tr>
+<tr>
+<td/><td valign="top">[out] sequence&lt; long &gt;</td>
+<td valign="bottom">&nbsp;rOffset );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Usage Restrictions</b></dt>
+<dd><i>deprecated</i></dd>
+<dt><b>Deprecation Info</b></dt>
+<dd>For internal use, this method is supported to get the
+ "transliteration", which equals() is based on.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="equals" class="membertitle">equals</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>equals</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;aStr1,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nPos1,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nCount1,</td>
+</tr>
+<tr>
+<td/><td valign="top">[out] long</td>
+<td valign="bottom">&nbsp;rMatch1,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;aStr2,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nPos2,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nCount2,</td>
+</tr>
+<tr>
+<td/><td valign="top">[out] long</td>
+<td valign="bottom">&nbsp;rMatch2 );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Match two substrings and find if they are equivalent as per this
+ transliteration.
+ 
+ </dd>
+<dd><p> This method can be called if the object has
+ <a href="TransliterationType.html">TransliterationType</a> IGNORE attribute. </p>
+
+ <p> Returns the number of matched code points in any case, even if
+ strings are not equal, for example: <br/>
+ equals( "a", 0, 1, nMatch1, "aaa", 0, 3, nMatch2 ) <br/>
+ returns <b>false</b> and nMatch:=1 and nMatch2:=1 <br/>
+ equals( "aab", 0, 3, nMatch1, "aaa", 0, 3, nMatch2 ) <br/>
+ returns <b>false</b> and nMatch:=2 and nMatch2:=2 <br/> </p>
+
+ </dd>
+<dt><b>Parameter aStr1</b></dt>
+<dd>First string to match.
+
+ </dd>
+<dt><b>Parameter nPos1</b></dt>
+<dd>Start position within aStr1.
+
+ </dd>
+<dt><b>Parameter nCount1</b></dt>
+<dd>Number of code points to use of aStr1.
+
+ </dd>
+<dt><b>Parameter rMatch1</b></dt>
+<dd>Returns number of matched code points in aStr1.
+
+ </dd>
+<dt><b>Parameter aStr2</b></dt>
+<dd>Second string to match.
+
+ </dd>
+<dt><b>Parameter nPos2</b></dt>
+<dd>Start position within aStr2.
+
+ </dd>
+<dt><b>Parameter nCount2</b></dt>
+<dd>Number of code points to use of aStr2.
+
+ </dd>
+<dt><b>Parameter rMatch2</b></dt>
+<dd>Returns number of matched code points in aStr2.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd><b>true</b> if the substrings are equal per this
+ transliteration <br/>
+ <b>false</b> else.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="transliterateRange" class="membertitle">transliterateRange</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">sequence&lt; string &gt;</td>
+</tr>
+<tr>
+<td valign="top"><b>transliterateRange</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;aStr1,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;aStr2 );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Transliterate one set of characters to another.
+ 
+ </dd>
+<dd><p> This method is intended for getting corresponding ranges and
+ can be called if the object has <a href="TransliterationType.html">TransliterationType</a>
+ IGNORE attribute. </p>
+ 
+ <p> For example: generic CASE_IGNORE transliterateRange( "a", "i" )
+ returns {"A","I","a","i"}, transliterateRange( "a", "a" )
+ returns {"A","A","a","a"}. </p>
+ 
+ <p> Use this transliteration to create regular expresssions like
+ [a-i] --> [A-Ia-i]. </p>
+ 
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>String sequence containing corresponding transliterated
+ pairs of characters to represent a range.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="compareSubstring" class="membertitle">compareSubstring</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">long</td>
+</tr>
+<tr>
+<td valign="top"><b>compareSubstring</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;aStr1,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nOff1,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nLen1,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;aStr2,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nOff2,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;nLen2 );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Compare 2 substrings as per this transliteration. It translates both 
+ substrings before comparing them.
+
+ </dd>
+<dt><b>Parameter aStr1</b></dt>
+<dd>First string.
+
+ </dd>
+<dt><b>Parameter nOff1</b></dt>
+<dd>Offset (from 0) of the first substring.
+
+ </dd>
+<dt><b>Parameter nLen1</b></dt>
+<dd>Length (from offset) of the first substring.
+
+ </dd>
+<dt><b>Parameter aStr2</b></dt>
+<dd>Second string.
+
+ </dd>
+<dt><b>Parameter nOff2</b></dt>
+<dd>Offset (from 0) of the second substring.
+
+ </dd>
+<dt><b>Parameter nLen2</b></dt>
+<dd>Length (from offset) of the second substring.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>1 if the first substring is greater than the second substring <br/>
+ 0 if the first substring is equal to the second substring <br/>
+ -1 if the first substring is less than the second substring
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="compareString" class="membertitle">compareString</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">long</td>
+</tr>
+<tr>
+<td valign="top"><b>compareString</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;aStr1,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;aStr2 );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Compare 2 strings as per this transliteration. It translates both
+ strings before comparing them.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>1 if the first string is greater than the second string <br/>
+ 0 if the first string is equal to the second string <br/>
+ -1 if the first string is less than the second string
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

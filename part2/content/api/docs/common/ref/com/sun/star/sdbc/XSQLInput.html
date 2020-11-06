@@ -1,0 +1,874 @@
+<html>
+<head>
+<title>Interface XSQLInput</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XSQLInput-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">sdbc</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XSQLInput</td>
+</tr>
+<tr>
+<td/></tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>represents an input stream that contains a stream of values representing an
+ instance of a SQL structured or distinct type.
+ 
+ 
+ </dd>
+<dd><p>
+ This interface, used only for custom mapping, is used by the driver
+ behind the scenes, and a programmer never directly invokes
+ <code>SQLInput</code>
+ methods.
+ </p>
+ <p>
+ When the method 
+ <code>getObject</code>
+ is called with an object of a service implementing the interface 
+ <code>SQLData</code>
+ , the SDBC driver calls the method 
+ <a href="XSQLData.html">XSQLData</a>::<a href="XSQLData.html#getSQLType">getSQLType()</a>
+ to determine the SQL type of the user-defined type (UDT) being custom mapped.
+ The driver creates an instance of 
+ <a href="XSQLInput.html">XSQLInput</a>
+ ,
+ populating it with the attributes of the UDT. The driver then passes the input
+ stream to the method 
+ <a href="XSQLData.html">XSQLData</a>::<a href="XSQLData.html#readSQL">readSQL()</a>
+ , which in turn calls the 
+ <code>XSQLInput.readXXX</code>
+ methods in its implementation for reading the attributes from the input stream.
+ </p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readString">readString</a></td>
+<td class="imsum_right">reads the next attribute in the stream as string.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readBoolean">readBoolean</a></td>
+<td class="imsum_right">reads the next attribute in the stream as boolean.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readByte">readByte</a></td>
+<td class="imsum_right">reads the next attribute in the stream as byte.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readShort">readShort</a></td>
+<td class="imsum_right">reads the next attribute in the stream as short.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readInt">readInt</a></td>
+<td class="imsum_right">reads the next attribute in the stream as long.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readLong">readLong</a></td>
+<td class="imsum_right">reads the next attribute in the stream as hyper.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readFloat">readFloat</a></td>
+<td class="imsum_right">reads the next attribute in the stream as float.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readDouble">readDouble</a></td>
+<td class="imsum_right">reads the next attribute in the stream as double.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readBytes">readBytes</a></td>
+<td class="imsum_right">reads the next attribute in the stream as sequence of bytes. 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readDate">readDate</a></td>
+<td class="imsum_right">reads the next attribute in the stream as date.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readTime">readTime</a></td>
+<td class="imsum_right">reads the next attribute in the stream as time.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readTimestamp">readTimestamp</a></td>
+<td class="imsum_right">reads the next attribute in the stream as datetime.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readBinaryStream">readBinaryStream</a></td>
+<td class="imsum_right">reads the next attribute in the stream as sequence of bytes.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readCharacterStream">readCharacterStream</a></td>
+<td class="imsum_right">reads the next attribute in the stream as a unicode string.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readObject">readObject</a></td>
+<td class="imsum_right">returns the datum at the head of the stream as an any.
+ 
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readRef">readRef</a></td>
+<td class="imsum_right">reads a REF(&amp;lt;structured-type&amp;gt;) from the stream.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readBlob">readBlob</a></td>
+<td class="imsum_right">reads a BLOB from the stream.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readClob">readClob</a></td>
+<td class="imsum_right">reads a CLOB from the stream.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#readArray">readArray</a></td>
+<td class="imsum_right">reads an array from the stream.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#wasNull">wasNull</a></td>
+<td class="imsum_right">determines whether the last value read was null.
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readString" class="membertitle">readString</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">string</td>
+</tr>
+<tr>
+<td valign="top"><b>readString</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads the next attribute in the stream as string.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readBoolean" class="membertitle">readBoolean</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>readBoolean</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads the next attribute in the stream as boolean.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readByte" class="membertitle">readByte</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">byte</td>
+</tr>
+<tr>
+<td valign="top"><b>readByte</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads the next attribute in the stream as byte.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readShort" class="membertitle">readShort</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">short</td>
+</tr>
+<tr>
+<td valign="top"><b>readShort</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads the next attribute in the stream as short.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readInt" class="membertitle">readInt</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">long</td>
+</tr>
+<tr>
+<td valign="top"><b>readInt</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads the next attribute in the stream as long.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readLong" class="membertitle">readLong</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">hyper</td>
+</tr>
+<tr>
+<td valign="top"><b>readLong</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads the next attribute in the stream as hyper.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readFloat" class="membertitle">readFloat</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">float</td>
+</tr>
+<tr>
+<td valign="top"><b>readFloat</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads the next attribute in the stream as float.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readDouble" class="membertitle">readDouble</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">double</td>
+</tr>
+<tr>
+<td valign="top"><b>readDouble</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads the next attribute in the stream as double.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readBytes" class="membertitle">readBytes</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">sequence&lt; byte &gt;</td>
+</tr>
+<tr>
+<td valign="top"><b>readBytes</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads the next attribute in the stream as sequence of bytes. 
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readDate" class="membertitle">readDate</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">::com::sun::star::<a href="../util/module-ix.html">util</a>::<a href="../util/Date.html">Date</a></td>
+</tr>
+<tr>
+<td valign="top"><b>readDate</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads the next attribute in the stream as date.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readTime" class="membertitle">readTime</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">::com::sun::star::<a href="../util/module-ix.html">util</a>::<a href="../util/Time.html">Time</a></td>
+</tr>
+<tr>
+<td valign="top"><b>readTime</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads the next attribute in the stream as time.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readTimestamp" class="membertitle">readTimestamp</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">::com::sun::star::<a href="../util/module-ix.html">util</a>::<a href="../util/DateTime.html">DateTime</a></td>
+</tr>
+<tr>
+<td valign="top"><b>readTimestamp</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads the next attribute in the stream as datetime.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readBinaryStream" class="membertitle">readBinaryStream</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">::com::sun::star::<a href="../io/module-ix.html">io</a>::<a href="../io/XInputStream.html">XInputStream</a></td>
+</tr>
+<tr>
+<td valign="top"><b>readBinaryStream</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads the next attribute in the stream as sequence of bytes.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readCharacterStream" class="membertitle">readCharacterStream</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">::com::sun::star::<a href="../io/module-ix.html">io</a>::<a href="../io/XInputStream.html">XInputStream</a></td>
+</tr>
+<tr>
+<td valign="top"><b>readCharacterStream</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads the next attribute in the stream as a unicode string.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readObject" class="membertitle">readObject</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">any</td>
+</tr>
+<tr>
+<td valign="top"><b>readObject</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>returns the datum at the head of the stream as an any.
+ 
+ 
+ </dd>
+<dd><p>
+ The actual type of the any returned is determined by the default
+ type mapping, and any customizations present in this stream's type map.
+ 
+ <br/>
+ A type map is registered with the stream by the SDBC driver before the
+ stream is passed to the application.
+ 
+ <br/>
+ When the datum at the head of the stream is a SQL NULL,
+ the method returns <b>void</b>. If the datum is a SQL structured or distinct
+ type, it determines the SQL type of the datum at the head of the stream,
+ constructs an object of the appropriate service, and calls the method
+ <a href="XSQLData.html">XSQLData</a>::<a href="XSQLData.html#readSQL">readSQL()</a>
+ on that object, which reads additional data
+ from the stream using the protocol described for that method.
+ 
+ </p>
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readRef" class="membertitle">readRef</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XRef.html">XRef</a></td>
+</tr>
+<tr>
+<td valign="top"><b>readRef</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads a REF(&amp;lt;structured-type&amp;gt;) from the stream.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readBlob" class="membertitle">readBlob</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XBlob.html">XBlob</a></td>
+</tr>
+<tr>
+<td valign="top"><b>readBlob</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads a BLOB from the stream.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readClob" class="membertitle">readClob</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XClob.html">XClob</a></td>
+</tr>
+<tr>
+<td valign="top"><b>readClob</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads a CLOB from the stream.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="readArray" class="membertitle">readArray</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XArray.html">XArray</a></td>
+</tr>
+<tr>
+<td valign="top"><b>readArray</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>reads an array from the stream.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the attribute; if the value is SQL NULL, return null.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="wasNull" class="membertitle">wasNull</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>wasNull</b>()</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="SQLException.html">SQLException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>determines whether the last value read was null.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd><b>true</b> if the most recently gotten SQL value was null; otherwise, <b>false</b>
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>SQLException 
+ if a database access error occurs.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

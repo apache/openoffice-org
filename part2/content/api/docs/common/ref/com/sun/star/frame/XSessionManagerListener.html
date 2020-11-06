@@ -1,0 +1,249 @@
+<html>
+<head>
+<title>Interface XSessionManagerListener</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XSessionManagerListener-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">frame</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XSessionManagerListener</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Base Interfaces</b></dt>
+<dd><pre style="font-family:monospace;"><strong>XSessionManagerListener</strong>
+&#x2517 ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XEventListener.html">XEventListener</a>
+
+</pre></dd>
+<dd><a name/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="crosstitle">
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XEventListener.html">XEventListener</a></td>
+<td class="imsum_right"><dl>
+<dt>(referenced interface's summary:)</dt>
+<dd>base interface for all event listeners interfaces.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td/></tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#doSave">doSave</a></td>
+<td class="imsum_right">doSave gets called when a save event was issued by the session manager
+ the listener should do what is necessary to restore
+ the current state of the application
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#approveInteraction">approveInteraction</a></td>
+<td class="imsum_right">approveInteraction is called when an outstanding
+ interaction request was processed by the session manager
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#shutdownCanceled">shutdownCanceled</a></td>
+<td class="imsum_right">shutdownCanceled is called when a shutdown was canceled by the user
+ The listener can cancel his saving operations. No
+ further interaction is necessary and further calls
+ on the session manager client service object will
+ be ignored.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#doRestore">doRestore</a></td>
+<td class="imsum_right">returns true, if a session was restored
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="doSave" class="membertitle">doSave</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">[oneway] void</td>
+</tr>
+<tr>
+<td valign="top"><b>doSave</b>(</td>
+<td valign="top">[in] boolean</td>
+<td valign="bottom">&nbsp;bShutdown,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] boolean</td>
+<td valign="bottom">&nbsp;bCancelable );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>doSave gets called when a save event was issued by the session manager
+ the listener should do what is necessary to restore
+ the current state of the application
+ 
+ </dd>
+<dd><p>If the listener desires to interact with the user
+ it must first issue a user interaction request and
+ only do so if interaction was granted</p>
+ 
+ <p>When the save request is processed (with or without
+ user interaction) the listener must call
+ <a href="XSessionManagerClient.html">XSessionManagerClient</a>::<a href="XSessionManagerClient.html#saveDone">saveDone()</a>
+ on the session manager client service object.</p>
+ 
+ </dd>
+<dt><b>Parameter bShutdown</b></dt>
+<dd><b>true</b> if a shutdown is in progress,
+ <b>false</b> if just a save point was requested
+
+ </dd>
+<dt><b>Parameter bCancelable</b></dt>
+<dd><b>true</b> if a shutdown in progress can be canceled by the listener,
+ <b>false</b> else
+ 
+ <p>the listener may choose to ignore the <a href="#saveDone">saveDone</a>
+ event in case no real shutdown is in progress. He
+ still has to call
+ <a href="XSessionManagerClient.html">XSessionManagerClient</a>::<a href="XSessionManagerClient.html#saveDone">saveDone()</a>
+ in that case.</p>
+ 
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="XSessionManagerClient.html">XSessionManagerClient</a>, <a href="XSessionManagerClient.html">XSessionManagerClient</a>::<a href="XSessionManagerClient.html#saveDone">saveDone()</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="approveInteraction" class="membertitle">approveInteraction</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">[oneway] void</td>
+</tr>
+<tr>
+<td valign="top"><b>approveInteraction</b>(</td>
+<td valign="top">[in] boolean</td>
+<td valign="bottom">&nbsp;bInteractionGranted );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>approveInteraction is called when an outstanding
+ interaction request was processed by the session manager
+
+ </dd>
+<dt><b>Parameter bInteractionGranted</b></dt>
+<dd>If <b>false</b> the listener must not interact with the user.
+ If <b>true</b> the listener can interact with the user now.
+ After interaction the listener must call
+ <a href="XSessionManagerClient.html">XSessionManagerClient</a>::<a href="XSessionManagerClient.html#interactionDone">interactionDone</a>
+ on the session manager client service object.
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="XSessionManagerClient.html">XSessionManagerClient</a>, <a href="XSessionManagerClient.html">XSessionManagerClient</a>::<a href="XSessionManagerClient.html#interactionDone">interactionDone()</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="shutdownCanceled" class="membertitle">shutdownCanceled</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">[oneway] void</td>
+</tr>
+<tr>
+<td valign="top"><b>shutdownCanceled</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>shutdownCanceled is called when a shutdown was canceled by the user
+ The listener can cancel his saving operations. No
+ further interaction is necessary and further calls
+ on the session manager client service object will
+ be ignored.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="doRestore" class="membertitle">doRestore</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">boolean</td>
+</tr>
+<tr>
+<td valign="top"><b>doRestore</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>returns true, if a session was restored
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

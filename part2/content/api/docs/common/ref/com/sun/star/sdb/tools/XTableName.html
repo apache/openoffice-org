@@ -1,0 +1,323 @@
+<html>
+<head>
+<title>Interface XTableName</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XTableName-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub"><a href="#AttributesSummary" class="navisub">Attributes' Summary</a></td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub"><a href="#AttributesDetails" class="navisub">Attributes' Details</a></td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../../module-ix.html" class="namechain">::</a> <a href="../../../../module-ix.html" class="namechain">com</a> :: <a href="../../../module-ix.html" class="namechain">sun</a> :: <a href="../../module-ix.html" class="namechain">star</a> :: <a href="../module-ix.html" class="namechain">sdb</a> :: <a href="module-ix.html" class="namechain">tools</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XTableName</td>
+</tr>
+<tr>
+<td/></tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>allows to manipulate table names.
+
+ </dd>
+<dd><p>When, in a database application, dealing with table names, there's many degrees
+ of freedom to deal with. For instance, suppose you want to have the full name of a
+ table object, as it should be used in a <code>SELECT</code> statement's <code>FROM</code>
+ part. This requires you to evaluate whether or not the table has a catalog and/or schema
+ name, to combine the catalog, the schema, and the basic table name into one name, respecting
+ the database's quoting character, and the order in which all those parts should be combined.
+ Additionally, you have to respect the client-side settings which tell OpenOffice.org
+ to use or not use catalogs and schemas in <code>SELECT</code> at all.</p>
+
+ <p>The <a href="XTableName.html">XTableName</a> interface eases this and other, similar tasks around table
+ names.</p>
+
+ <p>The component itself does not have life-time control mechanimns, i.e. you
+ cannot explicitly dispose it (::com::sun::star::<a href="../../lang/module-ix.html">lang</a>::<a href="../../lang/XComponent.html">XComponent</a>::<a href="../../lang/XComponent.html#dispose">dispose</a>),
+ and you cannot be notified when it dies.<br/>
+ However, if your try to access any of its methods or attributes, after the
+ connection which was used to create it was closed, a ::com::sun::star::<a href="../../lang/module-ix.html">lang</a>::<a href="../../lang/DisposedException.html">DisposedException</a>
+ will be thrown.</p>
+
+ </dd>
+<dt><b>Since </b></dt>
+<dd>OOo 2.0.4</dd>
+<dt><b>See also</b></dt>
+<dd><a href="XConnectionTools.html">XConnectionTools</a>, ::com::sun::star::<a href="../../sdbc/module-ix.html">sdbc</a>::<a href="../../sdbc/XDatabaseMetaData.html">XDatabaseMetaData</a>, ::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../DataSource.html">DataSource</a>::<a href="../DataSource.html#Settings">Settings</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getComposedName">getComposedName</a></td>
+<td class="imsum_right">returns the composed table name, including the catalog and schema name,
+ respecting the databases's quoting requirements, plus
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#setComposedName">setComposedName</a></td>
+<td class="imsum_right">sets a new composed table name
+ &nbsp;</td>
+</tr>
+</table>
+<a name="AttributesSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Attributes' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#CatalogName">CatalogName</a></td>
+<td class="imsum_right">denotes the name of the catalog which the table is a part of
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#SchemaName">SchemaName</a></td>
+<td class="imsum_right">denotes the name of the schema which the table is a part of
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#TableName">TableName</a></td>
+<td class="imsum_right">denotes the mere, unqualified table name, excluding any catalog and
+ schema.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#NameForSelect">NameForSelect</a></td>
+<td class="imsum_right">represents the table name in a form to be used in a <code>SELECT</code> statement.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#Table">Table</a></td>
+<td class="imsum_right">is the ::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../Table.html">Table</a> object specified
+ by the current name.
+
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getComposedName" class="membertitle">getComposedName</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">string</td>
+</tr>
+<tr>
+<td valign="top"><b>getComposedName</b>(</td>
+<td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;Type,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] boolean</td>
+<td valign="bottom">&nbsp;Quote )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../../lang/module-ix.html">lang</a>::<a href="../../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>returns the composed table name, including the catalog and schema name,
+ respecting the databases's quoting requirements, plus
+
+ </dd>
+<dt><b>Parameter Type</b></dt>
+<dd>the type of name composition to be used.
+
+ </dd>
+<dt><b>Parameter Quote</b></dt>
+<dd>specifies whether the single parts of the table name should be quoted
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::IllegalArgumentException
+ if the given <arg>Type</arg> does not denote a valid <a href="CompositionType.html">CompositionType</a>
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="CompositionType.html">CompositionType</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="setComposedName" class="membertitle">setComposedName</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>setComposedName</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;ComposedName,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;Type );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>sets a new composed table name
+ </dd>
+<dt><b>Parameter ComposedName</b></dt>
+<dd>specifies the composed table name
+ </dd>
+<dt><b>Parameter Type</b></dt>
+<dd>specifies the composition type which was used to create the composed table name
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="AttributesDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Attributes' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="CatalogName" class="membertitle">CatalogName</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>string <b>CatalogName</b>;<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>denotes the name of the catalog which the table is a part of
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="SchemaName" class="membertitle">SchemaName</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>string <b>SchemaName</b>;<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>denotes the name of the schema which the table is a part of
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="TableName" class="membertitle">TableName</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>string <b>TableName</b>;<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>denotes the mere, unqualified table name, excluding any catalog and
+ schema.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="NameForSelect" class="membertitle">NameForSelect</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>[ readonly ] string <b>NameForSelect</b>;<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>represents the table name in a form to be used in a <code>SELECT</code> statement.
+
+ </dd>
+<dd><p>On a per-data-source basis, OpenOffice.org allows to override database meta
+ data information in that you can specify to not use catalog and or schema names
+ in <code>SELECT</code> statements. Using this attribute, you can generate a table
+ name which respects those settings.</p>
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd>::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../DataSource.html">DataSource</a>::<a href="../DataSource.html#Settings">Settings</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="Table" class="membertitle">Table</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td>::com::sun::star::<a href="../../beans/module-ix.html">beans</a>::<a href="../../beans/XPropertySet.html">XPropertySet</a> <b>Table</b><dl>
+<dd>get raises (::com::sun::star::<a href="../../container/module-ix.html">container</a>::<a href="../../container/NoSuchElementException.html">NoSuchElementException</a>)</dd>
+<dd>set raises (::com::sun::star::<a href="../../lang/module-ix.html">lang</a>::<a href="../../lang/IllegalArgumentException.html">IllegalArgumentException</a>);</dd>
+</dl>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>is the ::com::sun::star::<a href="../module-ix.html">sdb</a>::<a href="../Table.html">Table</a> object specified
+ by the current name.
+
+ </dd>
+<dd><p>Retrieving this attribute is equivalent to obtaining the tables
+ container from the connection (via ::com::sun::star::<a href="../../sdbcx/module-ix.html">sdbcx</a>::<a href="../../sdbcx/XTablesSupplier.html">XTablesSupplier</a>),
+ and calling its ::com::sun::star::<a href="../../container/module-ix.html">container</a>::<a href="../../container/XNameAccess.html">XNameAccess</a>::<a href="../../container/XNameAccess.html#getByName">getByName</a>
+ method with the ComposedName.</p>
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::container::NoSuchElementException
+ if, upon getting the attribute value, the current composed table name
+ represented by this instance does not denote an existing table in the database.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>com::sun::star::lang::IllegalArgumentException
+ if you try to set an object which does not denote a table from the underlying
+ database.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

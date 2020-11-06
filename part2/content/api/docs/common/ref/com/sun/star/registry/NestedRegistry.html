@@ -1,0 +1,216 @@
+<html>
+<head>
+<title>Service NestedRegistry</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="NestedRegistry-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub">Services' Summary</td>
+<td class="navisub"><a href="#InterfacesSummary" class="navisub">Interfaces' Summary</a></td>
+<td class="navisub">Properties' Summary</td>
+<td class="navisub">Services' Details</td>
+<td class="navisub"><a href="#InterfacesDetails" class="navisub">Interfaces' Details</a></td>
+<td class="navisub">Properties' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">registry</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">service NestedRegistry</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>supports a shared view on two different registries. The registry 
+ files will be opened in two different modes, registry1 will be opened with read/write 
+ rights and registry2 will be opened read-only.
+ In the context of this service, the functions <code>open</code>, <code>close</code>, 
+ and <code>destroy</code> from <a href="XSimpleRegistry.html">XSimpleRegistry</a> are not supported and 
+ throw an exception if they are used. 
+ </dd>
+<dd><dl>
+ <dt>Functions of <a href="XSimpleRegistry.html">XSimpleRegistry</a>:
+ <dl>
+ <dt> <b>getURL</b> 
+ </dt>
+ <dd> returns the name of registry1.
+ 
+ </dd>
+ <dt> <b>isValid</b> 
+ </dt>
+ <dd> checks if registry1 is valid. If the interface is not <b>NULL</b>
+ then registry1 should always be valid. 
+ 
+ </dd>
+ <dt> <b>isReadOnly</b> 
+ </dt>
+ <dd> checks if registry1 has write protection.
+ </dd>
+ <dt> <b>mergeKey</b> 
+ </dt>
+ <dd> merges all information from the specified registry in registry1.
+ 
+ </dd>
+ <dt> <b>getRootKey</b> 
+ </dt>
+ <dd> returns a virtual rootkey of both registries.
+ </dd>
+ </dl> 
+ 
+ <br>
+ 
+ </dt>
+ <dt>Functions of <a href="XRegistryKey.html">XRegistryKey</a>:
+ <dl>
+ <dt> <b>openKey</b> 
+ </dt>
+ <dd> returns a virtual key which is specified in registy1 or registry2.
+ 
+ </dd>
+ <dt> <b>deleteKey</b> 
+ </dt>
+ <dd> deletes the key only if it is present in registry1.
+ 
+ </dd>
+ <dt> <b>setLongValue, setAsciiValue, setStringValue, setBinaryValue</b> 
+ </dt>
+ <dd> sets the value at the specified key in registry1.
+ 
+ </dd>
+ <dt> <b>getLongValue, getAsciiValue, getStringValue, getBinaryValue</b> 
+ </dt>
+ <dd> returns the value at the specified key in registry1, or if 
+ the value is not present in registry1, it will return the value of registry2.
+ 
+ </dd>
+ <dt> <b>openKeys</b> 
+ </dt>
+ <dd> returns a sequence of all subkeys in both registries.
+ 
+ </dd>
+ <dt> <b>getKeyNames</b> 
+ </dt>
+ <dd> returns a sequence with the names of all subkeys in both 
+ registries.
+ 
+ </dd>
+ <dt>
+ <br>
+ <b>Note: all write functions only work on registry1.</b>
+ </dt>
+ </dl>
+ </dt>
+ </dl>
+ <br>
+ How to initialize the registries:<br>
+ Use a sequence of <a href="XSimpleRegistry.html">XSimpleRegistry</a> with two elements. The first element must be 
+ the registry which is opened with read/write rights and the second element must be 
+ the read-only one.<br>
+ Two different ways are possible:<br>
+ <ul>
+ <li> use <method scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</method> to
+ create an instance of this service where the value of the any parameter must be the sequence with
+ the two open registries.
+ <li> use the initialize function of the ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XInitialization.html">XInitialization</a> interface where the value of the 
+ any parameter must be the sequence with the two open registries.
+ </ul>
+ <br>
+ 
+ 
+ Guarantees:
+ <ul>
+ <li>-thread safe</li>
+ </ul>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="InterfacesSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Exported Interfaces - Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XSimpleRegistry.html">XSimpleRegistry</a></td>
+<td class="imsum_right"><dl>
+<dt>(referenced entity's summary:)</dt>
+<dd>allows access to a registry (a persistent data source).
+ The data is stored in a hierarchical key structure beginning with a root key.
+ Each key can store a value and can have multiple subkeys.
+
+ </dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XInitialization.html">XInitialization</a></td>
+<td class="imsum_right"><dl>
+<dt>(referenced entity's summary:)</dt>
+<dd>initializes an object directly after its creation.
+ 
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+<a name="InterfacesDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Exported Interfaces - Details</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XSimpleRegistry" class="membertitle"><a href="XSimpleRegistry.html">XSimpleRegistry</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt>(referenced entity's summary:)</dt>
+<dd>allows access to a registry (a persistent data source).
+ The data is stored in a hierarchical key structure beginning with a root key.
+ Each key can store a value and can have multiple subkeys.
+
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XInitialization" class="membertitle">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XInitialization.html">XInitialization</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt>(referenced entity's summary:)</dt>
+<dd>initializes an object directly after its creation.
+ 
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<br>&nbsp;<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

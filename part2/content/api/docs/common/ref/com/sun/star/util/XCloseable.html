@@ -1,0 +1,201 @@
+<html>
+<head>
+<title>Interface XCloseable</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XCloseable-xref.html" class="navimain">Use</a></td>
+<td class="navimain"><a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Closing_Documents" class="navimain">Devguide</a></td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">util</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XCloseable</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Base Interfaces</b></dt>
+<dd><pre style="font-family:monospace;"><strong>XCloseable</strong>
+&#x2517 <a href="XCloseBroadcaster.html">XCloseBroadcaster</a>
+
+</pre></dd>
+<dd><a name/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="crosstitle">
+<tr>
+<td class="imsum_left"><a href="XCloseBroadcaster.html">XCloseBroadcaster</a></td>
+<td class="imsum_right"><dl>
+<dt>(referenced interface's summary:)</dt>
+<dd>broadcasts each tried closing of an object to all interest listener
+
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>makes it possible to release any objects in a ordered manner by using
+ a two-step mechanism
+
+ </dd>
+<dd><p>
+ If an object should be terminated, it can be:<br>
+ <ul>
+ <li>disposed (if it supports ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XComponent.html">XComponent</a>::<a href="../lang/XComponent.html#dispose">dispose()</a>)</li>
+ <li>closed (if it supports <a href="XCloseable.html#close()">close()</a>)</li>
+ </ul>
+ First version gives the object no chance to disagree with that (e.g. if a
+ process is still running and can't be cancelled realy). Last version
+ provides this possibility, but can't guarantee real termination of called object.
+ It depends from the environment of an object, if one or both mechanism are neccessary.
+ </p>
+
+ <p>
+ Base interface <a href="XCloseBroadcaster.html">XCloseBroadcaster</a> makes it possible that any listener
+ which is interrested on life time of listened object ...
+ <ul>
+ <li>can get a notification about closing of it</li>
+ <li>or can have a veto to break that.</li>
+ </ul>
+ </p>
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd>::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XComponent.html">XComponent</a>::<a href="../lang/XComponent.html#dispose">dispose()</a>, <a href="XCloseBroadcaster.html">XCloseBroadcaster</a>, <a href="XCloseListener.html">XCloseListener</a></dd>
+</dl>
+<a name="devmanual"> </a><dl>
+<dt><b>Developers Guide</b></dt>
+<dd><a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Closing_Documents">OfficeDev - Closing Documents</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#close">close</a></td>
+<td class="imsum_right">try to close the object
+
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="close" class="membertitle">close</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>close</b>(</td>
+<td valign="top">[in] boolean</td>
+<td valign="bottom">&nbsp;DeliverOwnership )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2"><a href="CloseVetoException.html">CloseVetoException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>try to close the object
+
+ </dd>
+<dd><p>
+ Must definitly be called before ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XComponent.html">XComponent</a>::<a href="../lang/XComponent.html#dispose">dispose()</a>.
+ But nobody can guarentee real closing of called object - because it can disagree with that if any
+ still running processes can't be cancelled yet. It's not allowed to block this call till internal
+ operations will be finished here. They must be cancelled or call must return imediatly by throwing
+ the <a href="CloseVetoException.html">CloseVetoException</a>. Otherwise (if nothing exist to disagree) it must return normaly.
+ </p>
+
+ <p>
+ Before any internal processes will be cancelled, all registered <a href="XCloseListener.html">XCloseListener</a>
+ must be notified. Any of them can disagree with a <a href="CloseVetoException.html">CloseVetoException</a> too.
+ It's forbidden to catch this exception inside the called close() method because the caller must
+ get this information!
+ </p>
+
+ <p>
+ If somewhere disagree with a CloseVetoException it will not clear who has to close the object again
+ after still running processes was finished. The parameter <var>DeliverOwnership</var> regulate that.
+ If it is set to <b>false</b> the caller of the method close() will be the owner of this object in every case.
+ Then it's not allowed to call close() from any other place (may a registered XCloseListener).
+ If it is set to <b>true</b> the caller gives up his ownership. If a XCloseListener throw the veto exception
+ he will be the new owner of the closing object. This information is passed to the listener by a parameter of
+ his notification method <a href="XCloseListener.html">XCloseListener</a>::<a href="XCloseListener.html#queryClosing">queryClosing()</a>. After his operations was finished
+ he MUST try to close it again. If the closing object itselfs disagree by an exception and the parameter
+ <var>DeliverOwnership</var> was set to <b>true</b> the object will be his own owner with all consequences of that.
+ <br><strong>Note:</strong><br>
+ There is no way to get the ownership back if it was delivered!
+ </p>
+
+ <p>
+ If this method was already called on an object it should return without any reaction. Normaly it's possible to throw
+ a ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/DisposedException.html">DisposedException</a> for already disposed or closed objects
+ (which represent a ::com::sun::star::<a href="../uno/module-ix.html">uno</a>::<a href="../uno/RuntimeException.html">RuntimeException</a> and can be thrown by every interface call),
+ but it shouldn't be used here. The veto exception should be the only way to indicates the result.
+ </p>
+
+ </dd>
+<dt><b>Parameter DeliverOwnership</b></dt>
+<dd><b>true</b> delegates the ownership of ths closing object to any one which throw the CloseVetoException.
+ This new owner has to close the closing object again if his still running processes will be finished.
+ <br>
+ <b>false</b> let the ownership at the original one which called the close() method. He must react for possible
+ CloseVetoExceptions and try it again at a later time. This can be usefull for a generic UI handling.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>CloseVetoException
+ indicates that the closing object himself or any of his currently registered listener disagree with this close() request.
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="XCloseListener.html">XCloseListener</a>, <a href="CloseVetoException.html">CloseVetoException</a>, ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XComponent.html">XComponent</a>::<a href="../lang/XComponent.html#dispose">dispose()</a>, ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/DisposedException.html">DisposedException</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

@@ -1,0 +1,206 @@
+<html>
+<head>
+<title>class SingletonRef</title>
+<link rel="stylesheet" type="text/css" href="../../cpp.css">
+</head>
+<body>
+<div id="adc-cppref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="1" cellspacing="0">
+<tr align="center" valign="top">
+<td class="navimain">&nbsp;<a href="../../index.html">Overview</a>&nbsp;</td>
+<td class="navimain">&nbsp;<a href="index.html">Namespace</a>&nbsp;</td>
+<td class="navimainself">&nbsp;Class&nbsp;</td>
+<td class="navimain">&nbsp;<a href="../../index-files/index-1.html">Index</a>&nbsp;</td>
+<td class="navimain">&nbsp;<a href="../../help.html">Help</a>&nbsp;</td>
+</tr>
+</table>
+<table class="navisub" cellpadding="0" cellspacing="3">
+<tr>
+<td width="20%"><font size="-2">PUBLIC MEMBERS:</font></td>
+<td>
+&nbsp;<font size="-2">CLASSES</font>
+|&nbsp;<font size="-2">STRUCTS</font>
+|&nbsp;<font size="-2">UNIONS</font>
+|&nbsp;<font size="-2">ENUMS</font>
+|&nbsp;<font size="-2">TYPEDEFS</font>
+|&nbsp;<a href="#publ_ops"><font size="-2"><b>METHODS</b></font></a>
+|&nbsp;<font size="-2">STATIC METHODS</font>
+|&nbsp;<font size="-2">DATA</font>
+|&nbsp;<font size="-2">STATIC DATA</font></td>
+</tr>
+<tr>
+<td width="20%"><font size="-2">PRIVATE MEMBERS:</font></td>
+<td>
+&nbsp;<font size="-2">CLASSES</font>
+|&nbsp;<a href="#priv_structs"><font size="-2"><b>STRUCTS</b></font></a>
+|&nbsp;<font size="-2">UNIONS</font>
+|&nbsp;<font size="-2">ENUMS</font>
+|&nbsp;<font size="-2">TYPEDEFS</font>
+|&nbsp;<a href="#priv_ops"><font size="-2"><b>METHODS</b></font></a>
+|&nbsp;<font size="-2">STATIC METHODS</font>
+|&nbsp;<font size="-2">DATA</font>
+|&nbsp;<a href="#priv_static_vars"><font size="-2"><b>STATIC DATA</b></font></a></td>
+</tr>
+</table>
+<hr>
+<a href="../../names/index.html" alt="Global Namespace in C++"><font size="+1"><b>::</b></font></a> <a href="index.html" alt="namespace"><font size="+1"><b>salhelper</b></font></a><font size="+1"> :: </font><br>
+<p><strong>template&lt; typename SingletonClass &gt;</strong></p>
+<div class="title"><h2>class SingletonRef</h2>
+</div><hr>
+<dl>
+<dt>Base Classes</dt>
+<dd>None.</dd>
+</dl>
+<dl>
+<dt>Known Derived Classes</dt>
+<dd>None.</dd>
+</dl>
+<br>
+<table class="flag-table" border="1" cellspacing="0">
+<tr>
+<td width="25%" class="flagname">virtual</td>
+<td width="25%" class="flagname">abstract</td>
+<td width="25%" class="flagname">interface</td>
+<td width="25%" class="flagname">template</td>
+</tr>
+<tr>
+<td class="flagno">NO</td>
+<td class="flagno">NO</td>
+<td class="flagno">NO</td>
+<td class="flagyes">YES</td>
+</tr>
+</table>
+<dl>
+<dt>Summary</dt>
+<dd>template for implementing singleton classes.
+
+    </dd>
+<dt>Description</dt>
+<dd>Such classes can be instanciated everytimes they
+            are needed. But the internal wrapped object will
+            be created one times only. Of course its used
+            resources are referenced one times only too.
+            This template hold it alive till the last
+            reference is gone. Further all operations
+            on this reference are threadsafe. Only
+            calls directly to the internal object (which modify
+            its state) must be made threadsafe by the object itself
+            or from outside.
+
+    </dd>
+<dt class="attention">ATTENTION!</dt>
+<dd>To prevent the code against race conditions, its not
+                allowed to start operations inside the ctor
+                of the internal wrapped object - especialy operations
+                which needs a reference to the same singleton too.
+
+                The only chance to supress such strange constellations
+                is a lazy-init mechanism.
+
+                <ul>
+                    <li>a) The singleton class can provide a special init()
+                           method, which must be called as first after creation.</li>
+                    <li>b) The singleton class can call a special impl_init()
+                           method implicit for every called interface method.</li>
+                </ul>
+                
+                Note further that this singleton pattern can work only, if
+                all user of such singleton are located inside the same library!
+                Because static values cant be exported - e.g. from windows libraries.
+ </dd>
+</dl>
+<dl>
+<dt>File</dt>
+<dd>singletonref.hxx</dd>
+</dl>
+<hr>
+<dl>
+<dt class="subtitle"><a name="publ_"><h3>Public Members</h3>
+</a></dt>
+<dd><a name="publ_ops"> </a><table class="childlist" border="1" cellpadding="5" cellspacing="0" width="100%">
+<tr class="subtitle">
+<td colspan="2"><h4>Methods</h4>
+</td>
+</tr>
+<tr>
+<td> <br>
+<a href="SingletonRef/o.html#SingletonRef-4579">SingletonRef</a>( );</td>
+<td width="50%"> standard ctor.
+
+            </td>
+</tr>
+<tr>
+<td> <br>
+<a href="SingletonRef/o.html#~SingletonRef-4580">~SingletonRef</a>( );</td>
+<td width="50%"> standard dtor.
+
+            </td>
+</tr>
+<tr>
+<td>SingletonClass * <br>
+<a href="SingletonRef/o.html#operator->-4581">operator-&gt;</a>( ) const;</td>
+<td width="50%"> Allows rSingle-&gt;someBodyOp().
+</td>
+</tr>
+<tr>
+<td>SingletonClass &amp; <br>
+<a href="SingletonRef/o.html#operator*-4582">operator*</a>( ) const;</td>
+<td width="50%"> Allows (*rSingle).someBodyOp().
+</td>
+</tr>
+</table>
+<hr>
+</dd>
+</dl>
+<dl>
+<dt class="subtitle"><a name="priv_"><h3>Private Members</h3>
+</a></dt>
+<dd><a name="priv_structs"> </a><table class="childlist" border="1" cellpadding="5" cellspacing="0" width="100%">
+<tr class="subtitle">
+<td colspan="2"><h4>Structs</h4>
+</td>
+</tr>
+<tr bgcolor="white">
+<td width="20%"><a href="SingletonRef/c-SingletonLockInit.html"><b>SingletonLockInit</b></a></td>
+<td>creates an own mutex for guarding static contents.
+
+            </td>
+</tr>
+</table>
+<hr>
+<a name="priv_ops"> </a><table class="childlist" border="1" cellpadding="5" cellspacing="0" width="100%">
+<tr class="subtitle">
+<td colspan="2"><h4>Methods</h4>
+</td>
+</tr>
+<tr>
+<td>::osl::Mutex &amp; <br>
+<a href="SingletonRef/o.html#ownStaticLock-4585">ownStaticLock</a>( ) const;</td>
+<td width="50%"> </td>
+</tr>
+</table>
+<hr>
+<a name="priv_static_vars"> </a><table class="childlist" border="1" cellpadding="5" cellspacing="0" width="100%">
+<tr class="subtitle">
+<td colspan="2"><h4>Static Data</h4>
+</td>
+</tr>
+<tr bgcolor="white">
+<td>SingletonClass * <a href="SingletonRef/d.html#m_pInstance"><strong>m_pInstance;</strong></a></td>
+<td>pointer to the internal wrapped singleton. </td>
+</tr>
+<tr bgcolor="white">
+<td><a href="../t-sal_Int32.html">sal_Int32</a> <a href="SingletonRef/d.html#m_nRef"><strong>m_nRef;</strong></a></td>
+<td>ref count, which regulate creation and removing of m_pInstance. </td>
+</tr>
+</table>
+<hr>
+</dd>
+</dl>
+<a href="#_top_" class="objchapter">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2012, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-cppref" -->
+</body>
+
+</html>

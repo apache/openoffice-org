@@ -1,0 +1,178 @@
+<html>
+<head>
+<title>Interface XDependentTextField</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XDependentTextField-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">text</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XDependentTextField</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Base Interfaces</b></dt>
+<dd><pre style="font-family:monospace;"><strong>XDependentTextField</strong>
+&#x2517 <a href="XTextField.html">XTextField</a>
+   &#x2517 <a href="XTextContent.html">XTextContent</a>
+      &#x2517 ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XComponent.html">XComponent</a>
+
+</pre></dd>
+<dd><a name/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="crosstitle">
+<tr>
+<td class="imsum_left"><a href="XTextField.html">XTextField</a></td>
+<td class="imsum_right"><dl>
+<dt>(referenced interface's summary:)</dt>
+<dd>is the base interface for all text fields.
+ 
+ 
+ 
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>makes it possible to attach this <a href="TextField.html">TextField</a> to a
+ <a href="TextFieldMaster.html">TextFieldMaster</a>.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#attachTextFieldMaster">attachTextFieldMaster</a></td>
+<td class="imsum_right">method must be called to attach the
+ <a href="TextFieldMaster.html">TextFieldMaster</a> to this <a href="TextField.html">TextField</a>.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getTextFieldMaster">getTextFieldMaster</a></td>
+<td class="imsum_right">&nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="attachTextFieldMaster" class="membertitle">attachTextFieldMaster</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>attachTextFieldMaster</b>(</td>
+<td valign="top">[in] ::com::sun::star::<a href="../beans/module-ix.html">beans</a>::<a href="../beans/XPropertySet.html">XPropertySet</a></td>
+<td valign="bottom">&nbsp;xFieldMaster )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>method must be called to attach the
+ <a href="TextFieldMaster.html">TextFieldMaster</a> to this <a href="TextField.html">TextField</a>.
+ </dd>
+<dd><p>A <a href="TextFieldMaster.html">TextFieldMaster</a> can only be assigned once.
+ </p>
+ 
+ </dd>
+<dt><b>Example</b></dt>
+<dd>Create and insert a user field (with a
+ <code>UserField</code>):
+ 
+ <pre>
+ // Create a fieldmaster for our newly created User Text field, and access it's
+ // XPropertySet interface
+ XPropertySet xMasterPropSet = (XPropertySet) UnoRuntime.queryInterface( 
+ XPropertySet.class, mxDocFactory.createInstance(
+ "com.sun.star.text.FieldMaster.User"));
+ // Set the name and value of the FieldMaster
+ xMasterPropSet.setPropertyValue ("Name", "UserEmperor");
+ xMasterPropSet.setPropertyValue ("Value", new Integer(42));
+ // Attach the field master to the user field
+ xUserField.attachTextFieldMaster (xMasterPropSet);
+ // Move the cursor to the end of the document
+ mxDocCursor.gotoEnd(false);
+ // insert a paragraph break using the XSimpleText interface
+ mxDocText.insertControlCharacter(
+ mxDocCursor, ControlCharacter.PARAGRAPH_BREAK, false);
+ // Insert the user field at the end of the document
+ mxDocText.insertTextContent(mxDocText.getEnd(), xUserField, false);
+ </pre>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getTextFieldMaster" class="membertitle">getTextFieldMaster</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">::com::sun::star::<a href="../beans/module-ix.html">beans</a>::<a href="../beans/XPropertySet.html">XPropertySet</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getTextFieldMaster</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Returns</b></dt>
+<dd>the previously attached <a href="TextFieldMaster.html">TextFieldMaster</a> 
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

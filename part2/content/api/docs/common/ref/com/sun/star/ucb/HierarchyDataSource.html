@@ -1,0 +1,166 @@
+<html>
+<head>
+<title>Service HierarchyDataSource</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="HierarchyDataSource-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub">Services' Summary</td>
+<td class="navisub"><a href="#InterfacesSummary" class="navisub">Interfaces' Summary</a></td>
+<td class="navisub">Properties' Summary</td>
+<td class="navisub">Services' Details</td>
+<td class="navisub"><a href="#InterfacesDetails" class="navisub">Interfaces' Details</a></td>
+<td class="navisub">Properties' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">ucb</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">service HierarchyDataSource</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>manages one or more complete sets of hierarchy data and serves as a factory
+ for objects that provide access to a subset of the data.
+
+ </dd>
+<dd><p><b>Note:</b> This is an abstract service. This means, that there should
+ never be implementations that can be instanciated using the service name
+ <code>com.sun.star.ucb.HierarchyDataSource</code>. Each implementation must
+ provide its own service name that can be used to create instances of that
+ service implementation. Important for those service specifications is also
+ to specify which of the optional parts are supported by the implementation.
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="InterfacesSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Exported Interfaces - Summary</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XMultiServiceFactory.html">XMultiServiceFactory</a></td>
+<td class="imsum_right"><p>allows creating access objects for specific views such as subsets and
+ fragments of the hierrachy data.
+
+ (<a href="#XMultiServiceFactory">details</a>)</p>
+</td>
+</tr>
+<tr>
+<td class="imsum_left">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XComponent.html">XComponent</a></td>
+<td class="imsum_right"><p>allows controlling or observing the lifetime of the hierarchy data
+ source and its views.
+ </p>
+</td>
+</tr>
+</table>
+<a name="InterfacesDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Exported Interfaces - Details</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XMultiServiceFactory" class="membertitle">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XMultiServiceFactory.html">XMultiServiceFactory</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>allows creating access objects for specific views such as subsets and
+ fragments of the hierrachy data.
+
+ </dd>
+<dd><p>The parameter <var>aServiceSpecifier</var> passed to
+ ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XMultiServiceFactory.html">XMultiServiceFactory</a>::<a href="../lang/XMultiServiceFactory.html#createInstanceWithArguments">createInstanceWithArguments</a>
+ supports at least the service specifier
+ <code>"com.sun.star.ucb.HierarchyDataReadAccess"</code>, which will
+ create a <b>read-only view</b> to the data. The object that is created
+ implements the service <a href="HierarchyDataReadAccess.html">HierarchyDataReadAccess</a>.
+
+ <p><b>Optionally</b> the factory may support <b>writable views</b>. A
+ writable view is requested by passing the service specifier
+ <code>"com.sun.star.ucb.HierarchyDataReadWriteAccess"</code> to
+ ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XMultiServiceFactory.html">XMultiServiceFactory</a>::<a href="../lang/XMultiServiceFactory.html#createInstanceWithArguments">createInstanceWithArguments</a>
+ The object that is created implements the service
+ <a href="HierarchyDataReadWriteAccess.html">HierarchyDataReadWriteAccess</a>.
+
+ <p>The arguments passed to
+ ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XMultiServiceFactory.html">XMultiServiceFactory</a>::<a href="../lang/XMultiServiceFactory.html#createInstanceWithArguments">createInstanceWithArguments</a>
+ in parameter <var>aArguments</var> specify the view of the data that
+ should be created. That is, they determine the subset of elements that
+ can be accessed starting from the returned object. Each element of the
+ argument sequence should be a
+ ::com::sun::star::<a href="../beans/module-ix.html">beans</a>::<a href="../beans/PropertyValue.html">PropertyValue</a>, so that the
+ parameters can be identified by name rather than by position.
+
+ <p>With both of the standard service specifiers above, an implementation
+ must accept a property named <code>nodepath</code> of type
+ <code>string</code>. This property must contain the absolute path to an
+ element of the data. The view that is selected consists of the named
+ element and all its decendants. A path consists of segments that are
+ separated by a single slash ('/'). There is neither a leading nor a
+ trailing slash allowed. The <b>root</b> of the hierarchy data always
+ has an empty path. Refer to <a href="HierarchyDataReadAccess.html">HierarchyDataReadAccess</a> for
+ more informtion on hierarchical names.
+
+ <p>Other arguments can be used to control the behavior of the view.
+ These are different for different implementations. Whether and how they
+ are used may also depend on the configuration store and configuration
+ that were selected when the provider was created.
+
+ <p>An implementation must ignore unknown arguments.
+
+ <p>The implementation of
+ ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XMultiServiceFactory.html">XMultiServiceFactory</a>::<a href="../lang/XMultiServiceFactory.html#createInstance">createInstance</a>
+ must behave exactly as if
+ ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XMultiServiceFactory.html">XMultiServiceFactory</a>::<a href="../lang/XMultiServiceFactory.html#createInstanceWithArguments">createInstanceWithArguments</a>
+ were called passing one single property named <code>nodepath</code>
+ where the property value is an empty string. Thus it always creates a
+ view to the root of the hierarchy data.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr/>
+<tr>
+<td class="imdetail"><a name="XComponent" class="membertitle">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XComponent.html">XComponent</a></a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-data" bgcolor="#ffffff" align="center">
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>allows controlling or observing the lifetime of the hierarchy data
+ source and its views.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<br>&nbsp;<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

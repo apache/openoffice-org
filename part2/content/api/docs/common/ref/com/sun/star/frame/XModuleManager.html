@@ -1,0 +1,166 @@
+<html>
+<head>
+<title>Interface XModuleManager</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XModuleManager-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">frame</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XModuleManager</td>
+</tr>
+<tr>
+<td/></tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>can be used to identify office modules.
+
+ </dd>
+<dt><b>Since </b></dt>
+<dd>OOo 2.0 </dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#identify">identify</a></td>
+<td class="imsum_right">@short identifies the given module.
+
+ @descr This identifier can then be used at the service <a href="ModuleManager.html">ModuleManager</a>
+ to get more information about this module.
+
+ For identification the interface ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XServiceInfo.html">XServiceInfo</a>
+ is requested on the given module. Because all module service registrations must be unique
+ this value can be queried and checked against the configuration.
+
+ Since OOo 2.3.0 also the optional interface <a href="XModule.html">XModule</a> will be used.
+ If its exists it will be preferred.
+
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="identify" class="membertitle">identify</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">string</td>
+</tr>
+<tr>
+<td valign="top"><b>identify</b>(</td>
+<td valign="top">[in] ::com::sun::star::<a href="../uno/module-ix.html">uno</a>::<a href="../uno/XInterface.html">XInterface</a></td>
+<td valign="bottom">&nbsp;Module )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a>,<br>
+<a href="UnknownModuleException.html">UnknownModuleException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>@short identifies the given module.
+
+ @descr This identifier can then be used at the service <a href="ModuleManager.html">ModuleManager</a>
+ to get more information about this module.
+
+ For identification the interface ::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/XServiceInfo.html">XServiceInfo</a>
+ is requested on the given module. Because all module service registrations must be unique
+ this value can be queried and checked against the configuration.
+
+ Since OOo 2.3.0 also the optional interface <a href="XModule.html">XModule</a> will be used.
+ If its exists it will be preferred.
+
+ </dd>
+<dt><b>Parameter Module</b></dt>
+<dd>Possible objects for this parameter can be the following one:
+ <ul>
+ <li>
+ <b><a href="XFrame.html">XFrame</a></b><br>
+ A frame contains (against a component window) a controller.
+ Such controller represent the module (in case no model exists).
+ </li>
+ <li>
+ <b><a href="XController.html">XController</a></b><br>
+ A controller can be bound to a model. Then the model represent the module.
+ If no model exists - the controller is used for identification.
+ </li>
+ <li>
+ <b><a href="XModel.html">XModel</a></b><br>
+ A model represent a module everytimes and can be used for
+ identification directly.
+ </li>
+ </ul>
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a>
+ if the parameter Module is:
+ <ul>
+ <li>an empty one</li>
+ <li>or does not provide one of the needed interface
+ XFrame, XControllerm, XModel</li>
+ <li>or does not provide the needed interface XServiceInfo.</li>
+ </ul>
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd><a href="UnknownModuleException.html">UnknownModuleException</a>
+ if the given module could not be identified.
+ Note: If the module represent a XFrame instance with does not contain
+ a document, this exception is thrown too!
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>An identifier for the given module.
+ Note: This value is valie everytimes. Error will be transported
+ by thrown exceptions!
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>

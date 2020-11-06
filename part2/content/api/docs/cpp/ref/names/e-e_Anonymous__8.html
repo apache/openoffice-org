@@ -1,0 +1,239 @@
+<html>
+<head>
+<title>enum e_Anonymous__8</title>
+<link rel="stylesheet" type="text/css" href="../cpp.css">
+</head>
+<body>
+<div id="adc-cppref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="1" cellspacing="0">
+<tr align="center" valign="top">
+<td class="navimain">&nbsp;<a href="../index.html">Overview</a>&nbsp;</td>
+<td class="navimain">&nbsp;<a href="index.html">Namespace</a>&nbsp;</td>
+<td class="navimainnone">&nbsp;Class&nbsp;</td>
+<td class="navimain">&nbsp;<a href="../index-files/index-1.html">Index</a>&nbsp;</td>
+<td class="navimain">&nbsp;<a href="../help.html">Help</a>&nbsp;</td>
+</tr>
+</table>
+<table class="navisub" cellpadding="0" cellspacing="3">
+<tr>
+<td width="20%"><font size="-2">LIST OF:</font></td>
+<td>
+&nbsp;<a href="#envals"><font size="-2"><b>VALUES</b></font></a></td>
+</tr>
+</table>
+<hr>
+<a href="../names/index.html" alt="Global Namespace in C++"><font size="+1"><b>::</b></font></a> <div class="title"><h2>enum e_Anonymous__8</h2>
+</div><hr>
+<dl>
+<dt>Summary</dt>
+<dd>Main goals and usage hints
+
+</dd>
+<dt>Description</dt>
+<dd>The main intentention of this interface is to provide an universal portable and
+high performance access to file system issues on any operating system.<p>
+
+There are a few main goals:<p>
+
+1.The path specifications always has to be absolut. Any usage of relative path
+specifications is forbidden. Exceptions are <code>osl_getSystemPathFromFileURL</code>,
+<code>osl_getFileURLFromSystemPath</code> and <code>osl_getAbsoluteFileURL</code>. Most operating systems 
+provide a "Current Directory" per process. This is the reason why relative path
+specifications can cause problems in multithreading environments.<p>
+
+2.Proprietary notations of file paths are not supported. Every path notation
+must the file URL specification. File URLs must be encoded in UTF8 and
+after that escaped. Although the URL parameter is a unicode string, the must
+contain only ASCII characters<p>
+
+3.The caller cannot get any information whether a file system is case sensitive,
+case preserving or not. The operating system implementation itself should
+determine if it can map case-insensitive paths. The case correct notation of
+a filename or file path is part of the "File Info". This case correct name
+can be used as a unique key if neccessary.<p>
+
+4. Obtaining information about files or volumes is controlled by a
+bitmask which specifies which fields are of interest. Due to performance
+issues it is not recommended to obtain information which is not needed.
+But if the operating system provides more information anyway the
+implementation can set more fields on output as were requested. It is in the
+responsibility of the caller to decide if he uses this additional information
+or not. But he should do so to prevent further unnecessary calls if the information
+is already there.<br>
+
+The input bitmask supports a flag <code>osl_FileStatus_Mask_Validate</code> which
+can be used to force retrieving uncached validated information. Setting this flag
+when calling <code>osl_getFileStatus</code> in combination with no other flag is
+a synonym for a "FileExists". This should only be done when processing a single file
+(f.e. before opening) and NEVER during enumeration of directory contents on any step
+of information processing. This would change the runtime behaviour from O(n) to
+O(n*n/2) on nearly every file system.<br>
+On Windows NT reading the contents of an directory with 7000 entries and
+getting full information about every file only takes 0.6 seconds. Specifying the
+flag <code>osl_FileStatus_Mask_Validate</code> for each entry will increase the
+time to 180 seconds (!!!).
+
+</dd>
+</dl>
+<hr>
+<a name="envals"> </a><table class="childlist" border="1" cellpadding="5" cellspacing="0" width="100%">
+<tr class="subtitle">
+<td colspan="2"><h4>Values</h4>
+</td>
+</tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_None"><b>osl_File_E_None</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_PERM"><b>osl_File_E_PERM</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_NOENT"><b>osl_File_E_NOENT</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_SRCH"><b>osl_File_E_SRCH</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_INTR"><b>osl_File_E_INTR</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_IO"><b>osl_File_E_IO</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_NXIO"><b>osl_File_E_NXIO</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_2BIG"><b>osl_File_E_2BIG</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_NOEXEC"><b>osl_File_E_NOEXEC</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_BADF"><b>osl_File_E_BADF</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_CHILD"><b>osl_File_E_CHILD</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_AGAIN"><b>osl_File_E_AGAIN</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_NOMEM"><b>osl_File_E_NOMEM</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_ACCES"><b>osl_File_E_ACCES</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_FAULT"><b>osl_File_E_FAULT</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_BUSY"><b>osl_File_E_BUSY</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_EXIST"><b>osl_File_E_EXIST</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_XDEV"><b>osl_File_E_XDEV</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_NODEV"><b>osl_File_E_NODEV</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_NOTDIR"><b>osl_File_E_NOTDIR</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_ISDIR"><b>osl_File_E_ISDIR</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_INVAL"><b>osl_File_E_INVAL</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_NFILE"><b>osl_File_E_NFILE</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_MFILE"><b>osl_File_E_MFILE</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_NOTTY"><b>osl_File_E_NOTTY</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_FBIG"><b>osl_File_E_FBIG</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_NOSPC"><b>osl_File_E_NOSPC</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_SPIPE"><b>osl_File_E_SPIPE</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_ROFS"><b>osl_File_E_ROFS</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_MLINK"><b>osl_File_E_MLINK</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_PIPE"><b>osl_File_E_PIPE</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_DOM"><b>osl_File_E_DOM</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_RANGE"><b>osl_File_E_RANGE</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_DEADLK"><b>osl_File_E_DEADLK</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_NAMETOOLONG"><b>osl_File_E_NAMETOOLONG</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_NOLCK"><b>osl_File_E_NOLCK</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_NOSYS"><b>osl_File_E_NOSYS</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_NOTEMPTY"><b>osl_File_E_NOTEMPTY</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_LOOP"><b>osl_File_E_LOOP</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_ILSEQ"><b>osl_File_E_ILSEQ</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_NOLINK"><b>osl_File_E_NOLINK</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_MULTIHOP"><b>osl_File_E_MULTIHOP</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_USERS"><b>osl_File_E_USERS</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_OVERFLOW"><b>osl_File_E_OVERFLOW</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_NOTREADY"><b>osl_File_E_NOTREADY</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_invalidError"><b>osl_File_E_invalidError</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_TIMEDOUT"><b>osl_File_E_TIMEDOUT</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_NETWORK"><b>osl_File_E_NETWORK</b></a></td>
+<td/></tr>
+<tr bgcolor="white">
+<td width="20%" valign="top"><a name="osl_File_E_FORCE_EQUAL_SIZE"><b>osl_File_E_FORCE_EQUAL_SIZE</b></a></td>
+<td/></tr>
+</table>
+<hr>
+<a href="#_top_" class="objchapter">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2012, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-cppref" -->
+</body>
+
+</html>

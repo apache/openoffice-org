@@ -1,0 +1,344 @@
+<html>
+<head>
+<title>Interface XTest</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+</head>
+<body>
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XTest-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">test</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XTest</td>
+</tr>
+<tr>
+<td/></tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>A simple interface to test a service or interface implementation.
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#testInvariant">testInvariant</a></td>
+<td class="imsum_right">Test the object TestObject against the test specified with TestName. This test
+ does not change the semantic state of the object, so it can be called on a existing
+ component that will used further on. Note: This can be a strong test limitation. 
+ There are some components, that cannot perform their full test scenario. 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#test">test</a></td>
+<td class="imsum_right">Test the object TestObject against the test specified with TestName. 
+ This test changes the state of the object. The object may be useless 
+ afterwards (e.g., a closed XOutputStream). The method in general may 
+ be called multiple times with a new test object instance. Note: Each test 
+ scenario should be independent of each other, so even if a scenario 
+ didn't pass the test, the other test can still be performed. 
+ The error messages are cumulative.
+ 
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#testMultiThread">testMultiThread</a></td>
+<td class="imsum_right">Test the object TestObject against the test specified with TestName using 
+ several threads. That does NOT mean that testMultiThread should implement 
+ a test using several threads but that this test method should be designed 
+ to be called by several threads. So for example, it has to take into consideration 
+ that a test object state that is changed by the method can be 
+ changed again by another thread. So it's not necessarily a mistake if an
+ expected state can't be confirmed after setting it. Besides that, everything 
+ is the same as described for the test method.
+
+ If this way of testing with multiple threads is not appropriate for the
+ component to be tested this method should not be implemented (it should 
+ only return -1) and a special multithread test adapted to the special 
+ needs of testing this component should be integrated in the test method.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#addTestListener">addTestListener</a></td>
+<td class="imsum_right">registers an event listener, which will be called for reporting 
+ errors/exceptions and warnings and for protocol purpuses.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#removeTestListener">removeTestListener</a></td>
+<td class="imsum_right">unregisters an event listener which was registered with
+ <a href="XTest.html">XTest</a>::<a href="XTest.html#addTestListener">addTestListener()</a>.
+
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="testInvariant" class="membertitle">testInvariant</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>testInvariant</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;TestName,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../uno/module-ix.html">uno</a>::<a href="../uno/XInterface.html">XInterface</a></td>
+<td valign="bottom">&nbsp;TestObject )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Test the object TestObject against the test specified with TestName. This test
+ does not change the semantic state of the object, so it can be called on a existing
+ component that will used further on. Note: This can be a strong test limitation. 
+ There are some components, that cannot perform their full test scenario. 
+ </dd>
+<dt><b>Parameter TestName</b></dt>
+<dd>the name of the test. Must be an interface, service, or implementation name.
+ Note: The name is only used by the test component to distinguish between test 
+ scenarios.
+ </dd>
+<dt><b>Parameter TestObject</b></dt>
+<dd>The instance to be tested.
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>IllegalArgumentException 
+ if the test does not support TestName or TestObject is null.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="test" class="membertitle">test</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">long</td>
+</tr>
+<tr>
+<td valign="top"><b>test</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;TestName,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../uno/module-ix.html">uno</a>::<a href="../uno/XInterface.html">XInterface</a></td>
+<td valign="bottom">&nbsp;TestObject,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;hTestHandle )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Test the object TestObject against the test specified with TestName. 
+ This test changes the state of the object. The object may be useless 
+ afterwards (e.g., a closed XOutputStream). The method in general may 
+ be called multiple times with a new test object instance. Note: Each test 
+ scenario should be independent of each other, so even if a scenario 
+ didn't pass the test, the other test can still be performed. 
+ The error messages are cumulative.
+ 
+ </dd>
+<dt><b>Parameter TestName</b></dt>
+<dd>The name of the test. Must be an interface, service, or 
+ implementation name. Note: The name is only used by the test component 
+ to distinguish between test scenarios.
+ </dd>
+<dt><b>Parameter TestObject</b></dt>
+<dd>The instance to be tested.
+ </dd>
+<dt><b>Parameter hTestHandle</b></dt>
+<dd>Internal test handle. Handle for first test is always 0.
+ Handle of next test is returned by the method.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>Handle of the next test. -1 if this was the last test.
+ 
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>IllegalArgumentException 
+ if the test does not support TestName or TestObject is null.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="testMultiThread" class="membertitle">testMultiThread</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">long</td>
+</tr>
+<tr>
+<td valign="top"><b>testMultiThread</b>(</td>
+<td valign="top">[in] string</td>
+<td valign="bottom">&nbsp;TestName,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] ::com::sun::star::<a href="../uno/module-ix.html">uno</a>::<a href="../uno/XInterface.html">XInterface</a></td>
+<td valign="bottom">&nbsp;TestObject,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;hTestHandle )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../lang/module-ix.html">lang</a>::<a href="../lang/IllegalArgumentException.html">IllegalArgumentException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Test the object TestObject against the test specified with TestName using 
+ several threads. That does NOT mean that testMultiThread should implement 
+ a test using several threads but that this test method should be designed 
+ to be called by several threads. So for example, it has to take into consideration 
+ that a test object state that is changed by the method can be 
+ changed again by another thread. So it's not necessarily a mistake if an
+ expected state can't be confirmed after setting it. Besides that, everything 
+ is the same as described for the test method.
+
+ If this way of testing with multiple threads is not appropriate for the
+ component to be tested this method should not be implemented (it should 
+ only return -1) and a special multithread test adapted to the special 
+ needs of testing this component should be integrated in the test method.
+
+ </dd>
+<dt><b>Parameter TestName</b></dt>
+<dd>The name of the test. Must be an interface, service or 
+ implementation name. Note: The name is only used by the test component 
+ to distinguish between test scenarios.
+ </dd>
+<dt><b>Parameter TestObject</b></dt>
+<dd>The instance to be tested.
+ </dd>
+<dt><b>Parameter hTestHandle</b></dt>
+<dd>Internal test handle. Handle for first test is always 0.
+ Handle of next test is returned by the method.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>Handle of the next test. -1 if this was the last test.
+ 
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>IllegalArgumentException 
+ if the test does not support TestName or TestObject is null.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="addTestListener" class="membertitle">addTestListener</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>addTestListener</b>(</td>
+<td valign="top">[in] <a href="XTestListener.html">XTestListener</a></td>
+<td valign="bottom">&nbsp;xListener );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>registers an event listener, which will be called for reporting 
+ errors/exceptions and warnings and for protocol purpuses.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="removeTestListener" class="membertitle">removeTestListener</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>removeTestListener</b>(</td>
+<td valign="top">[in] <a href="XTestListener.html">XTestListener</a></td>
+<td valign="bottom">&nbsp;xListener );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>unregisters an event listener which was registered with
+ <a href="XTest.html">XTest</a>::<a href="XTest.html#addTestListener">addTestListener()</a>.
+
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+</body>
+
+</html>
