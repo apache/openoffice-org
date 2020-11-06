@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Writer.AddPageNumber.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2006/07/14 09:36:44 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Writer">
+
+<keywords>
+	<keyword>page number</keyword>
+	<keyword>header</keyword>
+</keywords>
+
+<authors>
+</authors>
+
+<question heading="Add Page Number">How can I add the current page number and total page number to the header?
+</question>
+
+<answer>
+<listing>/* AddPageNumbering.rex */
+/* Macro */
+
+/* get the script context, the XModel and the XTextDocument interface */
+xScriptContext=uno.getScriptContext()
+oDoc=xScriptContext~getDocument
+xTextDoc=oDoc~{%see com.sun.star.text.XTextDocument%XTextDocument}
+
+/* access the PageStyles using XMultiServiceFactory */
+xServiceManager=oDoc~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+xPageStyle=xServiceManager~createInstance(&quot;{%see com.sun.star.style.PageStyle}&quot;)
+xFamiliesSupplier = xTextDoc~{%see com.sun.star.style.XStyleFamiliesSupplier%XStyleFamiliesSupplier}
+xStyle=xFamiliesSupplier~getStyleFamilies~getByName(&quot;PageStyles&quot;)~{%see com.sun.star.container.XNameContainer%XNameContainer}
+
+/* set the Header up */
+xHeader=xStyle~getByName(&quot;Standard&quot;)
+HeaderProperty=xHeader~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+HeaderProperty~setPropertyValue(&quot;HeaderIsOn&quot;, box(&quot;boolean&quot;, .true))
+headerText=HeaderProperty~getPropertyValue(&quot;HeaderText&quot;)~{%see com.sun.star.text.XText%XText}
+
+/* Creating the total number of pages */
+pageCount=xServiceManager~createInstance(&quot;{%see com.sun.star.text.TextField.PageCount}&quot;)
+pageCountTC=pageCount~{%see com.sun.star.text.XTextContent%XTextContent}()
+pageCountPS=pageCount~{%see com.sun.star.beans.XPropertySet%XPropertySet}()
+pageCountPS~setPropertyValue(&quot;NumberingType&quot;, box(&quot;Short&quot;, bsf.getConstant(&quot;{%see com.sun.star.style.NumberingType}&quot;, &quot;ARABIC&quot;)))
+
+/* Creating the actual page number */
+pageNumber=xServiceManager~createInstance(&quot;{%see com.sun.star.text.TextField.PageNumber}&quot;)
+pageNumberTC=pageNumber~{%see com.sun.star.text.XTextContent%XTextContent}()
+pageNumberPS=pageNumber~{%see com.sun.star.beans.XPropertySet%XPropertySet}()
+pageNumberPS~setPropertyValue(&quot;NumberingType&quot;, box(&quot;Short&quot;, bsf.getConstant(&quot;{%see com.sun.star.style.NumberingType}&quot;, &quot;ARABIC&quot;)))
+pageNumberPS~setPropertyValue(&quot;SubType&quot;, box(&quot;Short&quot;, &quot;1&quot;))
+
+/* Insert text in the header */
+headerText~setString(&quot;Page &quot;)
+headerText~insertTextContent(headerText~getEnd, pageNumberTC, .false)
+headerText~getEnd~setString(&quot; of &quot;)
+headerText~insertTextContent(headerText~getEnd, pageCountTC, .false)
+
+::requires UNO.CLS</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="" date="2006-07-09">Initial version</change>
+</changelog>
+
+</snippet>

@@ -1,0 +1,91 @@
+<?xml version="1.0" ?>
+
+<!-- 
+$RCSfile: Database.QueryDatabase.snip,v $
+
+last change: $Revision: 1.3 $ $Author: tomsontom $ $Date: 2004/11/18 10:40:05 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+ -->
+
+<snippet language="OOBasic" application="Database">
+
+<keywords>
+        <keyword>database</keyword>
+        <keyword>access</keyword>
+</keywords>
+
+<authors>
+	<author id="tomsontom" initial="true" email="tom.schindl@bestsolution.at">Tom Schindl</author>
+</authors>
+
+<question heading="Querying databases">
+How do I query a database in OpenOffice using StarBASIC?
+</question>
+
+<answer>
+<p>
+Fairly simple check this out. You'll have to register an DataSource named "my_resource" using Tools -&gt; Datasources.
+</p>
+
+<listing>
+Sub executeSQLOne
+    Dim RowSet
+    
+    ' Create a row-set to query the database
+    RowSet = createUnoService("com.sun.star.sdb.RowSet")
+    RowSet.DataSourceName = "my_resource"
+    RowSet.CommandType = com.sun.star.sdb.CommandType.COMMAND
+    RowSet.Command = "SELECT max(m_id) FROM member WHERE delmark = 0"
+    RowSet.execute()
+    
+    ' it only returns 1 row
+    ' so we need no loop
+    RowSet.next()
+    
+    MsgBoxg "The MaxId is " + rowSet.getString(1)
+    
+End Sub
+
+Sub executeSQLMore
+    ' Create a row-set to query the database
+    RowSet = createUnoService("com.sun.star.sdb.RowSet")
+    RowSet.DataSourceName = "my_resource"
+    RowSet.CommandType = com.sun.star.sdb.CommandType.COMMAND
+    RowSet.Command = "SELECT m_id, m_surname FROM member WHERE delmark = 0"
+    RowSet.execute()
+    
+    ' loop through the resultset until no record is left
+    while RowSet.next() 
+        MsgBoxg "The Person " + rowSet.getString(2) + " has the ID " + rowSet.getString(1);
+    wend
+End Sub
+</listing>
+</answer>
+
+<changelog>
+	<change author-id="tomsontom" date="0000-00-00">Initial version</change>
+</changelog>
+
+</snippet>
