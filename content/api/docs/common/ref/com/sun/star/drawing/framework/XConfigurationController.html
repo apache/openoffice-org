@@ -1,0 +1,566 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>Interface XConfigurationController</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../../idl.css">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/api/">api</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/">docs</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/">common</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/ref/">ref</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/ref/com/">com</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/ref/com/sun/">sun</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/ref/com/sun/star/">star</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/ref/com/sun/star/drawing/">drawing</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/ref/com/sun/star/drawing/framework/">framework</a></div>
+    </div>
+    <div id="clear"></div>
+      <!--#include virtual="/api/leftnav.html" -->
+      
+    <div id="content">
+      
+      
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XConfigurationController-xref.html" class="navimain">Use</a></td>
+<td class="navimainnone">Devguide</td>
+<td class="navimain"><a href="../../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../../module-ix.html" class="namechain">::</a> <a href="../../../../module-ix.html" class="namechain">com</a> :: <a href="../../../module-ix.html" class="namechain">sun</a> :: <a href="../../module-ix.html" class="namechain">star</a> :: <a href="../module-ix.html" class="namechain">drawing</a> :: <a href="module-ix.html" class="namechain">framework</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XConfigurationController</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Base Interfaces</b></dt>
+<dd><pre style="font-family:monospace;"><strong>XConfigurationController</strong>
+&#x2523 <a href="XConfigurationControllerRequestQueue.html">XConfigurationControllerRequestQueue</a>
+&#x2523 <a href="XConfigurationControllerBroadcaster.html">XConfigurationControllerBroadcaster</a>
+&#x2517 <a href="XResourceFactoryManager.html">XResourceFactoryManager</a>
+
+</pre></dd>
+<dd><a name/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="crosstitle">
+<tr>
+<td class="imsum_left"><a href="XConfigurationControllerRequestQueue.html">XConfigurationControllerRequestQueue</a></td>
+<td class="imsum_right"><dl>
+<dt>(referenced interface's summary:)</dt>
+<dd>The request queue of the configuration controller handles requests for
+ changes to the current configuration.
+
+ </dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XConfigurationControllerBroadcaster.html">XConfigurationControllerBroadcaster</a></td>
+<td class="imsum_right"><dl>
+<dt>(referenced interface's summary:)</dt>
+<dd>Manage the set of registered event listeners and the event notification for a configuration
+ controller.
+ </dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="XResourceFactoryManager.html">XResourceFactoryManager</a></td>
+<td class="imsum_right"><dl>
+<dt>(referenced interface's summary:)</dt>
+<dd>The XResourceFactoryManager is part of the configuration controller and
+ manages the set of registered resource factories.
+
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>The configuration controller is responsible for the management of the
+ set of active resources.
+
+ </dd>
+<dd><p>There are two configurations of resources:<ul>
+ <li>The current configuration contains the set of currently active
+ resources.</li>
+ <li>The requested configuration describes what the current configuration
+ should be. The requested configuration is changed usually by calling
+ <a href="XConfigurationController.html#requestResourceActivation()">requestResourceActivation()</a> and
+ <a href="XConfigurationController.html#requestResourceDeactivation()">requestResourceDeactivation()</a>.</li>
+ </ul></p>
+
+ <p>When the two configurations differ then the current configuration is
+ updated eventually to reflect the requested configuration. An update
+ takes place when the following three conditions are fullfilled.
+ <ol>
+ <li>when the last pending request for configuration changes has been
+ processed,</li>
+ <li>when the <a href="XConfigurationController.html#update()">update()</a> method is called.</li>
+ <li>when the configuration manager it is unlocked after formerly being
+ locked.</li>
+ </ol></p>
+
+ <p>Requests for configuration changes are handled in a two step process:
+ <ol>
+ <li>First the requested configuration is updated iteratively: Every
+ request that is being made by calling
+ <a href="XConfigurationController.html#requestResourceActivation()">requestResourceActivation()</a> or
+ <a href="XConfigurationController.html#requestResourceDeactivation()">requestResourceDeactivation()</a> results in one or more
+ function objects, that each implement the
+ <a href="XConfigurationChangeRequest.html">XConfigurationChangeRequest</a> interface. These are inserted
+ into a queue. The request objects in the queue are processed
+ asynchronously one at a time in the order in which they are inserted.
+ Only when one request object is processed a change to the requested
+ configuration is made. These changes are broadcasted to registered
+ <a href="XConfigurationChangeListener.html">XConfigurationChangeListener</a> objects. Listeners may
+ decide to make requests that then are added to the queue. For example
+ when the view in the center pane is replaced by another view, some
+ listeners may want to turn some side panes on or off, or show other
+ views in the side panes.</p>
+ <p>This process goes on until the queue of request objects becomes
+ empty. Until this point only the requested configuration has been
+ modified. No resources have been activated or deactivated.</p></li>
+
+ <li><p>The second update step activates or deactivates resources so that
+ the current configuration (the one that comprises the actually active
+ resources) reflects the requested configuration.</p>
+ <p>The order in which resources are activated or deactivated depends on
+ the dependency between the resources. For example a view depends on the
+ pane it is displayed in. Resources that other resources depend on are
+ activated first and deactivated last. The order is undefined for
+ unrelated resources.</p>
+ <p>Note that the second update step may not be able to activate (or even to
+ deactivate) all the requested resources. Either because they are
+ temporarily or permanently unavailable. For example, during the
+ start-up of a new Impress application the side panes are displayed
+ with a visible delay because they are not provided sooner by the
+ underlying framework. Such anavailable resources are not forgotten but
+ remain in the requested configuration. Every time the configuration
+ controller updates its current configuration these resources are
+ requested once more.</li></ol></p>
+
+ <p>The configuration controller sends the following events:
+ <ul>
+ <li><b>ResourceActivationRequested</b> is sent when the
+ activation of a resource has been requested and the resource is not yet
+ active in the requested configuration. The event is sent when the
+ configuration change request is executed, not when the
+ <a href="XConfigurationController.html#requestResourceActivation()">requestResourceActivation()</a> call is made.</p>
+ <p>The <a href="XConfigurationController.html#ResourceId">ResourceId</a> member is set to the requested
+ resource. The <a href="XConfigurationController.html#ResourceObject">ResourceObject</a> member is not
+ set.</p></li>
+ <li><b>ResourceDeactivationRequested</b> is sent when the
+ deactivation of a resource has been requested and the resource is active
+ in the requested configuration. The event is sent when the
+ configuration change request is executed that is created when for
+ example <a href="XConfigurationController.html#requestResourceDeactivation()">requestResourceDeactivation()</a> is called.</p>
+ <p>The <a href="XConfigurationController.html#ResourceId">ResourceId</a> member is set to the requested
+ resource. The <a href="XConfigurationController.html#ResourceObject">ResourceObject</a> member is not
+ set.</p></li>
+ <li><b>ConfigurationUpdateStart</b> is sent before the update of
+ the current configuration starts.</p>
+ <p>The requested configuration is available in the <a href="XConfigurationController.html#Configuration">Configuration</a> member. The
+ <a href="XConfigurationController.html#ResourceId">ResourceId</a> and <a href="XConfigurationController.html#ResourceObject">ResourceObject</a> members
+ are not set.</p></li>
+ <li><b>ConfigurationUpdateEnd</b> is sent after the update of
+ the current configuration ends.</p>
+ <p>The requested configuration is
+ available in the <a href="XConfigurationController.html#Configuration">Configuration</a> member. The <a href="XConfigurationController.html#ResourceId">ResourceId</a> and
+ <a href="XConfigurationController.html#ResourceObject">ResourceObject</a> members are not set.</p></li>
+ <li><b>ResourceActivation</b> is sent when a resource is
+ activated, i.e. when a new object of a resource is created (or taken
+ from a cash).</p>
+ <p>The <a href="XConfigurationController.html#ResourceId">ResourceId</a> and <a href="XConfigurationController.html#ResourceObject">ResourceObject</a>
+ members are set to the <a href="XResourceId.html">XResourceId</a> and object reference of
+ the activated resource.</p></li>
+ <li><b>ResourceDeactivation</b> is sent when a resource is
+ deactivated, i.e. when an object that previously was part of the
+ configuration is removed from the configuration.</p>
+ <p>The <a href="XConfigurationController.html#ResourceId">ResourceId</a> and <a href="XConfigurationController.html#ResourceObject">ResourceObject</a>
+ members are set to <a href="XResourceId.html">XResourceId</a> and object reference of the
+ deactivated resource.</p></li>
+ </ul></p>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#requestResourceActivation">requestResourceActivation</a></td>
+<td class="imsum_right">Request the activation of a resource.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#requestResourceDeactivation">requestResourceDeactivation</a></td>
+<td class="imsum_right">Request the deactivation of a resource.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getResource">getResource</a></td>
+<td class="imsum_right">Return the active resource specified by the given resource id.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#lock">lock</a></td>
+<td class="imsum_right">Lock the processing of configuration change requests.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#unlock">unlock</a></td>
+<td class="imsum_right">Unlock the processing of configuration change requests.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#update">update</a></td>
+<td class="imsum_right">Explicitly request an update of the current configuration.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getRequestedConfiguration">getRequestedConfiguration</a></td>
+<td class="imsum_right">Return a copy of the requested configuration.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#getCurrentConfiguration">getCurrentConfiguration</a></td>
+<td class="imsum_right">Return a copy of the current configuration.
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#restoreConfiguration">restoreConfiguration</a></td>
+<td class="imsum_right">Replace the requested configuration with the given configuration and
+ schedule an update of the current configuration.
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="requestResourceActivation" class="membertitle">requestResourceActivation</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>requestResourceActivation</b>(</td>
+<td valign="top">[in] <a href="XResourceId.html">XResourceId</a></td>
+<td valign="bottom">&nbsp;xResourceId,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="ResourceActivationMode.html">ResourceActivationMode</a></td>
+<td valign="bottom">&nbsp;eMode );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Request the activation of a resource.
+ </dd>
+<dd><p>The request is processed asynchronously. Notifications about
+ configuration changes are sent after this call returns.</p>
+ </dd>
+<dt><b>Parameter xResourceId</b></dt>
+<dd>The resource whose activation is requested.
+ </dd>
+<dt><b>Parameter eMode</b></dt>
+<dd><p>When eMode is <b>REPLACE</b> then, before adding the
+ resource activation to the request queue, similar resources
+ linked to the same anchor are removed. This makes it easer to
+ switch between resources whose activation is mutually exclusive.
+ For example, there can only be one view per pane, so before
+ activating a new view the old one has to be deactivated.</p>
+ <p>When eMode is <b>ADD</b> then the resource is requested
+ without further changes.</p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="requestResourceDeactivation" class="membertitle">requestResourceDeactivation</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>requestResourceDeactivation</b>(</td>
+<td valign="top">[in] <a href="XResourceId.html">XResourceId</a></td>
+<td valign="bottom">&nbsp;xResourceId );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Request the deactivation of a resource.
+ </dd>
+<dd><p>The request is processed asynchronously. Notifications about
+ configuration changes are sent after this call returns.</p>
+ <p>Requesting the deactivation
+ of a resource that is not active is not an error.</p>
+ </dd>
+<dt><b>Parameter xResourceId</b></dt>
+<dd>The resource whose deactivation is requested.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getResource" class="membertitle">getResource</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XResource.html">XResource</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getResource</b>(</td>
+<td valign="top">[in] <a href="XResourceId.html">XResourceId</a></td>
+<td valign="bottom">&nbsp;xResourceId );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Return the active resource specified by the given resource id.
+ </dd>
+<dt><b>Parameter xResourceId</b></dt>
+<dd>A valid resource id. This should, but does not have to be, the
+ resource id of an active resource.
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>When the given resource id specifies an active resource then
+ that resource is returned. Otherwise an empty reference is
+ returned.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="lock" class="membertitle">lock</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>lock</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Lock the processing of configuration change requests.
+ </dd>
+<dd><p>This is only necessary when more than one change request is being
+ made in a row. It prevents an update being made (with all the visible UI
+ changes) before all change requests are being made.</p>
+ <p>Recursive <a href="#lock()">lock()</a> calls are recognized: the
+ configuration controller is locked while <a href="#lock()">lock()</a> was
+ called more often than <a href="#unlock()">unlock()</a>.</p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="unlock" class="membertitle">unlock</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>unlock</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Unlock the processing of configuration change requests.
+ </dd>
+<dd><p>When <a href="#unlock()">unlock()</a> is called as many times as
+ <a href="#lock()">lock()</a> and the queue of configuration change
+ requests is not empty the configuration controller continues the
+ processing of the change requests. An update of the current
+ configuration will eventually being made.</p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="update" class="membertitle">update</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>update</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Explicitly request an update of the current configuration.
+ </dd>
+<dd><p>Call it when a resource is activated or deactivated
+ without the control and knowledge of the drawing framework. Calling
+ this method (from outside the drawing framework) should hardly every
+ be necessary.</p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getRequestedConfiguration" class="membertitle">getRequestedConfiguration</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XConfiguration.html">XConfiguration</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getRequestedConfiguration</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Return a copy of the requested configuration.
+ </dd>
+<dd><p>Modifications to the returned configuration have no effect on the
+ drawing framework.</p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="getCurrentConfiguration" class="membertitle">getCurrentConfiguration</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3"><a href="XConfiguration.html">XConfiguration</a></td>
+</tr>
+<tr>
+<td valign="top"><b>getCurrentConfiguration</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Return a copy of the current configuration.
+ </dd>
+<dd><p>Modifications to the returned configuration have no effect on the
+ drawing framework.</p>
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="restoreConfiguration" class="membertitle">restoreConfiguration</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">void</td>
+</tr>
+<tr>
+<td valign="top"><b>restoreConfiguration</b>(</td>
+<td valign="top">[in] <a href="XConfiguration.html">XConfiguration</a></td>
+<td valign="bottom">&nbsp;xConfiguration );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>Replace the requested configuration with the given configuration and
+ schedule an update of the current configuration.
+ </dd>
+<dd><p>Together with the <a href="#getCurrentConfiguration()">getCurrentConfiguration()</a> and
+ <a href="#getRequestedConfiguration()">getRequestedConfiguration()</a> methods this
+ allows the saving and restoring of configurations. However, the
+ given configuration can have other origins then these methods.</p>
+ <p>The given configuration is transformed into a list of of change
+ requests so that the resulting reqeusted configuration equals the
+ given configuration. This has the advantage that not only the
+ resource activations and deactivations but all configuration
+ changes are properly broadcasted.</p>
+ <p>Note that because of the configuration change notifications
+ listeners can make more configuratio change requests, so that the
+ resulting requested configuration can be different from the given
+ configuration.</p>
+ </dd>
+<dt><b>Parameter xConfiguration</b></dt>
+<dd>This typically is a configuration that was obtained with an
+ earlier <a href="#getRequestedConfiguration()">getRequestedConfiguration()</a> call.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

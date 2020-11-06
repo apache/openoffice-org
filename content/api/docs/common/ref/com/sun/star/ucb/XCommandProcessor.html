@@ -1,0 +1,279 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    
+<title>Interface XCommandProcessor</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../../idl.css">
+
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/api/">api</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/">docs</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/">common</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/ref/">ref</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/ref/com/">com</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/ref/com/sun/">sun</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/ref/com/sun/star/">star</a>&nbsp;&raquo;&nbsp;<a href="/api/docs/common/ref/com/sun/star/ucb/">ucb</a></div>
+    </div>
+    <div id="clear"></div>
+      <!--#include virtual="/api/leftnav.html" -->
+      
+    <div id="content">
+      
+      
+<div id="adc-idlref">
+
+<a name="_top_"> </a><table class="navimain" border="0" cellpadding="3">
+<tr>
+<td class="navimain"><a href="../module-ix.html" class="navimain">Overview</a></td>
+<td class="navimain"><a href="module-ix.html" class="navimain">Module</a></td>
+<td class="navimain"><a href="XCommandProcessor-xref.html" class="navimain">Use</a></td>
+<td class="navimain"><a href="#devmanual" class="navimain">Devguide</a></td>
+<td class="navimain"><a href="../../../../index-files/index-1.html" class="navimain">Index</a></td>
+</tr>
+</table>
+<table class="navisub" border="0" cellpadding="0">
+<tr>
+<td class="navisub"><a href="#MethodsSummary" class="navisub">Methods' Summary</a></td>
+<td class="navisub">Attributes' Summary</td>
+<td class="navisub"><a href="#MethodsDetails" class="navisub">Methods' Details</a></td>
+<td class="navisub">Attributes' Details</td>
+</tr>
+</table>
+<hr>
+<table border="0" width="100%" cellpadding="5" cellspacing="3" class="title-table" style="margin-bottom:6pt;">
+<tr>
+<td><p class="namechain"><a href="../../../../module-ix.html" class="namechain">::</a> <a href="../../../module-ix.html" class="namechain">com</a> :: <a href="../../module-ix.html" class="namechain">sun</a> :: <a href="../module-ix.html" class="namechain">star</a> :: <a href="module-ix.html" class="namechain">ucb</a> :: </p>
+</td>
+</tr>
+<tr>
+<td class="title">interface XCommandProcessor</td>
+</tr>
+<tr>
+<td/></tr>
+<tr>
+<td><dl>
+<dt><b>Description</b></dt>
+<dd>defines a processor for synchronous commands, which are executed in a
+ specific execution environment.
+
+ </dd>
+<dt><b>See also</b></dt>
+<dd><a href="Command.html">Command</a>, <a href="XCommandEnvironment.html">XCommandEnvironment</a>, <a href="XContent.html">XContent</a></dd>
+<dt><b>See also</b></dt>
+<dd><a href="XCommandProcessor2.html">XCommandProcessor2</a><br>
+for the improved version of this interface.
+
+ </dd>
+</dl>
+<a name="devmanual"> </a><dl>
+<dt><b>Developers Guide</b></dt>
+<dd><a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Services_and_Interfaces">UCB - Services and Interfaces</a></dd>
+<dd><a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Executing_Content_Commands">UCB - Executing Content Commands</a></dd>
+</dl>
+</td>
+</tr>
+</table>
+<hr>
+<a name="MethodsSummary"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle" colspan="2">Methods' Summary</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#createCommandIdentifier">createCommandIdentifier</a></td>
+<td class="imsum_right">creates a unique identifier for a command.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#execute">execute</a></td>
+<td class="imsum_right">executes a command.
+
+ &nbsp;</td>
+</tr>
+<tr>
+<td class="imsum_left"><a href="#abort">abort</a></td>
+<td class="imsum_right">ends the command associated with the given id.
+
+ &nbsp;</td>
+</tr>
+</table>
+<a name="MethodsDetails"/><table border="1" width="100%" cellpadding="5" cellspacing="0" class="subtitle">
+<tr>
+<td class="subtitle">Methods' Details</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="createCommandIdentifier" class="membertitle">createCommandIdentifier</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">long</td>
+</tr>
+<tr>
+<td valign="top"><b>createCommandIdentifier</b>();</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>creates a unique identifier for a command.
+
+ </dd>
+<dd><p>This identifier can be used to abort the execution of the command
+ accociated with that identifier. Note that it is generally not
+ necessary to obtain a new id for each command, because commands are
+ executed synchronously. So the id for a command is valid again after a
+ command previously associated with this id has finished. In fact you
+ only should get one identifier per thread and assign it to every
+ command executed by that thread.</p>
+
+ <p>Also, after a call to <a href="XCommandProcessor.html">XCommandProcessor</a>::<a href="XCommandProcessor.html#abort">abort</a>, an
+ identifier should not be used any longer (and instead be released by a
+ call to <a href="XCommandProcessor2.html">XCommandProcessor2</a>::<a href="XCommandProcessor2.html#releaseCommandIdentifier">releaseCommandIdentifier</a>),
+ because it may well abort <em>all</em> further calls to
+ <a href="XCommandProcessor.html">XCommandProcessor</a>::<a href="XCommandProcessor.html#execute">execute</a>.</p>
+
+ <p>To avoid ever-increasing resource consumption, the identifier
+ should be released via
+ <a href="XCommandProcessor2.html">XCommandProcessor2</a>::<a href="XCommandProcessor2.html#releaseCommandIdentifier">releaseCommandIdentifier</a>
+ when it is no longer used.</p>
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>a command identifier.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="execute" class="membertitle">execute</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">any</td>
+</tr>
+<tr>
+<td valign="top"><b>execute</b>(</td>
+<td valign="top">[in] <a href="Command.html">Command</a></td>
+<td valign="bottom">&nbsp;aCommand,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;CommandId,</td>
+</tr>
+<tr>
+<td/><td valign="top">[in] <a href="XCommandEnvironment.html">XCommandEnvironment</a></td>
+<td valign="bottom">&nbsp;Environment )</td>
+</tr>
+<tr>
+<td valign="top" align="right">raises( </td>
+<td valign="top" colspan="2">::com::sun::star::<a href="../uno/module-ix.html">uno</a>::<a href="../uno/Exception.html">Exception</a>,<br>
+<a href="CommandAbortedException.html">CommandAbortedException</a> );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>executes a command.
+
+ </dd>
+<dd><p>Common command definitions can be found in the soecification of the
+ service <a href="Content.html">Content</a>.
+
+ </dd>
+<dt><b>Parameter aCommand</b></dt>
+<dd>is the command to execute.
+
+ </dd>
+<dt><b>Parameter CommandId</b></dt>
+<dd>is a unique id for the command. This identifier was obtained by calling
+ <a href="XCommandProcessor.html">XCommandProcessor</a>::<a href="XCommandProcessor.html#createCommandIdentifier">createCommandIdentifier</a>. A value of
+ zero can be used, if the command never shall be aborted. Different
+ threads MUST NOT share one command identifier (except <code>0</code>).
+ This can easily achieved, if every thread that wants to use an
+ <a href="XCommandProcessor.html">XCommandProcessor</a>, obtains exactly one identifier
+ using <a href="XCommandProcessor.html">XCommandProcessor</a>::<a href="XCommandProcessor.html#createCommandIdentifier">createCommandIdentifier</a>.
+ This identifier can be used for every call to
+ <a href="XCommandProcessor.html">XCommandProcessor</a>::<a href="XCommandProcessor.html#execute">execute</a> done by that thread.
+
+ </dd>
+<dt><b>Parameter Environment</b></dt>
+<dd>is the execution environment.
+
+ </dd>
+<dt><b>Returns</b></dt>
+<dd>the result according to the specification of the command.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>CommandAbortedException
+ to indicate that the command was aborted.
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>DuplicateCommandIdentifierException
+ to indicate that two threads tried to use the same command identifier
+
+ </dd>
+<dt><b>Throws</b></dt>
+<dd>Exception
+ if an error occured during the execution of the command.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="imdetail"><a name="abort" class="membertitle">abort</a><table border="0" width="96%" cellpadding="5" cellspacing="0" class="table-in-method" bgcolor="#ffffff" align="center">
+<tr>
+<td><table class="table-in-method" border="0">
+<tr>
+<td valign="top" colspan="3">[oneway] void</td>
+</tr>
+<tr>
+<td valign="top"><b>abort</b>(</td>
+<td valign="top">[in] long</td>
+<td valign="bottom">&nbsp;CommandId );</td>
+</tr>
+</table>
+<hr>
+<dl>
+<dt><b>Description</b></dt>
+<dd>ends the command associated with the given id.
+
+ </dd>
+<dd><p>Not every command can be aborted. It's up to the implementation
+ to decide whether this method will actually end the processing of
+ the command or simply do nothing.
+
+ </dd>
+<dt><b>Parameter CommandId</b></dt>
+<dd>is a unique id for the command to abort. This must be the identifier
+ passed to <a href="XCommandProcessor.html">XCommandProcessor</a>::<a href="XCommandProcessor.html#execute">execute</a> for the command
+ to abort.
+ </dd>
+</dl>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a href="#_top_">Top of Page</a><hr size="3"><p class="copyright" align="center">Copyright &copy; 2013, The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.</p>
+
+</div> <!-- id="adc-idlref" -->
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

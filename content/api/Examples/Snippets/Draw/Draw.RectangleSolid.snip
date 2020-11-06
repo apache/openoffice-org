@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Draw.RectangleSolid.snip,v $
+last change: $Revision: 1.2 $ $Author: tomsontom $ $Date: 2008/10/20 11:29:27 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Draw">
+
+<keywords>
+	<keyword>rectangle</keyword>
+	<keyword>fill colour</keyword>
+	<keyword>line colour</keyword>
+	<keyword>solid</keyword>
+</keywords>
+
+<authors>
+	<author id="" initial="false" email="">Nicole Scholz</author>
+</authors>
+
+<question heading="rectangle solid">How can I draw a rectangle and change the colour?
+</question>
+
+<answer>
+<p>This example draws automatically a rectangle and changes the fill colour and the line colour of it.</p>
+<listing>/* Retrieve the Desktop object, we need its XComponentLoader interface to load a new document*/
+oDesktop         = UNO.createDesktop()    -- get the UNO Desktop service object
+xComponentLoader = oDesktop~{%see com.sun.star.frame.XDesktop%XDesktop}~{%see com.sun.star.frame.XComponentLoader%XComponentLoader}  -- get componentLoader interface
+/* open the blank file */
+url = &quot;private:factory/sdraw&quot;
+xDrawComponent = xComponentLoader~loadComponentFromURL(url, &quot;_blank&quot;, 0, -
+                                                       .UNO~noProps)
+/* need document&apos;s factory to be able to insert created objects */
+xDocumentFactory = xDrawComponent~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+
+/* get draw page by index */
+xDrawPage = xDrawComponent~{%see com.sun.star.drawing.XDrawPagesSupplier%XDrawPagesSupplier}~getDrawPages~getByIndex(0)~{%see com.sun.star.drawing.XDrawPage%XDrawPage}
+
+/* draw a rectangle */
+xrectangle = xDocumentFactory~createInstance(&quot;{%see com.sun.star.drawing.RectangleShape}&quot;)~{%see com.sun.star.drawing.XShape%xshape}
+xrectangle~setPosition(.bsf~new(&quot;{%see com.sun.star.awt.Point}&quot;, 1000, 1000))
+xrectangle~setSize(.bsf~new(&quot;{%see com.sun.star.awt.Size}&quot;, 5000, 5000))
+
+xDrawPage~add(xrectangle) -- add the rectangle to the draw document
+
+/* colour the rectangle pink solid */
+xShapeProps = xrectangle~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+/* set fill colour pink */
+xShapeProps~setPropertyValue(&quot;FillColor&quot;, box(&quot;int&quot;, &quot;ff 00 ff&quot;x ~c2d))
+/* set line colour blue */
+xShapeProps~setPropertyValue(&quot;LineColor&quot;, box(&quot;int&quot;, &quot;00 00 ff&quot;x ~c2d))
+
+/* fill the rectangle */
+xShapeProps~setPropertyValue(&quot;FillStyle&quot;, -
+	bsf.getConstant(&quot;{%see com.sun.star.drawing.FillStyle}&quot;, &quot;SOLID&quot;))
+xShapeProps~setPropertyValue(&quot;LineWidth&quot;, box(&quot;int&quot;, &quot;200&quot;)) -- set line width 2 millimeter
+xShapeProps~setPropertyValue(&quot;LineStyle&quot;, -
+	bsf.getConstant(&quot;com.sun.star.drawing.LineStyle&quot;, &quot;DASH&quot;)) -- set line style dash
+
+::requires UNO.cls    -- get UNO support</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

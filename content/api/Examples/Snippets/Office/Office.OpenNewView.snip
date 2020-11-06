@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!--
+$RCS $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2006/03/01 17:48:17 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCS in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="Java" application="Office">
+
+<keywords>
+	<keyword>OpenNewView</keyword>
+	<keyword>view</keyword>
+	<keyword>window</keyword>
+	<keyword>new window</keyword>
+</keywords>
+
+<authors>
+<author id="vgiuliano@sp-process.it" email="vgiuliano@sp-process.it">Vincenzo Giuliano</author>
+</authors>
+
+
+<question heading="Open new view on OpenOffice document">How can I open a new view for a document already loaded?
+</question>
+
+<answer>
+<p>I have to use the OpenNewView property.</p>
+<p>Mathias Bauer wrote: I think that OOo currently does not treat &quot;OpenNewView&quot; correctly, means: it looks like a bug. I think that this method can be useful until we get the bug fixed.</p>
+<listing>	/**return the new view XController if the document exists
+	* return null if the document does not exist */
+	private static XController createView(String url)throws java.lang.Exception{
+		/**Bootstrap- Service Manager*/
+		com.sun.star.uno.XComponentContext remoteContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+        	System.out.println(&quot;Connected to a running office ...&quot;);
+        	com.sun.star.lang.XMultiComponentFactory serviceManager = remoteContext.getServiceManager();
+        	String available = (serviceManager != null ? &quot;available&quot; : &quot;not available&quot;);
+        	System.out.println( &quot;remote ServiceManager is &quot; + available );
+		/***/
+        	/**I create the instance of desktop service*/
+        	XInterface desktop 	= (XInterface)serviceManager.createInstanceWithContext(&quot;com.sun.star.frame.Desktop&quot;,remoteContext);
+        	/**I Search the Components*/
+        	XDesktop xd = (XDesktop)UnoRuntime.queryInterface(XDesktop.class,desktop);
+        	XEnumerationAccess xea = xd.getComponents();
+        	XEnumeration xe = xea.createEnumeration();
+        	/**I search the model affiliated to url*/
+        	XModel currentModel = null;
+        	boolean found = false;
+        	while(xe.hasMoreElements() &amp;&amp; found==false){
+        		currentModel = (XModel)UnoRuntime.queryInterface(XModel.class,xe.nextElement());
+        		if(currentModel!=null){
+        			found = currentModel.getURL().trim().toLowerCase().equals(url.trim().toLowerCase());
+        		}
+        		else{
+        		}
+        	}
+        	/**If the model exists I create the new view*/
+        	if(found){
+        		XDispatchHelper xdh = (XDispatchHelper)UnoRuntime.queryInterface(XDispatchHelper.class,
+				serviceManager.createInstanceWithContext(&quot;com.sun.star.frame.DispatchHelper&quot;,remoteContext));
+        		XDispatchProvider xdp = (XDispatchProvider)UnoRuntime.queryInterface(XDispatchProvider.class,
+				currentModel.getCurrentController().getFrame());
+        		DispatchResultEvent dre = 		(DispatchResultEvent)AnyConverter.toObject(DispatchResultEvent.class,
+				xdh.executeDispatch(xdp,&quot;.uno:NewWindow&quot;,&quot;&quot;,FrameSearchFlag.AUTO,new PropertyValue[0]));
+        		return currentModel.getCurrentController();
+        	}
+        	else{
+        		return null;
+        	}
+	}</listing>
+</answer>
+
+<versions>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+<change author-id="vgiuliano@sp-process.it" date="2006-02-21">Initial version</change>
+</changelog>
+</snippet>
