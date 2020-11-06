@@ -68,7 +68,7 @@ To test the site locally, use
     ./build_local.sh
     
 This builds the site, serves it locally at  http://localhost:8820/ and rebuilds the content fairly
-quickly if any changes are made.
+quickly if any changes are made. Only the files that are not in `part2` are watched.
 
 Note that serving the site through JBake does not properly include the SSI which means that branding, navigation, and footers will be missing. If you wish to set up an HTTPD server on your local you can do that too.
 
@@ -87,11 +87,16 @@ The site templates are written in groovy scripts.
 Even though the files end with `.gsp` they are not GSP files and do not have access to tag libraries.
 You can run custom code in them. See [Templates Read Me](templates/README.md) for details.
 
+## Twice Baked
+
+Due to exceeding the maximum number of files needing rendering the site is baked in two phases. Some folders are in the `part2` directory.
+
 ## Pages are in the Content Tree.
 
 `.html` and `.md` files in the content tree are processed by templates as directed within `jbake.properties`.
 
     https://github.com/apache/openoffice-org/tree/main/content
+    https://github.com/apache/openoffice-org/tree/main/part2/content
 
 ### Branding and Navigation
 
@@ -105,6 +110,7 @@ You can run custom code in them. See [Templates Read Me](templates/README.md) fo
 Every file in the assets tree is copied as is during baking.
 
     https://github.com/apache/openoffice-org/tree/main/assets
+    https://github.com/apache/openoffice-org/tree/main/part2/assets
 
 * Files larger than 100MB are not allowed and over 50MB are not recommended. Only one file in the CMS site was too large to migrate.
 * Please do not add any `.exe` binaries.
