@@ -99,6 +99,8 @@ git commit -m 'Migration of ${2} ${3}'
 
 2. `tools/convert2md.sh ${1} ${2}`
 
+   `tools/convert2md2.sh` was used in the part2 migration for api.
+
 ```
 # ${1} Template type 'brand','navigator','page'
 # ${2} Path of mdtext file to convert to md file
@@ -107,6 +109,8 @@ nawk -f ${GITPATH}/tools/convert2md.awk ${2} >> ${GITPATH}/content/${2}
 ```
 
 3. `tools/migration2git.sh ${1}`
+
+   `tools/migration2git2.sh` and `tools/migration4css.sh` were run in later phases.
 
 ```
 # ${1} Site folder to migrate

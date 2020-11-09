@@ -20,12 +20,18 @@ This describes the Simple Groovy templates (GSP) that are used to build the site
   include "breadcrumbs.gsp"
   // using content.ssi[] get content.brand, content.topnav, content.leftnav and content.rightnav
   include "ssi_paths.gsp"
+  // adjust css from markdown output
+  if (content.image_css || content.list_css) {
+     include "markdown_css.gsp";
+  }
 %>
 ```
    The html skeleton may use any of the following content model properties
    - content.header (optional)
    - content.title (optional)
    - content.css (optional)
+   - content.image_css (optional)
+   - content.list_css (optional)
    - content.bodytag
    - content.brand
    - content.topnav
@@ -218,6 +224,38 @@ content.ssi=ssi;
       if ( topnav[key] ) content.topnav = topnav[key];
       if ( leftnav[key] ) content.leftnav = leftnav[key];
       if ( rightnav[key] ) content.rightnav = rightnav[key];
+  }
+%>
+```
+1. `markdown_css.gsp`
+    This template is used to insert css classes for image paragraphs
+    and product list items. This is due to no obvious support in JBake for
+    Markdown Extra.
+
+```
+<%
+  content.extracted_body = content.body
+  if ( content.image_css ) {
+     content.extracted_body = content.extracted_body.replaceAll("(<p><img)") {
+         it[0] = "<p class=\"${content.image_css}\"><img"
+     }
+     content.extracted_body = content.extracted_body.replaceAll("(<p><a href=\"/product)") {
+         it[0] = "<p class=\"${content.image_css}\"><a href=\"/product"
+     }
+  }
+  if ( content.list_css ) {
+     String[] list_css = ["${content.list_css}-writer",
+     	      	       	  "${content.list_css}-calc",
+			  "${content.list_css}-impress",
+			  "${content.list_css}-draw",
+			  "${content.list_css}-base",
+			  "${content.list_css}-math"]
+     def n=list_css.length;
+     for (int i=0; i<n; i++) {
+     	 content.extracted_body =  content.extracted_body.replaceFirst("(\\<li\\>)") {
+            it[0] = "<li class=\"${list_css[i]}\">"
+         }
+     }
   }
 %>
 ```
