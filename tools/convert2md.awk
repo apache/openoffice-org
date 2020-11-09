@@ -23,6 +23,10 @@ BEGIN {
 	META = 0;
 	print "~~~~~~";
     } else {
+	K = sub(/\\#/*{.*}$/,"",$0);
+	if ( K > 0 && match($0,/^ *$/) > 0 ) {
+	    next;
+	}
 	print $0;
     }
 }
