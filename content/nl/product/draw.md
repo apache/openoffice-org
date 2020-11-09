@@ -1,4 +1,5 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Draw
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
