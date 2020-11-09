@@ -1,4 +1,6 @@
 type=page
+image_css=rfloatimg
+list_css=product
 title=The Suite Advantage
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~

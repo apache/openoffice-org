@@ -10,6 +10,10 @@
   include "breadcrumbs.gsp"
   // using content.ssi[] get content.brand, content.topnav, content.leftnav and content.rightnav
   include "ssi_paths.gsp"
+  // adjust css from markdown output
+  if (content.image_css || content.list_css) {
+     include "markdown_css.gsp";
+  }
 %><!--#include virtual="/doctype.html" -->
 <html>
   <head>
