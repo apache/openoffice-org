@@ -2,7 +2,7 @@ type=page
 title=Apache OpenOffice Draw
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Schermafdruk van Apache OpenOffice Draw](/product/pix/draw.png)](/product/pix/draw-big.png "Klik voor grotere versie") # {.rfloatimg}
+[![Schermafdruk van Apache OpenOffice Draw](/product/pix/draw.png)](/product/pix/draw-big.png "Klik voor grotere versie")
 
 *Het geweldige grafische pakket*
 

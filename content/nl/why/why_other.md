@@ -1,8 +1,9 @@
 type=page
 title=Waarom Apache OpenOffice: Andere redenen
 notice=https://www.apache.org/licenses/LICENSE-2.0
-hier zijn nog enkele andere redenen om apache openoffice te gebruiken=
 ~~~~~~
+hier zijn nog enkele andere redenen om apache openoffice te gebruiken=
+
   - **U moet (ODF)-documenten in [Open Document Format kunnen lezen en schrijven ](why_odf.html) (*.odt, *.ods, *.odp)**
     
   - **U gebruikt Microsoft Windows XP of Vista en Microsoft ondersteunt Office niet langer op dat platform**

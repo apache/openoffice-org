@@ -2,8 +2,9 @@ type=page
 image_css=rfloatimg
 title=Waarom Apache OpenOffice: Bedrijven
 notice=https://www.apache.org/licenses/LICENSE-2.0
-![why apache openoffice=Enterprises](/why/images/why_sme.png) # {.rfloatimg}
 ~~~~~~
+![why apache openoffice=Enterprises](/why/images/why_sme.png)
+
 Bedrijven, van winkels om de hoek tot grote bedrijven, stappen over op Apache OpenOffice om hun zakelijke belangen te versterken. De **flexibele tekstbewerker**, **krachtige werkbladen**, **dynamische afbeeldingen**, **toegang tot databases** en meer voldoen aan de vereisten voor een volledig kantoorpakket.
 
 OpenOffice biedt een hoge mate van compatibiliteit met andere commerciële kantoorpakketten, maar zonder de zorgen over kosten of licenties.

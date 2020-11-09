@@ -2,7 +2,7 @@ type=page
 title=Apache OpenOffice Impress
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Schermafdruk van Apache OpenOffice Impress](/product/pix/impress.png)](/product/pix/impress-big.png "Klik voor grotere versie") # {.rfloatimg}
+[![Schermafdruk van Apache OpenOffice Impress](/product/pix/impress.png)](/product/pix/impress-big.png "Klik voor grotere versie")
 
 *Maak uw presentaties indrukwekkender*
 

@@ -2,7 +2,7 @@ type=page
 title=Apache OpenOffice Math
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Schermafdruk van Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Klik voor grotere versie") # {.rfloatimg}
+[![Schermafdruk van Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Klik voor grotere versie")
 
 *Voer vergelijkingen en formules voor documenten in*
 
