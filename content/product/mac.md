@@ -1,6 +1,4 @@
 type=page
-image_css=rfloatimg
-list_css=product
 title=Apache OpenOffice for macOS (OS X)
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~

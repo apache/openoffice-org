@@ -18,19 +18,21 @@
 # under the License.
 #
 
-# tools/convert2md.sh ${1} ${2}
-# ${1} Template type 'brand','navigator','page'
-# ${2} Path of mdtext file to convert to md file
+# tools/migration4css.sh ${1}
+# ${1} Site folder to migrate
 
-if test "$#" != 2; then
-  echo "USAGE: $0 Type Path"
+if test "$#" != 1; then
+  echo "USAGE: $0 Folder"
   exit 1
 fi
 
-MDPATH=${2:0:${#2}-4}
-echo "Convert "${2}" to "${MDPATH}
-echo "type="${1} > ${GITPATH}/content/${MDPATH}
-egrep -li "\\# {.*}$" ${2} | sed -e "s/^.&$/image_css=rfloatimg/" >> ${GITPATH}/content/${MDPATH}
-egrep -li "\\# {\\.product.*}$" ${2} | sed -e "s/^.*$/list_css=product/" >> ${GITPATH}/content/${MDPATH}
-awk -f ${GITPATH}/tools/convert2md.awk ${2} >> ${GITPATH}/content/${MDPATH}
+cd ${SVNPATH}
+echo 'Migrating ${SVNPATH}/${1} to ${GITPATH}'
+echo
+# 7 - Markdown
+echo 'Convert markdown pages'
+find ${1} -name "*.mdtext" ! -name "brand.mdtext" ! -name "*nav.mdtext" -type f -exec ${GITPATH}/tools/convert2md.sh page {} \;
+# commit and push
+${GITPATH}/tools/commit2git.sh content ${1} 'Markdown pages'
+echo
 
