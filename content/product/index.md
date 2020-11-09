@@ -1,5 +1,6 @@
 type=page
-product/index.mdtext
+image_css=rfloatimg
+list_css=product
 title=Apache OpenOffice Product Description
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=/product/styles.css

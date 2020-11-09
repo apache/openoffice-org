@@ -1,5 +1,5 @@
 type=page
-product/impress.mdtext
+image_css=rfloatimg
 title=Apache OpenOffice Impress
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~

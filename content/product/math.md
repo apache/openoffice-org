@@ -1,5 +1,5 @@
 type=page
-product/math.mdtext
+image_css=rfloatimg
 title=Apache OpenOffice Math
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~

@@ -1,5 +1,5 @@
 type=page
-product/base.mdtext
+image_css=rfloatimg
 title=Apache OpenOffice Base
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~

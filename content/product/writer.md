@@ -1,5 +1,5 @@
 type=page
-product/writer.mdtext
+image_css=rfloatimg
 title=Apache OpenOffice Writer
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~

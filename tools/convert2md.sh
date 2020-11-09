@@ -30,7 +30,7 @@ fi
 MDPATH=${2:0:${#2}-4}
 echo "Convert "${2}" to "${MDPATH}
 echo "type="${1} > ${GITPATH}/content/${MDPATH}
-egrep -li "\\# {.*}$" ${2} | sed -e "s/^.&$/image_css=rfloatimg/" >> ${GITPATH}/content/${MDPATH}
-egrep -li "\\# {\\.product.*}$" ${2} | sed -e "s/^.*$/list_css=product/" >> ${GITPATH}/content/${MDPATH}
+egrep -li "\\# {.*}$" ${2} | sed "s/^.*$/image_css=rfloatimg/" >> ${GITPATH}/content/${MDPATH}
+egrep -li "\\# {.*.product.*}$" ${2} | sed "s/^.*$/list_css=product/" >> ${GITPATH}/content/${MDPATH}
 awk -f ${GITPATH}/tools/convert2md.awk ${2} >> ${GITPATH}/content/${MDPATH}
 
