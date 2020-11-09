@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Waarom Apache OpenOffice: Vrije / Opensource-software
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Waarom Apache OpenOffice: Vrije / Opensource-software](/why/images/why_foss.png) # {.rfloatimg}
+![Waarom Apache OpenOffice: Vrije / Opensource-software](/why/images/why_foss.png)
 
 Voorstanders van Vrije / Opensource-software (F/OSS), zowel eindgebruikers als deelnemers wenden zich tot Apache OpenOffice. Met o.a. de **flexibele tekstverwerker**, **krachtige spreadsheet**, **dynamische tekentoepassing** en **databasetoegang** geniet het OpenOffice-kantoorpakket de voorkeur van miljoenen gebruikers.
 

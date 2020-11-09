@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Base
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Pantallazo de Apache OpenOffice Base](/es/producto/pix/base.png)](/es/producto/pix/base-big.png "Haga clic para aumentar tamaño") # {.rfloatimg}
+[![Pantallazo de Apache OpenOffice Base](/es/producto/pix/base.png)](/es/producto/pix/base-big.png "Haga clic para aumentar tamaño")
 
 **Base** es un sistema gestor de bases de datos con una amplia gama de 
 características, diseñado para cubrir un amplio abanico de usuarios, puede, 

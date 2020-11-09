@@ -1,9 +1,10 @@
 type=page
+image_css=rfloatimg
 title=Porquê o Apache OpenOffice
 ~~~~~~
 ## Porquê usar o Apache OpenOffice?
 
-![Porquê o Apache OpenOffice](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Porquê o Apache OpenOffice](/images/AOO_logos/orb.jpg)
 
 O Apache OpenOffice é o **conjunto líder de programas de escritório** de **código aberto** para **processamento de texto**, **folhas de cálculo**, **apresentações**, **gráficos**, **bases de dados** e mais. Está disponível em **muitos idiomas** e trabalha em todos os **computadores comuns**. Armazena todos os seus dados num **formato aberto internacional** e também pode ler e escrever ficheiros de outros conjuntos de programas de escritório. Pode ser transferido e usado completamente **livre de taxas** para **qualquer propósito**.
 

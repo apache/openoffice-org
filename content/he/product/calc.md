@@ -1,9 +1,10 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Calc
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=../rtl.css
 ~~~~~~
-[![Screendump of Apache OpenOffice Calc](/product/pix/calc.png)](/product/pix/calc-big.png "Click for bigger version") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Calc](/product/pix/calc.png)](/product/pix/calc-big.png "Click for bigger version")
 
 *גיליון-עבודה לכל מטרה*
 

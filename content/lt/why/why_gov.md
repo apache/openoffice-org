@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Kodėl būtent „Apache OpenOffice“: valdžia
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Kodėl „Apache OpenOffice“: viešasis administravimas](/why/images/why_gov.png) # {.rfloatimg}
+![Kodėl „Apache OpenOffice“: viešasis administravimas](/why/images/why_gov.png)
 
 Visų lygių valdžios ir viešojo administravimo įstaigose (savivaldos, centrinėse, regioninėse, valstybinėse ir pan.) plušantiems tarnautojams „Apache OpenOffice“ tapo idealiu programinės įrangos sprendiniu. Viename rinkinyje dera lanksti tekstų rengyklė, galinga skaičiuoklė, įspūdinga pranešimų rengyklė, dinamiška braižyklė, išsami duomenynų rengyklė ir kitos „Apache OpenOffice“ priemonės, tenkinančios visus kasdienius raštinės darbuotojų poreikius.
 

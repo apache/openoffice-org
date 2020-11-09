@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Waarom Apache OpenOffice: Gratis en Vrije software
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Waarom Apache OpenOffice: Gratis en Vrije software](/why/images/why_free.png) # {.rfloatimg}
+![Waarom Apache OpenOffice: Gratis en Vrije software](/why/images/why_free.png)
 
 Apache OpenOffice is niet alleen gratis maar ook vrije software. Dit betekent dat u het mag downloaden, het mag installeren op zoveel PC's als u wilt, het mag kopiëren en doorgeven aan zoveel mensen als u wilt. U kunt OpenOffice gebruiken voor elk doel zonder enige beperking, thuis, in het onderwijs, bij de overheid, in het bedrijfsleven... Vrij, echt vrij.
 

@@ -1,30 +1,31 @@
 type=page
+image_css=rfloatimg
+list_css=product
 title=Apache OpenOffice productomschrijving
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=/product/styles.css
 ~~~~~~
 Uitwisselbaar met andere grote kantoorpakketten, Apache OpenOffice is gratis te downloaden, te gebruiken en te distribueren. [Download nu][1], en ontvang:
 
-![Apache OpenOffice?](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
   - [Writer](writer.html "Tekstverwerker") een tekstverwerker die u voor van alles kunt gebruiken,
     van het schrijven van een snel briefje tot het produceren van een compleet boek.
-    # { .product-writer }
   - [Calc](calc.html "Spreadsheet") een krachtig werkblad met alle functionaliteit
     die u nodig heeft voor berekeningen, analyses, en het presenteren van uw gegevens in cijfermatige rapportages
-    of boeiende grafieken. # { .product-calc }
+    of boeiende grafieken.
   - [Impress](impress.html "Presentatiesoftware") de snelste, meest indrukwekkende
-    manier om doeltreffende multimedia-presentaties te maken. # { .product-impress }
+    manier om doeltreffende multimedia-presentaties te maken.
   - [Draw](draw.html "Vector tekengereedschap") laat u alles maken,
-    van eenvoudige diagrammen tot dynamische 3D-illustraties. # { .product-draw }
+    van eenvoudige diagrammen tot dynamische 3D-illustraties.
   - [Base](base.html "Database") laat u naadloos omgaan met databases.
     Maak en wijzig tabellen, formulieren, query's, en rapporten, allemaal vanuit
-    Apache OpenOffice. # { .product-base }
+    Apache OpenOffice.
   - [Math](math.html "Wiskundige formule-editor") laat u
     wiskundige vergelijkingen invoeren met een grafische gebruikersinterface of door uw formules direct in te typen
-    in de formule-editor. # { .product-math }
+    in de formule-editor.
 
-## Waarom Apache OpenOffice? #{ .why }
+## Waarom Apache OpenOffice?
 
 Apache OpenOffice staat voor **kwaliteit**:
 

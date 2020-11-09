@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Zašto Apache OpenOffice: besplatan softver
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Zašto Apache OpenOffice: besplatan softver](/why/images/why_free.png) # {.rfloatimg}
+![Zašto Apache OpenOffice: besplatan softver](/why/images/why_free.png)
 
 Apache OpenOffice je besplatan softver. To znači da ste slobodni da ga preuzmete, 
 da ga besplatno instalirate na onoliko računara koliko želite, slobodni da 

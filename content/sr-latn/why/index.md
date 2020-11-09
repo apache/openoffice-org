@@ -1,10 +1,11 @@
 type=page
+image_css=rfloatimg
 title=Zašto Apache OpenOffice
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 ## Zašto bih koristio Apache OpenOffice?
 
-![Zašto Apache OpenOffice](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Zašto Apache OpenOffice](/images/AOO_logos/orb.jpg)
 
 Apache OpenOffice je vodeći **kancelarijski paket** **otvorenog koda** za **obradu teksta**, **proračunske tabele**, **prezentacije**, **grafike**, **baze podataka** i više. Dostupan je na **mnogo jezika** i radi na svim **kompjuterima**. Skladišti sve podatke u **internacionalni otvoren standardni format** i takođe može da učitava i zapisuje datoteke za druge uobičajene programske pakete. Preuzima se i koristi potpuno **besplatno** za **bilo koju svrhu**.
 

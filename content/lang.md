@@ -1,7 +1,5 @@
-title=Native Language Sites
+type=page
 ~~~~~~
-
-- [Afar (aa)](/aa)
 - [Albanian (sq)](/sq)
 - [Afrikaans (af)](/af)
 - [Amharic (am) ](/am)

@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Čitanje ODF dokumenata (*.odt, *.ods, *.odp) sa Apache OpenOffice-om
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Zašto Apache OpenOffice: OpenDocument format](/why/images/shell.png) # {.rfloatimg}
+![Zašto Apache OpenOffice: OpenDocument format](/why/images/shell.png)
 
 ##"Windows ne može otvoriti ovu datoteku"
 

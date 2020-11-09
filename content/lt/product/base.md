@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Duomenynų rengyklė
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Base](/product/pix/base.png)](/product/pix/base-big.png "Didinti") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Base](/product/pix/base.png)](/product/pix/base-big.png "Didinti")
 
 Duomenynų rengyklė – tai rašomajam stalui skirta visavertė duomenynų
 tvarkymo sistema, tenkinanti įvairius naudotojų poreikius nuo asmeninės garso

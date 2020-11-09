@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Porquê o Apache OpenOffice: instituições sem fins lucrativos
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Porquê o Apache OpenOffice: instituições sem fins lucrativos](/why/images/why_nfp.png) # {.rfloatimg}
+![Porquê o Apache OpenOffice: instituições sem fins lucrativos](/why/images/why_nfp.png)
 
 Instituições sem fins lucrativos, organizações de todas as dimensões estão a voltar-se para o Apache OpenOffice - o programa que atende às suas 
 necessidades e partilha os seus valores. O **processador de texto flexível**, a **poderosa folha de cálculo**, **gráficos dinâmicos**, **acesso a bases de dados** e muito mais, 

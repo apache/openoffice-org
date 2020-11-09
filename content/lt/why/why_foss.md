@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Kodėl būtent „Apache OpenOffice“: LAPĮ šalininkai
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Kodėl „Apache OpenOffice“: laisvoji ir atviroji programinė įranga](/why/images/why_foss.png) # {.rfloatimg}
+![Kodėl „Apache OpenOffice“: laisvoji ir atviroji programinė įranga](/why/images/why_foss.png)
 
 Laisvosios ir atvirosios programinės įrangos (LAPĮ) šalininkai gręžiasi į „Apache OpenOffice“ ir kaip tiesioginiai naudotojai, ir kaip talkininkai. Dėl lanksčios tekstų rengyklės, galingos skaičiuoklės, įspūdingos pranešimų rengyklės, dinamiškos braižyklės, išsamios duomenynų rengyklės ir kitų „Apache OpenOffice“ priemonių šį raštinės programų paketą renkasi milijonai naudotojų.
 

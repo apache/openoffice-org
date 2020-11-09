@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Base
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Obrazovka Apache OpenOffice Base](/product/pix/base.png)](/product/pix/base-big.png "Kliknite pre zväčšenie") # {.rfloatimg}
+[![Obrazovka Apache OpenOffice Base](/product/pix/base.png)](/product/pix/base-big.png "Kliknite pre zväčšenie")
 
 **Base** je plnevybavený systém na správu databáz na vašom počítači, navrhnutý tak,
 aby splnil požiadavky širokého spektra užívateľov, od

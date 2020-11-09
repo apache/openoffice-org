@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Why Apache OpenOffice: Enterprises
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Why Apache OpenOffice: Enterprises](/why/images/why_sme.png) # {.rfloatimg}
+![Why Apache OpenOffice: Enterprises](/why/images/why_sme.png)
 
 Enterprises from corner-shops to corporate giants are turning to Apache OpenOffice to power their businesses. The **flexible word processor**, **powerful spreadsheet**, **dynamic graphics**, **database access** and more meet all the requirements for an office software package.
 

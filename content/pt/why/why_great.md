@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Porquê o Apache OpenOffice: grande software
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Porquê o Apache OpenOffice: grande programa](/why/images/why_great.png) # {.rfloatimg}
+![Porquê o Apache OpenOffice: grande programa](/why/images/why_great.png)
 
 Grandes programas requerem grandes pessoas. O Apache OpenOffice é o resultado de mais de vinte anos de engenharia informática de alta qualidade. Projectado 
 desde o início como uma **única peça de programação**, o Apache OpenOffice tem uma consistência e uma qualidade de classe mundial. O Apache OpenOffice 

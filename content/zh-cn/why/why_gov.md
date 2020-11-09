@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=为何选择Apache OpenOffice：公共管理
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![为何选择Apache OpenOffice：公共管理](/why/images/why_gov.png) # {.rfloatimg}
+![为何选择Apache OpenOffice：公共管理](/why/images/why_gov.png)
 
 公共管理单位以及为**各级政府机关**工作的人（无论是地方的还是中央的，区域性的还是全国性的）都会发现Apache OpenOffice是他们理想的软件解决方案。它的组合中包含一个**灵活的文本编辑器**，一个**强大的电子表格**，**灵活的绘图**，**数据库访问**等等，可以满足一个忙碌的办公室工作人员的所有日常办公需求。
 

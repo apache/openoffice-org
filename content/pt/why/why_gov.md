@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Porquê o Apache OpenOffice: administração pública
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Porquê o Apache OpenOffice: administração pública](/why/images/why_gov.png) # {.rfloatimg}
+![Porquê o Apache OpenOffice: administração pública](/why/images/why_gov.png)
 
 As administrações públicas e pessoas que trabalham em **todos os níveis do Estado** (local/regional/nacional etc) poderão achar que o Apache OpenOffice 
 é a solução ideal para um programa de escritório. A combinação de um **processador de texto flexível**, a **poderosa folha de cálculo**, **gráficos dinâmicos**, 

@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Rašyklė
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Writer](/product/pix/writer.png)](/product/pix/writer-big.png "Didinti") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Writer](/product/pix/writer.png)](/product/pix/writer-big.png "Didinti")
 
 Rašyklėje randama viskas, ko galima tikėtis iš šiuolaikiškos, visomis
 priemonėmis aprūpintos tekstų rengyklės arba rašomajam stalui skirto

@@ -1,13 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Why Apache OpenOffice: Enterprises
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-
-<div class="rfloatimg">
-
 ![Why Apache OpenOffice: Enterprises](/why/images/why_sme.png)
-
-</div>
 
 Enterprises from corner-shops to corporate giants are turning to Apache OpenOffice to power their businesses. The **flexible word processor**, **powerful spreadsheet**, **dynamic graphics**, **database access** and more meet all the requirements for an office software package.
 
@@ -24,4 +20,3 @@ OpenOffice offers a high degree of compatibility with commercial office software
   - **Open for business**
 
     Amazingly, Apache OpenOffice comes without any license fees, or any worrying small print. You can install it on as many computers as you like, use it for any purpose, and even give copies away for employees to use at home. No more threats of heavy-handed software audits disturbing your business. You don't even have to worry about what to install - OpenOffice is one complete package. If you need extra languages, simply install them.
-

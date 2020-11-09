@@ -1,10 +1,11 @@
 type=page
+image_css=rfloatimg
 title=Zergatik erabili Apache OpenOffice
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 ## Zergatik erabili beharko nuke Apache OpenOffice?
 
-![Zergatik Apache OpenOffice](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Zergatik Apache OpenOffice](/images/AOO_logos/orb.jpg)
 
 Apache OpenOffice 
    **testu-prozesatze**rako, **kalkulu-orriak**, **aurkezpenak** eta **grafikoak** prestatzeko, 

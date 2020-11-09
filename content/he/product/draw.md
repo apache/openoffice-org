@@ -1,9 +1,10 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Draw
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=../rtl.css
 ~~~~~~
-[![Screendump of Apache OpenOffice Draw](/product/pix/draw.png)](/product/pix/draw-big.png "Click for bigger version") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Draw](/product/pix/draw.png)](/product/pix/draw-big.png "Click for bigger version")
 
 *חבילה גרפית חזקה*
 

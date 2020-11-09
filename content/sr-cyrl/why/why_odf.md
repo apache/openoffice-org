@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Читање ОДФ документа (*.odt, *.ods, *.odp) са Apache OpenOffice-ом
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Зашто Apache OpenOffice: OpenDocument формат](/why/images/shell.png) # {.rfloatimg}
+![Зашто Apache OpenOffice: OpenDocument формат](/why/images/shell.png)
 
 ##"Виндоус не може отворити ову датотеку"
 

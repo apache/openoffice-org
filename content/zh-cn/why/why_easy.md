@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=为何选择Apache OpenOffice：易于使用
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![为何选择Apache OpenOffice：易于使用](/why/images/why_easy.png) # {.rfloatimg}
+![为何选择Apache OpenOffice：易于使用](/why/images/why_easy.png)
 
 方便使用，方便安装，方便学习——Apache OpenOffice是办公软件的一款轻松选择。OpenOffice非常适合于完全没有经验的初学者，对有其它办公软件使用经验的人也很不错。OpenOffice可以通过熟悉的屏幕和菜单来充分利用你已有的使用经验，并且可以直接读取你已有的文件——而不必重新输入。
 

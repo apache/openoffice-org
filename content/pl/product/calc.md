@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Calc
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Zrzut ekranu Apache OpenOffice Calc](/product/pix/calc.png)](/product/pix/calc-big.png "Kliknij aby zobaczyć większą wersję") # {.rfloatimg}
+[![Zrzut ekranu Apache OpenOffice Calc](/product/pix/calc.png)](/product/pix/calc-big.png "Kliknij aby zobaczyć większą wersję")
 
 *Sposób na przechowywanie wszystkich twoich liczb i wykazów!*
 

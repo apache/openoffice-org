@@ -1,9 +1,10 @@
 type=page
+image_css=rfloatimg
 title=יתרונות Apache OpenOffice: מנהל ציבורי
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=../rtl.css
 ~~~~~~
-![יתרונות Apache OpenOffice: מנהל ציבורי](/why/images/why_gov.png) # {.rfloatimg}
+![יתרונות Apache OpenOffice: מנהל ציבורי](/why/images/why_gov.png)
 
 המנהל הציבורי ואנשים שעובדים בממשלות שונות בעולם, ברמות שונות (מקומית, לאומית) מוצאים ש-Apache OpenOffice היא פתרון מושלם עבורם. 
 שילוב של **עורך טקסט גמיש**, **גיליונות-עבודה בעלי-עוצמה**, **גרפיקה דינמית**, **גישה לבסיסי-נתונים** ועוד עונים על כל הדרישות של מי שעובד מול מחשב במשרד.

@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Why Apache OpenOffice: IT business
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Why Apache OpenOffice: IT business](/why/images/why_oem.png) # {.rfloatimg}
+![Why Apache OpenOffice: IT business](/why/images/why_oem.png)
 
 Build your business around Apache OpenOffice. If you're in the IT business, OpenOffice can mean good business for you. The **flexible word processor**, **powerful spreadsheet**, **dynamic graphics**, **database access** and more meet all the requirements for an office software package.
 

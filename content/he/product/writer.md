@@ -1,9 +1,10 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Writer
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=../rtl.css
 ~~~~~~
-[![Screendump of Apache OpenOffice Writer](/product/pix/writer.png)](/product/pix/writer-big.png "Click for bigger version") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Writer](/product/pix/writer.png)](/product/pix/writer-big.png "Click for bigger version")
 
 *עבודה עם מסמכים*
 

@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=为何选择Apache OpenOffice：杰出的软件
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![为何选择Apache OpenOffice：杰出的软件](/why/images/why_great.png) # {.rfloatimg}
+![为何选择Apache OpenOffice：杰出的软件](/why/images/why_great.png)
 
 杰出的软件依赖于杰出的人。Apache OpenOffice凝聚了二十多年持续高质量软件工程的结晶。从最初的**一体软件**开始，Apache OpenOffice秉承一致，具有世界级的质量。它的**开源**开发模式意味着没有秘密。
 

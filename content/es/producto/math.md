@@ -1,10 +1,11 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Math
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 *Cree ecuaciones y fórmulas para sus documentos*
 
-[![Pantallazo de Apache OpenOffice Math](/es/producto/pix/math.png)](/es/producto/pix/math-big.png "Haga clic para aumentar tamaño") # {.rfloatimg}
+[![Pantallazo de Apache OpenOffice Math](/es/producto/pix/math.png)](/es/producto/pix/math-big.png "Haga clic para aumentar tamaño")
 
 **Math** es un componente de Apache OpenOffice para la creación de ecuaciones
 matemáticas. Generalmente se usa como editor de ecuaciones par documentos de

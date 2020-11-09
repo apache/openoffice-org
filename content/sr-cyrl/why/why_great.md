@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Зашто Apache OpenOffice: велик програм
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Зашто Apache OpenOffice: велик програм](/why/images/why_great.png) # {.rfloatimg}
+![Зашто Apache OpenOffice: велик програм](/why/images/why_great.png)
 
 Велики програм захтева велике људе. Apache OpenOffice је резултат од преко двадесет година програмерског 
 инжењерства високог квалитета. Дизајниран од почетка као **обједињен софтвер**, 

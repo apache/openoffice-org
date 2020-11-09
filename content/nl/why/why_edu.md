@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Waarom Apache OpenOffice: Onderwijs
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Waarom Apache OpenOffice: Opleiding](/why/images/why_edu.png) # {.rfloatimg}
+![Waarom Apache OpenOffice: Opleiding](/why/images/why_edu.png)
 
 Onderwijsinstellingen van alle niveaus (basis-, voortgezet-, middelbaar-, hoger onderwijs...) bemerken dat Apache OpenOffice voldoet aan de behoeften van zowel docenten als studenten. De **flexibele tekstverwerker**, **krachtige spreadsheet**, **dynamische tekentoepassing**, **databasetoegang** en meer voldoen aan alle vereisten voor een kantoorsoftwarepakket.
 

@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Why Apache OpenOffice: Great Software
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Why Apache OpenOffice: Great Software](/why/images/why_great.png) # {.rfloatimg}
+![Why Apache OpenOffice: Great Software](/why/images/why_great.png)
 
 Great Software requires great people. Apache OpenOffice is the result of over twenty years' continuous high quality software engineering. Designed from the start as a **single piece of software**, Apache OpenOffice has a consistency and a quality that is world class. Its **open-source** development model means there are no secrets.
 

@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Kodėl būtent „Apache OpenOffice“: nemokama
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Kodėl „Apache OpenOffice“: nemokama programinė įranga](/why/images/why_free.png) # {.rfloatimg}
+![Kodėl „Apache OpenOffice“: nemokama programinė įranga](/why/images/why_free.png)
 
 „Apache OpenOffice“ – tai nemokama programinė įranga, nemokamai gaunama, nemokamai diegiama neribotame skaičiuje kompiuterių, nemokamai platinama neribotam skaičiui žmonių, nemokamai naudojama visur: namuose, švietimo ir viešojo administravimo įstaigose, verslo ir prekybos įmonėse – nemokamai be jokių išlygų.
 

@@ -1,30 +1,31 @@
 type=page
+image_css=rfloatimg
+list_css=product
 title=Apache OpenOffice Ürün Açıklamaları
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=/product/styles.css
 ~~~~~~
 Diğer büyük ofis paketleriyle uyumlu olan, Apache OpenOffice, indirmek, kullanmak ve dağıtmak için ücretsizdir. [Şimdi indirin][1], ve şunlara sahip olun:
 
-![Apache OpenOffice?](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
   - [Writer](writer.html "Kelime işlemci"), hızlı bir mektup yazmaktan bütün bir 
     kitabı üretmeye kadar herşey için kullanabileceğiniz bir kelime işlemcidir.
-    # { .product-writer }
   - [Calc](calc.html "Hesap tablosu"), hesaplama, çözümleme için ihtiyacınız olan 
     tüm araçlara sahip ve verinizi sayısal raporlar içinde ya da canlı grafiklerde 
-    sunan güçlü bir hesap tablosudur. # { .product-calc }
+    sunan güçlü bir hesap tablosudur.
   - [Impress](impress.html "Sunum programı"), etkili çoklu ortam sunumları oluşturmak
-    için en hızlı, en güçlü yoldur. # { .product-impress }
+    için en hızlı, en güçlü yoldur.
   - [Draw](draw.html "Vektör çizim aracı"), basit diyagramlardan dinamik 3B resimlemeye 
-    kadar herşeyi üretmenize izin verir. # { .product-draw }
+    kadar herşeyi üretmenize izin verir.
   - [Base](base.html "Database") lets you manipulate databases seamlessly.
     Create and modify tables, forms, queries, and reports, all from within
-    Apache OpenOffice. # { .product-base }
+    Apache OpenOffice.
   - [Math](math.html "Mathematical function creator") lets you create
     mathematical equations with a graphic user interface or by directly typing
-    your formulas into the equation editor. # { .product-math }
+    your formulas into the equation editor.
 
-## Neden Apache OpenOffice? #{ .why }
+## Neden Apache OpenOffice?
 
 Apache OpenOffice is synonymous with **quality**:
 

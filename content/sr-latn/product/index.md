@@ -1,4 +1,6 @@
 type=page
+image_css=rfloatimg
+list_css=product
 title=Opis proizvoda Apache OpenOffice-a
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=/product/styles.css
@@ -6,11 +8,10 @@ css=/product/styles.css
 Kompatibilan sa ostalim glavnim kancelarijskim paketima, Apache OpenOffice je besplatan za
 preuzimanje, korišćenje i distribuciju. [Preuzmite ga odmah][1], i imajte:
 
-![Apache OpenOffice?](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
   - [Pisac](writer.html "Wordprocessor") - program za obradu teksta možete da koristite za
     bilo kakvo pisanje, od na brzinu pisanog pisma do stvaranja čitave knjige.
-    # { .product-writer }
   - [Račun](calc.html "Spreadsheet") - moćna proračunska tabela sa svim alatima
     potrebnim za računanje, analiziranje, i prikazom vaših podataka u brojnim izveštajima   
     ili odličinim grafikonima. 
@@ -30,7 +31,7 @@ preuzimanje, korišćenje i distribuciju. [Preuzmite ga odmah][1], i imajte:
     formule unutar uređivača za jednačine. 
 	# { .product-math }
 
-## Zašto Apache OpenOffice? #{ .why }
+## Zašto Apache OpenOffice?
 
 Apache OpenOffice je sinonim za **kvalitet**:
 

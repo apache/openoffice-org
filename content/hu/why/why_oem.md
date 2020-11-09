@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Miért az Apache OpenOffice: IT üzletág
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Miért az Apache OpenOffice: IT üzletág](/why/images/why_oem.png) # {.rfloatimg}
+![Miért az Apache OpenOffice: IT üzletág](/why/images/why_oem.png)
 
 Építse vállalkozását az OpenOffice köré! Ha az IT szektorban dolgozik, az OpenOffice egy kiváló üzlet lehet Önnek. A **rugalmas szövegszerkesztő**, **erőteljes táblázatkezelő**, **dinamikus rajzoló program**, **adatbázis kezelő** és további alkalmazások mind megfelelnek egy irodai programcsomaggal szemben támasztott elvárásoknak.
 

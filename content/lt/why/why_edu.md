@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Kodėl būtent „Apache OpenOffice“: švietimas
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Kodėl „Apache OpenOffice“: švietimas](/why/images/why_edu.png) # {.rfloatimg}
+![Kodėl „Apache OpenOffice“: švietimas](/why/images/why_edu.png)
 
 Visų pakopų švietimo įstaigos (pradinės ir vidurinės mokyklos, kolegijos, universitetai ir t.t.) jau įsitikino, kad „Apache OpenOffice“ tenkina tiek dėstytojų, tiek studentų poreikius. Lanksti tekstų rengyklė, galinga skaičiuoklė, įspūdinga pranešimų rengyklė, dinamiška braižyklė, išsami duomenynų rengyklė kartu su kitomis „Apache OpenOffice“ priemonėmis tenkina visus raštinės programų rinkiniui keliamus reikalavimus.
 

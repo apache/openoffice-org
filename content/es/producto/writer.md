@@ -1,10 +1,11 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Writer
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 *Para todos sus documentos*
 
-[![Pantallazo de Apache OpenOffice Writer](/es/producto/pix/writer.png)](/es/producto/pix/writer-big.png "Haga clic para aumentar tamaño") # {.rfloatimg}
+[![Pantallazo de Apache OpenOffice Writer](/es/producto/pix/writer.png)](/es/producto/pix/writer-big.png "Haga clic para aumentar tamaño")
 
 **Writer** tiene todo lo que se espera de un procesador de textos moderno 
 completamente equipado.

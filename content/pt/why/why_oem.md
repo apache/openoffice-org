@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Porquê o OpenOffice: tecnologias de informação
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Porquê o  OpenOffice: tecnologias de informação](/why/images/why_oem.png) # {.rfloatimg}
+![Porquê o  OpenOffice: tecnologias de informação](/why/images/why_oem.png)
 
 Construa o seu negócio em torno do Apache OpenOffice. Se está no negócio das tecnologias de informação, o OpenOffice pode significar uma boa solução para 
 si. O **processador de texto flexível**, a **poderosa folha de cálculo**, **gráficos dinâmicos**, **acesso a bases de dados** e muito mais, cumprem 

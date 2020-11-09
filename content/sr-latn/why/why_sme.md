@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Zašto Apache OpenOffice: preduzeća
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Zašto Apache OpenOffice: preduzeća](/why/images/why_sme.png) # {.rfloatimg}
+![Zašto Apache OpenOffice: preduzeća](/why/images/why_sme.png)
 
 Da bi jačali poslovanje, privredni subjekti, od prodavnice na uglu pa do privrednih giganata, okreću se Apache OpenOffice-u. **Fleksibilan procesor za obradu teksta**, **moćna proračunska tabela**, **dinamična grafika**, ** pristup bazi podataka**  i druge funkcije, ispunjavaju sve uslove za jedan kancelarijski paket.
 

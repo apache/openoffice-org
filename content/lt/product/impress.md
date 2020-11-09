@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Pranešimų rengyklė
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Impress](/product/pix/impress.png)](/product/pix/impress-big.png "Didinti") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Impress](/product/pix/impress.png)](/product/pix/impress-big.png "Didinti")
 
 Pranešimų rengyklė – tai puiki priemonė patraukliems daugialypės terpės
 pranešimams kurti. Pranešimai pagyvinami dvimačiais ir trimačiais piešinukais,

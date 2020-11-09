@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Zašto Apache OpenOffice: IT poslovanje
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Zašto Apache OpenOffice: IT poslovanje](/why/images/why_oem.png) # {.rfloatimg}
+![Zašto Apache OpenOffice: IT poslovanje](/why/images/why_oem.png)
 
 Izgradite svoj posao oko Apache OpenOffice-a. Ako ste u IT poslovanju, OpenOffice može značiti dobar posao za vas. **Fleksibilan procesor za obradu teksta**, **moćna proračunska tabela**, **dinamičan grafika**, **pristup bazi podataka** i druge funkcije, ispunjavaju sve uslove za jedan kancelarijski paket.
 

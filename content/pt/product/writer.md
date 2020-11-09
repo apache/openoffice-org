@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Writer
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Ecrã do Apache OpenOffice Writer](/product/pix/writer.png)](/product/pix/writer-big.png "Clique para ampliar") # {.rfloatimg}
+[![Ecrã do Apache OpenOffice Writer](/product/pix/writer.png)](/product/pix/writer-big.png "Clique para ampliar")
 
 *Para todos os seus documentos*
 

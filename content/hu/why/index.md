@@ -1,10 +1,11 @@
 type=page
+image_css=rfloatimg
 title=Miért az Apache OpenOffice?
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 ## Miért az Apache OpenOffice programot kellene használnom?
 
-![Miért az Apache OpenOffice](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Miért az Apache OpenOffice](/images/AOO_logos/orb.jpg)
 
 Az Apache OpenOffice a vezető **nyílt forrsású** **irodai programcsomag**, melyet használhat **szövegszerkesztésre**, **táblázatkezelésre**, **prezentáció készítésre**, **grafikai tervezésre**, **adatbázis kezelésre** és egyéb feladatokra. **Számos nyelven** elérhető és minden **normál számítógépen futtatható**. Adatait egy **nemzetközi nyílt szabvány formátumban** tárolja el, illetve más irodai programcsomagok által létrehozott fájlok kezelésére is képes. Letöltése és **bármilyen célra** történő felhasználása **teljesen ingyenes**.
 

@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Draw
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Ecrã do Apache OpenOffice Draw](/product/pix/draw.png)](/product/pix/draw-big.png "Clique para ampliar") # {.rfloatimg}
+[![Ecrã do Apache OpenOffice Draw](/product/pix/draw.png)](/product/pix/draw-big.png "Clique para ampliar")
 
 *A poderosa aplicação gráfica*
 

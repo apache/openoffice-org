@@ -1,4 +1,6 @@
 type=page
+image_css=rfloatimg
+list_css=product
 title=Apache OpenOffice Produktbeskrivning
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=/product/styles.css
@@ -6,31 +8,25 @@ css=/product/styles.css
 Kompatibel med andra större officepaket, Apache OpenOffice är fri att
 ladda ner, använda och distribuera. [Ladda ner det nu][1], och få:
 
-![Apache OpenOffice?](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
   - [Writer](writer.html "Ordbehandlare") en ordbehandlare du kan
     använda till allt från att skriva ett kort brev till en hel bok.
-    # { .product-writer }
   - [Calc](calc.html "Kalkylblad") ett kraftfullt kalkylprogram med
     alla de verktyg du behöver för att räkna, analysera och presentera
     dina data i sifferrapporter eller snygga grafik.
-    # { .product-calc }
   - [Impress](impress.html "Presentationsprogram") den snabbaste, mest
     kraftfulla vägen att skapa effektiva multimediapresentationer.
-    # { .product-impress }
   - [Draw](draw.html "Vektorritningsverktyg") låter dig producera vad som
     helt från enkla diagram till dynamiska 3D-illustrationer.
-    # { .product-draw }
   - [Base](base.html "Databas") låter dig bearbeta databaser sömlöst.
     Skapa och modifiera tabeller, formulär, frågor och rapporter, allt
     från Apache OpenOffice.
-    # { .product-base }
   - [Math](math.html "Bygga matematiska funktioner") låter dig skapa
     matematiska ekvationer med grafiskt användargränssnitt eller genom
     att skriva dina ekvationer i matteeditorn.
-    # { .product-math }
 
-## Varför Apache OpenOffice? # { .why }
+## Varför Apache OpenOffice?
 
 Apache OpenOffice är synonymt med **kvalitet**:
 

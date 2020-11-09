@@ -1,4 +1,6 @@
 type=page
+image_css=rfloatimg
+list_css=product
 title=תיאור Apache OpenOffice
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=/product/styles.css
@@ -6,17 +8,17 @@ css=../rtl.css
 ~~~~~~
 חבילת-התוכנות Apache OpenOffice תואמת לתוכנות אחרות למשרד. אפשר להוריד אותה ולהשתמש בה בחינם, ואף לחלק אותה לאחרים. [הורדת התוכנה][1] כוללת את התוכנות הבאות: 
 
-![מה כלול ב-Apache OpenOffice?](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![מה כלול ב-Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
   - [Writer](writer.html "Wordprocessor") מאפשרת לך לעשות הכל עם טקסטים: מכתיבת מכתב קצר ועד ספר שלם.
     # { .product-writer } 
-  - [Calc](calc.html "גיליון-עבודה") מכילה את כל הכלים הדרושים לעבודה עם גליונות-עבודה, ותעזור לך לחשב, לנתח ולהציג נתונים בדו"חות, כולל  וגרפים. # { .product-calc }
-  - [Impress](impress.html "תוכנת מצגות") הדרך המהירה והיעילה ליצירת מצגות. # { .product-impress }
-  - [Draw](draw.html "תוכנה לאיורים וקטוריים") מאפשרת את החופש ליצור הכל, מתרשימים פשוטים ועד איורים תלת-ממדיים. # { .product-draw }
-  - [Base](base.html "מסד-נתונים") מאפשרת לעבוד עם בסיסי-נתונים: ליצור ולערוך טבלאות, טפסים, שאילתות ודו"חות, הכל מתוך Apache OpenOffice. # { .product-base }
-  - [Math](math.html "יצירת נוסחאות מתמטיות") מאפשרת יצירת נוסחאות מתמטיות בעזרת מנשק גרפי, או על-ידי הקלדת משוואה בעורך המשוואותlets you create. # { .product-math }
+  - [Calc](calc.html "גיליון-עבודה") מכילה את כל הכלים הדרושים לעבודה עם גליונות-עבודה, ותעזור לך לחשב, לנתח ולהציג נתונים בדו"חות, כולל  וגרפים.
+  - [Impress](impress.html "תוכנת מצגות") הדרך המהירה והיעילה ליצירת מצגות.
+  - [Draw](draw.html "תוכנה לאיורים וקטוריים") מאפשרת את החופש ליצור הכל, מתרשימים פשוטים ועד איורים תלת-ממדיים.
+  - [Base](base.html "מסד-נתונים") מאפשרת לעבוד עם בסיסי-נתונים: ליצור ולערוך טבלאות, טפסים, שאילתות ודו"חות, הכל מתוך Apache OpenOffice.
+  - [Math](math.html "יצירת נוסחאות מתמטיות") מאפשרת יצירת נוסחאות מתמטיות בעזרת מנשק גרפי, או על-ידי הקלדת משוואה בעורך המשוואותlets you create.
 
-## למה Apache OpenOffice? #{ .why }
+## למה Apache OpenOffice?
 
 אמרת Apache OpenOffice אמרת **איכות**:
 

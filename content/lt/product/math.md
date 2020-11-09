@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Matematikos rašyklė
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Didinti") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Didinti")
 
 Matematikos rašyklė – tai mokslinėms lygtims skirtas „Apache OpenOffice“ sandas.
 Dažniausiai programa naudojama lygtims taisyti rašiniuose, tačiau pasitelkiama

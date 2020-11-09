@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Waarom Apache OpenOffice: Gebruiksvriendelijk
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Waarom Apache OpenOffice: Gebruiksvriendelijk](/why/images/why_easy.png) # {.rfloatimg}
+![Waarom Apache OpenOffice: Gebruiksvriendelijk](/why/images/why_easy.png)
 
 Eenvoudige keuze, eenvoudig te installeren, eenvoudig te leren - Apache OpenOffice is de makkelijke keuze voor een officepakket. OpenOffice is geschikt voor beginnende gebruikers, maar als u andere officepakketten gebruikt hebt is dat ook prima. OpenOffice maakt  optimaal gebruik van wat u al weet - met bekende schermen en menu's - en ook van wat u al heeft  - door bestaande bestanden in te lezen zonder overtypen.
 

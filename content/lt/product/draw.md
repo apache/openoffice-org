@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Braižyklė
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Draw](/product/pix/draw.png)](/product/pix/draw-big.png "Didinti") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Draw](/product/pix/draw.png)](/product/pix/draw-big.png "Didinti")
 
 Braižykle kuriami paprasti eskizai, sudėtingi planai, valdomi
 piešiniai ir diagramos. Apdorojamų puslapių dydis siekia 300cm x 300cm

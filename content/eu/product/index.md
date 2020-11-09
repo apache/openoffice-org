@@ -1,4 +1,6 @@
 type=page
+image_css=rfloatimg
+list_css=product
 title=Apache OpenOffice-ren produktuen deskribapena
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=/product/styles.css
@@ -6,26 +8,26 @@ css=/product/styles.css
 Beste bulego-suite garrantzitsuenekin bateragarria, Apache OpenOffice askatasun osoz
 jaitsi, erabili eta banatu ahal da. [Jaitsi ezazu orain][1], eta eskuratu:
 
-![Apache OpenOffice?](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
   - [Writer](writer.html "Testu-prozesadorea"), edozertarako erabili ahal 
-den testu-prozesadorea, gutun laburrak idaztetik liburu osoak prestatzeraino. # { .product-writer }
+den testu-prozesadorea, gutun laburrak idaztetik liburu osoak prestatzeraino.
   - [Calc](calc.html "Kalkulu-orria"), kalkuluak eta azterketak egiteko eta 
 datuak txosten numerikoz edo grafiko ikusgarriz aurkezteko behar diren 
-baliabide guztiak dituen kalkulu-orri ahaltsua. # { .product-calc }
+baliabide guztiak dituen kalkulu-orri ahaltsua.
   - [Impress](impress.html "Aurkezpenetarako programa"), multimedia aurkezpenak 
-prestatzeko aplikazio arinen eta ahaltsuenetarikoa. # { .product-impress }
+prestatzeko aplikazio arinen eta ahaltsuenetarikoa.
   - [Draw](draw.html "Marrazketa bektorialerako lanabesa"), edozein marrazketa 
 egiteko balio duen lanabesa, diagrama errazetatik hiru dimentsioko 
-irudi dinamikotaraino. # { .product-draw }
+irudi dinamikotaraino.
   - [Base](base.html "Datu-base kudeatzailea"), taulak, formularioak, kontsultak eta 
 txostenak sortuz eta aldatuz datu-baseak erraztasun osoz maneiatzeko 
-datu-base kudeatzailea; dena Apache OpenOffice-ren barruan lan eginez. # { .product-base }
+datu-base kudeatzailea; dena Apache OpenOffice-ren barruan lan eginez.
   - [Math](math.html "Funtzio matematikoen sortzailea"), funtzio matematikoak 
 sortzeko, erabiltzailerentzako interfaze grafikoaz baliatuz edo zuzenean 
-idatziz ekuazio-editorean. # { .product-math }
+idatziz ekuazio-editorean.
 
-## Zergatik Apache OpenOffice? #{ .why }
+## Zergatik Apache OpenOffice?
 
 Apache OpenOffice eta **kalitatea** sinonimoak dira:
 

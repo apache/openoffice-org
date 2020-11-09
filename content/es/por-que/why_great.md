@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Por qué Apache OpenOffice: magnífico Software
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Por qué Apache OpenOffice: magnífico Software](/why/images/why_great.png) # {.rfloatimg}
+![Por qué Apache OpenOffice: magnífico Software](/why/images/why_great.png)
 
 Un software magnífico necesita de gente magnífica. Apache OpenOffice es el resultado de más de veinte años de ingeniería  de software de la más alta calidad. Diseñado desde el principio como **una única pieza de software**, Apache OpenOffice posee una consistencia y calidad del más alto nivel mundial.
 

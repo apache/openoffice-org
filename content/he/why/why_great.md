@@ -1,9 +1,10 @@
 type=page
+image_css=rfloatimg
 title=יתרונות Apache OpenOffice: תוכנה מצויינת
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=../rtl.css
 ~~~~~~
-![יתרונות Apache OpenOffice: תוכנה מצויינת](/why/images/why_great.png) # {.rfloatimg}
+![יתרונות Apache OpenOffice: תוכנה מצויינת](/why/images/why_great.png)
 
 תוכנה מצויינת דורשת אנשים מצויינים. Apache OpenOffice היא תוצר לאחר 20 שנות פיתוח מתמשך. מאחר ותוכננה במקור כתוכנה יחידה, התוכנות בה מציגות אחידות ביניהן. שיטת הפיתוח כ**קוד-פתוח** מבטיחה שהכל גלוי.
 

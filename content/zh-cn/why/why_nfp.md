@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=为何选择Apache OpenOffice: 非盈利目的
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![为何选择Apache OpenOffice：非盈利目的](/why/images/why_nfp.png) # {.rfloatimg}
+![为何选择Apache OpenOffice：非盈利目的](/why/images/why_nfp.png)
 
 大大小小的非盈利组织都开始使用Apache OpenOffice软件，这款软件能满足他们的需求，并有着相同的价值观。其**灵活的文字处理器，强大的电子表格，动态图形，数据库访问**及其他功能几乎满足办公软件套件的所有要求。
 

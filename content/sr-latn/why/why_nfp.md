@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Zašto Apache OpenOffice: nije za profit
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Zašto Apache OpenOffice: nije za profit](/why/images/why_nfp.png) # {.rfloatimg}
+![Zašto Apache OpenOffice: nije za profit](/why/images/why_nfp.png)
 
 Nije za profit (Not for Profit - NFP) organizacije svih veličina se okreću ka Apache OpenOffice-u - softveru koji zadovoljava njihove potrebe i dele njihove vrednosti. **Fleksibilan procesor za obradu teksta**, **moćna proračunska tabela**, **dinamična grafika**, **pristup bazi podataka** i druge funkcije, ispunjavaju sve zahteve jednog kancelarijskog paketa.
 

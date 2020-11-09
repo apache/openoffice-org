@@ -1,10 +1,11 @@
 type=page
+image_css=rfloatimg
 title=Why Apache OpenOffice
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 ## 为什么我应当使用Apache OpenOffice？
 
-![为何选择Apache OpenOffice](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![为何选择Apache OpenOffice](/images/AOO_logos/orb.jpg)
 
 Apache OpenOffice是一款先进的**开源** **办公软件套件**，它包含**文本文档**、**电子表格**、**演示文稿**、**绘图**、**数据库**等。 它能够支持**许多语言**并且在所有**普通计算机**上工作。它将你所有的数据以**国际开放标准格式**存储下来，并能够读写从其它常用办公软件包来的文件。它可以被完全**免费**下载并使用于**任何用途**。
 

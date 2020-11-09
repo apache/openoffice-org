@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Writer
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Zrzut ekranu Apache OpenOffice Writer](/product/pix/writer.png)](/product/pix/writer-big.png "Kliknij aby zobaczyć większą wersję") # {.rfloatimg}
+[![Zrzut ekranu Apache OpenOffice Writer](/product/pix/writer.png)](/product/pix/writer-big.png "Kliknij aby zobaczyć większą wersję")
 
 *Pozwala skupić się na pisaniu twoich pomysłów*
 

@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Kodėl būtent „Apache OpenOffice“: IT verslas
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Kodėl „Apache OpenOffice“: IT verslas](/why/images/why_oem.png) # {.rfloatimg}
+![Kodėl „Apache OpenOffice“: IT verslas](/why/images/why_oem.png)
 
 Versle „Apache OpenOffice“ gali tapti atskaitos tašku. IT versle „Apache OpenOffice“ gali teikti daug gerų dalykų. Lanksti tekstų rengyklė, galinga skaičiuoklė, įspūdinga pranešimų rengyklė, dinamiška braižyklė, išsami duomenynų rengyklė kartu su kitomis „Apache OpenOffice“ priemonėmis tenkina visus raštinės programų rinkiniui keliamus reikalavimus.
 

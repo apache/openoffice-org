@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Porquê o Apache OpenOffice: fácil de usar
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Porquê o Apache OpenOffice: fácil de usar](/why/images/why_easy.png) # {.rfloatimg}
+![Porquê o Apache OpenOffice: fácil de usar](/why/images/why_easy.png)
 
 Fácil de escolher, fácil de instalar, fácil de aprender - o Apache OpenOffice é a escolha fácil para um conjunto de programas de escritório. O OpenOffice é apropriado para iniciados, mas se já usou outro conjunto de escritório, também lhe serve. O OpenOffice fará uso total do que já sabe - através de ecrãs e menus familiares - e ainda do que tem - lendo ficheiros existentes sem nova digitação.
 

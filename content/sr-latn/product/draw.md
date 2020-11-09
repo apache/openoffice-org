@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Crtež Apache OpenOffice-a
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Draw](/product/pix/draw.png)](/product/pix/draw-big.png "Kliknite za veću sliku") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Draw](/product/pix/draw.png)](/product/pix/draw-big.png "Kliknite za veću sliku")
 
 *Moćan grafički paket*
 

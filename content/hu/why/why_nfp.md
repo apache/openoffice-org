@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Miért az Apache OpenOffice: Nonprofit szervezetek
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Miért az Apache OpenOffice: Nonprofit szervezetek](/why/images/why_nfp.png) # {.rfloatimg}
+![Miért az Apache OpenOffice: Nonprofit szervezetek](/why/images/why_nfp.png)
 
 A kisebb és nagyobb nonprofit (azaz nem nyereségorientált) szervezetek is az OpenOffice programcsomagot használják, mivel minden igényüket kielégíti és megosztja értékeiket. A **rugalmas szövegszerkesztő**, **erőteljes táblázatkezelő**, **dinamikus rajzoló program** és nem utolsósorban az **adatbázis kezelő**, mind megfelelnek egy irodai programcsomaggal szemben támasztott elvárásoknak.
 

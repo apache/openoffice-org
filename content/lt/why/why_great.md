@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Kodėl būtent „Apache OpenOffice“: kokybiška
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Kodėl „Apache OpenOffice“: šauni programinė įranga](/why/images/why_great.png) # {.rfloatimg}
+![Kodėl „Apache OpenOffice“: šauni programinė įranga](/why/images/why_great.png)
 
 Šauniai programinei įrangai reikia šaunių žmonių. „Apache OpenOffice“– tai virš 20 metų trunkančio tolydaus aukštos kokybės programinės įrangos projektavimo rezultatas. „Apache OpenOffice“ programinė įranga projektuota vientisai, todėl pasižymi pasaulinio lygio nuoseklumu ir kokybe. Atviroji programinės įrangos plėtosena reiškia, kad nėra jokių paslapčių.
 

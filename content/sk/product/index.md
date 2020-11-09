@@ -1,4 +1,6 @@
 type=page
+image_css=rfloatimg
+list_css=product
 title=Popis produktu Apache OpenOffice
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=../../product/styles.css
@@ -6,26 +8,25 @@ css=../../product/styles.css
 Kompatibilný s ostatnými hlavnými kancelárskymi balíkmi, Apache OpenOffice je voľný na
 stiahnutie, používanie a distribúciu. [Stiahnite si ho teraz][1] a získajte:
 
-![Apache OpenOffice?](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
   - [Writer](writer.html "Textový procesor") textový procesor môžete použiť na
     čokoľvek od písania krátkych listov až po produkciu celej knihy.
-    # { .product-writer }
   - [Calc](http://www.openoffice.org/product/calc.html "Tabuľkový procesor") výkonný tabuľkový procesor so všetkými nástrojmi
     potrebnými na výpočty, analýzu, a poskytovanie vašich dát v číselných správach
-    alebo vzrušujúcich grafoch. # { .product-calc }
+    alebo vzrušujúcich grafoch.
   - [Impress](http://www.openoffice.org/product/impress.html "Prezentačný program") najrýchlejší, najsilnejší spôsob
-    ako vytvoriť pôsobivé multimediálne prezentácie. # { .product-impress }
+    ako vytvoriť pôsobivé multimediálne prezentácie.
   - [Draw](http://www.openoffice.org/product/draw.html "Vektorový kresliaci nástroj") umožňuje tvoriť všetko od
-    jednoduchých diagramov až po dynamické 3D ilustrácie. # { .product-draw }
+    jednoduchých diagramov až po dynamické 3D ilustrácie.
   - [Base](base.html "Datbáza") vám umožňuje bez problémov manipulovať s databázami.
     Vytvárajte a meňte tabuľky, formuláre, dopyty a zostavy, všetko zvnútra
-    Apache OpenOffice. # { .product-base }
+    Apache OpenOffice.
   - [Math](math.html "Tvorca matematických funkcií") umožňuje vám vytvoriť
     matematické rovnice s grafickým užívateľským rozhraním alebo priamo písať
-    vaše vzorce do editoru rovníc. # { .product-math }
+    vaše vzorce do editoru rovníc.
 
-## Prečo Apache OpenOffice? #{ .why }
+## Prečo Apache OpenOffice?
 
 Apache OpenOffice je synonymom **kvality**
 

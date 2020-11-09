@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Porquê o Apache OpenOffice: programa gratuito
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Porquê o Apache OpenOffice: programa gratuito](/why/images/why_free.png) # {.rfloatimg}
+![Porquê o Apache OpenOffice: programa gratuito](/why/images/why_free.png)
 
 O Apache OpenOffice é um programa grátis. Isso significa que é livre para o transferir, livre para instalá-lo em quantos computadores quiser, livre para 
 dar cópias a quantas pessoas quiser. Pode usar o OpenOffice para qualquer fim, sem restrição: privado, educacional, administração pública, comercial ... 

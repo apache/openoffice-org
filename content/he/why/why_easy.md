@@ -1,9 +1,10 @@
 type=page
+image_css=rfloatimg
 title=יתרונות Apache OpenOffice: קלה לשימוש
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=../rtl.css
 ~~~~~~
-![יתרונות Apache OpenOffice: קלות שימוש](/why/images/why_easy.png) # {.rfloatimg}
+![יתרונות Apache OpenOffice: קלות שימוש](/why/images/why_easy.png)
 
 קל לבחור, להתקין, וללמוד את OpenOffice. חבילת-התוכנות מתאימה למתחילים, אך גם לאנשים שמכירים כבר תוכנות משרדיות אחרות. 
 תפריטים ותצוגות דומגים לחבילות תוכנה אחרות יאפשרו לך להתמצא מיד. בנוסף, אפשר לקרוא קבצים קיימים, מבלי צורך להקליד אותם שוב מחדש.

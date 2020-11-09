@@ -1,11 +1,12 @@
 type=page
+image_css=rfloatimg
 title=יתרונות Apache OpenOffice
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=../rtl.css
 ~~~~~~
 ## יתרונות Apache OpenOffice?
 
-![למה לבחור ב-Apache OpenOffice](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![למה לבחור ב-Apache OpenOffice](/images/AOO_logos/orb.jpg)
 
 Apache OpenOffice הינה תוכנת קוד-פתוח הניתנת להורדה ושימוש **בחינם**, לכל מטרה. היא גם אחת מבין התוכנות המובילות ליצירת מסמכי-טקסט, גיליונות-עבודה, מצגות, קבצים גרפיים, מסדי-נתונים ועוד. חבילת-התוכנות ניתנת להתקנה בשפות שונות ובכל מערכות-ההפעלה הנפוצות. 
 Apache OpenOffice שומרת נתונים **בתקן בינלאומי**  ומסוגלת לקרוא ולשמור קבצים מחבילות תוכנה אחרות כמו Microsoft Office. 

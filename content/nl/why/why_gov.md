@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Waarom Apache OpenOffice: Overheden
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Why Apache OpenOffice: Public administrations](/why/images/why_gov.png) # {.rfloatimg}
+![Why Apache OpenOffice: Public administrations](/why/images/why_gov.png)
 
 Overheden en mensen die werken op **alle niveaus van de overheid** (lokaal / federaal / provinciaal / regionaal / nationaal etc) vinden dat Apache OpenOffice hun ideale software-oplossing is. De combinatie van een **flexibele tekstbewerker**, een **krachtig werkblad**, **dynamische afbeeldingen**, **toegang tot databases** en meer voldoet aan alle dagelijkse benodigdheden van een normale drukke kantoorwerker.
 

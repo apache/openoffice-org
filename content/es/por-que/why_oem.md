@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Por qué Apache OpenOffice: Consultores informáticos
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Por qué Apache OpenOffice: Consultores informáticos](/why/images/why_oem.png) # {.rfloatimg}
+![Por qué Apache OpenOffice: Consultores informáticos](/why/images/why_oem.png)
 
 **Construya su negocio** alrededor de Apache OpenOffice. Si está en el negocio de la informática, Apache OpenOffice puede significar buenos negocios para usted. El **flexible procesador de palabras**, la **potente planilla de cálculos**, los **gráficos dinámicos**, el **acceso a bases de datos** y más satisfacen todos los requerimientos de un paquete de oficina.
 

@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Math
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Zrzut ekranu Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Kliknij aby zobaczyć większą wersję") # {.rfloatimg}
+[![Zrzut ekranu Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Kliknij aby zobaczyć większą wersję")
 
 *Simple to create equations and formulae for your documents!*
 

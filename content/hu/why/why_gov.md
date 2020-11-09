@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Miért az Apache OpenOffice: közigazgatás
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Miért az Apache OpenOffice: közigazgatás](/why/images/why_gov.png) # {.rfloatimg}
+![Miért az Apache OpenOffice: közigazgatás](/why/images/why_gov.png)
 
 A közigazgatásban és **a kormányzás minden szintjén** (helyi / járási / régiószintű / nemzeti, stb.) dolgozók az Apache OpenOffice programot ideális szoftvermegoldásnak találják. A **rugalmas szövegszerkesztő**, a **hatékony táblázatkezelő**, a **dinamikus grafikai program**, az **adatbáziskezelő** és más összetevők egységeként az OpenOffice tökéletesen megfelel egy tipikus, elfoglalt irodai dolgozó mindennapi munkavégzéséhez szükséges elvárásoknak.
 

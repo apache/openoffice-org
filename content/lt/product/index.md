@@ -1,20 +1,22 @@
 type=page
+image_css=rfloatimg
+list_css=product
 title=Programos
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=/product/styles.css
 ~~~~~~
 Laisvųjų ir atvirųjų raštinės programų rinkinys „Apache OpenOffice“ suderinamas su kitomis žinomomis raštinės programomis. Rinkinį galima gauti, naudoti ir platinti nemokamai. [Gauti dabar][1]. Rinkinyje:
 
-![Apache OpenOffice?](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
-  - [rašykle](writer.html "Tekstų rengimo priemonė") kuriami ir taisomi laiškų, ataskaitų, dokumentų, tinklalapių tekstai bei piešiniai; # { .product-writer }
-  - [skaičiuokle](calc.html "Lentelinio skaičiavimo priemonė") nagrinėjami skaičiuotėse išdėstyti duomenys, tvarkomi skaičiuotėse sudaryti sąrašai; # { .product-calc }
-  - [pranešimų rengykle](impress.html "Skaidrinių pranešimų rengimo priemonė") kuriami ir taisomi skaidrių rodymams, susitikimams, tinklalapiams skirti pranešimai; # { .product-impress }
-  - [braižykle](draw.html "Vektorinio braižymo priemonė") kuriami ir taisomi brėžiniai, ryšių diagramos, logotipai; # { .product-draw }
-  - [duomenynų rengykle](base.html "Duomenynų rengimo priemonė") tvarkomi duomenynai, kuriamos užklausos ir ataskaitos, rikiuojami duomenys; # { .product-base }
-  - [matematikos rašykle](math.html "Matematinių funkcijų rašymo priemonė") kuriamos ir taisomos mokslinės formulės bei lygtys. # { .product-math }
+  - [rašykle](writer.html "Tekstų rengimo priemonė") kuriami ir taisomi laiškų, ataskaitų, dokumentų, tinklalapių tekstai bei piešiniai;
+  - [skaičiuokle](calc.html "Lentelinio skaičiavimo priemonė") nagrinėjami skaičiuotėse išdėstyti duomenys, tvarkomi skaičiuotėse sudaryti sąrašai;
+  - [pranešimų rengykle](impress.html "Skaidrinių pranešimų rengimo priemonė") kuriami ir taisomi skaidrių rodymams, susitikimams, tinklalapiams skirti pranešimai;
+  - [braižykle](draw.html "Vektorinio braižymo priemonė") kuriami ir taisomi brėžiniai, ryšių diagramos, logotipai;
+  - [duomenynų rengykle](base.html "Duomenynų rengimo priemonė") tvarkomi duomenynai, kuriamos užklausos ir ataskaitos, rikiuojami duomenys;
+  - [matematikos rašykle](math.html "Matematinių funkcijų rašymo priemonė") kuriamos ir taisomos mokslinės formulės bei lygtys.
 
-## Kodėl būtent „Apache OpenOffice“? #{ .why }
+## Kodėl būtent „Apache OpenOffice“?
 
 „Apache OpenOffice“ – kokybiškas:
 

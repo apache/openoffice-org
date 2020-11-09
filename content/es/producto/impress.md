@@ -1,10 +1,11 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Impress
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 *Más potencia para sus presentaciones*
 
-[![Pantallazo de Apache OpenOffice Impress](/es/producto/pix/impress.png)](/es/producto/pix/impress-big.png "Haga clic para aumentar tamaño") # {.rfloatimg}
+[![Pantallazo de Apache OpenOffice Impress](/es/producto/pix/impress.png)](/es/producto/pix/impress-big.png "Haga clic para aumentar tamaño")
 
 **Impress** es una herramienta excepcional para crear presentaciones multimedia 
 efectivas. Sus presentaciones destacarán con los cliparts en 2D y 3D, efectos 

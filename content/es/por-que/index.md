@@ -1,10 +1,11 @@
 type=page
+image_css=rfloatimg
 title=Por qué Apache OpenOffice
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 ## ¿Por qué debería usar Apache OpenOffice?
 
-![Por qué Apache OpenOffice?](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Por qué Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
 **Apache OpenOffice** es una **suite de oficina** de **código abierto** líder para el **procesamiento de palabras**, **hojas de cálculo**, **presentaciones**, **gráficos**, **bases de datos** y más. Se encuentra disponible en **varios idiomas** y funciona en todos los **sistemas comunes**. Almacena todos sus datos en un **formato que es un estándar internacional** y puede también leer y escribir archivos producidos por otros paquetes de oficina. Puede ser descargado y utilizado completamente **sin cargo** para **cualquier propósito**.
 

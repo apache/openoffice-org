@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=为何选择Apache OpenOffice：教育
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![为何选择Apache OpenOffice：教育](/why/images/why_edu.png) # {.rfloatimg}
+![为何选择Apache OpenOffice：教育](/why/images/why_edu.png)
 
 各级教育机构（小学，中学，大学和各级学院……）都发现Apache OpenOffice完全可以满足师生的要求。**灵活的文本编辑器**，**强大的电子表格**，**灵活的绘图**，**数据库访问**等等，可以满足大家对一个办公软件包的所有需求。
 

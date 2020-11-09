@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Miért az Apache OpenOffice: Szabad/Nyílt forrású szoftver
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Miért az Apache OpenOffice: Szabad/Nyílt forrású szoftver](/why/images/why_foss.png) # {.rfloatimg}
+![Miért az Apache OpenOffice: Szabad/Nyílt forrású szoftver](/why/images/why_foss.png)
 
 A Szabad/Nyílt forrású szoftver (F/OSS) támogatók végfelhasználóként és hozzájárulóként egyaránt keresik az Apache OpenOffice programot. A **rugalmas szövegszerkesztő**, a **hatékony táblázatkezelő**, a **dinamikus grafikai program**, az **adatbáziskezelő** és más összetevők egységeként az OpenOffice-t többmillió felhasználó választotta irodai programcsomagjának.
 

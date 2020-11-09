@@ -1,9 +1,10 @@
 type=page
+image_css=rfloatimg
 title=יתרונות Apache OpenOffice: גופי חינוך
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=../rtl.css
 ~~~~~~
-![יתרונות Apache OpenOffice: גופי-חינוך](/why/images/why_edu.png) # {.rfloatimg}
+![יתרונות Apache OpenOffice: גופי-חינוך](/why/images/why_edu.png)
 
 גופי-חינוך ברמות שונות (יסודי, חטיבת-ביניים ותיכונים, אוניברסיטאות ומכללות) מוצאים כי Apache OpenOffice מתאימה לצרכיהם של מורים ותלמידים. 
 שילוב של **עורך טקסט גמיש**, **גיליונות-עבודה בעלי-עוצמה**, **גרפיקה דינמית**, **גישה לבסיסי-נתונים** ועוד עונים על כל הדרישות של מי שעובד מול מחשב במשרד.

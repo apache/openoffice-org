@@ -1,9 +1,10 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Math
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=../rtl.css
 ~~~~~~
-[![Screendump of Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Click for bigger version") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Click for bigger version")
 
 *יצירת משוואות ונוסחאות לטובת מסמכים*
 

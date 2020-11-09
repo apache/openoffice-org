@@ -1,7 +1,7 @@
+type=page
 title=Apache OpenOffice - Privacy
-notice=http://www.apache.org/licenses/LICENSE-2.0
+notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-
 Information about your use of this website is collected using server access
 logs and a tracking cookie. The collected information consists of the
 following:

@@ -1,9 +1,10 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Impress
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=../rtl.css
 ~~~~~~
-[![Screendump of Apache OpenOffice Impress](/product/pix/impress.png)](/product/pix/impress-big.png "Click for bigger version") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Impress](/product/pix/impress.png)](/product/pix/impress-big.png "Click for bigger version")
 
 *יותר כח למצגות שלך*
 

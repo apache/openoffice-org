@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Miért az Apache OpenOffice: vállalkozások
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Miért az Apache OpenOffice: vállalkozások](/why/images/why_sme.png) # {.rfloatimg}
+![Miért az Apache OpenOffice: vállalkozások](/why/images/why_sme.png)
 
 A 'sarki fűszerestől' a nagyvállalat óriásokig Vállalkozások sokasága választja az Apache OpenOffice programot üzleti dokumentumainak kezelésére.  A **rugalmas szövegszerkesztő**, a **hatékony táblázatkezelő**, a **dinamikus grafikai program**, az **adatbáziskezelő** és más összetevők egységeként az OpenOffice tökéletesen megfelel egy irodai szoftverrel szemben támasztott elvárásoknak.
 

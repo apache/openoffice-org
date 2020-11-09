@@ -1,10 +1,11 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Calc
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 *La hoja de cálculo multipropósito*
 
-[![Pantallazo de Apache OpenOffice Calc](/es/producto/pix/calc.png)](/es/producto/pix/calc-big.png "Haga clic para aumentar tamaño") # {.rfloatimg}
+[![Pantallazo de Apache OpenOffice Calc](/es/producto/pix/calc.png)](/es/producto/pix/calc-big.png "Haga clic para aumentar tamaño")
 
 **Calc** es el programa de hoja de cálculo que siempre ha deseado. Para los 
 recién llegados es intuitiva y fácil de aprender; los profesionales mineros de 

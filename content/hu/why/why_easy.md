@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Miért az Apache OpenOffice: könnyű használni
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Miért az Apache OpenOffice? Könnyű használni](/why/images/why_easy.png) # {.rfloatimg}
+![Miért az Apache OpenOffice? Könnyű használni](/why/images/why_easy.png)
 
 Könnyű kiválasztani, könnyű feltelepíteni, könnyű megtanulni - az Apache OpenOffice könnyű választás az irodai programcsomagok között. Az OpenOffice teljesen kezdőknek is megfelelő, de ha Ön már használt másik programcsomagot, akkor sem lesz gond. Az OpenOffice - az ismerős képernyőkön és menükön keresztül - teljes mértékben hasznosítani fogja az Ön eddigi tapasztalatait és a fájlokat, amiket eddig létrehozott - nincs szükség az újraírásukra.
 

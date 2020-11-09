@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=为何选择Apache OpenOffice：企业
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![为何选择Apache OpenOffice：企业](/why/images/why_sme.png) # {.rfloatimg}
+![为何选择Apache OpenOffice：企业](/why/images/why_sme.png)
 
 许多企业，从街边的小店到大型集团，都在转向Apache OpenOffice以增强他们的商业竞争力。**灵活的文本编辑器**，**强大的电子表格**，**灵活的绘图**，**数据库访问**等等，可以满足大家对一个办公软件包的所有需求。
 

@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Kodėl būtent „Apache OpenOffice“: paprasta
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Kodėl „Apache OpenOffice“: lengva naudotis](/why/images/why_easy.png) # {.rfloatimg}
+![Kodėl „Apache OpenOffice“: lengva naudotis](/why/images/why_easy.png)
 
 Raštinės programų rinkinį „Apache OpenOffice“ lengva įsidiegti, lengva įvaldyti. Rinkinys tinka pradžiokams. Prieš tai naudojusiesiems kitas raštinės programas žinia – irgi gera. „Apache OpenOffice“ programose stebint jau pažįstamus ekrano vaizdus bei meniu sąrašus,  pravers visos lig šiol sukauptos žinios, o anksčiau sukurtų bylų iš naujo įvesti irgi nereikės, nes „Apache OpenOffice“ jas greičiausiai perskaitys.
 

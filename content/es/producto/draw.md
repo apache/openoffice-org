@@ -1,10 +1,11 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Draw
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 *El poderoso paquete gráfico*
 
-[![Pantallazo de Apache OpenOffice Draw](/es/producto/pix/draw.png)](/es/producto/pix/draw-big.png "Haga clic para aumentar tamaño") # {.rfloatimg}
+[![Pantallazo de Apache OpenOffice Draw](/es/producto/pix/draw.png)](/es/producto/pix/draw-big.png "Haga clic para aumentar tamaño")
 
 Desde un borrador rápido hasta un complejo plano, **Draw** le proporciona las 
 herramientas para comunicar con gráficos y diagramas. Con un tamaño de página de 

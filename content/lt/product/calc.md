@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Skaičiuoklė
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Calc](/product/pix/calc.png)](/product/pix/calc-big.png "Didinti") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Calc](/product/pix/calc.png)](/product/pix/calc-big.png "Didinti")
 
 Skaičiuoklė – tai lentelinio skaičiavimo programa. Pradedantieji džiaugsis
 paprastu ir suprantamu jos valdymu, o profesionalai – išsamiomis techninėmis jos

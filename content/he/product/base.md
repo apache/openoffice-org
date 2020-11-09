@@ -1,9 +1,10 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Base
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=../rtl.css
 ~~~~~~
-[![Screendump of Apache OpenOffice Base](/product/pix/base.png)](/product/pix/base-big.png "הגדל") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Base](/product/pix/base.png)](/product/pix/base-big.png "הגדל")
 
 **Base** היא תוכנה לניהול מסדי-נתונים, שתוכננה לענות על הדרישות של מגוון משתמשים, החל ממעקב אחרי ספריית תקליטורים שלך, ועד יצירת דו"ח מכירות חודשי עבור הארגון שלך.
 

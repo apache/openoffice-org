@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Writer
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Obrazovka Apache OpenOffice Writer](/product/pix/writer.png)](/product/pix/writer-big.png "Kliknite pre zväčšenie") # {.rfloatimg}
+[![Obrazovka Apache OpenOffice Writer](/product/pix/writer.png)](/product/pix/writer-big.png "Kliknite pre zväčšenie")
 
 *Pre všetky vaše dokumenty*
 

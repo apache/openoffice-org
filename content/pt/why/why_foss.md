@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Porquê o OpenOffice: programa de código aberto/gratuito
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Porquê o OpenOffice: programa de código aberto/gratuito](/why/images/why_foss.png) # {.rfloatimg}
+![Porquê o OpenOffice: programa de código aberto/gratuito](/why/images/why_foss.png)
 
 Os promotores de programas de código aberto/gratuito (F/OSS) estão a virar-se para o Apache OpenOffice tanto como utilizadores finais como como colaboradores. 
 Com o **processador de texto flexível**, a **poderosa folha de cálculo**, **gráficos dinâmicos**, **acesso a bases de dados** e mais, o OpenOffice é o 

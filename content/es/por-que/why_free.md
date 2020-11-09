@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Por qué Apache OpenOffice: es libre
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Por qué Apache OpenOffice: es libre](/why/images/why_free.png) # {.rfloatimg}
+![Por qué Apache OpenOffice: es libre](/why/images/why_free.png)
 
 Apache OpenOffice es software libre. Esto significa que usted es libre de descargarlo, libre de instalarlo en cuantas PC desee, libre de distribuir copias a cuantas personas desee. Puede utilizar Apache OpenOffice para cualquier propósito sin restricciones: privado, educacional, administración pública, comercial... Libre, realmente libre.
 

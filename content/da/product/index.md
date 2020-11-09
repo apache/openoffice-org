@@ -1,4 +1,6 @@
 type=page
+image_css=rfloatimg
+list_css=product
 title=Apache OpenOffice Produkt Beskrivelse
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=/product/styles.css
@@ -6,26 +8,26 @@ css=/product/styles.css
 Kompatibel med andre store office pakker, er Apache OpenOffice er gratis at hente,
 bruge og distribuere.
 
-![Apache OpenOffice?](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
   - [Writer](writer.html "Wordprocessor") et tekstredigerings program, du kan
     bruge til alt, lige fra at skrive et hurtigt brev til produktionen af en
-    hel bog. # { .product-writer }
+    hel bog.
   - [Calc](calc.html "Spreadsheet") et kraftfulgt regneark, med alle de værktøjer
     du behøver til at regne, analyserer og præsenterer dine numeriske data, både
-    som rapporter eller som grafik. # { .product-calc }
+    som rapporter eller som grafik.
   - [Impress](impress.html "Presentation program") den hurtigste, mest effektive
-    måde at skabe effektive multimediepræsentationer. # { .product-impress }
+    måde at skabe effektive multimediepræsentationer.
   - [Draw](draw.html "Vector drawing tool") lader dig skabe alt fra simple
-    diagrammer til dynamiske 3D illustrationer. # { .product-draw }
+    diagrammer til dynamiske 3D illustrationer.
   - [Base](base.html "Database") lader dig flydende manipulerer databaser. Tilføje
     eller redigerer tabeller, formularer, forespørgsler og rapporter alt sammen
-    inde fra Apache OpenOffice. # { .product-base }
+    inde fra Apache OpenOffice.
   - [Math](math.html "Mathematical function creator") lader dig skabe matematiske
     ligninger ved hjælp af en grafisk brugerflade eller ved direkte at indtaste
-    dine formularer ind i lignings redigeringsværktøjet. # { .product-math }
+    dine formularer ind i lignings redigeringsværktøjet.
 
-## Hvorfor vælge Apache OpenOffice? #{ .why }
+## Hvorfor vælge Apache OpenOffice?
 
 Apache OpenOffice er synonymt med **kvalitet**:
 

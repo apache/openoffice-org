@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=为何选择Apache OpenOffice：免费软件
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![为何选择Apache OpenOffice：免费软件](/why/images/why_free.png) # {.rfloatimg}
+![为何选择Apache OpenOffice：免费软件](/why/images/why_free.png)
 
 Apache OpenOffice是一款免费软件。这意味着你可以免费下载，免费安装到任意数量的电脑上，随意将这款软件复制给其他人。你可以将OpenOffice使用于任何目的而无限制：个人，教育，公务，商务……真正的免费，真正的自由。
 

@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Зашто Apache OpenOffice: лак за коришћење
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Зашто Apache OpenOffice: лак за коришћење](/why/images/why_easy.png) # {.rfloatimg}
+![Зашто Apache OpenOffice: лак за коришћење](/why/images/why_easy.png)
 
 Лак за одабир, једноставан за инсталацију, лак за учење - Apache OpenOffice је једноставан 
 избор за канцеларијски програмски пакет. OpenOffice је погодан за апсолутне почетнике, 

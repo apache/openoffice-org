@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=ODF: „Windows“ negali atversti bylos!
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Kodėl „Apache OpenOffice“: atvirojo dokumento forma](/why/images/shell.png) # {.rfloatimg}
+![Kodėl „Apache OpenOffice“: atvirojo dokumento forma](/why/images/shell.png)
 
 Kažkur matyta?
 

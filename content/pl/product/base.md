@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Base
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Zrzut ekranu Apache OpenOffice Base](/product/pix/base.png)](/product/pix/base-big.png "Kliknij aby zobaczyć większą wersję") # {.rfloatimg}
+[![Zrzut ekranu Apache OpenOffice Base](/product/pix/base.png)](/product/pix/base-big.png "Kliknij aby zobaczyć większą wersję")
 
 **Base** is a fully featured desktop database management system, designed to
 meet the needs of a broad array of users, from tracking a personal CD collections, 

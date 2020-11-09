@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Zašto OpenOffice.org: besplatan/program otvorenog koda
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Zašto OpenOffice.org: besplatan/program otvorenog koda](/why/images/why_foss.png) # {.rfloatimg}
+![Zašto OpenOffice.org: besplatan/program otvorenog koda](/why/images/why_foss.png)
 
 Zagovornici besplatnog / programa otvorenog koda (Free/Open-Source Software - F/OSS) okreću se Apache OpenOffice-u i kao krajnji korisnici i kao saradnici. Sa svojim **fleksibilnim procesorom za obradu teksta**, **moćnom proračunskom tabelom**, **dinamičnom grafikom**, **pristupom bazi podataka** i drugim funkcijama, OpenOffice je kancelarijski paket izbora miliona korisnika.
 

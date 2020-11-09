@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Kodėl būtent „Apache OpenOffice“?
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Kodėl būtent „Apache OpenOffice“?](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Kodėl būtent „Apache OpenOffice“?](/images/AOO_logos/orb.jpg)
 
 „Apache OpenOffice“ – tai pasaulyje pirmaujantis atvirųjų raštinės programų rinkinys, skirtas tekstams, skaičiavimo lentelėms, skaidriniams pranešimams, piešiniams, duomenynams ir kitiems dokumentams. Išverstas į daugelį kalbų, veikia visuose plačiai naudojamuose kompiuteriuose. Duomenis saugoja tarptautinio atvirojo standarto forma, skaito ir rašo kitų žinomų raštinės programų bylas. Galima gauti nemokamai ir naudoti visais raštinės tikslais.
 

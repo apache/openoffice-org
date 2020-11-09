@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Why Apache OpenOffice: Not for Profit
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Why Apache OpenOffice: Not for Profit](/why/images/why_nfp.png) # {.rfloatimg}
+![Why Apache OpenOffice: Not for Profit](/why/images/why_nfp.png)
 
 Not for Profit (NFP) organizations of all sizes are turning to Apache OpenOffice - software that meets their needs and shares their values. The **flexible word processor**, **powerful spreadsheet**, **dynamic graphics**, **database access** and more meet all the requirements for an office software package.
 

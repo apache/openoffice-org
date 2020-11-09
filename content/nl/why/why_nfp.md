@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Waarom Apache OpenOffice: Zonder winstoogmerk
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Why Apache OpenOffice: Not for Profit](/why/images/why_nfp.png) # {.rfloatimg}
+![Why Apache OpenOffice: Not for Profit](/why/images/why_nfp.png)
 
 Non-profit organisaties (NPO's) in alle grootten stappen over naar Apache OpenOffice - software die voldoet aan hun eisen en hun waarden deelt. De **flexibele tekstbewerker**, **krachtige werkbladen**, **dynamische afbeeldingen**, **toegang tot databases** en meer voldoet aan alle vereisten voor een software kantoorpakket.
 

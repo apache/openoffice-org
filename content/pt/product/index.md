@@ -1,4 +1,6 @@
 type=page
+image_css=rfloatimg
+list_css=product
 title=Apache OpenOffice Descrição do produto
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=/product/styles.css
@@ -6,27 +8,26 @@ css=/product/styles.css
 Compatível com outros importantes conjuntos de produtividade, o Apache OpenOffice 
 é grátis para transferir, usar e distribuir. [Transfira já][1] e obtenha:
 
-![Apache OpenOffice?](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
   - [Writer](writer.html "Processador de texto") um processador de texto que pode usar
     para escrever uma carta rapidamente ou para escrever um livro.
-    # { .product-writer }
   - [Calc](calc.html "Folha de cálculo") uma poderosa folha de cálculo com todas as
     ferramentas necessárias para calcular, analisar e mostrar os seus dados em relatórios
-    numéricos ou gráficos fabulosos. # { .product-calc }
+    numéricos ou gráficos fabulosos.
   - [Impress](impress.html "Apresentações") a maneira mais rápida, mais poderosa
-    para criar apresentações multimédia. # { .product-impress }
+    para criar apresentações multimédia.
   - [Draw](draw.html "Desenho vectorial") permite-lhe produzir tudo, desde
-    simples diagramas a ilustrações 3D dinâmicas. # { .product-draw }
+    simples diagramas a ilustrações 3D dinâmicas.
   - [Math](math.html "Criador de funções matemáticas") permite-lhe criar
     equações matemáticas com um ambiente gráfico de utilização ou digitando as suas fórmulas
-    no editor de equações. # { .product-math }
+    no editor de equações.
   - [Base](base.html "Base de dados") permite-lhe manipular bases de dados facilmente.
     Crie e modifique tabelas, formulários, pesquisas e relatórios, tudo dentro do
-    Apache OpenOffice. # { .product-base }
+    Apache OpenOffice.
   
 
-## Porquê o Apache OpenOffice? #{ .why }
+## Porquê o Apache OpenOffice?
 
 Apache OpenOffice é sinónimo de **qualidade**:
 

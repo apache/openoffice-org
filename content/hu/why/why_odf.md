@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=ODF dokumentumok kezelése (*.odt, *.ods, *.odp) az Apache OpenOffice programmal
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Miért az Apache OpenOffice: a nyílt dokumentum formátum (OpenDocument Format - ODF)](/why/images/shell.png) # {.rfloatimg}
+![Miért az Apache OpenOffice: a nyílt dokumentum formátum (OpenDocument Format - ODF)](/why/images/shell.png)
 
 ##"A Windows nem tudja megnyitni a fájlt"
 

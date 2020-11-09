@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Kodėl būtent „Apache OpenOffice“: PNV
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Kodėl „Apache OpenOffice“: PNV](/why/images/why_nfp.png) # {.rfloatimg}
+![Kodėl „Apache OpenOffice“: PNV](/why/images/why_nfp.png)
 
 Visų dydžių pelno nesiekiantys vienetai (PNV) gręžiasi į „Apache OpenOffice“ – programinę įrangą, tenkinančią jų poreikius ir puoselėjančią jų vertybes. Lanksti tekstų rengyklė, galinga skaičiuoklė, įspūdinga pranešimų rengyklė, dinamiška braižyklė, išsami duomenynų rengyklė kartu su kitomis „Apache OpenOffice“ priemonėmis tenkina visus raštinės programų rinkiniui keliamus reikalavimus.
 

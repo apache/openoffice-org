@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Porquê o Apache OpenOffice: empresas
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Porquê o Apache OpenOffice: empresas](/why/images/why_sme.png) # {.rfloatimg}
+![Porquê o Apache OpenOffice: empresas](/why/images/why_sme.png)
 
 Desde lojas de esquina até gigantes corporativos estão a voltar-se para o Apache OpenOffice para reforçar os seus negócios. O **processador de 
 texto flexível**, a **poderosa folha de cálculo**, **gráficos dinâmicos**, **acesso a bases de dados** e muito mais, atendem a todos os requisitos 

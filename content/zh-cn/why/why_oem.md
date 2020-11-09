@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=为何选择OpenOffice.org: IT业务
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![为何选择Apache OpenOffice: IT业务](/why/images/why_oem.png) # {.rfloatimg}
+![为何选择Apache OpenOffice: IT业务](/why/images/why_oem.png)
 
 在Apache OpenOffice 的基础上建立你的业务。如果你从事IT行业，OpenOffice 对你来说是一个很好的业务。其**灵活的文本编辑器、强大的电子表格、绘图、数据库访问**等等可以满足办公软件的所有需求。
 

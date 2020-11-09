@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Por qué Apache OpenOffice: Ámbito Empresarial
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Por qué Apache OpenOffice: Ámbito Empresarial](/why/images/why_sme.png) # {.rfloatimg}
+![Por qué Apache OpenOffice: Ámbito Empresarial](/why/images/why_sme.png)
 
 **Empresas** desde una pequeña tienda a corporaciones gigantes se están volcando a Apache OpenOffice para potenciar sus negocios. El **flexible procesador de palabras**, la **potente planilla de están**, los **gráficos dinámicos**, el **acceso a bases de datos** y mucho más responde a todos los requerimientos para un paquete de oficina.
 

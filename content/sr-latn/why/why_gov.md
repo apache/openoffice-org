@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Zašto Apache OpenOffice: javna uprava
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Zašto Apache OpenOffice: javna uprava](/why/images/why_gov.png) # {.rfloatimg}
+![Zašto Apache OpenOffice: javna uprava](/why/images/why_gov.png)
 
 Javna administracija i ljudi koji rade na svim nivoima **vlasti** (lokalnim / federalnim / regionalnim / nacionalnim itd.) uvideli su da je Apache OpenOffice njihovo idealno softversko rešenje. Kombinacija **fleksibilnog procesora za obradu teksta**, **moćne proračunske tabele**, **dinamične grafike**, **pristupa bazi podataka** i drugih funkcija, zadovoljava sve svakodnevne potrebe tipično uposlenog kancelarijskog radnika.
 

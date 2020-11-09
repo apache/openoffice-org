@@ -1,10 +1,11 @@
 type=page
+image_css=rfloatimg
 title=Hvorfor Apache OpenOffice
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 ## Hvorfor bør jeg bruke Apache OpenOffice?
 
-![Hvorfor Apache OpenOffice](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Hvorfor Apache OpenOffice](/images/AOO_logos/orb.jpg)
 
 Apache OpenOffice er den ledende **åpen-kildekode** **office-pakken** for **tekstbehandling**, **regneark**, **presentasjoner**, **grafikk**, **database** og mer. Den er tilgjengelig for **mange språk** og fungerer med alle **vanlige datamaskiner**. Den lagrer alle dine data i et **internasjonalt standardisert, åpent format** og kan også lese og skrive filer fra andre venlige office-pakker. Den kan lastes ned og brukes helt **gratis** for **alle formål**.
 

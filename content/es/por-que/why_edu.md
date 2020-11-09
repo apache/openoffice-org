@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Por qué Apache OpenOffice: Educación
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Por qué Apache OpenOffice: Educación](/why/images/why_edu.png) # {.rfloatimg}
+![Por qué Apache OpenOffice: Educación](/why/images/why_edu.png)
 
 Establecimientos educativos de todos los niveles (primarios, secundarios, terciarios, universitarios...) encontrarán en Apache OpenOffice una solución a las necesidades tanto de los profesores como de los estudiantes. El **flexible procesador de textos**, la **potente planilla de cálculos**, los **gráficos dinámicos**, el **acceso a bases de datos** y mucho más resuelve todos los requerimientos de un paquete de oficina.
 

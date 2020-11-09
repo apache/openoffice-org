@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Porqué Apache OpenOffice: Software Libre y de Código Abierto
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Porqué Apache OpenOffice: Software Libre y de Código Abierto](/why/images/why_foss.png) # {.rfloatimg}
+![Porqué Apache OpenOffice: Software Libre y de Código Abierto](/why/images/why_foss.png)
 
 Los defensores del **software libre de código abierto** (Free/Open-Source Software, F/OSS) se están volcando hacia Apache OpenOffice tanto como usuarios finales como contribuidores. Con su **flexible procesador de palabras**, **potente planilla de cálculos**, **gráficos dinámicos**, **acceso a bases de datos** y más, Apache OpenOffice es la suite de oficina elegida por millones de usuarios.
 

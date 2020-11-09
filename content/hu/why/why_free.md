@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Miért az Apache OpenOffice: ingyenes szoftver
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Miért az Apache OpenOffice: ingyenes szoftver](/why/images/why_free.png) # {.rfloatimg}
+![Miért az Apache OpenOffice: ingyenes szoftver](/why/images/why_free.png)
 
 Az Apache OpenOffice ingyenes szoftver. Ami annyit jelent, hogy Ön ingyenesen töltheti le, ingyenesen telepítheti annyi számítógépre, amennyire akarja és szabadon adhat annyi másolatot annyi embernek, amennyinek szeretne. Korlátozás nélkül használhatja az OpenOffice programot bármilyen célra: magán, oktatási, közigazgatási, üzleti... Ingyenes, valóban ingyenes.
 

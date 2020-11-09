@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Reading ODF Documents (*.odt, *.ods, *.odp) with Apache OpenOffice
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Why Apache OpenOffice: OpenDocument Format](/why/images/shell.png) # {.rfloatimg}
+![Why Apache OpenOffice: OpenDocument Format](/why/images/shell.png)
 
 ##"Windows cannot open this file"
 

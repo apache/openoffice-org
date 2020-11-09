@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Ler documentos ODF (*.odt, *.ods, *.odp) com o Apache OpenOffice
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Porquê o Apache OpenOffice: formato OpenDocument](/pt/why/images/shell.png) # {.rfloatimg}
+![Porquê o Apache OpenOffice: formato OpenDocument](/pt/why/images/shell.png)
 ##"O Windows não consegue abrir este ficheiro"
 
 Será que isto parece familiar?

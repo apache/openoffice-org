@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=为何选择OpenOffice.org: 免费开源软件
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![为何选择Apache OpenOffice: 免费开源软件](/why/images/why_foss.png) # {.rfloatimg}
+![为何选择Apache OpenOffice: 免费开源软件](/why/images/why_foss.png)
 
 免费开源软件倡导者正转向Apache OpenOffice作为终端用户和贡献者。OpenOffice以其**灵活的字处理器、强大的电子表格、动态图形、数据库访问**和更多其它功能成为数百万用户办公套件的不二选择。
 

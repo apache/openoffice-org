@@ -1,10 +1,11 @@
 type=page
+image_css=rfloatimg
 title=Prečo Apache OpenOffice
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 ## Prečo by som mal používať Apache OpenOffice?
 
-![Prečo Apache OpenOffice](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Prečo Apache OpenOffice](/images/AOO_logos/orb.jpg)
 
 Apache OpenOffice je hlavný **open-source** **softvérový kancelársky balík** na **spracovanie textu**, **prácu s tabuľkami**, **prezentácie**, **grafiku**, **databázy** a oveľa viac. je dostupný v **rôznych jazykoch** a pracuje na všetkých **bežných počítačoch**. Všetky vaše dáta ukladá v **štandardnom otvorenom medzinárodnom formáte** a tiež je schopný čítať a zapisovať súbory z ostatných bežných  softvérových kancelárskych balíčkov. Môže byť stiahnutý a používaný úplne **bez poplatkov** na **akýkoľvek účel**.
 

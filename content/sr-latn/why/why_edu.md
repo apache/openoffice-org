@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Zašto Apache OpenOffice: obrazovanje
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Zašto Apache OpenOffice: obrazovanje](/why/images/why_edu.png) # {.rfloatimg}
+![Zašto Apache OpenOffice: obrazovanje](/why/images/why_edu.png)
 
 Školske ustanove na svim nivoima (osnovno, srednje, više, univerzitet...) 
 smatraju da Apach OpenOffice zadovoljava potrebe nastavnika i studenata. 

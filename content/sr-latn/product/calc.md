@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Račun Apache OpenOffice-a
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Calc](/product/pix/calc.png)](/product/pix/calc-big.png "Kliknite za veću sliku") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Calc](/product/pix/calc.png)](/product/pix/calc-big.png "Kliknite za veću sliku")
 
 *Proračunska tabela (spreadsheet) za sve svrhe*
 

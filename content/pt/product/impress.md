@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Apache OpenOffice Impress
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Ecrã do Apache OpenOffice Impress](/product/pix/impress.png)](/product/pix/impress-big.png "Clique para ampliar") # {.rfloatimg}
+[![Ecrã do Apache OpenOffice Impress](/product/pix/impress.png)](/product/pix/impress-big.png "Clique para ampliar")
 
 *Mais poder nas suas apresentações*
 

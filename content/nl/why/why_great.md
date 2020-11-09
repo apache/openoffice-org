@@ -1,8 +1,9 @@
 type=page
+image_css=rfloatimg
 title=Waarom Apache OpenOffice: Geweldige software
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Why Apache OpenOffice: Great Software](/why/images/why_great.png) # {.rfloatimg}
+![Why Apache OpenOffice: Great Software](/why/images/why_great.png)
 
 Geweldige software vereist fantastische mensen. Apache OpenOffice is het resultaat van meer dan twintig jaar aan voortdurende, hoge kwaliteit, bouwen aan software. Vanaf het begin ontworpen als een **één stuk software**, bezit Apache OpenOffice een consistentie en een kwaliteit van wereldklasse. Het **open-source**-ontwikkelingsmodel betekent dat er geen geheimen zijn.
 
