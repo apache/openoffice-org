@@ -8,24 +8,25 @@ css=/product/styles.css
 Compatible with other major office suites, Apache OpenOffice is free to
 download, use, and distribute. [Download it now][1], and get:
 
-![Apache OpenOffice?](/images/AOO_logos/orb.jpg) 
+![Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
   - [Writer](writer.html "Wordprocessor") a word processor you can use for
     anything from writing a quick letter to producing an entire book.
   - [Calc](calc.html "Spreadsheet") a powerful spreadsheet with all the tools
     you need to calculate, analyze, and present your data in numerical reports
-    or sizzling graphics. 
+    or sizzling graphics.
   - [Impress](impress.html "Presentation program") the fastest, most powerful
-    way to create effective multimedia presentations. 
+    way to create effective multimedia presentations.
   - [Draw](draw.html "Vector drawing tool") lets you produce everything from
-    simple diagrams to dynamic 3D illustrations. 
+    simple diagrams to dynamic 3D illustrations.
   - [Base](base.html "Database") lets you manipulate databases seamlessly.
     Create and modify tables, forms, queries, and reports, all from within
-    Apache OpenOffice. 
+    Apache OpenOffice.
   - [Math](math.html "Mathematical function creator") lets you create
     mathematical equations with a graphic user interface or by directly typing
-    your formulas into the equation editor. 
+    your formulas into the equation editor.
 
+## Why Apache OpenOffice?
 
 Apache OpenOffice is synonymous with **quality**:
 

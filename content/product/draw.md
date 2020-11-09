@@ -3,7 +3,7 @@ image_css=rfloatimg
 title=Apache OpenOffice Draw
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Draw](/product/pix/draw.png)](/product/pix/draw-big.png "Click for bigger version") 
+[![Screendump of Apache OpenOffice Draw](/product/pix/draw.png)](/product/pix/draw-big.png "Click for bigger version")
 
 *Makes drawing business processes and diagrams a snap!*
 
