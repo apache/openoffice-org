@@ -30,6 +30,7 @@ This describes the Simple Groovy templates (GSP) that are used to build the site
    - content.header (optional)
    - content.title (optional)
    - content.css (optional)
+   - content.css2 (optional)
    - content.image_css (optional)
    - content.list_css (optional)
    - content.bodytag
@@ -51,7 +52,7 @@ This describes the Simple Groovy templates (GSP) that are used to build the site
    - content.rightnav (optional)
    - `/footer.html`
 
-   The CSS file that is used for these pages is `/css/ooo.css`
+   The CSS file that is used for these pages is `/css/ooo.css`. If provided then `content.css` and `content.css2` are included afterwards allowing for classes to be overriden.
    
 1. `brand.gsp`
    This template is used to generate the top / branding portion of each page, and is included with SSI.
