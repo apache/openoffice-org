@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.CreateAToolbar.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2008/10/20 11:29:27 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Office">
+
+<keywords>
+	<keyword>create</keyword>
+	<keyword>toolbar</keyword>
+	<keyword>runtime</keyword>
+</keywords>
+
+<authors>
+	<author id="1" initial="true" email="" copyright="Josef Frysak">Josef Frysak</author>
+</authors>
+
+<question heading="Create a toolbar">How to create a toolbar at runtime?
+</question>
+
+<answer>
+<p>Use the &quot;ModuleUIConfigurationManagerSupplier&quot; service to get a document</p>
+<p>type specific user interface manager (for Writer, for Calc, ...). Next</p>
+<p>call the &quot;createSettings&quot; function to create a new toolbar. Now</p>
+<p>configurate the newly created toolbar, by using the properties of the</p>
+<p>newly created toolbar.</p>
+<p>For further details see http://wi.wu-wien.ac.at/rgf/diplomarbeiten/BakkStuff/2008/200809_Frysak/200809_Frysak_Automating_OOo_ooRexx_Nutshells.pdf.</p>
+<listing>-- try to get a script context, will be .nil, if script was not invoked by OOo
+x_ScriptContext = uno.getScriptContext()
+if (x_ScriptContext &lt;&gt; .nil) then
+do
+   -- invoked by OOo as a macro
+
+   -- get context
+   x_ComponentContext = x_ScriptContext~getComponentContext
+   -- get desktop (an XDesktop)
+   x_Desktop  = x_ScriptContext~getDesktop
+   -- get current document
+   x_Document = x_ScriptContext~getDocument
+end
+else  
+do
+   -- called from outside of OOo, create a connection
+
+   -- connect to Open Office and get component context
+   x_ComponentContext = UNO.connect()
+   -- create a desktop service and its interface
+   service = &quot;{%see com.sun.star.frame.Desktop}&quot;
+   s_Desktop = x_ComponentContext~getServiceManager~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}~createInstance(service)
+   x_Desktop = s_Desktop~{%see com.sun.star.frame.XDesktop%XDesktop}
+   -- get the last active document
+   x_Document = x_Desktop~getCurrentComponent()  
+end
+
+
+
+
+-- define where to store the toolbar
+ToolbarURL = &quot;private:resource/toolbar/custom_exampletoolbar&quot;
+
+-- get the user interface configuration
+x_MultiServiceFactory = x_ComponentContext~getServiceManager()~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+configsupplier = &quot;{%see com.sun.star.ui.ModuleUIConfigurationManagerSupplier}&quot;
+s_Supplier = x_MultiServiceFactory~createInstance(configsupplier)
+x_Supplier = s_Supplier~{%see com.sun.star.ui.XModuleUIConfigurationManagerSupplier%XModuleUIConfigurationManagerSupplier}
+
+-- the document type this toolbar is bound to
+DocumentType = &quot;{%see com.sun.star.text.TextDocument}&quot;
+
+-- get the user interface configuration of writer
+x_UIConfigurationManager = x_Supplier~getUIConfigurationManager(DocumentType)
+
+-- create a new toolbar for writer  
+x_IndexContainer = x_UIConfigurationManager~createSettings()
+
+-- configure toolbar
+-- set name of toolbar
+x_Propertyset = x_IndexContainer~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+x_Propertyset~setPropertyValue(&quot;UIName&quot;, &quot;Bakk Statusbar&quot;)
+
+-- configure toolbar element
+DefaultButton = bsf.getConstant(&quot;{%see com.sun.star.ui.ItemType}&quot;, &quot;DEFAULT&quot;)
+
+toolbarbutton = uno.CreateArray(.UNO~PROPERTYVALUE, 4)
+
+MacroURL = &quot;vnd.sun.star.script:BakkMacros.w_CreateStyleCode.rex?language=ooRexx&amp;location=user&quot;
+toolbarbutton[1] = uno.createProperty(&quot;CommandURL&quot;, MacroURL)
+toolbarbutton[2] = uno.createProperty(&quot;Label&quot;, &quot;Create Style: code&quot;)
+toolbarbutton[3] = uno.createProperty(&quot;Type&quot;, DefaultButton)
+toolbarbutton[4] = uno.createProperty(&quot;Visible&quot;, .true)
+
+-- add toolbar element
+x_IndexContainer~insertByIndex(0, toolbarbutton)
+
+-- configure another toolbar element
+MacroURL = &quot;vnd.sun.star.script:BakkMacros.w_ImportCode.rex?language=ooRexx&amp;location=user&quot;
+toolbarbutton[1] = uno.createProperty(&quot;CommandURL&quot;, MacroURL)
+toolbarbutton[2] = uno.createProperty(&quot;Label&quot;, &quot;Import Code from GVim&quot;)
+toolbarbutton[3] = uno.createProperty(&quot;Type&quot;, DefaultButton)
+toolbarbutton[4] = uno.createProperty(&quot;Visible&quot;, .true)
+
+-- and add it at second position
+x_IndexContainer~insertByIndex(1, toolbarbutton)
+
+-- if the toolbar allready exists replace it, otherwise add it to the user interface
+If x_UIConfigurationManager~hasSettings(ToolbarURL) then
+do
+   x_UIConfigurationManager~replaceSettings( ToolbarURL, x_IndexContainer )
+end
+else
+do
+   x_UIConfigurationManager~insertSettings( ToolbarURL, x_IndexContainer )
+end
+
+::requires UNO.CLS</listing>
+</answer>
+
+<versions>
+	<version number="2.4.1" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="1" date="2008-10-13">Initial version</change>
+</changelog>
+
+</snippet>

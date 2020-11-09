@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Draw.CreateShapes.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2007/08/13 13:03:24 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Draw">
+
+<keywords>
+	<keyword>line</keyword>
+	<keyword>circle</keyword>
+	<keyword>rectangle</keyword>
+</keywords>
+
+<authors>
+	<author id="" initial="false" email="">Nicole Scholz</author>
+</authors>
+
+<question heading="draw shapes">How can I draw shapes?
+</question>
+
+<answer>
+<p>This example draws automatically a line, a circle and a rectangle</p>
+<listing>/* Retrieve the Desktop object, we need its XComponentLoader interface to load a new document*/
+oDesktop         = UNO.createDesktop()    -- get the UNO Desktop service object
+xComponentLoader = oDesktop~{%see com.sun.star.frame.XDesktop%XDesktop}~{%see com.sun.star.frame.XComponentLoader%XComponentLoader}  -- get componentLoader interface
+/* open the blank file */
+url = &quot;private:factory/sdraw&quot;
+xDrawComponent = xComponentLoader~loadComponentFromURL(url, &quot;_blank&quot;, 0, -
+                                                       .UNO~noProps)
+/* need document&apos;s factory to be able to insert created objects*/
+xDocumentFactory = xDrawComponent~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+
+/* get draw page by index */
+xDrawPage = xDrawComponent~{%see com.sun.star.drawing.XDrawPagesSupplier%XDrawPagesSupplier}~getDrawPages~getByIndex(0)~{%see com.sun.star.drawing.XDrawPage%XDrawPage}
+
+/* create a line and add it to the shape */
+xLine = xDocumentFactory~createInstance(&quot;{%see com.sun.star.drawing.LineShape}&quot;)~{%see com.sun.star.drawing.XShape%xShape}
+xLine~setPosition(.bsf~new(&quot;{%see com.sun.star.awt.Point}&quot;, 1000, 5000))
+xLine~setSize(.bsf~new(&quot;{%see com.sun.star.awt.Size}&quot;, 19000, 0))
+xDrawPage~add(xLine)
+
+/* create a circle and add it to the shape */
+xCircle = xDocumentFactory~createInstance(&quot;{%see com.sun.star.drawing.EllipseShape}&quot;)~{%see com.sun.star.drawing.XShape%xShape}
+xCircle~setPosition(.bsf~new(&quot;{%see com.sun.star.awt.Point}&quot;, 2000, 15000))
+xCircle~setSize(.bsf~new(&quot;{%see com.sun.star.awt.Size}&quot;, 5000, 5000))
+xDrawPage~add(xCircle)
+
+/* create a rectangle and add it to the shape */
+xBox =  xDocumentFactory~createInstance(&quot;{%see com.sun.star.drawing.RectangleShape}&quot;)~{%see com.sun.star.drawing.XShape%xShape}
+xBox~setPosition(.bsf~new(&quot;{%see com.sun.star.awt.Point}&quot;, 2000, 8000))
+xBox~setSize(.bsf~new(&quot;{%see com.sun.star.awt.Size}&quot;, 5000, 5000))
+xDrawPage~add(xBox)
+
+::requires UNO.cls    -- get UNO support</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Calc.SetHeader.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2006/07/14 09:36:44 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Calc">
+
+<keywords>
+</keywords>
+
+<authors>
+	<author id="" initial="true" email="h0253952@wu-wien.ac.at">Michael Hinz</author>
+</authors>
+
+<question heading="setHeader">How can i set or change the header
+</question>
+
+<answer>
+<listing>/* get the desktop  (an Xdesktop object) */
+oDesktop = UNO.createDesktop()   
+xComponentLoader = oDesktop~{%see com.sun.star.frame.XDesktop%XDesktop}~{%see com.sun.star.frame.XComponentLoader%XComponentLoader}      --get componentLoader interface
+                                                      
+/* open a blank calc file */
+url = &quot;private:factory/scalc&quot;
+xCalcComponent = xComponentLoader~loadComponentFromURL(url, &quot;_blank&quot;, 0, .UNO~noProps)
+
+
+/* get first sheet in spreadsheet */
+xDocument = xCalcComponent~{%see com.sun.star.sheet.XSpreadsheetDocument%XSpreadSheetDocument}
+xSheet = xDocument~getSheets~{%see com.sun.star.container.XIndexAccess%XIndexAccess}~getByIndex(0)~{%see com.sun.star.sheet.XSpreadsheet%XSpreadSheet}
+
+/* insert  value into cells */
+CALL UNO.setCell xSheet,  0, 0, &quot;The header is set!&quot;
+
+/*create an instance of page style*/
+xServiceManager = xDocument~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+xPageStyle = xServiceManager~createInstance(&quot;{%see com.sun.star.style.PageStyle}&quot;)
+xFamiliesSupplier = xDocument~{%see com.sun.star.style.XStyleFamiliesSupplier%XStyleFamiliesSupplier}
+xStyle = xFamiliesSupplier~getStyleFamilies~getByName(&quot;PageStyles&quot;)~{%see com.sun.star.container.XNameContainer%XNameContainer}
+
+/*get the header and turn it on*/
+xHeader = xStyle~getByName( &quot;Default&quot; )      
+xHeader~{%see com.sun.star.beans.XPropertySet%XPropertySet}~setPropertyValue(&quot;HeaderIsOn&quot;, box(&quot;boolean&quot;, .true))
+
+/*get the property value and set it*/
+headerText = xHeader~{%see com.sun.star.beans.XPropertySet%XPropertySet}~getPropertyValue(&quot;RightPageHeaderContent&quot;)
+xHeaderText = headerText~{%see com.sun.star.sheet.XHeaderFooterContent%XHeaderFooterContent}
+
+xHeaderText~getLeftText()~setString(&quot;Rexx&quot;)
+xHeaderText~getCenterText()~setString(&quot;was&quot;)
+xHeaderText~getRightText()~setString(&quot;here&quot;)
+
+XHeader~{%see com.sun.star.beans.XPropertySet%XPropertySet}~setPropertyValue(&quot;RightPageHeaderContent&quot;, xheaderText)
+
+
+::requires UNO.cls       -- get UNO support</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="Win32"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>
