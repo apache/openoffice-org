@@ -1,3 +1,0 @@
-type=page
-doctype=html
-~~~~~~
