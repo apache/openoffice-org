@@ -2,7 +2,7 @@ type=page
 title=Miért az Apache OpenOffice: Oktatás
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Miért az Apache OpenOffice: Oktatás](/why/images/why_edu.png) # {.rfloatimg}
+![Miért az Apache OpenOffice: Oktatás](/why/images/why_edu.png)
 
 Az oktatás valamennyi szereplője (általános iskolák, középiskolák, felsőoktatási intézmények) olyan szoftvernek találja az Apache OpenOffice csomag programjait, mely mind a tanárok, mind a diákok elvárásaiak megfelel, legyen az akár a **rugalmas szövegszerkesztő**, a **hatékony táblázatkezelő**, a **dinamikus grafikai program**, az **adatbáziskezelő** vagy más összetevő.
 

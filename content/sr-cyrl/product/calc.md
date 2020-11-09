@@ -2,7 +2,7 @@ type=page
 title=Рачун Apache OpenOffice-а
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Calc](/product/pix/calc.png)](/product/pix/calc-big.png "Kliknite za veću sliku") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Calc](/product/pix/calc.png)](/product/pix/calc-big.png "Kliknite za veću sliku")
 
 *Прорачунска табела (енгл. spreadsheet) за све сврхе*
 

@@ -2,7 +2,7 @@ type=page
 title=База Apache OpenOffice-а
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Base](/product/pix/base.png)](/product/pix/base-big.png "Kliknite za veću sliku") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Base](/product/pix/base.png)](/product/pix/base-big.png "Kliknite za veću sliku")
 
 **База** (engl. Base) је потпуно заокружен систем управљања базом података, дизајниран да
 задовољи потребе великог броја корисника, од

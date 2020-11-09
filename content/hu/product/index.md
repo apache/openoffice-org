@@ -6,26 +6,26 @@ css=/product/styles.css
 Az Apache OpenOffice ingyenesen letölthető, használható és terjeszthető. A piacon
 lévő főbb irodai programcsomagokkal kompatibilis. [Töltse le most!][1] és legyen Öné:
 
-![Apache OpenOffice?](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
   - [Writer](writer.html "Szövegszerkesztő") egy szövegszerkesztő, melyet bármire használhat,
-    egy gyors levélírástól egy teljes könyv összeállításáig. # { .product-writer }
+    egy gyors levélírástól egy teljes könyv összeállításáig.
   - [Calc](calc.html "Táblázatkezelő") egy hatékony táblázatkezelő és minden eszköz,
     amire szüksége lehet adatainak kalkulálása, analizálása illetve kimutatások és meggyőző 
-    diagramok készítése során. # { .product-calc }
+    diagramok készítése során.
   - [Impress](impress.html "Jelentéskészítő") egy jelentéskészítő, mely a leggyorsabb, 
-    legalkalmasabb eszköz hatásos multimédiás bemutatók készítésére. # { .product-impress }
+    legalkalmasabb eszköz hatásos multimédiás bemutatók készítésére.
   - [Draw](draw.html "Vektoros grafikai szerkesztő") egy grafikai szerkesztőprogram, 
     mellyel bármit elkészíthet az egyszerű diagramtól kezdve a dinamikus 3D-s 
-    illusztrációkig. # { .product-draw }
+    illusztrációkig.
   - [Base](base.html "Adatbáziskezelő") egy adatbáziskezelő, amellyel gond nélkül 
     dolgozhat adatbázisaival. Táblák, űrlapok,lekérdezések és jelentések létrehozása és módosítása - 
-    mindez együtt, az Apache OpenOffice részeként. # { .product-base }
+    mindez együtt, az Apache OpenOffice részeként.
   - [Math](math.html "Matematikai függvénykészítő") egy függvénykezelő, melyben grafikus 
     felhasználói felületen keresztül oldhat meg matematikai egyenleteket, vagy írhatja be képleteit
-    közvetlenül az egyenletszerkesztőbe. # { .product-math }
+    közvetlenül az egyenletszerkesztőbe.
 
-## Miért az Apache OpenOffice? #{ .why }
+## Miért az Apache OpenOffice?
 
 Az Apache OpenOffice a **minőség** szinonimája:
 

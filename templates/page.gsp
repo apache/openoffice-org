@@ -19,14 +19,18 @@
   <head>
     <% if (content.header) { %>
     ${content.header}
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
     <% }  else { %>
     <title>${content.title}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
     <% if (content.css) { %>
     <link href="${content.css}" rel="stylesheet" type="text/css">
     <% } %>
+    <% if (content.css2) { %>
+    <link href="${content.css2}" rel="stylesheet" type="text/css">
     <% } %>
-    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    <% } %>
     <!--#include virtual="/scripts/google-analytics.js" --> 
     <!--#include virtual="/scripts/entourage.js" -->
   </head>

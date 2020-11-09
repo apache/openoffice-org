@@ -2,7 +2,7 @@ type=page
 title=Apache OpenOffice Math
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Apache OpenOffice Math képernyőmentés](/product/pix/math.png)](/product/pix/math-big.png "Kattintson a kép nagyobb változatáért") # {.rfloatimg}
+[![Apache OpenOffice Math képernyőmentés](/product/pix/math.png)](/product/pix/math-big.png "Kattintson a kép nagyobb változatáért")
 
 *Készítsen egyenleteket és képleteket dokumentumaihoz*
 

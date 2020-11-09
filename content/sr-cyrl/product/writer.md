@@ -2,7 +2,7 @@ type=page
 title=Писац Apache OpenOffice-a
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Writer](/product/pix/writer.png)](/product/pix/writer-big.png "Kliknite za veću sliku") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Writer](/product/pix/writer.png)](/product/pix/writer-big.png "Kliknite za veću sliku")
 
 *За сва ваша документа*
 

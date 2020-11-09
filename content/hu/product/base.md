@@ -2,7 +2,7 @@ type=page
 title=Apache OpenOffice Base
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Apache OpenOffice Base képernyőmentés](/product/pix/base.png)](/product/pix/base-big.png "Kattintson a kép nagyobb változatáért") # {.rfloatimg}
+[![Apache OpenOffice Base képernyőmentés](/product/pix/base.png)](/product/pix/base-big.png "Kattintson a kép nagyobb változatáért")
 
 A **Base** egy teljeskörű adatbáziskezelő rendszer, melyet a széles felhasználói kör
 sokoldalú igényeinek kielégítésére terveztek, ami lehet

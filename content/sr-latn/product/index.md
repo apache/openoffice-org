@@ -15,21 +15,16 @@ preuzimanje, korišćenje i distribuciju. [Preuzmite ga odmah][1], i imajte:
   - [Račun](calc.html "Spreadsheet") - moćna proračunska tabela sa svim alatima
     potrebnim za računanje, analiziranje, i prikazom vaših podataka u brojnim izveštajima   
     ili odličinim grafikonima. 
-	# { .product-calc }  
   - [Prezentacija](impress.html "Presentation program") - najsnažniji, najmoćniji način
     da se naprave efektivne multimedijalne prezentacije. 
-	# { .product-impress }
   - [Crtež](draw.html "Vector drawing tool") - omogućava da proizvedete sve: od 
     jednostavnih dijagrama do dinamičnih 3D ilustracija. 
-	# { .product-draw }
   - [Baza](base.html "Database") - omogućava vam da lako manipulišete bazama podataka.
     Pravljenje i menjanje tabela, obrazaca, upita i izveštaja, sve to unutar
     Apache OpenOffice-a. 
-	# { .product-base }
   - [Matematika](math.html "Mathematical function creator") - omogućava vam da kreirate
     matematičke jednačine sa grafičkim korisničkim interfejsom ili direktno kucajući
     formule unutar uređivača za jednačine. 
-	# { .product-math }
 
 ## Zašto Apache OpenOffice?
 

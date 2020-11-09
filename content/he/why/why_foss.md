@@ -3,7 +3,7 @@ title=Why OpenOffice.org: Free/Open-Source Software
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=../rtl.css
 ~~~~~~
-![Why Apache OpenOffice: Free/Open-Source Software](/why/images/why_foss.png) # {.rfloatimg}
+![Why Apache OpenOffice: Free/Open-Source Software](/why/images/why_foss.png)
 
 Free/Open-Source Software (F/OSS) proponents are turning to Apache OpenOffice both as end-users and as contributors. With its **flexible word processor**, **powerful spreadsheet**, **dynamic graphics**, **database access** and more, OpenOffice is the office suite of choice of millions of users.
 

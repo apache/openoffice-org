@@ -5,22 +5,16 @@ css=/product/styles.css
 ~~~~~~
 兼容其他主流办公套件,Apache OpenOffice是自由下载、使用和分发的。 [现在就去下载][1], 并获得:
 
-![Apache OpenOffice?](/images/AOO_logos/orb.jpg) # {.rfloatimg}
+![Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
   - [Writer](writer.html "文字处理") 一个文字处理软件，您可以用它做任何事。无论是一条便签还是整本书。
-    # { .product-writer }
   - [Calc](calc.html "电子表格") 一个强大的电子表格软件，拥有几乎所有必要功能：计算、统计和用数字或图形呈现您的数据.
-    # { .product-calc }
   - [Impress](impress.html "演示程序") 最快最强大的途径来创建令人记忆犹新的多媒体演示.
-    # { .product-impress }
   - [Draw](draw.html "矢量绘图工具") 让您的产品包罗万象,绘制从简单的图表到动态三维的插图.
-    # { .product-draw }
   - [Base](base.html "数据库") 让您无缝操纵数据库.从Apache OpenOffice中创建和修改表、表单、查询和报告. 
-    # { .product-base }
   - [Math](math.html "数学函数创建") 允许您从图形界面创建数学方程式或直接输入公式编辑器的方程。
-    # { .product-math }
 
-## 为什么要用 Apache OpenOffice? #{ .why }
+## 为什么要用 Apache OpenOffice?
 
 Apache OpenOffice 等同于 **质量**
 

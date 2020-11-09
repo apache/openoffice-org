@@ -2,7 +2,7 @@ type=page
 title=Apache OpenOffice Math
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Apache OpenOffice Math屏幕截图](/product/pix/math.png)](/product/pix/math-big.png "点击看大图") # {.rfloatimg}
+[![Apache OpenOffice Math屏幕截图](/product/pix/math.png)](/product/pix/math-big.png "点击看大图")
 
 *为你的文档创建方程和公式*
 

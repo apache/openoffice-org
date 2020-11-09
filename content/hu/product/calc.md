@@ -2,7 +2,7 @@ type=page
 title=Apache OpenOffice Calc
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Apache OpenOffice Calc képernyőmentése](/product/pix/calc.png)](/product/pix/calc-big.png "Kattintson a kép nagyobb változatáért") # {.rfloatimg}
+[![Apache OpenOffice Calc képernyőmentése](/product/pix/calc.png)](/product/pix/calc-big.png "Kattintson a kép nagyobb változatáért")
 
 *A minden célnak megfelelő táblázatkezelő*
 

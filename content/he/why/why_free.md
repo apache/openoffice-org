@@ -3,7 +3,7 @@ title=יתרונות Apache OpenOffice: תוכנה בחינם
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=../rtl.css
 ~~~~~~
-![יתרונות Apache OpenOffice: תוכנה בחינם](/why/images/why_free.png) # {.rfloatimg}
+![יתרונות Apache OpenOffice: תוכנה בחינם](/why/images/why_free.png)
 
 Apache OpenOffice מופצת בחינם.
 אפשר להוריד אותה בחינם, להתקין אותה על מספר מחשבים, ולהפיץ אותה בין חברים.

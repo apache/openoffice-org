@@ -2,7 +2,7 @@ type=page
 title=Apache OpenOffice Impress
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Apache OpenOffice Impress képernyőmentés](/product/pix/impress.png)](/product/pix/impress-big.png "Kattintson a kép nagyobb változatáért") # {.rfloatimg}
+[![Apache OpenOffice Impress képernyőmentés](/product/pix/impress.png)](/product/pix/impress-big.png "Kattintson a kép nagyobb változatáért")
 
 *Több energia a bemutatóiban*
 

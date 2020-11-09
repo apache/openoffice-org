@@ -2,7 +2,7 @@ type=page
 title=Математика Apache OpenOffice-a
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Kliknite za veću sliku") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Kliknite za veću sliku")
 
 *Направите једначине и формуле за документе*
 

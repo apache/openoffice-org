@@ -4,14 +4,13 @@ list_css=product
 title=תיאור Apache OpenOffice
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=/product/styles.css
-css=../rtl.css
+css2=../rtl.css
 ~~~~~~
 חבילת-התוכנות Apache OpenOffice תואמת לתוכנות אחרות למשרד. אפשר להוריד אותה ולהשתמש בה בחינם, ואף לחלק אותה לאחרים. [הורדת התוכנה][1] כוללת את התוכנות הבאות: 
 
 ![מה כלול ב-Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
   - [Writer](writer.html "Wordprocessor") מאפשרת לך לעשות הכל עם טקסטים: מכתיבת מכתב קצר ועד ספר שלם.
-    # { .product-writer } 
   - [Calc](calc.html "גיליון-עבודה") מכילה את כל הכלים הדרושים לעבודה עם גליונות-עבודה, ותעזור לך לחשב, לנתח ולהציג נתונים בדו"חות, כולל  וגרפים.
   - [Impress](impress.html "תוכנת מצגות") הדרך המהירה והיעילה ליצירת מצגות.
   - [Draw](draw.html "תוכנה לאיורים וקטוריים") מאפשרת את החופש ליצור הכל, מתרשימים פשוטים ועד איורים תלת-ממדיים.

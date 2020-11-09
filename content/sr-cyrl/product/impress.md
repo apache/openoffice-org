@@ -2,7 +2,7 @@ type=page
 title=Презентација Apache OpenOffice-а
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Impress](/product/pix/impress.png)](/product/pix/impress-big.png "Kliknite za veću sliku") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Impress](/product/pix/impress.png)](/product/pix/impress-big.png "Kliknite za veću sliku")
 
 *Још снажније перформансе за ваше презентације*
 

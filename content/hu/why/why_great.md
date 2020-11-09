@@ -2,7 +2,7 @@ type=page
 title=Miért az Apache OpenOffice: nagyszerű szoftver
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-![Miért az Apache OpenOffice: nagyszerű szoftver](/why/images/why_great.png) # {.rfloatimg}
+![Miért az Apache OpenOffice: nagyszerű szoftver](/why/images/why_great.png)
 
 Egy nagyszerű szoftver nagyszerű embereket kíván. Az Apache OpenOffice több, mint 20 év folyamatos, magasszintű szoftverfejlesztési munkájának az  eredménye. Kezdettől fogva **egyetlen, egységes szoftver**nek tekintjük, így az Apache OpenOffice konzisztenciája és minősége világszínvonalú. **Nyílt forrású** fejlesztési folyamatából kifolyólag nem rejteget titkokat.
 

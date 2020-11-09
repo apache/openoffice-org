@@ -2,7 +2,7 @@ type=page
 title=Apache OpenOffice Writer
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Apache OpenOffice Writer képernyőmentés](/product/pix/writer.png)](/product/pix/writer-big.png "Kattintson a kép nagyobb változatáért") # {.rfloatimg}
+[![Apache OpenOffice Writer képernyőmentés](/product/pix/writer.png)](/product/pix/writer-big.png "Kattintson a kép nagyobb változatáért")
 
 *Minden dokumentumhoz*
 

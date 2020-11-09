@@ -3,7 +3,7 @@ title=Reading ODF Documents (*.odt, *.ods, *.odp) with Apache OpenOffice
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=../rtl.css
 ~~~~~~
-![Why Apache OpenOffice: OpenDocument Format](/why/images/shell.png) # {.rfloatimg}
+![Why Apache OpenOffice: OpenDocument Format](/why/images/shell.png)
 
 ##"Windows cannot open this file"
 

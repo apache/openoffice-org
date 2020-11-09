@@ -2,7 +2,7 @@ type=page
 title=Apache OpenOffice Calc
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Apache OpenOffice Calc界面截图](/product/pix/calc.png)](/product/pix/calc-big.png "点击查看大图") # {.rfloatimg}
+[![Apache OpenOffice Calc界面截图](/product/pix/calc.png)](/product/pix/calc-big.png "点击查看大图")
 
 *通用的电子表格*
 

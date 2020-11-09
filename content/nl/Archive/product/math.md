@@ -2,7 +2,7 @@ type=page
 title=Apache OpenOffice Math
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Click for bigger version") # {.rfloatimg}
+[![Screendump of Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Click for bigger version")
 
 *Create equations and formulae for your documents*
 

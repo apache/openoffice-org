@@ -2,7 +2,7 @@ type=page
 title=Apache OpenOffice Draw
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Apache OpenOffice Draw képernyőmentés](/product/pix/draw.png)](/product/pix/draw-big.png "Kattintson a kép nagyobb változatáért") # {.rfloatimg}
+[![Apache OpenOffice Draw képernyőmentés](/product/pix/draw.png)](/product/pix/draw-big.png "Kattintson a kép nagyobb változatáért")
 
 *Egy erőteljes grafikai csomag*
 
