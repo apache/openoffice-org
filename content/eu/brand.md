@@ -8,7 +8,7 @@ tagline=Produktibitate Suite Aske eta Irekia
 logo=/AOO_logos/AOO4_website_logo.png
 domain=https://www.openoffice.org
 divid=bannera
-announce=Apache OpenOffice 4.1.7 eskuragarri dagoeneko!
-announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-13
+announce=Apache OpenOffice 4.1.8 eskuragarri dagoeneko!
+announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-14
 announcetip=Irakur ezazu iragarkia
 ~~~~~~

@@ -8,7 +8,7 @@ tagline=Die freie und offene Büro-Software
 logo=AOO_logos/100MillAOO100px.png
 domain=https://www.openoffice.org
 divid=bannera
-announce=Apache OpenOffice 4.1.7 ist verfügbar!
-announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.7+Release+Notes
-announcetip=AOO 4.1.7 Release Notes (Englisch)
+announce=Apache OpenOffice 4.1.8 ist verfügbar!
+announceurl=https://cwiki.apache.org/confluence/pages/viewpage.action?pageId
+announcetip=AOO 4.1.8 Release Notes (Englisch)
 ~~~~~~
