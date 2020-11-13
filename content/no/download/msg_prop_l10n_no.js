@@ -38,76 +38,77 @@ l10n.dl_green_box_selectbox_ver_title		= "Velg produkt-versjon";
 // http://www.openoffice.org/download/index.html
 // Custominzations to each of these arrays will require ongoing maintenance for new releases.
 
-// l10n.dl_green_box_select_box_os_values	= [ "" ]; 
+// l10n.dl_green_box_select_box_os_values	= [ "" ];
 l10n.dl_green_box_select_box_os_values		= [ "Windows (EXE)",
-				    		    "Linux 64-bit (x86-64) (DEB)",
-						    "Linux 64-bit (x86-64) (RPM)",
-						    "Linux 32-bit (x86) (DEB)",
-						    "Linux 32-bit (x86) (RPM)",
-						    "OS X (versjon >= 10.7) (DMG)",
-						    "OS X (versjon <= 10.6) (DMG)",
-						    "Flere plattformer / operativsystem" ];
- 
+												"Linux 64-bit (x86-64) (DEB)",
+												"Linux 64-bit (x86-64) (RPM)",
+												"Linux 32-bit (x86) (DEB)",
+												"Linux 32-bit (x86) (RPM)",
+												"OS X (versjon >= 10.7) (DMG)",
+												"OS X (versjon <= 10.6) (DMG)",
+												"Flere plattformer / operativsystem" ];
+
 /* l10n.dl_green_box_select_box_language_values	= [ "" ]; */
 l10n.dl_green_box_select_box_language_values	= [ "" ];
 
 /* l10n.dl_green_box_select_box_lang_values_custom = [ "" ]; */
-						    // Value	Visible text				Tool tip
-l10n.dl_green_box_select_box_lang_values_custom = [ "ast",	"Asturisk",				"Asturianu",
-						    "eu",	"Baskisk",				"Euskara",
-						    "bg",	"Bulgarsk",				"български език",
-						    "da",	"Dansk",				"Dansk",
-						    "en-GB",	"Engelsk [British]",			"English [British]",
-						    "en-US",	"Engelsk [US]",				"English [US]",
-						    "fi",	"Finsk",				"Suomi",
-						    "fr",	"Fransk",				"Français",
-						    "gl",	"Galisisk",				"Galego",
-						    "el",	"Gresk",				"ελληνικά",
-						    "he",	"Hebraisk",				"עברית",
-						    "hi",	"Hindi",				"हिन्दी",
-						    "it",	"Italiensk",				"Italiano",
-						    "ja",	"Japansk",				"日本語",
-						    "ca",	"Katalansk",				"Català",
-						    "ca-XV",	"Katalansk [Valencia AVL]",		"València (AVL)",
-						    "ca-XR",	"Katalansk [Valencia RACV]",		"València (RACV)",
-						    "km",	"Khmer",				"ភាសាខ្មែរ",
-						    "zh-CN",	"Kinesisk [forenklet]",			"简体中文",
-						    "zh-TW",	"Kinesisk [tradisjonelt]",		"正體中文",
-						    "ko",	"Koreansk",				"한국어",
-						    "lt",	"Litauisk",				"Lietuvių",
-						    "nl",	"Nederlandsk",				"Nederlands",
-						    "nb",	"Norsk",				"Norsk [Bokmål]",
-						    "pl",	"Polsk",				"Polski",
-						    "pt-BR",	"Portugisisk [Brasil]",			"Português [do Brasil]",
-						    "pt",	"Portugisisk [Europa]",			"Português [Europeu]",
-						    "ru",	"Russisk",				"Русский",
-						    "gd",	"Skotsk [Gaelic]",			"Gàidhlig",
-						    "sr",	"Serbisk [Cyrillic]",			"Cрпски [ћирилицом]",
-						    "sk",	"Slovakisk",				"Slovenský jazyk [slovenčina]",
-						    "sl",	"Slovensk",				"Slovenski jezik [slovenščina]",
-						    "es",	"Spansk",				"Español",
-						    "sv",	"Svensk",				"Svenska",
-						    "ta",	"Tamilsk",				"தமிழ்",
-						    "th",	"Thai",					"ภาษาไทย",
-						    "cs",	"Tsjekkisk",				"Čeština",
-						    "tr",	"Tyrkisk",				"Türkçe",
-						    "de",	"Tysk",					"Deutsch",
-						    "hu",	"Ungarsk",				"Magyar",
-						    "vi",	"Vietnamesisk",				"Tiếng Việt" ];
+												// Value		Visible text				Tool tip
+l10n.dl_green_box_select_box_lang_values_custom = [ "ast",		"Asturisk",					"Asturianu",
+													"eu",		"Baskisk",					"Euskara",
+													"bg",		"Bulgarsk",					"български език",
+													"da",		"Dansk",					"Dansk",
+													"en-GB",	"Engelsk [British]",		"English [British]",
+													"en-US",	"Engelsk [US]",				"English [US]",
+													"fi",		"Finsk",					"Suomi",
+													"fr",		"Fransk",					"Français",
+													"gl",		"Galisisk",					"Galego",
+													"el",		"Gresk",					"ελληνικά",
+													"he",		"Hebraisk",					"עברית",
+													"hi",		"Hindi",					"हिन्दी",
+													"it",		"Italiensk",				"Italiano",
+													"ja",		"Japansk",					"日本語",
+													"ca",		"Katalansk",				"Català",
+													"ca-XV",	"Katalansk [Valencia AVL]",	"València (AVL)",
+													"ca-XR",	"Katalansk [Valencia RACV]","València (RACV)",
+													"km",		"Khmer",					"ភាសាខ្មែរ",
+													"zh-CN",	"Kinesisk [forenklet]",		"简体中文",
+													"zh-TW",	"Kinesisk [tradisjonelt]",	"正體中文",
+													"ko",		"Koreansk",					"한국어",
+													"lt",		"Litauisk",					"Lietuvių",
+													"nl",		"Nederlandsk",				"Nederlands",
+													"nb",		"Norsk",					"Norsk [Bokmål]",
+													"pl",		"Polsk",					"Polski",
+													"pt-BR",	"Portugisisk [Brasil]",		"Português [do Brasil]",
+													"pt",		"Portugisisk [Europa]",		"Português [Europeu]",
+													"ru",		"Russisk",					"Русский",
+													"gd",		"Skotsk [Gaelic]",			"Gàidhlig",
+													"sr",		"Serbisk [Cyrillic]",		"Cрпски [ћирилицом]",
+													"sk",		"Slovakisk",				"Slovenský jazyk [slovenčina]",
+													"sl",		"Slovensk",					"Slovenski jezik [slovenščina]",
+													"es",		"Spansk",					"Español",
+													"sv",		"Svensk",					"Svenska",
+													"ta",		"Tamilsk",					"தமிழ்",
+													"th",		"Thai",						"ภาษาไทย",
+													"cs",		"Tsjekkisk",				"Čeština",
+													"tr",		"Tyrkisk",					"Türkçe",
+													"de",		"Tysk",						"Deutsch",
+													"hu",		"Ungarsk",					"Magyar",
+													"vi",		"Vietnamesisk",				"Tiếng Việt" ];
 
-// l10n.dl_green_box_select_box_version_values	= [ "" ]; 
-l10n.dl_green_box_select_box_version_values	= [ "4.1.7",
-							"4.1.6",
-							"4.1.5",
-						    "4.1.4",
-						    "4.1.3",
-						    "4.1.2",
-						    "4.1.1",
-						    "4.1.0",
-						    "4.0.1",
-						    "4.0.0",
-						    "3.4.1",
-						    "Eldre versjoner" ];
+// l10n.dl_green_box_select_box_version_values	= [ "" ];
+l10n.dl_green_box_select_box_version_values	= [ "4.1.8",
+												"4.1.7",
+												"4.1.6",
+												"4.1.5",
+												"4.1.4",
+												"4.1.3",
+												"4.1.2",
+												"4.1.1",
+												"4.1.0",
+												"4.0.1",
+												"4.0.0",
+												"3.4.1",
+												"Eldre versjoner" ];
 
 // Download: Strings in the sub-green box (used in "index.html").
 // Not defined for now.
@@ -361,6 +362,7 @@ l10n.dl_analyze_table_stable_release_text	= "Stabil utgivelse";
 l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;functions/variables";
 
 // General: Links to webpage files that could be localized.
+l10n.dl_rel_notes_aoo418_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.8+Release+Notes";
 l10n.dl_rel_notes_aoo417_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.7+Release+Notes";
 l10n.dl_rel_notes_aoo416_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.6+Release+Notes";
 l10n.dl_rel_notes_aoo415_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.5+Release+Notes";
@@ -371,9 +373,9 @@ l10n.dl_rel_notes_aoo411_link			= "https://cwiki.apache.org/confluence/display/O
 l10n.dl_rel_notes_aoo410_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1+Release+Notes";
 l10n.dl_rel_notes_aoo401_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0.1+Release+Notes";
 l10n.dl_rel_notes_aoo400_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0+Release+Notes";
-l10n.dl_help_link				= "https://www.openoffice.org/download/full_vs_lp.html";
-l10n.dl_checksum_link				= "https://www.openoffice.org/download/checksums.html";
-l10n.dl_report_link				= "https://www.openoffice.org/download/analyze.html";
-l10n.dl_porting_link				= "https://www.openoffice.org/porting/index.html";
-l10n.dl_archive_link				= "https://www.openoffice.org/download/archive.html";
+l10n.dl_help_link						= "https://www.openoffice.org/download/full_vs_lp.html";
+l10n.dl_checksum_link					= "https://www.openoffice.org/download/checksums.html";
+l10n.dl_report_link						= "https://www.openoffice.org/download/analyze.html";
+l10n.dl_porting_link					= "https://www.openoffice.org/porting/index.html";
+l10n.dl_archive_link					= "https://www.openoffice.org/download/archive.html";
 l10n.dl_aoo341_link				= "https://www.openoffice.org/download/archive.html";

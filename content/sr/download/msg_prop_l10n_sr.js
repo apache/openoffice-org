@@ -92,18 +92,19 @@ l10n.dl_green_box_select_box_lang_values_custom = [ "ast",	"Asturian",				"Astur
 
 /* l10n.dl_green_box_select_box_language_values	= [ "" ]; */
 
-l10n.dl_green_box_select_box_version_values	= [ "4.1.7",
-							"4.1.6",
-							"4.1.5",
-						    "4.1.4",
-						    "4.1.3",
-						    "4.1.2",
-						    "4.1.1",
-						    "4.1.0",
-						    "4.0.1",
-						    "4.0.0",
-						    "3.4.1",
-						    "Older releases" ];
+l10n.dl_green_box_select_box_version_values	= [ "4.1.8",
+												"4.1.7",
+												"4.1.6",
+												"4.1.5",
+												"4.1.4",
+												"4.1.3",
+												"4.1.2",
+												"4.1.1",
+												"4.1.0",
+												"4.0.1",
+												"4.0.0",
+												"3.4.1",
+												"Older releases" ];
 
 /* l10n.dl_green_box_select_box_version_values	= [ "" ]; */
 
@@ -361,6 +362,7 @@ l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;functions/variables";
 
 
 // General: Links to webpage files that could be localized.
+l10n.dl_rel_notes_aoo418_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.8+Release+Notes";
 l10n.dl_rel_notes_aoo417_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.7+Release+Notes";
 l10n.dl_rel_notes_aoo416_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.6+Release+Notes";
 l10n.dl_rel_notes_aoo415_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.5+Release+Notes";
@@ -371,9 +373,9 @@ l10n.dl_rel_notes_aoo411_link			= "https://cwiki.apache.org/confluence/display/O
 l10n.dl_rel_notes_aoo410_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1+Release+Notes";
 l10n.dl_rel_notes_aoo401_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0.1+Release+Notes";
 l10n.dl_rel_notes_aoo400_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0+Release+Notes";
-l10n.dl_help_link				= "https://www.openoffice.org/download/full_vs_lp.html";
-l10n.dl_checksum_link				= "https://www.openoffice.org/download/checksums.html";
-l10n.dl_report_link				= "https://www.openoffice.org/download/analyze.html";
-l10n.dl_porting_link				= "https://www.openoffice.org/porting/index.html";
-l10n.dl_archive_link				= "https://www.openoffice.org/download/archive.html";
-l10n.dl_aoo341_link				= "https://www.openoffice.org/download/archive.html";
+l10n.dl_help_link						= "https://www.openoffice.org/download/full_vs_lp.html";
+l10n.dl_checksum_link					= "https://www.openoffice.org/download/checksums.html";
+l10n.dl_report_link						= "https://www.openoffice.org/download/analyze.html";
+l10n.dl_porting_link					= "https://www.openoffice.org/porting/index.html";
+l10n.dl_archive_link					= "https://www.openoffice.org/download/archive.html";
+l10n.dl_aoo341_link						= "https://www.openoffice.org/download/archive.html";
