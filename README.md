@@ -1,6 +1,6 @@
 # Apache OpenOffice Website - OpenOffice.org
 
-This is the content and build scripts for https:/www.openoffice.org/
+This is the content and build scripts for https://www.openoffice.org/
 
 ## Contributing to the website content
 
@@ -78,8 +78,6 @@ Modify that script andd call `bake.sh`  with any of the [arguments you would pas
 
 Most of the pages in the site are written using HTML. Many more recent pages are written using Markdown
 While it is a form of Markdown, JBake uses Flexmark/Java which implements Pegdown. It does have some [syntax differences that are worth reviewing](https://github.com/sirthias/pegdown/)
-
-The css style insertion syntax used on our `why` and `product` pages is not supported. I researching workarounds for the two use cases.
 
 ## Groovy Templates
 
