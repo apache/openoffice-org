@@ -18,8 +18,8 @@
 <html>
   <head>
     <% if (content.header) { %>
-    ${content.header}
     <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    ${content.header}
     <% }  else { %>
     <title>${content.title}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
