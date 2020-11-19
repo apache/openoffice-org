@@ -10,5 +10,5 @@ domain=https://www.openoffice.org
 divid=bannera
 announce=Apache OpenOffice 4.1.8 ist verfügbar!
 announceurl=https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=165224926
-announcetip=AOO 4.1.8 Release Notes (Englisch)
+announcetip=AOO 4.1.8 Release Notes
 ~~~~~~
