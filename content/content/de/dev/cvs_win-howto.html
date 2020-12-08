@@ -1,0 +1,574 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    
+    <title>
+      CVS Win-howto
+    </title>
+    <!-- Start de-header -->
+    <link rel="stylesheet" href="../styles/de.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="../styles/de_print.css" media="print" type="text/css" />
+    <link rel="alternate stylesheet" title="mit Navbar" href="../styles/de_navbar.css" media="screen" type="text/css" />
+    <link rel="alternate stylesheet" title="mit Navbar4" href="../styles/de_navbar4.css" media="screen" type="text/css" />
+    <link rel="alternate stylesheet" title="mit Navbar5" href="../styles/de_navbar5.css" media="screen" type="text/css" />
+    <link rel="alternate stylesheet" title="ohne Navbar" media="screen" href="../styles/de_nonavbar.css" type="text/css" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style type="text/css">
+      /*
+      <![CDATA[*/         	<!--         	@import url("../styles/de_navbar6.css");         	-->      /*]]>*/
+    </style>
+    <!-- >
+    Kommentare zur Seite
+    $Id: cvs_win-howto.html,v 2.30 2007/07/28 18:12:29 cloph Exp $
+    < -->
+    <!-- End de-header -->
+  
+    
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/de/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/de/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/de/">de</a>&nbsp;&raquo;&nbsp;<a href="/de/dev/">dev</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+    <table width="100%" summary="">
+      <tr>
+        <td align="left" valign="top">
+          <div id="body_de">
+            <h1>How To: CVS unter Windows</h1>
+            <p>
+              <i>Letztes Update: 29. Juli 2005</i>
+            </p>
+            <p>              In diesem Dokument möchte ich den CVS-Zugriff unter              Windows beschreiben. Falls Sie Schreibzugriff auf den              Server haben möchten, müssen Sie erst einen SSH2-Tunnel
+              aufbauen. Das wird in der 
+              <a href=             "ssh2_einfuehrung.html">SSH2-Anleitung</a>              ausführlich
+              beschrieben.
+            </p>
+            <h2>Inhalt</h2>
+            <dl>
+              <dt>
+                <a href="#software">Verwendete Software</a>
+              </dt>
+              <dt>
+                <a href="#zugriffsart">                  Lese- oder Schreibzugriff?</a>
+              </dt>
+              <dt>
+                <a href="#anmeldung">                  Anmeldung am CVS-Server</a>
+              </dt>
+              <dd>
+                <a href="#anmeldung_anonym">                  Bei anonymem Lesezugriff</a>
+              </dd>
+              <dd>
+                <a href="#anmeldung_schreiben">                  Bei Schreibzugriff</a>
+              </dd>
+              <dt>
+                <a href="#update">                  Aktualisieren des CVS-Verzeichnisbaums auf der Festplatte</a>
+              </dt>
+              <dt>
+                <a href="#checkout">                  Durchführen eines Checkouts</a>
+              </dt>
+              <dd>
+                <a href="#checkout_1">                  Was ist ein Checkout?</a>
+              </dd>
+              <dd>
+                <a href="#checkout_2">Vorbereitung</a>
+              </dd>
+              <dd>
+                <a href="#checkout_3">                  Bei anonymem Zuriff</a>
+              </dd>
+              <dd>
+                <a href="#checkout_4">Bei Schreibzugriff</a>
+              </dd>
+              <dd>
+                <a href="#checkout_5">                  Der Statusbericht des Checkouts</a>
+              </dd>
+              <dt>
+                <a href="#diff">                  Änderungen zwischen zwei Versionen einer Datei feststellen</a>
+              </dt>
+              <dd>
+                <a href="#diff_1">                  Vergleich einer älteren mit der aktuellen Version auf dem Server</a>
+              </dd>
+              <dd>
+                <a href="#diff_2">                  Vergleichen von zwei beliebigen Versionen</a>
+              </dd>
+              <dd>
+                <a href="#diff_3">                  Vergleichen von der Version auf                  der Festplatte mit einer Version auf dem Server</a>
+              </dd>
+              <dd>
+                <a href="#diff_4">                  Ausgabe, die bei einem Diff erzeugt wird</a>
+              </dd>
+              <dd>
+                <a href="#diff_extern">                  Verwendung eines externen Diff-Programms</a>
+              </dd>
+              <dt>
+                <a href="#add">                  Neue Dateien auf den Server stellen</a>
+              </dt>
+              <dt>
+                <a href="#commit">                  Änderungen an einer Datei an den Server übertragen</a>
+              </dt>
+            </dl>
+            <a name="software"></a>
+            <h2>Verwendete Software</h2>
+            <p>              Ich beschreibe die Schritte anhand der kostenlosen              Software WinCVS, da es eine grafische Oberfläche              besitzt, einfach zu bedienen ist und einen großen              Funktionsumfang hat. Ich verwende die Version 1.02 bzw. 2.0.              Falls es eine neuere Version gibt und die Anleitung              nicht mehr stimmt, teilen Sie mir das bitte per E-Mail
+              mit. WinCVS können Sie 
+              <a href=             "http://www.wincvs.org/download.html">                hier herunterladen.</a>
+            </p>
+            <a name="zugriffsart"></a>
+            <h2>Lese- oder Schreibzugriff?</h2>
+            <p>              Jeder kann anonym auf den CVS-Server zugreifen.              Damit können allerdings keine Dateien geändert werden.              Falls Sie aktiv am Lang/De-Projekt mitarbeiten, sollten              Sie in Betracht ziehen, den Schreibzugriff zu              beantragen. Allerdings ist es auch nicht sinnvoll, wenn              Sie nur sehr wenige Dokumente erstellen bzw. ändern              möchten, da sowohl auf Ihrer Seite als auch auf dem
+              Server einige Arbeit erforderlich ist.
+            </p>
+            <p>              Die notwendigen Vorbereitungen sind auf der Seite
+              SSH2-Einführung 
+              <a href=             "ssh2_einfuehrung.html">beschrieben</a>.
+            </p>
+            <a name="anmeldung"></a>
+            <h2>Anmeldung am CVS-Server</h2>
+            <a name="anmeldung_anonym"></a>
+            <h3>Bei anonymem Lesezugriff</h3>
+            <p>              Der anonyme Zugriff ist relativ leicht möglich.
+              Führen Sie die folgenden Schritte aus:
+            </p>
+            <ol>
+              <li>              Falls das Einstellungs-Fenster nach dem Start              nicht automatisch angezeigt wird, öffnen Sie dieses über den Menüeintrag 
+              <tt>                Admin |                Preferences... (in Version 2.0 finden Sie diese Konfiguration unter
+                Admin | Login)
+              </tt></li>
+              <li>Stellen Sie den Server ein. Als 
+              <tt>
+                CVSROOT
+              </tt>              geben Sie Folgendes ein:
+              <tt>
+                :pserver:anoncvs@anoncvs.services.openoffice.org:/cvs
+              </tt>.</li>
+              <li>Bei 
+              <tt>
+                Authentication
+              </tt>              stellen Sie
+              <tt>                "passwd" file on the CVS server
+                (in Version 2.O nicht erforderlich)
+              </tt>.</li>
+              <li>              Den Rest können Sie bei den Standardeinstellungen              belassen. Schließen Sie den Dialog mit einem Klick auf 
+              <tt>
+                OK
+              </tt>.</li>
+              <li>Sie können sich über 
+              <tt>
+                Admin | Login
+              </tt>              am              Server anmelden. Sie können ein beliebiges Passwort
+              eingeben.</li>
+              <li>              Falls im Status-Fenster kein Fehler angezeigt              wird (ein Fehler ist bei CVS "1"), sind Sie am Server              angemeldet. Ansonsten überprüfen Sie bitte nochmal Ihre Internetverbindung und die Einstellungen.</li>
+            </ol>
+            <a name="anmeldung_schreiben"></a>
+            <h3>Bei Schreibzugriff</h3>
+            <p>              Um sich anmelden zu können, muss erst ein              SSH2-Tunnel hergestellt werden. Nähere Informationen
+              dazu finden Sie 
+              <a href=             "ssh2_einfuehrung.html">hier</a>. Anschließend
+              verfahren Sie wie folgt:
+            </p>
+            <ol>
+              <li>              Falls das Einstellungs-Fenster nach dem Start              nicht automatisch angezeigt wird, öffnen Sie dieses über den Menüeintrag 
+              <tt>                Admin |                Preferences...(in Version 2.0 finden Sie diese Konfiguration unter
+                Admin | Login)
+              </tt></li>
+              <li>Stellen Sie den Server ein. Als 
+              <tt>
+                CVSROOT
+              </tt>              geben Sie Folgendes ein:
+              <tt>
+                :pserver:&lt;oousername&gt;@localhost:/cvs
+              </tt>.              &lt;oousername&gt; ersetzen Sie durch den Namen Ihres
+              OpenOffice-Zugangs.</li>
+              <li>Bei 
+              <tt>
+                Authentication
+              </tt>              stellen Sie
+              <tt>
+                "passwd" file on the CVS server
+              </tt>              ein.
+              (in Version 2.O nicht erforderlich)</li>
+              <li>              Den Rest können Sie bei den Standardeinstellungen              belassen. Schließen Sie den Dialog mit einem Klick auf 
+              <tt>
+                OK
+              </tt>.</li>
+              <li>Sie können sich über 
+              <tt>
+                Admin | Login
+              </tt>              am              Server anmelden. Als Passwort geben Sie Ihr
+              OpenOffice-Passwort ein.</li>
+              <li>              Falls im Status-Fenster kein Fehler angezeigt              wird (ein Fehler ist bei CVS "1"), sind Sie am Server              angemeldet sein. Ansonsten überprüfen Sie bitte              nochmal Ihre Internetverbindung und die Einstellungen.</li>
+            </ol>
+            <p>              Der manuelle Login ist nicht bei jedem Start              erforderlich. Sie können einfach das Arbeiten
+              beginnen.
+            </p>
+            <a name="update"></a>
+            <h2>              Aktualisieren des CVS-Verzeichnisbaums auf der Festplatte</h2>
+            <p>              Nach jedem Start sollten Sie prüfen, ob die Dateien              auf Ihrer Festplatte aktuell sind. Klicken Sie dazu mit              der rechten Maustaste auf das oberste CVS-Verzeichnis              ("oo" oder "de", je nachdem, ob Sie anonym oder per              SSH2-Tunnel angemeldet sind) und klicken Sie im
+              Kontextmenü auf 
+              <tt>
+                Update selection...(unter Version 2.0 Update)
+              </tt>. Nun              werden die Dateien auf ihre Aktualität geprüft und ggf.              aktualisiert. Grüne oder blaue Dateien bedeuten, dass              diese aktualisiert wurden. Falls nur orange              Verzeichnisse angezeigt werden, war kein Update
+              notwendig.
+            </p>
+            <a name="checkout"></a>
+            <h2>Durchführen eines Checkouts</h2>
+            <a name="checkout_1"></a>
+            <h3>Was ist ein Checkout?</h3>
+            <p>              Bei einem Checkout wird ein bestimmtes Verzeichnis              auf dem Server 1:1 auf die Festplatte übertragen. Dort              können Sie die Dateien bearbeiten und die Änderungen              wieder auf den Server übertragen. Falls Sie keinen              Schreibzugriff haben, können Sie die Datei per Mail an              jemanden senden, der die Datei auf dem Server
+              aktualisieren kann.
+            </p>
+            <a name="checkout_2"></a>
+            <h3>Vorbereitung</h3>
+            <p>              Erstellen Sie auf Ihrer Festplatte einen Ordner, in              den Sie die Dateien ablegen können. Nennen Sie ihn
+              beispielsweise 
+              <tt>
+                OpenOffice CVS
+              </tt>.
+            </p>
+            <a name="checkout_3"></a>
+            <h3>Bei anonymem Zugriff</h3>
+            <p>
+              Führen Sie die folgenden Schritte durch:
+            </p>
+            <ol>
+              <li>Klicken Sie auf den Menüeintrag 
+              <tt>                Create |                Checkout module...(unter 2.0 finden Sie diesen Punkt
+                unter Remote | Checkout module)
+              </tt></li>
+              <li>Geben Sie als Modul 
+              <tt>
+                de/www
+              </tt>              ein, um alle
+              Web-Dokumente des de-Projekts zu bekommen.</li>
+              <li>Oder geben Sie als Modul 
+              <tt>
+                de/documentation
+              </tt>              ein, um alle
+              ver&ouml;ffentlichten Dokumentationen des de-Projekts zu bekommen.</li>
+              <li>              Als Zielverzeichnis geben Sie das bei den Vorbereitungen angelegte Verzeichnis an.</li>
+              <li>              Klicken Sie auf OK, um den Checkout vorzunehmen.</li>
+              <li>Lesen Sie unten weiter.</li>
+            </ol>
+            <a name="checkout_4"></a>
+            <h3>Bei Schreibzugriff</h3>
+            <p>
+              Führen Sie die folgenden Schritte durch:
+            </p>
+            <ol>
+              <li>Klicken Sie auf den Menüeintrag 
+              <tt>                Create |                Checkout module...(unter 2.0 finden Sie diesen Punkt
+                unter Remote | Checkout module)
+              </tt></li>
+              <li>Geben Sie als Modul 
+              <tt>
+                de/www
+              </tt>              ein, um alle
+              Dokumente des de-Projekts zu bekommen.</li>
+              <li>Oder geben Sie als Modul 
+              <tt>
+                de/documentation
+              </tt>              ein, um alle
+              ver&ouml;ffentlichten Dokumentationen des de-Projekts zu bekommen.</li>
+              <li>              Als Zielverzeichnis geben Sie das bei den Vorbereitungen angelegte Verzeichnis an.</li>
+              <li>              Klicken Sie auf OK, um den Checkout vorzunehmen.</li>
+              <li>Lesen Sie unten weiter.</li>
+            </ol>
+            <a name="checkout_5"></a>
+            <h3>Der Status des Checkouts</h3>
+            <p>              Nachdem Sie den Checkout eingeleitet haben, wird im              Statusbereich der Fortschritt angezeigt. Sie erhalten              eine Ausgabe, die ähnlich wie folgende aussieht (bei              anonymem Zugriff weicht natürlich der Modulname
+              ab):
+            </p>
+            <p>
+              <tt>                cvs checkout -P de/www (in directory                C:\OpenOffice-CVS)
+                <br />                cvs server: Updating de/www
+                <br />                U de/www/README_de_DE.txt
+                <br />                U de/www/about-cdrom.html
+                <br />                [...]
+                <br />                U de/www/images/spacer.gif
+                <br />
+                <br />                *****CVS exited normally with code 0*****
+                <br />
+              </tt>
+            </p>
+            <p>              Die letzte Zeile bedeutet, dass kein Fehler              aufgetreten ist. Würde hier eine "1" stehen, wäre ein              Fehler aufgetreten. Das gilt für alle in diesem              Dokument beschriebenen Vorgänge, vom Login bis zum
+              Erstellen eines Diffs.
+            </p>
+            <a name="diff"></a>
+            <h2>              Änderungen zwischen zwei Versionen einer Datei feststellen</h2>
+            <a name="diff_1"></a>
+            <h3>              Vergleich einer älteren mit der aktuellen Version auf dem Server</h3>
+            <p>              Das geht am einfachsten, wenn Sie sich zuerst einen              Graphen zeichnen lassen. Dazu wählen Sie bitte im
+              Kontextmenü der entsprechenden Datei 
+              <tt>                Graph
+                selection (unter Version 2.0 "Graph")
+              </tt>              aus und klicken im erscheinenden Dialog
+              auf 
+              <tt>
+                OK
+              </tt>. Sie sehen nun eine Grafik, in der alle              vorhandenen Versionen angezeigt werden. Sie können eine
+              Version auswählen und im Menü auf 
+              <tt>                Graph | Diff
+                selected (unter Version 2.0 "Graph | Diff")
+              </tt>              klicken, um die ausgwählte Version mit              der neusten zu vergleichen.Klicken Sie im erscheinenden Dialog
+              auf 
+              <tt>
+                OK
+              </tt>.
+            </p>
+            <p>
+              Den Graph können Sie übrigens über 
+              <tt>                Graph |
+                Close
+              </tt>
+              wieder schließen.
+            </p>
+            <a name="diff_2"></a>
+            <h3>Vergleichen von zwei beliebigen Versionen</h3>
+            <p>              Dazu klicken Sie in der Dateiansicht im Kontextmenü
+              auf 
+              <tt>
+                Diff selection (unter Version 2.0 Diff)
+              </tt>. Im erscheinenden Dialog
+              markieren Sie den Eintrag 
+              <tt>                Compare two
+                revisions/tags/branches/dates (unter Version 2.0 entsprechender Eintrag in der Auswahlbox)
+              </tt>. In die zwei              Eingabefelder darunter können Sie nun zwei
+              Versionsnummern eintragen.
+            </p>
+            <a name="diff_3"></a>
+            <h3>              Vergleichen von der Version auf der Festplatte mit einer Version auf dem Server</h3>
+            <p>
+              Rufen Sie den Dialog über den Eintrag 
+              <tt>                Diff
+                selection
+              </tt>              im Kontextmenü der zu vergleichenden
+              Datei auf.
+            </p>
+            <h4>              Vergleich mit der gleichen Version auf dem Server</h4>
+            <p>
+              Selektieren Sie dazu die Option 
+              <tt>                Compare your
+                local file with the same remote revision
+              </tt>.
+            </p>
+            <h4>Vergleich mit einer anderen Version</h4>
+            <p>
+              Wählen Sie den Punkt 
+              <tt>                Compare your local file
+                with another revision/tag/branch/date
+              </tt>              aus.
+              (unter Version 2.0 entsprechender Eintrag in der Auswahlbox)
+            </p>
+            <a name="diff_4"></a>
+            <h3>Ausgabe, die bei einem Diff erzeugt wird</h3>
+            <p>              Nachdem Sie eine der oben aufgeführten Methoden              ausgewählt haben, bekommen Sie eine Ausgabe, die der              folgenden ähnelt. Diese ist bei jeder gewählten Methode
+              ähnlich.
+            </p>
+            <p>
+              <tt>                cvs diff -r 1.8 team.html (in directory                C:\OpenOffice-CVS\de\www\dev\)
+                <br />                Index: team.html
+                <br />                ===================================================================
+                <br />                RCS file: /cvs/de/www/dev/team.html,v
+                <br />                retrieving revision 1.8
+                <br />                retrieving revision 1.10
+                <br />                diff -r1.8 -r1.10
+                <br />                27c27
+                <br />
+                <font color="red">                  &lt;
+                  &lt;td&gt;lesend&lt;/td&gt;
+                </font>
+                <br />                ---
+                <br />
+                <font color="blue">                  &gt;
+                  &lt;td&gt;schreibend&lt;/td&gt;
+                </font>
+                <br />                112c112,114
+                <br />
+                <font color="red">                  &lt;
+                  &lt;td&gt;www/de&lt;/td&gt;
+                </font>
+                <br />                ---
+                <br />
+                <font color="blue">                  &gt;
+                  &lt;td&gt;www/de&lt;br&gt;
+                </font>
+                <br />
+                <font color="blue">                  &gt; &lt;a
+                  href="ftp://sunsite.informatik.rwth-aachen.de/pub/packages/OpenOffice"&gt;ftp-server&lt;/a&gt;
+                </font>
+                <br />
+                <font color="blue">
+                  &gt; &lt;/td&gt;
+                </font>
+                <br />                119c121,122
+                <br />
+                <font color="red">                  &lt;
+                  &lt;td&gt;www/de&lt;/td&gt;
+                </font>
+                <br />                ---
+                <br />
+                <font color="blue">                  &gt;
+                  &lt;td&gt;www/de&lt;br&gt;
+                </font>
+                <br />
+                <font color="blue">                  &gt; &lt;a
+                  href="http://whiteboard.openoffice.org/marketing/"&gt;marketing&lt;/a&gt;&lt;/td&gt;
+                </font>
+                <br />
+              </tt>
+            </p>
+            <p>              Im Kopf steht der Name der Datei und die zwei              verglichenen Versionen (hier 1.8 und 1.10). Darunter              folgen alle Änderungen. Zuerst wird die Zeilenangabe in              der Quell- (links von dem "c") und der Zieldatei              (rechts vom "c") angezeigt und darunter der Bereich in              der Quelldatei (in rot) und in der Zieldatei (in
+              blau).
+            </p>
+            <p>              Diese so genannten "diffs" kann man dazu verwenden,              um eine Datei, die man übersetzt hat, zu aktualisieren.              Es müssen ja nur die Bereiche aktualisiert werden, die              auch im Original verändert wurden. Um Zugriff auf die              Originaldateien zu bekommen, müssen Sie ein Checkout              des entsprechenden Originalverzeichnisses machen. Die              Verzeichnisse befinden sich alle unter
+              <tt>
+                &lt;project&gt;/www/&lt;dir&gt;
+              </tt>, wobei              &lt;project&gt; für das SUb-Projekt und &lt;dir&gt; für              den Verzeichnisnamen steht, der auch auf der Website              verwendet wird.
+              <br />              Zum besseren Verständnis ein Beispiel:
+              <br />
+              die Seite 
+              <a href=             "http://qa.openoffice.org/issue_handling/project_issues.html">http://qa.openoffice.org/issue_handling/project_issues.html</a>              finden Sie in dem Verzeichnis
+              <tt>
+                qa/www/issue_handling
+              </tt>.
+            </p>
+            <a name="diff_extern"></a>
+            <h3>Verwendung eines externen Diff-Programms</h3>
+            <p>              Ich habe das Programm WinMerge verwendet, das direkt
+              mit WinCVS zusammenarbeitet. Sie können es 
+              <a href=             "http://winmerge.sourceforge.net/">                hier herunterladen</a>. Dort ist auch eine DLL erhältlich,              die die Benutzeroberfläche ins Deutsche ändert. Sie
+              richten WinMerge wie folgt ein:
+            </p>
+            <ol>
+              <li>Installieren Sie WinMerge.</li>
+              <li>              Entpacken Sie die Sprach-DLL in das WinMerge-Verzeichnis.</li>
+              <li>Starten Sie WinMerge über das Startmenü.</li>
+              <li>Wählen Sie in dem Dialog 
+              <tt>                View |
+                Language...
+              </tt>
+              die Sprache 
+              <tt>                Deutsch
+                (Deutschland)
+              </tt>.</li>
+              <li>Sie können WinMerge wieder schließen.</li>
+              <li>              Öffnen Sie in WinCVS den Optionsdialog über
+              <tt>
+                Admin | Preferences
+              </tt>.</li>
+              <li>Wechseln Sie auf die Seite 
+              <tt>
+                WinCvs
+              </tt>.</li>
+              <li>Setzen Sie einen Haken vor 
+              <tt>                External diff
+                program
+              </tt>.</li>
+              <li>Klicken Sie auf 
+              <tt>...
+              </tt></li>
+              <li>              Wechseln Sie in das Verzeichnis, in das Sie              WinMerge installiert haben und wählen Sie die
+              <tt>
+                winmerge.exe
+              </tt>
+              aus.</li>
+              <li>              Schließen Sie den Dialog und die Optionen jeweils mit einem Klick auf 
+              <tt>
+                OK
+              </tt>.</li>
+              <li>              Beim nächsten Diff, das Sie anfertigen, wählen Sie im Diff-Dialog in der linken unteren Ecke 
+              <tt>                Use
+                the external diff
+              </tt>
+              aus.</li>
+            </ol>
+            <p>              In Zukunft startet automatisch WinMerge, wenn Sie              ein Diff anfertigen. Dort sehen Sie die Änderungen              durch farbliche Hervorhebung in der kompletten Datei
+              und erhalten nicht nur die Auszüge.
+            </p>
+            <h2>              Die folgenden Vorgänge erfordern Schreibzugriff auf den Server.</h2>
+            <a name="add"></a>
+            <h2>Neue Dateien auf den Server stellen</h2>
+            <p>              Kopieren Sie die Datei, die auf den Server soll, in              das passende Verzeichnis des CVS-Verzeichnisbaums auf              Ihrer Festplatte, der beim Checkout angelegt wurde.              Wählen Sie die Datei aus und klicken Sie im Menü auf
+              <tt>
+                Modify | Add selection (Unter Version 2.0 Modify | Add)
+              </tt>. Die Datei wird zum              Übertragen auf den Server markiert und erst bei einem
+              "Commit" der Datei tatsächlich übertragen.
+            </p>
+            <a name="commit"></a>
+            <h2>              Änderungen an einer Datei an den Server übertragen</h2>
+            <p>              Sie haben eine Datei geändert und möchten die              Änderungen an den Server übertragen? Kein Problem,              wählen Sie in der Dateiliste die geänderte Datei aus              (die übrigens ein rotes Icon hat) und klicken Sie im
+              Kontextmenü auf 
+              <tt>
+                Commit selection (Unter Version 2.0 Commit)
+              </tt>. Dort können              Sie einen kurzen Kommentar eingeben. Es empfiehlt sich              mit ein paar Wörtern die Änderungen zu beschreiben.              Sobald Sie auf OK klicken werden die Änderungen
+              übertragen.
+            </p>
+          </div>
+        </td>
+        <td valign="top" height="100%">
+          <!-- Start Navbar -->
+	<!-- >
+	Kommentare zur Navbar Informationen f&uuml;r Mitglieder im de.OpenOffice.org Projekt
+	Makemapversion:
+	$Id: makemap.pl,v 1.6 2006/02/12 22:32:45 mkirchner Exp :
+	navbar_Dev ,V 0.5.5 Mittwoch, 22. Februar 2006 10:15:48 _MLM
+	< -->
+<ul id="navbar_de">
+    <li><div align="center">de-links</div></li>
+    <li> <a href="../index.html" title=" "> Hauptseite </a></li>
+    <li> <a href="../map_all.html" title=" "> Sitemap </a></li>
+    <li> <a href="../neuhier.html" title="Informationen zu OpenOffice.org, dem Softwareprodukt"> Produkt-Info </a></li>
+    <li> <a href="../kontakt.html" title="Informationen zu OpenOffice.org, der Community"> Projekt-Info </a></li>
+    <li> <a href="../downloads/quick.html" title="Software und mehr"> Download </a></li>
+    <li> <a href="../doc/index.html" title="Installationsbeschreibungen und mehr Schriftliches"> Dokumentationen </a></li>
+    <li> <a href="../doc/faq/index.html" title="FAQ- H&auml;ufig gestellte Fragen"> FAQ </a></li>
+    <li> <a href="../probleme.html" title="Wo Hilfe nahe ist"> Support </a></li>
+    <li> <a href="../doc/howto/index.html" title="Knappe Anleitungen f&uuml;r die erste Benutzung"> Erste Schritte </a></li>
+    <li> <a href="../marketing/marketing.html" title="Materialien und mehr"> Marketing </a></li>
+    <li> <a href="../presse/about-presskit.html" title="Pressemitteilungen, Interviews und andere Informationen"> Presse </a></li>
+    <li>Mithelfen
+      <ul>
+      <li> <a href="index.html" title="Die Startseite f&uuml;r neue Mitarbeiter"> F&uuml;r Mithelfer </a></li>
+      <li> <a href="../doc/faq/mitarbeiter/index.html" title="Das Wissensarchiv f&uuml;r Neulinge und Fortgeschrittene"> Mitarbeiter-FAQ </a></li>
+      <li> <a href="ansprechpartner.html" title="Ansprechpartner &uuml;bernehmen die Verantwortung f&uuml;r einen Teil des Gesamtprojekts."> Ansprechpartner </a></li>
+      <li> <a href="team.html" title="Alle Mithelfer"> Das Team </a></li>
+      <li> <a href="pre_submission_de.html" title="Einsenden einer Fehlermeldung oder eines Verbesserungsvorschlags"> Fehlerbericht </a></li>
+      <li> <a href="aufgabenliste.html" title="Aufgaben, die Helfer suchen."> Aufgabenliste </a></li>
+      <li> <a href="todo.html" title="Eine Sammlung von Aufgaben, die zur Zeit dringend sind"> Aktuelle TODO-Liste </a></li>
+      <li> <a href="../about-ooo/about-mailinglist.html" title="Die wichtigste Kommunikationsform im deOOo Projekt"> Mailinglisten </a></li>
+      <li> <a href="../about-ooo/about-irc.html" title="F&uuml;r Konferenzen der Entwickler, kein Support!"> IRC </a></li>
+      <li> <a href="issuezilla_einfuehrung.html" title="Der Hintergrund des Issuezilla knapp dargestellt"> Issuezilla Einführung </a></li>
+      <li> <a href="qa/index.html" title="Informationen zur Qualit&auml;tskontrolle der deutschen Lokalisationen von OOo"> Qualit&auml;tskontrolle </a></li>
+      <li> <a href="../about-ooo/about_unterstuetzung.html" title="Finanzielle Zuwendungen und Serverkapazit&auml;ten"> Zuwendungen </a></li>
+      <li> <a href="credits.html" title="F&uuml;r besondere Hilfe dankt das Projekt ..."> Danksagung </a></li>
+      </ul>
+    </li>
+</ul>
+          <!-- End Navbar -->
+        </td>
+      </tr>
+    </table>
+
+<p>
+	<a href="http://validator.w3.org/check?uri=referer"><img
+	    src="http://www.w3.org/Icons/valid-xhtml10-blue"
+	    alt="Valid XHTML 1.0 Transitional" height="31" width="88" /></a>
+</p>
+  
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

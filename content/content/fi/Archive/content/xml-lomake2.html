@@ -1,0 +1,269 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    
+<title>Suomenkielinen OpenOffice.org</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="version" content="0.1" />
+
+<!-- Begin Finnish header -->
+<style type="text/css" media="screen, projection">
+/*<![CDATA[*/
+<!--
+  @import url(css/fi.css);
+-->
+/*]]>*/
+</style>
+<!-- End Finnish header -->
+
+    
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/fi/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/fi/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/fi/">fi</a>&nbsp;&raquo;&nbsp;<a href="/fi/Archive/">Archive</a>&nbsp;&raquo;&nbsp;<a href="/fi/Archive/content/">content</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<div id="fiheader">
+  <div id="fipositioner">
+    <a id="fiheader-logo" href="http://fi.openoffice.org/" accesskey="1" title="Suomenkieliselle OpenOffice.org-kotisivulle"></a>
+    <h1 id="fipositioner-text">Vapaa ja avoin toimisto-ohjelmisto</h1>
+
+  </div>
+</div>
+<table id="fibody">
+ <tr>
+  <td>
+   <table width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+     <td></td>
+     <td colspan="2">
+      <table cellpadding="5">
+       <tr valign="top">
+        <td>
+        
+<!-- Begin Finnish navbar -->
+         <div class="fiLeftMenu">
+          <div class="toolgroup">
+           <div class="label"><strong>OpenOffice.org&nbsp;suomeksi</strong></div>
+           <ul>  
+            <li><a href="index.html">Pääsivu</a></li>
+            <li><a href="lataa.html">Lataa</a></li>
+            <li><a href="tuote.html">Ohjelmiston&nbsp;kuvaus</a></li>
+            <li><a href="sivukartta.html">Sivukartta</a></li>
+           </ul>
+          </div>
+          
+          <div class="toolgroup">
+           <div class="label"><strong>Ohjeita</strong></div>
+           <ul>
+            <li><a href="tuki.html">Käyttäjätuki</a></li>
+            <li><a href="vastauksia.html">Vastauksia kysymyksiin</a></li>
+            <li><a href="dokumentaatio.html">Käyttöoppaat</a></li>
+            <li><a href="kielityokalut.html">Tavutus ja oikoluku</a></li>
+            <li><a href="mallit.html">Asiakirjamalleja</a></li>
+           </ul>
+          </div>
+          
+          <div class="toolgroup">
+           <div class="label"><strong>Suomennosprojekti</strong></div>
+           <ul>
+            <li><a href="http://fi.openoffice.org/servlets/ProjectNewsList">Tiedotteet</a></li>
+            <li><a href="postituslistat.html">Postituslistat</a>
+             (<a href="http://fi.openoffice.org/servlets/ProjectMailingListList">engl</a>)
+            </li>
+            <li><a href="todo.html">Tehtäviä</a></li>
+            <li><a href="issuezilla.html">Viat ja toiveet</a>
+             (<a href="http://fi.openoffice.org/servlets/ProjectIssues">engl</a>)
+            </li>
+            <li><a href="yhteystiedot.html">Yhteystiedot</a></li>
+           </ul>
+          </div> 
+         </div>
+<!-- End Finnish navbar -->
+        </td>
+        <td class="pagecontent">
+<!-- END-FINNISH-HEADER-PART -->
+        
+<!-- ====================================================================== -->
+<font size="-1"><a href="xml.html">XML-asiakirjat</a> » Esimerkki 3: ohjausobjektilomake</font><br/>
+
+<h1>XML-esimerkki 3: ohjausobjektilomakkeen tietojen kerääminen</h1>
+
+<p>Lomakkeen ohjausobjekteilla on mahdollista tehdä hyvin monipuolisia
+lomakkeita, joiden kentät voivat sisältää muutakin kuin vain
+tekstiä. Lomake voidaan yhdistää tietokantaan, jolloin lomakkeeseen
+täytetyt tiedot päivittyvät tietokantaan suoraan.</p>
+
+<p>Tässä esimerkissä lomaketta ei ole yhdistetty tietokantaan, vaan
+sen sisältämät tiedot muunnetaan toiseen tiedostomuotoon, tässä
+tapauksessa HTML:ksi.</p>
+
+<p>Oletetaan, että käyttäjä on täyttänyt <a href="esimerkit/lomake2.odt">esimerkkilomakkeen</a> (ODT).</p>
+
+<div align="center"><img src="kaappaukset/kaappaus_lomake2.png"></div>
+
+<h2>Muuntaminen</h2>
+
+<p>Alla esitetty muunnos muuntaa lomakkeen HTML-muotoiseksi taulukoksi.</p>
+
+<pre style="font-size: 70%; background-color: #f0f0f0; margin-left: 20px; margin-right: 20px;">
+&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;xsl:stylesheet
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+  xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+  xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+  xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+  xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+  xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"
+  xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0"
+  xmlns:svg="http://www.w3.org/2000/svg"
+  xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
+  xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0"
+  xmlns:math="http://www.w3.org/1998/Math/MathML"
+  xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0"
+  xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0"
+  xmlns:ooo="http://openoffice.org/2004/office"
+  xmlns:ooow="http://openoffice.org/2004/writer"
+  xmlns:oooc="http://openoffice.org/2004/calc"
+  xmlns:dom="http://www.w3.org/2001/xml-events"
+  xmlns:xforms="http://www.w3.org/2002/xforms"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  office:version="1.0"
+  version="1.0"&gt;
+
+  &lt;!-- Määrätään muunnoksen ulostulomuoto ja merkkikoodaus. --&gt;
+  &lt;xsl:output method="html" encoding="ISO-8859-1"/&gt;
+
+  &lt;!-- ======================================================================== --&gt;
+  &lt;!-- Luetaan kenttien tiedot ja muotoillaan ne taulukon riviksi               --&gt;
+  &lt;!-- ======================================================================== --&gt;
+  
+  &lt;!-- Tekstikenttä --&gt;
+  &lt;xsl:template match="form:text"&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;xsl:value-of select="@form:name"/&gt;:&lt;/td&gt;
+      &lt;td&gt;&lt;xsl:value-of select="@form:current-value"/&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/xsl:template&gt;
+  
+  &lt;!-- Muotoiltu tekstikenttä --&gt;
+  &lt;xsl:template match="form:formatted-text"&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;xsl:value-of select="@form:name"/&gt;:&lt;/td&gt;
+      &lt;td&gt;&lt;xsl:value-of select="@form:current-value"/&gt; (numeerinen päivämäärä 1.1.1900 laskien)&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/xsl:template&gt;
+  
+  &lt;!-- Monivalintakenttä --&gt;
+  &lt;xsl:template match="form:radio"&gt;
+    &lt;xsl:if test="@form:current-selected = 'true'"&gt;
+      &lt;tr&gt;
+        &lt;td&gt;&lt;xsl:value-of select="@form:name"/&gt;:&lt;/td&gt;
+        &lt;td&gt;&lt;xsl:value-of select="@form:label"/&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/xsl:if&gt;
+  &lt;/xsl:template&gt;
+
+
+  &lt;!-- ======================================================================== --&gt;
+  &lt;!-- Juurisolmu                                                               --&gt;
+  &lt;!-- ======================================================================== --&gt;
+   &lt;xsl:template match="/"&gt;
+     &lt;body&gt;
+       &lt;h2&gt;Lomakeraportti&lt;/h2&gt;
+       &lt;p&gt;Generoitu täytetyn lomakkeen sisältävästä OASIS OpenDocument -tekstiasiakirjasta.&lt;/p&gt;
+
+       &lt;table&gt;
+         &lt;tr&gt;&lt;th align="left"&gt;Tekstikenttä&lt;/th&gt;&lt;th align="left"&gt;Täytetty arvo&lt;/th&gt;&lt;/tr&gt;
+         &lt;xsl:apply-templates/&gt;
+       &lt;/table&gt;
+     &lt;/body&gt;
+   &lt;/xsl:template&gt;
+
+  &lt;!-- ======================================================================== --&gt;
+  &lt;!-- Karsitaan pois kaikki muut tekstit                                       --&gt;
+  &lt;!-- ======================================================================== --&gt;
+   &lt;xsl:template match="text()"&gt;
+   &lt;/xsl:template&gt;
+
+&lt;/xsl:stylesheet&gt;
+</pre>
+
+<p>Ajaminen tapahtuu kuten <a href="xml-lomake1.html">edellisessä
+esimerkissä</a> tai asentamalla XSLT-ohjelman suodattimeksi
+OpenOffice.orgiin.</p>
+
+<p>Suorittaminen tuottaa seuraavanlaisen raportin:</p>
+
+<div style="background-color: #e0e0ff; margin-left: 20px; margin-right: 20px;">
+<h2>Lomakeraportti</h2>
+<p>Generoitu täytetyn lomakkeen sisältävästä OASIS OpenDocument -tekstiasiakirjasta.</p>
+<table>
+<tr>
+<th align="left">Tekstikenttä</th>
+<th align="left">Täytetty arvo</th>
+</tr>
+<tr>
+<td>k_ammatti:</td>
+<td>kuningas</td>
+</tr>
+<tr>
+<td>k_syntymaaika:</td>
+<td>15438 (numeerinen päivämäärä 1.1.1900 laskien)</td>
+</tr>
+<tr>
+<td>k_sukunimi:</td>
+<td>Suuri</td>
+</tr>
+<tr>
+<td>k_etunimet:</td>
+<td>Kaarle</td>
+</tr>
+<tr>
+<td>k_siviilisaaty:</td>
+<td>eronnut</td>
+</tr>
+<tr>
+<td>k_syntymapaikka:</td>
+<td>paikkala</td>
+</tr>
+</table>
+</div>
+
+<p style="margin-top: 5em;">Marko Grönroos<br>magi42@openoffice.org</p>
+
+<!-- ====================================================================== -->
+        </td>
+       </tr>
+      </table>
+     </td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+</table>
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

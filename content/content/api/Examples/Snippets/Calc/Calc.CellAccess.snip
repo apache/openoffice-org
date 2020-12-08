@@ -1,0 +1,122 @@
+<!-- ========================================================================
+$RCSfile: Calc.CellAccess.snip,v $
+
+last change: $Revision: 1.3 $ $Author: jsc $ $Date: 2004/06/24 11:54:27 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the 
+Public Documentation License Version 1.0 (the "License"); 
+you may only use this Documentation if you comply with 
+the terms of this License. A copy of the License is 
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives 
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed 
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below 
+without the marker for being an initial author.
+
+All Rights Reserved.
+======================================================================== -->
+
+<snippet language="OOBasic" application="Calc">
+
+<keywords>
+  <keyword>Calc</keyword>
+  <keyword>cells</keyword>
+  <keyword>spreadsheet</keyword>
+  <keyword>access</keyword>
+  <keyword>XSheet</keyword>
+  <keyword>getCellByPosition</keyword>
+  <keyword>XNAmeAccess</keyword>
+  <keyword>getByName</keyword>
+  <keyword>XCell</keyword>
+  <keyword>getValue</keyword>
+  <keyword>getString</keyword>
+  <keyword>getString</keyword>
+  <keyword>getFormula</keyword>
+  <keyword>setValue</keyword>
+  <keyword>setString</keyword>
+  <keyword>setFormula</keyword>
+</keywords>
+
+<authors>
+	<author id="sasa" initial="true" email="scat@teol.net">Sasa Kelecevic</author>
+	<author id="andrew" initial="true" email="andrew@pitonyak.org">Andrew Pitonyak</author>
+	<author id="laurent" initial="true" email="listes.godard@laposte.net">Laurent Godard</author>
+	<author id="michael" initial="true" email="Michael.Hoennig@Sun.COM">Michael Hoennig</author>
+	<author id="tomsontom" initial="false" email="tom.schindl@bestsolution.at">Tom Schindl</author>
+</authors>
+
+<question heading="access cells">
+How can the cells of a given OOo/Calc document be accessed?
+
+<listing>
+Set objServiceManager = CreateObject("com.sun.star.ServiceManager")
+Set objDesktop = 
+objServiceManager.createInstance("com.sun.star.frame.Desktop")
+Dim args()
+Set objCalcDocument =
+objDesktop.loadComponentFromURL("private:factory/scalc", "_blank", 0, args)
+Set objSheets = objCalcDocument.Sheets
+aCell=???
+</listing>
+
+</question>
+
+<answer>
+<p>
+Cells can be accessed via the sheet in which they are:
+<code>objSheets.getByName("TheSheetName")</code>.
+</p>
+
+<listing>
+'Print Cell Value, String, Or Formula
+'******************************************************************
+'Author: Sasa Kelecevic
+'email:  scat@teol.net
+Sub ExampleGetValue
+   Dim oDocument As Object, oSheet As Object, oCell As Object
+   oDocument=ThisComponent
+   oSheet=oDocument.Sheets.getByName("Sheet1")
+   oCell=oSheet.getCellByPosition(0,0) 'A1
+   print oCell.getValue
+   'print oCell.getString
+   'print oCell.getFormula
+End sub
+</listing>
+
+<listing>
+'Set Cell Value, Format, String, Or Formula
+'******************************************************************
+'Author: Sasa Kelecevic
+'email:  scat@teol.net
+Sub ExampleSetValue
+   Dim oDocument As Object, oSheet As Object, oCell As Object
+   oDocument=ThisComponent
+   oSheet=oDocument.Sheets.getByName("Sheet1")
+   oCell=oSheet.getCellByPosition(0,0) 'A1
+   oCell.setValue(23658)
+   'oCell.NumberFormat=2   '23658.00
+   'oCell.setString("oops")
+   'oCell.setFormula("=FUNCTION()")
+   'oCell.IsCellBackgroundTransparent = TRUE
+   'oCell.CellBackColor = RGB(255,141,56)
+End Sub
+</listing>
+
+</answer>
+
+<changelog>
+	<change author-id="tomsontom" date="2004-06-22">Modified to match new snippet-DTD</change>
+	<change author-id="sasa" date="0000-00-00">Intial release</change>
+</changelog>
+</snippet>
