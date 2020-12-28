@@ -30,7 +30,7 @@ if ( DL.VERSION.slice( 4, 5 ) === "0" )
 
 // Data for the <select> element "os".
 				    // Value  Visible text				Not used for the options
-DL.SEL_OS			= [ "win32",  "Windows (EXE)",			    	".exe",
+DL.SEL_OS			= [ "win32",  "Windows 32-bit (x86) (EXE)",	    	".exe",
 				    "lnx64d", "Linux 64-bit (x86-64) (DEB)",	    	".tar.gz",
 				    "lnx64r", "Linux 64-bit (x86-64) (RPM)",	    	".tar.gz",
 				    "lnx32d", "Linux 32-bit (x86) (DEB)",	    	".tar.gz",
