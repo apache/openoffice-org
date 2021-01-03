@@ -38,7 +38,7 @@ DL.createDownloadBox = function() {
       + "</select>"
 
       // Platform info text.
-      + "<a id='dl_rpm_vs_deb'>"
+      + "<a id='platform_info'>"
         + ""
       + "</a>"
 
