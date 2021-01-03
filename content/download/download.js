@@ -593,10 +593,10 @@ DL.showErrorMessage = function( error_text ) {
 	document.getElementById( "sub_box"	).style.display	 = "block";
 
 	// Delete previously set strings to avoid to show them.
-	document.getElementById( "dl_rpm_vs_deb" ).style.cursor	= "default";
-	document.getElementById( "dl_rpm_vs_deb" ).title	= "";
-	document.getElementById( "dl_rpm_vs_deb" ).text		= "";
-	
+	document.getElementById( "platform_info" ).style.cursor	= "default";
+	document.getElementById( "platform_info" ).title	= "";
+	document.getElementById( "platform_info" ).text		= "";
+
 	// Delete previously set strings to get the possibility back to choose a different platform
 	// and then to assemble a new download link.
 	DL.UI_PLATFORM_NO_SUP	= "";
@@ -790,6 +790,11 @@ DL.checkForLinkExceptions = function() {
 		DL.SHOW_SUB_BOX = false;
 	}
 
+	// Show no platform info text.
+	document.getElementById( "platform_info" ).style.cursor		= "default";
+	document.getElementById( "platform_info" ).title		= "";
+	document.getElementById( "platform_info" ).text			= "";
+
 	return;
 }
 
@@ -848,15 +853,29 @@ DL.getLinkSelection = function() {
 		DL.SHOW_SUB_BOX		= true;
 		DL.ERROR		= false;
 
-		// If a Linux file is selected, then set the values for the RPM vs. DEB text link. Otherwise no text.
-		if( DL.INSTALL_EXTENSION === "RPM" || DL.INSTALL_EXTENSION === "DEB" ) {
-			document.getElementById( "dl_rpm_vs_deb" ).style.cursor	= "help";
-			document.getElementById( "dl_rpm_vs_deb" ).title	= l10n.dl_rpm_vs_deb_title;
-			document.getElementById( "dl_rpm_vs_deb" ).text		= l10n.dl_rpm_vs_deb_text;
+		// If a Windows file is selected and a respective text is existing, then set the values for the Windows info link.
+		if( DL.INSTALL_EXTENSION === "EXE" & l10n.dl_win_info_title != null ) {
+			document.getElementById( "platform_info" ).style.cursor	= "help";
+			document.getElementById( "platform_info" ).title	= l10n.dl_win_info_title;
+			document.getElementById( "platform_info" ).text		= l10n.dl_win_info_text;
+
+		// If a Mac file is selected and a respective text is existing, then set the values for the Mac info link.
+		} else if( DL.INSTALL_EXTENSION === "DMG" & l10n.dl_mac_info_title != null ) {
+			document.getElementById( "platform_info" ).style.cursor	= "help";
+			document.getElementById( "platform_info" ).title	= l10n.dl_mac_info_title;
+			document.getElementById( "platform_info" ).text		= l10n.dl_mac_info_text;
+
+		// If a Linux file is selected and a respective text is existing, then set the values for the Linux info link.
+		} else if( DL.INSTALL_EXTENSION === "RPM" || DL.INSTALL_EXTENSION === "DEB" & l10n.dl_linux_info_title != null ) {
+			document.getElementById( "platform_info" ).style.cursor	= "help";
+			document.getElementById( "platform_info" ).title	= l10n.dl_linux_info_title;
+			document.getElementById( "platform_info" ).text		= l10n.dl_linux_info_text;
+
+		// Otherwise no text.
 		} else {
-			document.getElementById( "dl_rpm_vs_deb" ).style.cursor	= "default";
-			document.getElementById( "dl_rpm_vs_deb" ).title	= "";
-			document.getElementById( "dl_rpm_vs_deb" ).text		= "";
+			document.getElementById( "platform_info" ).style.cursor	= "default";
+			document.getElementById( "platform_info" ).title	= "";
+			document.getElementById( "platform_info" ).text		= "";
 		}
 
 		// Set the values for both download text buttons and set the focus to the "full install".

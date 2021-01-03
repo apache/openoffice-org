@@ -228,9 +228,12 @@ l10n.dl_full_link_text				= "Download full installation";
 l10n.dl_full_link_title				= "Click to download: ";
 l10n.dl_langpack_link_text			= "Download language pack";
 l10n.dl_langpack_link_title			= "Click to download: ";
-l10n.dl_rpm_vs_deb_title			= "RPM is used in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB is used in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
-l10n.dl_rpm_vs_deb_text				= "RPM vs. DEB = What to choose?";
-
+l10n.dl_win_info_text				= "Windows : Title";
+l10n.dl_win_info_title				= "Windows : Text";
+l10n.dl_linux_info_text				= "RPM vs. DEB = What to choose?";
+l10n.dl_linux_info_title			= "RPM is used in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB is used in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
+l10n.dl_mac_info_text				= "macOS : Title";
+l10n.dl_mac_info_title				= "macOS : Text";
 
 l10n.dl_full_link_porting_text			= "Porting: Click to choose from 3rd party vendors";
 l10n.dl_full_link_porting_title			= "Click to browse to the porting webpage and download from 3rd party vendors";

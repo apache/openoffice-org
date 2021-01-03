@@ -37,9 +37,9 @@ DL.createDownloadBox = function() {
         + "title='" + l10n.dl_green_box_selectbox_ver_title  + "'>"
       + "</select>"
 
-      // Linux packages text.
-      + "<a id='dl_rpm_vs_deb' title='" + l10n.dl_rpm_vs_deb_title + "'>"
-        + l10n.dl_rpm_vs_deb_text
+      // Platform info text.
+      + "<a id='dl_rpm_vs_deb'>"
+        + ""
       + "</a>"
 
       + "</form>"
