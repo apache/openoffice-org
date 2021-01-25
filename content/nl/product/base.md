@@ -40,5 +40,5 @@ Meer informatie over het werken met **Base**, is te vinden op de
 Ga voor technische informatie, of om te helpen bij het verbeteren van **Base**, naar de
 [**Base** project pagina][2].
 
-[1]: http://wiki.services.openoffice.org/wiki/database
-[2]: http://dba.openoffice.org/
+[1]: https://wiki.openoffice.org/wiki/Database
+[2]: https://www.openoffice.org/dba/
