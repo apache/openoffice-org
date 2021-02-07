@@ -91,7 +91,8 @@ l10n.dl_green_box_select_box_lang_values_custom = [ "ast",	"Asturian",				"Astur
 						    "vi",	"Vietnamese",				"Tiếng Việt" ];
 
 /* l10n.dl_green_box_select_box_version_values	= [ "" ]; */
-l10n.dl_green_box_select_box_version_values	= [ "4.1.8",
+l10n.dl_green_box_select_box_version_values	= [ "4.1.9",
+												"4.1.8",
 												"4.1.7",
 												"4.1.6",
 												"4.1.5",
@@ -276,8 +277,8 @@ l10n.dl_checksum_sha512_title			= "提供下載的SHA512雜湊值是針對: ";
 l10n.dl_help_img_title				= "完整安裝與語言包有什麼不同?";
 l10n.dl_help_img_src				= "/download/cachedimages/help-information-icon.png";
 l10n.dl_help_img_alt				= "安裝資訊";
-l10n.dl_help_text				= "什麼是語言包?";
-l10n.dl_help_title				= "完整安裝與語言包有什麼不同?";
+l10n.dl_help_text					= "什麼是語言包?";
+l10n.dl_help_title					= "完整安裝與語言包有什麼不同?";
 l10n.dl_checksum_img_title			= "如何以檢查碼驗證下載的檔案?";
 l10n.dl_checksum_img_src			= "/download/cachedimages/help-information-icon.png";
 l10n.dl_checksum_img_alt			= "檢查碼驗證";
@@ -286,7 +287,7 @@ l10n.dl_checksum_title				= "如何以檢查碼驗證下載的檔案?";
 l10n.dl_report_img_title			= "下載連結失效? 點這裡回報。";
 l10n.dl_report_img_src				= "/download/cachedimages/help-report-broken-link-icon.png";
 l10n.dl_report_img_alt				= "下載連結失效";
-l10n.dl_report_text				= "回報下載連結";
+l10n.dl_report_text					= "回報下載連結";
 l10n.dl_report_title				= "下載連結失效? 點這裡回報。";
 
 // Download: Strings for error text in the sub-red box (used in "download.js").
@@ -298,10 +299,10 @@ l10n.dl_langpack_link_error_title		= "請選擇其他語言、平台或版本。
 l10n.dl_error_problem_img_title			= "選擇下載的檔案無法使用";
 l10n.dl_error_problem_img_src			= "/download/cachedimages/exclamation-icon.png";
 l10n.dl_error_problem_img_alt			= "錯誤文字";
-l10n.dl_error_problem_text			= "問題: ";
-l10n.dl_error_solution_text			= "解決方法: ";
-l10n.dl_error_aoo_text				= "Apache OpenOffice ";
-l10n.dl_error_not_available_for_text		= "無法提供以下的下載版本:";
+l10n.dl_error_problem_text				= "問題: ";
+l10n.dl_error_solution_text				= "解決方法: ";
+l10n.dl_error_aoo_text					= "Apache OpenOffice ";
+l10n.dl_error_not_available_for_text	= "無法提供以下的下載版本:";
 l10n.dl_error_please_select_1_text		= "請選擇4.0.1版";
 l10n.dl_error_please_select_2_text		= "請選擇4.0.1或更新版本。";
 l10n.dl_error_please_select_3_text		= "請選擇Windows, Linux 或OS X版本下載。";
@@ -349,16 +350,17 @@ l10n.dl_analyze_copy_button_text		= "以[Ctrl] + [C]複製";
 l10n.dl_analyze_copy_button_title		= "透過[Ctrl] + [C] 將選擇的表格資料複製至系統剪貼簿";
 
 // Analyze: Strings for the table (used in "analyze.html").
-l10n.dl_analyze_table_browser_text		= "瀏覽器變數";
-l10n.dl_analyze_table_values_text		= "值";
-l10n.dl_analyze_table_yes_text			= "是";
-l10n.dl_analyze_table_no_text			= "否";
+l10n.dl_analyze_table_browser_text			= "瀏覽器變數";
+l10n.dl_analyze_table_values_text			= "值";
+l10n.dl_analyze_table_yes_text				= "是";
+l10n.dl_analyze_table_no_text				= "否";
 l10n.dl_analyze_table_stable_release_text	= "穩定發行版本";
 l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;函式/變數";
 
 
 
 // General: Links to webpage files that could be localized.
+l10n.dl_rel_notes_aoo419_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.9+Release+Notes";
 l10n.dl_rel_notes_aoo418_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.8+Release+Notes";
 l10n.dl_rel_notes_aoo417_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.7+Release+Notes";
 l10n.dl_rel_notes_aoo416_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.6+Release+Notes";
@@ -370,10 +372,10 @@ l10n.dl_rel_notes_aoo411_link			= "https://cwiki.apache.org/confluence/display/O
 l10n.dl_rel_notes_aoo410_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1+Release+Notes";
 l10n.dl_rel_notes_aoo401_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0.1+Release+Notes";
 l10n.dl_rel_notes_aoo400_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0+Release+Notes";
-l10n.dl_help_link				= "https://www.openoffice.org/download/full_vs_lp.html";
-l10n.dl_checksum_link				= "https://www.openoffice.org/download/checksums.html";
-l10n.dl_report_link				= "https://www.openoffice.org/download/analyze.html";
-l10n.dl_porting_link				= "https://www.openoffice.org/porting/index.html";
-l10n.dl_archive_link				= "https://www.openoffice.org/download/archive.html";
-l10n.dl_aoo341_link				= "https://www.openoffice.org/download/other-341.html";
+l10n.dl_help_link						= "https://www.openoffice.org/download/full_vs_lp.html";
+l10n.dl_checksum_link					= "https://www.openoffice.org/download/checksums.html";
+l10n.dl_report_link						= "https://www.openoffice.org/download/analyze.html";
+l10n.dl_porting_link					= "https://www.openoffice.org/porting/index.html";
+l10n.dl_archive_link					= "https://www.openoffice.org/download/archive.html";
+l10n.dl_aoo341_link						= "https://www.openoffice.org/download/other-341.html";
 
