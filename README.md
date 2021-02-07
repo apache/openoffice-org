@@ -24,7 +24,7 @@ using `copy_staging.sh` by the [OpenOffice-org-Publish-Site](https://ci-builds.a
 Jenkins job. This job will need to be started manually.
 
 Any build failures are reported to [commits@openoffice.a.o](https://lists.apache.org/list.html?commits@openoffice.apache.org)
-mailing list.
+mailing list. 
 
 ## Quick updates to a single file
 
