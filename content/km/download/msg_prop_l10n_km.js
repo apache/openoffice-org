@@ -92,7 +92,8 @@ l10n.dl_green_box_select_box_lang_values_custom = [ "ast",	"Asturian",				"Astur
 
 /* l10n.dl_green_box_select_box_language_values	= [ "" ]; */
 
-l10n.dl_green_box_select_box_version_values	= [ "4.1.8",
+l10n.dl_green_box_select_box_version_values	= [ "4.1.9",
+												"4.1.8",
 												"4.1.7",
 												"4.1.6",
 												"4.1.5",
@@ -360,6 +361,7 @@ l10n.dl_analyze_table_stable_release_text	= "Stable Release";
 l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;functions/variables";
 
 // General: Links to webpage files that could be localized.
+l10n.dl_rel_notes_aoo419_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.9+Release+Notes";
 l10n.dl_rel_notes_aoo418_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.8+Release+Notes";
 l10n.dl_rel_notes_aoo417_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.7+Release+Notes";
 l10n.dl_rel_notes_aoo416_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.6+Release+Notes";

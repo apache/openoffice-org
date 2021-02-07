@@ -18,15 +18,15 @@ var l10n = new Object();
 DL.NL_LANG					= "hu";
 
 // General:
-l10n.dl_headline_text						= "Apache OpenOffice letöltése";
+l10n.dl_headline_text				= "Apache OpenOffice letöltése";
 
 // Download: Strings in the green box (used in "index.html").
-l10n.dl_green_box_headline_text				= "Apache OpenOffice letöltése";
-l10n.dl_green_box_headline_title			= "Töltse le az Apache OpenOffice programot a választott operációs rendszer, nyelv és verzió szerint";
-l10n.dl_green_box_subtext1_text				= "A Sourceforge.net hostolásával - Egy megbízható forrás";
-l10n.dl_green_box_subtext1_title			= "Az Apache OpenOffice bináris fájlokat a Sourceforge.net hostolja - Egy megbízható forrás";
-l10n.dl_green_box_subtext2_text				= "Válassza ki az operációs rendszert, nyelvet és verziót";
-l10n.dl_green_box_subtext2_title			= "Válassza ki az operációs rendszert, nyelvet és verziót";
+l10n.dl_green_box_headline_text			= "Apache OpenOffice letöltése";
+l10n.dl_green_box_headline_title		= "Töltse le az Apache OpenOffice programot a választott operációs rendszer, nyelv és verzió szerint";
+l10n.dl_green_box_subtext1_text			= "A Sourceforge.net hostolásával - Egy megbízható forrás";
+l10n.dl_green_box_subtext1_title		= "Az Apache OpenOffice bináris fájlokat a Sourceforge.net hostolja - Egy megbízható forrás";
+l10n.dl_green_box_subtext2_text			= "Válassza ki az operációs rendszert, nyelvet és verziót";
+l10n.dl_green_box_subtext2_title		= "Válassza ki az operációs rendszert, nyelvet és verziót";
 l10n.dl_green_box_selectbox_os_title		= "Válassza ki az operációs rendszert";
 l10n.dl_green_box_selectbox_lang_title		= "Válassza ki a nyelvet";
 l10n.dl_green_box_selectbox_ver_title		= "Válassza ki a verziót";
@@ -38,13 +38,13 @@ l10n.dl_green_box_selectbox_ver_title		= "Válassza ki a verziót";
 // Custominzations to each of these arrays will require ongoing maintenance for new releases.
 // l10n.dl_green_box_select_box_os_values	= [ "" ];
 l10n.dl_green_box_select_box_os_values		= [ "Windows (EXE)",
-												"Linux 64-bit (x86-64) (DEB)",
-												"Linux 64-bit (x86-64) (RPM)",
-												"Linux 32-bit (x86) (DEB)",
-												"Linux 32-bit (x86) (RPM)",
-												"OS X (version >= 10.7) (DMG)",
-												"OS X (version <= 10.6) (DMG)",
-												"További platformok / operációs rendszerek" ];
+						    "Linux 64-bit (x86-64) (DEB)",
+						    "Linux 64-bit (x86-64) (RPM)",
+						    "Linux 32-bit (x86) (DEB)",
+						    "Linux 32-bit (x86) (RPM)",
+						    "OS X (version >= 10.7) (DMG)",
+						    "OS X (version <= 10.6) (DMG)",
+						    "További platformok / operációs rendszerek" ];
 
 /* l10n.dl_green_box_select_box_language_values	= [ "" ]; */
 l10n.dl_green_box_select_box_language_values	= [ "" ];
@@ -94,19 +94,20 @@ l10n.dl_green_box_select_box_lang_values_custom = [ "ast",	"Asturian",				"Astur
 						    "vi",	"Vietnamese",				"Tiếng Việt" ];
 
 // l10n.dl_green_box_select_box_version_values	= [ "" ]; 
-l10n.dl_green_box_select_box_version_values	= [ "4.1.8",
-												"4.1.7",
-												"4.1.6",
-												"4.1.5",
-												"4.1.4",
-												"4.1.3",
-												"4.1.2",
-												"4.1.1",
-												"4.1.0",
-												"4.0.1",
-												"4.0.0",
-												"3.4.1",
-												"Korábbi kiadások" ];
+l10n.dl_green_box_select_box_version_values	= [ "4.1.9",
+						    "4.1.8",
+						    "4.1.7",
+						    "4.1.6",
+						    "4.1.5",
+						    "4.1.4",
+						    "4.1.3",
+						    "4.1.2",
+						    "4.1.1",
+						    "4.1.0",
+						    "4.0.1",
+						    "4.0.0",
+						    "3.4.1",
+						    "Korábbi kiadások" ];
 
 // Download: Strings in the sub-green box (used in "index.html").
 // Not defined for now.
@@ -359,7 +360,10 @@ l10n.dl_analyze_table_no_text			= "Nem";
 l10n.dl_analyze_table_stable_release_text	= "Stabil kiadás";
 l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;függvények/változók";
 
+
+
 // General: Links to webpage files that could be localized.
+l10n.dl_rel_notes_aoo419_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.9+Release+Notes";
 l10n.dl_rel_notes_aoo418_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.8+Release+Notes";
 l10n.dl_rel_notes_aoo417_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.7+Release+Notes";
 l10n.dl_rel_notes_aoo416_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.6+Release+Notes";
