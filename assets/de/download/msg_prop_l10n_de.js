@@ -41,75 +41,75 @@ l10n.dl_green_box_selectbox_ver_title		= "Wähle die gewünschte Version";
 
 // l10n.dl_green_box_select_box_os_values	= [ "" ];
 l10n.dl_green_box_select_box_os_values		= [ "Windows (EXE)",
-												"Linux 64-Bit (x86-64) (DEB)",
-												"Linux 64-Bit (x86-64) (RPM)",
-												"Linux 32-Bit (x86) (DEB)",
-												"Linux 32-Bit (x86) (RPM)",
-												"OS X (version >= 10.7) (DMG)",
-												"OS X (version <= 10.6) (DMG)",
-												"Andere Betriebssysteme" ];
+						    "Linux 64-Bit (x86-64) (DEB)",
+						    "Linux 64-Bit (x86-64) (RPM)",
+						    "Linux 32-Bit (x86) (DEB)",
+						    "Linux 32-Bit (x86) (RPM)",
+						    "OS X (version >= 10.7) (DMG)",
+						    "OS X (version <= 10.6) (DMG)",
+						    "Andere Betriebssysteme" ];
 
 // l10n.dl_green_box_select_box_language_values	= [ "" ];
 l10n.dl_green_box_select_box_language_values	= [ "" ];
 
 // l10n.dl_green_box_select_box_lang_values_custom = [ "" ];
-												// Value		Visible text						Tool tip
-l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",		"Asturisch",						"Asturianu",
-													"eu",		"Baskisch",							"Euskara",
-													"bg",		"Bulgarisch",						"български език",
-													"zh-TW",	"Chinesisch [Traditionell]",		"正體中文",
-													"zh-CN",	"Chinesisch [Vereinfacht]",			"简体中文",
-													"da",		"Dänisch",							"Dansk",
-													"de",		"Deutsch",							"Deutsch",
-													"en-GB",	"Englisch [Britisch]",				"English [British]",
-													"en-US",	"Englisch [US]",					"English [US]",
-													"fi",		"Finnisch",							"Suomi",
-													"fr",		"Französisch",						"Français",
-													"gl",		"Galicisch",						"Galego",
-													"el",		"Griechisch",						"ελληνικά",
-													"he",		"Hebräisch",						"עברית",
-													"hi",		"Hindi",							"हिन्दी",
-													"it",		"Italienisch",						"Italiano",
-													"ja",		"Japanisch",						"日本語",
-													"ca",		"Katalanisch",						"Català",
-													"ca-XV",	"Katalanisch [Valencianisch AVL]",	"València (AVL)",
-													"ca-XR",	"Katalanisch [Valencianisch RACV]",	"València (RACV)",
-													"km",		"Khmer",							"ភាសាខ្មែរ",
-													"ko",		"Koreanisch",						"한국어",
-													"lt",		"Litauisch",						"Lietuvių",
-													"nl",		"Niederländisch",					"Nederlands",
-													"nb",		"Norwegisch [Bokmål]",				"Norsk [Bokmål]",
-													"pl",		"Polnisch",							"Polski",
-													"pt-BR",	"Portugiesisch [Brasilianisch]",	"Português [do Brasil]",
-													"pt",		"Portugiesisch [Europäisch]",		"Português [Europeu]",
-													"ru",		"Russisch",							"Русский",
-													"gd",		"Schottisch [Gälisch]",				"Gàidhlig",
-													"sv",		"Schwedisch",						"Svenska",
-													"sr",		"Serbisch [Kyrillisch]",			"Cрпски [ћирилицом]",
-													"sk",		"Slowakisch",						"Slovenský jazyk [slovenčina]",
-													"sl",		"Slowenisch",						"Slovenski jezik [slovenščina]",
-													"es",		"Spanisch",							"Español",
-													"ta",		"Tamilisch",						"தமிழ்",
-													"th",		"Thailändisch",						"ภาษาไทย",
-													"cs",		"Tschechisch",						"Čeština",
-													"tr",		"Türkisch",							"Türkçe",
-													"hu",		"Ungarisch",						"Magyar",
-													"vi",		"Vietnamesisch",					"Tiếng Việt" ];
+//						    Value	Visible text				Tool tip
+l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",	"Asturisch",				"Asturianu",
+						    "eu",	"Baskisch",				"Euskara",
+						    "bg",	"Bulgarisch",				"български език",
+						    "zh-TW",	"Chinesisch [Traditionell]",		"正體中文",
+						    "zh-CN",	"Chinesisch [Vereinfacht]",		"简体中文",
+						    "da",	"Dänisch",				"Dansk",
+						    "de",	"Deutsch",				"Deutsch",
+						    "en-GB",	"Englisch [Britisch]",			"English [British]",
+						    "en-US",	"Englisch [US]",			"English [US]",
+						    "fi",	"Finnisch",				"Suomi",
+						    "fr",	"Französisch",				"Français",
+						    "gl",	"Galicisch",				"Galego",
+						    "el",	"Griechisch",				"ελληνικά",
+						    "he",	"Hebräisch",				"עברית",
+						    "hi",	"Hindi",				"हिन्दी",
+						    "it",	"Italienisch",				"Italiano",
+						    "ja",	"Japanisch",				"日本語",
+						    "ca",	"Katalanisch",				"Català",
+						    "ca-XV",	"Katalanisch [Valencianisch AVL]",	"València (AVL)",
+						    "ca-XR",	"Katalanisch [Valencianisch RACV]",	"València (RACV)",
+						    "km",	"Khmer",				"ភាសាខ្មែរ",
+						    "ko",	"Koreanisch",				"한국어",
+						    "lt",	"Litauisch",				"Lietuvių",
+						    "nl",	"Niederländisch",			"Nederlands",
+						    "nb",	"Norwegisch [Bokmål]",			"Norsk [Bokmål]",
+						    "pl",	"Polnisch",				"Polski",
+						    "pt-BR",	"Portugiesisch [Brasilianisch]",	"Português [do Brasil]",
+						    "pt",	"Portugiesisch [Europäisch]",		"Português [Europeu]",
+						    "ru",	"Russisch",				"Русский",
+						    "gd",	"Schottisch [Gälisch]",			"Gàidhlig",
+						    "sv",	"Schwedisch",				"Svenska",
+						    "sr",	"Serbisch [Kyrillisch]",		"Cрпски [ћирилицом]",
+						    "sk",	"Slowakisch",				"Slovenský jazyk [slovenčina]",
+						    "sl",	"Slowenisch",				"Slovenski jezik [slovenščina]",
+						    "es",	"Spanisch",				"Español",
+						    "ta",	"Tamilisch",				"தமிழ்",
+						    "th",	"Thailändisch",				"ภาษาไทย",
+						    "cs",	"Tschechisch",				"Čeština",
+						    "tr",	"Türkisch",				"Türkçe",
+						    "hu",	"Ungarisch",				"Magyar",
+						    "vi",	"Vietnamesisch",			"Tiếng Việt" ];
 
 // l10n.dl_green_box_select_box_version_values	= [ "" ];
 l10n.dl_green_box_select_box_version_values	= [ "4.1.8",
-												"4.1.7",
-												"4.1.6",
-												"4.1.5",
-												"4.1.4",
-												"4.1.3",
-												"4.1.2",
-												"4.1.1",
-												"4.1.0",
-												"4.0.1",
-												"4.0.0",
-												"3.4.1",
-												"Ältere Versionen" ];
+						     "4.1.7",
+						     "4.1.6",
+						     "4.1.5",
+						     "4.1.4",
+						     "4.1.3",
+						     "4.1.2",
+						     "4.1.1",
+						     "4.1.0",
+						     "4.0.1",
+						     "4.0.0",
+						     "3.4.1",
+						     "Ältere Versionen" ];
 
 // Download: Strings in the sub-green box (used in "index.html").
 // Not defined for now.
@@ -246,9 +246,12 @@ l10n.dl_full_link_text				= "Herunterladen: Vollinstallation";
 l10n.dl_full_link_title				= "Klicken zum Herunterladen: ";
 l10n.dl_langpack_link_text			= "Herunterladen: Sprachpaket";
 l10n.dl_langpack_link_title			= "Klicken zum Herunterladen: ";
-l10n.dl_rpm_vs_deb_title			= "RPM wird benutzt in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB wird benutzt in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
-l10n.dl_rpm_vs_deb_text				= "RPM oder DEB = Was soll ich wählen?";
-
+l10n.dl_win_info_text				= "Wichtiger Hinweis: 32-bit, 64-bit und Java - Was soll ich wählen?";
+l10n.dl_win_info_title				= "Derzeit wird nur eine 32-bit (x86) Version für Windows angeboten. Es funktioniert aber auch mit einem Windows 64-bit (x86-64).\nBitte beachten Sie, dass Sie für zusätzliche Funktionen Java mit 32-bit benötigen, das einmalig ausgewählt werden muss (siehe Menü 'Extras - Optionen - OpenOffice - Java').\n\nFür weitere Informationen über OpenOffice und Java klicken Sie bitte rechts auf den Link 'Java und Apache OpenOffice'.";
+l10n.dl_linux_info_title			= "RPM wird benutzt in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB wird benutzt in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
+l10n.dl_linux_info_text				= "RPM oder DEB = Was soll ich wählen?";
+// l10n.dl_mac_info_text			= "macOS : Titel";
+// l10n.dl_mac_info_title			= "macOS : Text";
 
 l10n.dl_full_link_porting_text			= "Portierungen: Klicken zum Wählen von Drittanbietern";
 l10n.dl_full_link_porting_title			= "Klicken zum Aufrufen der Portierungswebseite und Herunterladen von Drittanbietern";
@@ -368,6 +371,7 @@ l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;Funktionen/Variablen";
 
 
 // General: Links to webpage files that could be localized.
+l10n.dl_rel_notes_aoo419_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.9+Release+Notes";
 l10n.dl_rel_notes_aoo418_link			= "https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=165224926";
 l10n.dl_rel_notes_aoo417_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.7+Release+Notes";
 l10n.dl_rel_notes_aoo416_link			= "https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=97550579";
