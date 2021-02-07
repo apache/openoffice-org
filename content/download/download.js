@@ -596,6 +596,7 @@ DL.showErrorMessage = function( error_text ) {
 	document.getElementById( "platform_info" ).style.cursor	= "default";
 	document.getElementById( "platform_info" ).title	= "";
 	document.getElementById( "platform_info" ).text		= "";
+	document.getElementById( "platform_info" ).style.display = "none";
 
 	// Delete previously set strings to get the possibility back to choose a different platform
 	// and then to assemble a new download link.
@@ -696,7 +697,7 @@ DL.checkForLinkExceptions = function() {
 	}
 
 	// If version is '4.1.0' (or newer) and platform is 'Mac OS X <= 10.6', show the none-availability to the user.
-	if( ( DL.VERSION_SEL === "4.1.8" || DL.VERSION_SEL === "4.1.7" || DL.VERSION_SEL === "4.1.6" || DL.VERSION_SEL === "4.1.5" || DL.VERSION_SEL === "4.1.4" || DL.VERSION_SEL === "4.1.3" || DL.VERSION_SEL === "4.1.2" || DL.VERSION_SEL === "4.1.1" || DL.VERSION_SEL === "4.1.0" ) && DL.PLATFORM === "mac32" ) {
+	if( ( DL.VERSION_SEL === "4.1.9" || DL.VERSION_SEL === "4.1.8" || DL.VERSION_SEL === "4.1.7" || DL.VERSION_SEL === "4.1.6" || DL.VERSION_SEL === "4.1.5" || DL.VERSION_SEL === "4.1.4" || DL.VERSION_SEL === "4.1.3" || DL.VERSION_SEL === "4.1.2" || DL.VERSION_SEL === "4.1.1" || DL.VERSION_SEL === "4.1.0" ) && DL.PLATFORM === "mac32" ) {
 		// Show an error message that the chosen items do not lead to a download.
 
 		// If a customized string is not available in the "msg_prop_l10n_XX.js" file.
@@ -871,11 +872,12 @@ DL.getLinkSelection = function() {
 			document.getElementById( "platform_info" ).title	= l10n.dl_linux_info_title;
 			document.getElementById( "platform_info" ).text		= l10n.dl_linux_info_text;
 
-		// Otherwise no text.
+		// Otherwise no text and make the element invisible.
 		} else {
 			document.getElementById( "platform_info" ).style.cursor	= "default";
 			document.getElementById( "platform_info" ).title	= "";
 			document.getElementById( "platform_info" ).text		= "";
+			document.getElementById( "platform_info" ).style.display = "none";
 		}
 
 		// Set the values for both download text buttons and set the focus to the "full install".
@@ -958,7 +960,7 @@ DL.getLinkSelection = function() {
 		document.getElementById( "dl_rpt"	    ).title	= l10n.dl_report_title;
 
 		// New Apache release policy since March 2018: Do not provide any MD5 checksums anymore as it is understood as too insecure.
-		if( ( DL.VERSION_SEL === "4.1.8" || DL.VERSION_SEL === "4.1.7" || DL.VERSION_SEL === "4.1.6" || DL.VERSION_SEL === "4.2.0" ) ) {
+		if( ( DL.VERSION_SEL === "4.1.9" || DL.VERSION_SEL === "4.1.8" || DL.VERSION_SEL === "4.1.7" || DL.VERSION_SEL === "4.1.6" || DL.VERSION_SEL === "4.2.0" ) ) {
 			// If version is '4.1.6' (or newer), do not show any MD5 checksum file links.
 			document.getElementById( "space4"	    ).innerHTML	= "";
 			document.getElementById( "dl_f_chk_md5"	    ).href	= "";
