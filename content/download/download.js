@@ -596,7 +596,7 @@ DL.showErrorMessage = function( error_text ) {
 	document.getElementById( "platform_info" ).style.cursor	= "default";
 	document.getElementById( "platform_info" ).title	= "";
 	document.getElementById( "platform_info" ).text		= "";
-	document.getElementById( "platform_info" ).style.display = "none";
+	document.getElementById( "platform_info" ).style.display= "none";
 
 	// Delete previously set strings to get the possibility back to choose a different platform
 	// and then to assemble a new download link.
@@ -795,6 +795,7 @@ DL.checkForLinkExceptions = function() {
 	document.getElementById( "platform_info" ).style.cursor		= "default";
 	document.getElementById( "platform_info" ).title		= "";
 	document.getElementById( "platform_info" ).text			= "";
+	document.getElementById( "platform_info" ).style.display	= "none";
 
 	return;
 }
@@ -859,18 +860,21 @@ DL.getLinkSelection = function() {
 			document.getElementById( "platform_info" ).style.cursor	= "help";
 			document.getElementById( "platform_info" ).title	= l10n.dl_win_info_title;
 			document.getElementById( "platform_info" ).text		= l10n.dl_win_info_text;
+			document.getElementById( "platform_info" ).style.display= "inline";
 
 		// If a Mac file is selected and a respective text is existing, then set the values for the Mac info link.
 		} else if( DL.INSTALL_EXTENSION === "DMG" & l10n.dl_mac_info_title != null ) {
 			document.getElementById( "platform_info" ).style.cursor	= "help";
 			document.getElementById( "platform_info" ).title	= l10n.dl_mac_info_title;
 			document.getElementById( "platform_info" ).text		= l10n.dl_mac_info_text;
+			document.getElementById( "platform_info" ).style.display= "inline";
 
 		// If a Linux file is selected and a respective text is existing, then set the values for the Linux info link.
 		} else if( DL.INSTALL_EXTENSION === "RPM" || DL.INSTALL_EXTENSION === "DEB" & l10n.dl_linux_info_title != null ) {
 			document.getElementById( "platform_info" ).style.cursor	= "help";
 			document.getElementById( "platform_info" ).title	= l10n.dl_linux_info_title;
 			document.getElementById( "platform_info" ).text		= l10n.dl_linux_info_text;
+			document.getElementById( "platform_info" ).style.display= "inline";
 
 		// Otherwise no text and make the element invisible.
 		} else {
