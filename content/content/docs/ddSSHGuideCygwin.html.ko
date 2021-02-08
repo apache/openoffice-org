@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+<style type="text/css">
+/* <![CDATA[ */ @import "/branding/css/tigris.css"; /* ]]> */
+</style>
+  <script src="/branding/scripts/sc.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="/branding/css/print.css" media="print" />
+
+  <title>SSH tunneling using Cygwin</title>
+ </head>
+
+ <body class="docs" onload="self.focus()">
+  <div class="docs" id="ddsshguidecygwin">
+   <h2>SSH tunneling using Cygwin: The Desktop Unix Emulator</h2>
+
+   <div id="toc">
+    <ul>
+     <li><strong><a href="/nonav/servlets/HelpTOC">Help index</a></strong></li>
+    </ul>
+
+    <ul>
+     <li>
+      <a href="/nonav/docs/ddSSHGuide.html">About this guide</a> 
+
+      <ul>
+       <li><a href="/nonav/docs/ddSSHGuide.html#aboutssh">About SSH</a></li>
+
+       <li><a href="/nonav/docs/ddSSHGuide.html#furtherdocumentation">Further documentation</a></li>
+      </ul>
+     </li>
+
+     <li><a href="/nonav/docs/ddSSHGuideConcepts.html">Concepts</a></li>
+
+     <li><a href="/nonav/docs/ddSSHGuideTerminals.html">Choosing the desktop terminal</a></li>
+
+     <li>
+      <a href="/nonav/docs/ddSSHGuideTerminals.html">Using the Desktop Terminal</a> 
+
+      <ul>
+       <li><a href="/nonav/docs/ddSSHGuideTerminals.html#macs">Macintosh</a></li>
+
+       <li><a href="/nonav/docs/ddSSHGuideTerminals.html#windows">Windows</a></li>
+
+       <li><a href="/nonav/docs/ddSSHGuideTerminals.html#othersshclients">Other SSH clients</a></li>
+      </ul>
+     </li>
+
+     <li>Tunneling using Cygwin: The Desktop Unix Emulator</li>
+
+     <li><a href="/nonav/docs/ddSSHGuideterminating.html">Terminating the tunnel</a></li>
+    </ul>
+   </div>
+
+   <h3><a id="installation" name="installation">Installation</a></h3>
+
+   <p>Before we can tunnel with Cygwin, it must be correctly installed.</p>
+
+   <p>The most important consideration for installing Cygwin is creating the appropriate Unix folders. Cygwin's <a href="http://www.cygwin.com/">website</a> offers complete and detailed instructions; the below is an abbreviated version.</p>
+
+   <ul>
+    <li>Download and install Cygwin. Cygnus gives you the option of installing from the Web, but it is faster (and ultimately more efficient) to install from a local disk. So just download and save the file somewhere you can easily find it.</li>
+
+    <li>Click on Cygwin's "setup.exe" icon and follow the instructions, accepting the defaults. At some point, you will be asked for text format and whether you want Cygwin to be for yourself alone or to be shared. It doesn't matter whether you choose DOS or Unix, but for the sake of ease of use, choose Unix and "All." Cygwin will then install, and should create icons in your start file as well as on your desktop. If it doesn't, run setup again. Nothing will be installed if nothing needs to be, but it will take you to the end, where you can check the boxes indicating you want the icons installed. Check them.</li>
+
+    <li>At this point, you need to create the Unix folders. You can create the standard directories from within Cygwin, as Cygwin's configuration instructions suggest (<a href="http://www.cygwin.com/cygwin-ug-net/setup-dir.html">http://www.cygwin.com/cygwin-ug-net/setup-dir.html</a>), or you can set them up from within Windows. Using the Windows method has some advantages, especially for people who are not entirely familiar with Unix commands and protocols. Since Cygwin is able to read both Win32 (Windows) file paths as well as Unix ones (POSIX), it doesn't much matter how you do it.</li>
+
+    <li>Very clear instructions for creating the Unix directories can be found at <a href="http://www.woodsoup.org/projs/ORKiD/basic.htm">http://www.woodsoup.org/projs/ORKiD/basic.htm</a>. Although the instructions are specifically for a slightly earlier version of the program, they still obtain: the typical Unix directories must still be created.</li>
+
+    <li>As well, the cygwin.bat file needs to be modified. Cygnus suggests that other files, too, need modification; but of these, the .bat file, which specifies the commands and their sequence that bash must go through, needs immediate modification.</li>
+
+    <li>Configure your cygwin.bat file using Windows' Notepad utility or other text editor (not Microsoft Word or anything that imparts formatting) so that it looks something like this:</li>
+   </ul>
+<pre>
+<code>@ECHO OFF
+    SET MAKE_MODE=Unix
+    SET CYGWIN=notty
+    SET HOME=C:\unix\HOME\[your home directory name]
+    SET TERM=VT100
+    CHDIR C:\Unix\HOME\[your home directory name]
+    SET PATH=C:\Unix\BIN;C:\Unix\USR\LOCAL\BIN;C:\CYGWIN\BIN;%PATH%
+    BASH</code>
+  
+</pre>
+
+   <ul>
+    <li>Where the "unix" directory on the "C" drive contains the traditional Unix directories. You can name it anything you want, as long a you do not use anything that confuses Unix, e.g., hyphens, spaces, etc.</li>
+
+    <li>You should now have the C:\Cygwin directories, and your own C:\unix directories, which include your crucial home directory.</li>
+
+    <li>There is still one more, optional, step. For Cygwin to run efficiently, you might want to configure the shortcut icon on your desktop so that it starts the program in the right directory. This is not necessary, if you have stipulated the HOME directory in the .bat file.</li>
+
+    <li>Cygwin offers some further refinements, and, to be sure, there will doubtless be some tweaking you will have to do to make have the program running efficiently. Again, if you are familiar with Unix commands and file structures, you will find this easy; if you are not, Cygwin is quite forgiving, and you can get started with a minimum of fuss.</li>
+   </ul>
+
+   <h3><a id="tunneling" name="tunneling">Tunneling</a></h3>
+
+   <p>To gain access to CVS via a secure tunnel:</p>
+
+   <ol>
+    <li>From cygwin, or another UNIX-type command prompt, type: "ssh-keygen.exe -d" and press Enter. You should see:</li>
+
+    <li>
+     <ul>
+      <li>Generating DSA parameter and key.</li>
+
+      <li>Enter file in which to save the key (/home/Administrator/.ssh/id_dsa): [press Enter key for default location]</li>
+
+      <li>Enter passphrase (empty for no passphrase): [please leave blank, and press Enter]</li>
+
+      <li>Enter same passphrase again: [please leave blank, and press Enter]</li>
+
+      <li>Your identification has been saved in /home/Administrator/.ssh/id_dsa.</li>
+
+      <li>Your public key has been saved in /home/Administrator/.ssh/id_dsa.pub.</li>
+     </ul>
+    </li>
+
+    <li>Rename the "id_dsa.pub" from your computer to "username_id_dsa.pub", i.e. "jmorse_id_dsa.pub" and attach it to an issue for technical support. The key will need to be installed on the CVS server for you to gain access through the CVS tunnel. Cunsult with your support representative about a location to upload the *_id_dsa.pub key.</li>
+   </ol>
+
+   <p>Every time you wish to access the CVS repository you will need to run Cygwin or other UNIX shell and login with:</p>
+
+   <blockquote>
+    ssh -x -2 -L 2401:localhost:2401 tunnel@[your_server].com
+   </blockquote>
+
+   <p>where [your_server] equals the name of your CVS server.</p>
+
+   <p>You should get a message saying "Host key not found, are you sure you want to continue". Type "yes". You need to use the whole word. You get another line and the cursor moves to the left side of the window and just blinks. You can minimize the window, but do not close it.</p>
+
+   <p>Note: If you are prompted for a password, your key may not be properly added to the server yet. If that is the case, please contact technical support.</p>
+
+   <p>The tunnel will continue running as long as this window is running, except in cases of network error or other connectivity issues. To stop the tunnel, press ctrl-break.</p>
+
+   <div class="courtesylinks">
+    <p><a href="#toc">Top</a> | <a href="/nonav/servlets/HelpTOC">Help index</a></p>
+   </div>
+  </div>
+ </body>
+</html>
+
+

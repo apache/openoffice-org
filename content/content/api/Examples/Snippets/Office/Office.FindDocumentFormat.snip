@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.FindDocumentFormat.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2005/09/13 08:44:28 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="OOBasic" application="Office">
+
+<keywords>
+	<keyword>document format</keyword>
+</keywords>
+
+<authors>
+	<author id="cj" initial="true" email="">Christian Junker</author>
+	<author id="tomson" initial="true" email="tom.schindl@bestsolution.at">Tom Schindl</author>
+</authors>
+
+<question heading="Find document Format">How can I get the document format
+<p>Only relying on the operating system which it self relys ont the file suffix </p>
+<p>is sometimes not enough</p>
+</question>
+
+<answer>
+<p>You could use deep type-detection</p>
+<listing>Sub detectDocType() 
+    Dim mediaDescr(30) as new {@see com.sun.star.beans.PropertyValue} 
+
+    docurl = thisComponent.getURL() 
+    mediaDescr(0).Name = &quot;URL&quot; 
+    mediaDescr(0).Value = docurl 
+
+    typemgr = createUnoService(&quot;{@see com.sun.star.document.TypeDetection}&quot;) 
+    &apos;make deep type detection (not just based on filename extension)
+    msgbox typemgr.queryTypeByDescriptor(mediaDescr(), True) 
+
+End Sub</listing>
+</answer>
+
+<versions>
+	<version number="1.1.x" status="tested"/>
+	<version number="2.0.x" status="may_work"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="cj" date="2005-09-13">Initial version</change>
+</changelog>
+
+</snippet>
