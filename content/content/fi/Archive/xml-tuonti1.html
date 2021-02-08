@@ -1,0 +1,418 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    
+<title>Suomenkielinen OpenOffice.org</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="version" content="0.1" />
+
+<!-- Begin Finnish header -->
+<style type="text/css" media="screen, projection">
+/*<![CDATA[*/
+<!--
+  @import url(css/fi.css);
+-->
+/*]]>*/
+</style>
+<!-- End Finnish header -->
+
+    
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/fi/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/fi/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/fi/">fi</a>&nbsp;&raquo;&nbsp;<a href="/fi/Archive/">Archive</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<div id="fiheader">
+	<div id="fipositioner">
+		<a id="fiheader-logo" href="http://fi.openoffice.org/" accesskey="1" title="Suomenkieliselle OpenOffice.org-kotisivulle"></a>
+		<h1 id="fipositioner-text">Vapaa ja avoin toimisto-ohjelmisto</h1>
+
+	</div>
+</div>
+<table id="fibody">
+ <tr>
+  <td>
+   <table width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+     <td></td>
+     <td colspan="2">
+      <table cellpadding="5">
+       <tr valign="top">
+        <td>
+        
+<!-- Begin Finnish navbar -->
+         <div class="fiLeftMenu">
+          <div class="toolgroup">
+           <div class="label"><strong>OpenOffice.org&nbsp;suomeksi</strong></div>
+           <ul>  
+            <li><a href="index.html">Pääsivu</a></li>
+            <li><a href="lataa.html">Lataa</a></li>
+            <li><a href="tuote.html">Ohjelmiston&nbsp;kuvaus</a></li>
+            <li><a href="sivukartta.html">Sivukartta</a></li>
+           </ul>
+          </div>
+          
+          <div class="toolgroup">
+           <div class="label"><strong>Ohjeita</strong></div>
+           <ul>
+            <li><a href="tuki.html">Käyttäjätuki</a></li>
+            <li><a href="vastauksia.html">Vastauksia kysymyksiin</a></li>
+            <li><a href="dokumentaatio.html">Käyttöoppaat</a></li>
+            <li><a href="kielityokalut.html">Tavutus ja oikoluku</a></li>
+            <li><a href="mallit.html">Asiakirjamalleja</a></li>
+           </ul>
+          </div>
+          
+          <div class="toolgroup">
+           <div class="label"><strong>Suomennosprojekti</strong></div>
+           <ul>
+            <li><a href="http://fi.openoffice.org/servlets/ProjectNewsList">Tiedotteet</a></li>
+            <li><a href="postituslistat.html">Postituslistat</a>
+             (<a href="http://fi.openoffice.org/servlets/ProjectMailingListList">engl</a>)
+            </li>
+            <li><a href="todo.html">Tehtäviä</a></li>
+            <li><a href="issuezilla.html">Viat ja toiveet</a>
+             (<a href="http://fi.openoffice.org/servlets/ProjectIssues">engl</a>)
+            </li>
+            <li><a href="yhteystiedot.html">Yhteystiedot</a></li>
+           </ul>
+          </div> 
+         </div>
+<!-- End Finnish navbar -->
+        </td>
+        <td class="pagecontent">
+<!-- END-FINNISH-HEADER-PART -->
+        
+<!-- ====================================================================== -->
+<font size="-1"><a href="xml.html">XML-asiakirjat</a> » Tuontisuodattimet</font><br/>
+
+<h1>Tuontisuodattimen tekeminen</h1>
+
+<p>OpenOffice.orgiin on mahdollista itse rakentaa tuontisuodattimia
+XSLT-kielellä. Tuontisuodattimet voidaan <a
+href="xml-suodatin.html">asentaa</a> OpenOffice.orgiin helposti tai
+niitä voidaan käyttää ulkoisissa ohjelmissa.</p>
+
+<div align="center"><img src="kuvat/xml-muunnos-kuva1-2.png"></div>
+
+<p>Tuontisuodatin koostuu seuraavista komponenteista:</p>
+
+<ul>
+  <li><b>XSLT-muunnin</b>, joka luo asiakirjan <tt>content.xml</tt>-tiedoston,</li>
+  <li><b>tuontimalli</b>, joka määrittelee asiakirjan tyylit, ja lisäksi</li>
+  <li>valinnainen <b>DTD-rakennemäärittely</b>.</li>
+</ul>
+
+<h2>XML-asiakirja</h2>
+
+<p>Käytämme esimerkkinä seuraavaa XML-muodossa olevaa henkilötietokantaa.</p>
+
+<pre style="background-color: #f0f0f0; margin-left: 20px; margin-right: 20px;">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;henkilot&gt;
+  &lt;henkilo&gt;
+    &lt;etunimi&gt;<font color="green">Aleksanteri</font>&lt;/etunimi&gt;
+    &lt;sukunimi&gt;<font color="green">Suuri</font>&lt;/sukunimi&gt;
+    &lt;syntymaaika&gt;<font color="green">30.7.356 eaa</font>&lt;/syntymaaika&gt;
+    &lt;ammatti&gt;<font color="green">valloittaja</font>&lt;/ammatti&gt;
+    &lt;siviilisaaty tyyppi="<font color="green">naimaton</font>"/&gt;
+  &lt;/henkilo&gt;
+
+  &lt;henkilo&gt;
+    &lt;etunimi&gt;<font color="green">Kaarle</font>&lt;/etunimi&gt;
+    &lt;sukunimi&gt;<font color="green">Suuri</font>&lt;/sukunimi&gt;
+    &lt;syntymaaika&gt;<font color="green">2.4.742</font>&lt;/syntymaaika&gt;
+    &lt;ammatti&gt;<font color="green">kuningas</font>&lt;/ammatti&gt;
+    &lt;siviilisaaty tyyppi="<font color="green">leski</font>"/&gt;
+  &lt;/henkilo&gt;
+
+  &lt;henkilo&gt;
+    &lt;etunimi&gt;<font color="green">Konstantinus</font>&lt;/etunimi&gt;
+    &lt;sukunimi&gt;<font color="green">Suuri</font>&lt;/sukunimi&gt;
+    &lt;syntymaaika&gt;<font color="green">27.2.273</font>&lt;/syntymaaika&gt;
+    &lt;ammatti&gt;<font color="green">keisari</font>&lt;/ammatti&gt;
+    &lt;siviilisaaty tyyppi="<font color="green">naimisissa</font>"/&gt;
+  &lt;/henkilo&gt;
+
+  &lt;henkilo&gt;
+    &lt;etunimi&gt;<font color="green">KyyrÃ¶s II</font>&lt;/etunimi&gt;
+    &lt;sukunimi&gt;<font color="green">Suuri</font>&lt;/sukunimi&gt;
+    &lt;syntymaaika&gt;<font color="green">576 eaa</font>&lt;/syntymaaika&gt;
+    &lt;ammatti&gt;<font color="green">kuningas</font>&lt;/ammatti&gt;
+    &lt;siviilisaaty tyyppi="<font color="green">eronnut</font>"/&gt;
+  &lt;/henkilo&gt;
+&lt;/henkilot&gt;
+</pre>
+
+<h3>XML-rakennemäärittelyt</h3>
+
+<p>XML-asiakirjatyypille on hyvä tehdä DTD-rakennemäärittely
+oikeellisuuden tarkistamiseksi. DTD-määrittely ei ole pakollinen ja
+sitä käytetään OpenOffice.orgissa lähinnä vientisuodattimissa
+oikeellisuuden tarkistamiseen. Tuonnissa sitä voidaan käyttää vain
+<tt>.xml</tt>-päätteisen asiakirjatiedoston tyypin selvittämiseen,
+eikä sekään ole pakollista.</p>
+
+<p>Yllä mainitun henkilötietoesimerkin DTD-rakennemäärittely olisi
+seuraavanlainen:</p>
+
+<pre style="background-color: #f0f0f0; margin-left: 20px; margin-right: 20px;">
+&lt;!ELEMENT henkilot (henkilo*)&gt;
+&lt;!ELEMENT henkilo (etunimi,sukunimi,syntymaaika,ammatti,siviilisaaty)&gt;
+&lt;!ELEMENT etunimi (#PCDATA)&gt;
+&lt;!ELEMENT sukunimi (#PCDATA)&gt;
+&lt;!ELEMENT syntymaaika (#PCDATA)&gt;
+&lt;!ELEMENT ammatti (#PCDATA)&gt;
+&lt;!ELEMENT siviilisaaty EMPTY&gt;
+&lt;!ATTLIST siviilisaaty tyyppi (naimaton|naimisissa|eronnut|leski) #REQUIRED&gt;
+</pre>
+
+<p>DTD-rakennemäärittelyjä voidaan käyttää esimerkiksi
+oikeellisuustarkistuksiin.</p>
+
+<p>Seuraavassa esimerkki käyttäen <tt>onsgmls</tt>-validaattoria, kun XML-tiedostoon on tehty virhe:</p>
+
+<pre style="font-size: 70%; background-color: #f0f0ff; margin-left: 20px; margin-right: 20px;">
+$ onsgmls -wxml -s henkilotiedot.xml
+onsgmls:henkilotiedot.xml:29:13:E: element "EETUNIMI" undefined
+onsgmls:henkilotiedot.xml:30:13:E: document type does not allow element "SUKUNIMI" here
+onsgmls:henkilotiedot.xml:31:16:E: document type does not allow element "SYNTYMAAIKA" here
+onsgmls:henkilotiedot.xml:32:12:E: document type does not allow element "AMMATTI" here
+onsgmls:henkilotiedot.xml:33:34:E: document type does not allow element "SIVIILISAATY" here
+onsgmls:henkilotiedot.xml:34:11:E: end tag for "HENKILO" which is not finished
+</pre>
+
+<p>XML-pohjaiset "skeemat" ovat DTD-määrittelyjä uudempi tapa tehdä
+XML-rakennemäärittelyjä, ja mahdollistavat mm. tietotyyppien (kuten
+merkkijono tai kokonaisluku) määrittämisen. XML-skeemoja voi tehdä
+usealla skeemakielellä, kuten <i>XML Schema</i> tai
+<i>RelaxNG</i>. Henkilötietoesimerkkimme XML-asiakirjatyypin
+RelaxNG-rakennemäärittely olisi seuraavanlainen:</p>
+
+<pre style="background-color: #f0f0f0; margin-left: 20px; margin-right: 20px;">
+&lt;?xml version="1.0" encoding="iso-8859-1"?&gt;
+&lt;element name="henkilot" xmlns="http://relaxng.org/ns/structure/1.0"&gt;
+  &lt;zeroOrMore&gt;
+    &lt;element name="henkilo"&gt;
+      &lt;element name="etunimi"&gt;
+        &lt;text/&gt;
+      &lt;/element&gt;
+      &lt;element name="sukunimi"&gt;
+        &lt;text/&gt;
+      &lt;/element&gt;
+      &lt;element name="syntymaaika"&gt;
+        &lt;text/&gt;
+      &lt;/element&gt;
+      &lt;element name="ammatti"&gt;
+        &lt;text/&gt;
+      &lt;/element&gt;
+      &lt;element name="siviilisaaty"&gt;
+        &lt;attribute name="tyyppi"&gt;
+          &lt;choise&gt;
+            &lt;value&gt;naimaton&lt;/value&gt;
+            &lt;value&gt;naimisissa&lt;/value&gt;
+            &lt;value&gt;eronnut&lt;/value&gt;
+            &lt;value&gt;leski&lt;/value&gt;
+          &lt;/choise&gt;
+        &lt;/attribute&gt;
+      &lt;/element&gt;
+    &lt;/element&gt;
+  &lt;/zeroOrMore&gt;
+&lt;/element&gt;
+</pre>
+
+<p>RelaxNG-rakennemäärittelyjä voidaan käyttää esimerkiksi
+oikeellisuustarkistuksiin. Ohjelmia, jotka tukevat RelaxNG:tä, on
+lukuisia. Seuraavassa esimerkki käyttäen <tt>jing</tt>-validaattoria,
+kun XML-tiedostoon on tehty virhe:</p>
+
+<pre style="font-size: 70%; background-color: #f0f0ff; margin-left: 20px; margin-right: 20px;">
+$ jing henkilotiedot.rng henkilotiedot.xml
+/home/magi/texts/linux/openoffice/xml/henkilotiedot.xml:29: error: unknown element "eetunimi"
+/home/magi/texts/linux/openoffice/xml/henkilotiedot.xml:30: error: required elements missing
+</pre>
+
+<h2>XSLT-muunnin</h2>
+
+<p>XSLT-tuontisuodatin muuntaa tuotavan XML-asiakirjan
+OpenOffice.org-asiakirjan <tt>content.xml</tt>-tiedostoksi.</p>
+
+<p>Muunnos koostuu kahdesta pääosasta:</p>
+
+<ul>
+  <li>asiakirjan rungon määrittelystä ja</li>
+  <li>eri tyyppisten elementtien muunnoksista.</li>
+</ul>
+
+<p>Alla oleva muunnos muuntaa henkilötieto-asiakirjan OpenOffice.org 1.1 Writer -asiakirjaksi.</p>
+
+<pre style="font-size: 70%; background-color: #f0f0f0; margin-left: 20px; margin-right: 20px;">
+&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:office="http://openoffice.org/2000/office"
+  xmlns:style="http://openoffice.org/2000/style"
+  xmlns:text="http://openoffice.org/2000/text"
+  office:class="text"
+  office:version="1.0"
+  version="1.0"&gt;
+
+  &lt;xsl:output indent="yes" encoding="UTF-8"/&gt;
+
+  &lt;!-- ============================================================================ --&gt;
+  &lt;!-- Asiakirjan runko.                                                            --&gt;
+  &lt;!-- ============================================================================ --&gt;
+  &lt;xsl:template match="/"&gt;
+    &lt;office:document&gt;
+
+      &lt;office:body&gt;
+
+        &lt;!-- Otsikko --&gt;
+        &lt;text:h text:level="1" text:style-name="Heading 1"&gt;
+          &lt;xsl:text&gt;Tuodut henkilötiedot&lt;/xsl:text&gt;
+        &lt;/text:h&gt;
+
+        &lt;!-- Esittelyteksti --&gt;
+        &lt;text:p text:style-name="Text body"&gt;
+          &lt;xsl:text&gt;Tämä on omassa XML-formaatissa olevasta
+          tiedostosta tuotu Writer-asiakirja.&lt;/xsl:text&gt;
+        &lt;/text:p&gt;
+
+        &lt;!-- Käsitellään henkilö-tietueet --&gt;
+        &lt;xsl:apply-templates select="henkilot/henkilo"/&gt;
+
+        &lt;text:p text:style-name="Text body"&gt;&lt;/text:p&gt;
+        &lt;text:p text:style-name="Text body"&gt;
+          &lt;xsl:text&gt;XML-tiedostosta ladatut tietueet ovat
+          Henkilo-tyylisinä kappaleina. Tietueen kentät käyttävät
+          nimettyjä merkkityylejä, joiden perusteella ne tunnistetaan
+          tallennettaessa.&lt;/xsl:text&gt;
+        &lt;/text:p&gt;
+
+      &lt;/office:body&gt;
+    &lt;/office:document&gt;
+  &lt;/xsl:template&gt;
+
+  &lt;!-- ============================================================================ --&gt;
+  &lt;!-- Yhden henkilön tiedot                                                        --&gt;
+  &lt;!-- ============================================================================ --&gt;
+  &lt;xsl:template match="henkilo"&gt;
+    &lt;text:p text:style-name="Henkilo"&gt;
+
+      &lt;!-- Etunimi --&gt;
+      &lt;text:span text:style-name="Etunimi"&gt;
+        &lt;xsl:value-of select="etunimi"/&gt;
+      &lt;/text:span&gt;
+      &lt;xsl:text&gt; &lt;/xsl:text&gt;
+
+      &lt;!-- Sukunimi --&gt;
+      &lt;text:span text:style-name="Sukunimi"&gt;
+        &lt;xsl:value-of select="sukunimi"/&gt;
+      &lt;/text:span&gt;
+
+      &lt;!-- Syntymäaika --&gt;
+      &lt;xsl:text&gt; (s. &lt;/xsl:text&gt;
+      &lt;text:span text:style-name="Syntymaaika"&gt;
+        &lt;xsl:value-of select="syntymaaika"/&gt;
+      &lt;/text:span&gt;
+      &lt;xsl:text&gt;)&lt;/xsl:text&gt;
+
+      &lt;!-- Muuta tekstiä --&gt;
+      &lt;xsl:text&gt; oli merkittävä henkilö historiassa. Hän oli &lt;/xsl:text&gt;
+      &lt;text:span text:style-name="Ammatti"&gt;
+        &lt;xsl:value-of select="ammatti"/&gt;
+      &lt;/text:span&gt;
+      &lt;xsl:text&gt;, mutta hän harrasti myös runoutta, sodan runoutta. &lt;/xsl:text&gt;
+      &lt;xsl:text&gt;Ihmisenä hän oli onneton, koska oli &lt;/xsl:text&gt;
+
+      &lt;!-- Siviilisääty --&gt;
+      &lt;text:span text:style-name="Siviilisaaty"&gt;
+        &lt;xsl:value-of select="siviilisaaty/@tyyppi"/&gt;
+      &lt;/text:span&gt;
+      &lt;xsl:text&gt;.&lt;/xsl:text&gt;
+    &lt;/text:p&gt;
+  &lt;/xsl:template&gt;
+  
+&lt;/xsl:stylesheet&gt;
+</pre>
+
+<p>Esimerkissä muotoillaan <tt>henkilo</tt>-tietueet tekstikappaleiksi
+ja tietueen kentät kappaleen tekstin joukkoon.</p>
+
+<p>Asiakirjan kappaleet ovat <tt>&lt;text:p&gt;</tt>-merkintöjen
+sisällä, jotka vastaavat pitkälti HTML:n
+<tt>&lt;p&gt;</tt>-merkintöjä. Attribuutti <tt>text:style-name</tt>
+määrittelee kappaleen tyylin, jonka on oltava joko
+<tt>content.xml</tt>-tiedoston alussa määritelty automaattinen tai
+malliasiakirjassa (ks. alla) määritelty epäautomaattinen tyyli.</p>
+
+<p>Varsinainen tekstisisältö on <tt>&lt;text:span&gt;</tt>-merkintöjen
+sisällä. Niissä kannattaa usein käyttää
+<tt>text:style-name</tt>-attribuuttia, joka määrittelee
+tekstityylin. Niiden avulla tuonti ei hävitä informaatiota ja
+vientisuodatin voi tunnistaa kentät.</p>
+
+<h2>Tuontisuodattimen malliasiakirja</h2>
+
+<p>Tuontisuodatin luo vain asiakirjan varsinaisen sisällön sisältävän
+<tt>content.xml</tt>-tiedoston. Kaikki muu sisältö, kuten
+epäautomaattiset (eli varsinaiset) tyylit sisältävä
+<tt>styles.xml</tt>-tiedosto, saadaan erillisestä tuonnin
+malliasiakirjasta. Tosin epäautomaattiset tyylit on luvallista
+määritellä myös <tt>content.xml</tt>-tiedoston alussa.</p>
+
+<p>Malliasiakirjan sisällöllä ei ole mitään merkitystä ja se
+poistetaan tuotaessa. Sitä voi kuitenkin käyttää tyylejä
+suunniteltaessa esimerkkinä, kuten alla olevassa kuvassa näkyy:</p>
+
+<div align="center"><img src="kaappaukset/kaappaus_xml_henkilotiedot-2.png"></div>
+
+<p>XML-asiakirjaa muunnettaessa kannattaa yleensä määritellä kullekin
+tietue- ja kenttätyypille oma kappale-, sivu- tai merkkityyli,
+riippuen XML-asiakirjan rakenteesta. Henkilötietoesimerkissämme
+XML-asiakirjan <tt>henkilo</tt>-elementti muunnetaan
+<tt>Henkilo</tt>-kappaletyyliksi ja sen alaelementit merkkityyleiksi.</p>
+
+<h2>Tuontisuodattimen käyttö</h2>
+
+<p>Tuonti voidaan tehdä OpenOffice.orgin sisällä <a href="suodatin.html">asentamalla
+XSLT-muunnin suodattimeksi</a> tai ulkopuolella erillisellä
+XSLT-käsittelijällä.</p>
+
+<p>Alla on esitetty tuontisuodattimen avulla tuotu asiakirja:</p>
+
+<div align="center"><img src="kaappaukset/kaappaus_xml_henkilotiedot-1.png"></div>
+
+
+<p style="margin-top: 5em;">Marko Grönroos<br>magi42@openoffice.org</p>
+
+<!-- ====================================================================== -->
+        </td>
+       </tr>
+      </table>
+     </td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+</table>
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

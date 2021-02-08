@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Database.ExecuteAPredefinedQuery.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2007/03/12 08:42:47 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Database">
+
+<keywords>
+</keywords>
+
+<authors>
+</authors>
+
+<question heading="execute a predefined query">How can a predefined query, which is stored in the database document, be executed?
+</question>
+
+<answer>
+<listing>/* get the service manager */
+xContext = UNO.connect()
+XMcf = xContext~getServiceManager
+
+/* retrieve the DatabaseContext and get its XNameAccess interface */
+xNameAccess = xMcf~createInstanceWithContext(-
+	&quot;{%see com.sun.star.sdb.DatabaseContext}&quot;, xContext)~{%see com.sun.star.container.XNameAccess%XNameAccess}
+
+/* we use the &quot;mysql-test&quot; datasource */
+dataSource = xNameAccess~getByName(&quot;mysql-test&quot;)
+
+/************ non-interactive login ************/
+/* query for the XDataSource interface of the data source */
+xDataSource = dataSource~{%see com.sun.star.sdbc.XDataSource%XDataSource}
+/* simple way to connect - hard code (usr,pw) */
+xConnection = xDataSource~getConnection(&quot;stefan&quot;,&quot;apple&quot;);
+
+
+/* execute a query definition */
+xCommandPreparation = xConnection~{%see com.sun.star.sdb.XCommandPreparation%XCommandPreparation}	
+xPreparedStatement = xCommandPreparation~prepareCommand(-
+	&quot;Query_names+products&quot;,-
+	bsf.getStaticValue(&quot;{%see com.sun.star.sdb.CommandType}&quot;, &quot;QUERY&quot;))
+
+xResultSet = xPreparedStatement~executeQuery
+
+
+/* process the ResultSet */
+xRow = xResultSet~{%see com.sun.star.sdbc.XRow%XRow}
+DO WHILE xResultSet~next &lt;&gt; .false
+	firstname = xRow~getString(1)
+	lastname = xRow~getString(2)
+	product = xRow~getString(3)
+	say firstname &quot;|&quot; lastname &quot;|&quot; product
+END
+::requires UNO.cls -- get UNO support</listing>
+</answer>
+
+<versions>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

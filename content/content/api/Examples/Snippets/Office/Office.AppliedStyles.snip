@@ -1,0 +1,86 @@
+<!-- ========================================================================
+$RCSfile: Office.AppliedStyles.snip,v $
+
+last change: $Revision: 1.3 $ $Author: jsc $ $Date: 2004/06/24 11:54:29 $
+
+(c)2003 by the copyright holders listed with the author-tags. If no
+explicit copyright holder is mentioned with a certain author, the author
+him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the Public 
+Documentation License Version 1.0 (the "License"); you may only use this
+
+Documentation if you comply with the terms of this License. A copy of 
+the License is available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives of 
+openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed with the 
+author-tags below.
+
+The Contributor(s) are listed with the author-tags below without the 
+marker for being an initial author.
+
+All Rights Reserved.
+======================================================================== -->
+
+<snippet language="OOBasic" application="Office">
+<keywords>
+   <keyword>StyleFamilies</keyword>
+   <keyword>isInUse </keyword>
+   <keyword>Style</keyword>
+</keywords>
+
+<authors>
+	<author id="and" initial="true" email="andrew@pitonyak.org">Andrew Pitonyak</author>
+	<author id="mi" email="mi@sun.com">Michael Hoennig</author>
+	<author id="tomsontom" initial="false" email="tom.schindl@bestsolution.at">Tom Schindl</author>
+</authors>
+
+<question heading="Look at styles in document">
+How do I only look at the styles used in a document
+</question>
+
+<answer>
+<p>
+Look at all of the styles and call the isInUse() method
+</p>
+<listing>
+'******************************************************************
+'Author: Andrew Pitonyak
+'email:   andrew@pitonyak.org
+Sub DisplayAllStylesInUse
+  Dim mFamilyNames As Variant, mStyleNames As Variant
+  Dim sMsg As String, n%, i%
+  Dim oFamilies As Object, oStyle As Object, oStyles As Object
+  
+  oFamilies = ThisComponent.StyleFamilies
+  mFamilyNames = oFamilies.getElementNames()
+  For n = LBound(mFamilyNames) To UBound(mFamilyNames)
+    sMsg = ""
+    oStyles = oFamilies.getByName(mFamilyNames(n))
+    mStyleNames = oStyles.getElementNames()
+    For i = LBound(mStyleNames) To UBound (mStyleNames)
+      If oStyles.getByName(mStyleNames(i)).isInUse() Then
+        sMsg=sMsg + i + " : " + mStyleNames(i) + Chr(13)
+        If ((i + 1) Mod 20 = 0) Then
+          MsgBox sMsg,0,mFamilyNames(n)
+          sMsg = ""
+        End If
+      End If
+    Next i
+    MsgBox sMsg,0,mFamilyNames(n)
+  Next n
+End Sub
+</listing>
+</answer>
+
+<changelog>
+	<change author-id="tomsontom" date="2004-06-22">Modified to match new snippet-DTD</change>
+	<change author-id="and" date="0000-00-00">Initial release</change>
+</changelog>
+
+</snippet>

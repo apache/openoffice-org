@@ -96,7 +96,8 @@ l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",		"Asturian",						"As
 													"vi",		"Vietnamese",					"Tiếng Việt" ];
 
 // l10n.dl_green_box_select_box_version_values	= [ "" ];
-l10n.dl_green_box_select_box_version_values	= [ "4.1.8",
+l10n.dl_green_box_select_box_version_values	= [ "4.1.9",
+												"4.1.8",
 												"4.1.7",
 												"4.1.6",
 												"4.1.5",
