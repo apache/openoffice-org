@@ -8,7 +8,7 @@ tagline=開放免費的文書處理軟體
 logo=AOO_logos/100MillAOO100px.png
 domain=https://www.openoffice.org
 divid=bannera
-announce=Apache OpenOffice 4.1.8 現可供下載
-announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.8+Release+Notes
+announce=Apache OpenOffice 4.1.9 現可供下載
+announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.9+Release+Notes
 announcetip=閱讀佈告
 ~~~~~~
