@@ -15,10 +15,10 @@ var l10n = new Object();
 // The following variables are used in the "index.html" file:
 
 // Set a specific language ISO code to force to assemble a download link with a certain language.
-DL.NL_LANG					= "de";
+DL.NL_LANG	= "de";
 
 // General:
-l10n.dl_headline_text				= "Apache OpenOffice herunterladen";
+l10n.dl_headline_text	= "Apache OpenOffice herunterladen";
 
 // Download: Strings in the green box (used in "index.html").
 l10n.dl_green_box_headline_text			= "Apache OpenOffice herunterladen";
@@ -27,9 +27,9 @@ l10n.dl_green_box_subtext1_text			= "Bereitgestellt von SourceForge.net - Eine v
 l10n.dl_green_box_subtext1_title		= "Apache OpenOffice Installationsdateien werden von SourceForge.net bereitgestellt - Eine vertrauenswürdige Webseite";
 l10n.dl_green_box_subtext2_text			= "Wähle das gewünschte Betriebssystem, Sprache und Version";
 l10n.dl_green_box_subtext2_title		= "Wähle das gewünschte Betriebssystem, Sprache und Version";
-l10n.dl_green_box_selectbox_os_title		= "Wähle das gewünschte Betriebssystem";
-l10n.dl_green_box_selectbox_lang_title		= "Wähle die gewünschte Sprache";
-l10n.dl_green_box_selectbox_ver_title		= "Wähle die gewünschte Version";
+l10n.dl_green_box_selectbox_os_title	= "Wähle das gewünschte Betriebssystem";
+l10n.dl_green_box_selectbox_lang_title	= "Wähle die gewünschte Sprache";
+l10n.dl_green_box_selectbox_ver_title	= "Wähle die gewünschte Version";
 
 //These strings require updates per version. Leave them empty is you want to just take the default in English.
 
@@ -41,76 +41,76 @@ l10n.dl_green_box_selectbox_ver_title		= "Wähle die gewünschte Version";
 
 // l10n.dl_green_box_select_box_os_values	= [ "" ];
 l10n.dl_green_box_select_box_os_values		= [ "Windows (EXE)",
-						    "Linux 64-Bit (x86-64) (DEB)",
-						    "Linux 64-Bit (x86-64) (RPM)",
-						    "Linux 32-Bit (x86) (DEB)",
-						    "Linux 32-Bit (x86) (RPM)",
-						    "OS X (version >= 10.7) (DMG)",
-						    "OS X (version <= 10.6) (DMG)",
-						    "Andere Betriebssysteme" ];
+												"Linux 64-Bit (x86-64) (DEB)",
+												"Linux 64-Bit (x86-64) (RPM)",
+												"Linux 32-Bit (x86) (DEB)",
+												"Linux 32-Bit (x86) (RPM)",
+												"OS X (version >= 10.7) (DMG)",
+												"OS X (version <= 10.6) (DMG)",
+												"Andere Betriebssysteme" ];
 
 // l10n.dl_green_box_select_box_language_values	= [ "" ];
 l10n.dl_green_box_select_box_language_values	= [ "" ];
 
 // l10n.dl_green_box_select_box_lang_values_custom = [ "" ];
-//						    Value	Visible text				Tool tip
-l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",	"Asturisch",				"Asturianu",
-						    "eu",	"Baskisch",				"Euskara",
-						    "bg",	"Bulgarisch",				"български език",
-						    "zh-TW",	"Chinesisch [Traditionell]",		"正體中文",
-						    "zh-CN",	"Chinesisch [Vereinfacht]",		"简体中文",
-						    "da",	"Dänisch",				"Dansk",
-						    "de",	"Deutsch",				"Deutsch",
-						    "en-GB",	"Englisch [Britisch]",			"English [British]",
-						    "en-US",	"Englisch [US]",			"English [US]",
-						    "fi",	"Finnisch",				"Suomi",
-						    "fr",	"Französisch",				"Français",
-						    "gl",	"Galicisch",				"Galego",
-						    "el",	"Griechisch",				"ελληνικά",
-						    "he",	"Hebräisch",				"עברית",
-						    "hi",	"Hindi",				"हिन्दी",
-						    "it",	"Italienisch",				"Italiano",
-						    "ja",	"Japanisch",				"日本語",
-						    "ca",	"Katalanisch",				"Català",
-						    "ca-XV",	"Katalanisch [Valencianisch AVL]",	"València (AVL)",
-						    "ca-XR",	"Katalanisch [Valencianisch RACV]",	"València (RACV)",
-						    "km",	"Khmer",				"ភាសាខ្មែរ",
-						    "ko",	"Koreanisch",				"한국어",
-						    "lt",	"Litauisch",				"Lietuvių",
-						    "nl",	"Niederländisch",			"Nederlands",
-						    "nb",	"Norwegisch [Bokmål]",			"Norsk [Bokmål]",
-						    "pl",	"Polnisch",				"Polski",
-						    "pt-BR",	"Portugiesisch [Brasilianisch]",	"Português [do Brasil]",
-						    "pt",	"Portugiesisch [Europäisch]",		"Português [Europeu]",
-						    "ru",	"Russisch",				"Русский",
-						    "gd",	"Schottisch [Gälisch]",			"Gàidhlig",
-						    "sv",	"Schwedisch",				"Svenska",
-						    "sr",	"Serbisch [Kyrillisch]",		"Cрпски [ћирилицом]",
-						    "sk",	"Slowakisch",				"Slovenský jazyk [slovenčina]",
-						    "sl",	"Slowenisch",				"Slovenski jezik [slovenščina]",
-						    "es",	"Spanisch",				"Español",
-						    "ta",	"Tamilisch",				"தமிழ்",
-						    "th",	"Thailändisch",				"ภาษาไทย",
-						    "cs",	"Tschechisch",				"Čeština",
-						    "tr",	"Türkisch",				"Türkçe",
-						    "hu",	"Ungarisch",				"Magyar",
-						    "vi",	"Vietnamesisch",			"Tiếng Việt" ];
+//													Value		Visible text						Tool tip
+l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",		"Asturisch",						"Asturianu",
+													"eu",		"Baskisch",							"Euskara",
+													"bg",		"Bulgarisch",						"български език",
+													"zh-TW",	"Chinesisch [Traditionell]",		"正體中文",
+													"zh-CN",	"Chinesisch [Vereinfacht]",			"简体中文",
+													"da",		"Dänisch",							"Dansk",
+													"de",		"Deutsch",							"Deutsch",
+													"en-GB",	"Englisch [Britisch]",				"English [British]",
+													"en-US",	"Englisch [US]",					"English [US]",
+													"fi",		"Finnisch",							"Suomi",
+													"fr",		"Französisch",						"Français",
+													"gl",		"Galicisch",						"Galego",
+													"el",		"Griechisch",						"ελληνικά",
+													"he",		"Hebräisch",						"עברית",
+													"hi",		"Hindi",							"हिन्दी",
+													"it",		"Italienisch",						"Italiano",
+													"ja",		"Japanisch",						"日本語",
+													"ca",		"Katalanisch",						"Català",
+													"ca-XV",	"Katalanisch [Valencianisch AVL]",	"València (AVL)",
+													"ca-XR",	"Katalanisch [Valencianisch RACV]",	"València (RACV)",
+													"km",		"Khmer",							"ភាសាខ្មែរ",
+													"ko",		"Koreanisch",						"한국어",
+													"lt",		"Litauisch",						"Lietuvių",
+													"nl",		"Niederländisch",					"Nederlands",
+													"nb",		"Norwegisch [Bokmål]",				"Norsk [Bokmål]",
+													"pl",		"Polnisch",							"Polski",
+													"pt-BR",	"Portugiesisch [Brasilianisch]",	"Português [do Brasil]",
+													"pt",		"Portugiesisch [Europäisch]",		"Português [Europeu]",
+													"ru",		"Russisch",							"Русский",
+													"gd",		"Schottisch [Gälisch]",				"Gàidhlig",
+													"sv",		"Schwedisch",						"Svenska",
+													"sr",		"Serbisch [Kyrillisch]",			"Cрпски [ћирилицом]",
+													"sk",		"Slowakisch",						"Slovenský jazyk [slovenčina]",
+													"sl",		"Slowenisch",						"Slovenski jezik [slovenščina]",
+													"es",		"Spanisch",							"Español",
+													"ta",		"Tamilisch",						"தமிழ்",
+													"th",		"Thailändisch",						"ภาษาไทย",
+													"cs",		"Tschechisch",						"Čeština",
+													"tr",		"Türkisch",							"Türkçe",
+													"hu",		"Ungarisch",						"Magyar",
+													"vi",		"Vietnamesisch",					"Tiếng Việt" ];
 
 // l10n.dl_green_box_select_box_version_values	= [ "" ];
 l10n.dl_green_box_select_box_version_values	= [ "4.1.9",
-						    "4.1.8",
-						    "4.1.7",
-						    "4.1.6",
-						    "4.1.5",
-						    "4.1.4",
-						    "4.1.3",
-						    "4.1.2",
-						    "4.1.1",
-						    "4.1.0",
-						    "4.0.1",
-						    "4.0.0",
-						    "3.4.1",
-						    "Ältere Versionen" ];
+												"4.1.8",
+												"4.1.7",
+												"4.1.6",
+												"4.1.5",
+												"4.1.4",
+												"4.1.3",
+												"4.1.2",
+												"4.1.1",
+												"4.1.0",
+												"4.0.1",
+												"4.0.0",
+												"3.4.1",
+												"Ältere Versionen" ];
 
 // Download: Strings in the sub-green box (used in "index.html").
 // Not defined for now.
@@ -360,12 +360,12 @@ l10n.dl_analyze_copy_button_text		= "Kopieren mit [Strg] + [C] / [&#8984;]+[C]";
 l10n.dl_analyze_copy_button_title		= "Kopieren der ausgewählten Tabellendaten mit [ Strg ] + [ C ] oder [ &#8984; ] + [ C ] in die Zwischenablage";
 
 // Analyze: Strings for the table (used in "analyze.html").
-l10n.dl_analyze_table_problem_text1		= "Problembeschreibung";
-l10n.dl_analyze_table_problem_text2		= "Ersetze diesen Text und beschreibe das Problem <br /><br />(Was funktioniert nicht? Was wird erwartet?)";
-l10n.dl_analyze_table_browser_text		= "Browser Variablen";
-l10n.dl_analyze_table_values_text		= "Werte";
-l10n.dl_analyze_table_yes_text			= "Ja";
-l10n.dl_analyze_table_no_text			= "Nein";
+l10n.dl_analyze_table_problem_text1			= "Problembeschreibung";
+l10n.dl_analyze_table_problem_text2			= "Ersetze diesen Text und beschreibe das Problem <br /><br />(Was funktioniert nicht? Was wird erwartet?)";
+l10n.dl_analyze_table_browser_text			= "Browser Variablen";
+l10n.dl_analyze_table_values_text			= "Werte";
+l10n.dl_analyze_table_yes_text				= "Ja";
+l10n.dl_analyze_table_no_text				= "Nein";
 l10n.dl_analyze_table_stable_release_text	= "Stabiles Release";
 l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;Funktionen/Variablen";
 
