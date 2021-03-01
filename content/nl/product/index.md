@@ -53,7 +53,7 @@ Apache OpenOffice is **gratis en vrije software**:
 - Installeer het op zoveel pc's als u wenst
 - Gebruik het voor alle doeleinden - prive, in het onderwijs, bij de overheid en in de publieke
   sector, commercieel...
-- Geef kosteloos kopieÃ«n aan familie, vrienden, studenten, medewerkers, etc.
+- Geef kosteloos kopiën aan familie, vrienden, studenten, medewerkers, etc.
 
 Apache OpenOffice **voldoet aan de standaarden**:
 
