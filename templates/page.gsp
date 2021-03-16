@@ -31,6 +31,7 @@
     <link href="${content.css2}" rel="stylesheet" type="text/css">
     <% } %>
     <% } %>
+    <script src="https://www.apachecon.com/event-images/snippet.js"></script>
     <!--#include virtual="/scripts/google-analytics.js" --> 
     <!--#include virtual="/scripts/entourage.js" -->
   </head>
