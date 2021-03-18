@@ -27,9 +27,9 @@ l10n.dl_green_box_subtext1_text			= "Gehost door Sourceforge.net - Een vertrouwd
 l10n.dl_green_box_subtext1_title		= "Apache OpenOffice binaire bestanden worden gehost door Sourceforge.net - Een vertrouwde website";
 l10n.dl_green_box_subtext2_text			= "Selecteer uw favoriete besturingssysteem, taal en versie";
 l10n.dl_green_box_subtext2_title		= "Selecteer uw favoriete besturingssysteem, taal en versie";
-l10n.dl_green_box_selectbox_os_title		= "Selecteer uw favoriete besturingssysteem";
-l10n.dl_green_box_selectbox_lang_title		= "Selecteer uw favoriete taal";
-l10n.dl_green_box_selectbox_ver_title		= "Selecteer uw favoriete versie";
+l10n.dl_green_box_selectbox_os_title	= "Selecteer uw favoriete besturingssysteem";
+l10n.dl_green_box_selectbox_lang_title	= "Selecteer uw favoriete taal";
+l10n.dl_green_box_selectbox_ver_title	= "Selecteer uw favoriete versie";
 
 // The strings that will be shown in the OS, language and version drop-down select boxes.
 // You must leave at least one single empty string (see the comment lines below the 3 following variables)!
@@ -241,8 +241,12 @@ l10n.dl_full_link_text				= "Download volledige installatie";
 l10n.dl_full_link_title				= "Klik hier om te downloaden: ";
 l10n.dl_langpack_link_text			= "Download taalpakket";
 l10n.dl_langpack_link_title			= "Klik hier om te downloaden: ";
-l10n.dl_rpm_vs_deb_title			= "RPM is used in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB is used in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
-l10n.dl_rpm_vs_deb_text				= "RPM vs. DEB = What to choose?";
+l10n.dl_win_info_text				= "Important hint: 32-bit, 64-bit and Java - What to choose?";
+l10n.dl_win_info_title				= "At the moment we offer a 32-bit (x86) version for Windows. However, it installs and runs also on Windows 64-bit (x86-64).\nPlease note that you may need Java in 32-bit for additional functionality which must then be selected only once (see menu 'Tools - Options - OpenOffice - Java').\n\nFor more information about OpenOffice and Java please see the link on the right 'Java and Apache OpenOffice'.";
+l10n.dl_linux_info_text				= "Important hint: RPM vs. DEB = What to choose?";
+l10n.dl_linux_info_title			= "RPM is used in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB is used in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
+// l10n.dl_mac_info_text			= "macOS : Title";
+// l10n.dl_mac_info_title			= "macOS : Text";
 
 l10n.dl_full_link_porting_text		= "Porting: Klik hier om te kiezen uit 3e-partij-verkopers";
 l10n.dl_full_link_porting_title		= "Klik hier om te bladeren naar de webpagina Porting en download van 3e-partij-verkopers";
@@ -299,10 +303,10 @@ l10n.dl_langpack_link_error_title		= "Selecteer een andere taal, platform of ver
 l10n.dl_error_problem_img_title			= "Het geselecteerde downloadbestand is niet beschikbaar";
 l10n.dl_error_problem_img_src			= "/download/cachedimages/exclamation-icon.png";
 l10n.dl_error_problem_img_alt			= "Tekst fout";
-l10n.dl_error_problem_text			= "Probleem: ";
-l10n.dl_error_solution_text			= "Oplossing: ";
-l10n.dl_error_aoo_text				= "Apache OpenOffice ";
-l10n.dl_error_not_available_for_text		= " is niet beschikbaar voor ";
+l10n.dl_error_problem_text				= "Probleem: ";
+l10n.dl_error_solution_text				= "Oplossing: ";
+l10n.dl_error_aoo_text					= "Apache OpenOffice ";
+l10n.dl_error_not_available_for_text	= " is niet beschikbaar voor ";
 l10n.dl_error_please_select_1_text		= "Selecteer versie 4.0.1.";
 l10n.dl_error_please_select_2_text		= "Selecteer versie 4.1.0 of nieuwer.";
 l10n.dl_error_please_select_3_text		= "Selecteer een download voor Windows, macOS (OS&nbsp;X) of Linux.";
@@ -322,24 +326,24 @@ l10n.dl_error_custom_4_text			= "";
 // The following variables are used in the "analyze.html" file:
 
 // Analyze: Strings for the instruction text (used in "analyze.html").
-l10n.dl_analyze_headline_text			= "Hoe een verbroken downloadkoppeling te rapporteren?";
-l10n.dl_analyze_instruction_select_text		= "<b>Selecteer uw favorieten</b>: Besturingssysteem, taal en versie in het groene gedeelte hieronder.";
-l10n.dl_analyze_instruction_verify_text		= "Verifieer dat deze opties <b>nog steeds niet</b> leiden naar geldige downloadkoppelingen.";
-l10n.dl_analyze_instruction_click_text		= "Klik op de knop onder het groene vak:";
-l10n.dl_analyze_instruction_copy_text		= "Kopieer de geselecteerde tabelgegevens naar het klembord:";
-l10n.dl_analyze_instruction_new_mail_text	= "Maak een nieuw mailbericht.";
-l10n.dl_analyze_instruction_problem_text	= "<b>Schrijf een omschrijving van het probleem</b> (wat werkt niet en wat verwachtte u).";
-l10n.dl_analyze_instruction_details_text	= "Voeg ook <b>details over het gebruikte besturingssysteem</b> toe.";
-l10n.dl_analyze_instruction_paste_text		= "Plak de gekopieerde gegevens aan het einde van de mail.";
+l10n.dl_analyze_headline_text					= "Hoe een verbroken downloadkoppeling te rapporteren?";
+l10n.dl_analyze_instruction_select_text			= "<b>Selecteer uw favorieten</b>: Besturingssysteem, taal en versie in het groene gedeelte hieronder.";
+l10n.dl_analyze_instruction_verify_text			= "Verifieer dat deze opties <b>nog steeds niet</b> leiden naar geldige downloadkoppelingen.";
+l10n.dl_analyze_instruction_click_text			= "Klik op de knop onder het groene vak:";
+l10n.dl_analyze_instruction_copy_text			= "Kopieer de geselecteerde tabelgegevens naar het klembord:";
+l10n.dl_analyze_instruction_new_mail_text		= "Maak een nieuw mailbericht.";
+l10n.dl_analyze_instruction_problem_text		= "<b>Schrijf een omschrijving van het probleem</b> (wat werkt niet en wat verwachtte u).";
+l10n.dl_analyze_instruction_details_text		= "Voeg ook <b>details over het gebruikte besturingssysteem</b> toe.";
+l10n.dl_analyze_instruction_paste_text			= "Plak de gekopieerde gegevens aan het einde van de mail.";
 l10n.dl_analyze_instruction_only_download_text	= "<b>Verzend de mail alleen in geval van problemen met downloaden</b> en niet als u niet kunt installeren.";
-l10n.dl_analyze_instruction_no_install_text	= "Deze webpagina kan u echt niet helpen met problemen bij het installeren.";
-l10n.dl_analyze_instruction_send_mail_text	= "Tenslotte, <b>verzend de mail</b> naar de: ";
+l10n.dl_analyze_instruction_no_install_text		= "Deze webpagina kan u echt niet helpen met problemen bij het installeren.";
+l10n.dl_analyze_instruction_send_mail_text		= "Tenslotte, <b>verzend de mail</b> naar de: ";
 l10n.dl_analyze_instruction_mailing_list_text	= "Apache OpenOffice Development Mailing List";
 l10n.dl_analyze_instruction_mailing_list_title	= "Verzend het rapport naar de mailinglijst voor ontwikkelaars van Apache OpenOffice";
-l10n.dl_analyze_instruction_learn_more_text	= "Klik hier om meer te weten te komen over wat een mailinglijst is";
+l10n.dl_analyze_instruction_learn_more_text		= "Klik hier om meer te weten te komen over wat een mailinglijst is";
 l10n.dl_analyze_instruction_learn_more_title	= "Meer te weten komen over wat een mailinglijst is";
-l10n.dl_analyze_instruction_answer_text		= "We zullen proberen te antwoorden zodra wij de mail hebben ontvangen en het probleem hebben geanalyseerd.";
-l10n.dl_analyze_instruction_thanks_text		= "Dank u wel voor het rapport.";
+l10n.dl_analyze_instruction_answer_text			= "We zullen proberen te antwoorden zodra wij de mail hebben ontvangen en het probleem hebben geanalyseerd.";
+l10n.dl_analyze_instruction_thanks_text			= "Dank u wel voor het rapport.";
 
 // Analyze: Strings for the 3 buttons (used in "analyze.html").
 l10n.dl_analyze_update_button_text		= "Klik om de tabel bij te werken";
@@ -350,10 +354,10 @@ l10n.dl_analyze_copy_button_text		= "Kopieer met [Ctrl] + [C]";
 l10n.dl_analyze_copy_button_title		= "Kopieer de geselecteerde tabelgegevens via [Ctrl] + [C] naar het klembord";
 
 // Analyze: Strings for the table (used in "analyze.html").
-l10n.dl_analyze_table_browser_text		= "Browser-variabelen";
-l10n.dl_analyze_table_values_text		= "Waarden";
-l10n.dl_analyze_table_yes_text			= "Ja";
-l10n.dl_analyze_table_no_text			= "Nee";
+l10n.dl_analyze_table_browser_text			= "Browser-variabelen";
+l10n.dl_analyze_table_values_text			= "Waarden";
+l10n.dl_analyze_table_yes_text				= "Ja";
+l10n.dl_analyze_table_no_text				= "Nee";
 l10n.dl_analyze_table_stable_release_text	= "Stabiele uitgave";
 l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;functies/variabelen";
 
