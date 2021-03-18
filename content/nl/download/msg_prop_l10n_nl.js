@@ -241,15 +241,15 @@ l10n.dl_full_link_text				= "Download volledige installatie";
 l10n.dl_full_link_title				= "Klik hier om te downloaden: ";
 l10n.dl_langpack_link_text			= "Download taalpakket";
 l10n.dl_langpack_link_title			= "Klik hier om te downloaden: ";
-l10n.dl_win_info_text				= "Important hint: 32-bit, 64-bit and Java - What to choose?";
-l10n.dl_win_info_title				= "At the moment we offer a 32-bit (x86) version for Windows. However, it installs and runs also on Windows 64-bit (x86-64).\nPlease note that you may need Java in 32-bit for additional functionality which must then be selected only once (see menu 'Tools - Options - OpenOffice - Java').\n\nFor more information about OpenOffice and Java please see the link on the right 'Java and Apache OpenOffice'.";
-l10n.dl_linux_info_text				= "Important hint: RPM vs. DEB = What to choose?";
-l10n.dl_linux_info_title			= "RPM is used in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB is used in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
+l10n.dl_win_info_text				= "Belangrijke hint: 32-bit, 64-bit en Java - Wat te kiezen?";
+l10n.dl_win_info_title				= "Momenteel bieden we een 32-bit (x86) versie aan voor Windows. Die installeert echter, en kan ook worden uitgevoerd, op Windows 64-bit (x86-64).\nOnthoud dat u misschien Java in 32-bit nodig hebt voor aanvulende functionaliteiten die dan slechts eenmalig gekozen moet worden (in menu 'Extra - Opties - OpenOffice - Java').\n\nBekijk voor meer informatie over OpenOffice en Java de link aan de rechterkant 'Java en Apache OpenOffice'.";
+l10n.dl_linux_info_text				= "Belangrijke hint: RPM vs. DEB = Wat te kiezen?";
+l10n.dl_linux_info_title			= "RPM wordt gebruikt in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB wordt gebruikt in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
 //l10n.dl_mac_info_text				= "macOS : Text";
 //l10n.dl_mac_info_title			= "macOS : Title";
 
 l10n.dl_full_link_porting_text		= "Porting: Klik hier om te kiezen uit 3e-partij-verkopers";
-l10n.dl_full_link_porting_title		= "Klik hier om te bladeren naar de webpagina Porting en download van 3e-partij-verkopers";
+l10n.dl_full_link_porting_title		= "Klik hier om te bladeren naar de webpagina Porting en downloads van 3e-partij-verkopers";
 l10n.dl_full_link_archive_text		= "Archief: Klik hier om te kiezen uit oudere uitgaven";
 l10n.dl_full_link_archive_title		= "Klik hier om te bladeren door het archief en oudere uitgaven te downloaden";
 
