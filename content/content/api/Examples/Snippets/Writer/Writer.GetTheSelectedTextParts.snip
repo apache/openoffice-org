@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Writer.GetTheSelectedTextParts.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2008/10/20 11:29:28 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Writer">
+
+<keywords>
+	<keyword>get</keyword>
+	<keyword>selected</keyword>
+	<keyword>text</keyword>
+	<keyword>parts</keyword>
+	<keyword>part</keyword>
+	<keyword>selection</keyword>
+</keywords>
+
+<authors>
+	<author id="1" initial="true" email="" copyright="Josef Frysak">Josef Frysak</author>
+</authors>
+
+<question heading="Get the selected text parts">How to get the selected text parts?
+</question>
+
+<answer>
+<p>Get the current selections of the document and iterate trough this</p>
+<p>container. For every entry get the &quot;XTextRange&quot; interface and read the</p>
+<p>text string by calling the entrys &quot;getString&quot; function.</p>
+<p>For further details see http://wi.wu-wien.ac.at/rgf/diplomarbeiten/BakkStuff/2008/200809_Frysak/200809_Frysak_Automating_OOo_ooRexx_Nutshells.pdf.</p>
+<listing>-- try to get a script context, will be .nil, if script was not invoked by OOo
+x_ScriptContext = uno.getScriptContext()
+if (x_ScriptContext &lt;&gt; .nil) then
+do
+   -- invoked by OOo as a macro
+
+   -- get context
+   x_ComponentContext = x_ScriptContext~getComponentContext
+   -- get desktop (an XDesktop)
+   x_Desktop  = x_ScriptContext~getDesktop
+   -- get current document
+   x_Document = x_ScriptContext~getDocument
+end
+else  
+do
+   -- called from outside of OOo, create a connection
+
+   -- connect to Open Office and get component context
+   x_ComponentContext = UNO.connect()
+   -- create a desktop service and its interface
+   service = &quot;{%see com.sun.star.frame.Desktop}&quot;
+   s_Desktop = x_ComponentContext~getServiceManager~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}~createInstance(service)
+   x_Desktop = s_Desktop~{%see com.sun.star.frame.XDesktop%XDesktop}
+   -- get the last active document
+   x_Document = x_Desktop~getCurrentComponent()  
+end
+
+
+
+
+-- final output
+output = &quot;Text: &quot;
+
+-- get the current selection
+x_Model = x_Document~{%see com.sun.star.frame.XModel%XModel}
+s_Container = x_Model~getCurrentSelection()
+
+if s_Container &lt;&gt; .nil then
+do
+   -- if there is a selection iterate trough the selection
+   -- and read out the text into output variable
+   
+   x_IndexAccess = s_Container~{%see com.sun.star.container.XIndexAccess%XIndexAccess}
+   size = x_IndexAccess~getCount()
+
+   do counter = 1 to size
+      s_text = x_IndexAccess~getByIndex(counter - 1)
+      x_TextRange = s_text~{%see com.sun.star.text.XTextRange%XTextRange}
+
+      output = output || x_TextRange~getString()
+   end
+end
+
+-- finally show what is selected
+.bsf.dialog~messageBox(output, &quot;Currently Selected Text:&quot;, &quot;information&quot;)
+
+::requires UNO.CLS</listing>
+</answer>
+
+<versions>
+	<version number="2.4.1" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="1" date="2008-10-14">Initial version</change>
+</changelog>
+
+</snippet>

@@ -1,0 +1,314 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    
+<title>Arbeiten mit Datenquellen</title>
+	<!-- Start de-header -->
+	<link rel="stylesheet" href="../../../styles/de.css" media="screen" type="text/css" />
+	<link rel="stylesheet" href="../../../styles/de_print.css" media="print" type="text/css" />
+	<link rel="stylesheet" title="mit Navbar" href="../../../styles/de_navbar.css" media="screen" type="text/css" />
+	<link rel="alternate stylesheet" title="ohne Navbar" media="screen" href="../../../styles/de_nonavbar.css" type="text/css" />
+	<!-- >
+	Kommentare zur Seite
+	$Id: tech_sapdb.html 2003/12/25 11:06 cmarkgraf
+	< -->
+	<!-- End de-header -->
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    
+    <script src="https://www.apachecon.com/event-images/snippet.js"></script>
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body onload="loginfocus()" marginwidth="0" marginheight="0" class="composite">
+    <!--#include virtual="/de/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/de/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/de/">de</a>&nbsp;&raquo;&nbsp;<a href="/de/doc/">doc</a>&nbsp;&raquo;&nbsp;<a href="/de/doc/howto/">howto</a>&nbsp;&raquo;&nbsp;<a href="/de/doc/howto/datenquelle/">datenquelle</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<!-- "Erste Schritte"-Header -->
+<table cellpadding="2" cellspacing="2" border="0" width="100%">
+<tr>
+	<td width="33%">
+		<a href="tech_mysql.html">[zur&uuml;ck]</a>
+	</td>
+	<td width="33%">
+		<a href="index.html">[Hauptmen&uuml;]</a>
+        </td>
+	<td width="33%">
+		<a href="access-und-ooo.htm">[weiter]</a>
+        </td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td><a href="pdf/tech_sapdb.pdf">[PDF]</a></td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<hr size="1" />
+<div id="body_de">
+
+<h2>SAP DB und OpenOffice.org</h2>
+<p style="text-align: right; color:#c30000;">
+Einbinden von SAP-DB in OpenOffice.org mit Hilfe von JDBC</p>
+<p><br /><br />
+</p>
+<table width="100%" border="1" cellpadding="5" cellspacing="2">
+		<tr>
+			<td width="7%">
+				<p>
+				<img src="../pics/hinweis.png" name="Grafik9" vspace="14" border="0" width="32" height="32" alt="" /></p>
+			</td>
+			<td width="93%">
+				<p>Die Beschreibung wurde auf Linux
+				(SuSE 8.0) &ndash; Kernel 2.4.18, mit JDK&nbsp;&ndash;&nbsp;jdk1.3.1_06
+				und der SAPDB 7.3  realisiert.</p>
+			</td>
+		</tr>
+</table>
+<h3>Download der SAPDB</h3>
+<p>Die Datenbank kann von (1) bezogen werden.
+Notwendig sind folgende Dateien.</p>
+<p><br /><br />
+</p>
+<table width="100%" border="4" cellpadding="9" cellspacing="0">
+	<thead>
+		<tr>
+			<th width="49%">
+				<p><i><b>Komponente</b></i></p>
+			</th>
+			<th width="51%">
+				<p><i><b>Datei</b></i></p>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="a">
+			<td width="49%">
+				<p>
+				SAP
+				DB Environment</p>
+			</td>
+			<td width="51%">
+				<p>
+				sapdb-ind-7.3.0.29-1.i386.rpm</p>
+			</td>
+		</tr>
+		<tr class="b">
+			<td width="49%">
+				<p>
+				SAP
+				DB Server</p>
+			</td>
+			<td width="51%">
+				<p>
+				sapdb-srv-7.3.0.29-1.i386.rpm</p>
+			</td>
+		</tr>
+		<tr class="a">
+			<td width="49%">
+				<p>
+				WebInterface
+				und WebSql 
+				</p>
+			</td>
+			<td width="51%">
+				<p>
+				sapdb-web-7.3.0.29-1.i386.rpm</p>
+			</td>
+		</tr>
+		<tr class="b">
+			<td width="49%">
+				<p>
+				Beispieldatenbank</p>
+			</td>
+			<td width="51%">
+				<p>
+				sapdb-testdb-7.3.0.29-1.i386.rpm</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<p><i>Tabelle 1:
+ben&ouml;tigte Dateien</i></p>
+<h3>Installation der SAPDB</h3>
+<p>Eine sehr detaillierte Beschreibung findet sich
+unter <a href="http://www.sapdb.org/rpm_linux.htm">www.sapdb.org/rpm_linux.htm</a>.</p>
+<p>Die Schritte im Einzelnen:</p>
+<ul>
+	<li><p><kbd>rpm -i
+	sapdb-ind-7.3.0.29-1.i386.rpm</kbd></p></li>
+	<li><p><kbd>rpm -i
+	sapdb-srv-7.3.0.29-1.i386.rpm</kbd></p></li>
+</ul>
+<p>Wenn Sie SAPDB ohne WebInterface und ohne
+Beispieldatenbank betreiben wollen, sind Sie hier schon fertig.
+Beachten Sie, dass Sie dann aber die nachfolgenden Schritte nicht
+mehr nachvollziehen k&ouml;nnen.</p>
+<p>Die Startdateien f&uuml;r die Datenbank liegen im
+Verzeichnis <em>/opt/sapdb/indep_prog/pgm</em> und
+sind in folgender Reihenfolge zu starten:</p>
+<ul>
+	<li><p><kbd>niserver</kbd></p></li>
+	<li><p><kbd>vserver.</kbd></p></li>
+</ul>
+<p>Die Webtools installieren Sie so:</p>
+<ul>
+	<li><p><kbd>rpm -i
+	sapdb-web-7.3.0.29-1.i386.rpm</kbd></p></li>
+</ul>
+<p>Und die Beispieldatenbank so:</p>
+<ul>
+	<li><p><kbd>rpm -i
+	sapdb-testdb-7.3.0.29-1.i386.rpm</kbd></p></li>
+</ul>
+<p>Wollen Sie die Webinterfaces nicht sehen, dann
+machen Sie weiter bei Punkt 5.</p>
+<h3>Installation des Webinterface</h3>
+<p>Wenn Sie das Webinterface der SAPDB sehen wollen,
+f&uuml;gen Sie in der Datei <em>/etc/ld.so.conf</em>
+die Zeile</p>
+<p><kbd>/opt/sapdb/web/lib</kbd></p>
+<p>ein.</p>
+<p>Dann starten Sie 
+</p>
+<ul>
+	<li><p><kbd>ld
+	config</kbd></p></li>
+</ul>
+<p>Ist <em>ld config </em>abgeschlossen,
+ starten Sie</p>
+<ul>
+	<li><p><kbd>/opt/sapdb/web/pgm/wahttp</kbd></p></li>
+</ul>
+<p>und in einem Browser Ihrer Wahl k&ouml;nnen Sie
+mit</p>
+<ul>
+	<li><p><kbd><a href="http://localhost:9999/webdbm">http://localhost:9999/webdbm</a></kbd></p></li>
+</ul>
+<p>&uuml;ber das Webinterface die Datenbank
+verwalten.</p>
+	<p><img src="pics/sapdb_logon_manager.png" name="Grafik2" border="0" width="599" height="411" alt="" /><br /><i>Abbildung
+	1: Webinterface - Manager Logon</i></p>
+	<p>Name der Datenbank ist <kbd>TST</kbd>,
+	User Name und Password sind <kbd>DBM</kbd>.
+</p>
+<p>&nbsp;
+</p>
+	<p><img src="pics/sapdb_db_manager.png" name="Grafik1" border="0" width="600" height="436" alt="" /><br /><i>Abbildung
+	2: Webinterface - Database Manager</i></p>
+<p>Nach dem LOGON k&ouml;nnen Sie die Datenbank
+verwalten.
+</p>
+<p>Nun empfiehlt es sich die DOKU zu SAPDB zu lesen.
+;-)</p>
+<h3>Starten von WEBsql</h3>
+<p>Nachzulesen auf
+<a href="http://www.sapdb.org/sampledb_rpm.htm">www.sapdb.org/sampledb_rpm.htm</a>.</p>
+<p>Die  notwendigen Infos &uuml;ber Datenbankname und
+UserName finden sich auch dort.</p>
+	<p><img src="pics/sapdb_db_websql.png" name="Grafik4" border="0" width="600" height="" alt="436" /><br /><i>Abbildung
+	3: WebSql - Anmeldung</i></p>
+<p>Geben Sie in Ihrem Browser die Adresse
+<a href="http://localhost:9999/websql">http://localhost:9999/websql</a>
+ein. Name der Datenbank ist <kbd>TST</kbd>, User Name
+und Password sind <kbd>test</kbd>.
+</p>
+	<p><img src="pics/sapdb_db_websql.png" name="Grafik3" border="0" width="600" height="" alt="436" /><br /><i>Abbildung
+	4: WebSQL</i></p>
+<p>Danach sehen Sie:
+</p>
+<p>Nun empfiehlt es sich SQL-Kenntnisse zu haben.</p>
+<h3>Bereitstellen des JDBC Treibers</h3>
+<p>Die Datei sapdbc.jar (kann hier geladen werden
+<a href="http://www.sapdb.org/sap_db_jdbc.htm">www.sapdb.org/sap_db_jdbc.htm</a>)
+muss in das Verzeichnis <em>usr/java/jdk1.3.1_06/jre/lib/ext</em>
+kopiert werden.</p>
+<p>Der JDBC-Treiber muss f&uuml;r alle lesbar
+sein, also:</p>
+<ul>
+	<li><p><kbd>chmod
+	644 sapdbc.jar</kbd></p></li>
+</ul>
+<h3>Einstellungen in OpenOffice.org</h3>
+	<p><img src="pics/sapdb_extras_datenquellen.png" name="Grafik5" border="0" width="850" height="375" alt="" /><br /><i>Abbildung
+	5: Datenquellen verwalten</i></p>
+<p>W&auml;hlen Sie im Men&uuml; <b>Extras
+&ndash; Datenquellen</b>.
+</p>
+<p>Legen Sie eine neue Datenquelle an</p>
+<ul>
+	<li><p>Name: 		<kbd>SAPDB
+	Test Datenbank</kbd></p></li>
+	<li><p><kbd>Datenbanktyp:	jdbc</kbd></p>
+	<p><img src="pics/sapdb_neue_datenquelle.png" name="Grafik6" border="0" width="580" height="375" alt="" /><br /><i>Abbildung
+		6: Eine neue SAP DB Datenquelle</i></p>
+	<p>Datenquelle URL:	<kbd>sapdb://localhost/TST</kbd>
+	</p></li>
+</ul>
+<p>Und nun den Reiter JDBC klicken und folgende
+Eintragungen vornehmen:</p>
+<ul>
+	<li><p>JDBC-Trieberklasse:		<kbd>com.sap.dbtech.jdbc.DriverSapDB</kbd></p></li>
+	<li><p>URL:			<kbd>sapdb://localhost/TST</kbd></p></li>
+	<li><p>USER Name:		<kbd>TEST</kbd></p></li>
+	<li><p>Passwort erforderlich:	<kbd>ja</kbd>
+	anw&auml;hlen</p></li>
+</ul>
+	<p><img src="pics/sapdb_config_jdbc.png" name="Grafik7" border="0" width="580" height="375" alt="" /><br /><i>Abbildung
+	7: EInstellungen f&uuml;r JDBC</i></p>
+
+<p>Dann den Reiter Tabellen klicken:</p>
+<ul>
+	<li><p>Passwort &ldquo;<kbd>test</kbd>&rdquo;
+	eingeben und 
+	</p>
+	
+		<p><img src="pics/sapdb_passwort.png" name="Grafik8" border="0" width="442" height="162" alt="" /><br /><i>Abbildung
+		8: Passwortabfrage in OpenOffice.org</i></p></li>
+	<li><p><b>OK</b>
+	klicken.</p></li>
+</ul>
+<p>Damit ist die Testdatenbank in OpenOffice.org
+eingebunden und kann verwendet werden.</p>
+<h3>Links</h3>
+<p>Interessante Seiten im weitesten Sinne rund um das
+Thema:</p>
+<p>(1)	<a href="http://www.sapdb.org">www.sapdb.org</a></p>
+<p>(2)	<a href="http://homepages.fh-giessen.de/~hg7494/usefull/laps_german.html">homepages.fh-giessen.de/~hg7494/usefull/laps_german.html</a></p>
+<p>(3)	<a href="http://www.kienlein.com/pages/mysql-jdbc-howto-de.html">www.kienlein.com/pages/mysql-jdbc-howto-de.html</a></p>
+
+<div id="Credits">
+	<h3>Credits</h3>
+	<p>Autoren:</p>
+	<ul>
+		<li><p>Daniel Mischler
+		(<a href="mailto:mischler@openoffice.org">mischler@openoffice.org</a>)</p></li>
+		<li><p>Manfred
+		Reiter (<a href="mailto:manfredr@openoffice.org">manfredr@openoffice.org</a>)</p></li>
+	</ul>
+	<p>Korrektur
+	gelesen:	</p>
+	<p>letzte
+	&Auml;nderung:	25.05.2003</p>
+	<p>Kontakt
+	:	OpenOffice.org Documentation Project <a href="http://documentation.openoffice.org/">documentation.openoffice.org</a></p>
+	<p>	OpenOffice.org
+	deutschsprachig	<a href="http://de.openoffice.org/">de.openoffice.org</a></p>
+</div>
+</div>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

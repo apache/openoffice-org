@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.ConnectToOpenOffice.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2008/10/20 11:29:27 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Office">
+
+<keywords>
+	<keyword>connect</keyword>
+	<keyword>acceptor</keyword>
+	<keyword>other</keyword>
+	<keyword>different</keyword>
+	<keyword>macro</keyword>
+	<keyword>program</keyword>
+</keywords>
+
+<authors>
+	<author id="1" initial="true" email="" copyright="Josef Frysak">Josef Frysak</author>
+</authors>
+
+<question heading="Connect to Open Office">How to connect to Open Office from another Program?
+</question>
+
+<answer>
+<p>First describe the UNO-URL, which describes where the acceptor is located.</p>
+<p>Then create a bootsrap object and with this bootstrap object create a</p>
+<p>component context object. Next get the Servicemanager of the component</p>
+<p>context, which is an interface, and use it to create a connection service</p>
+<p>(UnoUrlResolver). Finally tell the connection service to connect to the</p>
+<p>previously prepared UNO-URL.</p>
+<p>For further details see http://wi.wu-wien.ac.at/rgf/diplomarbeiten/BakkStuff/2008/200809_Frysak/200809_Frysak_Automating_OOo_ooRexx_Nutshells.pdf.</p>
+<listing>-- identify target program
+unourl = &quot;uno:socket,host=localhost,port=2002;urp;StarOffice.ServiceManager&quot;
+-- create bootstrap object
+bootstrap = uno.wrap(.bsf~new(&quot;{%see com.sun.star.comp.helper.Bootstrap}&quot;))
+-- create the Component Context
+x_ComponentContext = bootstrap~createInitialComponentContext(.nil)
+-- get the UNO Service Manager
+s_UnoServiceManager = x_ComponentContext~getServiceManager()
+-- create an UNO connection interface
+urlresolver = &quot;{%see com.sun.star.bridge.UnoUrlResolver}&quot;
+s_UnoUrlResolver = s_UnoServiceManager~createInstanceWithContext(urlresolver, x_ComponentContext)
+x_UnoUrlResolver = s_UnoUrlResolver~{%see com.sun.star.bridge.XUnoUrlResolver%XUnoUrlResolver}
+-- connect to Open Office and retrieve &quot;StarOffice.ServiceManager&quot; service
+s_ServiceManager = x_UnoUrlResolver~resolve(unourl)
+::requires UNO.CLS</listing>
+</answer>
+
+<versions>
+	<version number="2.4.1" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="1" date="2008-10-12">Initial version</change>
+</changelog>
+
+</snippet>

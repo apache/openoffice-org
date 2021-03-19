@@ -1,0 +1,232 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.CreateADialogAtRuntime.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2008/10/20 11:29:27 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Office">
+
+<keywords>
+	<keyword>create</keyword>
+	<keyword>dialog</keyword>
+	<keyword>runtime</keyword>
+</keywords>
+
+<authors>
+	<author id="1" initial="true" email="" copyright="Josef Frysak">Josef Frysak</author>
+</authors>
+
+<question heading="Create a dialog at runtime">How to create a dialog at runtime?
+</question>
+
+<answer>
+<p>Every element in a dialog and the dialog itself are Control Model objects.</p>
+<p>Therefore create a &quot;UnoControlDialogModel&quot; which represents a dialog window.</p>
+<p>It is able to hold other Control Models like the &quot;UnoControlFixedTextModel&quot;</p>
+<p>or the &quot;UnoControlButtonModel&quot;, which can be created using the</p>
+<p>&quot;XMultiServiceFactory&quot; interface of the dialog. After creating these elements</p>
+<p>they must be added to the dialog by creating a control object of the</p>
+<p>dialog and using its &quot;XControlContainer&quot; interface. Also create a Toolkit</p>
+<p>service and with it create a Windowpeer for the dialog. Next create a new</p>
+<p>&quot;Frame&quot; object and use it to initiate the previously created windowpeer. This</p>
+<p>will allow the dialog to close properly.</p>
+<p>To notice the interaction with the user (i.e.: pressing the button) of a</p>
+<p>ooRexx macro, it is also necessary to register specific listeners to the</p>
+<p>corresponding elements. The interaction events can then be retrieved by</p>
+<p>calling &quot;bsf.pollEventText()&quot; function.</p>
+<p>For further details see http://wi.wu-wien.ac.at/rgf/diplomarbeiten/BakkStuff/2008/200809_Frysak/200809_Frysak_Automating_OOo_ooRexx_Nutshells.pdf.</p>
+<listing>-- try to get a script context, will be .nil, if script was not invoked by OOo
+x_ScriptContext = uno.getScriptContext()
+if (x_ScriptContext &lt;&gt; .nil) then
+do
+   -- invoked by OOo as a macro
+
+   -- get context
+   x_ComponentContext = x_ScriptContext~getComponentContext
+   -- get desktop (an XDesktop)
+   x_Desktop  = x_ScriptContext~getDesktop
+   -- get current document
+   x_Document = x_ScriptContext~getDocument
+end
+else  
+do
+   -- called from outside of OOo, create a connection
+
+   -- connect to Open Office and get component context
+   x_ComponentContext = UNO.connect()
+   -- create a desktop service and its interface
+   service = &quot;{%see com.sun.star.frame.Desktop}&quot;
+   s_Desktop = x_ComponentContext~getServiceManager~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}~createInstance(service)
+   x_Desktop = s_Desktop~{%see com.sun.star.frame.XDesktop%XDesktop}
+   -- get the last active document
+   x_Document = x_Desktop~getCurrentComponent()  
+end
+
+
+
+
+/* 
+***********************************
+* Dialog Window
+***********************************
+*/
+
+x_MultiServiceFactory = x_ComponentContext~getServiceManager()~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+
+o_Dialog = x_MultiServiceFactory~createInstance(&quot;{%see com.sun.star.awt.UnoControlDialogModel}&quot;)
+
+o_Dialog.Properties = o_Dialog~{%see com.sun.star.beans.XPropertySet%XPropertyset}
+
+o_Dialog.Properties~setPropertyValue(&quot;PositionX&quot;, box(&quot;int&quot;, 64))
+o_Dialog.Properties~setPropertyValue(&quot;PositionY&quot;, box(&quot;int&quot;, 64))
+o_Dialog.Properties~setPropertyValue(&quot;Width&quot;,     box(&quot;int&quot;, 256))
+o_Dialog.Properties~setPropertyValue(&quot;Height&quot;,    box(&quot;int&quot;, (128-8)))
+o_Dialog.Properties~setPropertyValue(&quot;Title&quot;,     &quot;How much do you like ooRexx?&quot;)
+
+o_Dialog.Factory = o_Dialog~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+o_Dialog.Container = o_Dialog~{%see com.sun.star.container.XNameContainer%XNameContainer}
+
+o_Dialog.Control = x_MultiServiceFactory~createInstance(&quot;{%see com.sun.star.awt.UnoControlDialog}&quot;)~{%see com.sun.star.awt.XControl%XControl}
+o_Dialog.Control~setModel(o_Dialog~{%see com.sun.star.awt.XControlModel%XControlModel})
+o_Dialog.ControlContainer = o_Dialog.Control~{%see com.sun.star.awt.XControlContainer%XControlContainer}
+
+s_Toolkit = x_MultiServiceFactory~createInstance(&quot;{%see com.sun.star.awt.Toolkit}&quot;)
+x_Toolkit = s_Toolkit~{%see com.sun.star.awt.XToolkit%XToolkit}
+
+o_Dialog.Control~createPeer(x_Toolkit, .nil)
+
+-- needed to let the Dialog dispose, if just displayed but not executed
+s_Frame = x_MultiServiceFactory~createInstance(&quot;{%see com.sun.star.frame.Frame}&quot;)
+x_Frame = s_Frame~{%see com.sun.star.frame.XFrame%XFrame}
+
+x_Frame~initialize(o_Dialog.Control~{%see com.sun.star.awt.XWindow%XWindow})
+
+
+/* 
+***********************************
+* Label1
+***********************************
+*/
+
+o_Label1 = o_Dialog.Factory~createInstance(&quot;{%see com.sun.star.awt.UnoControlFixedTextModel}&quot;)
+o_Label1.Properties = o_Label1~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+
+o_Label1.Properties~setPropertyValue(&quot;PositionX&quot;, box(&quot;int&quot;, 8))
+o_Label1.Properties~setPropertyValue(&quot;PositionY&quot;, box(&quot;int&quot;, 40))
+o_Label1.Properties~setPropertyValue(&quot;Width&quot;,     box(&quot;int&quot;, (256-16)))
+o_Label1.Properties~setPropertyValue(&quot;Height&quot;,    box(&quot;int&quot;, 32))
+o_Label1.Properties~setPropertyValue(&quot;Name&quot;,      &quot;Label1&quot;)
+o_Label1.Properties~setPropertyValue(&quot;TabIndex&quot;,  box(&quot;short&quot;, 1))
+o_Label1.Properties~setPropertyValue(&quot;Label&quot;,     &quot;Prefix1&quot;)
+
+o_Dialog.Container~insertByName(&quot;Label1&quot;, o_Label1);
+
+/*
+***********************************
+* Button1
+***********************************
+*/
+
+o_Button1 = o_Dialog.Factory~createInstance(&quot;{%see com.sun.star.awt.UnoControlButtonModel}&quot;)
+o_Button1.Properties = o_Button1~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+
+o_Button1.Properties~setPropertyValue(&quot;PositionX&quot;, box(&quot;int&quot;, 8))
+o_Button1.Properties~setPropertyValue(&quot;PositionY&quot;, box(&quot;int&quot;, 8))
+o_Button1.Properties~setPropertyValue(&quot;Width&quot;,     box(&quot;int&quot;, (256-16)))
+o_Button1.Properties~setPropertyValue(&quot;Height&quot;,    box(&quot;int&quot;, 32))
+o_Button1.Properties~setPropertyValue(&quot;Name&quot;,      &quot;Button1&quot;)
+o_Button1.Properties~setPropertyValue(&quot;TabIndex&quot;,  box(&quot;short&quot;, 0))
+o_Button1.Properties~setPropertyValue(&quot;Label&quot;,     &quot;Click Me&quot;)
+
+o_Dialog.Container~insertByName(&quot;Button1&quot;, o_Button1);
+o_Button1.Control = o_Dialog.ControlContainer~getControl(&quot;Button1&quot;)
+
+-- o_Button1.Control~{%see com.sun.star.awt.XButton%XButton}~bsf.addEventListener(&quot;action&quot;, &quot;&quot;,               &quot;noAction&quot;)
+o_Button1.Control~{%see com.sun.star.awt.XButton%XButton}~bsf.addEventListener(&quot;action&quot;, &quot;actionPerformed&quot;,&quot;Action&quot;)
+o_Button1.Control~{%see com.sun.star.awt.XButton%XButton}~bsf.addEventListener(&quot;action&quot;, &quot;disposing&quot;,      &quot;close&quot;)
+
+
+-- change mouse pointer apperance, whilst moving over label
+-- define cursortypes
+CursorWait = bsf.getConstant(&quot;{%see com.sun.star.awt.SystemPointer}&quot;, &quot;WAIT&quot;)
+CursorGo = bsf.getConstant(&quot;{%see com.sun.star.awt.SystemPointer}&quot;, &quot;ARROW&quot;)
+
+-- change cursortype
+s_Pointer = x_MultiServiceFactory~createInstance(&quot;{%see com.sun.star.awt.Pointer}&quot;)
+x_Pointer = s_Pointer~{%see com.sun.star.awt.XPointer%XPointer}
+
+cursorstate = 1
+
+
+-- do not call &quot;o_Dialog.Control~XDialog~execute()&quot; otherwise
+-- you do not have instant Listener report
+o_Dialog.Control~{%see com.sun.star.awt.XWindow%XWindow}~setVisible(.true)
+
+-- .bsf.dialog~messageBox(output, &quot;Currently Selected Text:&quot;, &quot;information&quot;)
+--   call Syssleep 1
+
+do forever
+-- somehow not calling Syssleep will create an error when calling this makro
+-- by menu: tools -&gt; macros -&gt; run macro
+   call Syssleep 0.5
+   eventText=bsf.pollEventText(100) -- timeout of 100/1000 sec
+
+   if eventText=&quot;close&quot; then leave;   -- disposed
+   if eventText=&quot;Action&quot; then
+   do
+      if cursorstate then
+      do
+         x_Pointer~SetType(CursorWait)
+         o_Button1.Control~getPeer()~setPointer(x_Pointer)
+         cursorstate = 0
+      end
+      else
+      do
+         x_Pointer~SetType(CursorGo)
+         o_Button1.Control~getPeer()~setPointer(x_Pointer)
+         cursorstate = 1
+      end
+   end
+end
+
+o_Dialog.Control~{%see com.sun.star.lang.XComponent%XComponent}~dispose()
+
+::requires UNO.CLS</listing>
+</answer>
+
+<versions>
+	<version number="2.4.1" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="1" date="2008-10-13">Initial version</change>
+</changelog>
+
+</snippet>

@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.HowToCloseTheQuickstarterUnderWindows2.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2006/03/07 12:46:08 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="OOBasic" application="Office">
+
+<keywords>
+	<keyword>Quickstarter</keyword>
+	<keyword>Close</keyword>
+	<keyword>Windows</keyword>
+	<keyword>API Windows</keyword>
+</keywords>
+
+<authors>
+	<author id="ddorange" initial="true" email="ddorange@dmaths.org" copyright="Didier Dorange-Pattoret">Didier Dorange-Pattoret</author>
+</authors>
+
+<question heading="How to close the quickstarter under Windows">Is there another way to terminate the OOo process even if the QS is running beside <internal-link href="Office.HowToCloseTheQuickstarterUnderWindows.snip" />
+</question>
+
+<answer>
+<p>Yes you can issue a shell command like <i>openoffice2.0\program\quickstart - killtray</i></p>
+<listing>Sub CloseQuickstarter
+	LeChemin = GetRepertoirePath(&quot;prog&quot;)&amp;&quot;\quickstart.exe -killtray&quot;
+	Shell(LeChemin)
+End Sub
+
+Function GetRepertoirePath(sInstPath as String) as String &apos;donne le r&#233;pertoire correspondant
+Dim  oPathSubstSrv as Object
+Dim sPath as String
+	sInstPath = &quot;$(&quot;+sInstPath+&quot;)&quot;
+  oPathSubstSrv = createUnoService(&quot;{@see com.sun.star.comp.framework.PathSubstitution}&quot;)
+  sPath = ConvertFromUrl(oPathSubstSrv.getSubstituteVariableValue(sInstPath))
+	GetRepertoirePath = sPath
+End Function</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="Win32"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="ddorange" date="2006-03-06">Initial version</change>
+</changelog>
+
+</snippet>
+

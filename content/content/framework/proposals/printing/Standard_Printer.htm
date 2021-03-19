@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="AUTHOR" CONTENT="Frank Loehmann">
+	<META NAME="CREATED" CONTENT="20001107;9561921">
+	<META NAME="CHANGEDBY" CONTENT="Frank Loehmann">
+	<META NAME="CHANGED" CONTENT="20010219;17473391">
+	<STYLE>
+	<!--
+		P { font-family: "Arial", sans-serif }
+		H2 { font-family: "Arial", sans-serif }
+		TD P { font-family: "Arial", sans-serif }
+		TH P { font-family: "Arial", sans-serif }
+	-->
+	</STYLE>
+</HEAD>
+<BODY>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Arial, sans-serif">Autor:
+Frank Loehmann; </FONT><A HREF="mailto:frank.loehmann@germany.sun.com"><FONT FACE="Arial, sans-serif">frank.loehmann@germany.sun.c</FONT></A></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Arial, sans-serif">Date: 16
+January 2001; final</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Arial, sans-serif">Use
+Standard Printer as Default Document Printer</FONT></P>
+<H2><FONT FACE="Arial, sans-serif">Problem</FONT></H2>
+<P><FONT FACE="Arial, sans-serif">OpenOffice stores the printer, used
+for the formatting and printing of the current document, in the
+document file itself.</FONT></P>
+<P STYLE="page-break-before: always"><FONT FACE="Arial, sans-serif">The
+restoring of this document printer after loading a document can be a
+problem, if OpenOffice will be used in a global network environment
+(e.g. a WAN or especially in Sun's flexible Office concept using
+SunRay's) or on a system (e.g. a notebook) where different
+environments (printer queue's) are present at the same time. (e.g. a
+notebook used at home and in the company). In such an environment
+documents will often be printed on the false printer when the print
+direct function (offered in the standard object bar) will be used.</FONT></P>
+<P><FONT FACE="Arial, sans-serif">Maybe this problem occurs as well
+if OpenOffice will be used in the new Sun Webtop environment. (not
+evaluated at this point)</FONT></P>
+<H2><FONT FACE="Arial, sans-serif">Solution</FONT></H2>
+<P><FONT FACE="Arial, sans-serif">We have analysed different
+possibilities to solve this problem. Due to our main concern, not to
+confuse the user with a new UI, we decided to look for an easy way to
+solve the problem without big UI changes and without loosing
+features. Always keep in mind that printing is a very key critical
+feature and will be used by nearly every user!</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Arial, sans-serif">The
+direct printing button in the objectbar of OpenOffice does not call
+the print dialog in the current version. For our solution we want to
+show the print dialog in some cases which will cause the problem
+described above.</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Arial, sans-serif">We want
+to call the print dialog on condition that the document printer
+differs from the system standard printer and the printer is available
+on the system too. Just not to loose the information which printer
+was set on the document (important for document templates used in
+companies), we should preselect this printer in the print dialog.
+Additionally we should implement a new option in the tools-options
+section to suppress this print dialog at any time and to force the
+printout on the system or document printer.</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Arial, sans-serif">If a
+document printer is not available on the current system, the printout
+will be done on the system default printer without any print dialog.</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Arial, sans-serif">Furthermore
+a bubble help on the direct printout button should show the printer
+which will be used for the printout. Also a new section to the help
+should be added. The help should contain a tip how to set a system
+default printer &#147;hard&#148; to the document without the standard
+printer flag. (maybe important for template design) (-&gt; In this
+case the current standard printer should be changed to a temporary
+one)</FONT></P>
+<P><FONT FACE="Arial, sans-serif"><B>Dialog</B></FONT></P>
+<TABLE WIDTH=753 BORDER=1 CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=367>
+	<COL WIDTH=368>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=367>
+				<P ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=3><I>Local
+				System Configuration</I></FONT></FONT></P>
+			</TH>
+			<TH WIDTH=368>
+				<P ALIGN=CENTER><FONT SIZE=3><I><FONT FACE="Arial, sans-serif">
+				Action</FONT></I></FONT></P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=367>
+				<P><SPAN STYLE="font-weight: medium"><FONT FACE="Arial, sans-serif">Document
+				printer is equal to default system printer</FONT></SPAN></P>
+			</TD>
+			<TD WIDTH=368>
+				<P ALIGN=LEFT STYLE="font-weight: medium"><FONT FACE="Arial, sans-serif">Printout
+				on default system printer without dialog</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=367>
+				<P><SPAN STYLE="font-weight: medium"><FONT FACE="Arial, sans-serif">Printer
+				available but not set as system default</FONT></SPAN></P>
+			</TD>
+			<TD WIDTH=368>
+				<P ALIGN=LEFT STYLE="font-weight: medium"><FONT FACE="Arial, sans-serif">Show
+				print dialog with document printer  preselected</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=367>
+				<P><SPAN STYLE="font-weight: medium"><FONT FACE="Arial, sans-serif">Document
+				printer is not available</FONT></SPAN></P>
+			</TD>
+			<TD WIDTH=368>
+				<P ALIGN=LEFT STYLE="font-weight: medium"><FONT FACE="Arial, sans-serif">Printout
+				on default system printer without dialog</FONT></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Arial, sans-serif"><B>Option in the tools-option
+section for print direct</B></FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Arial, sans-serif">We
+should add the following option on tools-options-common-printing:</FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Arial, sans-serif">Print
+direct &nbsp;(group box)</FONT></P>
+<TABLE WIDTH=361 BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=351>
+	<THEAD>
+		<TR>
+			<TD WIDTH=351 VALIGN=TOP>
+				<P><FONT FACE="Arial, sans-serif"><B>[ &nbsp;] Suppress print
+				dialog if document printer does not match system default printer</B></FONT></P>
+				<P><FONT FACE="Arial, sans-serif">(X) always print on system
+				default printer (defaulted)</FONT></P>
+				<P><FONT FACE="Arial, sans-serif">( &nbsp;) always print on
+				document printer (if available)</FONT></P>
+			</TD>
+		</TR>
+	</THEAD>
+</TABLE>
+<P><BR><BR>
+</P>
+<P STYLE="font-weight: medium"><FONT FACE="Arial, sans-serif">The two
+options are disabled as long as the main option (suppressing the
+dialog) is not checked (and this is the default). The option &#147;always
+use system default print&#148; will be defaulted too.</FONT></P>
+</BODY>
+</HTML>

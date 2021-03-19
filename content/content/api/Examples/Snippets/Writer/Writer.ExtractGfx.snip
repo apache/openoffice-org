@@ -1,0 +1,174 @@
+<!--
+$RCS index.html,v $
+
+last change: $Revision: 1.2 $ $Author: tomsontom $ $Date: 2004/08/16 09:57:43 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCS in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="OOBasic" application="Writer">
+
+<keywords>
+    <keyword>writer</keyword>
+    <keyword>pictures</keyword>
+    <keyword>graphics</keyword>
+    <keyword>extract</keyword>
+    <keyword>link</keyword>
+</keywords>
+
+<authors>
+    <author id="OB" initial="true" email="OliverBrinzing@t-online.de">Oliver Brinzing</author>
+</authors>
+
+<question heading="extract graphics out of an existing writer document">
+How to extract graphics out of an existing writer document ?
+<p>Having a writer document with lots of graphics inside the &quot;*.sxw&quot; file is very </p>
+<p>difficult to handle (e.g. it takes ages to save ...).</p>
+</question>
+
+<answer>
+<p>Run the macro provided. It will extract all graphics from an existing writer document</p>
+<p>and place them in a folder &quot;/Pictures&quot; relative to the writer document. All pictures</p>
+<p>will be renamed to the internal graphics name and linked to the writer document. </p>
+<p>After that the pictures folder inside the &quot;*.sxw&quot; file will be removed.</p>
+<p></p>
+<p>Place the macro into the &quot;user&quot; application container (e.g. soffice-&amp;Standard-&amp;Module1)</p>
+<p>Open the writer document you want &quot;refactor&quot; and run the macro.</p>
+<p>Remember: Always try this with a copy of your work !</p>
+<p></p>
+<p>Don&apos;t forget to check if &quot;Save URLs relative to File system&quot; in  in Tools -&gt;</p>
+<p>Options -&gt; Load/Save -&gt; General is enabled.</p>
+<p></p>
+<listing>
+OPTION EXPLICIT
+
+Sub ExtractWriterGraphics
+
+	On Local Error Goto ErrorHandler
+
+	Dim oDocument as Object
+	Dim oGraphics as Object
+
+	Dim oZipArchive as New com.sun.star.packages.Package
+	Dim oPictures as Object
+	Dim mZipFile(0) as Variant
+	Dim mFiles() as String
+
+	Dim oFileAccess as New com.sun.star.ucb.SimpleFileAccess
+	Dim oFile as Object
+	Dim oInputStream as Object
+	Dim oOutputStream as Object
+	Dim mData() as Variant
+	Dim sDestFolder as String
+	Dim sGraphicName as String
+	Dim sGraphicURL as String
+	Dim sTmp as String
+
+	Dim oUrl as New com.sun.star.util.URL 
+	Dim oTransformer as Object
+
+	Dim n as Long
+	Dim i as Integer
+	Dim j as Integer
+	Dim k as Integer
+	
+	oDocument = StarDesktop.getCurrentComponent
+
+	' create destination folder relative to document ...
+	oTransformer = createUnoService("com.sun.star.util.URLTransformer")
+	oUrl.Complete = oDocument.URL
+	oTransformer.parsestrict(oUrl) 
+	sDestfolder = "file://" &amp; oURL.Path &amp; "Pictures/"
+
+	' open zip file and get content of "Pictures" folder ...
+ 	oZipArchive = createUnoService("com.sun.star.packages.Package")
+	mZipFile(0) = oDocument.URL
+	oZipArchive.initialize(mZipFile())
+
+	oPictures = oZipArchive.getByHierarchicalName("Pictures")
+
+	oGraphics = oDocument.getGraphicObjects
+	' for all pictures in document ...
+	For i = 0 to oGraphics.getCount-1
+		mFiles() = oPictures.getElementNames
+		sGraphicURL = oGraphics.getByIndex(i).GraphicURL
+		sTmp = sGraphicURL
+		' internal picture names start with "vnd.sun..."
+		If InStr(1, sGraphicURL, "vnd.sun.star.GraphicObject:", 0) = 1 Then
+			' get the picture name (comes without the extension)
+			sGraphicURL = Mid(sGraphicURL, 28, Len(sGraphicURL))
+			' so search all files in pictures folder for the current picture ...
+			For j = 0 to uBound(mFiles())
+				If InStr(1, mFiles(j), sGraphicURL, 0) Then
+					' create new name with extension ...
+					sGraphicName = oGraphics.getByIndex(i).getName() &amp; Mid(mFiles(j), Len(sGraphicURL)+1, Len(mFiles(j))
+					Exit For
+				EndIf
+			Next j
+
+			' copy file to external folder relative to stored document...
+			oFileAccess = createUnoService("com.sun.star.ucb.SimpleFileAccess")
+			oFile = oFileAccess.openFileWrite(sDestFolder &amp; sGraphicName)
+			oOutputStream = createUnoService("com.sun.star.io.DataOutputStream")
+			oOutputStream.setOutputStream(oFile)
+
+			oInputStream = oPictures.getByName(mFiles(j)).getInputStream()
+
+			n = -1
+			While n &lt;&gt; 0
+				n =	oInputStream.readBytes(mData(), 16384)
+				oOutputStream.writeBytes(mData())
+			Wend
+			oOutputStream.flush()
+			oOutputStream.closeOutput()
+			oInputStream.closeInput()
+			ReDim mData() as Variant
+
+			' now link picture to new external file ...
+			oGraphics.getByIndex(i).GraphicURL = sDestFolder &amp; sGraphicName
+
+			' check for duplicates, link them too ...
+			For k = i + 1 to oGraphics.getCount-1
+				If sTmp = oGraphics.getByIndex(k).GraphicURL Then
+					oGraphics.getByIndex(k).GraphicURL = sDestFolder &amp; sGraphicName
+				EndIf
+			Next k		
+		EndIf
+	Next i
+
+	' this automatically removes the unused internal pictures too  :-) 
+	oDocument.store()
+
+	Exit Sub
+ErrorHandler:
+	MsgBox "Error: " &amp; Err() &amp; " " &amp; Error() &amp; " " &amp; Erl()
+End Sub
+</listing>
+</answer>
+
+<changelog>
+    <change author-id="OB" date="2004-08-03">Initial version</change>
+</changelog>
+
+</snippet>

@@ -1,0 +1,20 @@
+--- /projects/sise/openoffice/devel/workpits/641-irix-gcc-STLP/source/dbaccess/source/ui/querydesign/SelectionBrowseBox.cxx	Mon Oct 22 19:57:51 2001
++++ dbaccess/source/ui/querydesign/SelectionBrowseBox.cxx	Fri Nov  9 08:01:27 2001
+@@ -1998,7 +1998,7 @@
+ 	switch (nRow)
+ 	{
+ 		case BROW_VIS_ROW:
+-			pEntry->SetVisible(strNewText == g_strOne);
++			pEntry->SetVisible(strNewText.Equals(g_strOne));
+ 			break;
+ 		case BROW_FIELD_ROW:
+ 			pEntry->SetField(strNewText);
+@@ -2177,7 +2177,7 @@
+ // -----------------------------------------------------------------------------
+ void OSelectionBrowseBox::appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow)
+ {
+-	if(_rNewValue != _rOldValue)
++	if(!_rNewValue.Equals(_rOldValue))
+ 	{
+ 		OTabFieldCellModifiedUndoAct* pUndoAct = new OTabFieldCellModifiedUndoAct(this);
+ 		pUndoAct->SetCellIndex(_nRow);

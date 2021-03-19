@@ -1,0 +1,83 @@
+<!--
+$RCSfile: Office.GetAvailableFonts.snip,v $
+
+last change: $Revision: 1.2 $ $Author: tomsontom $ $Date: 2004/06/24 13:30:40
+$
+
+(c)2004 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="OOBasic" application="Office">
+
+<keywords>
+	<keyword>getFontDescriptors</keyword>
+	<keyword>Font</keyword>
+	<keyword>FontDescriptor</keyword>
+	<keyword>getContainerWindow</keyword>
+</keywords>
+
+<authors>
+    <author initial="true" id="pitonyak" email="andrew@pitonyak.org">Andrew Pitonyak</author>
+</authors>
+
+<question heading="Display the available fonts">
+How can I list the fonts available to a document?
+</question>
+
+<answer>
+<p>
+The available fonts are known by the container window. The
+getFontDescriptors() method returns an array of awt FontDescriptor
+structures that contain a lot of information about the font. The font
+descriptor can be passed to the getFont() method, which returns an
+object that supports the awt XFont interface. The XFont interface
+provides methods to determine font metrics, and the width of an
+individual character or an entire string of characters.
+</p>
+<p>Taken from Andrew&apos;s Macro Document at
+http://www.pitonyak.org</p>
+<listing>
+Sub ListFonts
+  Dim oWindow    &apos;The container window supports the awt XDevice interface.
+  Dim oDescript  &apos;Array of awt FontDescriptor structures
+  Dim s$         &apos;Temporary string variable to hold all of the string names.
+  Dim i%         &apos;General index variable
+
+  oWindow = ThisComponent.getCurrentController().getFrame().getContainerWindow()
+  oDescript = oWindow.getFontDescriptors()
+  s = &quot;&quot;
+
+  For i = LBound(oDescript) to UBound(oDescript)
+    s = s &amp; oDescript(i).Name &amp; &quot;, &quot;
+  Next
+  MsgBox s
+End Sub
+</listing>
+</answer>
+
+<changelog>
+    <change author-id="pitonyak" date="2004-06-28">Initial version</change>
+</changelog>
+
+</snippet>

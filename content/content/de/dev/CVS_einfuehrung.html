@@ -1,0 +1,619 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    
+    <title>
+      CVS Einf&uuml;hrung
+    </title>
+    <!-- Start de-header -->
+    <link rel="stylesheet" href="../styles/de.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="../styles/de_print.css" media="print" type="text/css" />
+    <link rel="alternate stylesheet" title="mit Navbar" href="../styles/de_navbar.css" media="screen" type="text/css" />
+    <link rel="alternate stylesheet" title="mit Navbar4" href="../styles/de_navbar4.css" media="screen" type="text/css" />
+    <link rel="alternate stylesheet" title="mit Navbar5" href="../styles/de_navbar5.css" media="screen" type="text/css" />
+    <link rel="alternate stylesheet" title="ohne Navbar" media="screen" href="../styles/de_nonavbar.css" type="text/css" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style type="text/css">
+      /*
+      <![CDATA[*/         	<!--         	@import url("../styles/de_navbar6.css");         	-->      /*]]>*/
+    </style>
+    <!-- >
+    Kommentare zur Seite
+    $Id: CVS_einfuehrung.html,v 2.33 2007/07/28 18:12:29 cloph Exp $
+    < -->
+    <!-- End de-header -->
+  
+    
+    <script src="https://www.apachecon.com/event-images/snippet.js"></script>
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/de/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/de/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/de/">de</a>&nbsp;&raquo;&nbsp;<a href="/de/dev/">dev</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+    <table width="100%" summary="">
+      <tr>
+        <td align="left" valign="top">
+          <div id="body_de">
+          </div>
+          <h1>
+            <a name="top"></a>
+            Einf&uuml;hrung in CVS</h1>
+          <h2>Inhalt</h2>
+          <ul>
+            <li>
+            <p>
+              <a href="#ungeduldig">F&uuml;r die Ungeduldigen</a>
+            </p></li>
+            <li>
+            <p>
+              <a href="#ziel">Ziel des Dokuments</a>
+            </p></li>
+            <li>
+            <p>
+              <a href="#begriffe">Begriffe</a>
+            </p></li>
+            <li>
+            <p>
+              <a href="#einmalig">Einmalige Vorbereitungen</a>
+            </p></li>
+            <li>
+            <p>
+              <a href="#lesend">Verwendung von CVS im laufenden Betrieb (lesend)</a>
+            </p></li>
+            <li>
+            <p>
+              <a href="#schreibend">Verwendung von CVS im laufenden Betrieb (schreibend)</a>
+            </p></li>
+          </ul>
+          <h2>
+            <a name="ungeduldig"></a>
+            F&uuml;r die Ungeduldigen</h2>
+          <p>
+            So bekommt man ein Modul in einem Rutsch auf die eigene Festplatte
+          </p>
+          <h3>ohne Schreibzugriff (ohne ssh-Tunnel)</h3>
+          <ul>
+            <li>
+            <p>
+              CVSROOT setzen:
+              <br />
+              <code>
+                export CVSROOT=:pserver:anoncvs@anoncvs.services.openoffice.org:/cvs
+              </code>
+            </p></li>
+            <li>
+            <p>
+              eventuell Einloggen beim CVS-Server:
+              <br />
+              <code>
+                cvs login
+              </code>
+              <br />
+              (Das Pa&szlig;wort lautet
+              <kbd>
+                anoncvs
+              </kbd>
+              )
+            </p></li>
+            <li>
+            <p>
+              checkout mit:
+              <br />
+              <code>
+                cvs checkout de/www/doc
+              </code>
+            </p></li>
+          </ul>
+          <h3>mit ssh-Tunnel</h3>
+          <ul>
+            <li>
+            <p>
+              Tunnel aufbauen:
+              <br />
+              <code>
+                ssh -2 -x -L 2401:localhost:2401 tunnel@openoffice.org
+              </code>
+            </p></li>
+            <li>
+            <p>
+              CVSROOT setzen:
+              <br />
+              <code>
+                export CVSROOT=:pserver:&lt;loginname&gt;@localhost:/cvs
+              </code>
+            </p></li>
+            <li>
+            <p>
+              eventuell Einloggen beim CVS-Server:
+              <br />
+              <code>
+                cvs login
+              </code>
+              <br />
+              (Das Pa&szlig;wort ist das OpenOffice.org-Pa&szlig;wort - dasselbe wie zum Einloggen &uuml;ber die OO.o-Homepage)
+            </p></li>
+            <li>
+            <p>
+              checkout mit
+              <br />
+              <code>
+                cvs checkout de/www/doc
+              </code>
+            </p></li>
+          </ul>
+          <p>
+            Dieses Beispiel verwendet das (Unter-)Modul
+            <code>
+              de/www/doc
+            </code>
+            - dort liegen die deutschsprachigen Dokumente, entweder &Uuml;bersetzungen englischsprachiger Dokumente oder selbst erstellte.
+          </p>
+          <p>
+            Die englischsprachigen Originale befinden sich im Modul
+            <code>
+              whiteboard/www/doc
+            </code>
+            <del>
+              (beim anonymen Zugang mu&szlig; wie immer
+              <code>
+                oo/
+              </code>
+              vorangestellt werden)
+            </del>. (ist nun nicht mehr n&ouml;tig)
+          </p>
+          <p>
+            <a href="#top">nach oben</a>
+          </p>
+          <h2>
+            <a name="ziel"></a>
+            Ziel des Dokuments</h2>
+          <p>
+            Diese Seite soll Nutzern einen Einblick in die Nutzung des CVS (
+            <dfn>
+              Concurrent Versions System
+            </dfn>
+            ) geben.
+          </p>
+          <p>
+            Da dies ausdr&uuml;cklich f&uuml;r Neulinge und unerfahrene Nutzer gedacht ist, gehe ich nicht auf die Feinheiten einer Unterscheidung der verschiedenen shells (etc.) ein, sondern verwende ausschlie&szlig;lich die am weitesten verbreitete: bash.
+            <br />
+            Au&szlig;erdem enth&auml;lt dieses Dokument bis jetzt nur Beschreibungen f&uuml;r kommandozeilenbasiertes CVS - werden GUI-Versionen verwendet, so m&uuml;ssen die entsprechenden Einstellungen (wie z.B. das Setzen von CVSROOT) h&ouml;chstwahrscheinlich in den Optionen des Programms get&auml;tigt werden.
+          </p>
+          <p>
+            <a href="#top">nach oben</a>
+          </p>
+          <h2>
+            <a name="begriffe"></a>
+            Begriffe</h2>
+          <p>
+            Anfangs sollten ein paar Grundbegriffe gekl&auml;rt werden, welche im Folgenden immer wieder verwendet werden:
+          </p>
+          <h3>Organisation der Dateien</h3>
+          <ul>
+            <li>
+            <p>
+              <em>
+                Repository
+              </em>
+              : Damit sind die Daten auf dem entfernten Server gemeint. Dort werden alle Versionen gespeichert und bildet die Referenz zu der alle &Auml;nderungen vorgenommen werden
+            </p></li>
+            <li>
+            <p>
+              <em>
+                Modul
+              </em>
+              : Ein Repository ist in verschiedene Module unterteilt, die im CVS-Baum als Unterordner erscheinen
+            </p></li>
+            <li>
+            <p>
+              <em>
+                Head:
+              </em>
+              Das Allerneueste, was in CVS eingecheckt ist. Ein cvs checkout ohne Angabe eines Revisionstags holt die HEAD-Revision. Will man &auml;ltere Versionen, so mu&szlig; man die gew&uuml;nschte Revisions-Nummer angeben
+            </p></li>
+            <li>
+            <p>
+              <em>
+                Revision
+              </em>
+              : Eine Art Versionsnummer, die aber mit der eigentlichen Version der Datei nichts gemein hat. Diese Nummer dient lediglich dazu, verschiedene 'Stadien' der Datei verfolgen zu k&ouml;nnen. Wird eine Datei ge&auml;ndert und committet, so erh&ouml;ht sich die Revision um einen Z&auml;hler.
+            </p></li>
+            <li>
+            <p>
+              <em>
+                Working-directory
+              </em>
+              oder
+              <em>
+                working-copy
+              </em>
+              : Die lokal vorhandenen Dateien des CVS-Baums - in der Regel wird nur mit den aktuellsten Dateien (head) gearbeitet. Auf die Festplatte bekommt man sie mit einem checkout
+            </p></li>
+            <li>
+            <p>
+              <em>
+                CVSROOT
+              </em>
+              : Umgebungsvariable, welche den Bezugspunkt f&uuml;r diverse CVS-Befehle bestimmt. Die Module werden relativ zum in der Variable CVSROOT angegebenen Pfad angesprochen
+            </p></li>
+          </ul>
+          <h3>CVS-Befehle</h3>
+          <ul>
+            <li>
+            <p>
+              <em>
+                Checkout
+              </em>
+              : Der Vorgang, bei dem die Dateien eines bestimmten Moduls aus dem Repository auf die lokale Festplatte kopiert werden. Es werden dabei nur die jeweils aktuellsten Versionen der Dateien &uuml;bertragen. Die lokalen Dateien werden als working-copy bezeichnet.
+              <br />
+              Dieses Kommando wird eigentlich nur ein einziges Mal gebraucht, um die Dateien auf die lokale Platte zu bef&ouml;rdern. Im weiteren Betrieb gen&uuml;gt das
+              <code>
+                update
+              </code>
+              Kommando
+            </p></li>
+            <li>
+            <p>
+              <em>
+                Commit
+              </em>
+              : Der Vorgang, bei denen die in der working-copy (oder auch working-directory) ge&auml;nderten Dateien in das repository eingearbeitet werden (im Falle von OpenOffice.org sind hier spezielle Rechte notwendig, genaueres im Anhang). CVS pr&uuml;ft dabei, ob nicht irgendwer anders bereits eine neue Version derselben Datei committet hat und &uuml;berl&auml;&szlig;t es dem Benutzer, entsprechende Konflikte aufzul&ouml;sen. Will man nicht in diese Situation gelangen, so kann man vor einem commit den Status pr&uuml;fen (dazu weiter unten mehr)
+            </p></li>
+            <li>
+            <p>
+              <em>
+                Update
+              </em>
+              : Das Kommando, mit dem die Dateien des working-directory auf den aktuellen Stand gebracht werden. Alle im Repository ver&auml;nderten Dateien werden heruntergeladen und die lokalen, veralteten Dateien durch diese ersetzt. Auch hier pr&uuml;ft CVS selbstst&auml;ndig auf eventuelle Konflikte (z.B. wenn eine Datei im Repository und auch lokal ge&auml;ndert wurde), so da&szlig; ein Datenverlust durch einfaches &Uuml;berschreiben unm&ouml;glich ist.
+              <br />
+              Neue Dateien und Verzeichnisse (Verzeichnisse nur, wenn die
+              <strong>Kommando-</strong>
+              Option
+              <code>
+                -d
+              </code>
+              verwendet wird) werden ebenso heruntergeladen
+            </p></li>
+          </ul>
+          <p>
+            Das sollte f&uuml;r den Anfang erst einmal gen&uuml;gen. Zu spezielleren Begriffen wird gegebenenfalls im Text eingegangen.
+          </p>
+          <p>
+            <a href="#top">nach oben</a>
+          </p>
+          <h2>
+            <a name="einmalig"></a>
+            Einmalige Vorbereitungen</h2>
+          <p>
+            Als erstes sollte auf der lokalen Festplatte ein Verzeichnis f&uuml;r das working-directory angelegt werden. Es wird zwar f&uuml;r jedes Modul ein eigener Unterordner angelegt, trotzdem bietet sich das zur besseren Ordnung an (vor allem, wenn man an mehreren Modulen beteiligt ist).
+          </p>
+          <p>
+            Danach sollten die n&ouml;tigen Angaben f&uuml;r das gew&uuml;nschte Modul in Erfahrung gebracht werden: CVSROOT und der Name des gew&uuml;nschten Moduls. Im Falle des deutschsprachigen Dokumentationsprojektes w&auml;ren dies:
+            <code>
+              :pserver:anoncvs@anoncvs.services.openoffice.org:/cvs
+            </code>
+            als CVSROOT und der Modulname w&auml;re beim anonymen Zugang
+            <code>
+              de/www/doc
+            </code>
+          </p>
+          <p>
+            Damit kann man eigentlich schon loslegen: Man setzt die Umgebungsvariable, wechselt in das Verzeichnis, welches man f&uuml;r CVS erstellt hat und macht einen checkout mittels dem Kommando
+            <br />
+            <code>
+              cvs checkout de/www/doc
+            </code>
+            <br />
+            Eventuell mu&szlig; man sich noch einloggen:
+            <br />
+            <code>
+              cvs login
+            </code>
+            <br />
+            Hat man bereits mit CVS herumgespielt, so ist das vielleicht schon nicht mehr n&ouml;tig (CVS speichert die login-Pa&szlig;w&ouml;rter codiert in der Datei ~/.cvspass). Dieses Pa&szlig;wort wird
+            <em>
+              nicht
+            </em>
+            zur Authentifizierung des Schreibzugriffs verwendet - dazu dient der ssh-Tunnel. Das Pa&szlig;wort wird &uuml;ber den ssh-Tunnel
+            <em>
+              verschl&uuml;sselt
+            </em>
+            &uuml;bertragen.
+          </p>
+          <p>
+            Und hier nocheinmal in der Kurzfassung:
+          </p>
+          <ul>
+            <li>
+            <p>
+              Verzeichnis f&uuml;r das lokale CVS-Verzeichnis (working-directory) anlegen und in dieses Verzeichnis wechseln:
+              <br />
+              <code>
+                mkdir cvsdir
+                <br />
+                cd cvsdir
+              </code>
+            </p></li>
+            <li>
+            <p>
+              Die Umgebungsvariable CVSROOT setzen:
+              <br />
+              <code>
+                export CVSROOT=:pserver:anoncvs@anoncvs.services.openoffice.org:/cvs
+              </code>
+            </p></li>
+            <li>
+            <p>
+              Eventuell Einloggen:
+              <br />
+              <code>
+                cvs login
+              </code>
+              <br />
+              (Das Pa&szlig;wort ist entweder
+              <kbd>
+                anoncvs
+              </kbd>
+              beim anonymen Zugang oder das entsprechende login-Pa&szlig;wort f&uuml;r die OO.o-Seite)
+              </p>
+              <br /></li>
+              <li>
+              <p>
+                Zuguterletzt noch einen checkout des entsprechenden Moduls machen:
+                <br />
+                <code>
+                  cvs checkout de/www/doc
+                </code>
+              </p></li>
+          </ul>
+          <p>
+            Man sollte dann in etwa Folgendes &uuml;ber den Bildschirm flimmern sehen:
+          </p>
+          <p>
+            <code>
+              [cvsdir]$ cvs checkout de/www/doc
+              <br />
+              cvs server: Updating de/www/doc
+              <br />
+              U de/www/doc/header-killer.sed
+              <br />
+              U de/www/doc/index.html
+              <br />
+              U de/www/doc/stil_richtlinie.html
+              <br />
+              U de/www/doc/todo.txt
+              <br />
+              [...]
+              <br />
+              [cvsdir]$
+            </code>
+          </p>
+          <p>
+            Es wurden also alle in diesem Augenblick vorhandenen Dateien (und eventuelle Unterverzeichnisse) in der jeweils aktuellsten Version (also die head-revision) auf die lokale Festplatte &uuml;bertragen. (Ebenfalls wird in jedem Verzeichnis ein Unterverzeichnis namens
+            <code>
+              CVS
+            </code>
+            angelegt, welches aber uns nicht weiter interessiert, da diese Dateien von CVS selbst benutzt werden)
+          </p>
+          <p>
+            <a href="#top">nach oben</a>
+          </p>
+          <h2>
+            <a name="lesend"></a>
+            Verwendung von CVS im laufenden Betrieb (lesend)</h2>
+          <p>
+            Nachdem ein checkout erfolgreich durchgef&uuml;hrt wurde, mu&szlig; die Variable CVSROOT nicht erneut gesetzt werden - sie wird in einer der Dateien im Unterverzeichnis
+            <code>
+              CVS
+            </code>
+            gespeichert (genauer: in der/den Datei/en
+            <code>
+              CVS/Root
+            </code>
+            ). Man ben&ouml;tigt auch das Kommando checkout nicht mehr und man mu&szlig; sich nicht mehr extra einloggen - anstattdessen verwendet man meist nur die Kommandos status und update.
+          </p>
+          <p>
+            Beispiel: Um zu pr&uuml;fen, ob sich etwas an den Dateien ge&auml;ndert hat, wird das status Kommando verwendet (man kann hierzu auch das update Kommando mit vorangesetzter Option -n nutzen). Im folgenden Beispiel sind alle Dateien auf dem neuesten Stand (up-to-date):
+          </p>
+          <p>
+            <code>
+              [cl@bm617259 de]$ cvs status
+              <br />
+              cvs server: Examining .
+              <br />
+              cvs server: Examining doc
+              <br />
+              ===================================================================
+              <br />
+              File: header-killer.sed&nbsp;&nbsp;&nbsp;&nbsp;Status: Up-to-date
+              <br />
+              <br />
+              Working revision:&nbsp;&nbsp;&nbsp;&nbsp;1.2
+              <br />
+              Repository revision:&nbsp;1.2&nbsp;&nbsp;&nbsp;/cvs/de/www/doc/header-killer.sed,v
+              <br />
+              Sticky Tag:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(none)
+              <br />
+              Sticky Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(none)
+              <br />
+              Sticky Options:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(none)
+              <br />
+              <br />
+              ===================================================================
+              <br />
+              File: index.html&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status: Up-to-date
+              <br />
+              <br />
+              Working revision:&nbsp;&nbsp;&nbsp;&nbsp;1.3
+              <br />
+              Repository revision:&nbsp;1.3&nbsp;&nbsp;&nbsp;/cvs/de/www/doc/index.html,v
+            </code>
+            <br />
+            <code>
+              Sticky Tag:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(none)
+              <br />
+              Sticky Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(none)
+              <br />
+              Sticky Options:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(none)
+              <br />
+              <br />
+              [...]
+            </code>
+          </p>
+          <p>
+            St&ouml;ren die Sticky-Zeilen, so kann man die Ausgabe derselben mit dem switch -Q (steht f&uuml;r quiet) unterdr&uuml;cken:
+          </p>
+          <p>
+            <code>
+              cvs -Q status
+            </code>
+          </p>
+          <p>
+            Standardm&auml;&szlig;ig wird bei der Statusabfrage auch in Unterverzeichnisse abgestiegen. Will man das Kommando auf das aktuelle Verzeichnis beschr&auml;nken, so mu&szlig; man den Switch -l (steht f&uuml;r local) verwenden:
+          </p>
+          <p>
+            <code>
+              cvs status -l
+            </code>
+          </p>
+          <p>
+            <em>
+              Die Reihenfolge der Optionen (vor dem Kommando oder dahinter) ist entscheidend!
+            </em>
+          </p>
+          <p>
+            Sollten die Dateien im Repository ge&auml;ndert worden sein, so kann man das working-directory mit einem update auf den neuesten Stand bringen. Ein update ist mit einem checkout vergleichbar, es werden allerdings nur ge&auml;nderte Dateien &uuml;bertragen. Das Kommando lautet hierzu:
+          </p>
+          <p>
+            <code>
+              cvs update
+            </code>
+          </p>
+          <p>
+            Wie bei der Statusabfrage wird standardm&auml;&szlig;ig in Unterverzeichnisse abgestiegen. Mit dem -l Switch kann man dies analog dazu unterbinden.
+          </p>
+          <p>
+            Das update-Kommando sucht zwar standardm&auml;&szlig; nach neuen Dateien, nicht aber nach neuen Verzeichnissen. Damit das update-Kommando auch nach neuen Unterverzeichnissen sucht, &uuml;bergibt man die
+            <strong>Kommando-</strong>
+            Option
+            <code>
+              -d
+            </code>. Die Option mu&szlig; hinter dem 'update' stehen!
+            <br />
+            W&uuml;nschenswert w&auml;re es nat&uuml;rlich, wenn die jeweiligen CVS-Committer eine entsprechende Ank&uuml;ndigung an die discuss_de-Mailingliste schicken w&uuml;rden, aber da alle nur Menschen sind, kann es gut sein, da&szlig; diese Meldung schlicht und einfach vergessen wird - schlie&szlig;lich hat derjenige selbst alle Dateien auch lokal auf seiner Platte und denkt erst gar nicht mehr daran.
+          </p>
+          <p>
+            <code>
+              [doc]$ cd ~/cvsdir/de/www/
+              <br />
+              [de]$ cvs update -d
+            </code>
+          </p>
+          <p>
+            CVSROOT wird wieder aus der entsprechenden Datei der working-copy ausgelesen und braucht hier deshalb nicht erneut angegeben zu werden.
+          </p>
+          <p>
+            <a href="#top">nach oben</a>
+          </p>
+          <h2>
+            <a name="schreibend"></a>
+            Benutzung von CVS im laufenden Betrieb (schreibend)</h2>
+          <p>
+            Jetzt, da die Dateien lokal auf der Platte sind und man gerne selbst 'Hand anlegen' m&ouml;chte, braucht man auch die Kommandos, um die ge&auml;nderten oder neu erstellten Dokumente &ouml;ffentlich zu machen.
+          </p>
+          <h3>Ge&auml;nderte Dateien &uuml;bertragen</h3>
+          <p>
+            Bei bereits vorhandenen Dateien geht dies mit dem Kommando commit:
+          </p>
+          <p>
+            <code>
+              [doc]$ cvs commit [ge&auml;nderte Datei(en)]
+            </code>
+          </p>
+          <p>
+            Werden dem Kommando commit keine Dateinamen &uuml;bergeben, so sucht es das komplette Verzeichnis und alle Unterverzeichnisse nach lokal ge&auml;nderten Dateien ab. Daraufhin wird man nach einer Mitteilung gefragt, die die &Auml;nderungen an den Dateien beschreiben soll. Da nur eine Meldung pro commit m&ouml;glich ist, sollten die Dateien m&ouml;glichst einzeln &uuml;bertragen werden, damit die Log-Eintr&auml;ge nicht in Sachen enden wie 'Hab da was ge&auml;ndert' - So eine Nachricht hat keinen Informationsgehalt und sollte deshalb vermieden werden. Eine bessere Mitteilung ist beispielsweise Folgende: 'Icons f&uuml;r externe Links hinzugef&uuml;gt'.
+          </p>
+          <h3>Neue Dateien hinzuf&uuml;gen</h3>
+          <p>
+            Neue Dateien &amp; Verzeichnisse m&uuml;ssen, bevor sie hochgeladen werden k&ouml;nnen, dem lokalen CVS-Baum 'vorgestellt' werden. Dies geschieht mit dem Kommando add
+          </p>
+          <p>
+            <code>
+              [doc]$ cvs add [neue Datei(en)/Verzeichnis(se)]
+            </code>
+          </p>
+          <p>
+            Danach mu&szlig; man die Dateien und/oder Verzeichnisse noch mittels dem Kommando commit &uuml;bertragen, ansonsten sind sie zwar lokal einsatzbereit, aber noch nicht im Repository.
+          </p>
+          <p >
+            <a href="#top">nach oben</a>
+          </p>
+        </td>
+        <td valign="top" >
+          <!-- Start Navbar -->
+	<!-- >
+	Kommentare zur Navbar Informationen f&uuml;r Mitglieder im de.OpenOffice.org Projekt
+	Makemapversion:
+	$Id: makemap.pl,v 1.7 2006/02/23 12:28:08 markomlm Exp :
+	navbar_Dev ,V 0.5.6 Dienstag, 11. Juli 2006 19:33:05 _MLM
+	< -->
+<ul id="navbar_de">
+    <li><div >de-links</div></li>
+    <li> <a href="../index.html" title=" "> Hauptseite </a></li>
+    <li> <a href="../map_all.html" title=" "> Sitemap </a></li>
+    <li> <a href="../neuhier.html" title="Informationen zu OpenOffice.org, dem Softwareprodukt"> Produkt-Info </a></li>
+    <li> <a href="../kontakt.html" title="Informationen zu OpenOffice.org, der Community"> Projekt-Info </a></li>
+    <li> <a href="../downloads/quick.html" title="Software und mehr"> Download </a></li>
+    <li> <a href="../doc/index.html" title="Installationsbeschreibungen und mehr Schriftliches"> Dokumentationen </a></li>
+    <li> <a href="../doc/faq/index.html" title="FAQ- H&auml;ufig gestellte Fragen"> FAQ </a></li>
+    <li> <a href="../probleme.html" title="Wo Hilfe nahe ist"> Support </a></li>
+    <li> <a href="../doc/howto/index.html" title="Knappe Anleitungen f&uuml;r die erste Benutzung"> Erste Schritte </a></li>
+    <li> <a href="../marketing/index.html" title="Materialien und mehr"> Marketing </a></li>
+    <li> <a href="../presse/about-presskit.html" title="Pressemitteilungen, Interviews und andere Informationen"> Presse </a></li>
+    <li>Mithelfen
+      <ul>
+      <li> <a href="index.html" title="Die Startseite f&uuml;r neue Mitarbeiter"> F&uuml;r Mithelfer </a></li>
+      <li> <a href="../doc/faq/mitarbeiter/index.html" title="Das Wissensarchiv f&uuml;r Neulinge und Fortgeschrittene"> Mitarbeiter-FAQ </a></li>
+      <li> <a href="ansprechpartner.html" title="Ansprechpartner &uuml;bernehmen die Verantwortung f&uuml;r einen Teil des Gesamtprojekts."> Ansprechpartner </a></li>
+      <li> <a href="team.html" title="Alle Mithelfer"> Das Team </a></li>
+      <li> <a href="pre_submission_de.html" title="Einsenden einer Fehlermeldung oder eines Verbesserungsvorschlags"> Fehlerbericht </a></li>
+      <li> <a href="aufgabenliste.html" title="Aufgaben, die Helfer suchen."> Aufgabenliste </a></li>
+      <li> <a href="todo.html" title="Eine Sammlung von Aufgaben, die zur Zeit dringend sind"> Aktuelle TODO-Liste </a></li>
+      <li> <a href="../about-ooo/about-mailinglist.html" title="Die wichtigste Kommunikationsform im deOOo Projekt"> Mailinglisten </a></li>
+      <li> <a href="../about-ooo/about-irc.html" title="F&uuml;r Konferenzen der Entwickler, kein Support!"> IRC </a></li>
+      <li> <a href="issuezilla_einfuehrung.html" title="Der Hintergrund des Issuezilla knapp dargestellt"> Issuezilla Einführung </a></li>
+      <li> <a href="qa/index.html" title="Informationen zur Qualit&auml;tskontrolle der deutschen Lokalisationen von OOo"> Qualit&auml;tskontrolle </a></li>
+      <li> <a href="../about-ooo/about_unterstuetzung.html" title="Finanzielle Zuwendungen und Serverkapazit&auml;ten"> Zuwendungen </a></li>
+      <li> <a href="credits.html" title="F&uuml;r besondere Hilfe dankt das Projekt ..."> Danksagung </a></li>
+      </ul>
+    </li>
+</ul>
+          <!-- End Navbar -->
+        </td>
+      </tr>
+    </table>
+<p>
+	<a href="http://validator.w3.org/check?uri=referer"><img
+	    src="http://www.w3.org/Icons/valid-xhtml10-blue"
+	    alt="Valid XHTML 1.0 Transitional" height="31" width="88" /></a>
+</p>
+  
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Database.ManipulateAndQueryDataUsingTheRowSetService.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2007/03/12 08:42:47 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Database">
+
+<keywords>
+</keywords>
+
+<authors>
+</authors>
+
+<question heading="manipulate and query data using the RowSet service">How is it possibilities to manipulate data in a database and to set up queries to get a result set?
+</question>
+
+<answer>
+<p>One possibility is the usage of the RowSet service. This possibility is not as advanced as using the statement object.</p>
+<listing>/* get the service manager */
+xContext = UNO.connect()
+xMcf = xContext~getServiceManager
+
+/* create RowSet object */
+xRowSet = xMcf~createInstanceWithContext(-
+	&quot;{%see com.sun.star.sdb.RowSet}&quot;,xContext)~{%see com.sun.star.sdbc.XRowSet%XRowSet}
+say &quot;RowSet created!&quot;
+
+/* set the properties which are needed to connect to a database */
+xPropertySet = xRowSet~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+xPropertySet~setPropertyValue(&quot;DataSourceName&quot;, &quot;mysql-test&quot;)
+xPropertySet~setPropertyValue(&quot;User&quot;, &quot;stefan&quot;)
+xPropertySet~setPropertyValue(&quot;Password&quot;, &quot;apple&quot;)
+
+/* choose the CommandType TABLE and set the command */
+xPropertySet~setPropertyValue(&quot;Command&quot;, &quot;test.sales&quot;)
+xPropertySet~setPropertyValue(&quot;CommandType&quot;, box(-
+	&quot;int&quot;,bsf.getStaticValue(&quot;{%see com.sun.star.sdb.CommandType}&quot;, &quot;TABLE&quot;)))
+
+/* now execute the previous specified command */
+xRowSet~execute
+say &quot;RowSet executed!&quot;
+
+/* process the ResultSet */
+say &quot;Results:&quot;
+xRow = xRowSet~{%see com.sun.star.sdbc.XRow%XRow}
+DO WHILE xRowSet~next &lt;&gt; .false
+	name = xRow~getString(1)
+	price = xRow~getString(2)
+	price2 = xRow~getString(3)
+	say name&quot;-&quot;price&quot;-&quot;price2
+END
+
+say
+say &quot;---Infos---&quot;
+/* show amount of returned rows*/
+say &quot;There are:&quot; xPropertySet~getPropertyValue(&quot;RowCount&quot;) &quot;rows&quot;
+/* show the currently used command */
+say &quot;Used Command:&quot; xPropertySet~getPropertyValue(&quot;ActiveCommand&quot;)
+say &quot;-----------&quot;
+say
+
+/* destroy the created RowSet */
+xComp = xRowSet~{%see com.sun.star.lang.XComponent%XComponent}~dispose
+say &quot;RowSet destroyed!&quot; 
+
+::requires UNO.cls -- get UNO support</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>
