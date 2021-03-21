@@ -237,7 +237,7 @@ l10n.dl_langpack_link_text			= "Herunterladen: Sprachpaket";
 l10n.dl_langpack_link_title			= "Klicken zum Herunterladen: ";
 l10n.dl_win_info_text				= "Wichtiger Hinweis: 32-bit, 64-bit und Java - Was soll ich wählen?";
 l10n.dl_win_info_title				= "Derzeit wird nur eine 32-bit (x86) Version für Windows angeboten. Es funktioniert aber auch mit einem Windows 64-bit (x86-64).\nBitte beachten Sie, dass Sie für zusätzliche Funktionen Java mit 32-bit benötigen, das einmalig ausgewählt werden muss (siehe Menü 'Extras - Einstellungen - OpenOffice - Java').\n\nFür weitere Informationen über OpenOffice und Java klicken Sie bitte rechts auf den Link 'Java und Apache OpenOffice'.";
-l10n.dl_linux_info_text				= "Wichtiger Hinweis: RPM oder DEB = Was soll ich wählen?";
+l10n.dl_linux_info_text				= "Wichtiger Hinweis: RPM oder DEB - Was soll ich wählen?";
 l10n.dl_linux_info_title			= "RPM wird benutzt in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB wird benutzt in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
 //l10n.dl_mac_info_text				= "macOS : Text";
 //l10n.dl_mac_info_title			= "macOS : Titel";
