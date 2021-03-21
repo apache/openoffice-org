@@ -16,10 +16,10 @@ var l10n = new Object();
 
 // Set a specific language ISO code to force to assemble a download link with a certain language.
 // Change xx to a valid ISO lang code.
-DL.NL_LANG	= "xx";
+DL.NL_LANG					= "xx";
 
 // General:
-l10n.dl_headline_text	= "Apache OpenOffice Download";
+l10n.dl_headline_text				= "Apache OpenOffice Download";
 
 // Download: Strings in the green box (used in "index.html").
 l10n.dl_green_box_headline_text			= "Download Apache OpenOffice";
@@ -40,13 +40,13 @@ l10n.dl_green_box_selectbox_ver_title		= "Select your favorite release version";
 
 // l10n.dl_green_box_select_box_os_values	= [ "" ];
 l10n.dl_green_box_select_box_os_values		= [ "Windows (EXE)",
-												"Linux 64-bit (x86-64) (DEB)",
-												"Linux 64-bit (x86-64) (RPM)",
-												"Linux 32-bit (x86) (DEB)",
-												"Linux 32-bit (x86) (RPM)",
-												"OS X (version >= 10.7) (DMG)",
-												"OS X (version <= 10.6) (DMG)",
-												"More platforms / operating systems" ];
+						    "Linux 64-bit (x86-64) (DEB)",
+						    "Linux 64-bit (x86-64) (RPM)",
+						    "Linux 32-bit (x86) (DEB)",
+						    "Linux 32-bit (x86) (RPM)",
+						    "OS X (version >= 10.7) (DMG)",
+						    "OS X (version <= 10.6) (DMG)",
+						    "More platforms / operating systems" ];
 
 // l10n.dl_green_box_select_box_language_values	= [ "" ];
 l10n.dl_green_box_select_box_language_values	= [ "" ];
@@ -96,20 +96,9 @@ l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",    "Asturian",				"As
 						    "vi",     "Vietnamese",				"Tiếng Việt" ];
 
 // l10n.dl_green_box_select_box_version_values	= [ "" ];
-l10n.dl_green_box_select_box_version_values	= [ "4.1.9",
-												"4.1.8",
-												"4.1.7",
-												"4.1.6",
-												"4.1.5",
-												"4.1.4",
-												"4.1.3",
-												"4.1.2",
-												"4.1.1",
-												"4.1.0",
-												"4.0.1",
-												"4.0.0",
-												"3.4.1",
-												"Older releases" ];
+l10n.dl_green_box_select_box_version_values	= [ "" ];
+
+l10n.dl_green_box_select_box_version_older	= "Ältere Versionen";
 
 // Download: Strings in the sub-green box (used in "index.html").
 // Not defined for now.
@@ -359,10 +348,10 @@ l10n.dl_analyze_copy_button_text		= "Copy with [Ctrl]+[C] / [&#8984;]+[C]";
 l10n.dl_analyze_copy_button_title		= "Copy the selected table data via [ Ctrl ] + [ C ] or [ &#8984; ] + [ C ] into the clipboard";
 
 // Analyze: Strings for the table (used in "analyze.html").
-l10n.dl_analyze_table_browser_text			= "Browser variables";
-l10n.dl_analyze_table_values_text			= "Values";
-l10n.dl_analyze_table_yes_text				= "Yes";
-l10n.dl_analyze_table_no_text				= "No";
+l10n.dl_analyze_table_browser_text		= "Browser variables";
+l10n.dl_analyze_table_values_text		= "Values";
+l10n.dl_analyze_table_yes_text			= "Yes";
+l10n.dl_analyze_table_no_text			= "No";
 l10n.dl_analyze_table_stable_release_text	= "Stable Release";
 l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;functions/variables";
 
@@ -381,9 +370,9 @@ l10n.dl_rel_notes_aoo411_link			= "https://cwiki.apache.org/confluence/display/O
 l10n.dl_rel_notes_aoo410_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1+Release+Notes";
 l10n.dl_rel_notes_aoo401_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0.1+Release+Notes";
 l10n.dl_rel_notes_aoo400_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0+Release+Notes";
-l10n.dl_help_link						= "https://www.openoffice.org/download/full_vs_lp.html";
-l10n.dl_checksum_link					= "https://www.openoffice.org/download/checksums.html";
-l10n.dl_report_link						= "https://www.openoffice.org/download/analyze.html";
-l10n.dl_porting_link					= "https://www.openoffice.org/porting/index.html";
-l10n.dl_archive_link					= "https://www.openoffice.org/download/archive.html";
+l10n.dl_help_link				= "https://www.openoffice.org/download/full_vs_lp.html";
+l10n.dl_checksum_link				= "https://www.openoffice.org/download/checksums.html";
+l10n.dl_report_link				= "https://www.openoffice.org/download/analyze.html";
+l10n.dl_porting_link				= "https://www.openoffice.org/porting/index.html";
+l10n.dl_archive_link				= "https://www.openoffice.org/download/archive.html";
 l10n.dl_aoo341_link				= "https://www.openoffice.org/download/other-341.html";
