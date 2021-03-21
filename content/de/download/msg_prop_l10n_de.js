@@ -244,8 +244,8 @@ l10n.dl_linux_info_title			= "RPM wird benutzt in:\nCentOS, Fedora, Mageia, Mand
 
 l10n.dl_full_link_porting_text			= "Portierungen: Klicken zum Wählen von Drittanbietern";
 l10n.dl_full_link_porting_title			= "Klicken zum Aufrufen der Portierungswebseite und Herunterladen von Drittanbietern";
-l10n.dl_full_link_archive_text			= "Archiv: Klicken zum Wählen von älteren Releases";
-l10n.dl_full_link_archive_title			= "Klicken zum Aufrufen der Archivwebseite und Herunterladen von älteren Releases";
+l10n.dl_full_link_archive_text			= "Archiv: Klicken zum Wählen von älteren Versionen";
+l10n.dl_full_link_archive_title			= "Klicken zum Aufrufen der Archivwebseite und Herunterladen von älteren Versionen";
 
 // Download: Strings in the sub-green box (used in "download.js").
 l10n.dl_rel_info_headline_text			= "Release: ";
