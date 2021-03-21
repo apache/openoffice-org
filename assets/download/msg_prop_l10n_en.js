@@ -3,8 +3,8 @@
  *
  * Instead of hard coded text in the green box please use these variables and translate it to your favorite language.
  *
- * Wrong:   "Download Apache OpenOffice"
- * Correct: l10n.dl_green_box_headline_text
+ * Wrong:	"Download Apache OpenOffice"
+ * Correct:	l10n.dl_green_box_headline_text
  */
 
 
@@ -40,7 +40,7 @@ l10n.dl_green_box_select_box_os_values		= [ "" ];
 l10n.dl_green_box_select_box_language_values	= [ "" ];
 
 /* l10n.dl_green_box_select_box_lang_values_custom = [ "" ]; */
-						    // Value	Visible text				Tool tip
+//						    Value	Visible text				Tool tip
 l10n.dl_green_box_select_box_lang_values_custom = [ "ast",	"Asturian",				"Asturianu",
 						    "eu",	"Basque",				"Euskara",
 						    "bg",	"Bulgarian",				"български език",
