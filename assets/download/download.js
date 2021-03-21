@@ -522,6 +522,11 @@ DL.getVersionSelection = function() {
 			DL.VERSION_SEL = version_value;
 			break;
 		}
+
+		if( version_value === "older" ) {
+			DL.VERSION_SEL = version_value;
+			break;
+		}
 	}
 
 	// Get the version number without dots (e.g., "413" instead of "4.1.3").
