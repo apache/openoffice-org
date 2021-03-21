@@ -95,6 +95,9 @@ l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",		"Asturian",						"As
 													"tr",		"Turkish",						"Türkçe",
 													"vi",		"Vietnamese",					"Tiếng Việt" ];
 
+/* l10n.dl_green_box_select_box_language_values	= [ "" ]; */
+l10n.dl_green_box_select_box_language_values	= [ "" ];
+
 l10n.dl_green_box_select_box_version_values	= [ "" ];
 
 l10n.dl_green_box_select_box_version_older	= "Older releases";
