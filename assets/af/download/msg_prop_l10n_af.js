@@ -97,7 +97,8 @@ l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",	"Asturian",			"Asturi
 
 // l10n.dl_green_box_select_box_version_values	= [ "" ];
 l10n.dl_green_box_select_box_version_values	= [ "" ];
-l10n.dl_green_box_select_box_version_older	= "Older versions";
+
+l10n.dl_green_box_select_box_version_older	= "Older releases";
 
 // Download: Strings in the sub-green box (used in "index.html").
 // Not defined for now.
