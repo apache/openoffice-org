@@ -3,19 +3,20 @@
  *
  * Instead of hard coded text in the green box please use these variables and translate it to your favorite language.
  *
- * Wrong:	"Download Apache OpenOffice"
- * Correct:	l10n.dl_green_box_headline_text
+ * Wrong:   "Download Apache OpenOffice"
+ * Correct: l10n.dl_green_box_headline_text
  */
 
 
 
 // Object that contains all following variables.
-var l10n = new Object();
+//var l10n = new Object();
 
 // The following variables are used in the "index.html" file:
 
 // Set a specific language ISO code to force to assemble a download link with a certain language.
-DL.NL_LANG					= "";
+// Change xx to a valid ISO lang code.
+DL.NL_LANG					= "en-US";
 
 // General:
 l10n.dl_headline_text				= "Apache OpenOffice Download";
@@ -32,57 +33,69 @@ l10n.dl_green_box_selectbox_lang_title		= "Select your favorite language";
 l10n.dl_green_box_selectbox_ver_title		= "Select your favorite release version";
 
 // The strings that will be shown in the OS, language and version drop-down select boxes.
-// You must leave at least one single empty string (see the comment lines below the 3 following variables)!
-/* l10n.dl_green_box_select_box_os_values	= [ "" ]; */
-l10n.dl_green_box_select_box_os_values		= [ "" ];
+// You must leave at least one single empty string (see the comment lines above the 3 following variables)!
+// Leaving as default will result in the download box for any OS, language, or release shown on:
+// http://www.openoffice.org/download/index.html
+// Custominzations to each of these arrays will require ongoing maintenance for new releases.
 
-/* l10n.dl_green_box_select_box_language_values	= [ "" ]; */
+// l10n.dl_green_box_select_box_os_values	= [ "" ];
+l10n.dl_green_box_select_box_os_values		= [ "Windows (EXE)",
+						    "Linux 64-bit (x86-64) (DEB)",
+						    "Linux 64-bit (x86-64) (RPM)",
+						    "Linux 32-bit (x86) (DEB)",
+						    "Linux 32-bit (x86) (RPM)",
+						    "OS X (version >= 10.7) (DMG)",
+						    "OS X (version <= 10.6) (DMG)",
+						    "More platforms / operating systems" ];
+
+// l10n.dl_green_box_select_box_language_values	= [ "" ];
 l10n.dl_green_box_select_box_language_values	= [ "" ];
 
-/* l10n.dl_green_box_select_box_lang_values_custom = [ "" ]; */
-//						    Value	Visible text				Tool tip
-l10n.dl_green_box_select_box_lang_values_custom = [ "ast",	"Asturian",				"Asturianu",
-						    "eu",	"Basque",				"Euskara",
-						    "bg",	"Bulgarian",				"български език",
-						    "ca",	"Catalan",				"Català",
-						    "ca-XV",	"Catalan [Valencia AVL]",		"València (AVL)",
-						    "ca-XR",	"Catalan [Valencia RACV]",		"València (RACV)",
-						    "zh-CN",	"Chinese [simplified]",			"简体中文",
-						    "zh-TW",	"Chinese [traditional]",		"正體中文",
-						    "cs",	"Czech",				"Čeština",
-						    "da",	"Danish",				"Dansk",
-						    "nl",	"Dutch",				"Nederlands",
-						    "en-GB",	"English [British]",			"English [British]",
-						    "en-US",	"English [US]",				"English [US]",
-						    "fi",	"Finnish",				"Suomi",
-						    "fr",	"French",				"Français",
-						    "gl",	"Galician",				"Galego",
-						    "de",	"German",				"Deutsch",
-						    "el",	"Greek",				"ελληνικά",
-						    "he",	"Hebrew",				"עברית",
-						    "hi",	"Hindi",				"हिन्दी",
-						    "hu",	"Hungarian",				"Magyar",
-						    "it",	"Italian",				"Italiano",
-						    "ja",	"Japanese",				"日本語",
-						    "km",	"Khmer",				"ភាសាខ្មែរ",
-						    "ko",	"Korean",				"한국어",
-						    "lt",	"Lithuanian",				"Lietuvių",
-						    "nb",	"Norwegian [Bokmal]",			"Norsk [Bokmål]",
-						    "pl",	"Polish",				"Polski",
-						    "pt-BR",	"Portuguese [Brazilian]",		"Português [do Brasil]",
-						    "pt",	"Portuguese [European]",		"Português [Europeu]",
-						    "ru",	"Russian",				"Русский",
-						    "gd",	"Scottish [Gaelic]",			"Gàidhlig",
-						    "sr",	"Serbian [Cyrillic]",			"Cрпски [ћирилицом]",
-						    "sk",	"Slovak",				"Slovenský jazyk [slovenčina]",
-						    "sl",	"Slovenian",				"Slovenski jezik [slovenščina]",
-						    "es",	"Spanish",				"Español",
-						    "sv",	"Swedish",				"Svenska",
-						    "ta",	"Tamil",				"தமிழ்",
-						    "th",	"Thai",					"ภาษาไทย",
-						    "tr",	"Turkish",				"Türkçe",
-						    "vi",	"Vietnamese",				"Tiếng Việt" ];
+// l10n.dl_green_box_select_box_lang_values_custom = [ "" ];
+//						    Value	Visible text			Tool tip
+l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",	"Asturian",			"Asturianu",
+						    "eu",	"Basque",			"Euskara",
+						    "bg",	"Bulgarian",			"български език",
+						    "ca",	"Catalan",			"Català",
+						    "ca-XV",	"Catalan [Valencia AVL]",	"València (AVL)",
+						    "ca-XR",	"Catalan [Valencia RACV]",	"València (RACV)",
+						    "zh-CN",	"Chinese [simplified]",		"简体中文",
+						    "zh-TW",	"Chinese [traditional]",	"正體中文",
+						    "cs",	"Czech",			"Čeština",
+						    "da",	"Danish",			"Dansk",
+						    "nl",	"Dutch",			"Nederlands",
+						    "en-GB",	"English [British]",		"English [British]",
+						    "en-US",	"English [US]",			"English [US]",
+						    "fi",	"Finnish",			"Suomi",
+						    "fr",	"French",			"Français",
+						    "gl",	"Galician",			"Galego",
+						    "de",	"German",			"Deutsch",
+						    "el",	"Greek",			"ελληνικά",
+						    "he",	"Hebrew",			"עברית",
+						    "hi",	"Hindi",			"हिन्दी",
+						    "hu",	"Hungarian",			"Magyar",
+						    "it",	"Italian",			"Italiano",
+						    "ja",	"Japanese",			"日本語",
+						    "km",	"Khmer",			"ភាសាខ្មែរ",
+						    "ko",	"Korean",			"한국어",
+						    "lt",	"Lithuanian",			"Lietuvių",
+						    "nb",	"Norwegian [Bokmal]",		"Norsk [Bokmål]",
+						    "pl",	"Polish",			"Polski",
+						    "pt-BR",	"Portuguese [Brazilian]",	"Português [do Brasil]",
+						    "pt",	"Portuguese [European]",	"Português [Europeu]",
+						    "ru",	"Russian",			"Русский",
+						    "gd",	"Scottish [Gaelic]",		"Gàidhlig",
+						    "sr",	"Serbian [Cyrillic]",		"Cрпски [ћирилицом]",
+						    "sk",	"Slovak",			"Slovenský jazyk [slovenčina]",
+						    "sl",	"Slovenian",			"Slovenski jezik [slovenščina]",
+						    "es",	"Spanish",			"Español",
+						    "sv",	"Swedish",			"Svenska",
+						    "ta",	"Tamil",			"தமிழ்",
+						    "th",	"Thai",				"ภาษาไทย",
+						    "tr",	"Turkish",			"Türkçe",
+						    "vi",	"Vietnamese",			"Tiếng Việt" ];
 
+// l10n.dl_green_box_select_box_version_values	= [ "" ];
 l10n.dl_green_box_select_box_version_values	= [ "" ];
 
 l10n.dl_green_box_select_box_version_older	= "Older releases";
@@ -95,13 +108,6 @@ l10n.dl_green_box_select_box_version_older	= "Older releases";
 
 // Download: Strings in the sub-yellow box (used in "index.html").
 // Not defined for now.
-
-// Get developers: Strings in the orange box (used in "index.html").
-l10n.dl_getdev_orange_box_headline_text		= "Help Needed";
-l10n.dl_getdev_orange_box_headline_title	= "The Apache OpenOffice project seeks developers to take part in expanding its activities";
-l10n.dl_getdev_orange_box_text_text		= "Are you a software developer with C++ skills? Do you have expertise in building software? Are you an experienced lead technical writer? Are you proficient in English? Do you like contributing to open source projects? Come and join us in helping Apache OpenOffice to thrive.";
-l10n.dl_getdev_orange_box_text_title		= "The Apache OpenOffice project seeks developers to take part in expanding its activities";
-l10n.dl_getdev_orange_box_text_href		= "https://openoffice.apache.org/get-involved.html";
 
 // Share: Strings in the light-blue box (used in "index.html").
 l10n.dl_share_light_blue_box_headline_text	= "Help Spread the Word";
@@ -166,7 +172,7 @@ l10n.dl_nav_hist_schedule_text			= "Historic Release Schedule";
 l10n.dl_nav_hist_schedule_title			= "When were old releases planned?";
 l10n.dl_nav_hist_schedule_href			= "https://wiki.openoffice.org/wiki/Product_Release";
 l10n.dl_nav_inst_guide_text			= "Installation Guides";
-l10n.dl_nav_inst_guide_title			= "Instructions for installing Apache OpenOffice on Windows, macOS (OS&nbsp;X) and Linux";
+l10n.dl_nav_inst_guide_title			= "Instructions for installing Apache OpenOffice on Windows, macOS (OS&nbsp;X) and Linux machines";
 l10n.dl_nav_inst_guide_href			= "https://www.openoffice.org/download/common/instructions.html";
 l10n.dl_nav_user_guide_text			= "User Guides";
 l10n.dl_nav_user_guide_title			= "Extensive user manuals for every day use";
@@ -194,7 +200,7 @@ l10n.dl_nav_mirrors1_title			= "Use SourceForge mirrors to download Apache OpenO
 l10n.dl_nav_mirrors1_href			= "https://sourceforge.net/projects/openofficeorg.mirror/files/";
 l10n.dl_nav_mirrors2_text			= "Alternative download link #2";
 l10n.dl_nav_mirrors2_title			= "Use Apache mirrors to download Apache OpenOffice";
-l10n.dl_nav_mirrors2_href			= "https://downloads.apache.org/openoffice/" + DL.VERSION + "/binaries/";
+l10n.dl_nav_mirrors2_href			= "https://www.apache.org/dyn/closer.lua/openoffice/";
 l10n.dl_nav_porting_text			= "3rd party ports and distributions";
 l10n.dl_nav_porting_title			= "Ports and distributions from 3rd party vendors";
 l10n.dl_nav_porting_href			= "https://www.openoffice.org/porting/index.html";
@@ -231,10 +237,11 @@ l10n.dl_langpack_link_text			= "Download language pack";
 l10n.dl_langpack_link_title			= "Click to download: ";
 l10n.dl_win_info_text				= "Important hint: 32-bit, 64-bit and Java - What to choose?";
 l10n.dl_win_info_title				= "At the moment we offer a 32-bit (x86) version for Windows. However, it installs and runs also on Windows 64-bit (x86-64).\nPlease note that you may need Java in 32-bit for additional functionality which must then be selected only once (see menu 'Tools - Options - OpenOffice - Java').\n\nFor more information about OpenOffice and Java please see the link on the right 'Java and Apache OpenOffice'.";
-l10n.dl_linux_info_text				= "Important hint: RPM vs. DEB - What to choose?";
+l10n.dl_linux_info_text				= "Important hint: RPM vs. DEB = What to choose?";
 l10n.dl_linux_info_title			= "RPM is used in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB is used in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
 //l10n.dl_mac_info_text				= "macOS : Text";
 //l10n.dl_mac_info_title			= "macOS : Title";
+
 
 l10n.dl_full_link_porting_text			= "Porting: Click to choose from 3rd party vendors";
 l10n.dl_full_link_porting_title			= "Click to browse to the porting webpage and download from 3rd party vendors";
@@ -315,7 +322,7 @@ l10n.dl_error_custom_4_text			= "";
 
 // Analyze: Strings for the instruction text (used in "analyze.html").
 l10n.dl_analyze_headline_text			= "How to report a broken download link?";
-l10n.dl_analyze_instruction_select_text		= "<b>Select your favorites</b>: Operating system, language and version in the green box below.";
+l10n.dl_analyze_instruction_select_text		= "<b>Select your favorites</b>: Operating system, language and version in the green below.";
 l10n.dl_analyze_instruction_verify_text		= "Verify that these options <b>still do not</b> lead to valid download links.";
 l10n.dl_analyze_instruction_click_text		= "Click on the button below the green box: ";
 l10n.dl_analyze_instruction_copy_text		= "Copy the selected table data into the clipboard: ";
@@ -342,15 +349,12 @@ l10n.dl_analyze_copy_button_text		= "Copy with [Ctrl]+[C] / [&#8984;]+[C]";
 l10n.dl_analyze_copy_button_title		= "Copy the selected table data via [ Ctrl ] + [ C ] or [ &#8984; ] + [ C ] into the clipboard";
 
 // Analyze: Strings for the table (used in "analyze.html").
-l10n.dl_analyze_table_problem_text1		= "Problem description";
-l10n.dl_analyze_table_problem_text2		= "Exchange this text to describe the problem <br /><br />(What does not work? What do you expect?)";
 l10n.dl_analyze_table_browser_text		= "Browser variables";
 l10n.dl_analyze_table_values_text		= "Values";
 l10n.dl_analyze_table_yes_text			= "Yes";
 l10n.dl_analyze_table_no_text			= "No";
 l10n.dl_analyze_table_stable_release_text	= "Stable Release";
 l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;functions/variables";
-
 
 
 // General: Links to webpage files that could be localized.
@@ -371,4 +375,5 @@ l10n.dl_checksum_link				= "https://www.openoffice.org/download/checksums.html";
 l10n.dl_report_link				= "https://www.openoffice.org/download/analyze.html";
 l10n.dl_porting_link				= "https://www.openoffice.org/porting/index.html";
 l10n.dl_archive_link				= "https://www.openoffice.org/download/archive.html";
-l10n.dl_aoo341_link				= "https://www.openoffice.org/download/archive.html";
+l10n.dl_aoo341_link				= "https://www.openoffice.org/download/other-341.html";
+
