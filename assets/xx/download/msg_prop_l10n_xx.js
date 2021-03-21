@@ -10,7 +10,7 @@
 
 
 // Object that contains all following variables.
-var l10n = new Object();
+// var l10n = new Object();
 
 // The following variables are used in the "index.html" file:
 
@@ -52,53 +52,52 @@ l10n.dl_green_box_select_box_os_values		= [ "Windows (EXE)",
 l10n.dl_green_box_select_box_language_values	= [ "" ];
 
 // l10n.dl_green_box_select_box_lang_values_custom = [ "" ];
-						    // Value  Visible text				Tool tip
-l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",    "Asturian",				"Asturianu",
-						    "eu",     "Basque",					"Euskara",
-						    "bg",     "Bulgarian",				"български език",
-						    "ca",     "Catalan",				"Català",
-						    "ca-XV",  "Catalan [Valencia AVL]",			"València (AVL)",
-						    "ca-XR",  "Catalan [Valencia RACV]",		"València (RACV)",
-						    "zh-CN",  "Chinese [simplified]",			"简体中文",
-						    "zh-TW",  "Chinese [traditional]",			"正體中文",
-						    "cs",     "Czech",					"Čeština",
-						    "da",     "Danish",					"Dansk",
-						    "nl",     "Dutch",					"Nederlands",
-						    "en-GB",  "English [British]",			"English [British]",
-						    "en-US",  "English [US]",				"English [US]",
-						    "fi",     "Finnish",				"Suomi",
-						    "fr",     "French",					"Français",
-						    "gl",     "Galician",				"Galego",
-						    "de",     "German",					"Deutsch",
-						    "el",     "Greek",					"ελληνικά",
-						    "he",     "Hebrew",					"עברית",
-						    "hi",     "Hindi",					"हिन्दी",
-						    "hu",     "Hungarian",				"Magyar",
-						    "it",     "Italian",				"Italiano",
-						    "ja",     "Japanese",				"日本語",
-						    "km",     "Khmer",					"ភាសាខ្មែរ",
-						    "ko",     "Korean",					"한국어",
-						    "lt",     "Lithuanian",				"Lietuvių",
-						    "nb",     "Norwegian [Bokmal]",			"Norsk [Bokmål]",
-						    "pl",     "Polish",					"Polski",
-						    "pt-BR",  "Portuguese [Brazilian]",			"Português [do Brasil]",
-						    "pt",     "Portuguese [European]",			"Português [Europeu]",
-						    "ru",     "Russian",				"Русский",
-						    "gd",     "Scottish [Gaelic]",			"Gàidhlig",
-						    "sr",     "Serbian [Cyrillic]",			"Cрпски [ћирилицом]",
-						    "sk",     "Slovak",					"Slovenský jazyk [slovenčina]",
-						    "sl",     "Slovenian",				"Slovenski jezik [slovenščina]",
-						    "es",     "Spanish",				"Español",
-						    "sv",     "Swedish",				"Svenska",
-						    "ta",     "Tamil",					"தமிழ்",
-						    "th",     "Thai",					"ภาษาไทย",
-						    "tr",     "Turkish",				"Türkçe",
-						    "vi",     "Vietnamese",				"Tiếng Việt" ];
+						    // Value	Visible text				Tool tip
+l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",	"Asturian",				"Asturianu",
+						    "eu",	"Basque",				"Euskara",
+						    "bg",	"Bulgarian",				"български език",
+						    "ca",	"Catalan",				"Català",
+						    "ca-XV",	"Catalan [Valencia AVL]",		"València (AVL)",
+						    "ca-XR",	"Catalan [Valencia RACV]",		"València (RACV)",
+						    "zh-CN",	"Chinese [simplified]",			"简体中文",
+						    "zh-TW",	"Chinese [traditional]",		"正體中文",
+						    "cs",	"Czech",				"Čeština",
+						    "da",	"Danish",				"Dansk",
+						    "nl",	"Dutch",				"Nederlands",
+						    "en-GB",	"English [British]",			"English [British]",
+						    "en-US",	"English [US]",				"English [US]",
+						    "fi",	"Finnish",				"Suomi",
+						    "fr",	"French",				"Français",
+						    "gl",	"Galician",				"Galego",
+						    "de",	"German",				"Deutsch",
+						    "el",	"Greek",				"ελληνικά",
+						    "he",	"Hebrew",				"עברית",
+						    "hi",	"Hindi",				"हिन्दी",
+						    "hu",	"Hungarian",				"Magyar",
+						    "it",	"Italian",				"Italiano",
+						    "ja",	"Japanese",				"日本語",
+						    "km",	"Khmer",				"ភាសាខ្មែរ",
+						    "ko",	"Korean",				"한국어",
+						    "lt",	"Lithuanian",				"Lietuvių",
+						    "nb",	"Norwegian [Bokmal]",			"Norsk [Bokmål]",
+						    "pl",	"Polish",				"Polski",
+						    "pt-BR",	"Portuguese [Brazilian]",		"Português [do Brasil]",
+						    "pt",	"Portuguese [European]",		"Português [Europeu]",
+						    "ru",	"Russian",				"Русский",
+						    "gd",	"Scottish [Gaelic]",			"Gàidhlig",
+						    "sr",	"Serbian [Cyrillic]",			"Cрпски [ћирилицом]",
+						    "sk",	"Slovak",				"Slovenský jazyk [slovenčina]",
+						    "sl",	"Slovenian",				"Slovenski jezik [slovenščina]",
+						    "es",	"Spanish",				"Español",
+						    "sv",	"Swedish",				"Svenska",
+						    "ta",	"Tamil",				"தமிழ்",
+						    "th",	"Thai",					"ภาษาไทย",
+						    "tr",	"Turkish",				"Türkçe",
+						    "vi",	"Vietnamese",				"Tiếng Việt" ];
 
-// l10n.dl_green_box_select_box_version_values	= [ "" ];
 l10n.dl_green_box_select_box_version_values	= [ "" ];
 
-l10n.dl_green_box_select_box_version_older	= "Ältere Versionen";
+l10n.dl_green_box_select_box_version_older	= "Older releases";
 
 // Download: Strings in the sub-green box (used in "index.html").
 // Not defined for now.
