@@ -96,7 +96,6 @@ l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",	"Asturisch",				"Astu
 						    "hu",	"Ungarisch",				"Magyar",
 						    "vi",	"Vietnamesisch",			"Tiếng Việt" ];
 
-// l10n.dl_green_box_select_box_version_values	= [ "" ];
 l10n.dl_green_box_select_box_version_values	= [ "" ];
 
 l10n.dl_green_box_select_box_version_older	= "Ältere Versionen";
