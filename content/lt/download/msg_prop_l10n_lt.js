@@ -8,7 +8,7 @@
  */
 
 // Object that contains all following variables.
-var l10n = new Object();
+// var l10n = new Object();
 
 // The following variables are used in the "index.html" file:
 
@@ -87,21 +87,12 @@ l10n.dl_green_box_select_box_lang_values_custom	= [ "en-US",	"Anglų (JAV)",			"
 						    "vi",	"Vietnamiečių",			"Tiếng Việt",
 						    "de",	"Vokiečių",			"Deutsch" ];
 
-// l10n.dl_green_box_select_box_version_values = [ "" ];
-l10n.dl_green_box_select_box_version_values	= [ "4.1.9",
-						    "4.1.8",
-						    "4.1.7",
-						    "4.1.6",
-						    "4.1.5",
-						    "4.1.4",
-						    "4.1.3",
-						    "4.1.2",
-						    "4.1.1",
-						    "4.1.0",
-						    "4.0.1",
-						    "4.0.0",
-						    "3.4.1",
-						    "Senesnės laidos" ];
+/* l10n.dl_green_box_select_box_language_values	= [ "" ]; */
+l10n.dl_green_box_select_box_language_values	= [ "" ];
+
+l10n.dl_green_box_select_box_version_values	= [ "" ];
+
+l10n.dl_green_box_select_box_version_older	= "Senesnės laidos";
 
 // Download: Strings in the sub-green box (used in "index.html").
 // Not defined for now.

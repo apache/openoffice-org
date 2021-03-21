@@ -3,14 +3,14 @@
  *
  * Instead of hard coded text in the green box please use these variables and translate it to your favorite language.
  *
- * Wrong:   "Download Apache OpenOffice"
- * Correct: l10n.dl_green_box_headline_text
+ * Wrong:	"Download Apache OpenOffice"
+ * Correct:	l10n.dl_green_box_headline_text
  */
 
 
 
 // Object that contains all following variables.
-var l10n = new Object();
+// var l10n = new Object();
 
 // The following variables are used in the "index.html" file:
 
@@ -90,20 +90,12 @@ l10n.dl_green_box_select_box_lang_values_custom = [ "ast",	"Asturian",				"Astur
 						    "tr",	"Turkish",				"Türkçe",
 						    "vi",	"Vietnamese",				"Tiếng Việt" ];
 
-l10n.dl_green_box_select_box_version_values	= [ "4.1.9",
-						    "4.1.8",
-						    "4.1.7",
-						    "4.1.6",
-						    "4.1.5",
-						    "4.1.4",
-						    "4.1.3",
-						    "4.1.2",
-						    "4.1.1",
-						    "4.1.0",
-						    "4.0.1",
-						    "4.0.0",
-						    "3.4.1",
-						    "Versiones anteriores" ];
+/* l10n.dl_green_box_select_box_language_values	= [ "" ]; */
+l10n.dl_green_box_select_box_language_values	= [ "" ];
+
+l10n.dl_green_box_select_box_version_values	= [ "" ];
+
+l10n.dl_green_box_select_box_version_older	= "Versiones anteriores";
 
 /* l10n.dl_green_box_select_box_version_values	= [ "" ]; */
 
