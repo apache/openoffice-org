@@ -3,8 +3,8 @@
  *
  * Instead of hard coded text in the green box please use these variables and translate it to your favorite language.
  *
- * Wrong:   "Download Apache OpenOffice"
- * Correct: l10n.dl_green_box_headline_text
+ * Wrong:	"Download Apache OpenOffice"
+ * Correct:	l10n.dl_green_box_headline_text
  */
 
 
@@ -27,9 +27,9 @@ l10n.dl_green_box_subtext1_text			= "Hosted by SourceForge.net - A trusted websi
 l10n.dl_green_box_subtext1_title		= "Apache OpenOffice binary files are hosted by SourceForge.net - A trusted website";
 l10n.dl_green_box_subtext2_text			= "Select your favorite operating system, language and version";
 l10n.dl_green_box_subtext2_title		= "Select your favorite operating system, language and version";
-l10n.dl_green_box_selectbox_os_title	= "Select your favorite operating system";
-l10n.dl_green_box_selectbox_lang_title	= "Select your favorite language";
-l10n.dl_green_box_selectbox_ver_title	= "Select your favorite release version";
+l10n.dl_green_box_selectbox_os_title		= "Select your favorite operating system";
+l10n.dl_green_box_selectbox_lang_title		= "Select your favorite language";
+l10n.dl_green_box_selectbox_ver_title		= "Select your favorite release version";
 
 // The strings that will be shown in the OS, language and version drop-down select boxes.
 // You must leave at least one single empty string (see the comment lines below the 3 following variables)!
@@ -40,7 +40,7 @@ l10n.dl_green_box_select_box_os_values		= [ "" ];
 l10n.dl_green_box_select_box_language_values	= [ "" ];
 
 /* l10n.dl_green_box_select_box_lang_values_custom = [ "" ]; */
-						    // Value	Visible text				Tool tip
+//						    Value	Visible text				Tool tip
 l10n.dl_green_box_select_box_lang_values_custom = [ "ast",	"Asturian",				"Asturianu",
 						    "eu",	"Basque",				"Euskara",
 						    "bg",	"Bulgarian",				"български език",
@@ -83,8 +83,9 @@ l10n.dl_green_box_select_box_lang_values_custom = [ "ast",	"Asturian",				"Astur
 						    "tr",	"Turkish",				"Türkçe",
 						    "vi",	"Vietnamese",				"Tiếng Việt" ];
 
-/* l10n.dl_green_box_select_box_version_values	= [ "" ]; */
 l10n.dl_green_box_select_box_version_values	= [ "" ];
+
+l10n.dl_green_box_select_box_version_older	= "Older releases";
 
 // Download: Strings in the sub-green box (used in "index.html").
 // Not defined for now.
@@ -98,9 +99,9 @@ l10n.dl_green_box_select_box_version_values	= [ "" ];
 // Get developers: Strings in the orange box (used in "index.html").
 l10n.dl_getdev_orange_box_headline_text		= "Help Needed";
 l10n.dl_getdev_orange_box_headline_title	= "The Apache OpenOffice project seeks developers to take part in expanding its activities";
-l10n.dl_getdev_orange_box_text_text			= "Are you a software developer with C++ skills? Do you have expertise in building software? Are you an experienced lead technical writer? Are you proficient in English? Do you like contributing to open source projects? Come and join us in helping Apache OpenOffice to thrive.";
+l10n.dl_getdev_orange_box_text_text		= "Are you a software developer with C++ skills? Do you have expertise in building software? Are you an experienced lead technical writer? Are you proficient in English? Do you like contributing to open source projects? Come and join us in helping Apache OpenOffice to thrive.";
 l10n.dl_getdev_orange_box_text_title		= "The Apache OpenOffice project seeks developers to take part in expanding its activities";
-l10n.dl_getdev_orange_box_text_href			= "https://openoffice.apache.org/get-involved.html";
+l10n.dl_getdev_orange_box_text_href		= "https://openoffice.apache.org/get-involved.html";
 
 // Share: Strings in the light-blue box (used in "index.html").
 l10n.dl_share_light_blue_box_headline_text	= "Help Spread the Word";
@@ -202,22 +203,22 @@ l10n.dl_nav_archive_title			= "Download legacy and archived releases";
 l10n.dl_nav_archive_href			= "https://www.openoffice.org/download/archive.html";
 
 // List items in the navigation bar that are not used for now.
-l10n.dl_nav_release_notes_text		= "Release Notes";
-l10n.dl_nav_release_notes_title		= "What is new, what has been improved in Apache OpenOffice?";
-l10n.dl_nav_release_notes_href		= "https://www.openoffice.org/development/releases/index.html";
+l10n.dl_nav_release_notes_text			= "Release Notes";
+l10n.dl_nav_release_notes_title			= "What is new, what has been improved in Apache OpenOffice?";
+l10n.dl_nav_release_notes_href			= "https://www.openoffice.org/development/releases/index.html";
 l10n.dl_nav_checksum_text			= "Verify the downloaded file";
 l10n.dl_nav_checksum_title			= "How to verify the downloaded file with signatures and hashes?";
 l10n.dl_nav_checksum_href			= "https://www.openoffice.org/download/checksums.html";
 
 // Strings for the logo graphics.
-l10n.dl_img_sourceforge_title		= "SourceForge - Download, Develop and Publish Free Open Source Software";
-l10n.dl_img_sourceforge_href		= "https://www.sourceforge.net/";
+l10n.dl_img_sourceforge_title			= "SourceForge - Download, Develop and Publish Free Open Source Software";
+l10n.dl_img_sourceforge_href			= "https://www.sourceforge.net/";
 l10n.dl_img_sourceforge_src			= "/images/sourceforge.png";
 l10n.dl_img_sourceforge_alt			= "SourceForge";
 l10n.dl_img_w3c_title				= "W3C Markup Validation Service - Check the markup (HTML, XHTML, ...) of Web documents";
 l10n.dl_img_w3c_href				= "https://validator.w3.org/check?uri=referer";
-l10n.dl_img_w3c_src					= "/images/valid-xhtml10-blue.png";
-l10n.dl_img_w3c_alt					= "W3C Validator";
+l10n.dl_img_w3c_src				= "/images/valid-xhtml10-blue.png";
+l10n.dl_img_w3c_alt				= "W3C Validator";
 
 
 
@@ -235,41 +236,41 @@ l10n.dl_linux_info_title			= "RPM is used in:\nCentOS, Fedora, Mageia, Mandriva,
 //l10n.dl_mac_info_text				= "macOS : Text";
 //l10n.dl_mac_info_title			= "macOS : Title";
 
-l10n.dl_full_link_porting_text		= "Porting: Click to choose from 3rd party vendors";
-l10n.dl_full_link_porting_title		= "Click to browse to the porting webpage and download from 3rd party vendors";
-l10n.dl_full_link_archive_text		= "Archive: Click to choose from legacy releases";
-l10n.dl_full_link_archive_title		= "Click to browse to the archive and download legacy releases";
+l10n.dl_full_link_porting_text			= "Porting: Click to choose from 3rd party vendors";
+l10n.dl_full_link_porting_title			= "Click to browse to the porting webpage and download from 3rd party vendors";
+l10n.dl_full_link_archive_text			= "Archive: Click to choose from legacy releases";
+l10n.dl_full_link_archive_title			= "Click to browse to the archive and download legacy releases";
 
 // Download: Strings in the sub-green box (used in "download.js").
-l10n.dl_rel_info_headline_text		= "Release: ";
-l10n.dl_rel_info_milestone_text		= "Milestone ";
-l10n.dl_rel_info_buildid_text		= "Build ID ";
+l10n.dl_rel_info_headline_text			= "Release: ";
+l10n.dl_rel_info_milestone_text			= "Milestone ";
+l10n.dl_rel_info_buildid_text			= "Build ID ";
 l10n.dl_rel_info_svn_text			= "SVN "
-l10n.dl_rel_info_rel_date_text		= "Released ";
+l10n.dl_rel_info_rel_date_text			= "Released ";
 l10n.dl_rel_notes_text				= "Release Notes";
 l10n.dl_rel_notes_title				= "Release Notes for Apache OpenOffice ";
 
 l10n.dl_headline_full_text			= "Full installation: ";
-l10n.dl_headline_langpack_text		= "Language pack: ";
+l10n.dl_headline_langpack_text			= "Language pack: ";
 l10n.dl_filesize_text				= "File size ~ ";
 l10n.dl_megabyte_text				= " MByte";
-l10n.dl_checksum_headline_text		= "Signatures and hashes: ";
+l10n.dl_checksum_headline_text			= "Signatures and hashes: ";
 l10n.dl_checksum_keys_text			= "KEYS";
 l10n.dl_checksum_keys_title			= "KEYS signature file";
 l10n.dl_checksum_asc_text			= "ASC";
 l10n.dl_checksum_asc_title			= "ASC signature for: ";
 l10n.dl_checksum_md5_text			= "MD5";
 l10n.dl_checksum_md5_title			= "MD5 hash for: ";
-l10n.dl_checksum_sha256_text		= "SHA256";
-l10n.dl_checksum_sha256_title		= "SHA256 hash for: ";
-l10n.dl_checksum_sha512_text		= "SHA512";
-l10n.dl_checksum_sha512_title		= "SHA512 hash for: ";
+l10n.dl_checksum_sha256_text			= "SHA256";
+l10n.dl_checksum_sha256_title			= "SHA256 hash for: ";
+l10n.dl_checksum_sha512_text			= "SHA512";
+l10n.dl_checksum_sha512_title			= "SHA512 hash for: ";
 
 l10n.dl_help_img_title				= "What is the difference between full installation and language pack?";
 l10n.dl_help_img_src				= "/download/cachedimages/help-information-icon.png";
 l10n.dl_help_img_alt				= "Install info";
-l10n.dl_help_text					= "What is a language pack?";
-l10n.dl_help_title					= "What is the difference between full installation and language pack?";
+l10n.dl_help_text				= "What is a language pack?";
+l10n.dl_help_title				= "What is the difference between full installation and language pack?";
 l10n.dl_checksum_img_title			= "How to verify the downloaded file with checksums?";
 l10n.dl_checksum_img_src			= "/download/cachedimages/help-information-icon.png";
 l10n.dl_checksum_img_alt			= "Checksum verify";
@@ -278,7 +279,7 @@ l10n.dl_checksum_title				= "How to verify the downloaded file with checksums?";
 l10n.dl_report_img_title			= "Broken download link? Click here to report.";
 l10n.dl_report_img_src				= "/download/cachedimages/help-report-broken-link-icon.png";
 l10n.dl_report_img_alt				= "Broken link";
-l10n.dl_report_text					= "Report broken link";
+l10n.dl_report_text				= "Report broken link";
 l10n.dl_report_title				= "Broken download link? Click here to report.";
 
 // Download: Strings for error text in the sub-red box (used in "download.js").
@@ -290,10 +291,10 @@ l10n.dl_langpack_link_error_title		= "Please select another language, platform o
 l10n.dl_error_problem_img_title			= "The selected download file is not available";
 l10n.dl_error_problem_img_src			= "/download/cachedimages/exclamation-icon.png";
 l10n.dl_error_problem_img_alt			= "Error text";
-l10n.dl_error_problem_text				= "Problem: ";
-l10n.dl_error_solution_text				= "Solution: ";
-l10n.dl_error_aoo_text					= "Apache OpenOffice ";
-l10n.dl_error_not_available_for_text	= " is not available for ";
+l10n.dl_error_problem_text			= "Problem: ";
+l10n.dl_error_solution_text			= "Solution: ";
+l10n.dl_error_aoo_text				= "Apache OpenOffice ";
+l10n.dl_error_not_available_for_text		= " is not available for ";
 l10n.dl_error_please_select_1_text		= "Please select version 4.0.1.";
 l10n.dl_error_please_select_2_text		= "Please select version 4.1.0 or newer.";
 l10n.dl_error_please_select_3_text		= "Please select a download for Windows, macOS (OS&nbsp;X) or Linux.";
@@ -365,9 +366,9 @@ l10n.dl_rel_notes_aoo411_link			= "https://cwiki.apache.org/confluence/display/O
 l10n.dl_rel_notes_aoo410_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1+Release+Notes";
 l10n.dl_rel_notes_aoo401_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0.1+Release+Notes";
 l10n.dl_rel_notes_aoo400_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0+Release+Notes";
-l10n.dl_help_link						= "https://www.openoffice.org/download/full_vs_lp.html";
-l10n.dl_checksum_link					= "https://www.openoffice.org/download/checksums.html";
-l10n.dl_report_link						= "https://www.openoffice.org/download/analyze.html";
-l10n.dl_porting_link					= "https://www.openoffice.org/porting/index.html";
-l10n.dl_archive_link					= "https://www.openoffice.org/download/archive.html";
-l10n.dl_aoo341_link						= "https://www.openoffice.org/download/archive.html";
+l10n.dl_help_link				= "https://www.openoffice.org/download/full_vs_lp.html";
+l10n.dl_checksum_link				= "https://www.openoffice.org/download/checksums.html";
+l10n.dl_report_link				= "https://www.openoffice.org/download/analyze.html";
+l10n.dl_porting_link				= "https://www.openoffice.org/porting/index.html";
+l10n.dl_archive_link				= "https://www.openoffice.org/download/archive.html";
+l10n.dl_aoo341_link				= "https://www.openoffice.org/download/archive.html";
