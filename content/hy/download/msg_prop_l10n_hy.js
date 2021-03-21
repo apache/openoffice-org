@@ -10,7 +10,7 @@
 
 
 // Object that contains all following variables.
-var l10n = new Object();
+//var l10n = new Object();
 
 // The following variables are used in the "index.html" file:
 
@@ -96,20 +96,9 @@ l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",		"Asturian",						"As
 													"vi",		"Vietnamese",					"Tiếng Việt" ];
 
 // l10n.dl_green_box_select_box_version_values	= [ "" ];
-l10n.dl_green_box_select_box_version_values	= [ "4.1.9",
-												"4.1.8",
-												"4.1.7",
-												"4.1.6",
-												"4.1.5",
-												"4.1.4",
-												"4.1.3",
-												"4.1.2",
-												"4.1.1",
-												"4.1.0",
-												"4.0.1",
-												"4.0.0",
-												"3.4.1",
-												"Older releases" ];
+l10n.dl_green_box_select_box_version_values	= [ "" ];
+
+l10n.dl_green_box_select_box_version_older	= "Older releases";
 
 // Download: Strings in the sub-green box (used in "index.html").
 // Not defined for now.
