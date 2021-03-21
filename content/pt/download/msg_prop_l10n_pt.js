@@ -238,7 +238,7 @@ l10n.dl_langpack_link_text		= "Transferir pacote de idioma";
 l10n.dl_langpack_link_title		= "Clique para transferir: ";
 l10n.dl_win_info_text			= "Important hint: 32-bit, 64-bit and Java - What to choose?";
 l10n.dl_win_info_title			= "At the moment we offer a 32-bit (x86) version for Windows. However, it installs and runs also on Windows 64-bit (x86-64).\nPlease note that you may need Java in 32-bit for additional functionality which must then be selected only once (see menu 'Tools - Options - OpenOffice - Java').\n\nFor more information about OpenOffice and Java please see the link on the right 'Java and Apache OpenOffice'.";
-l10n.dl_linux_info_text			= "Important hint: RPM vs. DEB = O que escolher?";
+l10n.dl_linux_info_text			= "Important hint: RPM vs. DEB - O que escolher?";
 l10n.dl_linux_info_title		= "RPM é usado em:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB é usado em:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
 //l10n.dl_mac_info_text			= "macOS : Text";
 //l10n.dl_mac_info_title		= "macOS : Title";
