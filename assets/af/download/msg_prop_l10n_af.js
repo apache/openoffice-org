@@ -10,7 +10,7 @@
 
 
 // Object that contains all following variables.
-var l10n = new Object();
+//var l10n = new Object();
 
 // The following variables are used in the "index.html" file:
 
