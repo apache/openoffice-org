@@ -10,7 +10,7 @@
 
 
 // Object that contains all following variables.
-var l10n = new Object();
+//var l10n = new Object();
 
 // The following variables are used in the "index.html" file:
 
@@ -91,20 +91,9 @@ l10n.dl_green_box_select_box_lang_values_custom = [ "de",	"Almanca",				"Deutsch
 						    "el",	"Yunanca",				"ελληνικά" ];
 
 /* l10n.dl_green_box_select_box_version_values	= [ "" ]; */
-l10n.dl_green_box_select_box_version_values	= [ "4.1.9",
-												"4.1.8",
-												"4.1.7",
-												"4.1.6",
-												"4.1.5",
-												"4.1.4",
-												"4.1.3",
-												"4.1.2",
-												"4.1.1",
-												"4.1.0",
-												"4.0.1",
-												"4.0.0",
-												"3.4.1",
-												"Eski yayımlar" ];
+l10n.dl_green_box_select_box_version_values	= [ "" ];
+
+l10n.dl_green_box_select_box_version_older	= "Eski yayımlar";
 
 // Download: Strings in the sub-green box (used in "index.html").
 // Not defined for now.
@@ -243,7 +232,7 @@ l10n.dl_langpack_link_text			= "Dil paketini indir";
 l10n.dl_langpack_link_title			= "Şunu indirmek için tıklayın: ";
 l10n.dl_win_info_text				= "Important hint: 32-bit, 64-bit and Java - What to choose?";
 l10n.dl_win_info_title				= "At the moment we offer a 32-bit (x86) version for Windows. However, it installs and runs also on Windows 64-bit (x86-64).\nPlease note that you may need Java in 32-bit for additional functionality which must then be selected only once (see menu 'Tools - Options - OpenOffice - Java').\n\nFor more information about OpenOffice and Java please see the link on the right 'Java and Apache OpenOffice'.";
-l10n.dl_linux_info_text				= "Important hint: RPM vs. DEB = What to choose?";
+l10n.dl_linux_info_text				= "Important hint: RPM vs. DEB - What to choose?";
 l10n.dl_linux_info_title			= "RPM is used in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB is used in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
 //l10n.dl_mac_info_text				= "macOS : Text";
 //l10n.dl_mac_info_title			= "macOS : Title";

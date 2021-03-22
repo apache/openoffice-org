@@ -332,9 +332,20 @@ DL.fillVersionSelection = function() {
 		selection.appendChild( option );
 	}
 
+	if( l10n.dl_green_box_select_box_version_older ) {
+		// Add the translated item "Older releases" as last item into the select box.
+		option       = document.createElement( "option" );
+		// Assign the text as index value.
+		option.value = "older";
+		// Assign the UI text.
+		option.text  = l10n.dl_green_box_select_box_version_older;
+		// Add the new option to the already existing ones.
+		selection.appendChild( option );
+	}
+
 	// Check if the option names are localized. 
 	// If the first string in the array element is larger than 0, assume all are localized and should be used.
-	if ( l10n.dl_green_box_select_box_version_values[ 0 ].length > 0 ) {
+	if( l10n.dl_green_box_select_box_version_values[ 0 ].length > 0 ) {
 		// Search through the localized names.
 		for( i = 0, j = l10n.dl_green_box_select_box_version_values.length; i < j; i++ ) {
 			// Exchange the version name with the localized one.
@@ -508,6 +519,11 @@ DL.getVersionSelection = function() {
 	// Search through the <select> element until the chosen version is found.
 	for( var i = 0, j = DL.SEL_VER.length; i < j; i = i + 2 ) {
 		if( DL.SEL_VER[ i ] === version_value ) {
+			DL.VERSION_SEL = version_value;
+			break;
+		}
+
+		if( version_value === "older" ) {
 			DL.VERSION_SEL = version_value;
 			break;
 		}

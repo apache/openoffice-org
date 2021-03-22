@@ -10,7 +10,7 @@
 
 
 // Object that contains all following variables.
-var l10n = new Object();
+//var l10n = new Object();
 
 // The following variables are used in the "index.html" file:
 
@@ -91,20 +91,9 @@ l10n.dl_green_box_select_box_lang_values_custom = [ "ast",		"Asturisch",				"Ast
 													"sv",		"Zweeds",					"Svenska" ];
 
 /* l10n.dl_green_box_select_box_version_values	= [ "" ]; */
-l10n.dl_green_box_select_box_version_values	= [ "4.1.9",
-												"4.1.8",
-												"4.1.7",
-												"4.1.6",
-												"4.1.5",
-												"4.1.4",
-												"4.1.3",
-												"4.1.2",
-												"4.1.1",
-												"4.1.0",
-												"4.0.1",
-												"4.0.0",
-												"3.4.1",
-												"Oudere uitgaven" ];
+l10n.dl_green_box_select_box_version_values	= [ "" ];
+
+l10n.dl_green_box_select_box_version_older	= "Oudere uitgaven";
 
 // Download: Strings in the sub-green box (used in "index.html").
 // Not defined for now.
@@ -243,7 +232,7 @@ l10n.dl_langpack_link_text			= "Download taalpakket";
 l10n.dl_langpack_link_title			= "Klik hier om te downloaden: ";
 l10n.dl_win_info_text				= "Belangrijke hint: 32-bit, 64-bit en Java - Wat te kiezen?";
 l10n.dl_win_info_title				= "Momenteel bieden we een 32-bit (x86) versie aan voor Windows. Die kan echter ook worden geïnstalleerd en uitgevoerd op Windows 64-bit (x86-64).\nOnthoud dat u misschien Java in 32-bit nodig hebt voor aanvullende functionaliteiten die dan slechts eenmalig gekozen moet worden (in menu 'Extra - Opties - OpenOffice - Java').\n\nBekijk voor meer informatie over OpenOffice en Java de link aan de rechterkant 'Java en Apache OpenOffice'.";
-l10n.dl_linux_info_text				= "Belangrijke hint: RPM vs. DEB = Wat te kiezen?";
+l10n.dl_linux_info_text				= "Belangrijke hint: RPM vs. DEB - Wat te kiezen?";
 l10n.dl_linux_info_title			= "RPM wordt gebruikt in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB wordt gebruikt in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
 //l10n.dl_mac_info_text				= "macOS : Text";
 //l10n.dl_mac_info_title			= "macOS : Title";

@@ -29,76 +29,75 @@ if ( DL.VERSION.slice( 4, 5 ) === "0" )
 	DL.VERSION_SHORT = DL.VERSION.substring( 0, 3 );
 
 // Data for the <select> element "os".
-				    // Value  Visible text				Not used for the options
-DL.SEL_OS			= [ "win32",  "Windows 32-bit (x86) (EXE)",	    	".exe",
-				    "lnx64d", "Linux 64-bit (x86-64) (DEB)",	    	".tar.gz",
-				    "lnx64r", "Linux 64-bit (x86-64) (RPM)",	    	".tar.gz",
-				    "lnx32d", "Linux 32-bit (x86) (DEB)",	    	".tar.gz",
-				    "lnx32r", "Linux 32-bit (x86) (RPM)",	    	".tar.gz",
-				    "mac64",  "OS X (version >= 10.7) (DMG)",	    	".dmg",
-				    "mac32",  "OS X (version <= 10.6) (DMG)",	    	".dmg",
-				    "other",  "More platforms / operating systems",	"" ];
+//				    Value	Visible text				Not used for the options
+DL.SEL_OS			= [ "win32",	"Windows 32-bit (x86) (EXE)",	    	".exe",
+				    "lnx64d",	"Linux 64-bit (x86-64) (DEB)",	    	".tar.gz",
+				    "lnx64r",	"Linux 64-bit (x86-64) (RPM)",	    	".tar.gz",
+				    "lnx32d",	"Linux 32-bit (x86) (DEB)",	    	".tar.gz",
+				    "lnx32r",	"Linux 32-bit (x86) (RPM)",	    	".tar.gz",
+				    "mac64",	"OS X (version >= 10.7) (DMG)",	    	".dmg",
+				    "mac32",	"OS X (version <= 10.6) (DMG)",	    	".dmg",
+				    "other",	"More platforms / operating systems",	"" ];
 
 // Data for the <select> element "lang".
-				    // Value  Visible text				Tool tip
-DL.SEL_LANG			= [ "ast",    "Asturian",				"Asturianu",
-				    "eu",     "Basque",					"Euskara",
-				    "bg",     "Bulgarian",				"български език",
-				    "ca",     "Catalan",				"Català",
-				    "ca-XV",  "Catalan [Valencia AVL]",			"València (AVL)",
-				    "ca-XR",  "Catalan [Valencia RACV]",		"València (RACV)",
-				    "zh-CN",  "Chinese [simplified]",			"简体中文",
-				    "zh-TW",  "Chinese [traditional]",			"正體中文",
-				    "cs",     "Czech",					"Čeština",
-				    "da",     "Danish",					"Dansk",
-				    "nl",     "Dutch",					"Nederlands",
-				    "en-GB",  "English [British]",			"English [British]",
-				    "en-US",  "English [US]",				"English [US]",
-				    "fi",     "Finnish",				"Suomi",
-				    "fr",     "French",					"Français",
-				    "gl",     "Galician",				"Galego",
-				    "de",     "German",					"Deutsch",
-				    "el",     "Greek",					"ελληνικά",
-				    "he",     "Hebrew",					"עברית",
-				    "hi",     "Hindi",					"हिन्दी",
-				    "hu",     "Hungarian",				"Magyar",
-				    "it",     "Italian",				"Italiano",
-				    "ja",     "Japanese",				"日本語",
-				    "km",     "Khmer",					"ភាសាខ្មែរ",
-				    "ko",     "Korean",					"한국어",
-				    "lt",     "Lithuanian",				"Lietuvių",
-				    "nb",     "Norwegian [Bokmal]",			"Norsk [Bokmål]",
-				    "pl",     "Polish",					"Polski",
-				    "pt-BR",  "Portuguese [Brazilian]",			"Português [do Brasil]",
-				    "pt",     "Portuguese [European]",			"Português [Europeu]",
-				    "ru",     "Russian",				"Русский",
-				    "gd",     "Scottish [Gaelic]",			"Gàidhlig",
-				    "sr",     "Serbian [Cyrillic]",			"Cрпски [ћирилицом]",
-				    "sk",     "Slovak",					"Slovenský jazyk [slovenčina]",
-				    "sl",     "Slovenian",				"Slovenski jezik [slovenščina]",
-				    "es",     "Spanish",				"Español",
-				    "sv",     "Swedish",				"Svenska",
-				    "ta",     "Tamil",					"தமிழ்",
-				    "th",     "Thai",					"ภาษาไทย",
-				    "tr",     "Turkish",				"Türkçe",
-				    "vi",     "Vietnamese",				"Tiếng Việt" ];
+//				    Value	Visible text				Tool tip
+DL.SEL_LANG			= [ "ast",	"Asturian",				"Asturianu",
+				    "eu",	"Basque",				"Euskara",
+				    "bg",	"Bulgarian",				"български език",
+				    "ca",	"Catalan",				"Català",
+				    "ca-XV",	"Catalan [Valencia AVL]",		"València (AVL)",
+				    "ca-XR",	"Catalan [Valencia RACV]",		"València (RACV)",
+				    "zh-CN",	"Chinese [simplified]",			"简体中文",
+				    "zh-TW",	"Chinese [traditional]",		"正體中文",
+				    "cs",	"Czech",				"Čeština",
+				    "da",	"Danish",				"Dansk",
+				    "nl",	"Dutch",				"Nederlands",
+				    "en-GB",	"English [British]",			"English [British]",
+				    "en-US",	"English [US]",				"English [US]",
+				    "fi",	"Finnish",				"Suomi",
+				    "fr",	"French",				"Français",
+				    "gl",	"Galician",				"Galego",
+				    "de",	"German",				"Deutsch",
+				    "el",	"Greek",				"ελληνικά",
+				    "he",	"Hebrew",				"עברית",
+				    "hi",	"Hindi",				"हिन्दी",
+				    "hu",	"Hungarian",				"Magyar",
+				    "it",	"Italian",				"Italiano",
+				    "ja",	"Japanese",				"日本語",
+				    "km",	"Khmer",				"ភាសាខ្មែរ",
+				    "ko",	"Korean",				"한국어",
+				    "lt",	"Lithuanian",				"Lietuvių",
+				    "nb",	"Norwegian [Bokmal]",			"Norsk [Bokmål]",
+				    "pl",	"Polish",				"Polski",
+				    "pt-BR",	"Portuguese [Brazilian]",		"Português [do Brasil]",
+				    "pt",	"Portuguese [European]",		"Português [Europeu]",
+				    "ru",	"Russian",				"Русский",
+				    "gd",	"Scottish [Gaelic]",			"Gàidhlig",
+				    "sr",	"Serbian [Cyrillic]",			"Cрпски [ћирилицом]",
+				    "sk",	"Slovak",				"Slovenský jazyk [slovenčina]",
+				    "sl",	"Slovenian",				"Slovenski jezik [slovenščina]",
+				    "es",	"Spanish",				"Español",
+				    "sv",	"Swedish",				"Svenska",
+				    "ta",	"Tamil",				"தமிழ்",
+				    "th",	"Thai",					"ภาษาไทย",
+				    "tr",	"Turkish",				"Türkçe",
+				    "vi",	"Vietnamese",				"Tiếng Việt" ];
 
 // Data for the <select> element "ver".
-				    // Value  Visible text
-DL.SEL_VER			= [ "4.1.9",  "4.1.9",
-				    "4.1.8",  "4.1.8",
-				    "4.1.7",  "4.1.7",
-				    "4.1.6",  "4.1.6",
-				    "4.1.5",  "4.1.5",
-				    "4.1.4",  "4.1.4",
-				    "4.1.3",  "4.1.3",
-				    "4.1.2",  "4.1.2",
-				    "4.1.1",  "4.1.1",
-				    "4.1.0",  "4.1.0",
-				    "4.0.1",  "4.0.1",
-				    "4.0.0",  "4.0.0",
-				    "3.4.1",  "3.4.1",
-				    "older",  "Older releases" ];
+//				    Value  Visible text
+DL.SEL_VER			= [ "4.1.9",	"4.1.9",
+				    "4.1.8",	"4.1.8",
+				    "4.1.7",	"4.1.7",
+				    "4.1.6",	"4.1.6",
+				    "4.1.5",	"4.1.5",
+				    "4.1.4",	"4.1.4",
+				    "4.1.3",	"4.1.3",
+				    "4.1.2",	"4.1.2",
+				    "4.1.1",	"4.1.1",
+				    "4.1.0",	"4.1.0",
+				    "4.0.1",	"4.0.1",
+				    "4.0.0",	"4.0.0",
+				    "3.4.1",	"3.4.1" ];
 
 // Base URLs to the Sourceforge and Apache mirror server.
 DL.SF				= "https://sourceforge.net/projects/openofficeorg.mirror/files/";
@@ -154,7 +153,7 @@ DL_BETA.ASF			= "https://www.apache.org/dyn/aoo-closer.cgi/openoffice/"		   + DL
 DL_BETA.ASF_DIST		= "https://downloads.apache.org/openoffice/"				   + DL_BETA.VERSION;
 DL_BETA.ASF_ARC			= "https://archive.apache.org/dist/openoffice/"				   + DL_BETA.VERSION;
 
-// Debug: Uncomment to use different base URLs.
+// For debugging: Uncomment to use different base URLs.
 // var DL.PEOPLE_BASE_URL	= "http://people.apache.org/~marcus/aoo/"				   + DL.VERSION;
 
 DL.RELEASE_MODE			= 1;
@@ -173,4 +172,3 @@ DL.SHOW_SUB_BOX			= true;
 DL.ERROR			= false;
 DL.ID_SUB_BOX			= "";
 DL.ID_LINKS			= "";
-
