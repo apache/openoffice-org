@@ -52,7 +52,7 @@ l10n.dl_green_box_select_box_os_values		= [ "Windows (EXE)",
 l10n.dl_green_box_select_box_language_values	= [ "" ];
 
 // l10n.dl_green_box_select_box_lang_values_custom = [ "" ];
-						    // Value	Visible text				Tool tip
+//						    Value	Visible text				Tool tip
 l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",	"Asturian",				"Asturianu",
 						    "eu",	"Basque",				"Euskara",
 						    "bg",	"Bulgarian",				"български език",
@@ -347,6 +347,8 @@ l10n.dl_analyze_copy_button_text		= "Copy with [Ctrl]+[C] / [&#8984;]+[C]";
 l10n.dl_analyze_copy_button_title		= "Copy the selected table data via [ Ctrl ] + [ C ] or [ &#8984; ] + [ C ] into the clipboard";
 
 // Analyze: Strings for the table (used in "analyze.html").
+l10n.dl_analyze_table_problem_text1		= "Problem description";
+l10n.dl_analyze_table_problem_text2		= "Exchange this text to describe the problem <br /><br />(What does not work? What do you expect?)";
 l10n.dl_analyze_table_browser_text		= "Browser variables";
 l10n.dl_analyze_table_values_text		= "Values";
 l10n.dl_analyze_table_yes_text			= "Yes";
