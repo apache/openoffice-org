@@ -1,0 +1,466 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    
+<title>Suomenkielinen OpenOffice.org</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="version" content="0.1" />
+
+<!-- Begin Finnish header -->
+<style type="text/css" media="screen, projection">
+/*<![CDATA[*/
+<!--
+  @import url(css/fi.css);
+-->
+/*]]>*/
+</style>
+<!-- End Finnish header -->
+
+    
+    <script src="https://www.apachecon.com/event-images/snippet.js"></script>
+    <!--#include virtual="/scripts/google-analytics.js" --> 
+    <!--#include virtual="/scripts/entourage.js" -->
+  </head>
+  <body>
+    <!--#include virtual="/fi/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/fi/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/fi/">fi</a>&nbsp;&raquo;&nbsp;<a href="/fi/Archive/">Archive</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<div id="fiheader">
+	<div id="fipositioner">
+		<a id="fiheader-logo" href="http://fi.openoffice.org/" accesskey="1" title="Suomenkieliselle OpenOffice.org-kotisivulle"></a>
+		<h1 id="fipositioner-text">Vapaa ja avoin toimisto-ohjelmisto</h1>
+
+	</div>
+</div>
+<table id="fibody">
+ <tr>
+  <td>
+   <table width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+     <td></td>
+     <td colspan="2">
+      <table cellpadding="5">
+       <tr valign="top">
+        <td>
+        
+<!-- Begin Finnish navbar -->
+         <div class="fiLeftMenu">
+          <div class="toolgroup">
+           <div class="label"><strong>OpenOffice.org&nbsp;suomeksi</strong></div>
+           <ul>  
+            <li><a href="index.html">Pääsivu</a></li>
+            <li><a href="lataa.html">Lataa</a></li>
+            <li><a href="tuote.html">Ohjelmiston&nbsp;kuvaus</a></li>
+            <li><a href="sivukartta.html">Sivukartta</a></li>
+           </ul>
+          </div>
+          
+          <div class="toolgroup">
+           <div class="label"><strong>Ohjeita</strong></div>
+           <ul>
+            <li><a href="tuki.html">Käyttäjätuki</a></li>
+            <li><a href="vastauksia.html">Vastauksia kysymyksiin</a></li>
+            <li><a href="dokumentaatio.html">Käyttöoppaat</a></li>
+            <li><a href="kielityokalut.html">Tavutus ja oikoluku</a></li>
+            <li><a href="mallit.html">Asiakirjamalleja</a></li>
+           </ul>
+          </div>
+          
+          <div class="toolgroup">
+           <div class="label"><strong>Suomennosprojekti</strong></div>
+           <ul>
+            <li><a href="http://fi.openoffice.org/servlets/ProjectNewsList">Tiedotteet</a></li>
+            <li><a href="postituslistat.html">Postituslistat</a>
+             (<a href="http://fi.openoffice.org/servlets/ProjectMailingListList">engl</a>)
+            </li>
+            <li><a href="todo.html">Tehtäviä</a></li>
+            <li><a href="issuezilla.html">Viat ja toiveet</a>
+             (<a href="http://fi.openoffice.org/servlets/ProjectIssues">engl</a>)
+            </li>
+            <li><a href="yhteystiedot.html">Yhteystiedot</a></li>
+           </ul>
+          </div> 
+         </div>
+<!-- End Finnish navbar -->
+        </td>
+        <td class="pagecontent">
+<!-- END-FINNISH-HEADER-PART -->
+        
+<!-- ====================================================================== -->
+<font size="-1"><a href="xml.html">XML-asiakirjat</a> » Esimerkki 2: syöttökenttien kerääminen</font><br/>
+
+<h1>Esimerkki 2: lomakkeen syöttökenttien kerääminen</h1>
+
+<p>Syöttökentät ovat eräs tapa toteuttaa lomakkeita. Tässä
+yksinkertaisessa esimerkissä kerätään OpenDocument-muotoisesta
+tekstiasiakirjasta kaikkien syöttökenttien sisältämät tiedot ja
+tulostetaan ne HTML-muodossa.</p>
+
+<p>Ohjelma kerää syöttökentät mistä tahansa tiedostosta, ei vain
+lomakkeesta. Alempana <a href="#word">toinen esimerkki</a> kenttien
+keräämisestä aidosta <a
+href="http://lomake.fi/">lomake.fi</a>-palvelun tarjoamasta Microsoft
+Word -lomakkeesta.</p>
+
+<p>Oletetaan, että käyttäjä on täyttänyt <a href="esimerkit/lomake1.odt">tyhjän
+lomakkeen</a> ja saanut aikaiseksi <a href="esimerkit/lomake1_taytetty.odt">täytetyn
+lomakkeen</a>.</p>
+
+<div align="center"><img src="kaappaukset/kaappaus_lomake1_taytetty.png"></div>
+
+<p>Lomakkeessa on syöttökenttiä, jotka on nimetty <tt>k_sukunimi</tt>,
+<tt>k_etunimet</tt>, ja niin edelleen.</p>
+
+<p>XSLT-ohjelma (eli muunnin tai "tyylisivu") on
+seuraavanlainen. Alussa on nimialueiden määrittelyjen vakio-osa, jonka
+jälkeen tulee tulosmuodon määrittely (HTML) ja lopulta kolme
+muunnossääntöä.</p>
+
+<pre style="font-size: 70%; background-color: #f0f0f0; margin-left: 20px; margin-right: 20px;">
+&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+
+&lt;!-- ======================================================================== --&gt;
+&lt;!-- OpenDocument-formaatin nimiavaruusmäärittelyt                            --&gt;
+&lt;!-- Huomaa, että tähän on otettu mukaan vain ne nimiavaruudet, joita tässä   --&gt;
+&lt;!-- muunnoksessa oikeasti käytetään.                                         --&gt;
+&lt;!-- ======================================================================== --&gt;
+&lt;xsl:stylesheet
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+  office:version="1.0"
+  version="1.0"&gt;
+
+  &lt;!-- Määrätään muunnoksen ulostulomuoto ja merkkikoodaus. --&gt;
+  &lt;xsl:output method="html" encoding="ISO-8859-1"/&gt;
+
+  &lt;!-- ======================================================================== --&gt;
+  &lt;!-- Lue syöttökentän tiedot ja muotoile ne taulukon riviksi                  --&gt;
+  &lt;!-- ======================================================================== --&gt;
+  &lt;xsl:template match="text:text-input"&gt;
+    &lt;xsl:if test="normalize-space(.) != ''"&gt;
+      &lt;tr&gt;
+        &lt;td&gt;&lt;xsl:value-of select="normalize-space(@text:description)"/&gt;:&lt;/td&gt;
+        &lt;td&gt;&lt;xsl:value-of select="normalize-space(.)"/&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/xsl:if&gt;
+  &lt;/xsl:template&gt;
+
+  &lt;!-- ======================================================================== --&gt;
+  &lt;!-- Juurisolmu                                                               --&gt;
+  &lt;!-- ======================================================================== --&gt;
+   &lt;xsl:template match="/"&gt;
+     &lt;body&gt;
+       &lt;h2&gt;Lomakeraportti&lt;/h2&gt;
+       &lt;p&gt;Generoitu täytetyn lomakkeen sisältävästä OASIS OpenDocument -tekstiasiakirjasta.&lt;/p&gt;
+
+       &lt;table&gt;
+         &lt;tr&gt;&lt;th&gt;Tekstikenttä&lt;/th&gt;&lt;th&gt;Täytetty arvo&lt;/th&gt;&lt;/tr&gt;
+         &lt;xsl:apply-templates/&gt;
+       &lt;/table&gt;
+     &lt;/body&gt;
+   &lt;/xsl:template&gt;
+
+  &lt;!-- ======================================================================== --&gt;
+  &lt;!-- Karsitaan pois kaikki muut tekstit                                       --&gt;
+  &lt;!-- ======================================================================== --&gt;
+   &lt;xsl:template match="text()"&gt;
+   &lt;/xsl:template&gt;
+
+&lt;/xsl:stylesheet&gt;
+</pre>
+
+<h3>XSLT-muunnoksen tekeminen asiakirjalle</h3>
+
+<p>XSLT-ohjelman voi asentaa OpenOffice.orgiin vientisuodattimeksi,
+kuten on kuvattu alempana. Sitä voi kuitenkin käyttää myös
+OpenOffice.orgin ulkopuolella. Esimerkiksi Linuxissa sitä käytetään
+komentoriviltä seuraavasti. Puretaan asiakirjasta ensin sen sisältö ja
+sen jälkeen ajetaan nimellä <tt>lomake-tekstiksi.xsl</tt> tallennettu
+XSLT-ohjelma.</p>
+
+<pre style="background-color: #f0f0f0; margin-left: 20px; margin-right: 20px;">
+$ unzip lomake1.odt content.xml
+$ xsltproc lomake-tekstiksi.xsl content.xml
+</pre>
+
+<p>Tällöin saadaan seuraava HTML-muotoinen tulostus:</p>
+
+<pre style="font-size: 70%; background-color: #f0f0f0; margin-left: 20px; margin-right: 20px;">
+&lt;body <i>...nimiavaruusmäärittelyjä...</i>&gt;
+&lt;h2&gt;Lomakeraportti&lt;/h2&gt;
+&lt;p&gt;Generoitu täytetyn lomakkeen sisältävästä OASIS OpenDocument -tekstiasiakirjasta.&lt;/p&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&lt;th align="left"&gt;Tekstikenttä&lt;/th&gt;
+&lt;th align="left"&gt;Täytetty arvo&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;k_sukunimi:&lt;/td&gt;
+&lt;td&gt;Suuri&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;k_etunimet:&lt;/td&gt;
+&lt;td&gt;Aleksanteri&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;k_ammatti:&lt;/td&gt;
+&lt;td&gt;valloittaja&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;k_syntymaaika:&lt;/td&gt;
+&lt;td&gt;1.4.-390&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+</pre>
+
+<p>Joka siis näyttää tältä:</p>
+
+<div style="background-color: #e0e0ff; margin-left: 20px; margin-right: 20px;">
+<h2>Lomakeraportti</h2>
+<p>Generoitu täytetyn lomakkeen sisältävästä OASIS OpenDocument -tekstiasiakirjasta.</p>
+<table>
+<tr>
+<th align="left">Tekstikenttä</th>
+<th align="left">Täytetty arvo</th>
+</tr>
+<tr>
+<td>k_sukunimi:</td>
+<td>Suuri</td>
+</tr>
+<tr>
+<td>k_etunimet:</td>
+<td>Aleksanteri</td>
+</tr>
+<tr>
+<td>k_ammatti:</td>
+<td>valloittaja</td>
+</tr>
+<tr>
+<td>k_syntymaaika:</td>
+<td>1.4.-390</td>
+</tr>
+</table>
+</div>
+
+<h2><a name="word">Syöttökenttien kerääminen Word-asiakirjasta</a></h2>
+
+<p>Jotkin julkishallinnon lomakkeet ovat edelleen
+Word-muodossa. Esimerkiksi <a href="http://lomake.fi/">lomake.fi</a>
+tarjoaa sellaisia, muttei vielä OpenOffice-muodossa. Näiden
+lomakkeiden sisältö on kuitenkin helppo muuttaa OpenOffice- tai
+OpenDocument-muotoon ja käsitellä yllä määritellyllä suodattimella.</p>
+
+<p>Otetaan vaikkapa <a
+href="https://lomake.fi/lp/index.cgi/search_forms/search?s=QUrZMWHd3dwXzJ1&keyword=yritt%E4jyys">Yrittäjyys</a>-kokoelmasta lomake <a href="https://lomake.fi/lp/index.cgi/log?s=QUrZMWHd3dwXzJ1&lomake_id=2296&url=http%3A%2F%2Fwww.ytj.fi%2Fbinary.asp%3Fpage%3D1281%26file%3Dattachments%5C2004%5C5%5C31151977329218%5Cy3.doc&authority_id=6&type=doc">Yksityinen elinkeinonharjoittaja, perustamisilmoitus</a> (Word). </p>
+
+<div align="center"><img src="kaappaukset/kaappaus_lomake1b_1.png"></div>
+
+
+<p>Muunnetaan se OpenDocument-muotoon lataamalla se OpenOffice.orgiin
+Word-tiedostona ja tallentamalla se uudessa muodossa. Suuri määrä
+Word-asiakirjoja on helposti muunnettavissa .sxw- tai .odt-muotoon
+OpenOffice.orgin <i>asiakirjamuuntimella</i>. Asiakirjamuunnin
+käynnistetään valikosta <b>Tiedosto/Ohjattu
+toiminto/Asiakirjamuunnin</b>.</p>
+
+<div style="background-color: #e0e0ff; margin-left: 20px; margin-right: 20px;">
+<h2>Lomakeraportti</h2>
+<p>Generoitu täytetyn lomakkeen sisältävästä OASIS OpenDocument -tekstiasiakirjasta.</p>
+<table>
+<tr>
+<th align="left">Tekstikenttä</th>
+<th align="left">Täytetty arvo</th>
+</tr>
+<tr>
+<td>Teksti6:</td>
+<td>Munfirma</td>
+</tr>
+<tr>
+<td>Teksti217:</td>
+<td>Joku kiva vaihtoehtonimi</td>
+</tr>
+<tr>
+<td>Teksti218:</td>
+<td>Toinen tosi kiva vaihtoehtoinen nimi</td>
+</tr>
+<tr>
+<td>Teksti250:</td>
+<td>Se kiva kaupunki jossa mä asun</td>
+</tr>
+<tr>
+<td>Teksti6:</td>
+<td>Mycompany</td>
+</tr>
+<tr>
+<td>Teksti241:</td>
+<td>Mycompany</td>
+</tr>
+<tr>
+<td>Teksti243:</td>
+<td>Biznekset ameriikoissa</td>
+</tr>
+<tr>
+<td>Teksti242:</td>
+<td>Blerp</td>
+</tr>
+<tr>
+<td>Teksti244:</td>
+<td>Biznekset ruottissa</td>
+</tr>
+<tr>
+<td>Teksti11:</td>
+<td>Minun yritykseni, Blerp</td>
+</tr>
+<tr>
+<td>Teksti217:</td>
+<td>Risto Reipas</td>
+</tr>
+<tr>
+<td>Teksti216:</td>
+<td>123456-123a</td>
+</tr>
+<tr>
+<td>Teksti239:</td>
+<td>suomi</td>
+</tr>
+<tr>
+<td>Teksti223:</td>
+<td>Kivakuja 42</td>
+</tr>
+<tr>
+<td>:</td>
+<td>1</td>
+</tr>
+<tr>
+<td>:</td>
+<td>2</td>
+</tr>
+<tr>
+<td>:</td>
+<td>3</td>
+</tr>
+<tr>
+<td>:</td>
+<td>4</td>
+</tr>
+<tr>
+<td>:</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Teksti224:</td>
+<td>KAUPUNKILA</td>
+</tr>
+<tr>
+<td>Teksti15:</td>
+<td>Käymälä 3</td>
+</tr>
+<tr>
+<td>Teksti16:</td>
+<td>12345</td>
+</tr>
+<tr>
+<td>Teksti17:</td>
+<td>KYLÄLÄ</td>
+</tr>
+<tr>
+<td>Teksti18:</td>
+<td>09-123456</td>
+</tr>
+<tr>
+<td>Teksti219:</td>
+<td>555-12643</td>
+</tr>
+<tr>
+<td>Teksti220:</td>
+<td>555-67375</td>
+</tr>
+<tr>
+<td>Teksti22:</td>
+<td>mie@jossain.fi</td>
+</tr>
+<tr>
+<td>Teksti222:</td>
+<td>http://kotskasivu.fi/</td>
+</tr>
+<tr>
+<td>Teksti225:</td>
+<td>1.1.-31.12</td>
+</tr>
+<tr>
+<td>Teksti226:</td>
+<td>1.1.2005-31.12.2005</td>
+</tr>
+<tr>
+<td>Teksti31:</td>
+<td>Ei kukkaa</td>
+</tr>
+<tr>
+<td>Teksti32:</td>
+<td>2783483264783264</td>
+</tr>
+<tr>
+<td>Teksti33:</td>
+<td>Osoitekuja 88</td>
+</tr>
+<tr>
+<td>Teksti34:</td>
+<td>12345</td>
+</tr>
+<tr>
+<td>Teksti35:</td>
+<td>PAIKKALA</td>
+</tr>
+<tr>
+<td>Teksti225:</td>
+<td>Semmosii bizniksii, tiätsä</td>
+</tr>
+<tr>
+<td>Teksti245:</td>
+<td>Ju nou, juttui</td>
+</tr>
+<tr>
+<td>Teksti248:</td>
+<td>Tahan tuottaminen</td>
+</tr>
+<tr>
+<td>Teksti228:</td>
+<td>ei</td>
+</tr>
+</table>
+</div>
+
+<p>(Lomakkeesta oli suurin osa kentistä jätetty täyttämättä.)</p>
+
+<p style="margin-top: 5em;">Marko Grönroos<br>magi42@openoffice.org</p>
+
+<!-- ====================================================================== -->
+        </td>
+       </tr>
+      </table>
+     </td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+</table>
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

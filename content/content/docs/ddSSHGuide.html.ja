@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+<style type="text/css">
+/* <![CDATA[ */ @import "/branding/css/tigris.css"; /* ]]> */
+</style>
+  <script src="/branding/scripts/sc.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="/branding/css/print.css" media="print" />
+
+  <title>Tunneling with SSH</title>
+ </head>
+
+ <body class="docs" onload="self.focus()">
+  
+<div class="docs" id="ddsshguide">
+   
+  <h2>SSH を用いたトンネリング</h2>
+
+   <div id="toc">
+    <ul>
+      <li><strong><a href="/nonav/servlets/HelpTOC">ヘルプ索引</a></strong></li>
+    </ul>
+
+    <ul>
+      <li>
+      このガイドについて 
+
+        <ul>
+          <li><a href="/nonav/docs/ddSSHGuide.html#aboutssh">SSH について</a></li>
+          <li><a href="/nonav/docs/ddSSHGuide.html#furtherdocumentation">詳細なドキュメンテーション</a></li>
+        </ul>
+      </li>
+      <li><a href="/nonav/docs/ddSSHGuideConcepts.html">コンセプト</a></li>
+      <li><a href="/nonav/docs/ddSSHGuideTerminals.html">デスクトップ端末の選択</a></li>
+      <li>
+      <a href="/nonav/docs/ddSSHGuideTerminals.html">デスクトップ端末の利用</a> 
+
+        <ul>
+          <li><a href="/nonav/docs/ddSSHGuideTerminals.html#macs">Macintosh</a></li>
+          <li><a href="/nonav/docs/ddSSHGuideTerminals.html#windows">Windows</a></li>
+          <li><a href="/nonav/docs/ddSSHGuideTerminals.html#othersshclients">他の SSH クライアント</a></li>
+        </ul>
+      </li>
+      <li><a href="/nonav/docs/ddSSHGuideCygwin.html">Cygwin によるトンネリング (デスクトップの UNIX エミュ
+        レータ)</a></li>
+      <li><a href="/nonav/docs/ddSSHGuideterminating.html">トンネリングの終了</a></li>
+    </ul>
+   </div>
+
+   <h3><a id="thisguide" name="thisguide">このガイドについて</a></h3>
+
+   
+  <h4>このガイドの内容</h4>
+
+   
+  <p>このガイドでは、SSH (セキュア・シェル) を使ってユーザが希望するサ
+   ーバにトンネリングする方法について説明します。 このガイドは、複数
+   の異なるな要素に分かれています。 前後のセクションを参照しなくて
+   も、質問に最も適したセクションにジャンプすることができます。 この
+   ヘルプに記載されていない項目に関する質問については、下のリストにあ
+   るリソースを利用してみてください。</p>
+
+   
+  <h4>このガイドに含まれていない内容</h4>
+
+   
+  <p>このガイドは、CVS を使用するためのトンネルの設定方法について説明
+   しています。CVS の使い方は記載されていません。 ただし、トンネルを
+   確立した後に CVS で使用するコマンドの短い説明がこのガイドの終わり
+   に追加されています。</p>
+
+   <h3><a id="aboutssh" name="aboutssh">SSH について</a></h3>
+
+   
+  <p>SSH は、Telnet や rlogin の代わりになる柔軟でよりセキュアなプロ
+   トコルです。 アクセス制御とデータ転送のセキュリティを提供するため
+   に、開発プロジェクトでは幅広く使用されています。 SSH は、CVS (バ
+   ージョン管理・システム) サーバへの、目立たない透明な「ポート・ト
+   ンネル」を作成するために使用することができます。 トンネルを介して
+   転送されるデータは暗号化されますが、この処理はユーザまたは CVS リ
+   ポジトリにアクセスするために使用しているクライアント・ソフトウェア
+   には表示されません。 簡単に使用でき非常にセキュアであるため、CVS
+   リポジトリへのアクセスには、SSH の使用をお勧めします。.</p>
+
+   
+  <p>SSH を使用しないで CVS リポジトリへアクセスすると、第三者に CVS
+   パスワードを盗用される危険が高くなります。 さらに、他人の CVS パ
+   スワードを使って重大な被害を与えることが可能になります。 たとえ
+   ば、ソース・コードにウイルスを挿入することにより、第三者がプロジェ
+   クトの CVS リポジトリに不正なアクセスを使って侵入することができま
+   す。</p>
+
+   <h3><a id="furtherdocumentation" name="furtherdocumentation">詳細なドキュメンテーション</a></h3>
+
+   
+  <ul>
+    <li><a href="http://openbsd.appli.se/openssh/windows.html">OpenBSD.org</a> には、Windows および Macintosh マシンから
+        OpenSSH で相互運用する無料クライアントのリストが掲載されて
+        います。アドレスは次のとおりです。
+       http://openbsd.appli.se/openssh/windows.html</li>
+    <li><a href="http://www.dreamwvr.com/ssh/ssh-faq.html">Secure Shell</a> (SSH) のよくある質問とその答え:
+       http://www.dreamwvr.com/SSH-faq/</li>
+    <li><a href="http://www.ssh.org/">Secure Shell のコミュニティサイト:</a> 
+      http://www.ssh.org/</li>
+    <li><a href="http://www.openssh.com/">OpenSSH:</a> http://www.openssh.com/</li>
+    <li><a href="http://sources.redhat.com/ml/cygwin/">Cygwin プロジェクトのメーリングリストのアーカイブ</a>: http://sources.redhat.com/ml/cygwin/</li>
+    <li><a href="http://www.ssh.org/">Secure Shell のコミュニティサイト</a>: http://www.ssh.org/</li>
+    <li><a href="http://www.linuxhelp.net/guides/sirplaya/ssh.phtml">Secure Shell (SSH/SSH) のセットアップ (Linux)</a>: http://www.linuxhelp.net/guides/sirplaya/ssh.phtml</li>
+    <li><a href="http://www.SecureMac.com/">Macintosh のセキュリティの課題</a>: http://www.SecureMac.com/</li>
+    <li><a href="http://www.macssh.com/">MacSSH</a> (Mac 用の オープン・ソースSSH1 および 2): http://www.macssh.com/</li>
+    <li><a href="http://www.wincvs.org/ssh.html">WinCVS を使った SSH</a>: http://www.wincvs.org/ssh.html</li>
+  </ul>
+
+   <div class="courtesylinks">
+    <p><a href="#toc">トップ</a> | <a href="/nonav/servlets/HelpTOC">ヘルプ索引</a></p>
+   </div>
+  </div>
+ </body>
+</html>
+
+
