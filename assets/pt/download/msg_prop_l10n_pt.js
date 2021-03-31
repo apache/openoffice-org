@@ -236,17 +236,17 @@ l10n.dl_full_link_text			= "Transferir instalação completa";
 l10n.dl_full_link_title			= "Clique para transferir: ";
 l10n.dl_langpack_link_text		= "Transferir pacote de idioma";
 l10n.dl_langpack_link_title		= "Clique para transferir: ";
-l10n.dl_win_info_text			= "Important hint: 32-bit, 64-bit and Java - What to choose?";
-l10n.dl_win_info_title			= "At the moment we offer a 32-bit (x86) version for Windows. However, it installs and runs also on Windows 64-bit (x86-64).\nPlease note that you may need Java in 32-bit for additional functionality which must then be selected only once (see menu 'Tools - Options - OpenOffice - Java').\n\nFor more information about OpenOffice and Java please see the link on the right 'Java and Apache OpenOffice'.";
-l10n.dl_linux_info_text			= "Important hint: RPM vs. DEB = O que escolher?";
+l10n.dl_win_info_text			= "Sugestão importante: 32-bit, 64-bit e Java - O que escolher?";
+l10n.dl_win_info_title			= "De momento disponibilizamos a versão 32-bit (x86) para Windows. Contudo, esta versão instala e corre também em Windows 64-bit (x86-64).\nPor favor note que pode necessitar do Java em 32-bit para algumas funcionalidades adicionais e este deverá ser seleccionado apenas uma vez (ver menu 'Ferramentas - Opções - OpenOffice - Java').\n\nPara obter mais informação sobre o OpenOffice e Java por favor veja o link à direita 'Java e o Apache OpenOffice'.";
+l10n.dl_linux_info_text			= "Sugestão importante: RPM vs. DEB - O que escolher?";
 l10n.dl_linux_info_title		= "RPM é usado em:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB é usado em:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
 //l10n.dl_mac_info_text			= "macOS : Text";
 //l10n.dl_mac_info_title		= "macOS : Title";
 
 l10n.dl_full_link_porting_text	= "Transportar: clique para escolher entre vendedores";
 l10n.dl_full_link_porting_title	= "Clique para ir para a página de transporte e transferir de outros vendedores";
-l10n.dl_full_link_archive_text	= "Arquivo: clique para escolher entre versões legadas";
-l10n.dl_full_link_archive_title	= "Clique para ir para o arquivo e escolher entre versões legadas";
+l10n.dl_full_link_archive_text	= "Arquivo: clique para escolher entre versões antigas";
+l10n.dl_full_link_archive_title	= "Clique para ir para o arquivo e escolher entre versões antigas";
 
 // Download: Strings in the sub-green box (used in "download.js").
 l10n.dl_rel_info_headline_text = "Versão: ";
@@ -283,11 +283,11 @@ l10n.dl_checksum_img_src = "/download/cachedimages/help-information-icon.png";
 l10n.dl_checksum_img_alt = "Verificar checksum";
 l10n.dl_checksum_text = "Como verificar o ficheiro transferido?";
 l10n.dl_checksum_title = "Como verificar o ficheiro transferido com checksums?";
-l10n.dl_report_img_title = "Ligação de transferência quebrada? Clique aqui para reportar.";
+l10n.dl_report_img_title = "Ligação de transferência inválida? Clique aqui para reportar.";
 l10n.dl_report_img_src = "/download/cachedimages/help-report-broken-link-icon.png";
-l10n.dl_report_img_alt = "Ligação quebrada";
-l10n.dl_report_text = "Reportar ligação quebrada";
-l10n.dl_report_title = "Ligação de transferência quebrada? Clique aqui para reportar.";
+l10n.dl_report_img_alt = "Ligação inválida";
+l10n.dl_report_text = "Reportar ligação inválida";
+l10n.dl_report_title = "Ligação de transferência inválida? Clique aqui para reportar.";
 
 // Download: Strings for error text in the sub-red box (used in "download.js").
 l10n.dl_full_link_error_text = "Não há instalação completa disponível";
@@ -321,7 +321,7 @@ l10n.dl_error_custom_4_text			= "";
 // The following variables are used in the "analyze.html" file:
 
 // Analyze: Strings for the instruction text (used in "analyze.html").
-l10n.dl_analyze_headline_text = "Como reportar uma ligação de transferência quebrada?";
+l10n.dl_analyze_headline_text = "Como reportar uma ligação de transferência inválida?";
 l10n.dl_analyze_instruction_select_text = "<b>Seleccione os seus favoritos</b>: sistema operativo, idioma e versão no verde abaixo.";
 l10n.dl_analyze_instruction_verify_text = "Verifique que estas opções <b>também não</b> conduzem a ligações válidas.";
 l10n.dl_analyze_instruction_click_text = "Clique no botão abaixo da caixa verde:";
