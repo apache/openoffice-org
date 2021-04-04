@@ -871,6 +871,7 @@ DL.getLinkSelection = function() {
 		DL.SHOW_SUB_BOX		= true;
 		DL.ERROR		= false;
 
+/*
 		// If a Windows file is selected and a respective text is existing, then set the values for the Windows info link.
 		if( DL.INSTALL_EXTENSION === "EXE" & l10n.dl_win_info_title != null ) {
 			document.getElementById( "platform_info" ).style.cursor	= "help";
@@ -899,6 +900,14 @@ DL.getLinkSelection = function() {
 			document.getElementById( "platform_info" ).text		= "";
 			document.getElementById( "platform_info" ).style.display = "none";
 		}
+*/
+
+		// Show a link to get hints for the choosen platform.
+		document.getElementById( "platform_info" ).style.cursor	= "pointer";
+		document.getElementById( "platform_info" ).href		= l10n.dl_platform_info_link;
+		document.getElementById( "platform_info" ).title	= l10n.dl_platform_info_title + DL.UI_PLATFORM;
+		document.getElementById( "platform_info" ).text		= l10n.dl_platform_info_text + DL.UI_PLATFORM;
+		document.getElementById( "platform_info" ).style.display= "inline";
 
 		// Set the values for both download text buttons and set the focus to the "full install".
 		document.getElementById( "dl_f_link"	    ).href	= DL.LINK_FULL;
@@ -1444,4 +1453,3 @@ DL.debug = function( location ) {
 
 	return;
 }
-
