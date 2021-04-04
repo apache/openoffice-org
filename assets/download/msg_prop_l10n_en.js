@@ -229,15 +229,27 @@ l10n.dl_full_link_text				= "Download full installation";
 l10n.dl_full_link_title				= "Click to download: ";
 l10n.dl_langpack_link_text			= "Download language pack";
 l10n.dl_langpack_link_title			= "Click to download: ";
+
+l10n.dl_platform_info_text			= "Important hints for ";
+l10n.dl_platform_info_title			= "Click here to get important hints for ";
+l10n.dl_platform_info_link			= "platform_hints.html";
+l10n.dl_platform_info_headline			= "Apache OpenOffice - Important hints for the choosen platform";
+l10n.dl_platform_info_win_headline		= "Windows";
+l10n.dl_platform_info_win_sub_headline		= "32-bit, 64-bit and Java - What to choose?";
+l10n.dl_platform_info_win_text			= "At the moment we offer a 32-bit (x86) version for Windows. However, it installs and runs also on Windows 64-bit (x86-64). <br /> Please note that you may need Java in 32-bit for additional functionality which must then be selected only once (see menu 'Tools - Options - OpenOffice - Java'). <br /><br /> For more information about OpenOffice and Java please see: <a href=https://www.openoffice.org/download/common/java.html>https://www.openoffice.org/download/common/java.html</a>.";
+l10n.dl_platform_info_mac_headline		= "macOS";
+l10n.dl_platform_info_mac_sub_headline		= "Coming soon";
+l10n.dl_platform_info_mac_text			= "";
+l10n.dl_platform_info_linux_headline		= "Linux";
+l10n.dl_platform_info_linux_sub_headline	= "RPM vs. DEB - What to choose?";
+l10n.dl_platform_info_linux_text		= "RPM is used in: <br/> CentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server <br /><br /> DEB is used in: <br/> Debian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
+
 l10n.dl_win_info_text				= "Important hint: 32-bit, 64-bit and Java - What to choose?";
 l10n.dl_win_info_title				= "At the moment we offer a 32-bit (x86) version for Windows. However, it installs and runs also on Windows 64-bit (x86-64).\nPlease note that you may need Java in 32-bit for additional functionality which must then be selected only once (see menu 'Tools - Options - OpenOffice - Java').\n\nFor more information about OpenOffice and Java please see the link on the right 'Java and Apache OpenOffice'.";
 l10n.dl_linux_info_text				= "Important hint: RPM vs. DEB - What to choose?";
 l10n.dl_linux_info_title			= "RPM is used in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB is used in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
-//l10n.dl_mac_info_text				= "macOS : Text";
-//l10n.dl_mac_info_title			= "macOS : Title";
-l10n.dl_platform_info_text			= "Important hints for ";
-l10n.dl_platform_info_title			= "Click here to get important hints for ";
-l10n.dl_platform_info_link			= "platform_hints.html";
+// l10n.dl_mac_info_text			= "macOS : Text";
+// l10n.dl_mac_info_title			= "macOS : Title";
 
 l10n.dl_full_link_porting_text			= "Porting: Click to choose from 3rd party vendors";
 l10n.dl_full_link_porting_title			= "Click to browse to the porting webpage and download from 3rd party vendors";
