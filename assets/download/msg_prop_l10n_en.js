@@ -235,6 +235,9 @@ l10n.dl_linux_info_text				= "Important hint: RPM vs. DEB - What to choose?";
 l10n.dl_linux_info_title			= "RPM is used in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB is used in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
 //l10n.dl_mac_info_text				= "macOS : Text";
 //l10n.dl_mac_info_title			= "macOS : Title";
+l10n.dl_platform_info_text			= "Important hints for ";
+l10n.dl_platform_info_title			= "Click here to get important hints for ";
+l10n.dl_platform_info_link			= "platform_hints.html";
 
 l10n.dl_full_link_porting_text			= "Porting: Click to choose from 3rd party vendors";
 l10n.dl_full_link_porting_title			= "Click to browse to the porting webpage and download from 3rd party vendors";
