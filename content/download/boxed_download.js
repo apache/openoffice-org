@@ -36,12 +36,7 @@ DL.createDownloadBox = function() {
       + "<select class='sel-version' id='version' name='version' onchange='DL.getLinkSelection()'"
         + "title='" + l10n.dl_green_box_selectbox_ver_title  + "'>"
       + "</select>"
-/*
-    // Platform info text.
-    + "<a id='platform_info'>"
-      + ""
-    + "</a>"
-*/
+
     + "</form>"
 
     // Both download text buttons: First (left) for "full install", then (right) for "langpack".
@@ -67,7 +62,8 @@ DL.createDownloadBox = function() {
     + "<div style='margin: 0px 0px 0px 3%;'>"
       + "<div class='btn_hint_text' style='display: inline-block;'>"
         + "<h3>"
-          + "<a id='platform_info' target='_blank'></a>"
+//        + "<a id='platform_info' target='_blank'></a>"
+          + "<a id='platform_info' target='_blank' onclick='DL.showWindow( this.href ); return false;'></a>"
         + "</h3>"
       + "</div>"
     + "</div>"
