@@ -32,8 +32,6 @@
     <% } %>
     <% } %>
     <script src="https://www.apachecon.com/event-images/snippet.js"></script>
-    <!--#include virtual="/scripts/google-analytics.js" --> 
-    <!--#include virtual="/scripts/entourage.js" -->
   </head>
   <body<% if (content.bodytag) { %>${content.bodytag}<% } %>>
     <!--#include virtual="${content.brand}" -->
