@@ -17,12 +17,12 @@
 %><!--#include virtual="/doctype.html" -->
 <html>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <% if (content.header) { %>
     <link href="/css/ooo.css" rel="stylesheet" type="text/css">
     ${content.header}
     <% }  else { %>
     <title>${content.title}</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link href="/css/ooo.css" rel="stylesheet" type="text/css">
     <% if (content.css) { %>
     <link href="${content.css}" rel="stylesheet" type="text/css">
