@@ -232,7 +232,7 @@ l10n.dl_langpack_link_title			= "Click to download: ";
 
 l10n.dl_platform_info_text			= "Important hints for ";
 l10n.dl_platform_info_title			= "Click here to get important hints for ";
-l10n.dl_platform_info_link			= "platform_hints.html";
+l10n.dl_platform_info_link			= "/download/platform_hints.html";
 l10n.dl_platform_info_headline			= "Apache OpenOffice - Important hints for the chosen platform";
 l10n.dl_platform_info_win_headline		= "Windows";
 // l10n.dl_platform_info_win_sub_headline	= "32-bit, 64-bit and Java - What to choose?";
