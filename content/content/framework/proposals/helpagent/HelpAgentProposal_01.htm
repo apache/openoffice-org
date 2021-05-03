@@ -1,0 +1,272 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>Proposal for a new Help Agent</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Solaris Sparc)">
+	<META NAME="AUTHOR" CONTENT="Lutz Hoeger">
+	<META NAME="CREATED" CONTENT="20010209;15581100">
+	<META NAME="CHANGEDBY" CONTENT="Lutz Hoeger">
+	<META NAME="CHANGED" CONTENT="20010209;15581700">
+	<META NAME="CLASSIFICATION" CONTENT="Help Agent in StarOffice / OpenOffice.org">
+	<META NAME="KEYWORDS" CONTENT="User assistance, documentation, help system, Help Agent">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm; margin: 2cm }
+		P { margin-bottom: 0.21cm; font-family: "sunserif regular", "SunSerif-Regular", "Geneva", "Arial", "Helvetica", "Lucida Sans", Sans-Serif; font-size: 10pt; page-break-before: auto }
+		H1 { margin-top: 0.63cm; margin-bottom: 0.21cm; font-family: "sunsans demi", "SunSans-Demi", "Geneva", "Arial", "Helvetica", "Lucida Sans", Sans-Serif; font-size: 14pt; font-weight: demi-bold; page-break-before: auto }
+		H2 { margin-bottom: 0.21cm; font-family: "sunsans demi", "SunSans-Demi", "Geneva", "Arial", "Helvetica", "Lucida Sans", Sans-Serif; font-size: 12pt; font-weight: demi-bold; page-break-before: auto }
+	-->
+	</STYLE>
+</HEAD>
+<BODY>
+<P ALIGN=CENTER STYLE="margin-top: 0.42cm; page-break-after: avoid"><FONT FACE="Sunsans Heavy"><FONT SIZE=4 STYLE="font-size: 16pt">Proposal
+for a new Help Agent</FONT></FONT></P>
+<P ALIGN=CENTER STYLE="margin-top: 0.42cm; font-style: normal; font-weight: demi-bold; page-break-after: avoid">
+<FONT FACE="sunsans heavy, SunSans-Heavy, Geneva, Arial, Helvetica, Lucida Sans, Sans-Serif"><FONT SIZE=4>Version
+1, Lutz H&ouml;ger, 02/09/2001</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<DIV ID="Table of Contents1">
+	<DIV ID="Table of Contents1_Head">
+		<P STYLE="margin-top: 0.42cm; font-weight: medium; page-break-after: avoid">
+		<FONT FACE="Sunsans Demi"><FONT SIZE=4>Table of Contents</FONT></FONT></P>
+	</DIV>
+	<P STYLE="margin-bottom: 0.2cm"><FONT FACE="SunSans-Demi"><A HREF="#1.Preface|outline">Preface</A></FONT></P>
+	<P STYLE="margin-bottom: 0.2cm"><FONT FACE="SunSans-Demi"><A HREF="#2.Problem|outline">Problem</A></FONT></P>
+	<P STYLE="margin-bottom: 0.2cm"><FONT FACE="SunSans-Demi"><A HREF="#3.Solution|outline">Solution</A></FONT></P>
+	<P STYLE="margin-bottom: 0.2cm"><FONT FACE="SunSans-Demi"><A HREF="#4.Details|outline">Details</A></FONT></P>
+	<P STYLE="margin-left: 0.5cm; margin-bottom: 0.2cm"><FONT FACE="SunSans-Demi"><A HREF="#4.1.WhenshouldtheHelpAgentbetriggered?|outline">When
+	should the Help Agent be triggered?</A></FONT></P>
+	<P STYLE="margin-left: 0.5cm; margin-bottom: 0.2cm"><FONT FACE="SunSans-Demi"><A HREF="#4.2.Let'sgetvisual|outline">Let's
+	get visual</A></FONT></P>
+	<P STYLE="margin-left: 0.5cm; margin-bottom: 0.2cm"><FONT FACE="SunSans-Demi"><A HREF="#4.3.UsingtheHelpAgent|outline">Using
+	the Help Agent</A></FONT></P>
+	<P STYLE="margin-left: 0.5cm; margin-bottom: 0.2cm"><FONT FACE="SunSans-Demi"><A HREF="#4.4.Advancedfeatures|outline">Advanced
+	features</A></FONT></P>
+	<P STYLE="margin-left: 0.5cm; margin-bottom: 0.2cm"><FONT FACE="SunSans-Demi"><A HREF="#4.5.ConfiguringtheHelpAgent|outline">Configuring
+	the Help Agent</A></FONT></P>
+	<P STYLE="margin-bottom: 0.2cm"><FONT FACE="SunSans-Demi"><A HREF="#5.ImplementationSteps|outline">Implementation
+	Steps</A></FONT></P>
+	<P STYLE="margin-bottom: 0.2cm"><FONT FACE="SunSans-Demi"><A HREF="#6.OpenIssues|outline">Open
+	Issues</A></FONT></P>
+</DIV>
+<H1><A NAME="1.Preface|outline"></A>Preface</H1>
+<P>This short proposal doesn't claim to completely cover all aspects
+of the subject, even though I'm trying to propose the feature as
+complete as possible.</P>
+<H1><A NAME="2.Problem|outline"></A>Problem</H1>
+<P STYLE="margin-bottom: 0.2cm"><FONT FACE="Sunserif Regular">When
+working with StarOffice / OpenOffice.org (SO / OO.o) there are
+various situations where the program 'decides' to act in a certain
+way that might not have been expected by the user. Some examples for
+this are: </FONT>
+</P>
+<UL STYLE="margin-left: 0.5cm">
+	<LI><P STYLE="margin-bottom: 0.2cm"><FONT FACE="Sunserif Regular">the
+	'AutoCorrect' feature automatically completes a word the user has
+	just started to type</FONT></P>
+	<LI><P STYLE="margin-bottom: 0.2cm"><FONT FACE="Sunserif Regular">the
+	same feature automatically creates a bullet list from plain text
+	while typing (type '- test', press Enter)</FONT></P>
+	<LI><P STYLE="margin-bottom: 0.2cm"><FONT FACE="Sunserif Regular">the
+	'Print' dialog box is shown even though the user has clicked on the
+	'Print File Directly' symbol in the 'Function Bar' (because there
+	was a mismatch between the default system printer and the printer
+	stored in the document)</FONT></P>
+</UL>
+<P STYLE="margin-bottom: 0.2cm"><FONT FACE="Sunserif Regular">To
+simplify it: from a user's point of view in some situations a program
+behaves unpredictably. No matter how hard we try to avoid these
+cases, in certain situation the expectations of users simply are too
+different.</FONT></P>
+<H1><A NAME="3.Solution|outline"></A>Solution</H1>
+<P STYLE="margin-bottom: 0.2cm"><FONT FACE="Sunserif Regular">The
+first and very simple idea is to tell users what's happening, e.g.
+use some plain text explaining the current behavior. We tried that in
+SO 5.x, using the so called Help Agent. In the current SO / OO.o
+release (614) there is no such information any more. </FONT>
+</P>
+<P STYLE="margin-bottom: 0.2cm"><FONT FACE="Sunserif Regular">Due to
+the lack of this feature, we can now see the real benefit of this
+mechanism. It helps users in getting out of 'screen mysteries', it
+offers support when users actually need it. So this proposal is about
+the re-implementation of the Help Agent feature to be more elegant,
+more intelligent but also less annoying than formerly.</FONT></P>
+<H1><A NAME="4.Details|outline"></A>Details</H1>
+<H2><A NAME="4.1.WhenshouldtheHelpAgentbetriggered?|outline"></A>When
+should the Help Agent be triggered?</H2>
+<P>The most important feature of the Help Agent is to 'proactively'
+(I don't know any better word) offer support in certain situations.
+This distinguishes it from common help systems which offer help only
+if a user asks for it, e.g. by hitting the 'help' button. The Help
+Agent needs to detect if the user performs an action that may lead to
+confusion or that's generally difficult to understand in order to
+present helpful information to the user.</P>
+<P>The detection of these situations is a quite critical part of the
+Help Agent. The range of implementations for this goes from a static,
+pre-defined list (like in SO 5.x) to some artificial intelligence
+driven agent analyzing the user's behavior and thus detecting usage
+problems. The compromise between release driven reality and feature
+theory lies somewhere in-between. 
+</P>
+<P>I think it's best to start with the simple list implementation and
+advance to something more sophisticated later. A list of situations
+that require user assistance already exists in SO 5.x and can be
+maintained based upon the feedback from our users, e.g. by evaluating
+the FAQ lists that are regularly generated by Sun's Support. 
+</P>
+<H2><A NAME="4.2.Let'sgetvisual|outline"></A>Let's get visual</H2>
+<P>When designing the UI of the new Help Agent, we tried to follow
+the paradigm 'K.I.S.S.' (keep it short &amp; simple). SO 5.x users
+sometimes did complain about the old Help Agent. Very often the first
+thing that was done with it was to disable this feature completely,
+because it was rather irritating than helpful. That was caused by two
+aspects: The window showed up automatically but had to be closed
+again manually, and the content wasn't appropriate for the majority
+of our users - beginners.</P>
+<P>To change the content of the help system is one thing. It's safe
+to say that it will take some time to be accomplished and the whole
+process will probably span a couple of SO / OO.o releases. Fixing the
+usability issue should be possible soon, so let's have a look at a
+first UI design idea. 
+</P>
+<P>Here's a mock-up screen shot of a typical Help Agent situation:
+The user adjusts some settings that have 'invisible side effects' -
+in this case the spell check for the selected languages only
+functions if the appropriate language has been installed, something
+users very often aren't aware of, if they are just 'playing around'
+with some character formatting settings.</P>
+<P ALIGN=CENTER><IMG SRC="offering.gif" NAME="Graphic1" ALIGN=BOTTOM WIDTH=384 HEIGHT=303 BORDER=0></P>
+<P>Due to the 'SO 5.x help content issue', we decided to initially
+display as few text as possible. This leads to the idea of just
+showing up an image button indicating that help is available.  The
+Help Agent gets triggered and shows up in the lower right corner of
+the current document window. The design of the image above is just a
+placeholder for some artwork that would still have to be created.</P>
+<P>The Help Agent window or indicator should appear on top of the
+current document window but underneath a potentially open dialog box
+that has got the focus. It shouldn't be possible to raise the
+document window's z-order above the Help Agent's one. The current
+focus should remain unchanged so that the user can continue his work
+without being interrupted. (This is exactly the behavior of the Help
+Agent window in SO 5.x.)</P>
+<P>Behind the scenes, the help ID of the control that triggered the
+Help Agent gets forwarded to the Help Agent in order to be available
+for later processing.</P>
+<H2><A NAME="4.3.UsingtheHelpAgent|outline"></A>Using the Help Agent</H2>
+<P>To address the complains about the old Help Agent's stickiness,
+the new Help Agent should disappear after a time-out of 30 seconds.
+If the user doesn't do anything but continue his normal work and
+ignores the Help Agent, the pop-up window simply disappears after
+this time-out. If another item triggers the Help Agent within this
+time-out, the countdown timer should be reset and the new help ID
+should be stored instead of the old one.</P>
+<P>If the user clicks on the Help Agent indicator within the time-out
+timeframe, the help system will be opened and the help related to the
+temporarily stored help ID will be displayed. Starting with SO 6.0 /
+OO.0, the help system is an own operating system task. In case this
+task is already running at the time the Help Agent is used (clicked),
+it simply gets the focus and displays the respective help topic. That
+way, only one help task can be open at the same time.</P>
+<H2><A NAME="4.4.Advancedfeatures|outline"></A>Advanced features</H2>
+<P>Turning the static list of Help Agent relevant help IDs into a
+'semi-static' list could be achieved by dropping items dynamically.
+Whenever the Help Agent detects that his help offer didn't succeed,
+i.e. the user didn't make use of it a couple of times (3? 5? 10?)
+within a certain time (e.g. 90 days), an item can be dropped from the
+list. That way the occurrences of the Help Agent can be minimized
+down to what an individual user actually needs. 
+</P>
+<P>I'm not sure whether or not it is necessary to manually reset a
+list that has been modified this way to the factory default. But my
+guts tell me that there might be a number of people who want to have
+this feature. 
+</P>
+<P>So far this is not 'rocket science'. A far more advanced feature
+would be to add new items to the list based on an analysis of the
+program's usage. This could come pretty close to an interactive
+tutor, detecting certain 'inefficiencies' in usage patterns and
+offering the respective shortcuts to the user. This feature itself
+would need a much more extensive description than this proposal is
+supposed to deliver. Maybe someone else wants to pick this up and
+follow upon it?</P>
+<P>Regardless whether or not the typical geek likes it: animations
+are one of those neat features that particularly beginners do like.
+As there is a quite contradictory discussion about this detail, I'll
+leave it open and name it just for the purpose of completeness.</P>
+<P>Something maybe more important to think about is the position of
+the Help Agent indicator. On one hand it brings a certain calmness to
+the user interface, if this window always shows up at the same
+position, on the other hand if this position should ever be occupied
+by something else (like a toolbar or a docked float), it could be
+desirable to open the window somewhere else. SO 5.x had a mechanism
+that tried to position the Help Agent's floating window intelligently
+so that it doesn't cover the currently used dialog box. Of course
+such a feature would be helpful for the new Help Agent's window, too.
+But as the new window should be much smaller than the old one, it
+might be something that can be done later.</P>
+<H2><A NAME="4.5.ConfiguringtheHelpAgent|outline"></A>Configuring the
+Help Agent</H2>
+<P>Even though the new Help Agent tries to be both - as visible as
+necessary and as invisible as possible - there's probably the
+requirement to configure at least some basic settings. 
+</P>
+<UL STYLE="margin-left: 0.5cm">
+	<LI><P>Advanced users might want to switch the feature completely
+	off; so this option should be offered. This implies that the default
+	should be 'on' ;-)</P>
+	<LI><P>The suggested default time-out of 30 seconds might be
+	something that users want to adjust, too. We should offer a scale
+	from 0 to 60 seconds in 5 second steps, so this can be combined with
+	the above configuration setting ('0 seconds' means 'feature is
+	deactivated'). Or should the two settings be independent from each
+	other?</P>
+	<LI><P>As soon as the Help Agent is able to 'forget' or 'learn'
+	about situations it should show up, there's probably some
+	requirement to reset a modified list to the factory default. 
+	</P>
+	<LI><P>As mentioned above, the position of the Help Agent window
+	should later be configurable if it's not possible to make it evade
+	intelligently .</P>
+</UL>
+<H1><A NAME="5.ImplementationSteps|outline"></A>Implementation Steps</H1>
+<P>Driven by product release reality, I suggest the following three
+steps of implementation. However, if someone thinks this isn't
+appropriate, I would be happy to see an alternative.</P>
+<OL STYLE="margin-left: 0.5cm">
+	<LI><P>The first implementation basically should include anything
+	described in the chapters &quot;When should...&quot;, &quot;Let's
+	get...&quot; and &quot;Using&quot;, plus the basic configuration
+	option of enabling/disabling the feature and justifying the
+	time-out.</P>
+	<LI><P>The addition of the feature &quot;dropping items from the
+	list&quot; and the possibility to reset the list should be the main
+	parts of step 2. In addition to this, the window positioning issue
+	(if at all there is such an issue) should be finalized.</P>
+	<LI><P>The third step could be a mid-term to long-term project,
+	defining and implementing the feature &quot;add new items to the
+	list&quot;, as this would probably affect other projects as well.</P>
+</OL>
+<H1><A NAME="6.OpenIssues|outline"></A>Open Issues</H1>
+<P>These are just a few open issues that would need to be resolved in
+order to achieve step 1 and step 2 of the implementation. Probably
+there are many more if one starts digging into the details, but I
+think these are the most obvious ones.</P>
+<UL STYLE="margin-left: 0.5cm">
+	<LI><P>Artwork for the Help Agent indicator<BR>This should clearly
+	indicate 'click me' and 'there's something you might want to know'</P>
+	<LI><P>Further configuration details<BR>Are the configurable
+	settings sufficient or already too detailed? What are reasonable
+	default values to minimize the necessity of configuring this
+	feature?</P>
+	<LI><P>Window behavior<BR>What about stickiness, movability, focus
+	behavior? 
+	</P>
+</UL>
+<DIV TYPE=FOOTER>
+	<P STYLE="margin-top: 0.1cm; margin-bottom: 0.2cm"><FONT SIZE=1 STYLE="font-size: 8pt"><SDFIELD TYPE=DOCINFO SUBTYPE=CHANGE FORMAT=DATE SDNUM="1033;1033;MM/DD/YYYY">02/09/2001</SDFIELD>	<SDFIELD TYPE=DOCINFO SUBTYPE=TITLE>Proposal for a new Help Agent</SDFIELD>	Page
+	<SDFIELD TYPE=PAGE SUBTYPE=RANDOM FORMAT=PAGE>4</SDFIELD> of <SDFIELD TYPE=DOCSTAT SUBTYPE=PAGE FORMAT=PAGE>4</SDFIELD></FONT></P>
+</DIV>
+</BODY>
+</HTML>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<oood-config>
+  <!-- uncomment this to allow connects from all hosts -->
+  <!--acceptor value="socket,host=0,port=2002;urp"-->
+
+  <!-- allow connects from this machine only -->
+  <acceptor value="socket,host=localhost,port=2002;urp"/>
+
+  <!-- is used to shutdown and retrieve information from the daemon -->
+  <admin-acceptor value="socket,host=localhost,port=2001;urp"/>
+
+  <!-- path to user installations -->
+  <user-installation url="file:///home/joergl/OpenOffice.org1.1.0_instance-0" />
+  <user-installation url="file:///home/joergl/OpenOffice.org1.1.0_instance-1" />
+<!--
+  <user-installation url="file:///home/joergl/OpenOffice.org1.1.0_instance-2" />
+-->
+  <!-- number of seconds, that are given an OpenOffice.org worker instance to start.
+       In case the time is exceeded, daemon will terminate (and thus signaling,
+       that there is something wrong with the overall setup)
+   -->
+  <tolerated-startuptime-per-instance value="180"/>
+  
+  <!-- a concrete OOo instances gets sick with time (e.g. memory leaks, inconsistencies,
+      aborted scripts which left documents opened, etc. ). Attribute max gives the
+      number upper number of 'uses' by
+      a client, after which the office instance gets restarted. As a fixed
+      limit tends to lead to load peaks on certain points of time, this limit can
+      be randomized with the random attribute.
+   -->
+  <usage-count-per-instance max="10" random="3"/>
+
+  <!-- The verbosity of the daemon.
+       Can be high (errors only),
+       info (proposed, gives some useful administration information),
+       detail (for debugging) -->
+  <logging level="info"/>
+</oood-config>
