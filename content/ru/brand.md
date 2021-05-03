@@ -8,7 +8,7 @@ tagline=The Free and Open Productivity Suite
 logo=AOO_logos/100MillAOO100px.png
 domain=https://www.openoffice.org
 divid=bannera
-announce=Выпущен Apache OpenOffice 4.1.9
-announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.9+Release+Notes
-announcetip=Выпущен Apache OpenOffice 4.1.9
+announce=Выпущен Apache OpenOffice 4.1.10
+announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.10+Release+Notes
+announcetip=Выпущен Apache OpenOffice 4.1.10
 ~~~~~~
