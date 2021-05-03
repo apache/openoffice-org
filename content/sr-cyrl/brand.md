@@ -8,7 +8,7 @@ tagline=Бесплатан и отворен канцеларијски паке
 logo=AOO_logos/100MillAOO100px.png
 domain=www.openoffice.org
 divid=bannera
-announce=Apache OpenOffice 4.1.9 је објављен!
-announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.9+Release+Notes
-announcetip=Apache OpenOffice 4.1.9 је објављен!
+announce=Apache OpenOffice 4.1.19 је објављен!
+announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.10+Release+Notes
+announcetip=Apache OpenOffice 4.1.10 је објављен!
 ~~~~~~
