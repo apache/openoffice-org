@@ -9,6 +9,6 @@ logo=AOO_logos/100MillAOO100px.png
 domain=https://www.openoffice.org
 divid=bannera
 announce=Apache OpenOffice 4.1.10 ist verfügbar!
-announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.10+Release+Notes
+announceurl=https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=181305380
 announcetip=AOO 4.1.10 Release Notes
 ~~~~~~
