@@ -5,12 +5,19 @@
   content.leftnav=null;
   content.rightnav=null;
 
+// As long as we have no translation for a specific language, we will use the general English text to keep the website updates as low as possible for new releases.
+// Therefore some of the following languages are commented out and in the next line the general "brand.html" will be used.
+
   def brand = [:]
 	brand["/"] = "/brand.html"
-	brand["/af/"] = "/af/brand.html"
-	brand["/am/"] = "/am/brand.html"
-	brand["/ar/"] = "/ar/brand.html"
-	brand["/ast/"] = "/ast/brand.html"
+//	brand["/af/"] = "/af/brand.html"
+	brand["/af/"] = "/brand.html"
+//	brand["/am/"] = "/am/brand.html"
+	brand["/am/"] = "/brand.html"
+//	brand["/ar/"] = "/ar/brand.html"
+	brand["/ar/"] = "/brand.html"
+//	brand["/ast/"] = "/ast/brand.html"
+	brand["/ast/"] = "/brand.html"
 	brand["/bg/"] = "/bg/brand.html"
 	brand["/ca/"] = "/ca/brand.html"
 	brand["/cs/"] = "/cs/brand.html"
