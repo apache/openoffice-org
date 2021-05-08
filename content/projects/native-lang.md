@@ -42,7 +42,6 @@ Language								| Website			| OpenOffice availability
 [Arabic (ar)](/ar/)						| help wanted		| outdated
 [Armenian (hy)](/hy/)					| help wanted		| outdated
 [Asturian (ast)](/ast/)					| help wanted		| current 4.1.x
-[Balochi (bal)](/bal/)					| help wanted		| outdated
 [Basque (eu)](/eu/)						| help wanted		| current 4.1.x
 [Bengali (bn)](/bn/)					| help wanted		| outdated
 [Bosnian (bs)](/bs/)					| help wanted		| outdated
