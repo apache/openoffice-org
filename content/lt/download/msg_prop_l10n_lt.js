@@ -227,10 +227,10 @@ l10n.dl_full_link_text				= "Gauti visą dienginį";
 l10n.dl_full_link_title				= "Spustelėjus gauti: ";
 l10n.dl_langpack_link_text			= "Gauti kalbos paketą";
 l10n.dl_langpack_link_title			= "Spustelėjus gauti: ";
-l10n.dl_win_info_text				= "Important hint: 32-bit, 64-bit and Java - What to choose?";
-l10n.dl_win_info_title				= "At the moment we offer a 32-bit (x86) version for Windows. However, it installs and runs also on Windows 64-bit (x86-64).\nPlease note that you may need Java in 32-bit for additional functionality which must then be selected only once (see menu 'Tools - Options - OpenOffice - Java').\n\nFor more information about OpenOffice and Java please see the link on the right 'Java and Apache OpenOffice'.";
-l10n.dl_linux_info_text				= "Important hint: RPM vs. DEB - What to choose?";
-l10n.dl_linux_info_title			= "RPM is used in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB is used in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
+l10n.dl_win_info_text				= "Svarbi užuomina: 32 bitai, 64 bitai ir Java – ką rinktis?";
+l10n.dl_win_info_title				= "Šiuo metu platformai „Windows“ siūloma 32 bitų (x86) laida, kuri veikia ir „Windows“ 64 bitų (x86-64) sistemoje.\nĮsidėmėtina, kad papildomoms funkcijoms gali reikėti 32 bitų Javos, kurią būtina pasinkti (žr. meniu „Priemonės – Nuostatos… – OpenOffice – Java“).\n\nDaugiau informacijos apie „OpenOffice“ ir Javą, dešinėje spustelėjus saitą „Java ir „Apache OpenOffice“.";
+l10n.dl_linux_info_text				= "Svarbi užuomina: RPM lyginant su DEB – kurį rinktis?";
+l10n.dl_linux_info_title			= "RPM vartojamas:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB vartojamas:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
 //l10n.dl_mac_info_text				= "macOS : Text";
 //l10n.dl_mac_info_title			= "macOS : Title";
 
