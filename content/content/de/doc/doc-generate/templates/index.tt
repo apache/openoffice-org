@@ -1,0 +1,253 @@
+	<html>
+	<head>
+
+<title>
+		Dokumentationsportal
+</title>
+
+	<noscript>
+				<meta http-equiv="refresh" content="0; URL=index-nojs.html" />
+			</noscript>
+
+
+
+		<!-- Start de-header -->
+		
+		<link rel="stylesheet" type="text/css" href="doc.css" />
+		<link rel="alternate" type="application/atom+xml" title="OpenOffice.org Dokumentation" href="http://de.openoffice.org/doc/feed.xml" />
+
+
+		<script type="text/javascript">
+			var GridStates = new Array();
+
+			GridStates['grid-all']     = 0;
+
+			GridStates['grid-writer']  = 0;
+			GridStates['grid-calc']    = 0;
+			GridStates['grid-draw']    = 0;
+			GridStates['grid-base']    = 0;
+			GridStates['grid-impress'] = 0;
+			GridStates['grid-math']    = 0;
+
+			GridStates['grid-dev']     = 0;
+			GridStates['grid-author']  = 0;
+
+			function getGridNameFromURLParam() {
+				grid = undefined;
+				if ( document.URL.indexOf('?') > 0 ) {
+					u = document.URL;
+					end = u.indexOf('#');
+					if ( end == -1 ) {
+						end = u.length;
+					}
+					grid = u.substring(u.indexOf('?')+1,end).split('&')[0].split('=')[1];
+					if ( grid == '' ) {
+						grid = undefined;
+					}
+				}
+				return grid;
+			}
+
+			function toggleGridVisible( gridname ) {
+				if ( gridname == undefined ) {
+					return;
+				}
+				var obj = document.getElementById( gridname );
+				if ( GridStates[gridname] == 0 ) {
+					obj.style.display = 'block';
+					GridStates[gridname] = 1;
+				} else {
+					obj.style.display = 'none';
+					GridStates[gridname] = 0;
+				}
+			}
+		</script>
+		<!-- End de-header -->
+	</head>
+	<body>
+		<!-- Start Body -->
+
+		<h1>Dokumentation</h1>
+
+		<noscript>
+			<div class="warning">
+				<p>
+				Bitte aktivieren Sie JavaScript, um die Dokumentation anzuzeigen.
+				</p>
+				<p>
+				<a href="index-nojs.html">Alternative ohne JavaScript</a>
+				</p>
+			</div>
+		</noscript>
+
+		<table id="feedinfo" summary="Dokumentationsnewsfeed">
+			<tr>
+				<td><a href="feed.xml"><img src="pics/icon-feed.png" alt="Feedicon" /></a></td>
+				<td>
+				Seien Sie immer auf dem neuesten Stand und abonnieren Sie
+				unseren <a href="feed.xml">Dokumentationsfeed</a>.
+				</td>
+			</tr>
+		</table>
+
+
+		<table summary="Dokumentation nach Modulen" class="modules">
+			<tr>
+				<td id="all" class="icon-col"><a href="javascript:toggleGridVisible('grid-all')"><img src="pics/icon-all.png" alt="Alle" /></a></td>
+				<td class="doccontent">
+					<div class="doclink"><a href="javascript:toggleGridVisible('grid-all')">OpenOffice.org Allgemein</a></div>
+					<div class="docdesc">
+						Installationsanleitungen &middot; allgemeine Dokumentationen, die auf alle
+						OpenOffice.org-Module zutreffen
+					</div>
+
+					<div id="grid-all" class="grid-container">
+						<!-- docgrid: all -->
+						[% INCLUDE 'grid-contents.tt' elements=all %]
+						<!-- end of docgrid: all -->
+					</div>
+				</td>
+			</tr>
+		</table>
+		<table summary="Hauptmodule" class="modules">
+			<tr>
+				<td id="writer" class="icon-col"><a href="javascript:toggleGridVisible('grid-writer')"><img src="pics/icon-writer.png" alt="Writer" /></a></td>
+				<td class="doccontent">
+					<div class="doclink"><a href="javascript:toggleGridVisible('grid-writer')">OpenOffice.org Writer (Textverarbeitung)</a></div>
+					<div class="docdesc">Das komplette Writer-Handbuch &middot;
+						Tutorien zu Serienbriefen &middot;
+						Aufz&auml;hlungen/Nummerierungen</div>
+					<div id="grid-writer" class="grid-container">
+						<!-- docgrid: writer -->
+						[% INCLUDE 'grid-contents.tt' elements=writer %]
+						<!-- end of docgrid: writer -->
+					</div>
+				</td>
+				
+			</tr>
+			<tr>
+				<td id="calc" class="icon-col"><a href="javascript:toggleGridVisible('grid-calc')"><img src="pics/icon-calc.png" alt="Calc" /></a></td>
+				<td class="doccontent">
+					<div class="doclink"><a	href="javascript:toggleGridVisible('grid-calc')">OpenOffice.org Calc (Tabellenkalkulation)</a></div>
+					<div class="docdesc">
+						Tutorium zur Erstellung von Gantt-Diagrammen mit Calc
+					</div>
+					<div id="grid-calc" class="grid-container">
+						<!-- docgrid: calc -->
+						[% INCLUDE 'grid-contents.tt' elements=calc %]
+						<!-- end of docgrid: calc -->
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td id="impress" class="icon-col"><a href="javascript:toggleGridVisible('grid-impress')"><img src="pics/icon-impress.png" alt="Impress" /></a></td>
+				<td class="doccontent">
+					<div class="doclink"><a href="javascript:toggleGridVisible('grid-impress')">OpenOffice.org Impress (Pr&auml;sentationsmodul)</a></div>
+					<div class="docdesc">
+						Erste Schritte f&uuml;r Einsteiger &middot; Schnellstart &middot; Unterschiede zu PowerPoint
+					</div>
+					<div id="grid-impress" class="grid-container">
+						<!-- docgrid: impress -->
+						[% INCLUDE 'grid-contents.tt' elements=impress %]
+						<!-- end of docgrid: impress -->
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td id="draw" class="icon-col"><a href="javascript:toggleGridVisible('grid-draw')"><img src="pics/icon-draw.png" alt="Draw" /></a></td>
+				<td class="doccontent">
+					<div class="doclink"><a href="javascript:toggleGridVisible('grid-draw')">OpenOffice.org Draw (Zeichenprogramm)</a></div>
+					<div class="docdesc">
+						Das komplette Draw-Handbuch als PDF &middot; Tutorium zu Imagemaps
+					</div>
+					<div id="grid-draw" class="grid-container">
+						<!-- docgrid: draw -->
+						[% INCLUDE 'grid-contents.tt' elements=draw %]
+						<!-- end of docgrid: draw -->
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td id="base" class="icon-col"><a href="javascript:toggleGridVisible('grid-base')"><img src="pics/icon-base.png" alt="Base" /></a></td>
+				<td class="doccontent">
+					<div class="doclink"><a href="javascript:toggleGridVisible('grid-base')">OpenOffice.org Base (Datenbankmodul)</a></div>
+					<div class="docdesc">
+						Einf&uuml;hrung in Datenbankanwendungen &middot; Entwurf einer Beispieldatenbank &middot; ODBC-Datenanbindungen
+					</div>
+					<div id="grid-base" class="grid-container">
+						<!-- docgrid: base -->
+						[% INCLUDE 'grid-contents.tt' elements=base %]
+						<!-- end of docgrid: base -->
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td id="math" class="icon-col"><a href="javascript:toggleGridVisible('grid-math')"><img src="pics/icon-math.png" alt="Math" /></a></td>
+				<td class="doccontent">
+					<div class="doclink"><a href="javascript:toggleGridVisible('grid-math')">OpenOffice.org Math (Formelprogramm)</a></div>
+					<div class="docdesc">
+						Erste Schritte
+					</div>
+					<div id="grid-math" class="grid-container">
+						<!-- docgrid: math -->
+						[% INCLUDE 'grid-contents.tt' elements=math %]
+						<!-- end of docgrid: math -->
+					</div>
+				</td>
+			</tr>
+		</table>
+		<table summary="Sonstiges" class="modules">
+			<tr>
+				<td id="development" class="icon-col"><a href="javascript:toggleGridVisible('grid-dev')"><img src="pics/icon-development.png" alt="Entwicklung" /></a></td>
+				<td class="doccontent">
+					<div class="doclink"><a href="javascript:toggleGridVisible('grid-dev')">Dokumentation f&uuml;r Entwickler</a></div>
+					<div class="docdesc">
+						OpenOffice.org kompilieren mit ooobuild &middot; Python-Bridge
+					</div>
+					<div id="grid-dev" class="grid-container">
+						<!-- docgrid: dev -->
+						[% INCLUDE 'grid-contents.tt' elements=dev %]
+						<!-- end of docgrid: dev -->
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td id="docdevel" class="icon-col"><a href="javascript:toggleGridVisible('grid-author')"><img src="pics/icon-docdevel.png" alt="Dokumentation - Entwicklung" /></a></td>
+				<td class="doccontent">
+					<div class="doclink"><a href="javascript:toggleGridVisible('grid-author')">Informationen f&uuml;r Autoren</a></div>
+					<div class="docdesc">
+						Informationen f&uuml;r Mitarbeiter im Projekt
+						und Autoren, die neue Dokumentationen beitragen
+						oder bestehende erweitern m&ouml;chten
+					</div>
+					<div id="grid-author" class="grid-container">
+						<!-- docgrid: author -->
+						[% INCLUDE 'grid-contents.tt' elements=author %]
+						<!-- end of docgrid: author -->
+					</div>
+				</td>
+			</tr>
+
+			<!-- OOo 1.x / 1.1.x -->
+			<tr>
+				<td />
+				<td class="doccontent">
+					<div class="doclink"><a href="howto/index_1_x.html">Dokumentation f&uuml;r Version 1.x und 1.1.x</a></div>
+					<div class="docdesc">
+						Dokumentation der Verson 1.x und 1.1.x von OpenOffice.org
+					</div>
+				</td>
+			</tr>
+
+
+		</table>
+
+		[% INCLUDE 'footer.tt' %]
+
+	<script type="text/javascript">
+		toggleGridVisible(getGridNameFromURLParam());
+	</script>
+
+		<!-- End Body -->
+	</body>
+	</html>

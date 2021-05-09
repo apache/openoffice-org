@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Database.CreateAPredefinedQuery.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2007/03/12 08:42:46 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Database">
+
+<keywords>
+</keywords>
+
+<authors>
+</authors>
+
+<question heading="create a predefined query">How can a predefined query be created?
+<p>The predefined query will be saved into the database document.</p>
+</question>
+
+<answer>
+<listing>/* get the service manager */
+xContext = UNO.connect()
+XMcf = xContext~getServiceManager
+
+/* retrieve the DatabaseContext and get its XNameAccess interface */
+xNameAccess = xMcf~createInstanceWithContext(-
+	&quot;{%see com.sun.star.sdb.DatabaseContext}&quot;, xContext)~{%see com.sun.star.container.XNameAccess%XNameAccess}
+
+/* let&apos;s use the datasource mysql-test */
+dataSource = xNameAccess~getByName(&quot;mysql-test&quot;)
+
+/*create an empty QueryDefinition and request it&apos;s XPropertySet interface*/
+xQueryDefinitionsSupplier = dataSource~{%see com.sun.star.sdb.XQueryDefinitionsSupplier%XQueryDefinitionsSupplier}
+xQDefs = xQueryDefinitionsSupplier~getQueryDefinitions
+xSingleServiceFactory = xQDefs~{%see com.sun.star.lang.XSingleServiceFactory%XSingleServiceFactory}
+xPropertySet = xSingleServiceFactory~createInstance~{%see com.sun.star.beans.XPropertySet%XPropertySet} 
+
+/* define the query */
+xPropertySet~setPropertyValue(&quot;Command&quot;,-
+	&quot;SELECT firstname, lastname, product.name &quot;-
+	&quot;FROM customer, sales, product &quot;-
+	&quot;WHERE customer.cid = sales.cid AND sales.name = product.name&quot;)
+	
+xPropertySet~setPropertyValue(-
+	&quot;EscapeProcessing&quot;,box(&quot;BOOL&quot;,.true))
+
+/* insert it into the query definition container */
+xNameContainer = xQDefs~{%see com.sun.star.container.XNameContainer%XNameContainer}
+queryName = &quot;Query_names+products&quot;
+IF xNameContainer~hasByName(queryName) THEN 
+DO 
+	say &quot;removing existing query definition....&quot;
+	xNameContainer~removeByName(queryName)
+END
+
+
+say &quot;insert Query to the container....&quot;
+xNameContainer~insertByName(queryName,xPropertySet)
+
+
+/* store the database document */
+
+/* retrieve the XDocumentDataSource interface of the data source */
+xDocumentDataSource = dataSource~{%see com.sun.star.sdb.XDocumentDataSource%XDocumentDataSource}
+
+/* get the attribute &apos;DatabaseDocument&apos; */
+xOfficeDatabaseDocument = xDocumentDataSource~getDatabaseDocument
+
+/* store the database document and with it the query definition */
+xStorable = xOfficeDatabaseDocument~{%see com.sun.star.frame.XStorable%XStorable}~store
+say &quot;storing database document....&quot;
+
+::requires UNO.cls -- get UNO support
+</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

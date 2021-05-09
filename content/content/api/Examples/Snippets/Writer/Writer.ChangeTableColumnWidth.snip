@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Writer.ChangeTableColumnWidth.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2008/10/20 11:29:28 $
+
+(c)2008 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Writer">
+
+<keywords>
+	<keyword>width</keyword>
+	<keyword>column width</keyword>
+	<keyword>change table column width</keyword>
+</keywords>
+
+<authors>
+	<author id="" initial="false" email="">Nicole Scholz</author>
+</authors>
+
+<question heading="change table column width">How can I change the width of a table column
+</question>
+
+<answer>
+<p>In this example the column width of a table is changed.</p>
+<listing>/* change the table width */
+
+/* Retrieve the Desktop object, we need its XComponentLoader interface to load a new document*/
+oDesktop         = UNO.createDesktop()    -- get the UNO Desktop service object
+xComponentLoader = oDesktop~{%see com.sun.star.frame.XDesktop%XDesktop}~{%see com.sun.star.frame.XComponentLoader%XComponentLoader}  -- get componentLoader interface
+/* open the blank file */
+url = &quot;private:factory/swriter&quot;
+xWriterComponent = xComponentLoader~loadComponentFromURL(url, &quot;_blank&quot;, 0, .UNO~noProps)
+
+xDocumentFactory = xWriterComponent~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+xTextDocument = xWriterComponent~{%see com.sun.star.text.XTextDocument%XTextDocument}
+xText = xTextDocument~getText()
+xTextCursor = xText~createTextCursor()
+xPropertySet = xTextCursor~{%see com.sun.star.beans.XPropertySet%xPropertySet}
+xDMsf = xTextDocument~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+
+/* create the table */
+xTextTable = xDMsf~createInstance(&quot;{%see com.sun.star.text.TextTable}&quot;)~{%see com.sun.star.text.XTextTable%XTextTable}
+xTextTable~initialize(1, 2) -- initialize the table
+
+/* insert TextTable in the Text */
+xText~insertTextContent(xTextCursor, xTextTable, .false)
+
+/* insert text into the table */
+call setCellText &quot;A1&quot;, &quot;table width&quot;, xTextTable
+call setColumnWidth &quot;A1&quot;, xTextTable
+
+::requires UNO.cls
+
+  -- routine to set the cell text
+::routine setCellText
+  	use arg cell, text, xTextTable
+	xCellText = xTextTable~getCellByName(cell)~{%see com.sun.star.text.XText%XText}
+	xCellCursor = xCellText~createTextCursor()
+	cursorProps = xCellCursor~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+	xCellText~setString(text)
+	return
+
+  -- routine to change the column width of a table
+::routine setColumnWidth
+    use arg cell, xTextTable
+  xTextTableCursor = xTextTable~createCursorByCellName(cell)
+  xTableProps=xTextTable~{%see com.sun.star.beans.XPropertySet%xPropertySet}
+  colRelSum=xTableProps~getPropertyValue(&quot;TableColumnRelativeSum&quot;) -- usually: 10000
+  colSeparators=xTableProps~getPropertyValue(&quot;TableColumnSeparators&quot;) -- total sum
+  colSeparators[1]~position=trunc(colRelSum*0.70)  -- new position of the column separator
+  -- set the property with the calculated position of the seperator
+  xTableProps~setPropertyValue(&quot;TableColumnSeparators&quot;, colSeparators)
+  return
+
+</listing>
+</answer>
+
+<versions>
+</versions>
+
+<operating-systems>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

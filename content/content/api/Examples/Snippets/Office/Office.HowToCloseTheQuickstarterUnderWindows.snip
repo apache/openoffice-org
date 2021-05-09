@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.HowToCloseTheQuickstarterUnderWindows.snip,v $
+last change: $Revision: 1.3 $ $Author: tomsontom $ $Date: 2006/03/07 12:46:08 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="OOBasic" application="Office">
+
+<keywords>
+	<keyword>Quickstarter</keyword>
+	<keyword>Close</keyword>
+	<keyword>Windows</keyword>
+	<keyword>API Windows</keyword>
+</keywords>
+
+<authors>
+	<author id="ddorange" initial="true" email="ddorange@dmaths.org" copyright="Didier Dorange-Pattoret">Didier Dorange-Pattoret</author>
+</authors>
+
+<question heading="How to Terminate the OOo process even if the QS is running">Is there another way to terminate the OOo process even if the QS is running beside <internal-link href="Office.HowToCloseTheQuickstarterUnderWindows2.snip" />
+</question>
+
+<answer>
+<listing>Declare Function GetActiveWindow Lib &quot;user32&quot; () As Long
+Declare Sub ExitProcess Lib &quot;kernel32&quot; (ByVal uExitCode As Long)
+
+Sub Essai
+   rem getting the active window&apos;s handle.
+   hWnd = GetActiveWindow()
+   rem closing all active windows
+   On error resume Next
+       myEnum = StarDesktop.Components.CreateEnumeration
+       Do while myEnum.HasmoreElements
+           oDoc = myEnum.NextElement
+           If HasUnoInterfaces(oDoc, &quot;{@see com.sun.star.util.XCloseable}&quot;) Then
+           oDoc.close(true)
+           Else
+           oDoc.dispose()
+           End If
+       Loop
+       On error goto 0
+   rem closing the quickstarter
+   ExitProcess(hWnd)
+End Sub </listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="Win32"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>
+

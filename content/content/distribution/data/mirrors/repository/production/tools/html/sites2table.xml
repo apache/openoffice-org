@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+ <xsl:output method="html" encoding="UTF-8"/>
+ <xsl:variable name="newline" select="'&#xA;'"/>
+
+ <xsl:template match="/">
+  <table summary="Table of mirror sites." class="list" cellpadding="2px" cellspacing="0" width="95%" style="font-size: small">
+   <thead>
+    <tr>
+     <th class="alt4">Location</th>
+     <th class="alt4">Name</th>
+     <th class="alt4"></th>
+     <th class="alt4" colspan="3">Main</th>
+     <th class="alt4" colspan="3">Extended</th>
+     <th class="alt4" colspan="3">Archive</th>
+     <th class="alt4"></th>
+     <th class="alt4" width="20%">Notes</th>
+     <th class="alt4">
+      <a href="javascript:void(0)" id="maintainer_c" onclick="showMaintainer(false); return false;" style="display: none;">&lt;&lt; Maintainer</a><a href="javascript:void(0)" id="maintainer_o" onclick="showMaintainer(true); return false;">&gt;&gt;</a>
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    <xsl:for-each select="//site">
+     <xsl:sort select="@location"/>
+     <xsl:sort select="@name"/>
+     <xsl:value-of select="$newline"/>
+     <xsl:value-of select="$newline"/>
+     <xsl:call-template name="print-site"/>
+    </xsl:for-each>
+    <xsl:value-of select="$newline"/>
+    <xsl:value-of select="$newline"/>
+   </tbody>
+  </table>
+ </xsl:template>
+
+ <xsl:template name="print-site">
+  <tr>
+   <xsl:attribute name="class">
+    <xsl:choose>
+     <xsl:when test="position() mod 2 = 1">
+      <xsl:value-of select="'a'"/>
+     </xsl:when>
+     <xsl:otherwise>
+      <xsl:value-of select="'b'"/>
+     </xsl:otherwise>
+    </xsl:choose>
+   </xsl:attribute>
+
+   <td><xsl:value-of select="@location"/></td>
+
+   <td><xsl:value-of select="@name"/></td>
+
+   <td></td>
+
+   <xsl:call-template name="print-sets">
+    <xsl:with-param name="set" select="'main'"/>
+   </xsl:call-template>
+
+   <xsl:call-template name="print-sets">
+    <xsl:with-param name="set" select="'extended'"/>
+   </xsl:call-template>
+
+   <xsl:call-template name="print-sets">
+    <xsl:with-param name="set" select="'archive'"/>
+   </xsl:call-template>
+
+   <td></td>
+
+   <td><xsl:value-of select="notes"/></td>
+
+   <td class="contact"><xsl:apply-templates select="contact"/></td>
+  </tr>
+ </xsl:template>
+ 
+ <xsl:template name="print-sets">
+  <xsl:param name="set"/>
+  <td>
+   <xsl:call-template name="print-a">
+    <xsl:with-param name="set" select="$set"/>
+    <xsl:with-param name="scheme" select="'http'"/>
+   </xsl:call-template>
+  </td>
+
+  <td>
+   <xsl:call-template name="print-a">
+    <xsl:with-param name="set" select="$set"/>
+    <xsl:with-param name="scheme" select="'ftp'"/>
+   </xsl:call-template>
+  </td>
+
+  <td>
+   <xsl:call-template name="print-a">
+    <xsl:with-param name="set" select="$set"/>
+    <xsl:with-param name="scheme" select="'rsync'"/>
+   </xsl:call-template>
+  </td>
+ </xsl:template>
+
+ <xsl:template name="print-a">
+  <xsl:param name="set"/>
+  <xsl:param name="scheme"/>
+  <xsl:for-each select="uri[@set=$set and @scheme=$scheme]">
+   <a>
+    <xsl:attribute name="href">
+     <xsl:value-of select="."/>
+    </xsl:attribute>
+    <xsl:value-of select="$scheme"/>
+   </a>
+  <xsl:if test="position() != last()">
+   <br/>
+  </xsl:if>
+  </xsl:for-each>
+ </xsl:template>
+
+ <xsl:template match="contact">
+  <xsl:choose>
+   <xsl:when test="count(email)!=0">
+    <xsl:apply-templates select="email"/>
+   </xsl:when>
+   <xsl:otherwise>
+    <xsl:if test="string-length(@name)!=0">
+     <xsl:text>"</xsl:text>
+     <xsl:value-of select="@name"/>
+     <xsl:text>"</xsl:text>
+    </xsl:if>
+   </xsl:otherwise>
+  </xsl:choose>
+  <xsl:if test="position() != last()">
+   <xsl:text>, </xsl:text>
+  </xsl:if>
+ </xsl:template>
+
+ <xsl:template match="email">
+  <xsl:if test="string-length(../@name)!=0">
+   <xsl:text>"</xsl:text>
+   <xsl:value-of select="../@name"/>
+   <xsl:text>"</xsl:text>
+  </xsl:if>
+  <xsl:if test="string-length(.)!=0">
+   <xsl:choose>
+    <xsl:when test="string-length(../@name)!=0">
+     <xsl:text> &lt;</xsl:text>
+     <xsl:value-of select="."/>
+     <xsl:text>&gt;</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+     <xsl:value-of select="."/>
+    </xsl:otherwise>
+   </xsl:choose>
+  </xsl:if>
+  <xsl:if test="position() != last()">
+   <xsl:text>, </xsl:text>
+  </xsl:if>
+ </xsl:template>
+
+</xsl:stylesheet>
