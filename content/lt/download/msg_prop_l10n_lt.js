@@ -227,10 +227,25 @@ l10n.dl_full_link_text				= "Gauti visą dienginį";
 l10n.dl_full_link_title				= "Spustelėjus gauti: ";
 l10n.dl_langpack_link_text			= "Gauti kalbos paketą";
 l10n.dl_langpack_link_title			= "Spustelėjus gauti: ";
-l10n.dl_win_info_text				= "Svarbi užuomina: 32 bitai, 64 bitai ir Java – ką rinktis?";
-l10n.dl_win_info_title				= "Šiuo metu platformai „Windows“ siūloma 32 bitų (x86) laida, kuri veikia ir „Windows“ 64 bitų (x86-64) sistemoje.\nĮsidėmėtina, kad papildomoms funkcijoms gali reikėti 32 bitų Javos, kurią būtina pasinkti (žr. meniu „Priemonės – Nuostatos… – OpenOffice – Java“).\n\nDaugiau informacijos apie „OpenOffice“ ir Javą, dešinėje spustelėjus saitą „Java ir „Apache OpenOffice“.";
-l10n.dl_linux_info_text				= "Svarbi užuomina: RPM lyginant su DEB – kurį rinktis?";
-l10n.dl_linux_info_title			= "RPM vartojamas:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB vartojamas:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
+
+l10n.dl_platform_info_text			= "Svarbios užuominos apie ";
+l10n.dl_platform_info_title			= "Spustelėjus rodomos svarbios užuominos apie ";
+l10n.dl_platform_info_link			= "platform_hints.html";
+l10n.dl_platform_info_headline			= "„Apache OpenOffice“ – svarbios užuominos apie pasirinktą platformą";
+l10n.dl_platform_info_win_headline		= "„Windows“";
+// l10n.dl_platform_info_win_sub_headline	= "32 bitai, 64 bitai ir Java – ką rinktis?";
+l10n.dl_platform_info_win_text			= "<h5> 32 bitai, 64 bitai ir Java – ką rinktis? </h5> <p> Šiuo metu platformai „Windows“ siūloma 32 bitų (x86) laida, kuri veikia ir „Windows“ 64 bitų (x86-64) sistemoje. Įsidėmėtina, kad papildomoms funkcijoms gali reikėti 32 bitų Javos, kurią būtina pasirinkti (žr. meniu „Priemonės – Nuostatos… – OpenOffice – Java“). <br /><br /> Daugiau informacijos apie „OpenOffice“ ir Javą žr. <a target='_blank' href=https://www.openoffice.org/download/common/java.html>https://www.openoffice.org/download/common/java.html</a>.</p>";
+l10n.dl_platform_info_mac_headline		= "macOS";
+// l10n.dl_platform_info_mac_sub_headline	= "Netrukus";
+l10n.dl_platform_info_mac_text			= "<h5> Netrukus </h5>";
+l10n.dl_platform_info_linux_headline		= "Linux";
+// l10n.dl_platform_info_linux_sub_headline	= "RPM lyginant su DEB – kurį rinktis?";
+l10n.dl_platform_info_linux_text		= "<h5> RPM lyginant su DEB – kurį rinktis? </h5> <p> RPM vartojamas: <br/> CentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server <br /><br /> DEB vartojamas: <br/> Debian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu </p> <h5> Installation instructions </h5> <p>For installation instruction please see here: <a target='_blank' href=https://www.openoffice.org/download/common/instructions.html#linux>https://www.openoffice.org/download/common/instructions.html#linux</a>.</p>";
+
+//l10n.dl_win_info_text				= "Svarbi užuomina: 32 bitai, 64 bitai ir Java – ką rinktis?";
+//l10n.dl_win_info_title			= "Šiuo metu platformai „Windows“ siūloma 32 bitų (x86) laida, kuri veikia ir „Windows“ 64 bitų (x86-64) sistemoje.\nĮsidėmėtina, kad papildomoms funkcijoms gali reikėti 32 bitų Javos, kurią būtina pasirinkti (žr. meniu „Priemonės – Nuostatos… – OpenOffice – Java“).\n\nDaugiau apie „OpenOffice“ ir Javą skaityti, dešinėje spustelėjus saitą „Java ir „Apache OpenOffice“.";
+//l10n.dl_linux_info_text			= "Svarbi užuomina: RPM lyginant su DEB – kurį rinktis?";
+//l10n.dl_linux_info_title			= "RPM vartojamas:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB vartojamas:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
 //l10n.dl_mac_info_text				= "macOS : Text";
 //l10n.dl_mac_info_title			= "macOS : Title";
 
@@ -337,7 +352,7 @@ l10n.dl_analyze_update_button_title		= "Į žemiau esančią lentelę pažymėta
 l10n.dl_analyze_select_button_text		= "Spustelėjus rinktis lentelę";
 l10n.dl_analyze_select_button_title		= "Rinktis visus duomenis žemiau esančioje lentelėje";
 l10n.dl_analyze_copy_button_text		= "Kopijuoti klavišų deriniu [Vald] + [C]";
-l10n.dl_analyze_copy_button_title		= "Kopijuoti pažymėtus lentelės duomenis į iškaprinę klavišų deriniu [Vald] + [C]";
+l10n.dl_analyze_copy_button_title		= "Kopijuoti pažymėtus lentelės duomenis į iškarpinę klavišų deriniu [Vald] + [C]";
 
 // Analyze: Strings for the table (used in "analyze.html").
 l10n.dl_analyze_table_browser_text		= "Naršyklės kintamieji";
