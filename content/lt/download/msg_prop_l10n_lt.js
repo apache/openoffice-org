@@ -232,7 +232,7 @@ l10n.dl_platform_info_text			= "Svarbios užuominos apie ";
 l10n.dl_platform_info_title			= "Spustelėjus rodomos svarbios užuominos apie ";
 l10n.dl_platform_info_link			= "platform_hints.html";
 l10n.dl_platform_info_headline			= "„Apache OpenOffice“ – svarbios užuominos apie pasirinktą platformą:";
-l10n.dl_platform_info_win_headline		= "„Windows“";
+l10n.dl_platform_info_win_headline		= "Windows";
 // l10n.dl_platform_info_win_sub_headline	= "32 bitai, 64 bitai ir Java – ką rinktis?";
 l10n.dl_platform_info_win_text			= "<h5> 32 bitai, 64 bitai ir Java – ką rinktis? </h5> <p> Šiuo metu platformai „Windows“ siūloma 32 bitų (x86) laida, kuri veikia ir „Windows“ 64 bitų (x86-64) sistemoje. Įsidėmėtina, kad papildomoms funkcijoms gali reikėti 32 bitų Javos, kurią būtina pasirinkti (žr. meniu „Priemonės – Nuostatos… – OpenOffice – Java“). <br /><br /> Daugiau informacijos apie „OpenOffice“ ir Javą šiuo adresu <a target='_blank' href=https://www.openoffice.org/download/common/java.html>https://www.openoffice.org/download/common/java.html</a>.</p>";
 l10n.dl_platform_info_mac_headline		= "macOS";
