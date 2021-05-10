@@ -1,0 +1,38 @@
+#if( $acl.hasPermission("Project Document - Suggest", $currentProject) )
+
+  <tr>
+   <th>Tasks : &nbsp;&nbsp;</th>
+   <td><div class="pipelinks">
+
+  #if ($rootFolder)
+    #set($rootFolderID = $rootFolder.getID())
+    #set($isApproved = $rootFolder.isApproved())
+  #else
+    #set($rootFolderID = $0)
+    #set($isApproved = true)
+  #end
+
+    #set($addFolderURL = $currentProject.getProjectPageURL("ProjectFolderAdd", "rootFolderID=$rootFolderID"))
+    #set($addDocURL = $currentProject.getProjectPageURL("ProjectDocumentAdd", "rootFolderID=$rootFolderID"))
+    #set( $editURL = $currentProject.getProjectPageURL("ProjectFolderEdit", "folderID=$rootFolderID"))
+    #set($deleteURL = $currentProject.getProjectPageURL("ProjectFolderDelete", "folderID=$rootFolderID"))
+
+    #if ( $acl.hasPermission("Project Document - Approve", $currentProject) && $isApproved )
+       <a href="$addFolderURL">Add a Folder</a> | <a href="$addDocURL">Add a Document</a>
+    #elseif ( $acl.hasPermission("Project Document - Suggest", $currentProject)  && $isApproved )
+       <a href="$addFolderURL">Suggest a Folder</a> | <a href="$addDocURL">Suggest a Document</a>
+    #end
+
+  #if ($rootFolder)
+      #if ($rootFolder.assertEditPermission($acl))
+  | <a href="$editURL">Edit This Folder</a> 
+      #end
+      #if ($rootFolder.assertDeletePermission($acl))
+  | <a href="$deleteURL">Delete This Folder</a> 
+      #end
+  #end
+   
+   </div></td>
+  </tr>
+
+#end

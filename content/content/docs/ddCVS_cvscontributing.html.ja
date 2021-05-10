@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+<style type="text/css">
+/* <![CDATA[ */ @import "/branding/css/tigris.css"; /* ]]> */
+</style>
+  <script src="/branding/scripts/sc.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="/branding/css/print.css" media="print" />
+
+  <title>ソースコード変更の寄稿</title>
+ </head>
+
+ <body class="docs" onload="self.focus()">
+  <div class="docs" id="ddcvscvscontributing">
+   <h2>コマンドライン CVS によるソースコード変更の寄稿</h2>
+
+   <div id="toc">
+    <ul>
+     <li><strong><a href="/nonav/servlets/HelpTOC">ヘルプ索引</a></strong></li>
+    </ul>
+
+    <ul>
+     <li>
+      <a href="/nonav/docs/ddCVS.html">CVS を使用したソースコードバージョン管理について</a> 
+
+      <ul>
+       <li><a href="/nonav/docs/ddCVS_cvsglossary.html">バージョン管理グロッサリ</a></li>
+
+       <li><a href="/nonav/docs/ddUsingCVS_command-line.html">CVS コマンドラインによるプロジェクト・ソースファイルへのアクセス</a></li>
+
+       <li>
+        CVS によるソースコード変更の寄稿 
+
+        <ul>
+         <li><a href="#cvscommit">ファイルとディレクトリのコミット</a></li>
+
+         <li><a href="#cvsadd">新しいファイルとディレクトリの追加</a></li>
+
+         <li><a href="#work">ファイルの取り扱いについて</a></li>
+
+         <li><a href="#filetypes">ファイル形式について</a></li>
+
+         <li><a href="#cvsupdate">作業用コピーを最新の状態に保つこと (CVS 更新)</a></li>
+
+         <li><a href="#cvstatus">作業用ファイルと CVS リポジトリの比較</a></li>
+
+         <li><a href="#otherdiff">コミットする前のファイルの比較</a></li>
+
+         <li><a href="#cvsmerging">変更のマージ</a></li>
+
+         <li><a href="#cvsresolving">マージする際のコンフリクトの解消</a></li>
+
+         <li><a href="#reverting">リビジョン履歴と復旧</a></li>
+        </ul>
+       </li>
+
+       <li><a href="/nonav/docs/ddCVS_cvsmanaging.html">CVS を使ったプロジェクトファイルとディレクトリの管理</a></li>
+      </ul>
+     </li>
+    </ul>
+   </div>
+
+   <h3><a id="contributing" name="contributing">変更の CVS への寄稿</a></h3>
+
+   <p><a id="cvscommit" name="cvscommit"></a>ファイルへの変更を共有リポジトリに<i>コミット</i>するには、次のコマンドを入力します。</p>
+
+   <p><code>cvs commit -m "ここに変更メッセージを入力" filename</code></p>
+
+   <p>ファイルへの変更に関する説明を含めなかった場合は、CVS がコミット操作を完了する前に、ファイル・エディタを実行して説明を加えるように要求されます。</p>
+
+   <p>ディレクトリとそのサブディレクトリにあるすべてのファイルへの変更をコミットするには、次のコマンドを入力します。</p>
+<pre>
+<code>cd top_directory_to_commit
+cvs commit -m "ここに変更メッセージを入力"
+</code>
+</pre>
+
+   <p>すべてのコミットは、自動的に記録され、プロジェクトの CVS メーリングリストに掲示されます。</p>
+
+   <h3><a id="cvsadd" name="cvsadd">ファイル/ディレクトリの追加</a></h3>
+
+   <p>自分のワーキング・ディレクトリでファイルを作成し、編集した後でこの新しいファイルを CVS リポジトリに<i>追加</i>するには、次のコマンドを入力します。</p>
+
+   <p><code>cvs add filename</code></p>
+
+   <p>次に「CVS のファイル名コミット」コマンドを続けます。 最初にファイルを追加しなかった場合は、CVS はファイルを認識できません。</p>
+
+   <p>CVS への書き込み権限がある場合は、「<b>cvs add</b>」コマンドを使ってプロジェクトのソースツリーにサブディレクトリを追加できます。それから、「<b>cvs move</b>」コマンドを使って既存のファイルを新しいサブディレクトリに移動できます。</p>
+
+   <p>注意: CVS のディレクトリに名前を付けるときには、注意して行うようにしてください。 CVS のリポジトリには、さまざまなオペレーティングシステムを使用しているユーザがアクセスします。ディレクトリ名に使用した文字が読めないユーザがいるかもしれません。自分のオペレーティングシステムでは、.、~、/、\ やその他の文字をディレクトリ名として使用できる場合でも、ディレクトリにアクセスを必要とするほかのユーザがファイル構成スキーマを使用できない場合があります。ほかのユーザとの問題を避けるには、ディレクトリ名に次の文字のみを使用するようにします。</p>
+
+   <blockquote>
+    <p>a～z、A～Z、0～9、および _ (アンダースコア)</p>
+   </blockquote>
+
+   <p>その他の文字を追加すると、ディレクトリ名がほかのオペレーティングシステムを使用するユーザが読めなくなることがあります。</p>
+
+   <ul>
+    <li><a href="http://cvsbook.red-bean.com/cvsbook.html#Committing">変更をコミットすることについての詳細</a></li>
+
+    <li><a href="http://cvshome.org/docs/manual/cvs_7.html#SEC66">ファイルとディレクトリの追加についての詳細</a></li>
+   </ul>
+
+   <h3><a id="work" name="work">ファイルの取り扱いについて</a></h3>
+
+   <p>プロジェクトのリポジトリからのファイルのチェックアウトとリポジトリへのチェックインの間で、ファイルがどのようにプロジェクト環境やビルド・プロセスで使用されたかについては、CVS にはほとんど関係がありません。 これは、プロジェクトのオーナとプロジェクトに特有のその他の外部要因によって支配されます。</p>
+
+   <p>既存のファイルに変更を加える場合は、自分の選択したファイル・エディタを使ってローカルマシン上でこれらのファイルの作業用コピーを編集します。作業用コピーに加えた変更は、ファイルの変更したバージョンをチェックイン (<i>cvs commit</i> の実行) までは、プロジェクトのソース・リポジトリや他の開発者の作業には全く影響しません。</p>
+
+   <p>詳しくは、<a href="http://www.cvshome.org/docs/manual/cvs_1.html#SEC1">CVS が行わないこと</a>を参照してください。</p>
+
+   <h3><a id="filetypes" name="filetypes">ファイル形式について</a></h3>
+
+   <p>CVS コマンドと操作についてこのドキュメントに記載されてている情報は、作業しているプロジェクト・ファイルがテキスト・ファイルであることを想定しています。CVS のバージョン管理にバイナリ・ファイルを含める可能性がある場合は、特別な問題がいくつかあります。</p>
+
+   <p>詳しくは、CVS の<a href="http://cvshome.org/docs/manual/cvs_9.html#SEC80">バイナリファイルのハンドリング</a> を参照してください。</p>
+
+   <h3><a id="cvsupdate" name="cvsupdate">作業用ファイルとリポジトリファイルの日付を同じ日に維持する</a></h3>
+
+   <p>ファイルの操作を行う前にファイルの状態を知りたい場合は、次のコマンドを使ってプロジェクトのリポジトリと日付が合っていないローカル・ディレクトリのファイル・リストを表示できます。</p>
+
+   <p><code>cvs -qn update</code></p>
+
+   <p>影響するディレクトリまたはサブディレクトリにあるファイルと現在のステータスが次のように示されます。</p>
+
+   <ul>
+    <li>? = ファイルが CVS で認識されません (追加してコミットする必要があります)。</li>
+
+    <li>A = ファイルが追加され、CVS が認識していますが、リポジトリにコミットしなければなりません。</li>
+
+    <li>M = 作業用コピーをチェックアウトしてからファイルがほかの開発者によって変更されています。 これは、ファイルの更新が必要であることを意味します。</li>
+
+    <li>U = ファイルが更新されています。</li>
+
+    <li>C = マージする際ファイルに手作業で解決しなければならない競合があります。</li>
+   </ul>
+
+   <p>実際に更新を実行してワーキング・ディレクトリをリポジトリに同期させるには、次のコマンドを入力します。</p>
+
+   <p><code>cvs update</code></p>
+
+   <p>このコマンドにファイル名を追加して、個別のファイルを更新することもできます。</p>
+
+   <p>または、更新するときに新しいディレクトリを含めるには、次のコマンドを実行します。</p>
+
+   <p><code>cvs update -d</code></p>
+
+   <ul>
+    <li><a href="http://www.gnu.org/manual/cvs/html_chapter/cvs_20.html#SEC132">CVS 更新コマンドについての詳細</a></li>
+
+    <li><a href="http://www.gnu.org/manual/cvs/html_chapter/cvs_20.html#SEC134">CVS 更新アウトプットについての詳細</a></li>
+   </ul>
+
+   <h3><a id="cvstatus" name="cvstatus">作業用ファイルと CVS リポジトリの比較</a></h3>
+
+   <p>リポジトリの最新バージョンと自分の作業用コピーが同期しているかを見るもう 1 つの方法は、次のコマンドを使用する方法です。</p>
+
+   <p><code>cvstatus</code></p>
+
+   <p>または、個別のファイル・ステータスを確認するには、次のコマンドを使用します。</p>
+
+   <p><code>cvs status filename</code></p>
+
+   <p>この比較により、次のうちいずれかのメッセージが返されます。</p>
+
+   <dl>
+    <dt>Locally modified (ローカルで修正済み)</dt>
+
+    <dd>ファイルを編集しましたが、変更がコミットされていません。</dd>
+
+    <dt>Locally Added (ローカルで追加済み)</dt>
+
+    <dd>ファイルを追加しましたが、変更がコミットされていません。</dd>
+
+    <dt>Locally Removed (ローカルで削除済み)</dt>
+
+    <dd>「remove」を使ってファイルを削除しましたが、変更がコミットされていません。</dd>
+
+    <dt>Needs Checkout (チェックアウトが必要) </dt>
+
+    <dd>ほかのユーザが新しいリビジョンをリポジトリにコミットしています。このメッセージは操作を正確に表していないかもしれません。通常、新しいリビジョンを取得する場合には「チェックアウト」ではなく「更新」という用語を使用します。</dd>
+
+    <dt>Needs Patch (パッチが必要)</dt>
+
+    <dd>「チェックアウトが必要「と同じく、CVS サーバがファイル全体ではなくパッチを送信します。パッチまたはファイル全体を送信することは同じ結果となります。</dd>
+
+    <dt>Needs Merge (マージが必要) </dt>
+
+    <dd>ほかのユーザがより新しいリビジョンをリポジトリにコミットしました。さらに、自分もファイルに変更を加えています。 </dd>
+
+    <dt>File had conflicts on merge (ファイルにマージ上の競合があります。) </dt>
+
+    <dd>これは、「ローカルで修正済み」と同じですが、前の「update」コマンドを実行すると競合が発生して、CVS が加えた変更を解決できません。 
+  まず、<a href="#cvsresolving">コンフリクトの解決</a>を実行しなければなりません。</dd>
+
+    <dt>不明</dt>
+
+    <dd>CVS はこのファイルに関して情報を持っていません。 たとえば、新しいファイルを作成したが、「cvs add」をまだ実行していないような場合に発生します。</dd>
+   </dl>
+
+   <p>一般的に、<I>ファイルの変更をコミットする直前に</I>、リポジトリと作業用ファイルが同期しているかを確認することをお勧めします。これは、異なるディレクトリからコミットしたり、自分がリポジトリからチェックアウトしたり最後に更新した後で、ほかの開発者が同じファイルに変更を加えた場合などの理由で、コミットが正しく実行できないことがあるためです。同じファイルの古いバージョンに対し、変更をコミットしようとすると、CVS がこれらをマージするときに競合が発生しやすくなります。このような状態でコミットしようとすると、CVS から「dying gasps」のメッセージが表示されることがあります。 </p>
+
+   <p>ファイルのコピーとリポジトリの最新バージョンとの差を表示するには、次のコマンドを入力します。</p>
+
+   <p><code>cvs diff filename</code></p>
+
+   <p><a href="http://cvsbook.red-bean.com/cvsbook.html#Finding_Out_What_You__And_Others__Did_--_update_And_diff">プロジェクトレポジトリと自分の作業についての詳細</a></p>
+
+   <h3><a id="otherdiff" name="otherdiff">差をコミットする<i>前に</i>、ファイルのバージョンを比較する</a></h3>
+
+   <p>自分の変更をコミットする<i>前に</i>、同じファイルにほかの開発者が加えた変更を表示したい場合があります。 
+たとえば、非常に複雑な変更をコミットしようとしている場合で、ほかの開発者の作業と競合が予想されるような場合です。</p>
+
+   <p>この場合は、別のファイル名で自分の作業用ファイルを保存しておきます (「 filename-new」など）。 それから、<b>cvs update</b>コマンドを実行して、リポジトリの最新バージョンと自分のファイルを変更をコミットする前に比較します。 次の diff コマンドを使って、2 つのファイルを横に並べて比較することもできます。</p>
+
+   <p><code>diff -y filename filename-new</code></p>
+
+   <h3><a id="cvsmerging" name="cvsmerging">ほかの開発者の変更に自分の変更をマージする</a></h3>
+
+   <p><b>「cvs update」</b> コマンドを実行することは、CVS にリポジトリの最新バージョンを自分の作業用コピーにマージすることと同じです。</p>
+
+   <p>しかし、最後に更新してからファイルに加えられた変更が、自分の変更と合わない場合があります。または、リポジトリのバージョン内で競合する変更を自分が加えたような場合もあります。 CVS は、更新してコミットする際に、このような競合をできるだけ自動的に解決しようと試みますが、すべてを解決できない場合があります。この場合、ファイル内の競合は、手作業で解決しなければなりません。</p>
+
+   <h3><a id="cvsresolving" name="cvsresolving">マージする際のコンフリクトの解消</a></h3>
+
+   <p>マージ・コンフリクトを解決するには、ファイル・エディタでファイルを開きます。<b>&gt;&gt;&gt;&gt;&gt;&gt;</b> and <b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b>でマークされている行やセクションを探します。 CVS がコンフリクトを解決できない場合は、両バージョンに影響する行やセクションをファイルに含めます。最新のバージョンが通常先に挿入されます。コンフリクトを解消する作業は、不必要な行とコンフリクトの記号やリビジョン番号などを含む行を削除することです。 
+それから、ファイルを保存して再度コミットします。</p>
+
+   <ul>
+    <li><a href="http://www.gnu.org/manual/cvs/html_chapter/cvs_7.html#SEC40">コンフリクトの例</a></li>
+
+    <li><a href="http://cvsbook.red-bean.com/cvsbook.html#Detecting_And_Resolving_Conflicts">コンフリクトの解決についての詳細</a></li>
+   </ul>
+
+   <h3><a id="reverting" name="reverting">リビジョン履歴と復旧</a></h3>
+
+   <p><b>cvs log</b>コマンドを使ってファイルの変更履歴を表示すること以外に、<i>復旧</i>プロセスを使って以前のファイル・リビジョンを最新のバージョンとして実際に復旧させることができます(「リポジトリのヘッド」に復元されます)。 これは、いかなる理由があるとしても、ファイルを以前のバージョンに戻す必要がある場合に便利です。開発プロジェクトに壊れたビルドやほかの問題がある場合は、これは最も便利で強力なバージョン管理機能になります。</p>
+
+   <p>>注意: 「リビジョン」と「バージョン」の違いを混同することがあります。 <i>リビジョン</i>は、個々のファイルの特定のアップデートで、リビジョン番号は 1.1、1.2、1.3 などとなります。 「cvs log filename」コマンドを実行すると、特定のファイルのリビジョン番号がすべて表示されます。一方、<i>バージョン</i>は、ファイル・リビジョンの<b><i>セット</i></b>で、特定の時点でタグ付けされ名前が付けられます。バージョンはファイルのリビジョンと同様に名前が付けられるため、混同しやすくなっています (1.0、1.1、1.2 など)。しかし、バージョンはこの方法で名前を付ける必要はありません。プロジェクトオーナが指定した任意の文字列や、異なる番号スキームを使用できます。</p>
+
+   <p>まず、復旧を行う前に、現在のリポジトリ・ヘッドにあるファイル・バージョンと復旧しようとしているバージョン間の差を確認することをお勧めします。これには、次のコマンドを使用します。</p>
+
+   <p><code>cvs diff -c -r version# -r version# filename</code></p>
+
+   <p>これにより、復旧しようとする前に、2 つのファイルを比較できます。 2 つのバージョンを区別できる限り、このコマンドの結果は致命的なものにはなりません。</p>
+
+   <p>復旧に使用するコマンドには、バージョン番号のルールに厳しく従うことが必要です。最新のバージョンから以前のバージョンに復旧するには、次のコマンドを入力します。</p>
+
+   <p><code>cvs update -j later_version# -j earlier_version# filename</code></p>
+
+   <p>復旧には、複数の方法があるため、次の項目も参照してください:<br />
+    <a href="http://cvsbook.red-bean.com/cvsbook.html#Examining_And_Reverting_Changes">復旧についての詳細</a><br />
+    <a href="http://www.gnu.org/manual/cvs/html_chapter/cvs_16.html#SEC72">リビジョン履歴についての詳細</a></p>
+
+   <p>復旧は、「スティッキー・タグ」エラーを招く場合があるということにも注意してください。これは、次の更新コマンドに特別なスイッチを使って解決できます。</p>
+
+   <p><code>cvs update -dAP</code></p>
+
+   <p>(<a href="http://cvsbook.red-bean.com/cvsbook.html#Getting_Snapshots__Dates_And_Tagging_">スティッキ－タグエラーとは?</a>)</p>
+   <!--
+
+          <h3><a name="cvstips">Feedback on this document</a></h3>
+        <p>
+          The author of this help document has made every attempt to compile accurate, helpful information about using CVS for projects hosted on this site. If you think any content in the above document is wrong, inadequate, or something is just plain missing ... that's good. This is open source, so step up to the plate and contribute your suggestions for additions and improvements.
+          </p> -->
+
+   <p>より詳しい CVS のヘルプ: <a href="/nonav/docs/ddCVS_cvsmanaging.html">コマンドライン CVS を使ったプロジェクトファイルとディレクトリの管理</a></p>
+
+   <div class="courtesylinks">
+    <p><a href="#toc">トップ</a> | <a href="/nonav/servlets/HelpTOC">ヘルプ索引</a></p>
+   </div>
+  </div>
+ </body>
+</html>
+
+

@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+<style type="text/css">
+/* <![CDATA[ */ @import "/branding/css/tigris.css"; /* ]]> */
+</style>
+  <script src="/branding/scripts/sc.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="/branding/css/print.css" media="print" />
+
+  <title>Managing project source code</title>
+ </head>
+
+ <body class="docs" onload="self.focus()">
+  <div class="docs" id="projectownersource">
+   <h2>Managing project source code</h2>
+
+   <div id="toc">
+    <ul>
+     <li><strong><a href="/nonav/servlets/HelpTOC">Help index</a></strong></li>
+    </ul>
+
+    <ul>
+     <li>
+      <a href="/nonav/docs/ProjectOwnerAdmin.html">Project owner administration</a> 
+
+      <ul>
+       <li><a href="/nonav/docs/ProjectOwnerEdit.html">Editing and maintaining the Project Home page</a></li>
+
+       <li><a href="/nonav/docs/ProjectOwnerNews.html">Managing project site news</a></li>
+
+       <li><a href="/nonav/docs/ProjectOwnerMembers.html">Adding project members and approving roles</a></li>
+
+       <li><a href="/nonav/docs/ProjectOwnerMailingLists.html">Configuring and managing project mailing lists</a></li>
+
+       <li><a href="/nonav/docs/ProjectOwnerDocuments.html">Managing project documentation</a></li>
+
+       <li>
+        Managing project source code 
+
+        <ul>
+         <li><a href="#gettingstarted">Getting started</a></li>
+
+         <li><a href="#siteadmincvs">About CVS repository tasks</a></li>
+
+         <li><a href="#considerations">A few initial considerations for project owners</a></li>
+
+         <li><a href="#cvspermissions">Managing CVS permissions</a></li>
+        </ul>
+       </li>
+
+       <li><a href="/nonav/docs/ProjectOwnerIssues.html">Managing project issues and generating reports</a></li>
+       <li><a href="/nonav/docs/ProjectOwnerCustomStyle.html">Managing custom HTML styling</a></li>
+      </ul>
+     </li>
+    </ul>
+   </div>
+
+   <h3><a name="gettingstarted" id="gettingstarted">Getting started</a></h3>
+
+   <p>If you are new to CVS, this help guide provides some basic quick reference information for administrative CVS tasks relevant to projects hosted this site. This guide by no means exhaustively documents CVS or the many broader project management issues imputed by versioning control. A wealth of published documentation for CVS exists, both online and in print. The following links lead to general CVS tool documentation elsewhere on this site, and these documents include many authoritative, external CVS resources.</p>
+
+   <h4>CVS tool documentation</h4>
+
+   <ul>
+    <li><a href="/nonav/docs/ddCVS.html">About CVS version control</a></li>
+
+    <li><a href="/nonav/docs/ddCVS_cvsglossary.html">A version control glossary</a></li>
+
+    <li><a href="/nonav/docs/ddUsingCVS_command-line.html">Using command line CVS</a></li>
+
+    <li><a href="/nonav/docs/ddUsingWinCvs.html">UsingWinCvs</a></li>
+   </ul>
+
+   <h3><a id="siteadmincvs" name="siteadmincvs">About CVS repository tasks</a></h3>
+
+   <p>Much of the administrative work involved with setting up your project's source repository is handled "behind the scenes" when your project gains approval. If you are new to CVS, this means that you do not have to start from scratch to set up the CVS repository for your project.</p>
+
+   <p>The following tasks occur automatically:</p>
+
+   <ul>
+    <li>Your project's basic repository structure is created with a top-level directory that can be expanded upon by adding subdirectories as the project evolves. There is also a "/www" directory created for project web content.</li>
+
+    <li>
+     Your project's CVS root (that is, the server where your CVS repository is located) is automatically set to this site's host servers and preconfigured. The instructions in the <b>Source code</b> page for your project display the exact CVS root needed to log in to the project's source repository. For most projects on this site, the cvsroot will be: 
+
+     <p><code>:pserver:username@cvs.projectname.thisdomain:/cvs</code></p>
+    </li>
+   </ul>
+
+   <p>For CVS experts, this automation means that the CVS administrative module is preconfigured for projects hosted on this site. That includes the following files, listed here for your information:</p>
+
+   <ul>
+    <li>Modules file</li>
+
+    <li>Cvswrappers file</li>
+
+    <li>Commit support files</li>
+
+    <li>Commitinfo</li>
+
+    <li>Verifying log messages</li>
+
+    <li>Editinfo</li>
+
+    <li>Loginfo</li>
+
+    <li>Rcsinfo</li>
+
+    <li>Ignoring files via cvsignore</li>
+
+    <li>Checkoutlist file</li>
+
+    <li>History file</li>
+
+    <li>Expansions in administrative files</li>
+   </ul>
+
+   <p>All CVS repository tasks such as backing up, restoring, moving, or configuring remote repository access are also handled by site administrators. Should your project require editing CVS administrative files or other repository-level actions, you must contact a site administrator for support.</p>
+
+   <h3><a id="considerations" name="considerations">A few initial considerations for project owners</a></h3>
+
+   <h4><a id="definestructure" name="definestructure">Starting from scratch</a></h4>
+
+   <p>When your project is completely new or still in infancy, plan the overall directory structure at the front end of project evolution. Although the top level CVS module structure is predetermined, decide how you generally want to organize source files so that you can communicate this to existing and potential contributors. Considering source structure early on enables you to maintain consistency as the project grows, and makes it easier for new contributors to get up to speed.</p>
+
+   <p>A good example of communicating overall project source structure is in the <a href="http://scarab.tigris.org/scarab-design.html#directory">design document for the scarab open source project</a> which uses a graphic depiction. ViewCVS source browsing, provided with all projects hosted on this site, also allows users to explore your project's source structure.</p>
+
+   <p><a id="postrcsissues" name="postrcsissues"></a><b>Version control project management issues</b></p>
+
+   <p>As the project owner, you are likely to deal with developers who are grappling with the differences between RCS and CVS. Here are some key differences to clarify:</p>
+
+   <ul>
+    <li>One of the central principals in RCS is file locking, which prevents other developers from checking out or modifying a file when someone else has checked it out. The benefit of file locking is that developers never have to deal with conflicting modifications within files. RCS controls versioning by only allowing files to be modified by one person at a time. Therefore, the drawback to RCS is: no one can commit changes to a file while another developer has it checked out.</li>
+
+    <li>The central tenant of CVS is ability for developers to concurrently check out, modify, and commit files, which greatly benefits projects with developers participating remotely. CVS merges everyone's changes in a central repository, but the tradeoff is developers on your project will inevitably deal with merge conflicts in files. The only way to resolve such conflicts is to edit the file, choosing which changes to keep and which to delete, before it can be committed.</li>
+   </ul>
+
+   <h3><a id="cvspermissions" name="cvspermissions">Managing CVS permissions</a></h3>
+
+   <p>CVS read-access to your project's source code for site users is determined by whether your project is licensed open source or proprietary. Open source projects allow source file read access for any site user by default, whether or not they are project members. Proprietary project pages are not publicly viewable, so source code access is restricted to project members.</p>
+
+   <p>In both open source and proprietary projects, however, you as the Project Owner determine which project members will gain CVS write-access permissions through the roles you grant to them.</p>
+
+   <p>Observers, that is, users you have approved for project membership but who are not actually contributing source code to the project, have read-access but <i>not</i> write-access to your project's source repository . They can check out, view, compare revisions, and update source files, but they cannot contribute modified files or new files to the source repository.</p>
+
+   <p>All other project membership roles automatically confer cvs write-access to project members. This includes the ability to:</p>
+
+   <ul>
+    <li>commit changes/patches</li>
+
+    <li>add new files</li>
+
+    <li>import files</li>
+
+    <li>remove files</li>
+
+    <li>check file status</li>
+
+    <li>tag and branch files</li>
+   </ul>
+
+   <p>Read-write permissions associated with individual files are administered separately from CVS. Note that these permissions cannot be altered for a file once it is checked into the project's CVS repository.</p>
+
+   <div class="courtesylinks">
+    <p><a href="#toc">Top</a> | <a href="/nonav/servlets/HelpTOC">Help index</a></p>
+   </div>
+  </div>
+ </body>
+</html>
+
+

@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Writer.InsertRemoveAnnotations.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2005/06/01 07:54:34 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="OOBasic" application="Writer">
+
+<keywords>
+	<keyword>annotation</keyword>
+	<keyword>note</keyword>
+	<keyword>text content</keyword>
+</keywords>
+
+<authors>
+	<author id="paolomantovani" initial="true" email="mantovani.citie@libero.it">Paolo Mantovani</author>
+</authors>
+
+<question heading="insert remove annotations">How to insert and remove annotations in text documents?
+</question>
+
+<answer>
+<p>Text annotations are a special type of text fields, therefore, in order to insert and remove annotations you must proceed in the same manner as for other kind of text contents</p>
+<p>See the example below:</p>
+<p>The first routine shows how to add an annotation</p>
+<p>The second shows how to find and remove all annotations in a document</p>
+<p></p>
+<p></p>
+<listing>REM  *****  BASIC  *****
+
+Sub Example_InsertAnnotation
+	oDoc = ThisComponent
+	oTextCursor = oDoc.Text.createTextCursor
+	oTextCursor.goToEnd(False)
+	
+	Dim oDate As New {@see com.sun.star.util.Date}
+	With oDate
+		.Day = Day(Now)
+		.Month = Month(Now)
+		.Year = Year(Now)
+	End With
+	
+	oTextAnnotation = oDoc.createInstance(&quot;{@see com.sun.star.text.TextField.Annotation}&quot;)
+	With oTextAnnotation
+		.Content = &quot;Paolo was here!!&quot;
+		.Author = &quot;PM&quot;
+		.Date = oDate
+	End With
+	
+	oDoc.Text.insertTextContent( oTextCursor, oTextAnnotation, True) 	
+
+End Sub
+
+
+Sub Example_RemoveAllAnnotations
+	oDoc = ThisComponent	
+	oEnum = oDoc.TextFields.createEnumeration
+	
+	Do While oEnum.hasMoreElements
+		oTField = oEnum.nextElement
+		If oTField.supportsService(&quot;{@see com.sun.star.text.TextField.Annotation}&quot;) Then
+			MsgBox oTField.Content, 16,&quot;Annotation detected!!&quot;
+			oDoc.Text.removeTextContent(oTField)
+			MsgBox &quot;Annotation Removed!!&quot;
+		End If
+	Loop
+
+End Sub</listing>
+</answer>
+
+<versions>
+	<version number="1.0.x" status="may_work"/>
+	<version number="1.1.x" status="tested"/>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="paolomantovani" date="2005-05-31">Initial version</change>
+</changelog>
+
+</snippet>
+
