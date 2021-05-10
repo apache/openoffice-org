@@ -23,59 +23,60 @@ help wanted	| This website needs help and may be incomplete, outdated or unmaint
 
 <br />
 
-Language				| Website	| OpenOffice availability
+Language								| Website		| OpenOffice availability
 ----------------------------------------|---------------|------------------------
-[Afrikaans (af)](/af/)			| help wanted	| outdated
-[Amharic (am)](/am/)			| help wanted	| outdated
-[Arabic (ar)](/ar/)			| help wanted	| outdated
-[Armenian (hy)](/hy/)			| help wanted	| outdated
-[Asturian (ast)](/ast/)			| help wanted	| current 4.1.x
-[Basque (eu)](/eu/)			| help wanted	| current 4.1.x
-[Bulgarian (bg)](/bg/)			| help wanted	| current 4.1.x
-[Catalan (ca)](/ca/)			| help wanted	| current 4.1.x
+[Afrikaans (af)](/af/)					| help wanted	| outdated
+[Amharic (am)](/am/)					| help wanted	| outdated
+[Arabic (ar)](/ar/)						| help wanted	| outdated
+[Armenian (hy)](/hy/)					| help wanted	| outdated
+[Asturian (ast)](/ast/)					| help wanted	| current 4.1.x
+[Basque (eu)](/eu/)						| help wanted	| current 4.1.x
+[Bulgarian (bg)](/bg/)					| help wanted	| current 4.1.x
+[Catalan (ca)](/ca/)					| help wanted	| current 4.1.x
 [正體中文 Chinese trad. (tw)](/zh-tw/)	| maintained	| current 4.1.x
 [简体中文 Chinese sim. (cn)](/zh-cn/)	| maintained	| current 4.1.x
-[Czech (cs)](/cs/)			| maintained	| current 4.1.x
-[Danish (da)](/da/)			| maintained	| current 4.1.x
-[Dutch (nl)](/nl/)			| maintained	| current 4.1.x
-[Esperanto (eo)](/eo/)			| help wanted	| outdated
-[Estonian (et)](/et/)			| help wanted	| outdated
-[Finnish (fi)](/fi/)			| maintained	| current 4.1.x
-[French (fr)](/fr/)			| maintained	| current 4.1.x
-[Galician (gl)](/gl/)			| help wanted	| current 4.1.x
-[Gaelic - Scottish (gd)](/gd/)		| help wanted	| current 4.1.x
-[German (de)](/de/)			| maintained	| current 4.1.x
-[Greek (el)](/el/)			| maintained	| current 4.1.x
-[Hebrew (he)](/he/)			| maintained	| current 4.1.x
-[Hindi (hi)](/hi/)			| help wanted	| current 4.1.x
-[Hungarian (hu)](/hu/)			| help wanted	| current 4.1.x
-[Icelandic (is)](/is/)			| help wanted	| outdated
-[Indonesian (id)](/id/)			| help wanted	| outdated
-[Italiano (it)](/it/)			| maintained	| current 4.1.x
-[Japanese (ja)](/ja/)			| maintained	| current 4.1.x
-[Kabyle (kab)](/kab/)			| help wanted	| outdated
-[Khmer (km)](/km/)			| help wanted	| current 4.1.x
-[Korean (ko)](/ko/)			| help wanted	| current 4.1.x
-[Lithuanian (lt)](/lt/)			| maintained	| current 4.1.x
-[Norwegian (no)](/no/)			| maintained	| current 4.1.x
-[Oromo (om)](/om/)			| help wanted	| outdated
-[Polish (pl)](/pl/)			| maintained	| current 4.1.x
-[Portuguese Europeu (pt)](/pt/)		| maintained	| current 4.1.x
+[Czech (cs)](/cs/)						| maintained	| current 4.1.x
+[Danish (da)](/da/)						| maintained	| current 4.1.x
+[Dutch (nl)](/nl/)						| maintained	| current 4.1.x
+[Esperanto (eo)](/eo/)					| help wanted	| outdated
+[Estonian (et)](/et/)					| help wanted	| outdated
+[Finnish (fi)](/fi/)					| maintained	| current 4.1.x
+[French (fr)](/fr/)						| maintained	| current 4.1.x
+[Galician (gl)](/gl/)					| help wanted	| current 4.1.x
+[Gaelic - Scottish (gd)](/gd/)			| help wanted	| current 4.1.x
+[German (de)](/de/)						| maintained	| current 4.1.x
+[Greek (el)](/el/)						| maintained	| current 4.1.x
+[Hebrew (he)](/he/)						| maintained	| current 4.1.x
+[Hindi (hi)](/hi/)						| help wanted	| current 4.1.x
+[Hungarian (hu)](/hu/)					| help wanted	| current 4.1.x
+[Icelandic (is)](/is/)					| help wanted	| outdated
+[Indonesian (id)](/id/)					| help wanted	| outdated
+[Italiano (it)](/it/)					| maintained	| current 4.1.x
+[Japanese (ja)](/ja/)					| maintained	| current 4.1.x
+[Kabyle (kab)](/kab/)					| help wanted	| outdated
+[Khmer (km)](/km/)						| help wanted	| current 4.1.x
+[Korean (ko)](/ko/)						| help wanted	| current 4.1.x
+[Lithuanian (lt)](/lt/)					| maintained	| current 4.1.x
+[Norwegian (no)](/no/)					| maintained	| current 4.1.x
+[Oromo (om)](/om/)						| help wanted	| outdated
+[Polish (pl)](/pl/)						| maintained	| current 4.1.x
+[Portuguese Europeu (pt)](/pt/)			| maintained	| current 4.1.x
 [Portuguese of Brasil (pt-br)](/pt-br/)	| help wanted	| current 4.1.x
-[Romanian (ro)](/ro/)			| help wanted	| outdated
-[Russian (ru)](/ru/)			| maintained	| current 4.1.x
-[Serbian - Cyrillic (sr)](/sr/)		| help wanted	| current 4.1.x
+[Romanian (ro)](/ro/)					| help wanted	| outdated
+[Russian (ru)](/ru/)					| maintained	| current 4.1.x
+[Serbian - Cyrillic (sr)](/sr/)			| help wanted	| current 4.1.x
 [Serbian - Latin (sr-Latn)](/sr-latn/)	| maintained	| current 4.1.x
-[Slovenian (sl)](/sl/)			| help wanted	| current 4.1.x
-[Slovakian (sk)](/sk/)			| maintained	| current 4.1.x
-[Spanish (es)](/es/)			| maintained	| current 4.1.x
-[Swedish (sv)](/sv/)			| maintained	| current 4.1.x
-[Thai (th)](/th/)			| help wanted	| current 4.1.x
-[Turkish (tr)](/tr/)			| maintained	| current 4.1.x
-[Ukrainian (uk)](/uk/)			| help wanted	| outdated
-Valencian AVL (ca-XV)			| help wanted	| current 4.1.x
-Valencian RACV (ca-XR)			| help wanted	| current 4.1.x
-[Vietnamese (vi)](/vi/)			| help wanted	| current 4.1.x
+[Slovenian (sl)](/sl/)					| help wanted	| current 4.1.x
+[Slovakian (sk)](/sk/)					| maintained	| current 4.1.x
+[Spanish (es)](/es/)					| maintained	| current 4.1.x
+[Swedish (sv)](/sv/)					| maintained	| current 4.1.x
+[Tamil (ta)](/ta/)						| help wanted	| current 4.1.x
+[Thai (th)](/th/)						| help wanted	| current 4.1.x
+[Turkish (tr)](/tr/)					| maintained	| current 4.1.x
+[Ukrainian (uk)](/uk/)					| help wanted	| outdated
+Valencian AVL (ca-XV)					| help wanted	| current 4.1.x
+Valencian RACV (ca-XR)					| help wanted	| current 4.1.x
+[Vietnamese (vi)](/vi/)					| help wanted	| current 4.1.x
 
 ([Legacy information for the Native Language Confederation][4], not accurate for Apache OpenOffice.)
 
