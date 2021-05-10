@@ -86,6 +86,6 @@ Valencian RACV (ca-XR)					| help wanted	| current 4.1.x
   [4]: /native-lang/
   [5]: /download/
   [6]: //translate.apache.org/projects/aoo40/
-  [7]: //svn.apache.org/viewvc/openoffice/trunk/
+  [7]: //gitbox.apache.org/repos/asf?p=openoffice.git
   [8]: //openoffice.apache.org/native-lang.html
   [9]: //openoffice.apache.org/mailing-lists.html#localization-mailing-list-public
