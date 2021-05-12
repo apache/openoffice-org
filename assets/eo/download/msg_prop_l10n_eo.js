@@ -16,7 +16,7 @@
 
 // Set a specific language ISO code to force to assemble a download link with a certain language.
 // Change xx to a valid ISO lang code.
-DL.NL_LANG					= "eo";
+DL.NL_LANG					= "en";
 
 // General:
 l10n.dl_headline_text				= "Apache OpenOffice Download";

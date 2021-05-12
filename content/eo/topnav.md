@@ -11,11 +11,11 @@ divid=topnava
 - [Contact][m7]
 
 
-[m0]:   /xx/product/                  "Apache OpenOffice product description"
-[m1]:   /xx/download/                 "Download Apache OpenOffice"
-[m2]:   /xx/support/                  "Find Support for OpenOffice"
+[m0]:   /eo/product/                  "Apache OpenOffice product description"
+[m1]:   /eo/download/                 "Download Apache OpenOffice"
+[m2]:   /eo/support/                  "Find Support for OpenOffice"
 [m3]:   https://blogs.apache.org/ooo/ "Apache OpenOffice Blog"
 [m4]:   https://openoffice.xx/	      "Apache OpenOffice blog in your own language"
-[m5]:   /xx/extensions/               "Extensions and Templates for OpenOffice"
-[m6]:   /xx/participate/              "Get involved in Apache OpenOffice"
-[m7]:   /xx/participate/contact.html  "Contact Apache OpenOffice contributors"
+[m5]:   /eo/extensions/               "Extensions and Templates for OpenOffice"
+[m6]:   /eo/participate/              "Get involved in Apache OpenOffice"
+[m7]:   /eo/participate/contact.html  "Contact Apache OpenOffice contributors"
