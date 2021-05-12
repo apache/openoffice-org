@@ -16,7 +16,7 @@ var l10n = new Object();
 
 // Graphic, text and links to show inside the event box.
 									// "true" = Show the box, "false" = Do not show.
-l10n.index_event_box_show			= true;
+l10n.index_event_box_show			= false;
 									// Logo graphic.
 l10n.index_event_box_graphic_src		= "/images/ASF-at-15-EPS.png";
 									// Alternative text for the graphic.
