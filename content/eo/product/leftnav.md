@@ -3,20 +3,20 @@ divid=leftnav
 ~~~~~~
 # Products
 
-  - [Writer](/xx/product/writer.html)
-  - [Calc](/xx/product/calc.html)
-  - [Impress](/xx/product/impress.html)
-  - [Draw](/xx/product/draw.html)
-  - [Base](/xx/product/base.html)
-  - [Math](/xx/product/math.html)
+  - [Writer](/eo/product/writer.html)
+  - [Calc](/eo/product/calc.html)
+  - [Impress](/eo/product/impress.html)
+  - [Draw](/eo/product/draw.html)
+  - [Base](/eo/product/base.html)
+  - [Math](/eo/product/math.html)
 
 # Platforms
 
-  - [Windows](/xx/product/windows.html)
-  - [Mac](/xx/product/mac.html)
-  - [Linux](/xx/product/linux.html)
+  - [Windows](/eo/product/windows.html)
+  - [Mac](/eo/product/mac.html)
+  - [Linux](/eo/product/linux.html)
 
 # More
 
-  - [Suite](/xx/product/suite.html)
-  - [Reviews](/xx/product/reviews.html)
+  - [Suite](/eo/product/suite.html)
+  - [Reviews](/eo/product/reviews.html)

@@ -64,10 +64,10 @@ Apache OpenOffice is **standards compliant**:
 ### [Find out more][8] or [try it today][1]!
 
 
-[1]: /xx/download "Download Apache OpenOffice"
+[1]: /eo/download "Download Apache OpenOffice"
 [2]: /about_us/milestones.html
 [3]: reviews.html
 [4]: /projects/native-lang.html
 [6]: http://www.oasis-open.org/
 [7]: http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=office
-[8]: /xx/why/
+[8]: /eo/why/
