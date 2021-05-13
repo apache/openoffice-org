@@ -8,7 +8,7 @@ tagline=Ücretsiz ve Açık Verimlilik Paketi
 logo=AOO_logos/AOO4_website_logo.png
 domain=https://tr.openoffice.org
 divid=bannera
-announce=Apache OpenOffice 4.1.10 yayımlandı!
-announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.10+Release+Notes
-announcetip=Apache OpenOffice 4.1.10 yayımlandı!
+announce=Yayımlandı: Apache OpenOffice
+announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-16
+announcetip=Yayımlandı: Apache OpenOffice
 ~~~~~~
