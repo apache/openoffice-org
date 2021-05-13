@@ -2,13 +2,13 @@ type=brand
 home=home
 search=search
 selectedlang=en
-language=Language
+language=Լեզու
 name=Apache OpenOffice
-tagline=The Free and Open Productivity Suite
+tagline=Անվճար և բաց արտադրողականության հավաքակազմ
 logo=AOO_logos/AOO4_website_logo.png
 domain=https://www.openoffice.org
 divid=bannera
-announce=Released: Apache OpenOffice
+announce=Թողարկված: Apache OpenOffice
 announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-16
-announcetip=Released: Apache OpenOffice
+announcetip=Թողարկված: Apache OpenOffice
 ~~~~~~
