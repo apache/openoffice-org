@@ -1,7 +1,7 @@
 type=brand
 home=home
 search=search
-selectedlang=en
+selectedlang=հը
 language=Language
 name=Apache OpenOffice
 tagline=The Free and Open Productivity Suite
