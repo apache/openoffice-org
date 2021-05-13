@@ -1,1 +1,279 @@
 
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+
+    
+    <script src="https://www.apachecon.com/event-images/snippet.js"></script>
+  </head>
+  <body>
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/th/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/th/">th</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td width="84%" height="769" valign="top">
+<h1>การสร้างโปรแกรม (build) สำหรับ Windows</h1>
+
+<p>ในที่นี้จะพูดถึงการ build OO.o source line 1.1.x (64x) บนแพลตฟอร์ม Windows เท่านั้น</p>
+<p>วิธีการ build สำหรับแพลตฟอร์มอื่นๆ (Linux, Mac OS X, Solaris, etc.) ให้ดูที่หน้า document</p>
+
+<h2>สิ่งที่ต้องมีก่อนการ build</h2>
+<h3>ฮาร์ดแวร์:</h3>
+<ul>
+<li>หน่วยประมวลผล ระดับเพนเทียม หรือเทียบเท่า ขึ้นไป</li>
+<li>เนื้อที่ว่างในดิสก์ ต้องมี อย่างน้อย 3 GB</li>
+<li>หน่วยความจำ แนะนำให้มี อย่างน้อย 128 MB</li>
+</ul>
+<h3>ซอฟต์แวร์:</h3>
+<h4>ซอฟต์แวร์: สภาพแวดล้อมของระบบ</h4>
+<ul>
+<li>Service Pack
+<ul>
+<li>Windows NT 4 : ต้องลง Service Pack 3 หรือสูงกว่า</li>
+<li>Windows 2000 : ต้องลง Service Pack 2 หรือสูงกว่า</li>
+</ul>
+ดาวน์โหลด Service Pack ได้ที่ <a href="http://www.microsoft.com/windows/lifecycle/servicepacks.mspx">http://www.microsoft.com/windows/lifecycle/servicepacks.mspx</a></li>
+<li>cygwin -- ดาวน์โหลดได้ที่ <a href="http://www.cygwin.org">http://www.cygwin.org</a><br>
+(ไฟล์ที่ดาวน์โหลดมา จะเป็นตัวติดตั้งเท่านั้น ตัวติดดั้งจะไปดาวน์โหลดแต่ละแพคเกจที่ต้องการอีกที)
+<ul>
+<li>
+ตอนติดตั้งให้เลือกลงแบบ default และให้แน่ใจว่า ได้เลือกแพคเกจเหล่านี้เพิ่มแล้ว
+<ul>
+<li>autoconf</li>
+<li>automake</li>
+<li>binutils</li>
+<li>bison</li>
+<li>bzip2</li>
+<li>cmake</li>
+<li>cvs</li>
+<li>flex</li>
+<li>gawk</li>
+<li>gcc</li>
+<li>gzip</li>
+<li>make</li>
+<li>mingw</li>
+<li>openssh</li>
+<li>openssl</li>
+<li>patch</li>
+<li>perl</li>
+<li>tar</li>
+<li>tcsh</li>
+<li>unzip</li>
+<li>zip</li>
+</ul>
+</li>
+<li>ขณะติดตั้ง ให้แน่ใจว่า ได้เลือกค่า "Default Text File Type" เป็น "Unix" (ในตอนแรกจะเป็นค่านี้อยู่แล้ว)</li>
+<li><a href="http://website.openoffice.org/support/en/howtos/1.html">อ่านข้อมูลเพิ่มเติมเกี่ยวกับ Cygwin ได้ที่นี่</a> [ภาษาอังกฤษ]</li>
+</ul>
+</li>
+</ul>
+
+<h4>ซอฟต์แวร์: คอมไพเลอร์</h4>
+<ul>
+<li>Microsoft Visual C++ 6.0 Service Pack 3 ขึ้นไป -- ดาวน์โหลด Service Pack ได้ที่ <a href="http://www.microsoft.com">http://www.microsoft.com</a></li>
+<li>Microsoft Platfrom SDK -- ดาวน์โหลดได้ที่ <a href="http://www.microsoft.com/msdownload/platformsdk/sdkupdate/">http://www.microsoft.com/msdownload/platformsdk/sdkupdate/</a><br>
+<b>ข้อควรระวัง: ในตอนที่ดาวน์โหลด Platform SDK ให้เลือกดาวน์โหลด Build environment (Intel 64-bit) ด้วย, ถ้ามี</b></li>
+<li>Microsoft Macro Assembler -- ดาวน์โหลดได้ที่ <a href="http://www2.dgsys.com/~raymoon/faq/masm.html#9">http://www2.dgsys.com/~raymoon/faq/masm.html#9</a> หรือจาก<a href="http://www.google.co.th/search?q=Microsoft+Macro+Assembler+ml.exe+download&btnG=Google+Search&hl=en&ie=UTF-8&oe=UTF-8">ที่อื่นๆ</a><br>
+(บางทีอาจจะถูกติดตั้งไว้แล้ว ในไดเรกทอรีเดียวกับ VC++, ให้ลองหาไฟล์ชื่อ ML.EXE และ ML.ERR, ถ้าไม่พบ ให้ติดตั้งเ้พิ่ม)</li>
+<li>Java 2 SE SDK รุ่น 1.4 ขึ้นไป -- ดาวน์โหลดได้ที่ <a href="http://java.sun.com/">http://java.sun.com/</a><br>
+<b>ข้อควรระวัง: ขณะนี้ ใช้ Java 2 SE 1.4.1 ได้ แต่ยังใช้ Java 2 SE 1.4.2 ไม่ได้</b></li>
+</ul>
+
+<h4>ซอฟต์แวร์: ซอร์สโค้ด และ ไลบรารี</h4>
+<ul>
+<li>ซอร์สโค้ดของ OOo (แนะนำให้ใช้ตัวล่าสุด) -- ดาวน์โหลดได้ที่ <a href="http://www.openoffice.org/dev_docs/source/download.html#source">http://www.openoffice.org/dev_docs/source/download.html#source</a> (แนะนำให้ดาวน์โหลดตัวที่เป็น .tar.bz2 เพราะตัวเล็กกว่า และไม่พบปัญหาหลังการแตกไฟล์)</li>
+<li>solver ของ Windows -- ดาวน์โหลดได้ที่ <a href="http://www.openoffice.org/dev_docs/source/download.html#source">http://www.openoffice.org/dev_docs/source/download.html#source</a></li>
+<li>ไลบรารี General Polygon Clipper -- ดาวน์โหลดได้ที่ <a href="http://www.cs.man.ac.uk/aig/staff/alan/software/">http://www.cs.man.ac.uk/aig/staff/alan/software/</a><br>
+หลังจากแตกไฟล์ออกมาแล้ว ให้นำไฟล์ gpc.h และ gpc.c ไปใส่ไว้ในไดเรกทอรี $SRC_ROOT/external/gpc</li>
+<li>ไลบรารี Microsoft Layer for Unicode on Windows 95/98/ME -- ดาวน์โหลดได้ที่ 
+<a href="http://download.microsoft.com/download/b/7/5/b75eace3-00e2-4aa0-9a6f-0b6882c71642/unicows.exe">http://download.microsoft.com/download/b/7/5/b75eace3-00e2-4aa0-9a6f-0b6882c71642/unicows.exe</a><br>
+หลังจากแตกไฟล์ออกมาแล้ว ให้นำไฟล์ unicows.dll ไปใส่ไว้ในไดเรกทอรี $SRC_ROOT/external/unicows</li>
+<li>ไลบรารี DbgHelp.dll -- ดาวน์โหลดได้ที่ <a href="http://www.microsoft.com/downloads/release.asp?releaseid=30682">http://www.microsoft.com/downloads/release.asp?releaseid=30682</a><br>
+หลังจากแตกไฟล์ออกมาแล้ว ให้นำไฟล์ DbgHelp.dll ไปใส่ไว้ในไดเรกทอรี $SRC_ROOT/external/dbghelp</li>
+<li>* ในกรณีที่สร้าง OOo ด้วย .NET compiler, ต้องใช้ไฟล์ msvcp70.dll และ msvcr70.dll 
+
+-- ทั้งสองไฟล์ จะมีอยู่ในไดเรกทอรี
+"\Program Files\Microsoft Visual Studio .NET\Visual C++ .NET Professional - English\"<br>
+ให้ทำสำเนาทั้งสองไฟล์มาไว้ที่ ไดเรกทอรี $SRC_ROOT/external/msvcp70</li>
+</ul>
+
+<h2>การตั้งชื่อไดเรกทอรี ที่ใช้เก็บซอร์สโค้ด OOo</h2>
+<ul>
+<li><b>ห้ามเก็บไว้ใต้ไดเรกทอรีชื่อ cvs</b><br>
+เช่น /cvs/ooo_1.1_src<br>
+เพราะจะทำให้มีปัญหาตอนใช้ CVS (เป็นข้อผิดพลาดของตัว OOo เอง)
+ให้เลี่ยงไปใช้ชื่ออื่นแทน<br>
+เช่น /ooocvs/ooo_1.1_src</li>
+<li><b>อย่าใช้ชื่อไดเรกทอรีที่มีชื่อ stl เป็นส่วนหนึ่งของชื่อ</b><br>
+เนื่องจากจะทำการ build ผิดพลาด (เป็นปัญหาของ script ในการ build เอง)</li>
+</ul>
+
+<h2>ปัญหาเรื่องไดเรกทอรี tmp</h2>
+<p>ปกติในขั้นตอนการ build
+ตัว build จะใส่ผลลัพธ์ชั่วคราวจากการ zip ไว้ที่ไดเรกทอรี $ROOT/tmp
+แต่ด้วยข้อผิดพลาดบางอย่าง ในบางครั้ง root จะถูกชี้ไปที่ root ของ drive ที่เก็บ source code (เช่น e:\)
+แทนที่จะเป็นไดเรกทอรี root ของ cygwin (เช่น d:\cygwin)</p>
+
+<p>วิธีแก้ปัญหาเฉพาะหน้าคือ
+<ul>
+<li>ลบไดเรกทอรี tmp ที่ไดเรกทอรี root ของ cygwin ทิ้ง</li>
+<li>สร้างไดเรกทอรี tmp ที่ root ของ drive</li>
+<li>ทำ symbolic link ชื่อ tmp ที่ไดเรกทอรี root ของ cygwin ให้ชี้ไปที่ tmp ที่ root ของ drive เช่น
+<pre>cd /
+ln -s /cygdrive/e/tmp tmp</pre>
+</li>
+</ul>
+
+
+<h2>การสร้างโปรแกรม (build)</h2>
+<p>ประกอบด้วย 3 ขั้นตอนหลัก
+<ul>
+<li><a href="#build-configure">ตรวจสอบส่วนประกอบที่จำเป็น</a> -- configure</li>
+<li><a href="#build-bootstrap">สร้างเครื่องมือสำหรับการสร้่างโปรแกรม</a> -- bootstrap</li>
+<li><a href="#build-build">ลงมือสร้างโปรแกรม</a> -- dmake/build</li>
+</ul>
+</p>
+
+<a name="build-configure"></a>
+<h3>ตรวจสอบส่วนประกอบที่จำเป็น</h3>
+<p>โดยใช้โปรแกรม configure ซึ่งจะตรวจสอบว่า เครื่องของเรามีส่วนประกอบซอฟต์แวร์ต่างๆ สำหรับการ build ครบถ้วนหรือไม่
+<ul>
+<li>ถ้า configure หาส่วนประกอบใดไม่พบ จะแจ้งชื่อของส่วนนั้น และหยุดการทำงาน<br>
+ให้ติดตั้งส่วนประกอบนั้น (ในที่ๆ configure จะหาเจอ) ให้เรียบร้อยเสียก่อน</li> 
+<li>พารามิเตอร์อื่นๆ ของ configure สามารถดูได้ โดยสั่ง "configure --help"</li>
+<li>ถ้า configure ตรวจพบทุกอย่างที่จำเป็น จะทำการสร้างไฟล์ environment setting มาให้เรา
+(ชื่อจะแตกต่างกันไป ตามสภาพแวดล้อม เช่น winenv.set, winmingw.set)</li>
+</ul></p>
+
+<p>การรัน configure ให้ไปที่ไดเรกทอรี config_office แล้วสั่ง
+<pre>./configure --with-cl-home=(ที่อยู่ของ C compiler) --with-asm-home=(ที่อยู่ของ Assembler) --with-jdk-home=(ที่อยู่ของ Java SDK) --with-unzip-home=(ที่อยู่ของโปรแกรม UnZip) --with-2003-psdk --with-use-shell=tcsh</pre>
+ตัวอย่าง
+<pre>./configure --with-cl-home=/cygdrive/d/PROGRA~1/MICROS~3/VC98 --with-asm-home=/cygdrive/d/ml --with-jdk-home=/cygdrive/d/j2sdk1.4.1_02 --with-unzip-home=/cygdrive/d/cygwin/bin --with-2003-psdk --with-use-shell=tcsh</pre>
+</p>
+
+<a name="build-bootstrap"></a>
+<h3>สร้างเครื่องมือสำหรับการสร้่างโปรแกรม</h3>
+<p>ก่อนอื่นให้ืทำการตั้งค่าสภาพแวดล้อมให้อำนวยกับการ build โดยสั่ง
+<pre>tcsh</pre>
+เพื่อเข้าใช้ tcsh (shell แบบหนึ่ง) แล้วสั่ง
+<pre>source winenv.set</pre>
+(winenv.set คือไฟล์ที่สร้างโดยโปรแกรม configure)<br>
+จากนั้น ที่ root ของ source สั่ง
+<pre>bootstrap</pre>
+เพื่อสร้างโปรแกรม dmake</p>
+
+<a name="build-build"></a>
+<h3>ลงมือสร้างโปรแกรม</h3>
+<p>หลังจากสร้างโปรแกรม dmake เรียบร้อยแล้ว, ที่ root ของ source ให้็สั่ง
+<pre>dmake</pre>
+เพื่อลงมือสร้างโปรแกรมทั้งหมด.<br>
+<b>* หากต้องการ เริ่มสร้างโปรแกรมใหม่ทั้งหมด</b> (ลบส่วนประกอบเดิมต่างๆ ที่เคยสร้างเอาไว้ทิ้ง แล้วคอมไพล์ใหม่ทุกอย่างตั้งแต่เริ่มแรก) ให้ใช้คำสั่ง dmake clean ก่อน แล้วจึงตามด้วย dmake
+<ul>
+<li>การ build จะกินเวลาอย่างน้อยประมาณ 12 ชม. แล้วแต่ความเร็วของเครื่อง (ในกรณีที่ build ทั้งหมดทุกโมดูลจากซอร์สโค้ดโดยตรง ไม่ได้ใช้ solver)</li>
+<li>ให้แน่ใจว่ามีเนื้อที่ว่าง <u>อย่างน้อย 3 GB</u> ก่อนการ build (ในกรณีที่ build ทั้งหมดทุกโมดูล)</li>
+<li>บางครั้ง dmake จะหยุดการทำงานแล้วแจ้งว่า error นู่น error นี่
+ให้ลองสั่ง dmake ซ้ำดู บางทีจะสามารถทำงานต่อได้ โดยไม่มี error
+(เป็นปัญหาของตัว dmake เอง)</li>
+<li>ผลลัพธ์ต่างๆ ที่ได้จากการ build
+จะอยู่ในไดเรกทอรี <pre>$SRC_ROOT/solver/<i>NNN</i>/<i>ooocccpv</i>.pro</pre> โดย<br>
+NNN คือหมายเลข source tree<br>
+ooo = ชื่อ os เช่น wnt (Windows NT)<br>
+ccc = ชื่อ compiler ที่ใช้ เช่น msc (Microsoft Visual C++)<br>
+p = ชื่อ platform เช่น i (Intel)<br>
+v = เลขรุ่นของ compiler ที่ใช้<br>
+เช่น<br>
+<b>solver/645/wntmsci9.pro</b> ถ้าใช้ Visual C++<br>
+<b>solver/645/wntgcci3.pro</b> ถ้าใช้ mingw (gcc)<br><br>
+หมายเหตุ: .pro หมายถึง product</li>
+<li>ตัวติดตั้ง (setup.exe -- installation set) จะอยู่ในไดเรกทอรี <pre>$SRC_ROOT/instsetoo/<i>ooocccpv</i>.pro/<i>LL</i>/normal</pre><br>
+โดย LL เป็นตัวเลขของ locale เช่น 01 สำหรับภาษาอังกฤษ, 66 สำหรับภาษาไทย</li>
+</ul>
+</p>
+
+<h2>การปรับปรุงซอร์สโค้ดจาก CVS</h2>
+<p>ตัวอย่างเช่น<pre>cvs -d :pserver:anoncvs@anoncvs.services.openoffice.org:/cvs update -r OpenOffice644 OpenOffice</pre></p>
+
+<h2>พบปัญหาในการ build</h2>
+<ul>
+<li>ตรวจสอบ configuration และไฟล์ที่ต้องใช้ต่างๆ ว่าครบถ้วน และถูกต้อง ตามสภาพแวดล้อมของเครื่องปัจจุบันหรือไม่ (เช่นชื่อไดเรกทอรี รุ่นของ Java 2 SDK ฯลฯ) ลองทำการแก้ไข และ build อีกครั้งหนึ่ง</li>
+<li>อ่านเอกสารที่ OpenOffice.org Developer Website</li>
+<li>สอบถามไปยัง mailing list ของ OOo พร้อมระบุปัญหาที่พบ สภาพแวดล้อมที่พบปัญหา (รุ่นของระบบปฏิบัติการ รุ่นของคอมไพเลอร์ configuration ที่ใช้ในการ build ฯลฯ) และรุ่นของซอร์สโค้ดที่ใช้ในการ build (เช่น 1.1rc3 หรือวันที่ check out จาก cvs) ให้ชัดเจน และกระชับ</li>
+</ul>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+</td>
+<td width="1%" valign="top">&nbsp;</td>
+<td width="15%" valign="top">
+<table width="100%" border="1" bordercolor="#000000" cellspacing="0" cellpadding="5">
+
+<tr><td bgcolor="#000080"><font color="#fffffff" face="Verdana, Arial, Helvetica, sans-serif" size="3"><b>ชุมชนภาษาไทย</b></font></td></tr>
+
+<tr><td><font size="2"><a href="index.html">แนะนำ</a></font></td></tr>
+
+<tr><td bgcolor="#000080"><font color="#fffffff" face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>ผลิตภัณฑ์</b></font></td></tr>
+
+<tr><td><font size="2">
+ <a href="about-product.html">รายละเอียด</a><br>
+ <a href="about-downloads.html">ดาวน์โหลด</a><br>
+ <a href="about-cdrom.html">ซีดีรอม</a><br>
+ <a href="about-spellcheck.html">ตัวตรวจตัวสะกด</a></font></td></tr>
+<tr><td bgcolor="#000080"><font color="#fffffff" face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>โครงการ</b></font></td></tr>
+
+<tr><td><font size="2">
+ <a href="background.html">ความเป็นมา</a><br> 
+ <a href="faq.html">ถาม/ตอบ</a> 
+</font></td></tr>
+
+<tr><td bgcolor="#000080"><font color="#fffffff" face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>ขอความช่วยเหลือ</b></font></td></tr>
+
+<tr><td><font size="2">
+ <a href="about-mailinglist.html">เมลลิงลิสต์</a><br> 
+ <a href="about-documentation.html">เอกสาร</a> 
+</font></td></tr>
+
+<tr><td bgcolor="#000080"><font color="#fffffff" face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>ร่วมพัฒนา</b></font></td></tr>
+
+<tr><td><font size="2">
+ <a href="about-helping.html">ทำอย่างไร?</a><br> 
+ <a href="about-issuezilla.html">แจ้งบั๊ก</a><br>
+</font></td></tr>
+
+<tr><td bgcolor="#000080"><font color="#fffffff" face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>ติดต่อ</b></font></td></tr>
+
+<tr><td><font size="2">
+ <a href="about-mailinglist.html">เมลลิงลิสต์</a><br>
+ <a href="addresses.html">ที่อยู่</a> 
+</font></td></tr>
+
+<tr><td bgcolor="#000080"><font color="#fffffff" face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>อื่นๆ</b></font></td></tr>
+
+<tr><td><font size="2">
+ <a href="credits.html">เครดิต</a><br>
+ <a href="about-legal.html">ข้อกฏหมาย</a><br>
+</font></td></tr>
+
+</table>
+</td>
+</tr>
+</table>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
