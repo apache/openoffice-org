@@ -8,7 +8,7 @@ tagline=O Pacote de Produtividade Livre e Aberto
 logo=AOO_logos/AOO4_website_logo.png
 domain=https://www.openoffice.org
 divid=bannera
-announce=Saiba como PARTICIPAR do projeto
-announceurl=/pt-br/participe.html
-announcetip=Leia o anúncio
+announce=Liberada: Apache OpenOffice
+announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-16
+announcetip=Liberada: Apache OpenOffice
 ~~~~~~
