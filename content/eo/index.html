@@ -5,11 +5,11 @@
     <meta name="name" content="Apache OpenOffice" />
     <meta name="description" content="The official home page of the Apache OpenOffice open source project, home of OpenOffice Writer, Calc, Impress, Draw and Base." />
     <meta name="keywords" content="OpenOffice, Open Office, Apache OpenOffice, Apache Open Office, OpenOffice.org, Writer, Calc, Impress, Draw, Base, ODF, Open Document Format, free office editors" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <title>Apache OpenOffice - Official Site - La Free and Open Productivity Suite</title>
     <script type="text/javascript" src="/download/globalvars.js"></script>
-    <script type="text/javascript" src="./msg_prop_l10n_eo.js"></script>
-    <script type="text/javascript" src="/download/languages.js"></script>
-    <script type="text/javascript" src="/download/download.js"></script>
+    <script type="text/javascript" src="/msg_prop_l10n.js"></script>
     <style type="text/css">
     /* <![CDATA[ */
     /*-------------------- Exceptions on standard css -----------------------*/
@@ -31,40 +31,6 @@
         } else if ( platform == 'YouTube' ) {
           window.open( "https://www.youtube.com/openoffice", "_blank" );
         }
-      }
-
-      function showEventBox() {
-	// The text is defined in "/msg_prop_l10n.js".
-
-	// Show the event box or not?
-	if( l10n.index_event_box_show ) {
-		// Show the banner logo and text with link and cursor as pointer.
-		document.write( "<div id='event_box' onclick='window.open( \"" + l10n.index_event_box_text_href
-			+ "\", \"_blank\" ); return false;'>"
-			+ "<ul>"
-			  + "<li>"
-			    // Event banner logo on the left hand side.
-			    + "<p style='float: left;'>"
-			      + "<a href='" + l10n.index_event_box_graphic_href
-				+ "' title='" + l10n.index_event_box_graphic_title + "' target='_blank'>"
-				  + "<img src='" + l10n.index_event_box_graphic_src + "'"
-				  + "alt='" + l10n.index_event_box_graphic_alt + "'"
-				  + "height='" + l10n.index_event_box_graphic_height + "'"
-				  + "width='" + l10n.index_event_box_graphic_width + "' />"
-			      + "</a>"
-			    + "</p>"
-
-			    // Event text on the right hand side.
-			    + "<p>"
-			      + "<a style='color: black; text-decoration: none;'"
-				+ "' title='" + l10n.index_event_box_text_title + "' target='_blank'>"
-				+ l10n.index_event_box_text_text
-			      + "</a>"
-			    + "</p>"
-			  + "</li>"
-			+ "</ul>"
-		+ "</div>" );
-	}
       }
 
       function showAlertBox() {
@@ -104,125 +70,24 @@
 		document.write( "</li></ul></div>" ); // Alert box.
 	}
       }
-
-      function setRedirect() {
-	// The text is defined in "/msg_prop_l10n.js".
-	DL.NL_LANG	= "";					// Set to empty as both variables ...
-	DL.LANG_SEL	= "";					// ... must not be used in following function.
-	var lang_iso	= DL.getLanguage();			// Get the language ISO code from browser guessed data.
-	var lang_mode	= "";					// Customized redirect mode.
-	var lang_text	= "";					// Customized message text that can be shown.
-	var link	= "";					// Override redirect mode.
-
-	// Add ECMA262-5 Array methods if not supported natively.
-	// To workaround that MSIE 8 and older do not support this function.
-	if( !( 'indexOf' in Array.prototype ) ) {
-		Array.prototype.indexOf= function( find, i ) {	// 'i' is an optional parameter.
-			if( i === undefined ) {
-				i = 0;
-			}
-			if( i < 0 ) {
-				i+= this.length;
-			}
-			if( i < 0 ) {
-				i = 0;
-			}
-			for( var n = this.length; i < n; i++ ) {
-				if( i in this && this[ i ] === find ) {
-					return i;
-				}
-			}
-			return -1;
-		};
-	}
-
-	// Fix for Portuguese (European) as they are named only "pt" without region code!
-	if( lang_iso === "pt-pt" || lang_iso === "pt-PT" ) {
-		lang_iso = "pt";
-	}
-
-	// Query if the browser language is one of the released languages.
-	// The array has 3 elements per language (defined in "/download/globalvars.js"
-	for( var i = 0, j = DL.SEL_LANG.length; i < j; i = i + 3 ) {
-	  // If the ISO code is found in the language array.
-	  if( DL.SEL_LANG[ i ] === lang_iso ) {
-	    // Query for the redirect method (defined in "/msg_prop_l10n.js", column 0).
-	    lang_mode	= l10n.index_redirect_text[ i / 3 * 2 ];
-	    lang_text	= l10n.index_redirect_text[ i / 3 * 2 + 1 ];
-	    break;
-	  }
-	}
-
-	// Convert the browser URL into a string.
-	link = String( document.location );
-
-	// Does the browser URL contain already a redirect mode?
-	// If yes, set the new redirect mode to override the customized mode.
-	if( link.indexOf( "hard" ) !== -1 ) {
-	    lang_mode = "hard";
-	} else if( link.indexOf( "soft" ) !== -1 ) {
-	    lang_mode = "soft";
-	} else if( link.indexOf( "none" ) !== -1 ) {
-	    lang_mode = "none";
-	}
-
-	// Fix for English as main language for the website, it does not need a language code.
-	if( lang_iso === "en-us" || lang_iso === "en-gb" || lang_iso === "en-uk" || lang_iso === "en" ||
-	    lang_iso === "en-US" || lang_iso === "en-GB" || lang_iso === "en-UK" ) {
-		lang_iso = "";
-	}
-
-	switch( lang_mode ) {
-		case "hard":
-			// Do not show a message, just redirect.
-			window.open( "https://www.openoffice.org/" + lang_iso , "_self" );
-			break;
-		case "soft":
-			// Show a message and redirect only on user's click.
-			// Assign the message text that is defined in:
-			// "/msg_prop_l10n.js", array "l10n.index_redirect_text", column 1),
-			document.write( "<div id='redirect_box'"
-			+ " onclick='window.open( \"https://www.openoffice.org/" + lang_iso + "\", \"_self\" );"
-			+ "return false;'>"
-			+ "<ul><li>"
-			+ "<p>" + lang_text + "</p>"
-			+ "</li></ul>"
-			+ "</div>" ); // Redirect box.
-			break;
-		case "none":
-		default:
-			// Do nothing and show nothing.
-	}
-
-	return;
-      }
     </script>
 </head>
 
 <body>
 
-<!-- The text in the H1 tag is intentionally shown as "display: none" (do not display). -->
-<!-- This is to please accessibility tools like a screen reader. -->
+<!-- The text in the H1 tag is intentionally shown as not displayable, just to please accessibility tools like a
+screen reader.
+-->
 <h1 style="display: none;">Apache OpenOffice</h1>
 
 <div id="actionstatements">
 
   <script type="text/javascript">
   <!--
-  // Show event box.
-  // Show a banner logo and message of the event.
-  // In "/msg_prop_l10n.js": Change to 'true' to show the box that is defined in the variables.
-  showEventBox();
-
   // Show alert box.
   // Show an important message or announcement.
   // In "/msg_prop_l10n.js": Change to 'true' to show the box that is defined in the variables.
   showAlertBox();
-
-  // Show redirect box.
-  // Show a text how to redirect to the NL webpage.
-  // In "/msg_prop_l10n.js": Change the mode and text how a redirect to the respective NL webpage should be done.
-  setRedirect();
   //-->
   </script>
 
@@ -230,7 +95,6 @@
     <li>
       <hr />
     </li>
-
     <li>
       <div class="action-info">
         <div class="action-text action-link">
@@ -241,7 +105,6 @@
         </div>
       </div>
     </li>
-
     <li>
       <hr />
     </li>
@@ -705,7 +568,8 @@
 
       <p>
         <em>10-an de Oktobro 2013:</em>
-        La itala administra regiono de Emilia-Romagna sciigis planojn movi al OpenOffice, <a href="https://justpaste.it/redirect/8yuud/https://joinup.ec.europa.eu/community/osor/news/openoffice-italian-emilia-romagna-save-2-million">
+        La itala administra regiono de Emilia-Romagna sciigis planojn movi al OpenOffice,
+        <a href="https://justpaste.it/redirect/8yuud/https://joinup.ec.europa.eu/community/osor/news/openoffice-italian-emilia-romagna-save-2-million">
         ŝparante 2 milionojn da eŭro</a>.
       </p>
     </div>
@@ -717,13 +581,13 @@
         <em>8-a de Januaro 2013:</em>
         Apache OpenOffice estas evoluigita 100% de volontuloj. Apache ne pagas por programistoj, por tradukistoj, por
         QAA, por marketing, por UI, por subteno, ktp. Kompreneble, ni estas kontenta a akcepti
-        <a href="https://justpaste.it/redirect/8yuud/https://www.apache.org/foundation/contributing.html">donacojn al la Apache Software Foundation</a>,
-        por subteni nian serviloj runnings kaj por similaj superkape elspezojn. Sed niaj produktoj estas evoluigita
-        tute de volontuloj. 
+        <a href="https://justpaste.it/redirect/8yuud/https://www.apache.org/foundation/contributing.html">donacojn al
+        la Apache Software Foundation</a>, por subteni nian serviloj runnings kaj por similaj superkape elspezojn.
+        Sed niaj produktoj estas evoluigita tute de volontuloj. 
       </p>
-      <p>Kelkaj uzantoj estas komence maltrankviligita per tiu seldiro:<br /><strong>Kiel povas softvaron por libera,
-        evoluigita fare de volontuloj, esti iu ajn bona?<br /></strong><a href=''>Legita sur
-        por respondo...</a>
+      <p>
+        Kelkaj uzantoj estas komence maltrankviligita per tiu seldiro:<br /><strong>Kiel povas softvaron por libera,
+        evoluigita fare de volontuloj, esti iu ajn bona?<br /></strong><a href=''>Legita sur por respondo...</a>
       </p>
     </div>
   </div>
