@@ -15,8 +15,8 @@
 // The following variables are used in the "index.html" file:
 
 // Set a specific language ISO code to force to assemble a download link with a certain language.
-// Change xx to a valid ISO lang code.
-DL.NL_LANG					= "xx";
+// Exchange "en-US" only to a valid ISO lang code when the language is actually available for download.
+DL.NL_LANG					= "en-US";
 
 // General:
 l10n.dl_headline_text				= "Apache OpenOffice Download";
