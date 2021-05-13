@@ -73,4 +73,6 @@
     </div>
     <div id="bannercenter"><br/>${content.tagline}</div>
   </div>
-  <div id="announce"><a href="${content.announceurl}" title="${content.announcetip}">${content.announce}</a></div>
+
+// The version number must no longer be part of every localized "brand.md" in order to change it only in a single place: here.
+  <div id="announce"><a href="${content.announceurl}" title="${content.announcetip} 4.1.10">${content.announce} 4.1.10</a></div>
