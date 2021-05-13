@@ -9,6 +9,6 @@ logo=AOO_logos/100MillAOO100px.png
 domain=https://www.openoffice.org
 divid=bannera
 announce=Liberigita: Apache OpenOffice
-announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.10+Release+Notes
+announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-16
 announcetip=Liberigita: Apache OpenOffice
 ~~~~~~
