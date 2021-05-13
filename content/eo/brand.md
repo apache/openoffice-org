@@ -1,14 +1,14 @@
 type=brand
 home=home
-search=search
+search=serĉi
 selectedlang=en
-language=Language
+language=Lingvo
 name=Apache OpenOffice
-tagline=The Free and Open Productivity Suite
+tagline=La Libera kaj Malferma Produktiveca Serio 
 logo=AOO_logos/100MillAOO100px.png
 domain=https://www.openoffice.org
 divid=bannera
-announce=Apache OpenOffice 4.1.10 released
+announce=Liberigita: Apache OpenOffice
 announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.10+Release+Notes
-announcetip=Apache OpenOffice 4.1.10 released
+announcetip=Liberigita: Apache OpenOffice
 ~~~~~~
