@@ -8,7 +8,7 @@ tagline=  O programa de produtividade gratuito e de código aberto
 logo=/AOO_logos/AOO4_website_logo.png
 domain=https://www.openoffice.org/pt/
 divid=bannera
-announce=O novo Apache OpenOffice 4.1.10 já saiu!
-announceurl=https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.10+Release+Notes
-announcetip=Leia as notas de lançamento
+announce=Liberada: Apache OpenOffice
+announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-16
+announcetip=Liberada: Apache OpenOffice
 ~~~~~~
