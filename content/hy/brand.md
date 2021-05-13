@@ -8,7 +8,7 @@ tagline=Անվճար և բաց արտադրողականության հավաքա
 logo=AOO_logos/AOO4_website_logo.png
 domain=https://www.openoffice.org
 divid=bannera
-announce=Թողարկված: Apache OpenOffice
+announce=Թողարկված: Apache OpenOffice 4.1.10
 announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-16
-announcetip=Թողարկված: Apache OpenOffice
+announcetip=Թողարկված: Apache OpenOffice 4.1.10
 ~~~~~~
