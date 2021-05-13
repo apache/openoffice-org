@@ -4,6 +4,7 @@
   content.topnav='/topnav.html';
   content.leftnav=null;
   content.rightnav=null;
+  content.versionnumber='4.1.10';
 
 // As long as we have no translation for a specific language, we will use the general English text to keep the website updates as low as possible for new releases.
 // Therefore some of the following languages are commented out and in the next line the general "brand.html" will be used.
