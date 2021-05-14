@@ -16,21 +16,21 @@
 
 // Set a specific language ISO code to force to assemble a download link with a certain language.
 // Change xx to a valid ISO lang code.
-DL.NL_LANG					= "en-US";
+DL.NL_LANG								= "en-US";
 
 // General:
-l10n.dl_headline_text				= "Apache OpenOffice ներբեռնում";
+l10n.dl_headline_text					= "Apache OpenOffice ներբեռնում";
 
 // Download: Strings in the green box (used in "index.html").
 l10n.dl_green_box_headline_text			= "Ներբեռնեք Apache OpenOffice -ը";
 l10n.dl_green_box_headline_title		= "Ներբեռնեք Apache OpenOffice -ը ձեր նախընտրած գործառնական համակարգի, լեզվի և տարբերակի համար";
-l10n.dl_green_box_subtext1_text			= "Հյուրընկալվում է Sourceforge.net -ի կողմից՝ վստահելի կայք";
+l10n.dl_green_box_subtext1_text			= "Հյուրընկալվում է SourceForge.net -ի կողմից՝ վստահելի կայք";
 l10n.dl_green_box_subtext1_title		= "Apache OpenOffice -ի երկուական նիշքերը հյուրընկալվում են SourceForge.net -ի կողմից` վստահելի կայք";
 l10n.dl_green_box_subtext2_text			= "Ընտրեք ձեր նախընտրած գործառնական համակարգը, լեզուն և տարբերակը";
 l10n.dl_green_box_subtext2_title		= "Ընտրեք ձեր նախընտրած գործառնական համակարգը, լեզուն և տարբերակը";
-l10n.dl_green_box_selectbox_os_title		= "Ընտրեք ձեր նախընտրած գործառնական համակարգը";
-l10n.dl_green_box_selectbox_lang_title		= "Ընտրեք ձեր նախընտրած լեզուն";
-l10n.dl_green_box_selectbox_ver_title		= "Ընտրեք թողարկման ձեր նախընտրած տարբերակը";
+l10n.dl_green_box_selectbox_os_title	= "Ընտրեք ձեր նախընտրած գործառնական համակարգը";
+l10n.dl_green_box_selectbox_lang_title	= "Ընտրեք ձեր նախընտրած լեզուն";
+l10n.dl_green_box_selectbox_ver_title	= "Ընտրեք թողարկման ձեր նախընտրած տարբերակը";
 
 // The strings that will be shown in the OS, language and version drop-down select boxes.
 // You must leave at least one single empty string (see the comment lines above the 3 following variables)!
@@ -52,48 +52,48 @@ l10n.dl_green_box_select_box_os_values		= [ "Windows (EXE)",
 l10n.dl_green_box_select_box_language_values	= [ "" ];
 
 // l10n.dl_green_box_select_box_lang_values_custom = [ "" ];
-												 // Value		Visible text					Tool tip
-l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",		"Աստուրիան",						"Աստուրիան",
-													"eu",		"Բասկերեն",						"Euskara",
-													"bg",		"Բուլղարերեն",					"български език",
+												 // Value		Visible text							Tool tip
+l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",		"Աստուրիան",							"Աստուրիան",
+													"eu",		"Բասկերեն",							"Euskara",
+													"bg",		"Բուլղարերեն",						"български език",
 													"ca",		"Կատալաներեն",						"Català",
 													"ca-XV",	"Կատալաներեն [Վալենսիա AVL]",		"València (AVL)",
-													"ca-XR",	"Կատալաներեն [Վալենսիա RACV]",		"València (RACV)",
-													"zh-CN",	"Չինարեն [պարզեցված]",			"简体中文",
-													"zh-TW",	"Չինարեն [ավանդական]",		"正體中文",
-													"cs",		"Չեխերեն",						"Čeština",
-													"da",		"Դանիերեն",						"Dansk",
-													"nl",		"Հոլանդերեն",						"Nederlands",
+													"ca-XR",	"Կատալաներեն [Վալենսիա RACV]",	"València (RACV)",
+													"zh-CN",	"Չինարեն [պարզեցված]",				"简体中文",
+													"zh-TW",	"Չինարեն [ավանդական]",			"正體中文",
+													"cs",		"Չեխերեն",							"Čeština",
+													"da",		"Դանիերեն",							"Dansk",
+													"nl",		"Հոլանդերեն",							"Nederlands",
 													"en-GB",	"Անգլերեն [Բրիտանական]",			"English [British]",
-													"en-US",	"Անգլերեն [ԱՄՆ]",					"English [US]",
-													"fi",		"Ֆիններեն",						"Suomi",
-													"fr",		"French",						"Français",
-													"gl",		"Գալիսիերեն",						"Galego",
+													"en-US",	"Անգլերեն [ԱՄՆ]",						"English [US]",
+													"fi",		"Ֆիններեն",							"Suomi",
+													"fr",		"French",								"Français",
+													"gl",		"Գալիսիերեն",							"Galego",
 													"de",		"Գերմաներեն",						"Deutsch",
-													"el",		"Հունարեն",						"ελληνικά",
-													"he",		"Եբրայերեն",						"עברית",
-													"hi",		"Հինդի",						"हिन्दी",
-													"hu",		"Հունգարերեն",					"Magyar",
-													"it",		"Իտալերեն",						"Italiano",
-													"ja",		"Ճապոներեն",						"日本語",
-													"km",		"Խմերերեն",						"ភាសាខ្មែរ",
-													"ko",		"Կորեերեն",						"한국어",
-													"lt",		"Լիտվերեն",					"Lietuvių",
-													"nb",		"Նորվերգերեն [Բոկմալ]",			"Norsk [Bokmål]",
-													"pl",		"Լեհերեն",						"Polski",
+													"el",		"Հունարեն",							"ελληνικά",
+													"he",		"Եբրայերեն",							"עברית",
+													"hi",		"Հինդի",								"हिन्दी",
+													"hu",		"Հունգարերեն",						"Magyar",
+													"it",		"Իտալերեն",							"Italiano",
+													"ja",		"Ճապոներեն",							"日本語",
+													"km",		"Խմերերեն",							"ភាសាខ្មែរ",
+													"ko",		"Կորեերեն",							"한국어",
+													"lt",		"Լիտվերեն",							"Lietuvių",
+													"nb",		"Նորվերգերեն [Բոկմալ]",				"Norsk [Bokmål]",
+													"pl",		"Լեհերեն",								"Polski",
 													"pt-BR",	"Պորտուգալերեն [Բրազիլական]",		"Português [do Brasil]",
 													"pt",		"Պորտուգալերեն [Եվրոպական]",		"Português [Europeu]",
-													"ru",		"Ռուսերեն",						"Русский",
-													"gd",		"Շոտլանդերեն [Գաելիկ]",			"Gàidhlig",
-													"sr",		"Սերբերեն [Կիրիլիցա]",			"Cрпски [ћирилицом]",
-													"sk",		"Սլովակերեն",						"Slovenský jazyk [slovenčina]",
-													"sl",		"Սլովեներեն",					"Slovenski jezik [slovenščina]",
-													"es",		"Իսպաներեն",						"Español",
-													"sv",		"Շվեդերեն",						"Svenska",
-													"ta",		"Թամիլերեն",						"தமிழ்",
+													"ru",		"Ռուսերեն",							"Русский",
+													"gd",		"Շոտլանդերեն [Գաելիկ]",				"Gàidhlig",
+													"sr",		"Սերբերեն [Կիրիլիցա]",				"Cрпски [ћирилицом]",
+													"sk",		"Սլովակերեն",							"Slovenský jazyk [slovenčina]",
+													"sl",		"Սլովեներեն",							"Slovenski jezik [slovenščina]",
+													"es",		"Իսպաներեն",							"Español",
+													"sv",		"Շվեդերեն",							"Svenska",
+													"ta",		"Թամիլերեն",							"தமிழ்",
 													"th",		"Թայերեն",							"ภาษาไทย",
-													"tr",		"Թուրքերեն",						"Türkçe",
-													"vi",		"Վիետնամերեն",					"Tiếng Việt" ];
+													"tr",		"Թուրքերեն",							"Türkçe",
+													"vi",		"Վիետնամերեն",						"Tiếng Việt" ];
 
 /* l10n.dl_green_box_select_box_language_values	= [ "" ]; */
 l10n.dl_green_box_select_box_language_values	= [ "" ];
@@ -233,16 +233,25 @@ l10n.dl_img_w3c_alt					= "W3C վավերացնող";
 // The following variables are used in the "download.js" file:
 
 // Download: Strings in the green box (used in "download.js").
-l10n.dl_full_link_text				= "Ներբեռնեք ամբողջական տեղադրումը";
-l10n.dl_full_link_title				= "Ներբեռնելու համար կտտացրեք: ";
-l10n.dl_langpack_link_text			= "Ներբեռնեք լեզվի փաթեթը";
-l10n.dl_langpack_link_title			= "Ներբեռնելու համար կտտացրեք: ";
-l10n.dl_win_info_text				= "Կարևոր ակնարկ: 32-բիթ, 64-բիթ և Java - Ի՞նչ ընտրել:";
-l10n.dl_win_info_title				= "Այս պահին մենք առաջարկում ենք 32-բիթանոց (x86) տարբերակը Windows-ի համար: Այնուամենայնիվ, այն տեղադրվում և գործարկվում է նաև Windows 64-բիթանոց (x86-64) համակարգերով:\nԽնդրում ենք նկատի ունենալ, որ լրացուցիչ ֆունկցիոնալության համար ձեզ կարող է անհրաժեշտ լինել 32-բիթանոց Java, որն այնուհետև պետք է ընտրվի միայն մեկ անգամ (տե՛ս «Գործիքներ - Ընտրանքներ - OpenOffice - Java» ընտրացանկը):\n\nOpenOffice- ի և Java- ի մասին լրացուցիչ տեղեկություններ ստանալու համար տե՛ս «Java և Apache OpenOffice» -ից աջ հղումը:";
-l10n.dl_linux_info_text				= "Կարևոր ակնար: RPM ընդդեմ DEB - Ի՞նչ ընտրել:";
-l10n.dl_linux_info_title			= "RPM-ն օգտագործվում է:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB-ն օգտագործվում է:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
-//l10n.dl_mac_info_text				= "macOS : Text";
-//l10n.dl_mac_info_title			= "macOS : Title";
+l10n.dl_full_link_text					= "Ներբեռնեք ամբողջական տեղադրումը";
+l10n.dl_full_link_title					= "Ներբեռնելու համար կտտացրեք: ";
+l10n.dl_langpack_link_text				= "Ներբեռնեք լեզվի փաթեթը";
+l10n.dl_langpack_link_title				= "Ներբեռնելու համար կտտացրեք: ";
+
+l10n.dl_platform_info_text				= "Important hints for ";
+l10n.dl_platform_info_title				= "Click here to get important hints for ";
+l10n.dl_platform_info_link				= "platform_hints.html";
+l10n.dl_platform_info_headline			= "Apache OpenOffice - Important hints for the chosen platform";
+l10n.dl_platform_info_win_headline		= "Windows";
+l10n.dl_platform_info_win_text			= "<h5> 32-bit, 64-bit and Java - What to choose? </h5> <p> At the moment we offer a 32-bit (x86) version for Windows. However, it installs and runs also on Windows 64-bit (x86-64). Please note that you may need Java in 32-bit for additional functionality which must then be selected only once (see menu 'Tools - Options - OpenOffice - Java'). <br /><br /> For more information about OpenOffice and Java please see: <a target='_blank' href=https://www.openoffice.org/download/common/java.html>https://www.openoffice.org/download/common/java.html</a>.</p>";
+l10n.dl_platform_info_mac_headline		= "macOS";
+l10n.dl_platform_info_mac_text			= "<h5> Coming soon </h5>";
+l10n.dl_platform_info_linux_headline	= "Linux";
+l10n.dl_platform_info_linux_text		= "<h5> RPM vs. DEB - What to choose? </h5> <p> RPM is used in: <br/> CentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server <br /><br /> DEB is used in: <br/> Debian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu </p> <h5> Installation instructions </h5> <p>For installation instruction please see here: <a target='_blank' href=https://www.openoffice.org/download/common/instructions.html#linux>https://www.openoffice.org/download/common/instructions.html#linux</a>.</p>";
+//l10n.dl_win_info_text					= "Կարևոր ակնարկ: 32-բիթ, 64-բիթ և Java - Ի՞նչ ընտրել:";
+//l10n.dl_win_info_title				= "Այս պահին մենք առաջարկում ենք 32-բիթանոց (x86) տարբերակը Windows-ի համար: Այնուամենայնիվ, այն տեղադրվում և գործարկվում է նաև Windows 64-բիթանոց (x86-64) համակարգերով:\nԽնդրում ենք նկատի ունենալ, որ լրացուցիչ ֆունկցիոնալության համար ձեզ կարող է անհրաժեշտ լինել 32-բիթանոց Java, որն այնուհետև պետք է ընտրվի միայն մեկ անգամ (տե՛ս «Գործիքներ - Ընտրանքներ - OpenOffice - Java» ընտրացանկը):\n\nOpenOffice- ի և Java- ի մասին լրացուցիչ տեղեկություններ ստանալու համար տե՛ս «Java և Apache OpenOffice» -ից աջ հղումը:";
+//l10n.dl_linux_info_text				= "Կարևոր ակնար: RPM ընդդեմ DEB - Ի՞նչ ընտրել:";
+//l10n.dl_linux_info_title				= "RPM-ն օգտագործվում է:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB-ն օգտագործվում է:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
 
 
 l10n.dl_full_link_porting_text		= "Հանգույց: Կտտացրեք՝ ընտրելու 3-րդ կողմի վաճառողներից";
