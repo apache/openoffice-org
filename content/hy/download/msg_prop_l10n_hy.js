@@ -19,18 +19,18 @@
 DL.NL_LANG					= "en-US";
 
 // General:
-l10n.dl_headline_text				= "Apache OpenOffice Download";
+l10n.dl_headline_text				= "Apache OpenOffice ներբեռնում";
 
 // Download: Strings in the green box (used in "index.html").
-l10n.dl_green_box_headline_text			= "Download Apache OpenOffice";
-l10n.dl_green_box_headline_title		= "Download Apache OpenOffice for your favorite operating system, language and version";
-l10n.dl_green_box_subtext1_text			= "Hosted by Sourceforge.net - A trusted website";
-l10n.dl_green_box_subtext1_title		= "Apache OpenOffice binary files are hosted by SourceForge.net - A trusted website";
-l10n.dl_green_box_subtext2_text			= "Select your favorite operating system, language and version";
-l10n.dl_green_box_subtext2_title		= "Select your favorite operating system, language and version";
-l10n.dl_green_box_selectbox_os_title		= "Select your favorite operating system";
-l10n.dl_green_box_selectbox_lang_title		= "Select your favorite language";
-l10n.dl_green_box_selectbox_ver_title		= "Select your favorite release version";
+l10n.dl_green_box_headline_text			= "Ներբեռնեք Apache OpenOffice -ը";
+l10n.dl_green_box_headline_title		= "Ներբեռնեք Apache OpenOffice -ը ձեր նախընտրած գործառնական համակարգի, լեզվի և տարբերակի համար";
+l10n.dl_green_box_subtext1_text			= "Հյուրընկալվում է Sourceforge.net -ի կողմից՝ վստահելի կայք";
+l10n.dl_green_box_subtext1_title		= "Apache OpenOffice -ի երկուական նիշքերը հյուրընկալվում են SourceForge.net -ի կողմից` վստահելի կայք";
+l10n.dl_green_box_subtext2_text			= "Ընտրեք ձեր նախընտրած գործառնական համակարգը, լեզուն և տարբերակը";
+l10n.dl_green_box_subtext2_title		= "Ընտրեք ձեր նախընտրած գործառնական համակարգը, լեզուն և տարբերակը";
+l10n.dl_green_box_selectbox_os_title		= "Ընտրեք ձեր նախընտրած գործառնական համակարգը";
+l10n.dl_green_box_selectbox_lang_title		= "Ընտրեք ձեր նախընտրած լեզուն";
+l10n.dl_green_box_selectbox_ver_title		= "Ընտրեք թողարկման ձեր նախընտրած տարբերակը";
 
 // The strings that will be shown in the OS, language and version drop-down select boxes.
 // You must leave at least one single empty string (see the comment lines above the 3 following variables)!
@@ -40,60 +40,60 @@ l10n.dl_green_box_selectbox_ver_title		= "Select your favorite release version";
 
 // l10n.dl_green_box_select_box_os_values	= [ "" ];
 l10n.dl_green_box_select_box_os_values		= [ "Windows (EXE)",
-												"Linux 64-bit (x86-64) (DEB)",
-												"Linux 64-bit (x86-64) (RPM)",
-												"Linux 32-bit (x86) (DEB)",
-												"Linux 32-bit (x86) (RPM)",
-												"OS X (version >= 10.7) (DMG)",
-												"OS X (version <= 10.6) (DMG)",
-												"More platforms / operating systems" ];
+												"Linux 64-բիթ (x86-64) (DEB)",
+												"Linux 64-բիթ (x86-64) (RPM)",
+												"Linux 32-բիթ (x86) (DEB)",
+												"Linux 32-բիթ (x86) (RPM)",
+												"OS X (տարբերակ >= 10.7) (DMG)",
+												"OS X (տարբերակ <= 10.6) (DMG)",
+												"Ավելի հարթակներ / գործառնական համակարգեր" ];
 
 // l10n.dl_green_box_select_box_language_values	= [ "" ];
 l10n.dl_green_box_select_box_language_values	= [ "" ];
 
 // l10n.dl_green_box_select_box_lang_values_custom = [ "" ];
 												 // Value		Visible text					Tool tip
-l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",		"Asturian",						"Asturianu",
-													"eu",		"Basque",						"Euskara",
-													"bg",		"Bulgarian",					"български език",
-													"ca",		"Catalan",						"Català",
-													"ca-XV",	"Catalan [Valencia AVL]",		"València (AVL)",
-													"ca-XR",	"Catalan [Valencia RACV]",		"València (RACV)",
-													"zh-CN",	"Chinese [simplified]",			"简体中文",
-													"zh-TW",	"Chinese [traditional]",		"正體中文",
-													"cs",		"Czech",						"Čeština",
-													"da",		"Danish",						"Dansk",
-													"nl",		"Dutch",						"Nederlands",
-													"en-GB",	"English [British]",			"English [British]",
-													"en-US",	"English [US]",					"English [US]",
-													"fi",		"Finnish",						"Suomi",
+l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",		"Աստուրիան",						"Աստուրիան",
+													"eu",		"Բասկերեն",						"Euskara",
+													"bg",		"Բուլղարերեն",					"български език",
+													"ca",		"Կատալաներեն",						"Català",
+													"ca-XV",	"Կատալաներեն [Վալենսիա AVL]",		"València (AVL)",
+													"ca-XR",	"Կատալաներեն [Վալենսիա RACV]",		"València (RACV)",
+													"zh-CN",	"Չինարեն [պարզեցված]",			"简体中文",
+													"zh-TW",	"Չինարեն [ավանդական]",		"正體中文",
+													"cs",		"Չեխերեն",						"Čeština",
+													"da",		"Դանիերեն",						"Dansk",
+													"nl",		"Հոլանդերեն",						"Nederlands",
+													"en-GB",	"Անգլերեն [Բրիտանական]",			"English [British]",
+													"en-US",	"Անգլերեն [ԱՄՆ]",					"English [US]",
+													"fi",		"Ֆիններեն",						"Suomi",
 													"fr",		"French",						"Français",
-													"gl",		"Galician",						"Galego",
-													"de",		"German",						"Deutsch",
-													"el",		"Greek",						"ελληνικά",
-													"he",		"Hebrew",						"עברית",
-													"hi",		"Hindi",						"हिन्दी",
-													"hu",		"Hungarian",					"Magyar",
-													"it",		"Italian",						"Italiano",
-													"ja",		"Japanese",						"日本語",
-													"km",		"Khmer",						"ភាសាខ្មែរ",
-													"ko",		"Korean",						"한국어",
-													"lt",		"Lithuanian",					"Lietuvių",
-													"nb",		"Norwegian [Bokmal]",			"Norsk [Bokmål]",
-													"pl",		"Polish",						"Polski",
-													"pt-BR",	"Portuguese [Brazilian]",		"Português [do Brasil]",
-													"pt",		"Portuguese [European]",		"Português [Europeu]",
-													"ru",		"Russian",						"Русский",
-													"gd",		"Scottish [Gaelic]",			"Gàidhlig",
-													"sr",		"Serbian [Cyrillic]",			"Cрпски [ћирилицом]",
-													"sk",		"Slovak",						"Slovenský jazyk [slovenčina]",
-													"sl",		"Slovenian",					"Slovenski jezik [slovenščina]",
-													"es",		"Spanish",						"Español",
-													"sv",		"Swedish",						"Svenska",
-													"ta",		"Tamil",						"தமிழ்",
-													"th",		"Thai",							"ภาษาไทย",
-													"tr",		"Turkish",						"Türkçe",
-													"vi",		"Vietnamese",					"Tiếng Việt" ];
+													"gl",		"Գալիսիերեն",						"Galego",
+													"de",		"Գերմաներեն",						"Deutsch",
+													"el",		"Հունարեն",						"ελληνικά",
+													"he",		"Եբրայերեն",						"עברית",
+													"hi",		"Հինդի",						"हिन्दी",
+													"hu",		"Հունգարերեն",					"Magyar",
+													"it",		"Իտալերեն",						"Italiano",
+													"ja",		"Ճապոներեն",						"日本語",
+													"km",		"Խմերերեն",						"ភាសាខ្មែរ",
+													"ko",		"Կորեերեն",						"한국어",
+													"lt",		"Լիտվերեն",					"Lietuvių",
+													"nb",		"Նորվերգերեն [Բոկմալ]",			"Norsk [Bokmål]",
+													"pl",		"Լեհերեն",						"Polski",
+													"pt-BR",	"Պորտուգալերեն [Բրազիլական]",		"Português [do Brasil]",
+													"pt",		"Պորտուգալերեն [Եվրոպական]",		"Português [Europeu]",
+													"ru",		"Ռուսերեն",						"Русский",
+													"gd",		"Շոտլանդերեն [Գաելիկ]",			"Gàidhlig",
+													"sr",		"Սերբերեն [Կիրիլիցա]",			"Cрпски [ћирилицом]",
+													"sk",		"Սլովակերեն",						"Slovenský jazyk [slovenčina]",
+													"sl",		"Սլովեներեն",					"Slovenski jezik [slovenščina]",
+													"es",		"Իսպաներեն",						"Español",
+													"sv",		"Շվեդերեն",						"Svenska",
+													"ta",		"Թամիլերեն",						"தமிழ்",
+													"th",		"Թայերեն",							"ภาษาไทย",
+													"tr",		"Թուրքերեն",						"Türkçe",
+													"vi",		"Վիետնամերեն",					"Tiếng Việt" ];
 
 /* l10n.dl_green_box_select_box_language_values	= [ "" ]; */
 l10n.dl_green_box_select_box_language_values	= [ "" ];
@@ -112,204 +112,204 @@ l10n.dl_green_box_select_box_version_older	= "Older releases";
 // Not defined for now.
 
 // Share: Strings in the light-blue box (used in "index.html").
-l10n.dl_share_light_blue_box_headline_text		= "Help Spread the Word";
-l10n.dl_share_light_blue_box_headline_title		= "Help spread the word and tell your friends about Apache OpenOffice";
-l10n.dl_share_light_blue_box_text_text			= "Please tell your friends about Apache OpenOffice:";
-l10n.dl_share_light_blue_box_text_title			= "Help spread the word and tell your friends about Apache OpenOffice";
-l10n.dl_share_light_blue_box_blog_text			= "Official Blog";
-l10n.dl_share_light_blue_box_blog_title			= "Weblog of OpenOffice";
+l10n.dl_share_light_blue_box_headline_text		= "Օգնեք տարածել խոսքը";
+l10n.dl_share_light_blue_box_headline_title		= "Օգնեք տարածել խոսքը և պատմեք ձեր ընկերներին Apache OpenOffice -ի մասին";
+l10n.dl_share_light_blue_box_text_text			= "Խնդրում ենք պատմեք ձեր ընկերներին Apache OpenOffice -ի մասին:";
+l10n.dl_share_light_blue_box_text_title			= "Օգնեք տարածել խոսքը և պատմեք ձեր ընկերներին Apache OpenOffice -ի մասին";
+l10n.dl_share_light_blue_box_blog_text			= "Պաշտոնական բլոգ";
+l10n.dl_share_light_blue_box_blog_title			= "OpenOffice -ի վեբլոգը";
 l10n.dl_share_light_blue_box_blog_src			= "/images/logo-rss-32.png";
-l10n.dl_share_light_blue_box_blog_alt			= "Weblog of OpenOffice";
-l10n.dl_share_light_blue_box_facebook_text		= "Facebook";
-l10n.dl_share_light_blue_box_facebook_title		= "Please tell your friends about Apache OpenOffice via Facebook";
+l10n.dl_share_light_blue_box_blog_alt			= "OpenOffice -ի վեբլոգը";
+l10n.dl_share_light_blue_box_facebook_text		= "Դիմագիրք";
+l10n.dl_share_light_blue_box_facebook_title		= "Խնդրում ենք ձեր ընկերներին պատմեք Apache OpenOffice -ի մասին Facebook-ի միջոցով";
 l10n.dl_share_light_blue_box_facebook_src		= "/images/logo-facebook-32.png";
-l10n.dl_share_light_blue_box_facebook_alt		= "Share on Facebook";
+l10n.dl_share_light_blue_box_facebook_alt		= "Կիսվեք Facebook -ում";
 l10n.dl_share_light_blue_box_twitter_text		= "Twitter";
-l10n.dl_share_light_blue_box_twitter_title		= "Please tell your friends about Apache OpenOffice via Twitter";
+l10n.dl_share_light_blue_box_twitter_title		= "Խնդրում ենք ձեր ընկերներին պատմեք Apache OpenOffice -ի մասին Twitter-ի միջոցով";
 l10n.dl_share_light_blue_box_twitter_src		= "/images/logo-twitter-32.png";
-l10n.dl_share_light_blue_box_twitter_alt		= "Share on Twitter";
+l10n.dl_share_light_blue_box_twitter_alt		= "Կիսվեք Twitter -ում";
 
 // Extensions: Strings in the blue box (top) (used in "index.html").
-l10n.dl_ext_blue_box_headline_text			= "Get Apache OpenOffice Extensions and Dictionaries";
-l10n.dl_ext_blue_box_headline_title			= "Choose from a wide range of additional and individual functionality";
-l10n.dl_ext_blue_box_text_text				= "Extend your Apache OpenOffice functionality with a large and growing library of extensions and dictionaries from other users.";
-l10n.dl_ext_blue_box_text_title				= "Choose from a wide range of additional and individual functionality";
+l10n.dl_ext_blue_box_headline_text			= "Ձեռք բերեք Apache OpenOffice -ի ընդարձակումները և բառարանները";
+l10n.dl_ext_blue_box_headline_title			= "Ընտրեք լրացուցիչ և անհատական ֆունկցիոնալության լայն տեսականիից";
+l10n.dl_ext_blue_box_text_text				= "Ընդլայնեք ձեր Apache OpenOffice ֆունկցիոնալությունը այլ օգտվողների տրամադրած ընդլայնումների և բառարանների մեծ և աճող գրադարանով:";
+l10n.dl_ext_blue_box_text_title				= "Ընտրեք լրացուցիչ և անհատական ֆունկցիոնալության լայն տեսականիից";
 l10n.dl_ext_blue_box_text_href				= "https://extensions.openoffice.org/";
 
 // Templates: Strings in the blue box (bottom) (used in "index.html").
-l10n.dl_tlp_blue_box_headline_text			= "Get Apache OpenOffice Templates";
-l10n.dl_tlp_blue_box_headline_title			= "Choose from a wide range of additional and individual documents";
-l10n.dl_tlp_blue_box_text_text				= "Extend your Apache OpenOffice creativity with a large and growing library of templates from other users.";
-l10n.dl_tlp_blue_box_text_title				= "Choose from a wide range of additional and individual documents";
+l10n.dl_tlp_blue_box_headline_text			= "Ստացեք Apache OpenOffice ձևանմուշները";
+l10n.dl_tlp_blue_box_headline_title			= "Ընտրեք լրացուցիչ և անհատական փաստաթղթերի լայն տեսականիից";
+l10n.dl_tlp_blue_box_text_text				= "Ընդլայնեք ձեր Apache OpenOffice -ի ստեղծագործականությունը այլ օգտվողների կաղապարների մեծ և աճող գրադարանի միջոցով:";
+l10n.dl_tlp_blue_box_text_title				= "Ընտրեք լրացուցիչ և անհատական փաստաթղթերի լայն տեսականիից";
 l10n.dl_tlp_blue_box_text_href				= "https://templates.openoffice.org/";
 
 // Strings in the navigation bar (used in "index.html").
 // Release Information
-l10n.dl_nav_headline_1_text					= "Release Information";
-l10n.dl_nav_sysreq_text						= "System Requirements";
-l10n.dl_nav_sysreq_title					= "HDD: ~300MB free - Memory: &gt;128MB - Processor: &gt;500MHz - OS: Windows, macOS (OS&nbsp;X), Linux, Solaris, FreeBSD...";
+l10n.dl_nav_headline_1_text					= "Թողարկման տեղեկատվություն";
+l10n.dl_nav_sysreq_text						= "Համակարգի պահանջներ";
+l10n.dl_nav_sysreq_title					= "HDD: ~300MB ազատ - Հիշողություն: &gt;128MB - պրոցեսոր: &gt;500MHz - OS: Windows, macOS (OS&nbsp;X), Linux, Solaris, FreeBSD...";
 l10n.dl_nav_sysreq_href						= "https://www.openoffice.org/dev_docs/source/sys_reqs_aoo41.html";
-l10n.dl_nav_license_text					= "License";
-l10n.dl_nav_license_title					= "Apache OpenOffice License";
+l10n.dl_nav_license_text					= "Արտոնագիր";
+l10n.dl_nav_license_title					= "Apache OpenOffice արտոնագիր";
 l10n.dl_nav_license_href					= "https://www.openoffice.org/license.html";
-l10n.dl_nav_source_text						= "Source";
-l10n.dl_nav_source_title					= "For developers and power users: Get the source to build Apache OpenOffice from scratch";
+l10n.dl_nav_source_text						= "Աղբյուր";
+l10n.dl_nav_source_title					= "Մշակողների և փորձված օգտագործողների համար. Ստացեք Apache OpenOffice-ը զրոյից կառուցելու սկզբնական կոդըը";
 l10n.dl_nav_source_href						= "https://openoffice.apache.org/downloads.html";
-l10n.dl_nav_build_text						= "Building Guide";
-l10n.dl_nav_build_title						= "For developers and power users: HowTo guide to build Apache OpenOffice from scratch";
+l10n.dl_nav_build_text						= "Կառուցման ուղեցույց";
+l10n.dl_nav_build_title						= "Մշակողների և փորձված օգտագործողների համար․ HowTo ուղեցույց զրոյից Apache OpenOffice-ը կառուցելու համար";
 l10n.dl_nav_build_href						= "https://wiki.openoffice.org/wiki/Documentation/Building_Guide_AOO";
-l10n.dl_nav_sdk_text						= "Software Development Kit (SDK)";
-l10n.dl_nav_sdk_title						= "For developers: Software Development Kit";
+l10n.dl_nav_sdk_text						= "Ծրագրաշարի մշակման հավաքածու (SDK)";
+l10n.dl_nav_sdk_title						= "Մշակողների համար՝ Ծրագրաշարի մշակման հավաքածո";
 l10n.dl_nav_sdk_href						= "https://openoffice.apache.org/downloads.html";
-l10n.dl_nav_devbuilds_text					= "Development Builds";
-l10n.dl_nav_devbuilds_title					= "For QA volunteers: Development Builds";
+l10n.dl_nav_devbuilds_text					= "Մշակումների կառուցում";
+l10n.dl_nav_devbuilds_title					= "Որակի աջակիցների կամավորների համար: Մշակումների կառուցում";
 l10n.dl_nav_devbuilds_href					= "https://www.openoffice.org/download/devbuilds.html";
 
 // Documentation
-l10n.dl_nav_headline_2_text					= "Documentation";
-l10n.dl_nav_schedule_text					= "Release Schedules";
-l10n.dl_nav_schedule_title					= "When are new releases planned?";
+l10n.dl_nav_headline_2_text					= "Փաստաթղթավորում";
+l10n.dl_nav_schedule_text					= "Թողարկման ժամանակացույցեր";
+l10n.dl_nav_schedule_title					= "Ե՞րբ են նախատեսվում նոր թողարկումները:";
 l10n.dl_nav_schedule_href					= "https://cwiki.apache.org/confluence/display/OOOUSERS/Releases";
-l10n.dl_nav_hist_schedule_text				= "Historic Release Schedule";
-l10n.dl_nav_hist_schedule_title				= "When were old releases planned?";
+l10n.dl_nav_hist_schedule_text				= "Պատմական թողարկման ժամանակացույց";
+l10n.dl_nav_hist_schedule_title				= "Ե՞րբ էին նախատեսվում հին թողարկումները:";
 l10n.dl_nav_hist_schedule_href				= "https://wiki.openoffice.org/wiki/Product_Release";
-l10n.dl_nav_inst_guide_text					= "Installation Guides";
-l10n.dl_nav_inst_guide_title				= "Instructions for installing Apache OpenOffice on Windows, macOS (OS&nbsp;X) and Linux machines";
+l10n.dl_nav_inst_guide_text					= "Տեղադրման ուղեցույցներ";
+l10n.dl_nav_inst_guide_title				= "Տեղադրելու ցուցումներ Apache OpenOffice -ը Windows, macOS (OS&nbsp;X) և Linux մեքենաներում";
 l10n.dl_nav_inst_guide_href					= "https://www.openoffice.org/download/common/instructions.html";
-l10n.dl_nav_user_guide_text					= "User Guides";
-l10n.dl_nav_user_guide_title				= "Extensive user manuals for every day use";
+l10n.dl_nav_user_guide_text					= "Օգտագործողի ուղեցույցներ";
+l10n.dl_nav_user_guide_title				= "Ամենօրյա օգտագործման ընդլայնված ձեռնարկներ";
 l10n.dl_nav_user_guide_href					= "https://www.openoffice.org/documentation/index.html";
-l10n.dl_nav_why_java_text					= "Java and Apache OpenOffice";
-l10n.dl_nav_why_java_title					= "Explains why to use Java and what it is";
+l10n.dl_nav_why_java_text					= "Java և Apache OpenOffice";
+l10n.dl_nav_why_java_title					= "Բացատրում է, թե ինչու է օգտագործել Java- ն ու ինչ է դա";
 l10n.dl_nav_why_java_href					= "https://www.openoffice.org/download/common/java.html";
-l10n.dl_nav_eol_text						= "End-Of-Life Information";
-l10n.dl_nav_eol_title						= "Information about releases that have reached End-Of-Life status";
+l10n.dl_nav_eol_text						= "Շահագործման կյանքի տևողության մասին տեղեկատվություն";
+l10n.dl_nav_eol_title						= "Տեղեկատվություն թողարկումների մասին, որոնք հասել են շահագործման կյանքի տևողության վերջի կարգավիճակին";
 l10n.dl_nav_eol_href						= "https://www.openoffice.org/development/releases/eol.html";
 
 // Additional Resources
-l10n.dl_nav_headline_3_text			= "Additional Resources";
-l10n.dl_nav_support_text			= "Support";
-l10n.dl_nav_support_title			= "If the information above did not answer your question: Free and paid support!";
+l10n.dl_nav_headline_3_text			= "Լրացուցիչ պաշարներ";
+l10n.dl_nav_support_text			= "Աջակցություն";
+l10n.dl_nav_support_title			= "Եթե վերը նշված տեղեկատվությունը չի պատասխանում ձեր հարցին՝ անվճար և վճարովի աջակցություն:";
 l10n.dl_nav_support_href			= "https://www.openoffice.org/support/index.html";
-l10n.dl_nav_local_text				= "Localizations";
-l10n.dl_nav_local_title				= "Information and support in your favorite language";
+l10n.dl_nav_local_text				= "Տեղայնացումներ";
+l10n.dl_nav_local_title				= "Տեղեկատվություն և աջակցություն ձեր սիրած լեզվով";
 l10n.dl_nav_local_href				= "https://openoffice.apache.org/native-lang.html";
-l10n.dl_nav_stat_text				= "Download Statistics";
-l10n.dl_nav_stat_title				= "Download and other statistics";
+l10n.dl_nav_stat_text				= "Ներբեռնման վիճակագրություն";
+l10n.dl_nav_stat_title				= "Ներբեռնման և այլ վիճակագրություն";
 l10n.dl_nav_stat_href				= "https://www.openoffice.org/stats/index.html";
-l10n.dl_nav_mirrors1_text			= "Alternative download link #1";
-l10n.dl_nav_mirrors1_title			= "Use SourceForge mirrors to download Apache OpenOffice";
+l10n.dl_nav_mirrors1_text			= "Այլընտրանքային ներբեռնման հղում #1";
+l10n.dl_nav_mirrors1_title			= "Apache OpenOffice-ը ներբեռնելու համար օգտագործեք SourceForge հայելիները";
 l10n.dl_nav_mirrors1_href			= "https://sourceforge.net/projects/openofficeorg.mirror/files/";
-l10n.dl_nav_mirrors2_text			= "Alternative download link #2";
-l10n.dl_nav_mirrors2_title			= "Use Apache mirrors to download Apache OpenOffice";
+l10n.dl_nav_mirrors2_text			= "Այլընտրանքային ներբեռնման հղում #2";
+l10n.dl_nav_mirrors2_title			= "Apache OpenOffice-ը ներբեռնելու համար օգտագործեք Apache հայելիներ";
 l10n.dl_nav_mirrors2_href			= "https://www.apache.org/dyn/closer.lua/openoffice/";
-l10n.dl_nav_porting_text			= "3rd party ports and distributions";
-l10n.dl_nav_porting_title			= "Ports and distributions from 3rd party vendors";
+l10n.dl_nav_porting_text			= "3-րդ կողմի հանգույցներ և բաշխումներ";
+l10n.dl_nav_porting_title			= "Հանգույցներ և բաշխումներ 3-րդ կողմի վաճառողներից";
 l10n.dl_nav_porting_href			= "https://www.openoffice.org/porting/index.html";
-l10n.dl_nav_archive_text			= "Archived and legacy releases";
-l10n.dl_nav_archive_title			= "Download legacy and archived releases";
+l10n.dl_nav_archive_text			= "Արխիվացված և հին թողարկումներ";
+l10n.dl_nav_archive_title			= "Ներբեռնեք հին և արխիվացված թողարկումները";
 l10n.dl_nav_archive_href			= "https://www.openoffice.org/download/archive.html";
 
 // List items in the navigation bar that are not used for now.
-l10n.dl_nav_release_notes_text		= "Release Notes";
-l10n.dl_nav_release_notes_title		= "What is new, what has been improved in Apache OpenOffice?";
+l10n.dl_nav_release_notes_text		= "Թողարկման նշումներ";
+l10n.dl_nav_release_notes_title		= "Ի՞նչ նոր բան կա, ի՞նչն է բարելավվել Apache OpenOffice-ում:";
 l10n.dl_nav_release_notes_href		= "https://www.openoffice.org/development/releases/index.html";
-l10n.dl_nav_checksum_text			= "Verify the downloaded file";
-l10n.dl_nav_checksum_title			= "How to verify the downloaded file with signatures and hashes?";
+l10n.dl_nav_checksum_text			= "Ստուգեք ներբեռնված նիշքը";
+l10n.dl_nav_checksum_title			= "Ինչպե՞ս ստուգել ներբեռնված նիշքը ստորագրություններով և հեշերով:";
 l10n.dl_nav_checksum_href			= "https://www.openoffice.org/download/checksums.html";
 
 // Strings for the logo graphics.
-l10n.dl_img_sourceforge_title		= "SourceForge - Download, Develop and Publish Free Open Source Software";
+l10n.dl_img_sourceforge_title		= "SourceForge - Ներբեռնեք, մշակեք և հրապարակեք անվճար բաց կոդով ծրագրակազմ";
 l10n.dl_img_sourceforge_href		= "https://www.sourceforge.net/";
 l10n.dl_img_sourceforge_src			= "/images/sourceforge.png";
 l10n.dl_img_sourceforge_alt			= "SourceForge";
-l10n.dl_img_w3c_title				= "W3C Markup Validation Service - Check the markup (HTML, XHTML, ...) of Web documents";
+l10n.dl_img_w3c_title				= "W3C Նշագրման վավերացման ծառայություն - Ստուգեք ոստայնի փաստաթղթերի նշագրումը (HTML, XHTML, ...)";
 l10n.dl_img_w3c_href				= "https://validator.w3.org/check?uri=referer";
 l10n.dl_img_w3c_src					= "/images/valid-xhtml10-blue.png";
-l10n.dl_img_w3c_alt					= "W3C Validator";
+l10n.dl_img_w3c_alt					= "W3C վավերացնող";
 
 
 
 // The following variables are used in the "download.js" file:
 
 // Download: Strings in the green box (used in "download.js").
-l10n.dl_full_link_text				= "Download full installation";
-l10n.dl_full_link_title				= "Click to download: ";
-l10n.dl_langpack_link_text			= "Download language pack";
-l10n.dl_langpack_link_title			= "Click to download: ";
-l10n.dl_win_info_text				= "Important hint: 32-bit, 64-bit and Java - What to choose?";
-l10n.dl_win_info_title				= "At the moment we offer a 32-bit (x86) version for Windows. However, it installs and runs also on Windows 64-bit (x86-64).\nPlease note that you may need Java in 32-bit for additional functionality which must then be selected only once (see menu 'Tools - Options - OpenOffice - Java').\n\nFor more information about OpenOffice and Java please see the link on the right 'Java and Apache OpenOffice'.";
-l10n.dl_linux_info_text				= "Important hint: RPM vs. DEB - What to choose?";
-l10n.dl_linux_info_title			= "RPM is used in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB is used in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
+l10n.dl_full_link_text				= "Ներբեռնեք ամբողջական տեղադրումը";
+l10n.dl_full_link_title				= "Ներբեռնելու համար կտտացրեք: ";
+l10n.dl_langpack_link_text			= "Ներբեռնեք լեզվի փաթեթը";
+l10n.dl_langpack_link_title			= "Ներբեռնելու համար կտտացրեք: ";
+l10n.dl_win_info_text				= "Կարևոր ակնարկ: 32-բիթ, 64-բիթ և Java - Ի՞նչ ընտրել:";
+l10n.dl_win_info_title				= "Այս պահին մենք առաջարկում ենք 32-բիթանոց (x86) տարբերակը Windows-ի համար: Այնուամենայնիվ, այն տեղադրվում և գործարկվում է նաև Windows 64-բիթանոց (x86-64) համակարգերով:\nԽնդրում ենք նկատի ունենալ, որ լրացուցիչ ֆունկցիոնալության համար ձեզ կարող է անհրաժեշտ լինել 32-բիթանոց Java, որն այնուհետև պետք է ընտրվի միայն մեկ անգամ (տե՛ս «Գործիքներ - Ընտրանքներ - OpenOffice - Java» ընտրացանկը):\n\nOpenOffice- ի և Java- ի մասին լրացուցիչ տեղեկություններ ստանալու համար տե՛ս «Java և Apache OpenOffice» -ից աջ հղումը:";
+l10n.dl_linux_info_text				= "Կարևոր ակնար: RPM ընդդեմ DEB - Ի՞նչ ընտրել:";
+l10n.dl_linux_info_title			= "RPM-ն օգտագործվում է:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB-ն օգտագործվում է:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
 //l10n.dl_mac_info_text				= "macOS : Text";
 //l10n.dl_mac_info_title			= "macOS : Title";
 
 
-l10n.dl_full_link_porting_text		= "Porting: Click to choose from 3rd party vendors";
-l10n.dl_full_link_porting_title		= "Click to browse to the porting webpage and download from 3rd party vendors";
-l10n.dl_full_link_archive_text		= "Archive: Click to choose from legacy releases";
-l10n.dl_full_link_archive_title		= "Click to browse to the archive and download legacy releases";
+l10n.dl_full_link_porting_text		= "Հանգույց: Կտտացրեք՝ ընտրելու 3-րդ կողմի վաճառողներից";
+l10n.dl_full_link_porting_title		= "Կտտացրեք՝ տեղափոխելու հանգույցի կայքէջը և ներբեռնելու 3-րդ կողմի վաճառողներից";
+l10n.dl_full_link_archive_text		= "Արխիվ. Կտտացրեք՝ հնացած թողարկումներից ընտրություն կատարելու համար";
+l10n.dl_full_link_archive_title		= "Կտտացրեք արխիվին գնալու և հնացած թողարկումները ներբեռնելու համար";
 
 // Download: Strings in the sub-green box (used in "download.js").
-l10n.dl_rel_info_headline_text		= "Release: ";
-l10n.dl_rel_info_milestone_text		= "Milestone ";
-l10n.dl_rel_info_buildid_text		= "Build ID ";
+l10n.dl_rel_info_headline_text		= "Թողարկում: ";
+l10n.dl_rel_info_milestone_text		= "Հանգրվան ";
+l10n.dl_rel_info_buildid_text		= "Կառուցման ID ";
 l10n.dl_rel_info_svn_text			= "SVN "
-l10n.dl_rel_info_rel_date_text		= "Released ";
-l10n.dl_rel_notes_text				= "Release Notes";
-l10n.dl_rel_notes_title				= "Release Notes for Apache OpenOffice ";
+l10n.dl_rel_info_rel_date_text		= "Թողարկված ";
+l10n.dl_rel_notes_text				= "Թողարկման նշումներ";
+l10n.dl_rel_notes_title				= "Թողարկման նշումներ Apache OpenOffice-ի համար ";
 
-l10n.dl_headline_full_text			= "Full installation: ";
-l10n.dl_headline_langpack_text		= "Language pack: ";
-l10n.dl_filesize_text				= "File size ~ ";
-l10n.dl_megabyte_text				= " MByte";
-l10n.dl_checksum_headline_text		= "Signatures and hashes: ";
-l10n.dl_checksum_keys_text			= "KEYS";
-l10n.dl_checksum_keys_title			= "KEYS signature file";
+l10n.dl_headline_full_text			= "Ամբողջական տեղադրում: ";
+l10n.dl_headline_langpack_text		= "Լեզվական փաթեթ: ";
+l10n.dl_filesize_text				= "Նիշքի չափը ~ ";
+l10n.dl_megabyte_text				= " Մբայթ";
+l10n.dl_checksum_headline_text		= "Ստորագրություններ և հաշեր: ";
+l10n.dl_checksum_keys_text			= "ԲԱՆԱԼԻՆԵՐ";
+l10n.dl_checksum_keys_title			= "ԲԱՆԱԼԻՆԵՐ ստորագրության նիշք";
 l10n.dl_checksum_asc_text			= "ASC";
-l10n.dl_checksum_asc_title			= "ASC signature for: ";
+l10n.dl_checksum_asc_title			= "ASC ստորագրություն: ";
 l10n.dl_checksum_md5_text			= "MD5";
-l10n.dl_checksum_md5_title			= "MD5 hash for: ";
+l10n.dl_checksum_md5_title			= "MD5 հաշ: ";
 l10n.dl_checksum_sha256_text		= "SHA256";
-l10n.dl_checksum_sha256_title		= "SHA256 hash for: ";
+l10n.dl_checksum_sha256_title		= "SHA256 հաշ: ";
 l10n.dl_checksum_sha512_text		= "SHA512";
-l10n.dl_checksum_sha512_title		= "SHA512 hash for: ";
+l10n.dl_checksum_sha512_title		= "SHA512 հաշ: ";
 
-l10n.dl_help_img_title				= "What is the difference between full installation and language pack?";
+l10n.dl_help_img_title				= "Ի՞նչ տարբերություն ամբողջական տեղադրման և լեզվական փաթեթի միջև:";
 l10n.dl_help_img_src				= "/download/cachedimages/help-information-icon.png";
-l10n.dl_help_img_alt				= "Install info";
-l10n.dl_help_text					= "What is a language pack?";
-l10n.dl_help_title					= "What is the difference between full installation and language pack?";
-l10n.dl_checksum_img_title			= "How to verify the downloaded file with checksums?";
+l10n.dl_help_img_alt				= "Տեղադրման տեղեկատվություն";
+l10n.dl_help_text					= "Ի՞նչ է լեզվի փաթեթը:";
+l10n.dl_help_title					= "Ի՞նչ տարբերություն ամբողջական տեղադրման և լեզվական փաթեթի միջև:";
+l10n.dl_checksum_img_title			= "Ինչպե՞ս ստուգել ներբեռնված նիշքը ստուգիչ գումարներով:";
 l10n.dl_checksum_img_src			= "/download/cachedimages/help-information-icon.png";
-l10n.dl_checksum_img_alt			= "Checksum verify";
-l10n.dl_checksum_text				= "How to verify the download?";
-l10n.dl_checksum_title				= "How to verify the downloaded file with checksums?";
-l10n.dl_report_img_title			= "Broken download link? Click here to report.";
+l10n.dl_checksum_img_alt			= "Ստուգիչ գումարի վավերացում";
+l10n.dl_checksum_text				= "Ինչպե՞ս ստուգել ներբեռնումը:";
+l10n.dl_checksum_title				= "Ինչպե՞ս ստուգել ներբեռնված նիշքը ստուգիչ գումարի հետ։";
+l10n.dl_report_img_title			= "Ներբեռնման կոտրված հղո՞ւմ: Սեղմեք այստեղ` զեկուցելու համար:";
 l10n.dl_report_img_src				= "/download/cachedimages/help-report-broken-link-icon.png";
-l10n.dl_report_img_alt				= "Broken link";
-l10n.dl_report_text					= "Report broken link";
-l10n.dl_report_title				= "Broken download link? Click here to report.";
+l10n.dl_report_img_alt				= "Կոտրված հղում";
+l10n.dl_report_text					= "Հաղորդել կոտրված հղման մասին";
+l10n.dl_report_title				= "Ներբեռնման կոտրված հղո՞ւմ: Սեղմեք այստեղ` զեկուցելու համար:";
 
 // Download: Strings for error text in the sub-red box (used in "download.js").
-l10n.dl_full_link_error_text			= "No full installation available";
-l10n.dl_full_link_error_title			= "Please select another language, platform or version.";
-l10n.dl_langpack_link_error_text		= "No language pack available";
-l10n.dl_langpack_link_error_title		= "Please select another language, platform or version.";
+l10n.dl_full_link_error_text			= "Ամբողջական տեղադրումը հասանելի չէ";
+l10n.dl_full_link_error_title			= "Խնդրում ենք ընտրել այլ լեզու, հարթակ կամ տարբերակ:";
+l10n.dl_langpack_link_error_text		= "Չկա հասանելի լեզվական փաթեթ";
+l10n.dl_langpack_link_error_title		= "Խնդրում ենք ընտրել այլ լեզու, հարթակ կամ տարբերակ:";
 
-l10n.dl_error_problem_img_title			= "The selected download file is not available";
+l10n.dl_error_problem_img_title			= "Ներբեռնման ընտրված նիշքը հասանելի չէ";
 l10n.dl_error_problem_img_src			= "/download/cachedimages/exclamation-icon.png";
-l10n.dl_error_problem_img_alt			= "Error text";
-l10n.dl_error_problem_text				= "Problem: ";
-l10n.dl_error_solution_text				= "Solution: ";
+l10n.dl_error_problem_img_alt			= "Սխալի տեքստ";
+l10n.dl_error_problem_text				= "Խնդիր: ";
+l10n.dl_error_solution_text				= "Լուծում: ";
 l10n.dl_error_aoo_text					= "Apache OpenOffice ";
-l10n.dl_error_not_available_for_text	= " is not available for ";
-l10n.dl_error_please_select_1_text		= "Please select version 4.0.1.";
-l10n.dl_error_please_select_2_text		= "Please select version 4.1.0 or newer.";
-l10n.dl_error_please_select_3_text		= "Please select a download for Windows, macOS (OS&nbsp;X) or Linux.";
-l10n.dl_error_please_select_4_text		= "Please select another language or version.";
+l10n.dl_error_not_available_for_text	= " հասանելի չէ ";
+l10n.dl_error_please_select_1_text		= "Խնդրում ենք ընտրել 4.0.1 տարբերակը:";
+l10n.dl_error_please_select_2_text		= "Խնդրում ենք ընտրել 4.0.1 տարբերակը կան ավելի նորը:";
+l10n.dl_error_please_select_3_text		= "Խնդրում ենք ընտրել ներբեռնում Windows-ի, macOS-ի (OS&nbsp;X) կամ Linux-ի համար:";
+l10n.dl_error_please_select_4_text		= "Խնդրում ենք ընտրել այլ լեզու կամ տարբերակ:";
 
-l10n.dl_unknown_platform_text			= "unknown operating system / platform";
+l10n.dl_unknown_platform_text			= "անհայտ գործառնական համակարգ / հարթակ";
 
 // Download: Strings with customized error text in the sub-red box (used in "download.js").
 // Can be used when the default text in the variables above cannot be translated correctly.
@@ -323,40 +323,40 @@ l10n.dl_error_custom_4_text			= "";
 // The following variables are used in the "analyze.html" file:
 
 // Analyze: Strings for the instruction text (used in "analyze.html").
-l10n.dl_analyze_headline_text					= "How to report a broken download link?";
-l10n.dl_analyze_instruction_select_text			= "<b>Select your favorites</b>: Operating system, language and version in the green below.";
-l10n.dl_analyze_instruction_verify_text			= "Verify that these options <b>still do not</b> lead to valid download links.";
-l10n.dl_analyze_instruction_click_text			= "Click on the button below the green box: ";
-l10n.dl_analyze_instruction_copy_text			= "Copy the selected table data into the clipboard: ";
-l10n.dl_analyze_instruction_new_mail_text		= "Create a new mail.";
-l10n.dl_analyze_instruction_problem_text		= "<b>Write a problem description</b> (what does not work and what do you expect).";
-l10n.dl_analyze_instruction_details_text		= "Please also add <b>details about the used operating system</b>.";
-l10n.dl_analyze_instruction_paste_text			= "Paste the copied data at the end of the mail.";
-l10n.dl_analyze_instruction_only_download_text	= "Please <b>send the mail only in case of download problems</b> and not if you cannot install.";
-l10n.dl_analyze_instruction_no_install_text		= "This webpage cannot help at all with installation problems.";
-l10n.dl_analyze_instruction_send_mail_text		= "Finally, <b>send the mail</b> to the: ";
-l10n.dl_analyze_instruction_mailing_list_text	= "Apache OpenOffice Development Mailing List";
-l10n.dl_analyze_instruction_mailing_list_title	= "Send the report to the Apache OpenOffice developers mailing list";
-l10n.dl_analyze_instruction_learn_more_text		= "Click here to learn more about what a mailing list is";
-l10n.dl_analyze_instruction_learn_more_title	= "Learn more about what a mailing list is";
-l10n.dl_analyze_instruction_answer_text			= "We will try to answer as soon as we get the mail and the problem analyzed.";
-l10n.dl_analyze_instruction_thanks_text			= "Thank you for your report.";
+l10n.dl_analyze_headline_text					= "Ինչպե՞ս զեկուցել կոտրված ներբեռնման հղման մասին:";
+l10n.dl_analyze_instruction_select_text			= "<b>Ընտրեք ձեր նախընտրածները</b>: Գործառնական համակարգը, լեզուն և տարբերակը ներկայացված են ստորև կանաչ գույնով:";
+l10n.dl_analyze_instruction_verify_text			= "Ստուգեք, որ այս ընտրանքները <b>դեռ չեն</b> հանգեցնում ներբեռնման վավեր հղումների:";
+l10n.dl_analyze_instruction_click_text			= "Կտտացրեք կանաչ տուփի ներքևում գտնվող կոճակին։ ";
+l10n.dl_analyze_instruction_copy_text			= "Պատճենեք ընտրված աղյուսակի տվյալները միջանկյալ հիշողությունում։ ";
+l10n.dl_analyze_instruction_new_mail_text		= "Ստեղծեք նոր նամակ:";
+l10n.dl_analyze_instruction_problem_text		= "<b>Գրեք խնդրի նկարագրությունը</b> (ինչը չի աշխատում, և ինչ եք ակնկալում).";
+l10n.dl_analyze_instruction_details_text		= "Խնդրում ենք նաև ավելացնել <b>մանրամասներ օգտագործված գործառնական համակարգի մասին</b>.";
+l10n.dl_analyze_instruction_paste_text			= "Հետարկեք պատճենված տվյալները փոստի վերջում:";
+l10n.dl_analyze_instruction_only_download_text	= "Խնդրում ենք <b>փոստը ուղարկեք միայն ներբեռնման հետ կապված խնդիրների դեպքում</b> և ոչ թե երբ չեք կարող տեղադրել:";
+l10n.dl_analyze_instruction_no_install_text		= "Այս վեբ էջն ընդհանրապես չի կարող օգնել տեղադրման հետ կապված խնդիրներին:";
+l10n.dl_analyze_instruction_send_mail_text		= "Ի վերջո, <b>նամակն ուղարկեք</b> հասցեին: ";
+l10n.dl_analyze_instruction_mailing_list_text	= "Apache OpenOffice-ի զարգացման փոստային ցուցակին";
+l10n.dl_analyze_instruction_mailing_list_title	= "Ուղարկեք հաշվետվությունը Apache OpenOffice-ի զարգացման փոստային ցուցակին";
+l10n.dl_analyze_instruction_learn_more_text		= "Սեղմեք այստեղ՝ ավելին իմանալու թե ինչ է փոստային ցուցակը";
+l10n.dl_analyze_instruction_learn_more_title	= "Իմացեք ավելին, թե ինչ է փոստային ցուցակը";
+l10n.dl_analyze_instruction_answer_text			= "Մենք կփորձենք պատասխանել նամակը ստանալուն պես, վերլուծելով խնդիրը:";
+l10n.dl_analyze_instruction_thanks_text			= "Շնորհակալություն զեկույցի համար:";
 
 // Analyze: Strings for the 3 buttons (used in "analyze.html").
-l10n.dl_analyze_update_button_text			= "Click to update the table";
-l10n.dl_analyze_update_button_title			= "Put the selected options as values into the table below";
-l10n.dl_analyze_select_button_text			= "Click to select the table";
-l10n.dl_analyze_select_button_title			= "Select all data in the table below";
-l10n.dl_analyze_copy_button_text			= "Copy with [Ctrl]+[C] / [&#8984;]+[C]";
-l10n.dl_analyze_copy_button_title			= "Copy the selected table data via [ Ctrl ] + [ C ] or [ &#8984; ] + [ C ] into the clipboard";
+l10n.dl_analyze_update_button_text			= "Սեղմեք աղյուսակը թարմացնելու համար";
+l10n.dl_analyze_update_button_title			= "Ընտրված ընտրանքները որպես արժեք տեղադրեք ստորև բերված աղյուսակում";
+l10n.dl_analyze_select_button_text			= "Կտտացրեք աղյուսակը ընտրելու համար";
+l10n.dl_analyze_select_button_title			= "Ստորև բերված աղյուսակում ընտրեք բոլոր տվյալներըw";
+l10n.dl_analyze_copy_button_text			= "Պատճենեք [Ctrl]+[C] / [&#8984;]+[C]";
+l10n.dl_analyze_copy_button_title			= "Պատճենեք ընտրված աղյուսակի տվյալները [ Ctrl ] + [ C ] միջոցով, կամ [ &#8984; ] + [ C ] միջանկյալ հիշողություն";
 
 // Analyze: Strings for the table (used in "analyze.html").
-l10n.dl_analyze_table_browser_text			= "Browser variables";
-l10n.dl_analyze_table_values_text			= "Values";
-l10n.dl_analyze_table_yes_text				= "Yes";
-l10n.dl_analyze_table_no_text				= "No";
-l10n.dl_analyze_table_stable_release_text	= "Stable Release";
-l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;functions/variables";
+l10n.dl_analyze_table_browser_text			= "Զննարկչի փոփոխականներ";
+l10n.dl_analyze_table_values_text			= "Արժեքներ";
+l10n.dl_analyze_table_yes_text				= "Այո";
+l10n.dl_analyze_table_no_text				= "Ոչ";
+l10n.dl_analyze_table_stable_release_text	= "Կայուն թողարկում";
+l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;գործառույթներ/փոփոխականներ";
 
 
 // General: Links to webpage files that could be localized.
