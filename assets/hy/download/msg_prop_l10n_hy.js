@@ -16,10 +16,10 @@
 
 // Set a specific language ISO code to force to assemble a download link with a certain language.
 // Change xx to a valid ISO lang code.
-DL.NL_LANG					= "en-US";
+DL.NL_LANG								= "en-US";
 
 // General:
-l10n.dl_headline_text				= "Apache OpenOffice ներբեռնում";
+l10n.dl_headline_text					= "Apache OpenOffice ներբեռնում";
 
 // Download: Strings in the green box (used in "index.html").
 l10n.dl_green_box_headline_text			= "Ներբեռնեք Apache OpenOffice -ը";
@@ -28,9 +28,9 @@ l10n.dl_green_box_subtext1_text			= "Հյուրընկալվում է SourceForge
 l10n.dl_green_box_subtext1_title		= "Apache OpenOffice -ի երկուական նիշքերը հյուրընկալվում են SourceForge.net -ի կողմից` վստահելի կայք";
 l10n.dl_green_box_subtext2_text			= "Ընտրեք ձեր նախընտրած գործառնական համակարգը, լեզուն և տարբերակը";
 l10n.dl_green_box_subtext2_title		= "Ընտրեք ձեր նախընտրած գործառնական համակարգը, լեզուն և տարբերակը";
-l10n.dl_green_box_selectbox_os_title		= "Ընտրեք ձեր նախընտրած գործառնական համակարգը";
-l10n.dl_green_box_selectbox_lang_title		= "Ընտրեք ձեր նախընտրած լեզուն";
-l10n.dl_green_box_selectbox_ver_title		= "Ընտրեք թողարկման ձեր նախընտրած տարբերակը";
+l10n.dl_green_box_selectbox_os_title	= "Ընտրեք ձեր նախընտրած գործառնական համակարգը";
+l10n.dl_green_box_selectbox_lang_title	= "Ընտրեք ձեր նախընտրած լեզուն";
+l10n.dl_green_box_selectbox_ver_title	= "Ընտրեք թողարկման ձեր նախընտրած տարբերակը";
 
 // The strings that will be shown in the OS, language and version drop-down select boxes.
 // You must leave at least one single empty string (see the comment lines above the 3 following variables)!
