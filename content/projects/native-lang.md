@@ -28,7 +28,7 @@ Language								| Website		| OpenOffice availability
 [Afrikaans (af)](/af/)					| help wanted	| outdated
 [Amharic (am)](/am/)					| help wanted	| outdated
 [Arabic (ar)](/ar/)						| help wanted	| outdated
-[Armenian (hy)](/hy/)					| help wanted	| outdated
+[Armenian (hy)](/hy/)					| maintained	| outdated
 [Asturian (ast)](/ast/)					| help wanted	| current 4.1.x
 [Basque (eu)](/eu/)						| help wanted	| current 4.1.x
 [Bulgarian (bg)](/bg/)					| help wanted	| current 4.1.x
