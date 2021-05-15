@@ -1,0 +1,1027 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>Increasing the row limit above 32000 rows</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice 7  (Solaris Sparc)">
+	<META NAME="AUTHOR" CONTENT="Eike Rathke">
+	<META NAME="CREATED" CONTENT="20010906;18022045">
+	<META NAME="CHANGEDBY" CONTENT="Eike Rathke">
+	<META NAME="CHANGED" CONTENT="20041206;13362800">
+	<META NAME="Document state" CONTENT="CWS rowlimit integrated as of SRC680_m42; CWS rowlimit2 integrated as of SRC680_m52; bugfixes as of SRC680_m59">
+	<META NAME="TODO" CONTENT="beyond 64k plan">
+	<STYLE>
+	<!--
+		@page { size: 8.5in 11in }
+		TD P { font-family: "Arial", sans-serif }
+		H1 { font-family: "Arial", sans-serif }
+		P { font-family: "Arial", sans-serif }
+		H2 { font-family: "Arial", sans-serif }
+		TH P { font-family: "Arial", sans-serif }
+		CODE { font-family: "Courier", monospace }
+	-->
+	</STYLE>
+
+    
+    <script src="https://www.apachecon.com/event-images/snippet.js"></script>
+  </head>
+  <body LANG="en-US" DIR="LTR">
+    <!--#include virtual="/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/sc/">sc</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<H1 ALIGN=CENTER><SDFIELD TYPE=DOCINFO SUBTYPE=TITLE>Increasing the row limit above 32000 rows</SDFIELD></H1>
+<P>Author: <A HREF="mailto:er@openoffice.org?subject=Increasing the row limit above 32000 rows">Eike
+Rathke</A><BR>Document state: <SDFIELD TYPE=DOCINFO SUBTYPE=INFO1>CWS rowlimit integrated as of SRC680_m42; CWS rowlimit2 integrated as of SRC680_m52; bugfixes as of SRC680_m59</SDFIELD><BR>TODO:
+<SDFIELD TYPE=DOCINFO SUBTYPE=INFO2>beyond 64k plan</SDFIELD><BR>Last
+changed: <SDFIELD TYPE=DOCINFO SUBTYPE=CHANGE FORMAT=DATE SDNUM="1033;1033;NNNNMMMM D, YYYY">Monday, December 6, 2004</SDFIELD></P>
+<H2>Table of content</H2>
+<OL>
+	<LI><DD><A HREF="#Preliminary|outline" NAME="TOC Preliminary">Preliminary</A></DD><LI><DD>
+	<A HREF="#History|outline" NAME="TOC History">History</A></DD><LI><DD>
+	<A HREF="#Document structure overview|outline" NAME="TOC Document structure overview">Document
+	structure overview</A></DD><LI><DD>
+	<A HREF="#Position accessing methods|outline" NAME="TOC Position accessing methods">Position
+	accessing methods</A></DD><LI><DD>
+	<A HREF="#List of structs and classes having an USHORT (or short or UINT16 or INT16) row value as member variable|outline" NAME="TOC List of structs and classes having an USHORT (or short or UINT16 or INT16) row value as member variable">List
+	of structs and classes having an USHORT (or short or UINT16 or
+	INT16) row value as member variable</A></DD><LI><DD>
+	<A HREF="#List of defines using a limited row value|outline" NAME="TOC List of defines using a limited row value">List
+	of defines using a limited row value</A></DD><LI><DD>
+	<A HREF="#Some specials about row numbers|outline" NAME="TOC Some specials about row numbers">Some
+	specials about row numbers</A></DD><LI><DD>
+	<A HREF="#Strategy|outline" NAME="TOC Strategy">Strategy</A></DD><LI><DD>
+	<A HREF="#Road map and time frame|outline" NAME="TOC Road map and time frame">Road
+	map and time frame</A> 
+	</DD><LI><DD STYLE="margin-bottom: 0.2in">
+	<A HREF="#Table_of_steps" NAME="TOC_Table_of_steps">Table of steps</A>
+		</DD></OL>
+<H2><A NAME="Preliminary|outline"></A><A HREF="#TOC Preliminary">Preliminary</A></H2>
+<P>Currently the spreadsheet application is limited to 32000 rows per
+sheet. As we all know that is not enough for some uses. In this
+document I will describe the code changes which have to be done to
+increase the limit. Where necessary I will also insert some remarks
+about why the code is like it is, pitfalls and things to have in mind
+when changing the code. This document is under development, the goal
+is to have it completed by the end of the year, so changing the code
+may start next year (apart from some minor changes here and there
+which can be done on the fly). [Editor's note: that was back in 2001.
+The goal was shifted twice because of other tasks to be completed
+with higher priority. Hopefully we'll start modifying code by the end
+of July / start of August 2002]. You may wonder about that time
+frame, but increasing the row limit is not a task of changing one
+defined constant or similar. You will see as this document evolves.</P>
+<H2><A NAME="History|outline"></A><A HREF="#TOC History">History</A></H2>
+<P>Bear in mind that most document structures were designed back in
+old Win31 days and the number of rows was limited to 8192 then. Win31
+couldn't address more than 64kB in one contiguous memory area without
+<VAR>huge</VAR> effort (it could have been 16384 instead of 8192
+(what the unnamed competitors program implemented in its version 5)
+because with size_of_ptr==4 an array of 64kB could hold 16384
+pointers to rows, but anyways, it wasn't). In general, addressing a
+spreadsheet position is done using <VAR>unsigned short</VAR> type
+variables for column, row, sheet (AKA table). Theoretically this
+would allow 65536 rows to be addressed, but at some places there are
+<VAR>short</VAR> type variables used where relative addressing is
+needed, for example in cell references. Some special values like
+<VAR>USHRT_MAX</VAR> or <VAR>MAXROW+1</VAR> are used to denote an
+invalid row position, and furthermore the number of rows has to be
+dividable by a reasonable number producing a whole-numbered result
+which is necessary for the mechanism of broadcasting changes in areas
+where formulas are listening to. Hence the change from 16384 to 32000
+instead of 32768.</P>
+<H2><A NAME="Document structure overview|outline"></A><A HREF="#TOC Document structure overview">Document
+structure overview</A></H2>
+<P>Roughly said, a spreadsheet document may consist of up to 256
+sheets, each sheet having 256 columns with each column containing a
+dynamic array with elements containing the row number and a pointer
+to the cell for a given row. Empty cells are not stored. The array is
+binary searchable and for evenly distributed filled columns an
+interpolating search is used. A similar array holds the cell style
+attributes (font, alignment, number format and so on) with each entry
+specifying an end row for that attribute, thus formatting an entire
+column with identical attributes results in only one entry.</P>
+<H2><A NAME="Position accessing methods|outline"></A><A HREF="#TOC Position accessing methods">Position
+accessing methods</A></H2>
+<P>There are a lot of <CODE>class ScDocument</CODE> methods (see
+<CODE>inc/document.hxx</CODE> and <CODE>source/data/documen*.cxx</CODE>
+accessing a cell position by<BR><CODE>MethodName( USHORT nCol, USHORT
+nRow, USHORT nTab );</CODE><BR>where at least the <VAR>nRow</VAR>
+parameter will have to be changed to <VAR>long</VAR>, but it should
+be evaluated if all methods taking separated col/row/tab parameters
+couldn't be changed to take one <CODE>ScAddress</CODE> (see below)
+parameter instead. Similar, the <CODE>class ScTable</CODE> methods
+(see <CODE>inc/table.hxx</CODE> and
+<CODE>source/core/data/table*.cxx</CODE>)<BR><CODE>MethodName( USHORT
+nCol, USHORT nRow );</CODE><BR>and the <CODE>class ScColumn</CODE>
+methods (see <CODE>inc/column.hxx</CODE> and
+<CODE>source/core/data/column*.cxx</CODE>)<BR><CODE>MethodName(
+USHORT nRow );<BR></CODE>and the <CODE><CODE>class ScAttrArray</CODE></CODE>
+methods (see <CODE><CODE>inc/attarray.hxx</CODE></CODE> and
+<CODE><CODE>source/core/data/<CODE>attarray</CODE>.cxx</CODE></CODE>)<BR><CODE><CODE>MethodName(
+USHORT nRow );</CODE></CODE><BR>row parameters have to be changed,
+also all<BR><CODE><CODE>MethodName( ..., USHORT nStartRow, <CODE>USHORT
+nEndRow, ...</CODE> );</CODE></CODE><BR>of all of those
+classes.<BR><CODE>Search( USHORT nRow, short&amp; nIndex );</CODE><BR>of
+<CODE>ScColumn</CODE> and <CODE>ScAttrArray</CODE> and similar are
+special in a way that the <CODE>short&amp; nIndex</CODE> reference is
+used to return a position within an array where the position may at
+most be the number of rows used. This of course has to be changed as
+well. <BR><BR>Additionally, a <CODE>class ScAddress</CODE> (see
+<CODE>inc/global.hxx</CODE> and <CODE>source/core/data/global2.cxx</CODE>)
+contains column/row/table values encoded into one <VAR>UINT32</VAR>
+value such that the row value occupies 16 bit and column and table
+values each occupy 8 bit. Changing these would also affect the old
+binary file format, so appropriate conversion methods would have to
+be provided. It should be evaluated how a packing of information into
+any whatsoever sized variable space could be accomplished, since an
+<CODE>ScAddress</CODE> is quite often stored in memory. For example,
+one <VAR>INT32</VAR> may hold the row value and column and sheet
+positions may be stored in <VAR>INT16</VAR> values each. <VAR>INT16</VAR>
+because at least the sheet number shouldn't be limited to 256 anymore
+(this as a side effect of all the row limit changes, though a change
+of the real sheet accessing methods would have to be carried out in a
+second step).</P>
+<P>A cell reference (<CODE>struct SingleRefData</CODE> and <CODE>struct
+ComplRefData</CODE>, see <CODE>inc/refdata.hxx</CODE> and
+<CODE>source/core/tool/refdata.cxx</CODE>) in a formula contains an
+absolute position and an relative position. Both values are <VAR>INT16</VAR>
+values. If those are to be changed it should be thought over if it
+would be really necessary to keep both the absolute value and the
+relative value or if it wouldn't be sufficient to keep either one
+(which of course would imply some changes in the <CODE>class
+ScInterpreter</CODE> (see <CODE>source/core/inc/interpre.hxx</CODE>
+and <CODE>source/core/tool/interpr*.cxx</CODE>) and <CODE>class
+ScCompiler</CODE> (see <CODE>inc/compiler.hxx</CODE> and
+<CODE>source/core/tool/compiler.cxx</CODE> position accessing
+methods). This would save a significant amount of memory if a lot of
+references were used in a lot of formulas (which usually is the
+case).</P>
+<P>There is also a <CODE>class ScTripel</CODE> which partly
+implements features found in <CODE>class ScAddress</CODE>, and a
+<CODE>class ScRefTripel</CODE> which is similar to the <CODE>SingleRefData</CODE>
+with the exception that it is never used in formula data and has
+slightly different capabilities. Both, ScTripel and ScRefTripel (see
+<CODE>inc/global.hxx</CODE> and <CODE>source/core/data/global.cxx</CODE>),
+are leftovers from prior versions and should be replaced by <CODE>ScAddress</CODE>
+and a new (to be created) <CODE>class ScRefAddress</CODE>
+respectively throughout the entire application.</P>
+<H2><A NAME="List of structs and classes having an USHORT (or short or UINT16 or INT16) row value as member variable|outline"></A>
+<A HREF="#TOC List of structs and classes having an USHORT (or short or UINT16 or INT16) row value as member variable">List
+of structs and classes having an <VAR>USHORT</VAR> (or <VAR>short</VAR>
+or <VAR>UINT16</VAR> or <VAR>INT16</VAR>) row value as member
+variable</A></H2>
+<H3>Note: this list was created in 2001 and is incomplete
+[2004-01-26]</H3>
+<H3>inc/*.hxx</H3>
+<UL>
+	<LI><P>class ScAddress<BR>UINT32 nAddress; encoded row in lower 16
+	bit</P>
+</UL>
+<UL>
+	<LI><P>struct ScAttrEntry<BR>nRow; the end row of the range spanned
+	by the attribute</P>
+	<LI><P>class ScAttrArray<BR>nCount; number of used ScAttrEntry
+	entries (max: number of used rows)<BR>nLimit; number of allocated
+	entries (ditto)</P>
+	<LI><P>class ScAttrIterator<BR>short nPos; holds the index position
+	to a ScAttrArray element obtained by ScAttrArray::Search()
+	<BR>nRow;<BR>nEndRow;</P>
+	<LI><P>class ScMergeAttr<BR>INT16 nRowMerge;</P>
+	<LI><P>class ScFormulaCell<BR>nMatRows;</P>
+	<LI><P>class ScChartPositionMap<BR>nRowCount;</P>
+	<LI><P>class ScChartArray<BR>nStartRow;</P>
+	<LI><P>class ScChangeTrack<BR>nContentRowsPerSlot;<BR>nContentSlots;</P>
+	<LI><P>struct ColEntry<BR>nRow;</P>
+	<LI><P>class ScColumn<BR>nCount; number of used ColEntry entries
+	(max: number of used rows)<BR>nLimit; number of allocated entries
+	(ditto)</P>
+	<LI><P>struct ScReferenceEntry<BR>nRow;</P>
+	<LI><P>class ScConsData<BR>nRowCount;</P>
+	<LI><P>class
+	ScDBData<BR>nStartRow;<BR>nEndRow;<BR>nSortDestRow;<BR>nQueryDestRow;</P>
+	<LI><P>class ScDocumentIterator<BR>nRow;</P>
+	<LI><P>class
+	ScValueIterator<BR>nStartRow;<BR>nEndRow;<BR>nRow;<BR>nColRow;<BR>nNextRow;<BR>nAttrEndRow;</P>
+	<LI><P>class ScQueryValueIterator<BR>nRow;<BR>nColRow;<BR>nAttrEndRow;</P>
+	<LI><P>class ScCellIterator<BR>nStartRow;<BR>nEndRow;<BR>nRow;<BR>nColRow;</P>
+	<LI><P>class ScQueryCellIterator<BR>nRow;<BR>nColRow;<BR>nAttrEndRow;</P>
+	<LI><P>class ScDocAttrIterator<BR>nStartRow;<BR>nEndRow;</P>
+	<LI><P>class ScAttrRectIterator<BR>nStartRow;<BR>nEndRow;</P>
+	<LI><P>class ScHorizontalCellIterator<BR>nEndRow;<BR>USHORT*
+	pNextRows;<BR>nRow;</P>
+	<LI><P>class ScHorizontalAttrIterator<BR>nStartRow;<BR>nEndRow;<BR>USHORT*
+	pNextEnd;<BR>nRow;</P>
+	<LI><P>class
+	ScUsedAreaIterator<BR>nNextRow;<BR>nCellRow;<BR>nAttrRow;<BR>nFoundRow;</P>
+	<LI><P>struct RowInfo<BR>nRowNo;</P>
+	<LI><P>struct ScSymbolStringCellEntry<BR>nRow;</P>
+	<LI><P>class ScDocument<BR>nSrcMaxRow;</P>
+	<LI><P>class ScTableRowsObj<BR>nStartRow;<BR>nEndRow;</P>
+	<LI><P>class
+	ScDPOutput<BR>nTabStartRow;<BR>nMemberStartRow;<BR>nDataStartRow;<BR>nTabEndRow;</P>
+	<LI><P>class ScDPSaveData<BR>nRowGrandMode;</P>
+	<LI><P>struct ScDPTableIteratorParam<BR>nRowCount;</P>
+	<LI><P>class ScEditUtil<BR>nRow;</P>
+	<LI><P>struct ScImportParam<BR>nRow1;<BR>nRow2;</P>
+	<LI><P>class ScTripel<BR>nRow;<BR>NOTE: Replace usage of ScTripel
+	with ScAddress and delete ScTripel code. Delete ScTripel conversion
+	code from ScAddress.</P>
+	<LI><P>struct ScQueryParam<BR>nRow1;<BR>nRow2;<BR>nDestRow;</P>
+	<LI><P>struct ScSubTotalParam<BR>nRow1;<BR>nRow2;</P>
+	<LI><P>struct ScConsolidateParam<BR>nRow;</P>
+	<LI><P>struct ScPivotParam<BR>nRow;<BR>nRowCount;</P>
+	<LI><P>struct ScMarkEntry<BR>nRow;</P>
+	<LI><P>class ScMarkArray<BR>nCount; number of used ScMarkEntry
+	entries (max: number of used rows)<BR>nLimit; number of allocated
+	entries (ditto)</P>
+	<LI><P>class
+	ScPivot<BR>nSrcRow1;<BR>nSrcRow2;<BR>nDestRow1;<BR>nDestRow2;<BR>nDataStartRow;<BR>short
+	nRowCount; a count which in program flow may not exceed a value of
+	8. Just a nice trap for a grep.<BR>short
+	nDataRowCount;<BR>nRowIndex;<BR>This class is some old stuff almost
+	not needed anymore, was used for the old ... (pssst, we can't use
+	the word here since it is a registered trademark, guess by whom)
+	what is called DataPilot in our application. The class is only used
+	for import/export of the old binary file format.</P>
+	<LI><P>class ScArea<BR>nRowStart;<BR>nRowEnd;</P>
+	<LI><P>struct SingleRefData<BR>INT16 nRow;<BR>INT16 nRelRow;</P>
+	<LI><P>struct ScExtTabOptions<BR>UINT16 nTopRow;<BR>UINT16
+	nTopSplitRow;</P>
+	<LI><P>class ScExtDocOptions<BR>UINT16 nCurRow;</P>
+	<LI><P>struct ScSortParam<BR>nRow1;<BR>nRow2;<BR>nDestRow;</P>
+</UL>
+<H3>source/core/inc/*.hxx</H3>
+<UL>
+	<LI><P>class ScMatrix<BR>nAnzRow;</P>
+</UL>
+<H3>source/filter/inc/*.hxx</H3>
+<UL>
+	<LI><P>struct ScEEParseEntry<BR>nRow;<BR>nRowOverlap;</P>
+	<LI><P>class ScEEParser<BR>nRowCnt;<BR>nRowMax;</P>
+	<LI><P>class
+	XclExpTableOp<BR>nFirstRow;<BR>nLastRow;<BR>nColInpRow;<BR>nRowInpCol;<BR>nRowInpRow;</P>
+	<LI><P>struct ScHTMLTableStackEntry<BR>nRowCnt;</P>
+	<LI><P>struct ScHTMLAdjustStackEntry<BR>nNextRow;<BR>nCurRow;</P>
+	<LI><P>class ScHTMLTableData<BR>nFirstRow;<BR>nLastRow;<BR>nRowSpan;<BR>nDocRow;</P>
+	<LI><P>struct Sc10ColData<BR>Row;<BR>NOTE: Calc 1.0 import filter,
+	there shouldn't be any changes necessary.</P>
+	<LI><P>class XclExpCachedValueList<BR>nRows;</P>
+	<LI><P>class XclImpChart_LinkedData<BR>nMinRowVal;</P>
+</UL>
+<H3>source/filter/xml/*.hxx</H3>
+<UL>
+	<LI><P>class ScMyNotEmptyCellsIterator<BR>sal_uInt16 nCellRow;</P>
+</UL>
+<H3>source/ui/inc/*.hxx</H3>
+<UL>
+	<LI><P>class ScRedlinData<BR>nRow;</P>
+	<LI><P>class ScDataGrid<BR>nNumberOfRows;</P>
+	<LI><P>class ScGridWindow<BR>nFilterBoxRow;</P>
+	<LI><P>class ScNavigatorDlg<BR>nCurRow;</P>
+	<LI><P>class ScOutputData<BR>nEditRow;</P>
+	<LI><P>struct ScPrintState<BR>nStartRow;<BR>nEndRow;</P>
+	<LI><P>class ScPageRowEntry<BR>nStartRow;<BR>nEndRow;</P>
+	<LI><P>class
+	ScPrintFunc<BR>nRepeatStartRow;<BR>nRepeatEndRow;<BR>nStartRow;<BR>nEndRow;</P>
+	<LI><P>class ScSpellingEngine<BR>nOrgRow;<BR>nOldRow;</P>
+	<LI><P>class ScTabPageSortFields<BR>nFirstRow;</P>
+	<LI><P>class ScUndoCursorAttr<BR>nRow;</P>
+	<LI><P>class ScUndoEnterData<BR>nRow;</P>
+	<LI><P>class ScUndoPageBreak<BR>nRow;</P>
+	<LI><P>class ScUndoThesaurus<BR>nRow;</P>
+	<LI><P>class ScUndoSubTotals<BR>nNewEndRow;</P>
+	<LI><P>class ScUndoImportData<BR>nEndRow;</P>
+	<LI><P>class ScUndoRepeatDB<BR>nNewEndRow;</P>
+	<LI><P>class ScViewData<BR>nEditRow;<BR>nEditEndRow;</P>
+</UL>
+<H2><A NAME="List of defines using a limited row value|outline"></A><A HREF="#TOC List of defines using a limited row value">List
+of defines using a limited row value</A></H2>
+<UL>
+	<LI><P><CODE>#define MAXROW 31999<BR>inc/global.hxx</CODE><BR><B><U><I>THE</I></U></B>
+	limit.</P>
+	<LI><P><CODE>#define BCA_BRDCST_ALWAYS ScAddress( 0, 32767, 0
+	)<BR>inc/global.hxx</CODE><BR>A special address (outside the normal
+	valid address range) used to signal an &ldquo;always changed&rdquo;
+	function or cell.</P>
+	<LI><P><CODE>#define ASCIIDLG_MAXROWS
+	32000<BR>source/ui/dbgui/asciiopt.cxx</CODE><BR>The maximum number
+	of rows displayed in the ASCII import preview dialog. It is
+	questionable if this should be increased since arrays for holding
+	the imported data are created.</P>
+	<LI><P><CODE>NumericField ED_ROW: Maximum = 32000; Last = 32000;
+	<BR><CODE>source/ui/navipi/navipi.src</CODE>, <CODE>Window
+	RID_SCDLG_NAVIGATOR</CODE><BR></CODE>The navigator resource defines
+	an upper limit for the row edit field and its spin button.</P>
+</UL>
+<H2><A NAME="Some specials about row numbers|outline"></A><A HREF="#TOC Some specials about row numbers">Some
+specials about row numbers</A></H2>
+<P>A couple of iterators (see <CODE>inc/dociter.hxx</CODE> and
+<CODE>source/core/data/dociter.cxx</CODE>) make direct use of
+internal data structures like those of <CODE>ScColumn</CODE> and
+<CODE>ScAttrArray</CODE> using row values.</P>
+<P>Reference updating methods like those of <CODE>class ScRefUpdate</CODE>
+(see <CODE>inc/refupdat.hxx</CODE> and <CODE>source/core/tool/refupdat.cxx</CODE>)
+make extensive use of <VAR>USHORT</VAR> and <VAR>short</VAR>
+variables and the <VAR>MAXROW</VAR> limit.</P>
+<P>Each sheet contains two arrays, <CODE>pRowHeight</CODE> and
+<CODE>pRowFlags (see inc/table.hxx and source/core/data/table1.cxx)</CODE>,
+sized <VAR>MAXROW+1</VAR> each. If the number of rows is to be
+increased significantly a new mechanism would have to be implemented
+since keeping those row infos for a million rows or so isn't
+desirable. Even now these two arrays allocate about 90kB per sheet.</P>
+<P><CODE>class ScBroadcastAreaSlot</CODE> (see
+<CODE>source/core/data/bcaslot.cxx</CODE>) makes use of an upper row
+limit in the way that the rows are distributed over a number of
+slots. The number of slots is related to the number of rows.</P>
+<P><CODE>class ScChangeTrack</CODE> uses a similar technique to
+combine positions into slot buckets for faster access.</P>
+<P>Currently, both algorithms of <CODE>ScBroadcastAreaSlot</CODE> and
+<CODE>ScChangeTrack</CODE> can't work with an arbitrary changing row
+limit, they do need a fixed upper limit set at compile time. Both
+algorithms would also not work very well (regarding speed, memory
+footprint and efficiency) if the upper limit would be too high.</P>
+<P><CODE>ScChartArray::GlueState()</CODE> (see
+<CODE>source/core/tool/chartarr.cxx</CODE>) creates a temporary array
+which may become as big as the spanning area of a (multi-) selection.
+Currently the maximum limit this implies is 8MB (256 columns x 32000
+rows), this will automatically grow if more rows are available and
+the user spans a selection from upper left to lower right. However,
+the upcoming future chart implementation will not need this mechanism
+anymore, but we'll have to keep it for backwards compatibility.</P>
+<P>The drawing layer is not directly related to the row limit, but
+the area it covers is of course determined by the number of available
+rows.</P>
+<H2><A NAME="Strategy|outline"></A><A HREF="#TOC Strategy">Strategy</A></H2>
+<P>It would be challenging to offer an almost unlimited number of
+rows, say a million or two or hundred (if your system had that much
+memory). However, before that could be accomplished the above
+mentioned mechanisms of the drawing layer needed to be changed and
+row flags, ScBroadcastAreaSlot and ScChangeTrack needed to be changed
+to be less memory consuming.</P>
+<P>Therefor the changes should be carried out in several steps:</P>
+<OL>
+	<LI><P>Change all variables used for row numbers from <VAR>USHORT</VAR>
+	and <VAR>short</VAR> to <VAR>INT32</VAR> using a <CODE>SCROW</CODE>
+	typedef. This includes any changes needed or type conversion in
+	import/export filter, and to compensate for any side effect that
+	might occur. The change should be carried out successively instead
+	of in one big move in order to maintain a usable application and not
+	to render it useless for weeks. To help in finding all necessary
+	places a special access operators and methods converter class <CODE>SCROW</CODE>
+	should be used that forces the compiler to throw error diagnostics
+	whenever an <VAR>USHORT</VAR> or <VAR>short</VAR> is used in
+	combination with <CODE>SCROW</CODE>. A similar class is already
+	available (on the writer's machine ;-) and just needs some
+	modification.</P>
+	<LI><P>Find a solution for the memory footprint problem of the
+	<CODE>pRowHeight</CODE> and <CODE>pRowFlags</CODE> arrays. Similar
+	to the mechanism used to manage row entries of a column array of
+	used rows, dynamic arrays of applied row heights and flags should be
+	maintained.</P>
+	<LI><P>For MS-Excel compatibility increase the limit to 64k rows. It
+	should still be ok to use the same drawing layer and
+	<CODE>ScBroadcastAreaSlot</CODE> and <CODE>ScChangeTrack</CODE>
+	mechanisms at this stage, even if the latter two would result in
+	some more memory consumption, but those are on a per document basis
+	and not a per sheet basis.</P>
+	<LI><P>At this point, a version may be released to provide an
+	interim solution for those who need it, for example for extended
+	MS-Excel compatibility.</P>
+	<LI><P>Find solutions for the <CODE>ScBroadcastAreaSlot</CODE> and
+	<CODE>ScChangeTrack</CODE> problems which have to be really
+	scalable. The first might involve a complete redesign of the
+	broadcaster/listener concept of formula cells, a heavy change! But
+	it would be necessary anyways, because there are some performance
+	issues with it.</P>
+	<LI><P>Wait for a reimplementation of the drawing layer (which will
+	come) and use that because it will do away some quirks related to
+	anchor positions, different map modes, rounding errors, and the area
+	covered.</P>
+	<LI><P>Finally set an arbitrary row limit. Or don't have an
+	arbitrary limit at all?</P>
+</OL>
+<H2><A NAME="Road map and time frame|outline"></A><A HREF="#TOC Road map and time frame">Road
+map and time frame</A></H2>
+<P>Since we'll never touch the binary file format again in the sense
+of modifying anything of it's structure to store new features, and
+the fact that we're working on a method to strip the binary filters
+from the core code and have separate filters to convert SO5 file
+format to XML file format, we won't have to care about the binary
+file stream operators or code accessing file streams if we wait for
+the new filter code to be functional before touching the binary file
+format code. This will ease things a lot. A second mile stone we want
+to achieve before carrying out massive changes on the source code are
+the accessibility and CTL changes for the next release that are going
+on in the 642 builds. Both changes are expected to be finished by the
+end of July. The following table uses week x for the availability of
+the filter and main feature completeness on accessibility and CTL,
+and references to week x+1 and so on. For calculating the duration of
+tasks it is assumed that a week has about 2.5 developer's days, not
+counting time needed for other tasks such as fixing bugs, code
+reviews, and participating in mailing lists, meetings and conference
+calls. Time lines of best case &ndash; worst case are given, this
+includes assumptions of best case getting help when appropriate and
+worst case when I'd to do everything on my own. Vacations not
+included.</P>
+<P><STRONG>NOTE:</STRONG> Previous versions of this document stated a
+&quot;starting date&quot; of August 2002, based on the assumption
+that OOo1.1/SO6.1 were feature complete and that the binary filters
+were stripped until end of July. Unfortunately that wasn't the case,
+and people kept asking me about the progress and why this task wasn't
+even started. At the moment I cannot (and I don't want to) give yet
+another estimate of things that aren't even the slightest bit under
+my control to be nailed down on it. So I just state that waiting for
+other tasks is ongoing, without giving any due date.</P>
+<P><STRONG>NOTE2:</STRONG> Started in week 48 of 2003 without waiting
+for the binary filter to be stripped. Based on the 2.5 days per week
+calculation and including 2 weeks holidays the approximated end date
+will be between April and June of 2004.</P>
+<H3><A HREF="#TOC_Table_of_steps" NAME="Table_of_steps">Towards 64k</A></H3>
+<TABLE WIDTH=100% BORDER=1 CELLPADDING=4 CELLSPACING=3>
+	<COL WIDTH=15*>
+	<COL WIDTH=83*>
+	<COL WIDTH=26*>
+	<COL WIDTH=26*>
+	<COL WIDTH=13*>
+	<COL WIDTH=13*>
+	<COL WIDTH=27*>
+	<COL WIDTH=26*>
+	<COL WIDTH=26*>
+	<THEAD>
+		<TR>
+			<TH ROWSPAN=2 WIDTH=6%>
+				<P>Step</P>
+			</TH>
+			<TH ROWSPAN=2 WIDTH=33%>
+				<P>What</P>
+			</TH>
+			<TH ROWSPAN=2 WIDTH=10%>
+				<P>Start week</P>
+			</TH>
+			<TH ROWSPAN=2 WIDTH=10%>
+				<P>Effort (days)</P>
+			</TH>
+			<TH COLSPAN=2 WIDTH=10%>
+				<P>Duration (weeks)</P>
+			</TH>
+			<TH ROWSPAN=2 WIDTH=10%>
+				<P>End week</P>
+			</TH>
+			<TH ROWSPAN=2 WIDTH=10%>
+				<P>Status</P>
+			</TH>
+			<TH ROWSPAN=2 WIDTH=10%>
+				<P>Days used</P>
+			</TH>
+		</TR>
+		<TR>
+			<TH WIDTH=5%>
+				<P>min</P>
+			</TH>
+			<TH WIDTH=5%>
+				<P>max</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR>
+			<TD WIDTH=6% VALIGN=TOP>
+				<P ALIGN=CENTER><BR>
+				</P>
+			</TD>
+			<TD WIDTH=33% VALIGN=TOP>
+				<P>Wait for new SO5 binary filter.</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>past</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>-</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>-</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>-</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>???</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>done</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>-</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=6%>
+				<P ALIGN=CENTER><BR>
+				</P>
+			</TD>
+			<TD WIDTH=33% VALIGN=TOP>
+				<P>Start work on branch cws_src680_rowlimit, don't wait for
+				stripped binary filter anymore.</P>
+			</TD>
+			<TD WIDTH=10% SDVAL="48" SDNUM="1033;">
+				<P ALIGN=CENTER>48</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>-</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>-</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>-</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>-</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>done</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>-</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=6%>
+				<P ALIGN=CENTER>1</P>
+			</TD>
+			<TD WIDTH=33% VALIGN=TOP>
+				<P><A NAME="step1"></A>Isolate <CODE>class ScAddress</CODE> in an
+				own header file (move from <CODE>inc/global.hxx</CODE> to
+				<CODE>inc/address.hxx</CODE>), in the same header file add the
+				following typedefs and include that whenever needed.</P>
+				<P><CODE>typedef USHORT SCROW;<BR>typedef USHORT SCCOL;<BR>typedef
+				USHORT SCTAB;<BR>// temporarily for signed short types:<BR><CODE>typedef
+				short SCsROW;<BR><CODE>typedef short SCsCOL;<BR></CODE></CODE>typedef
+				short SCsTAB;</CODE></P>
+				<P>This can be done at almost any time. I'll do it.</P>
+			</TD>
+			<TD WIDTH=10% SDVAL="0" SDNUM="1033;">
+				<P ALIGN=CENTER>0</P>
+			</TD>
+			<TD WIDTH=10% SDVAL="2" SDNUM="1033;">
+				<P ALIGN=CENTER>2</P>
+			</TD>
+			<TD WIDTH=5% SDVAL="0.8" SDNUM="1033;">
+				<P ALIGN=CENTER>0.8</P>
+			</TD>
+			<TD WIDTH=5% SDVAL="0.8" SDNUM="1033;">
+				<P ALIGN=CENTER>0.8</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>0-1</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>done</P>
+			</TD>
+			<TD WIDTH=10% SDVAL="2" SDNUM="1033;">
+				<P ALIGN=CENTER>2</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD ROWSPAN=2 WIDTH=6%>
+				<P ALIGN=CENTER>2</P>
+			</TD>
+			<TD WIDTH=33% VALIGN=TOP>
+				<P><A NAME="step2"></A>Replace all <VAR>USHORT</VAR> and <VAR>UINT16
+				for row variables</VAR> with <VAR>SCROW</VAR>.</P>
+				<P>Replace <VAR>short</VAR> and <VAR>INT16</VAR> with <VAR>SCsROW</VAR>
+				for row variables. This is just to identify used signed row
+				variables and mark them for easier retrieval later on when they
+				are to be changed using a <CODE>typedef INT32 SCROW;</CODE> Maybe
+				those are places where some special handling will be necessary
+				(for example, in reference updating code) if the width of the
+				variable type is changed later on.</P>
+				<P>Additionally, while we're at it, we should change column
+				<VAR>USHORT</VAR> to <VAR>SCCOL</VAR> and change table <VAR>USHORT</VAR>
+				to <VAR>SCTAB</VAR> (and <VAR>SCsCOL</VAR> and <VAR>SCsTAB</VAR>
+				as above) for future reference.</P>
+				<P>This work could be parallelized in greater portions, I guess
+				up to 4 people could work on it together. This is a task where
+				one or two community members willing to dive deeper into the
+				spreadsheet code could participate in a coordinated effort.</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>1</P>
+			</TD>
+			<TD WIDTH=10% SDVAL="12" SDNUM="1033;">
+				<P ALIGN=CENTER>12</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>2.4</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>4.8</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>3-5</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>done</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>10.5</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=8 WIDTH=94% VALIGN=TOP>
+				<P>Keeping this old note for documentation: Except for the
+				source/filter/excel/ directory the first wave is completed.
+				Reason to leave out the excel directory are heavy changes in the
+				calcrtl and calc18 childworkspaces that would end up in doing all
+				the work twice. We're waiting for integration of those.
+				Furthermore, we're waiting for integration of the cac CWS that
+				also introduces quite some changes to the
+				formula-compiler-interpreter related code, where a second run
+				will be necessary.</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=6%>
+				<P ALIGN=CENTER>3</P>
+			</TD>
+			<TD WIDTH=33% VALIGN=TOP>
+				<P><A NAME="step3"></A>Restructure <CODE>class ScAddress</CODE>
+				to use<BR><CODE>SCROW nRow;</CODE><BR><CODE>SCCOL nCol;<BR><CODE>SCTAB
+				nTab;<BR></CODE></CODE>and provide constructors and access
+				operators to set and get old <VAR>ULONG</VAR>/<VAR>UINT32</VAR>/<VAR>USHORT</VAR>
+				values with internal conversion so that no existing source code
+				using it has to be changed.</P>
+				<P>My task.</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>3-6</P>
+			</TD>
+			<TD WIDTH=10% SDVAL="2" SDNUM="1033;">
+				<P ALIGN=CENTER>2</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>0.8</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>0.8</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>3-6</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>done</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>2</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=6%>
+				<P ALIGN=CENTER>4</P>
+			</TD>
+			<TD WIDTH=33% VALIGN=TOP>
+				<P><A NAME="step4"></A>Implement functionality of <CODE>class
+				ScTripel</CODE> at <CODE>class ScAddress</CODE> (<CODE>GetText()</CODE>,
+				<CODE>GetColRowString()</CODE>).</P>
+				<P>Create <CODE>class ScRefAddress</CODE> similar to <CODE>class
+				ScRefTripel</CODE>.</P>
+				<P>Replace all usage of <CODE>class ScTripel</CODE> and <CODE>class
+				ScRefTripel</CODE> with <CODE>class ScAddress</CODE> and <CODE>class
+				ScRefAddress</CODE>.</P>
+				<P>My task.</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>4-7</P>
+			</TD>
+			<TD WIDTH=10% SDVAL="4" SDNUM="1033;">
+				<P ALIGN=CENTER>4</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>1.6</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>1.6</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>5-8</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>done</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>4</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=6% HEIGHT=128>
+				<P ALIGN=CENTER>5</P>
+			</TD>
+			<TD WIDTH=33% VALIGN=TOP>
+				<P><A NAME="step5"></A>Using a special converter class included
+				in <CODE>inc/address.hxx</CODE> identify pieces of code where an
+				implicit conversion of type <VAR>SCROW</VAR> to type <VAR>USHORT</VAR>
+				or <VAR>UINT16</VAR> is performed. Change the code found to use
+				<VAR>SCROW</VAR> or explicit conversion and take measures for
+				error handling if the value passed doesn't fit. Same for <VAR>SCsROW</VAR>
+				and <VAR>short</VAR> and <VAR>INT16</VAR>.</P>
+				<P>I'll provide the converter class and would appreciate the help
+				of another developer familiar with the code. This is a nasty task
+				because it means to compile every source file with the converter
+				class header, decide about modifications, make changes, compile
+				again, ...</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>5-9</P>
+			</TD>
+			<TD WIDTH=10% SDVAL="9" SDNUM="1033;">
+				<P ALIGN=CENTER>9</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>1.8</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>3.6</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>6-12</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>done</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>16</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD ROWSPAN=2 WIDTH=6%>
+				<P ALIGN=CENTER>6</P>
+			</TD>
+			<TD WIDTH=33% VALIGN=TOP>
+				<P><A NAME="step6"></A>Look for places where the signed <VAR>SCsROW</VAR>
+				is used and add special handling if necessary.</P>
+				<P>Task for two.</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>7-13</P>
+			</TD>
+			<TD WIDTH=10% SDVAL="6" SDNUM="1033;">
+				<P ALIGN=CENTER>6</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>1.2</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>2.4</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>8-15</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>done</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>2</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=8 WIDTH=94% VALIGN=TOP>
+				<P>This turned out to be unnecessary as we replaced all unsigned
+				types with signed types. Instead, use of nRow&lt;=MAXROW and
+				similar were replaced with ValidRow(nRow), as also negative
+				values might be encountered now.</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=6%>
+				<P ALIGN=CENTER>7</P>
+			</TD>
+			<TD WIDTH=33% VALIGN=TOP>
+				<P><A NAME="step7"></A>Implement solution for <VAR>pRowHeight</VAR>
+				and <VAR>pRowFlags</VAR> arrays.</P>
+				<P>This may get a bit more complicated since it is woven with UI
+				issues.</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>8-16</P>
+			</TD>
+			<TD WIDTH=10% SDVAL="9" SDNUM="1033;">
+				<P ALIGN=CENTER>9</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>3</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>4</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>10-19</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>done</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>13</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=6%>
+				<P ALIGN=CENTER>8</P>
+			</TD>
+			<TD WIDTH=33% VALIGN=TOP>
+				<P><A NAME="step8"></A>Throw the switch to <CODE><CODE>typedef
+				INT32 SCROW;</CODE></CODE> and <CODE><CODE>typedef INT32 SCsROW;</CODE></CODE></P>
+				<P>Test and fix bugs.</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>11-20</P>
+			</TD>
+			<TD WIDTH=10% SDVAL="3" SDNUM="1033;">
+				<P ALIGN=CENTER>3</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>1.2</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>1.2</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>12-21</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>done</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>2</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=6%>
+				<P ALIGN=CENTER>9</P>
+			</TD>
+			<TD WIDTH=33% VALIGN=TOP>
+				<P><A NAME="step9"></A>Change <CODE>MAXROW</CODE> to 64k and
+				<CODE>BCA_BRDCST_ALWAYS</CODE> to <CODE>ScAddress(0,SCROW_MAX,0)</CODE>.
+				Adjust <CODE>ScBroadcastAreaSlot</CODE> and <CODE>ScChangeTrack</CODE>
+				slots.</P>
+				<P>Test and fix bugs.</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>12-21</P>
+			</TD>
+			<TD WIDTH=10% SDVAL="9" SDNUM="1033;">
+				<P ALIGN=CENTER>9</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>2</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>4</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>14-24</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>done</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>9</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=9 WIDTH=100%>
+				<P ALIGN=CENTER>In order to provide an EarlyAccess version in
+				time, the rowlimit CWS will be QA'ed at this point and integrated
+				into the master. After that, I'll create a new CWS (rowlimit2) to
+				work on the remaining step7, addressing memory consumption. Note
+				that columns &quot;start week&quot;, &quot;duration in weeks&quot;,
+				and &quot;end week&quot; aren't aligned anymore.</P>
+				<P ALIGN=CENTER>CWS rowlimit2 was integrated as of SRC680_m52,
+				additional bugfixes went into SRC680_m59.</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=6%>
+				<P ALIGN=CENTER>10</P>
+			</TD>
+			<TD WIDTH=33% VALIGN=TOP>
+				<P><A NAME="step10"></A>Maybe <CODE>MAXROW</CODE> could be
+				increased to 128k or 256k with the current slot implementations,
+				would have to be investigated.</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>15-25</P>
+			</TD>
+			<TD WIDTH=10% SDVAL="3" SDNUM="1033;">
+				<P ALIGN=CENTER>3</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>1.2</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>2</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>16-26</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER><BR>
+				</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=6%>
+				<P ALIGN=CENTER><BR>
+				</P>
+			</TD>
+			<TD WIDTH=33% VALIGN=TOP>
+				<P>Be happy.</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>16-26</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>?</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER>?</P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER><BR>
+				</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER><BR>
+				</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER><BR>
+				</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=6%>
+				<P ALIGN=CENTER><BR>
+				</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P ALIGN=CENTER STYLE="text-decoration: none"><B>Sum</B></P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER><BR>
+				</P>
+			</TD>
+			<TD WIDTH=10% SDVAL="59" SDNUM="1033;">
+				<P ALIGN=CENTER STYLE="text-decoration: none"><B>59</B></P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER STYLE="text-decoration: none"><B>16</B></P>
+			</TD>
+			<TD WIDTH=5%>
+				<P ALIGN=CENTER STYLE="text-decoration: none"><B>25.2</B></P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER>week<BR>(x+16)-(x+26)<BR>==<BR>12-21 (2004)</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER><BR>
+				</P>
+			</TD>
+			<TD WIDTH=10%>
+				<P ALIGN=CENTER><BR>
+				</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR><BR>
+</P>
+<H3>Breaking the limit</H3>
+<P>To be done.</P>
+<P><BR><BR>
+</P>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
