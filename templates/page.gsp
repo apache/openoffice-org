@@ -14,12 +14,8 @@
   if (content.image_css || content.list_css) {
      include "markdown_css.gsp";
   }
-  // This line is already part of every file. Adding it here is resulting in a double entry which is against the W3C standard.
-  // %><!--#include virtual="/doctype.html" -->
 <html>
   <head>
-    // This line is already part of every file. Adding it here is resulting in a double entry which is against the W3C standard.
-    // <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <% if (content.header) { %>
     <link href="/css/ooo.css" rel="stylesheet" type="text/css">
     ${content.header}
