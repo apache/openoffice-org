@@ -15,7 +15,7 @@
      include "markdown_css.gsp";
   }
   %><!--#include virtual="/doctype.html" -->
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <% if (content.header) { %>
     <link href="/css/ooo.css" rel="stylesheet" type="text/css">
