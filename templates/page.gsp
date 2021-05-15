@@ -14,6 +14,7 @@
   if (content.image_css || content.list_css) {
      include "markdown_css.gsp";
   }
+  %><!--#include virtual="/doctype.html" -->
 <html>
   <head>
     <% if (content.header) { %>
