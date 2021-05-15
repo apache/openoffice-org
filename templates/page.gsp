@@ -14,9 +14,10 @@
   if (content.image_css || content.list_css) {
      include "markdown_css.gsp";
   }
-  %><!--#include virtual="/doctype.html" -->
+%><!--#include virtual="/doctype.html" -->
 <html>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <% if (content.header) { %>
     <link href="/css/ooo.css" rel="stylesheet" type="text/css">
     ${content.header}
