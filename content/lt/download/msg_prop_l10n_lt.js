@@ -105,21 +105,21 @@ l10n.dl_green_box_select_box_version_older	= "Senesnės laidos";
 
 // Share: Strings in the light-blue box (used in "index.html").
 l10n.dl_share_light_blue_box_headline_text	= "Skleisti žinią";
-l10n.dl_share_light_blue_box_headline_title	= "Skleisti žinią apie „Apache OpenOffice“, papasakojant savo draugams";
+l10n.dl_share_light_blue_box_headline_title	= "Skleisti žinią apie „Apache OpenOffice“ savo draugams";
 l10n.dl_share_light_blue_box_text_text		= "Papasakoti apie „Apache OpenOffice“ savo draugams!";
-l10n.dl_share_light_blue_box_text_title		= "Skleisti žinią apie „Apache OpenOffice“, papasakojant savo draugams";
+l10n.dl_share_light_blue_box_text_title		= "Skleisti žinią apie „Apache OpenOffice“ savo draugams";
 l10n.dl_share_light_blue_box_blog_text		= "Tarnybinis tinklaraštis";
 l10n.dl_share_light_blue_box_blog_title		= "„Apache OpenOffice“ tinklaraštis";
 l10n.dl_share_light_blue_box_blog_src		= "/images/logo-rss-32.png";
 l10n.dl_share_light_blue_box_blog_alt		= "„Apache OpenOffice“ tinklaraštis";
-l10n.dl_share_light_blue_box_facebook_text	= "„Facebook“";
-l10n.dl_share_light_blue_box_facebook_title	= "Papasakoti apie „Apache OpenOffice“ savo draugams, pasitelkiant „Facebook“";
+l10n.dl_share_light_blue_box_facebook_text	= "Facebook";
+l10n.dl_share_light_blue_box_facebook_title	= "Papasakoti apie „Apache OpenOffice“ savo draugams per „Facebook“";
 l10n.dl_share_light_blue_box_facebook_src	= "/images/logo-facebook-32.png";
-l10n.dl_share_light_blue_box_facebook_alt	= "Skleisti žinią, pasitelkiant „Facebook“";
-l10n.dl_share_light_blue_box_twitter_text	= "„Twitter“";
-l10n.dl_share_light_blue_box_twitter_title	= "Papasakoti apie „Apache OpenOffice“ savo draugams, pasitelkiant „Twitter“";
+l10n.dl_share_light_blue_box_facebook_alt	= "Skleisti žinią per „Facebook“";
+l10n.dl_share_light_blue_box_twitter_text	= "Twitter";
+l10n.dl_share_light_blue_box_twitter_title	= "Papasakoti apie „Apache OpenOffice“ savo draugams per „Twitter“";
 l10n.dl_share_light_blue_box_twitter_src	= "/images/logo-twitter-32.png";
-l10n.dl_share_light_blue_box_twitter_alt	= "Skleisti žinią, pasitelkiant „Twitter“";
+l10n.dl_share_light_blue_box_twitter_alt	= "Skleisti žinią per „Twitter“";
 
 // Extensions: Strings in the blue box (top) (used in "index.html").
 l10n.dl_ext_blue_box_headline_text		= "Gauti „Apache OpenOffice“ plėtinių ir žodynų";
