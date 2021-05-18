@@ -1,5 +1,5 @@
 type=brand
-home=տուն
+home=home
 search=փնտրել
 selectedlang=en
 language=Լեզու
