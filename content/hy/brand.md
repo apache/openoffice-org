@@ -1,6 +1,6 @@
 type=brand
-home=home
-search=search
+home=տուն
+search=փնտրել
 selectedlang=en
 language=Լեզու
 name=Apache OpenOffice
