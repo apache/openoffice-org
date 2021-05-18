@@ -1,0 +1,325 @@
+<html><head>
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+ <head>
+<style type="text/css">
+/* <![CDATA[ */ @import "/branding/css/tigris.css"; /* ]]> */
+</style>
+  <script src="/branding/scripts/tigris.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="/branding/css/print.css" media="print" />
+
+  <title>Tunneling with SSH</title>
+ </head>
+
+ <body class="docs" onLoad="self.focus()">
+  <div class="docs" id="ddsshguide">
+
+
+   <div id="toc">
+
+
+  <h2>Tunneling with SSH2</h2>
+  <p>Last updated 2003-07</p>
+  <p class="Header">Contents</p>
+  <div class="Indent">
+    <ul>
+      <li><a href="#thisguide">About this Guide</a> </li>
+      <li><a href="#aboutssh">About SSH2</a></li>
+      <li><a href="#concepts">Concepts</a></li>
+      <li><a href="#choosing">The SSH2 Client</a> </li>
+      <li><a href="#platforms">Platforms</a></li>
+      <li><a href="#commands">Command-line (Linux, Mac OS X Terminal, Unix)</a></li>
+      <li><a href="#mac">Mac OS 9</a></li>
+      <li><a href="#windows">Windows</a></li>
+      <li><a href="#cygwin">Using Cygwin: Free and Open Source Unix Terminal
+          Emulator </a></li>
+      <li><a href="#HowtoConnect">Tunneling with Cygwin: Unix Commands (Applicable
+          to Linux, OS X, etc.)</a></li>
+      <li><a href="#sendingkey">Submitting Your Certificate (Public Key): For
+          everyone</a></li>
+      <li><a href="#whattodo">What to do once you've established a tunnel: For
+          everyone</a></li>
+      <li><a href="#cvs">How to use CVS with a tunnel</a></li>
+    </ul>
+  </div>
+  <a href="/servlets/HelpTOC">Back to main Help index</a> <br />
+  </div>
+  <hr noshade size=1 />
+  <h3>About this Guide<a name="thisguide"></a></h3>
+  <p><b>What this guide discusses</b>. The purpose of this guide is to
+    enable users to tunnel to OpenOffice.org using SSH2 (Secure Shell 2). This
+    guide provides instructions for the creating the certificate (also called
+    the public key) used by SSH2 servers and for sending that certificate to
+    the OpenOffice.org administrator. It will also then explain how to create
+    a secure "tunnel" between your machine and OpenOffice.org using this certificate.
+    (Throughout this discussion, the term "public key" and "certificate" will
+    be used interchangeably.) This guide only seems long. Much of the material
+    is repeated and tailored to suit the needs of particular clients.
+  </p><p><b>What this guide does not discuss</b>. This guide does not explain in detail how
+    to use CVS, only how to set up the tunnel so that you can use CVS. See the brief account of using CVS with a tunnel <a href="#cvs">below</a>.
+  </p><p><strong>Note</strong>: In order to tunnel to OpenOffice.org, you must first
+    submit a public key (certificate); it must then be accepted; it will only
+    be accepted if you have the authorization of your project lead and have submitted
+    either a Joint Copyright Assignment or Public Document License and your name
+    is on the &quot;<a href="../copyright/copyrightapproved.html">Copyright Approved</a>&quot; list.
+    For more information, see the <a href="../contributing.html">Contributing</a> page.</p>
+  <a name="aboutssh"></a>
+  <h3>About SSH2</h3>
+  <p>SSH2 is a flexible and more secure replacement for telnet and rlogin, and
+    SSH1. It is widely used in development projects to provide access control
+    and data-transport security. SSH2 can be used to create an unobtrusive, transparent "port
+    tunnel" to the CVS (concurrent versions system) server. SSH2 uses encrypted
+    certificates (a public/private key pair) to verify the user's identity and
+    to transmit data. Data sent through the tunnel is encrypted, but the process
+    is invisible to you or to the client software you are using to access the
+    CVS repository. </p>
+  <p>Because it is easy to use and very secure, OpenOffice.org uses SSH2 for
+    developers accessing the CVS repository. </p>
+  <a name="concepts"></a>
+  <h3>Concepts</h3>
+  <ol>
+    <li>Using the right software</li>
+    <li>Creating the certificate</li>
+    <li>Establishing the SSH2 tunnel</li>
+  </ol>
+  <p>Before you can establish an SSH2 connection, you have to find the right
+    software, i.e., a client that places a terminal on your desktop, if you are
+    using Windows or Mac OS 9 (Mac OS X has SSH2 capability built in). Fortunately,
+    there are excellent clients that offer Windows and Mac OS users desktop terminals.
+    The section below discusses them in detail. Of course, if you are using Linux
+    (or some other Unix variant), then you can skip that section and go right
+    to the section, <a href="#HowtoConnect">"Tunneling"</a> that describes the
+    key elements in establishing an SSH2 tunnel in a Unix-like environment. And
+    if you already are familiar with the these clients, then you can skip ahead
+    to "<a href="#usingterminals">Using the Desktop Terminal</a>.&quot;</p>
+  <p>Once you have obtained and configured a client terminal, you must
+  </p><ol start="1">
+    <li>Generate a public/private key pair (the certificate); and</li>
+    <li>File an issue and attach the public key to the issue. Assign it to ssh2key@openoffice.org
+      in the &quot;www&quot; component</li>
+  </ol>
+  <p>Generating the key is simple, and there are both commercially available
+    and free clients that do the job for you. Sending the key then is only a
+    matter of attaching it to an issue in which you explain which module you
+    wish to access and assigning it to ssh2key@openoffice.org in the www.component. </p>
+  <h3>The SSH2 Client<a name="choosing"></a></h3>
+  <h4>Platforms<a name="platforms"></a></h4>
+  <p><b>Command Line: Linux, Mac OS X, Unix, Solaris.<a name="commands"></a></b> Linux
+    supports SSH. To connect using SSH, see the "Tunneling" section below. As
+    well, Mac OS X, via the &quot;Terminal&quot; application, allows you to generate
+    a key pair, and establish a tunnel. This is no surprise, as it is using tried-and-true
+    software. To establish the tunnel, follow the instructions as for Linux,
+    with the exception being that the command for generating the DSA key in BSD
+    is different: <font face="Courier New, Courier, mono">ssh-keygen -t dsa</font> (though
+    I have found that<font face="Courier New, Courier, mono"> ssh-keygen -d also
+    works</font>).</p>
+  <p><b><a name="Mac"></a>MacOS 9.x.</b> Hardly surprising, isn't it, that tunneling
+    using Mac OS 9 is trivially easy? The concepts are the same as for Windows,
+    Linux, or Mac OS X, as are the numbers, etc. But, in a nutshell, here's what
+    you do. It's a two-step process. First, you must configure MacSSH, then configure
+    the CVS client. </p>
+  <h4>Configuring MacSSH</h4>
+  <ol>
+    <li>Download the latest version of <a href="hhttp://www.macssh.com">MacSSH,</a> which
+      is characteristically easy to use, is free, Open Source, and offers superior
+      performance.</li>
+    <li>Configure it by clicking on the &quot;Favorites&quot; pull-down menu
+      in the top-navbar. </li>
+    <li>Click on the &quot;New&quot; button.</li>
+    <li>Enter a name for this favorite. If it is going to be your default, don't
+      bother. </li>
+    <li>Host Name: openoffice.org</li>
+    <li>Port: 22</li>
+    <li>Terminal: default</li>
+    <li>Go now to &quot;SSH2&quot; tab.</li>
+    <li>Encryption: <b>3DES</b></li>
+    <li>Authentication: <b>MD5</b></li>
+    <li>Compression: <b>zlib</b></li>
+    <li>Method: <b>Local TCP port forward</b></li>
+    <li>Local port: <b>2401</b></li>
+    <li> Remote host: <b>localhost</b></li>
+    <li> Remote port: <b>2401</b></li>
+    <li>You now must initialize (create) your SSH2 key pair. Click on the &quot;Initialize
+      SSH&quot; button. Follow instructions.</li>
+    <li>Export your key (that is, put it elsewhere) by clicking on the &quot;Export&quot; button. </li>
+    <li>Once your key has been loaded by the helpful and friendly staff at OpenOffice.org,
+      you will be notified; and then you will be able to establish a tunnel. </li>
+    <li>And, as is the case with tunnels: once established, there is no shell.
+      At most you will receive a message in a window saying that you are connected.
+      That is all. Leave this open, though you may minimize the window.</li>
+  </ol>
+  <h4>Configuring Mac CVS Clients</h4>
+  <p>There are several free and easy-to-use CVS clients for the Mac. Each has
+    its shortcoming (among them being the inane similarity of names) but I prefer
+    two: <a href="http://www.maccvs.org" target="_blank">MacCVSPro</a>, and <a href="http://www.heilancoo.net/MacCVSClient/" target="_blank">MacCVSClient</a>.
+    Both allow port forwarding (so you can use the tunnel) and both are easily
+    configured. The data is the same for both. As well, for both you <i>must</i> create
+    a folder for he CVS files. This can be done within the client or outside.
+    I suggest you do it first, and that you clearly identify your folder. </p>
+  <p><b>Note: I am providing all the information you <i>may</i> need. Not all
+      this information is required by the clients.</b>
+  </p><ul>
+    <li>Remote Host information: localhost</li>
+    <li>CVS Root: /cvs</li>
+    <li>CVs User Name: The same as your OpenOffice.org login user name</li>
+    <li>CVs Password: The same as your OpenOffice.org login password</li>
+    <li>CVs command: CVS</li>
+    <li>Port: 2401</li>
+    <li>Method: Pserver</li>
+    <li>Default Module: The module to which you have access.</li>
+    <li>Do not allow &quot;Auto Merge.&quot;</li>
+  </ul>
+  <p>The above information should be all you need. If you receive error messages
+    (a &quot;1&quot; in CVS), you may not have correctly set up your tunnel or
+    have a bad password. As well, be sure to put the preceding slash &quot;/&quot; <i>before</i> the
+    cvs (lowercase) root. If it's not there, you won't be able to checkout material.</p>
+  <p><b>Windows</b><a name="windows"></a>. If you are using Windows (NT or 9x
+    or 2K), then please use <a href="http://www.cygwin.com/" target="_blank">Cygwin</a>.
+    Cygwin, from Cygnus Solutions, provides a nearly full Unix environment on
+    your desktop. Cygwin has been updated to load quickly and easily. It also
+    generates the keys in the proper format for OpenOffice.org. We recommend
+    Cygwin and do not recommend any other client.</p>
+  <h3>Using Cygwin: Free and Open Source Unix Terminal Emulator<a name="cygwin"></a></h3>
+  <h4>Generating the Key with Cygwin: Unix Commands</h4>
+  <ol>
+    <li>Open Cygwin. If properly configured, Cygwin should start in your home
+      directory. To check that it does, type in "<font face="Courier New, Courier, mono">pwd</font>" at
+      the prompt. (The command requests bash to respond with the working directory.)
+      If the answer does not correspond to your home directory, type in "<font face="Courier New, Courier, mono">cd</font>." This
+      relocates the working directory to your home directory. </li>
+    <li>Enter "<font face="Courier New, Courier, mono">ssh-keygen -d</font>." This
+      commands the program to generate an SSH2 key (the -d extension specifies
+      a DSA or SSH2 key). Depending on the speed of your processor, it could
+      take anywhere from several seconds to several minutes. When finished, it
+      will prompt you for a file in which to save the key. You should accept
+      the default; or, you can specify a file and directory in which to save
+      the key, but doing so can be a pain, unless you are familiar (or wish to
+      be become familiar) with Unix file structures.</li>
+    <li>You will then be asked to enter a passphrase. You must enter a passphrase. Your key will not work unless you enter one. 
+      Remember this passphrase: you will be asked for it every time you log into
+      the SSH2 server to which you have connected using this public key. </li>
+    <li>If you have entered a passphrase correctly (and you will be asked twice
+      to be sure you aren't typo-ing your way into a mistake), you will then
+      be told that the "identification" has been saved in the file you stipulated,
+      and that the "public key" has been saved in a file bearing that same name
+      but with a <font face="Courier New, Courier, mono">.pub</font> suffix.
+      The .<font face="Courier New, Courier, mono">pub</font> signifies that
+      it is the public key.</li>
+    <li>For details on submitting the key, see the section below, &quot;Submitting
+      Your Certificate (Public Key).</li>
+    <li>Note: you are going to use CVS via the tunnel. Your CVSROOT needs therefore
+      to point to your localhost to use the tunnel.</li>
+  </ol>
+  <h4><a name="HowtoConnect"></a>Tunneling with the Cygwin: Unix
+    commands </h4>
+  <ul>
+    <li>First, begin the program.</li>
+    <li>At the prompt, enter "<font face="Courier New, Courier, mono">ssh -2
+        -x -L 2401:localhost:2401 tunnel@openoffice.org</font>"</li>
+    <li>The server should ask you for your passphrase. Enter it. If the passphrase
+      is entered wrongly, the server will immediately ask for your password.
+      This request indicates a failure. You should try again, and hope for better
+      luck.</li>
+    <li>If this is your first time, the server will send you a message along
+      these lines:
+      <ul>
+        <li><font face="Courier New, Courier, mono">Host key not found from the
+            list of known hosts. </font></li>
+        <li><font face="Courier New, Courier, mono">Are you sure you want to
+            continue connecting (yes/no)?</font> </li>
+      </ul>
+    </li>
+    <li>Enter "<font face="Courier New, Courier, mono">Yes</font>." You can't
+      just enter "y"; you have to spell it out.
+    </li><li>The server will then respond with: "Host "<font face="Courier New, Courier, mono">openoffice.org</font>" added
+      to the list of known hosts."
+    </li><li>The screen does not show a prompt. It may, at most, say something. That's
+      how it should be. The tunnel has been established. You are now ready to
+      begin using CVS.
+    </li><li>But: Your CVSROOT needs to point to your <span class="TypewriterPlain">localhost</span> to
+      use the tunnel
+    </li><li>You can, at this point, minimize the terminal, but do not close it or
+      enter <font face="Courier New, Courier, mono">Ctrl-C (^C)</font>. Doing
+      so will kill the terminal tunnel.</li>
+  </ul>
+  <h4>Submitting Your Certificate (Public Key)<a name="sendingkey"></a></h4>
+  <p>Regardless of the way the public key has been created, it needs to be sent
+    to OpenOffice.org and accepted by OpenOffice.org administrators.</p>
+  <ol>
+    <li> To submit the key, attach the .<font face="Courier New, Courier, mono">pub</font> file
+      as an attachment to an IssueZilla issue. (To use IssueZilla you must be
+      registered; but, then, to actually use the key you have to be a registered
+      user.) Assign it to "ssh2key@openoffice.org" in the &quot;www&quot; component.
+      Explain in the issue what modules you wish access to. (The key takes up
+      one very long line; it cannot be broken into more than one line, and anything
+      that does that violates the integrity of the key. That's why you need to
+      attach the file to the issue.)</li>
+    <li> We will then send you an acknowledgment alerting you of your ability
+      to use the certificate to tunnel to OpenOffice.org. Should you run into
+      difficulties, do not hesitate to contact <a href="mailto:ssh2key@openoffice.org">ssh2key@openoffice.org</a>.</li>
+    <li>Note: Your CVSROOT needs to point at your localhost to use the tunnel</li>
+  </ol>
+  <h4><a name="whattodo"></a>What to do after you have a tunnel</h4>
+  <p>Okay, you've come this far. If you've done everything right, you will have
+    a tunnel on your desktop to the server housing the CVS repository. This tunnel
+    is <i>not</i> a shell, i.e., you will not see any of the more or less familiar
+    Unix elements, just a perplexingly blank screen, and a message indicating
+    when you last logged in.. And this is the way it should be. </p>
+  <p>What you must do now: Log on to CVS. As mentioned before, this document
+    does not touch upon CVS protocols, only how to establish an SSH tunnel. But,
+    to emphasize the issue, the establishment of the tunnel is distinct from
+    loggin into the CVS repository. The tunnel only <i>enables</i> you to log
+    in. For documentation on how to use CVS, please see the Help on <a href="ddCVS.html">CVS</a>.</p>
+  <p>See below,<a href="#cvs"> How to use CVS with a tunnel</a>.</p>
+  <p class="Header">See also the <a href="http://website.openoffice.org/support/en/howtos/1.html">new
+      document</a> generated by Miljenko Williams of Website that does a fine
+      job of explaining not only tunneling and Cygwin, but also CVS.</p>
+  <h4><a name="cvs"></a>How to use CVS with a tunnel</h4>
+  <p>The tunnel is a conduit for cvs data. When you initiate a tunnel following
+    the instructions above, you  are connecting to the CVS server. The tunnel,
+    which is more a window into the server, becomes your designated CVS host.
+    You need only supply the correct password for the CVS server; it is the same
+    as your OpenOffice.org user password. Thus, the process is:</p>
+</div>
+
+<ol>
+  <li> Establish a tunnel. If it works, you will be asked for your passphrase
+  (not password, a sign of failure)</li>
+  <li>Initiate the CVS connection. You use :pserver; the server is &quot;localhost&quot;
+    (the tunnel), and you use your regular OpenOffice.org username.
+    <ul>
+      <li>E.g., cvs -d :pserver:[username]@localhost:/cvs login </li>
+ 
+    </ul>
+  </li>
+<li>The regular set of CVS commands obtains. Just keep in mind you are going through the localhost tunnel, that you are not connecting to the CVS server outside of the tunnel.
+</li></ol>
+  <h4>Terminating the tunnel<a name="terminating"></a></h4>
+  <p>The easiest way to terminate the tunnel is to Ctrl-C (^C) it out of existence.
+      In both the Mac OS and Windows environment, you can also close the client
+    window, thereby shutting the tunnel down.</p>
+  
+  <h4><a name="furtherdocumentation"></a>Further Documentation</h4>
+  <ul>
+    <li><a href="http://jakarta.apache.org/site/cvsonwin32.html" target="_blank">Jakarta
+          Projec</a>t information on using SSH and CVS on Windows. Useful information
+          on the issues involved.
+    </li><li> <a href=" http://openbsd.appli.se/openssh/windows.html" target="_blank">OpenBSD.org</a> has
+        a list of "free" clients for interoperating with OpenSSH from both Windows
+        and Macintosh boxes
+    </li><li><a href="http://www.dreamwvr.com/SSH-faq/" target="_blank">The Secure
+          Shell</a> (SSH) Frequently Asked Questions
+    </li><li><a href="http://www.ssh.org/" target="_blank">The Secure Shell Community
+          Site</a>
+    </li><li><a href="http://www.openssh.com/" target="_blank">OpenSSH</a>
+    </li><li><a href="http://sources.redhat.com/ml/cygwin/" target="_blank">The Cygwin
+          Project Mailing List Archives</a>
+    </li><li><a href="http://www.ssh.org/" target="_blank">The Secure Shell Community
+          Site</a>
+    </li><li><a href="http://www.linuxhelp.net/guides/sirplaya/ssh.phtml" target="_blank">Secure
+          Shell (SSH/SSH) Setup (Linux)</a>
+    </li><li><a href="http://www.wincvs.org/ssh.html" target="_blank">SSH with WinCvs</a>
+  </li></ul>
+  <span class="PlainText">
+  <p>
+  <a href="#toc">Top</a> | <a href="/nonav/servlets/HelpTOC">Help index</a></p></span> 
+ </body></html>

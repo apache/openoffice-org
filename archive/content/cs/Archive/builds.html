@@ -1,0 +1,149 @@
+<html>
+  <head>
+    <meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <table width="100%">
+      <tr>
+	<td valign=top>
+<h3>Testovací a debugovací buildy, UPX buildy</h3>
+
+<h4>Testovací buildy</h4>
+
+<p>
+  Abychom zajistili pravidelné testování našich překladů a lokalizačních úprav, vytváříme
+  tzv. <i>testovací buildy</i>. Většinou pouze pro GNU/Linux, FreeBSD a Microsoft Windows, neboť
+  překlad pro operační systém Sun Solaris v&nbsp;našich podmínkách trvá poměrně dlouho. Testovací
+  buildy pro tyto operační systémy naleznete na serveru <a
+  href="ftp://ftp.linux.cz/pub/localization/OpenOffice.org/devel/">ftp.linux.cz</a>.
+</p>
+
+<h4>Debug buildy</h4>
+
+<p>
+  Náš tým pravidelně produkuje buildy české verze OpenOffice.org pro operační systémy GNU/Linux,
+  Microsoft Windows a Sun Solaris. Každý z&nbsp;těchto buildů obsahuje přeložené prostředí, nápovědu
+  apod. Abychom mohli jednoduše identifikovat překládané texty v&nbsp;uživatelském prostředí,
+  vytváříme i&nbsp;tzv. <i>debug buildy</i>. Ty mají proti standardním verzím jeden rozdíl: každý
+  přeložený řetězec je očíslován a potom se například v&nbsp;hlavním menu objeví položka
+  "12793:Soubor" místo "Soubor" (viz obrázek).</p>
+
+<center>
+  <img src="/img/debug_build.png">
+</center>
+
+<p>
+  Použitím debug buildu tedy mohou vývojáři jednoduše identifikovat přesné umístění překládaného
+  řetězce v&nbsp;CVS stromu a případně jej jednoduše opravit. Bez tohoto nástroje by bylo velmi
+  obtížné identifikovat přesné místo překladu. Například řetězec "Soubor" se v&nbsp;překladech verze
+  1.0.2 nachází na 15 místech.
+</p>
+
+<h4>Paralelní běh normálního i&nbsp;debug buildu</h4>
+
+<p>
+  Pokud chcete vedle sebe na jednom počítači používat normální i&nbsp;debug build OpenOffice.org,
+  můžete postupovat například následovně:
+</p>
+
+<ol>
+  <li>nainstalujte normální verzi bez jakékoli změny</li>
+  <li>rozbalte instalační sadu debug buildu</li>
+  <li>upravte soubor <tt>setup.ins</tt> například takto:</li>
+
+<pre>
+--- setup.ins~  Sun Jun 29 09:48:58 2003
++++ setup.ins   Sun Jun 29 09:48:58 2003
+@@ -1,6 +1,6 @@
+ Installation gid_Installation
+   ProductName   = "OpenOffice.org";
+-  ProductVersion = "1.1.0";
++  ProductVersion = "1.1.0-DEBUG";
+   VendorName    = "OpenOffice.org";
+   DefaultDestPath = "%PRODUCTNAME%PRODUCTVERSION";
+   ScriptVersion = 100;
+</pre>
+  <li>pokud používáte i&nbsp;skript <tt>install</tt> pro instalaci OpenOffice.org, musíte ho také mírně
+    upravit:
+
+<pre>
+--- install~    Sun Jun 29 09:56:35 2003
++++ install     Sun Jun 29 09:49:24 2003
+@@ -5,7 +5,7 @@
+ 
+ # Set the Defaults Here
+ oo_version="OpenOffice.org 1.1"
+-oo_home=OpenOffice.org1.1
++oo_home=OpenOffice.org1.1-DEBUG
+ oo_default_prefix=/usr/local
+ oo_default_netflg=-net
+ oo_default_interact=no
+</pre>
+OpenOffice.org se potom nainstaluje do jiného adresáře.</li>
+</ol>
+
+<p>
+  V&nbsp;souboru <tt>~/.sversionrc</tt> potom budete mít následující:
+</p>
+
+<pre>
+[Versions]
+OpenOffice.org 1.1.0=file:///mnt/hdc2/pavel/OpenOffice.org1.1.0
+OpenOffice.org 1.1.0-DEBUG=file:///mnt/hdc2/pavel/OpenOffice.org1.1.0-DEBUG
+</pre>
+
+<p>
+  a obě verze bude možné mít spuštěné současně, což výrazně zefektivní proces ladění překladů.
+</p>
+
+<h4>UPX buildy</h4>
+
+<p>
+  Tyto buildy pro operační systémy Microsoft Windows obsahují spustitelné soubory a DLL knihovny
+  sbalené <a href="http://upx.sf.net/">UPX kompresí</a>. S&nbsp;jejich kompilací jsme začali ve
+  verzi OpenOffice.org 1.1 Beta 2 z&nbsp;důvodu úspory místa na discích uživatelů a rychlejšího
+  startu OpenOffice.org. Je možné, že se v&nbsp;těchto verzích vyskytnou chyby, které ve
+  standardních verzích nenajdete (o&nbsp;každém takovém <a href="/bugs.html">problému</a> rádi
+  uslyšíme). Archivy s&nbsp;těmito buildy mají jméno "[jmeno_normal_buildu]_upx.zip" a jsou
+  vystaveny na <a href="ftp://ftp.linux.cz/pub/localization/OpenOffice.org/devel/">ftp.linux.cz</a>.
+</p>
+
+    </td>
+    <td width="180px" valign="top">
+      <table border=1 cellspacing=0 cellpadding=2 width="100%" bgcolor="#ffffff">
+	<tr><td bgcolor="#00315A"><font size=-1 color="white"><b>Projekt</b></font></td></tr>
+	<tr><td bgcolor="#dddddd" style="padding: 5px;"><font size=-1 color="black">
+	      <a href="/index.html">Úvod</a><br>
+	      <a href="/people.html">O nás</a><br>
+	      <a href="/sponsorship.html">Sponzoring</a><br>
+	</font></td></tr>
+	<tr><td bgcolor="#00315A"><font size=-1 color="white"><b>Pro uživatele</b></font></td></tr>
+	<tr><td bgcolor="#dddddd" style="padding: 5px;"><font size=-1 color="black">
+	      <a href="http://www.OpenOffice.cz">Portál www.OpenOffice.cz</a><br>
+	</font></td></tr>
+	<tr><td bgcolor="#00315A" ><font size=-1 color="white"><b>Pro vývojáře</b></font></td></tr>
+	<tr><td bgcolor="#dddddd" style="padding: 5px;"><font size=-1 color="black">
+	      <a href="http://www.openoffice.org/project/www/issues/query.cgi">Issuezilla</a><br>
+	      <a href="/issuezilla/index.html">Návod k používání Issuezilly</a><br>
+	      <a href="/cvs_account.html">Překlady v CVS</a><br>
+	      <a href="http://cs.openoffice.org/source/browse/cs/">CVS</a><br>
+	      <a href="http://cs.openoffice.org/qa/">Statistiky QA</a><br>
+	      <a href="http://cs.openoffice.org/qa/howto.html">Návod ke kontrole</a><br>
+	      <a href="http://cs.openoffice.org/stats/">Statistiky překladů</a><br>
+	      <a href="/builds.html">Testovací a debug buildy, UPX buildy</a><br>
+	      <a href="/servlets/SummarizeList?listName=dev">Konference vývojářů</a><br>
+	      <a href="/bugs.html">Oznámení chyby</a><br>
+	      <a href="/issues/buglist.cgi?component=cs&issue_status=NEW&issue_status=STARTED&issue_status=REOPENED">Seznam chyb</a><br>
+	      <br>
+	      <a href="/roadmap/index.html">Roadmap</a><br>
+	      <a href="/how_to_help.html">Jak mohu pomoci?</a><br>
+	      <a href="/links.html">Odkazy</a><br>
+	      <br><br>
+	      <a href="/news.rss"><img border=0 src="/img/xml.gif"></a>
+	</font></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
