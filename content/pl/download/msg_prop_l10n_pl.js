@@ -233,12 +233,21 @@ l10n.dl_full_link_text				= "Pobierz pełną wersję instalatora";
 l10n.dl_full_link_title				= "Kliknij, aby pobrać: ";
 l10n.dl_langpack_link_text			= "Pobierz pakiet językowy";
 l10n.dl_langpack_link_title			= "Kliknij, aby pobrać: ";
-l10n.dl_win_info_text				= "Ważna wskazówka: 32-bit, 64-bit i Java - Co wybrać?";
-l10n.dl_win_info_title				= "Obecnie dla Windows oferujemy wersję 32-bitową (x86), ale instaluje się ona i działa także pod Windows 64-bit (x86-64).\nProsimy pamiętać, że do dodatkowych funkcjonalności potrzebna być może 32-bitowa wersja Javy, którą należy wybrać tylko raz (zobacz menu 'Narzędzia - Opcje - OpenOffice - Java').\n\nWięcej informacji o OpenOffice i Javie znajdziesz pod linkiem po prawej 'Java i Apache OpenOffice'.";
-l10n.dl_linux_info_text				= "Ważna wskazówka: RPM vs. DEB - Co wybrać?";
-l10n.dl_linux_info_title			= "RPM jest używany w:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB jest używany w:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
-//l10n.dl_mac_info_text				= "macOS : Text";
-//l10n.dl_mac_info_title			= "macOS : Title";
+
+l10n.dl_platform_info_text				= "Important hints for ";
+l10n.dl_platform_info_title				= "Click here to get important hints for ";
+l10n.dl_platform_info_link				= "platform_hints.html";
+l10n.dl_platform_info_headline			= "Apache OpenOffice - Important hints for the chosen platform";
+l10n.dl_platform_info_win_headline		= "Windows";
+l10n.dl_platform_info_win_text			= "<h5> 32-bit, 64-bit and Java - What to choose? </h5> <p> At the moment we offer a 32-bit (x86) version for Windows. However, it installs and runs also on Windows 64-bit (x86-64). Please note that you may need Java in 32-bit for additional functionality which must then be selected only once (see menu 'Tools - Options - OpenOffice - Java'). <br /><br /> For more information about OpenOffice and Java please see: <a target='_blank' href=https://www.openoffice.org/download/common/java.html>https://www.openoffice.org/download/common/java.html</a>.</p>";
+l10n.dl_platform_info_mac_headline		= "macOS";
+l10n.dl_platform_info_mac_text			= "<h5> Coming soon </h5>";
+l10n.dl_platform_info_linux_headline	= "Linux";
+l10n.dl_platform_info_linux_text		= "<h5> RPM vs. DEB - What to choose? </h5> <p> RPM is used in: <br/> CentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server <br /><br /> DEB is used in: <br/> Debian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu </p> <h5> Installation instructions </h5> <p>For installation instruction please see here: <a target='_blank' href=https://www.openoffice.org/download/common/instructions.html#linux>https://www.openoffice.org/download/common/instructions.html#linux</a>.</p>";
+//l10n.dl_win_info_text					= "Ważna wskazówka: 32-bit, 64-bit i Java - Co wybrać?";
+//l10n.dl_win_info_title				= "Obecnie dla Windows oferujemy wersję 32-bitową (x86), ale instaluje się ona i działa także pod Windows 64-bit (x86-64).\nProsimy pamiętać, że do dodatkowych funkcjonalności potrzebna być może 32-bitowa wersja Javy, którą należy wybrać tylko raz (zobacz menu 'Narzędzia - Opcje - OpenOffice - Java').\n\nWięcej informacji o OpenOffice i Javie znajdziesz pod linkiem po prawej 'Java i Apache OpenOffice'.";
+//l10n.dl_linux_info_text				= "Ważna wskazówka: RPM vs. DEB - Co wybrać?";
+//l10n.dl_linux_info_title				= "RPM jest używany w:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB jest używany w:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
 
 l10n.dl_full_link_porting_text		= "Portowanie: Kliknij, aby wybrać dostawców firm trzecich";
 l10n.dl_full_link_porting_title		= "Kliknij, aby przejść na stronę i pobrać od zewnętrznych stron";
