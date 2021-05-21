@@ -3,13 +3,13 @@ divid=leftnav
 ~~~~~~
 # Products
 
-  - [Writer](/product/writer.html)
-  - [Calc](/product/calc.html)
-  - [Impress](/product/impress.html)
-  - [Draw](/product/draw.html)
-  - [Base](/product/base.html)
-  - [Math](/product/math.html)
+  - [Writer](/hy/product/writer.html)
+  - [Calc](/hy/product/calc.html)
+  - [Impress](/hy/product/impress.html)
+  - [Draw](/hy/product/draw.html)
+  - [Base](/hy/product/base.html)
+  - [Math](/hy/product/math.html)
 
 # More
 
-  - [Suite](/product/suite.html)
+  - [Suite](/hy/product/suite.html)
