@@ -11,7 +11,7 @@ divid=topnava
 - [Մայրենի լեզու][m7]
 
 
-[m0]:	  /product/index.html						"Apache OpenOffice ապրանքի նկարագրությունը"
+[m0]:	  /hy/product/index.html						"Apache OpenOffice ապրանքի նկարագրությունը"
 [m1]: 	  /hy/download/index.html					"Ներբեռնեք OpenOffice"
 [m2]: 	  /support/index.html 				     	     	"Գտեք աջակցություն OpenOffice -ի համար"
 [m3]:	  https://blogs.apache.org/ooo/					"Apache OpenOffice բլոգ"
