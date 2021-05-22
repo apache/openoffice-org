@@ -4,38 +4,38 @@ title=Apache OpenOffice Base
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 
-**Base** is a fully featured desktop database management system, designed to
-meet the needs of a broad array of users, from tracking a personal CD collections, 
-to producing a corporate monthly departmental sales reports.
+**Base** -ը ամբողջությամբ ձևավորված գրասեղանային տվյալների շտեմարանի կառավարման համակարգ է, որը նախատեսված է
+բավարարել օգտագործողների լայն զանգվածների կարիքները՝ սկսած անհատական CD հավաքածուները հետևելուց,
+նաև կորպորատիվ ամսական վաճառքների հաշվետվություններ պատրաստելուց։
 
-Base offers wizards to help users new to database design (or Base) 
-to create Tables, Queries, Forms and Reports, along with a set of
-predefined table definitions for tracking Assets, Customers, Sales Orders,
-Invoices and much more.
+Base-ն առաջարկում է հրաշագործներ՝ օգնելու օգտվողներին, ովքեր նոր են տվյալների շտեմարանի ձևավորման գործում (կամ Base)
+ստեղծելու աղյուսակներ, հարցումներ, ձևեր և հաշվետվություններ, ինչպես նաև մի շարք
+նախասահմանված աղյուսակների սահմանումներով ակտիվների, հաճախորդների, վաճառքի պատվերների,
+վճարահաշիվների և ավելին հետևելու համար:
 
-When a personal use database is all you need, Base offers the full HSQL
-relational database engine, configured for single user, with the data stored
-right in the Base file, as well as native support for dBase flat files.
+Երբ անհատական օգտագործման շտեմարանն անհրաժեշտ է, Base-ն առաջարկում է տվյալների ամբողջական HSQL
+հարաբերական շտեմարանի շարժիչ, որը կազմաձևված է մեկ օգտվողի համար, պահված տվյալներով
+ուղղակի Base նիշքում, ինչպես նաև dBase հարթ նիշքերի բնական աջակցություն:
 
-For power users in the enterprise, Base delivers native support drivers for
-a variety of multi-user database engines: MySQL, Adabas D, MS Access and
-PostgreSQL. In addition, support for JDBC and ODBC standard drivers allows you
-to connect to virtually any database.
+Ձեռնարկությունների փորձառու օգտագործողների համար Base-ը մատակարարում է աջակցության ներդրված վարորդներ
+բազմաօգտվող տվյալների շտեմարանի բազմաբնույթ շարժիչների համար՝ MySQL, Adabas D, MS Access և 
+PostgreSQL։ Բացի այդ, JDBC և ODBC ստանդարտ վարորդներին աջակցելը թույլ է տալիս
+գործնականում միանալու տվյալների ցանկացած շտեմարանի:
 
-Base integrates seamlessly into the rest of the Apache OpenOffice suite
-applications, for example:
+Base-ը անխափան կերպով ինտեգրվում է Apache OpenOffice մնացյալ հավաքածուի կիրառությունների 
+մեջ, օրինակ՝
 
-  - Supplying address book data for mail merge in Writer using the industry
-    standard LDAP protocol, or common address book formats such as Microsoft
-    Outlook, Microsoft Windows and Mozilla; 
-  - Creating linked data ranges in Calc files for data pilot analysis or as the 
-    basis for charts.
+  - Հասցեագրքի տվյալների մատակարարում փոստի միաձուլման համար Writer-ում` օգտագործելով արդյունաբերական
+     ստանդարտ LDAP արձանագրություն կամ հասցեագրքի ընդհանուր ձևաչափեր, ինչպիսիք են Microsoft
+     Outlook-ը, Microsoft Windows-ը և Mozilla-ն;
+     - Կապված տվյալների միջակայքերի ստեղծում Calc նիշքերում տվյալների փորձնական վերլուծության համար կամ որպես
+     գծապատկերների հիմք:
 
-For more information on working with Base, please see the 
-[Apache OpenOffice Wiki Database][1] pages.
+Base- ի հետ աշխատելու վերաբերյալ լրացուցիչ տեղեկություններ ստանալու համար տես՝ 
+[Apache OpenOffice Wiki Database][1] էջերը։
 
-For technical information, or to help make Base even better, stop by the 
-[Base project page][2].
+Տեխնիկական տեղեկատվության կամ Base-ն էլ ավելի լավ դարձնելու համար կանգ առեք
+[Base նախագծի էջում][2]։
 
 [1]: https://wiki.openoffice.org/wiki/database
 [2]: https://dba.openoffice.org/
