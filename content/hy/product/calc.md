@@ -5,53 +5,53 @@ notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 [![Screendump of Apache OpenOffice Calc](/product/pix/calc.png)](/product/pix/calc-big.png "Click for bigger version")
 
-*The solution to storing all your numbers and lists!*
+*Ձեր բոլոր թվերը և ցուցակները պահելու լուծումը:*
 
-**Calc** is the spreadsheet application you've always wanted. Newcomers find it
-intuitive and easy to learn; professional data miners and number crunchers will
-appreciate the comprehensive range of advanced functions.
+**Calc**-ը փռված աղյուսակի հավելված է, որը դուք միշտ ցանկացել եք: Նորեկները գտնում են դա
+ինտուիտիվ և սովորելու համար հեշտ; տվյալներ հավաքագրող արհեստավարժները և թվեր հաշվարկողները
+կգնահատեն առաջադեմ գործառույթների համապարփակ շրջանակը: 
 
-*DataPilot* is an advanced technology that makes it easy to pull in raw data from corporate
-databases; cross-tabulate, summarize, and convert it into meaningful information.
+*DataPilot*-ը առաջադեմ տեխնոլոգիա է, որը հեշտացնում է կորպորատիվ շտեմարաններից հում տվյալների ստացումը; 
+խաչաձև աղյուսակների ստեղծումը, ամփոփումը և փոխակերպումը իմաստալից տեղեկատվության: 
 
-*Natural language formulas* let you create formulas using words (e.g. "sales -
-costs").
+*Բնական լեզվի բանաձևերը* ձեզ թույլ են տալիս ստեղծել բանաձևեր, օգտագործելով 
+բառերը (ասենք, "sales - costs")։
 
-*Intelligent Sum Button* inserts a sum function or a subtotal automatically,
-depending on context.
+*Խելացի գումարի կոճակը* ինքնաշխատ կերպով տեղադրում է գումարի գործառույթ կամ ենթագումարը 
+կախված համատեքստից:
 
-*Wizards* guides you through choosing and using a comprehensive range of
-advanced spreadsheet functions, or [download templates][1] from our Templates
-repository for ready-made spreadsheet solutions.
+*Հրաշագործները*-ը ձեզ ուղղորդում է ընտրելու և օգտագործելու առաջադեմ աղյուսակի գործառույթների 
+համապարփակ տիրույթ, կամ [ներբեռնեք ձևանմուշներ] [1] Կաղապարների մեր պահոցից՝ 
+փռված աղյուսակների պատրաստի լուծումների համար: 
 
-*Styles and Formatting* makes it easy to apply flexible cell formatting options,
-including freely rotating contents, templates, backgrounds, borders, and many
-more. You can be your own spreadsheet expert thanks to *templates* with built-in
-functions, allowing you to concentrate on your real work.
+*Ոճերն ու ձևաչափումը* հեշտացնում է բջիջների ձևավորման ճկուն ընտրանքների կիրառումը,
+ներառյալ ազատ շրջանառվող բովանդակությունը, ձևանմուշները, հետնամասերը, եզրագծերը և ավելին։
+Ներկառուցված *կաղապարների* շնորհիվ Դուք կարող եք հանդես գալ որպես ձեր սեփական աղյուսակի 
+փորձագետ, թույլ տալով կենտրոնանալ ձեր իրական աշխատանքի վրա:
+ 
+*Սցենարի կառավարիչը* թույլ է տալիս «ինչ անել, եթե ...» վերլուծությունը կոճակի հպումով՝ օր.
+համեմատեք վաճառքի բարձր /միջին/ ցածր կանխատեսումների շահութաբերությունը:
 
-*Scenario Manager* allows "what if ..." analysis at the touch of a button - e.g.
-compare profitability for high / medium / low sales forecasts.
+Calc-ի *լուծիչ* բաղադրիչը թույլ է տալիս լուծել օպտիմալացման խնդիրներ, որտեղ
+որոշակի աղյուսակի բջիջի օպտիմալ արժեքը պետք է հաշվարկվի
+այլ բջիջներում տրամադրված սահմանափակումների հիմքի վրա:
 
-Calc's *solver* component allows solving optimization problems where the
-optimum value of a particular spreadsheet cell has to be calculated based on
-constraints provided in other cells.
+*Բազմաթիվ օգտվողների աջակցություն* - Խրախուսեք աղյուսակների վրա համագործակցային աշխատանքը:
+Համատեղելով աղյուսակը, այլ օգտվողները կարող են հեշտությամբ ավելացնել իրենց տվյալները
+աղյուսակին։ Աղյուսակի սեփականատերը կարող է այնուհետև հեշտությամբ ինտեգրել նոր տվյալները
+մի քանի կտտոցով։ Համագործակցության այս առանձնահատկությունն օգնում է խուսափել բախումներից:
 
-*Multiple users support* - Encourage collaborative work on spreadsheets. 
-By sharing a spreadsheet, other users can easily add their data to the
-spreadsheet. The spreadsheet owner can then easily integrate the new data with a
-few clicks. This collaboration feature helps avoid editing conflicts.
+Պահպանեք ձեր աղյուսակները OpenDocument ձևաչափով՝ միջազգային նոր ստանդարտ
+գրասենյակային փաստաթղթերի համար: Այս XML ձևաչափը նշանակում է, որ կապված չեք Calc-ին։
+Դուք կարող եք մուտք գործել ձեր աղյուսակներ ցանկացած OpenDocument-ի հետ համատեղելի
+ծրագրակազմից։
 
-Save your spreadsheets in OpenDocument format, the new international standard
-for office documents. This XML based format means you're not tied in to
-Calc. You can access your spreadsheets from any OpenDocument compliant
-software.
+Դուք ազատ եք ներմուծել ձեր հին Microsoft Excel աղյուսակները կամ պահպանել ձեր աշխատանքը
+Excel ձևաչափով` այն անձանց ուղարկելու համար, ովքեր օգտագործում են Microsoft-ի արտադրանքը:
+Calc-ը կարող է կարդալ .xlsx նիշքեր, որոնք ստեղծվել են Microsoft Office 2007 կամ
+Microsoft Office 2008 Mac OS X-ի համար:
 
-You are free to import your old Microsoft Excel spreadsheets, or save
-your work in Excel format for sending to people who are using Microsoft products.
-Calc is able to read .xlsx files created with Microsoft Office 2007 or
-Microsoft Office 2008 for Mac OS X.
+Եթե ցանկանում եք ձեր արդյունքները ուղարկել մեկին, ով չունի փռված աղյուսակի ծրագիրը տեղադրված,
+ապա օգտագործեք Դյուրակիր փաստաթղթի ձևաչափը (.pdf) - կարիք չկա գնել կամ տեղադրել որևէ լրացուցիչ ծրագիր:
 
-If you want to send your results to someone who doesn't have a spreadsheet application installed, 
-then use Portable Document Format (.pdf) - no need to buy or install any extra software. 
-
-[1]: http://extensions.openoffice.org/templates "Download Apache OpenOffice Templates"
+[1]: https://extensions.openoffice.org/templates "Ներբեռնեք Apache OpenOffice ձևաչափերը"
