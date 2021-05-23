@@ -6,7 +6,7 @@ notice=https://www.apache.org/licenses/LICENSE-2.0
 css=/product/styles.css
 ~~~~~~
 Համատեղելի այլ խոշոր գրասենյակային հավաքակազմերի հետ` Apache OpenOffice-ն անվճար է
-ներբեռնելը, օգտագործելը և տարածելը: [Ներբեռնեք այն հիմա] [1] և ստացեք՝
+ներբեռնելը, օգտագործելը և տարածելը: [Ներբեռնեք այն հիմա][1] և ստացեք՝
 
 ![Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
@@ -58,7 +58,7 @@ Apache OpenOffice-ը **անվճար ծրագրակազմ է**:
 
 Apache OpenOffice-ը **ստանդարտներին համապատասխանող է**:
 
-- այն աշխարհում առաջին ծրագրային փաթեթն է, որն օգտագործում է [OASIS] [6] [OpenDocument ձևաչափը][7] (ISO/IEC 26300)
+- այն աշխարհում առաջին ծրագրային փաթեթն է, որն օգտագործում է [OASIS][6] [OpenDocument ձևաչափը][7] (ISO/IEC 26300)
   as its native file format.
 
 ### [Find out more][8] or [try it today][1]!
