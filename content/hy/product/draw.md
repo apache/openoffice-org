@@ -5,38 +5,39 @@ notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 [![Screendump of Apache OpenOffice Draw](/product/pix/draw.png)](/product/pix/draw-big.png "Click for bigger version")
 
-*Makes drawing business processes and diagrams a snap!*
+*Բիզնես գործընթացների ու գծապատկերների ստեղծումը դարձնումէ պարզ:*
 
-**Draw** - from a quick sketch to a complex plan, Draw gives you the tools
-to communicate with graphics and diagrams. With a maximum page size of 300cm by
-300cm, Draw is powerful tool for technical or general posters, etc.
+**Draw** - արագ ուրվագիծից դեպի բարդ պլան, Draw-ն ձեզ տալիս է գործիքներ
+շփվելու գրաֆիկայի և գծապատկերների հետ: Էջի առավելագույն չափը 300 սմ x
+300 սմ, Draw-ն հզոր գործիք է տեխնիկական կամ ընդհանուր պաստառների համար և այլն:
 
-'Park' your most commonly used drawing tools around your screen ready for
-single-click access.
+«Կայանեք» ձեր ամենատարածված նկարչական գործիքները ձեր պաստառի շուրջ, պատրաստ
+մեկ սեղմումով մուտքի:
 
-Use *Styles and Formatting* to put all your graphics styles at your finger tips.
+Օգտագործեք *Ոճեր և Ձևաչափում* -ը գրաֆիկական ձեր բոլոր ոճերը դնելու համար ձեր մատների ներքո։
 
-*Manipulate objects*, rotate in two or three dimensions; the *3D controller* allows you to create
-spheres, rings, cubes, etc. in a quick pinch.
+*Մանիպուլյացիայի ենթարկել առարկաները*, պտտվել երկու կամ երեք չափսերով. *3D կարգավորիչը* թույլ է տալիս շատ 
+արագ ստեղծել գնդեր, օղակներ, խորանարդներ և այլն:
 
-*Arrange objects*, group, ungroup, regroup, and edit objects while grouped.
-Sophisticated *rendering* let you create photorealistic images with your own
-texture, lighting effects, transparency, perspective, and so on.
+*Դասավորեք առարկաները*, խմբավորեք, ապախմբավորեք, վերախմբավորեք և խմբագրեք առարկաները քանի դեռ խմբավորված են:
+Բարդ *մատուցումը* թույլ է տալիս ստեղծել ֆոտոիրական պատկերներ ձեր սեփականով
+հորինվածքով, լուսավորության էֆեկտներով, թափանցիկությամբ, հեռանկարով և այլն:
 
-*Smart connectors* make short work of flowcharts, organization charts, network
-diagrams, etc. Define your own 'glue points' for connectors to 'stick' to.
+*Խելացի միակցիչները* կատարում են բլոկ սխեմաների, կազմակերպական գծապատկերների, ցանցի գծապատկերների 
+և այլն համար կարճ աշխատանքներ: Սահմանեք ձեր սեփական «սոսնձման կետերը» միակցիչներին «կպչելու» համար:
 
-*Dimension lines* automatically calculate and display linear dimensions as you
-draw.
+*Չափսերի գծերը* ինքնաշխատ կերպով հաշվարկում և ցուցադրում են գծային չափերը ինչպես դուք
+նկարել եք։
 
-Use the picture *Gallery* for clipart; you can also create your own art and add it to the
-Gallery.
+Clipart-ի համար օգտագործեք *Պատկերասրահ* նկարը; Դուք կարող եք նաև ստեղծել ձեր սեփական արվեստը և այն 
+ավելացնել Պատկերասրահին։
 
-Save your graphics in OpenDocument format, the new international standard for
-office documents. This XML based format means you're not tied into using Draw.
-You can access your graphics from any OpenDocument compliant software.
+Պահեք ձեր գրաֆիկան OpenDocument ձևաչափով՝ միջազգային նոր ստանդարտի
+գրասենյակային փաստաթղթերի  համար: Այս XML ձևաչափը նշանակում է, որ դուք կապված չեք 
+Draw-ի օգտագործման հետ:
+Ձեր գրաֆիկա կարող եք մուտք գործել OpenDocument համատեղելի ցանկացած ծրագրակազմից:
 
-*Import graphics* from all common formats (including BMP, GIF, JPEG, PNG, TIFF,
-and WMF).
+*Ներմուծել գրաֆիկա* բոլոր սովորական ձևաչափերից (ներառյալ BMP, GIF, JPEG, PNG, TIFF,
+և WMF):
 
-Use Draw's free feature to create Flash (.swf) versions of your work.
+Օգտագործեք Draw-ի անվճար հնարավորությունը` ձեր աշխատանքի Flash (.swf) տարբերակները ստեղծելու համար:
