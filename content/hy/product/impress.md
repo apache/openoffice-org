@@ -5,39 +5,41 @@ notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 [![Screendump of Apache OpenOffice Impress](/product/pix/impress.png)](/product/pix/impress-big.png "Click for bigger version")
 
-*Impress your audience with your presentations!*
+*Տպավորեք ձեր լսարանին ձեր շնորհանդեսներով:*
 
-**Impress** is a truly outstanding tool for creating effective multimedia
-presentations. Your presentations will stand out with 2D and 3D clip art,
-special effects, animation, and high-impact drawing tools.
+**Impress** -ը իսկապես ակնառու գործիք է արդյունավետ մուլտիմեդիա շնոհանդեսներ ստեղծելու 
+համար: Ձեր շնորհանդեսները կառանձնանան 2D և 3D տեսահոլովակներով, կունենան
+հատուկ էֆեկտներ, անիմացիա և բարձր ազդեցության գծանկարչական գործիքներ:
 
-*Master Pages* simplify the task of preparing your materials. Save even more
-time by [downloading templates][1] from our Templates repository.
+*Վարպետ էջերը* պարզեցնում են ձեր նյութերը պատրաստելու խնդիրը: Խնայեք էլ ավելի
+ժամանակը [ձևանմուշները ներբեռնելով] [1]՝ Կաղապարների մեր պահոցից:
 
-*Complete range of Views* are supported: Slides / Outline / Notes / Handouts
-to meet all the needs of presenters and audiences, plus an optional
-multi-pane view to put all the tools at your fingertips.
+*Դիտումների ամբողջական շարքերը* աջակցվում են. սահիկներ / ուրվագիծ / Նշումներ / Նյութեր
+բավարարելու ներկայացնողի և լսարանի բոլոր կարիքները, գումարած ընտրովի
+բազմաշերտ տեսք՝ բոլոր գործիքները ձեր մատների տակ դնելու համար:
 
-*Multiple monitors support* so that presenters can have additional materials or notes while presenting their slides on a projector. 
-Make the most of this with the integrated [Presenter Screen][2], which lets you see your next slides
-as well as the time and the speaker notes.
+*Բազմակի մոնիտորների աջակցություն*, որպեսզի ներկայացնողները կարողանան ունենալ լրացուցիչ նյութեր կամ գրառումներ` իրենց սահիկները ներկայացնելիս:
+Սրա առավելագույնը օգտագործեք ինտեգրված [Ներկայացնողի պաստառի] [2] միջոցով, որը թույլ է տալիս տեսնել ձեր հաջորդ սահիկները,
+ինչպես նաև ժամանակը և բանախոսի գրառումները:
 
-*Easy-to-use drawing and diagramming tools* - a complete range to spice up your presentation. 'Park' your most commonly used drawing
-tools around your screen ready for single-click access.
+*Հեշտ օգտագործման գծագրության և գծապատկերի գործիքներ* - ձեր շնորհանդեսը համեմելու ամբողջական տեսականի: «Կայանել» ձեր 
+ամենաշատ օգտագործվող նկարչական գործիքները ձեր 
+պաստառի շուրջ, պատրաստ մեկ սեղմումով մուտքի համար:
 
-*Slide show Animation and Effects* bring your presentation to life. Fontworks
-provides stunning 2D and 3D images from text. Create lifelike 3D images with
-astounding speed and response.
+*Սահիկի ցուցադրության շարժապատկերներ և էֆեկտներ* կյանքի են կոչում ձեր ներկայացումը: Տառատեսակները
+ապահովում է ցնցող 2D և 3D պատկերներ տեքստից: Ստեղծեք իրական 3D պատկերներ
+ապշեցուցիչ արագությամբ և արձագանքեք:
 
-*.odp Standard* - Save your presentations in OpenDocument format, the new international standard
-for office documents. This XML based format means you're not tied up with using
-Impress. You can access your presentations from any OpenDocument compliant
-software.
+*.odp Standard* - Պահպանեք ձեր շնորահնդեսները OpenDocument ձևաչափով` գրասենյակային փաստաթղթերի
+միջազգային նոր ստանդարտով: Այս XML ձևաչափը նշանակում է, որ դուք կապված չեք Impress-ի օգտագործման հետ։
+Դուք կարող եք մուտք գործել ձեր շնորհանդեսներ ցանկացած OpenDocument-ի համատեղելի
+ծրագրակազմից։
 
-*.ppt &amp; .pptx support* - Of course, you are free to import your old Microsoft PowerPoint presentations, or
-save your work in PowerPoint format for sending to people who are still using Microsoft products. 
+*.ppt &amp; .pptx աջակցություն* - Իհարկե, ազատ եք ներմուծել ձեր հին Microsoft PowerPoint շնորհանդեսները, կամ
+ձեր աշխատանքը պահեք PowerPoint ձևաչափով այն մարդկանց ուղարկելու համար, ովքեր դեռ օգտագործում են Microsoft-ի արտադրանքը: 
 
-*Flash .swf support* - Alternatively, use Impress's built-in ability to create Flash versions of your presentations.
+*Flash .swf աջակցություն* - Այլընտրանքորեն, օգտագործեք Impress-ի ներկառուցված ունակությունը` ձեր շնորհանդեսների 
+Flash տարբերակները ստեղծելու համար:
 
-[1]: https://extensions.openoffice.org/templates "Download Apache OpenOffice Templates"
-[2]: https://wiki.openoffice.org/wiki/Presenter_Screen "Read about the Presenter Screen"
+[1]: https://extensions.openoffice.org/templates "Ներբեռնեք Apache OpenOffice ձևանմուշները"
+[2]: https://wiki.openoffice.org/wiki/Presenter_Screen "Կարդացեք ներկայացնողի պաստառի մասին"
