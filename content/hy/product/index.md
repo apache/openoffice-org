@@ -5,60 +5,60 @@ title=Apache OpenOffice Product Description
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=/product/styles.css
 ~~~~~~
-Compatible with other major office suites, Apache OpenOffice is free to
-download, use, and distribute. [Download it now][1], and get:
+Համատեղելի այլ խոշոր գրասենյակային հավաքակազմերի հետ` Apache OpenOffice-ն անվճար է
+ներբեռնելը, օգտագործելը և տարածելը: [Ներբեռնեք այն հիմա] [1] և ստացեք՝
 
 ![Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
-  - [Writer](writer.html "Wordprocessor") a word processor you can use for
-    anything from writing a quick letter to producing an entire book.
-  - [Calc](calc.html "Spreadsheet") a powerful spreadsheet with all the tools
-    you need to calculate, analyze, and present your data in numerical reports
-    or sizzling graphics.
-  - [Impress](impress.html "Presentation program") the fastest, most powerful
-    way to create effective multimedia presentations.
-  - [Draw](draw.html "Vector drawing tool") lets you produce everything from
-    simple diagrams to dynamic 3D illustrations.
-  - [Base](base.html "Database") lets you manipulate databases seamlessly.
-    Create and modify tables, forms, queries, and reports, all from within
-    Apache OpenOffice.
-  - [Math](math.html "Mathematical function creator") lets you create
-    mathematical equations with a graphic user interface or by directly typing
-    your formulas into the equation editor.
+  - [Writer](writer.html "Տեքստային խմբագրիչ") տեքստային խմբագրիչ, որը կարող եք օգտագործել
+     արագ նամակ գրելուց մինչև մի ամբողջ գիրք թողարկելը:
+  - [Calc] (calc.html "Փռված աղյուսակ") հզոր փռված աղյուսակ՝ ձեզ անհրաժեշտ բոլոր գործիքներով
+     թվային հաշվետվություններում կամ ճչացող գրաֆիկայում ձեր տվյալների հաշվարկման,
+     վերլուծության և ներկայացման համար:
+  - [Impress](impress.html "Շնորհանդեսային ծրագիր") ամենաարագ, ամենահզոր
+     արդյունավետ մուլտիմեդիա շնորհանդեսներ ստեղծելու միջոց:
+  - [Draw](draw.html "Վեկտորային նկարչության գործիք") թույլ է տալիս թողարկել ամեն ինչ՝
+     պարզ դիագրամներից մինչև դինամիկ 3D նկարազարդումներ
+  - [Base](base.html "Շտեմարան") հնարավորություն է տալիս անխափանորեն շահագործել տվյալների շտեմարանները:
+     Ստեղծեք և փոփոխեք աղյուսակները, ձևերը, հարցումները և հաշվետվությունները՝ բոլորը
+     Apache OpenOffice-ի միջից:
+  - [Math](math.html "Մաթեմատիկական ֆունկցիայի ստեղծող") թույլ է տալիս ստեղծել
+     մաթեմատիկական հավասարումներ գրաֆիկական օգտագործողի միջերեսով կամ ուղղակի մուտքագրելով
+     ձեր բանաձևերը հավասարումների խմբագրիչում:
 
-## Why Apache OpenOffice?
+## Ինչու՞ Apache OpenOffice։
 
-Apache OpenOffice is synonymous with **quality**:
+Apache OpenOffice հոմանիշ է **որակի**:
 
-- The [roots of Apache OpenOffice][2] go back twenty years, creating a mature
-  and powerful product
-- Many millions of users
-- [Independent reviewers][3] around the world have recommended the product
-- With a fully open development process, Apache OpenOffice has nothing to
-  hide - the product stands or falls on its reputation
+- [Apache OpenOffice-ի արմատները][2] հետ են գնում քսան տարի՝ ստեղծելու հասուն 
+   և հզոր արտադրանք
+- Բազմամիլիոն օգտվողներ
+- [Անկախ գրախոսողները][3] ողջ աշխարհում երաշխավորում են արտադրանքը
+- Լիովին բաց զարգացման գործընթացով Apache OpenOffice-ը թաքցնելու ոչինչ 
+չունի - արտադրանքը կանգուն է կամ անկում է ապրում իր հեղինակության շնորհիվ
 
-Apache OpenOffice is **easy to use**:
+Apache OpenOffice-ը **հեշտ է օգտագործել**:
 
-- The software looks and feels familiar and is instantly usable by anyone who
-  has used a competitive product
-- It's easy to change to Apache OpenOffice - the software reads most file types
-  of major competitors
-- Few [language barriers][4] - if it's not yet available in your language,
-  the chances are it will be soon
-- Apache OpenOffice is supported by a global community of friendly volunteers,
-  happy to provide assistance to newcomers and advanced users alike
+- Ծրագրակազմը նայվում և զգացվում է ծանոթ, և անմիջապես օգտագործելի է յուրաքանչյուրի համար
+   ով օգտագործել է մրցակցային արտադրանք։
+- Apache OpenOffice-ին անցնելը հեշտ է։ Ծրագրաշարը կարդում է  խոշոր մրցակիցների
+նիշքերի տեսակների մեծ մասը։
+  - Աննշան [լեզվական խոչընդոտներ][4] - եթե այն դեռ մատչելի չէ ձեր լեզվով,
+   հավանական է, որ այն շուտով կլինի։
+- Apache OpenOffice-ին աջակցում է ընկերական կամավորների համաշխարհային համայնքը,
+   ուրախ են օգնություն տրամադրել նորեկներին և փորձառու օգտվողներին։
 
-Apache OpenOffice is **free software**:
+Apache OpenOffice-ը **անվճար ծրագրակազմ է**:
 
-- You may download Apache OpenOffice completely free of any license fees
-- Install it on as many PCs as you like
-- Use it for any purpose - private, educational, government and public
-  administration, commercial...
-- Pass on copies free of charge to family, friends, students, employees, etc.
+- Դուք կարող եք ներբեռնել Apache OpenOffice-ը ամբողջովին անվճար հեղինակային վճարներից
+- Տեղադրեք այն այնքան համակարգչի վրա, որքան ցանկանում եք
+- Օգտագործեք այն ցանկացած նպատակով՝ մասնավոր, կրթական, պետական և հանրային
+   վարչարարություն, առևտրային...
+- Պատճեններն անվճար փոխանցեք ընտանիքին, ընկերներին, ուսանողներին, աշխատակիցներին և այլն:
 
-Apache OpenOffice is **standards compliant**:
+Apache OpenOffice-ը **ստանդարտներին համապատասխանող է**:
 
-- The first software package in the world to use [OASIS][6] [OpenDocument Format][7] (ISO/IEC 26300)
+- այն աշխարհում առաջին ծրագրային փաթեթն է, որն օգտագործում է [OASIS] [6] [OpenDocument ձևաչափը][7] (ISO/IEC 26300)
   as its native file format.
 
 ### [Find out more][8] or [try it today][1]!
