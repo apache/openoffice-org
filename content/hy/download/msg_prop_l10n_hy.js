@@ -67,7 +67,7 @@ l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",		"Աստուրիան"
 													"en-GB",	"Անգլերեն [Բրիտանական]",			"English [British]",
 													"en-US",	"Անգլերեն [ԱՄՆ]",						"English [US]",
 													"fi",		"Ֆիններեն",							"Suomi",
-													"fr",		"French",								"Français",
+													"fr",		"Ֆրանսերեն",								"Français",
 													"gl",		"Գալիսիերեն",							"Galego",
 													"de",		"Գերմաներեն",						"Deutsch",
 													"el",		"Հունարեն",							"ελληνικά",
@@ -100,7 +100,7 @@ l10n.dl_green_box_select_box_language_values	= [ "" ];
 
 l10n.dl_green_box_select_box_version_values	= [ "" ];
 
-l10n.dl_green_box_select_box_version_older	= "Older releases";
+l10n.dl_green_box_select_box_version_older	= "Ավելի հին թողարկումներ";
 
 // Download: Strings in the sub-green box (used in "index.html").
 // Not defined for now.
@@ -238,16 +238,16 @@ l10n.dl_full_link_title					= "Ներբեռնելու համար կտտացրե�
 l10n.dl_langpack_link_text				= "Ներբեռնեք լեզվի փաթեթը";
 l10n.dl_langpack_link_title				= "Ներբեռնելու համար կտտացրեք: ";
 
-l10n.dl_platform_info_text				= "Important hints for ";
-l10n.dl_platform_info_title				= "Click here to get important hints for ";
+l10n.dl_platform_info_text				= "Կարևոր հնարքներ ";
+l10n.dl_platform_info_title				= "Կտտացրեք այստեղ կարևոր հնարքների համար ";
 l10n.dl_platform_info_link				= "platform_hints.html";
-l10n.dl_platform_info_headline			= "Apache OpenOffice - Important hints for the chosen platform";
+l10n.dl_platform_info_headline			= "Apache OpenOffice - Կարևոր հնարքներ ընտրված հարթակի համար";
 l10n.dl_platform_info_win_headline		= "Windows";
-l10n.dl_platform_info_win_text			= "<h5> 32-bit, 64-bit and Java - What to choose? </h5> <p> At the moment we offer a 32-bit (x86) version for Windows. However, it installs and runs also on Windows 64-bit (x86-64). Please note that you may need Java in 32-bit for additional functionality which must then be selected only once (see menu 'Tools - Options - OpenOffice - Java'). <br /><br /> For more information about OpenOffice and Java please see: <a target='_blank' href=https://www.openoffice.org/download/common/java.html>https://www.openoffice.org/download/common/java.html</a>.</p>";
+l10n.dl_platform_info_win_text			= "<h5> 32-բիթ, 64-բիթ և Java - Ո՞րը ընտրել։ </h5> <p> Այս պահին մենք առաջարկում ենք 32-բիթ (x86) տարբերակը Windows-ի համար։ Այնուամենայնիվ, այն տեղադրվում և գործարկվում է նաև Windows 64-բիթ (x86-64) համակարգերով: Խնդրում ենք նկատի ունենալ, որ լրացուցիչ գործառույթների համար ձեզ կարող է անհրաժեշտ լինել 32-բիթանոց Java, որն այնուհետև պետք է ընտրվի միայն մեկ անգամ (տե՛ս «Գործիքներ - Ընտրանքներ - OpenOffice - Java» ընտրացանկը): <br /><br /> OpenOffice-ի և Java-ի մասին լրացուցիչ տեղեկություններ ստանալու համար տե՛ս: <a target='_blank' href=https://www.openoffice.org/download/common/java.html>https://www.openoffice.org/download/common/java.html</a>.</p>";
 l10n.dl_platform_info_mac_headline		= "macOS";
-l10n.dl_platform_info_mac_text			= "<h5> Coming soon </h5>";
+l10n.dl_platform_info_mac_text			= "<h5> Շուտով </h5>";
 l10n.dl_platform_info_linux_headline	= "Linux";
-l10n.dl_platform_info_linux_text		= "<h5> RPM vs. DEB - What to choose? </h5> <p> RPM is used in: <br/> CentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server <br /><br /> DEB is used in: <br/> Debian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu </p> <h5> Installation instructions </h5> <p>For installation instruction please see here: <a target='_blank' href=https://www.openoffice.org/download/common/instructions.html#linux>https://www.openoffice.org/download/common/instructions.html#linux</a>.</p>";
+l10n.dl_platform_info_linux_text		= "<h5> RPM ընդդեմ DEB - Ո՞րը ընտրել։ </h5> <p> RPM օգտագործվում է: <br/> CentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server <br /><br /> DEB օգտագործվում է: <br/> Debian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu </p> <h5> Տեղադրման հրահանգներ </h5> <p>Տեղադրման հրահանգների համար տես այստեղ: <a target='_blank' href=https://www.openoffice.org/download/common/instructions.html#linux>https://www.openoffice.org/download/common/instructions.html#linux</a>.</p>";
 //l10n.dl_win_info_text					= "Կարևոր ակնարկ: 32-բիթ, 64-բիթ և Java - Ի՞նչ ընտրել:";
 //l10n.dl_win_info_title				= "Այս պահին մենք առաջարկում ենք 32-բիթանոց (x86) տարբերակը Windows-ի համար: Այնուամենայնիվ, այն տեղադրվում և գործարկվում է նաև Windows 64-բիթանոց (x86-64) համակարգերով:\nԽնդրում ենք նկատի ունենալ, որ լրացուցիչ ֆունկցիոնալության համար ձեզ կարող է անհրաժեշտ լինել 32-բիթանոց Java, որն այնուհետև պետք է ընտրվի միայն մեկ անգամ (տե՛ս «Գործիքներ - Ընտրանքներ - OpenOffice - Java» ընտրացանկը):\n\nOpenOffice- ի և Java- ի մասին լրացուցիչ տեղեկություններ ստանալու համար տե՛ս «Java և Apache OpenOffice» -ից աջ հղումը:";
 //l10n.dl_linux_info_text				= "Կարևոր ակնար: RPM ընդդեմ DEB - Ի՞նչ ընտրել:";
@@ -314,11 +314,11 @@ l10n.dl_error_solution_text				= "Լուծում: ";
 l10n.dl_error_aoo_text					= "Apache OpenOffice ";
 l10n.dl_error_not_available_for_text	= " հասանելի չէ ";
 l10n.dl_error_please_select_1_text		= "Խնդրում ենք ընտրել 4.0.1 տարբերակը:";
-l10n.dl_error_please_select_2_text		= "Խնդրում ենք ընտրել 4.0.1 տարբերակը կան ավելի նորը:";
+l10n.dl_error_please_select_2_text		= "Խնդրում ենք ընտրել 4.0.1 տարբերակը կամ ավելի նորը:";
 l10n.dl_error_please_select_3_text		= "Խնդրում ենք ընտրել ներբեռնում Windows-ի, macOS-ի (OS&nbsp;X) կամ Linux-ի համար:";
 l10n.dl_error_please_select_4_text		= "Խնդրում ենք ընտրել այլ լեզու կամ տարբերակ:";
 
-l10n.dl_unknown_platform_text			= "անհայտ գործառնական համակարգ / հարթակ";
+l10n.dl_unknown_platform_text			= "Անհայտ գործառնական համակարգ / հարթակ";
 
 // Download: Strings with customized error text in the sub-red box (used in "download.js").
 // Can be used when the default text in the variables above cannot be translated correctly.
