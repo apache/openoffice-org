@@ -59,9 +59,9 @@ Apache OpenOffice-ը **անվճար ծրագրակազմ է**:
 Apache OpenOffice-ը **ստանդարտներին համապատասխանող է**:
 
 - այն աշխարհում առաջին ծրագրային փաթեթն է, որն օգտագործում է [OASIS][6] [OpenDocument ձևաչափը][7] (ISO/IEC 26300)
-  as its native file format.
+  որպես դրա հարազատ Նիշքի ձևաչափ:
 
-### [Find out more][8] or [try it today][1]!
+### [Իմանալ ավելին][8] կամ [փորձեք այսօր][1]։
 
 
 [1]: /hy/download "Download Apache OpenOffice"
