@@ -5,58 +5,58 @@ notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 [![Screendump of Apache OpenOffice Writer](/product/pix/writer.png)](/product/pix/writer-big.png "Click for bigger version")
 
-*Letting you concentrate on writing your ideas*
+*Թույլ տալ ձեզ կենտրոնանալ ձեր գաղափարները գրելու վրա*
 
-**Writer** has everything you would expect from a modern, fully equipped word
-processor.
+**Writer** ունի այն ամենը, ինչ կսպասեիք ժամանակակից, լիովին հագեցած տեքստի
+խմբագրիչից։
 
-It is simple enough for a quick memo, yet powerful enough to create complete books
-with contents, diagrams, indexes, etc. You're free to concentrate on your
-ideas while Writer makes them look great.
+Այն բավականին պարզ է արագ հուշագրի համար, բայց բավականաչափ հզոր՝ լիարժեք գրքեր ստեղծելու համար
+բովանդակությամբ, գծապատկերներով, ցուցիչներով և այլն: Դուք ազատ եք կենտրոնանալու ձեր 
+գաղափարների վրա, մինչ Writer-ը դրանց հիանալի տեսք է տալիս:
 
-*Wizards* take all the hassle out of producing standard documents such as
-letters, faxes, agendas, minutes, or carrying out more complex tasks such as
-mail merges. Of course, you are also free to create your own templates, or
-[download templates][1] from our Templates repository.
+*Հրաշագործները*-ը ազատում են ստանդարտ փաստաթղթեր պատրաստելու հետ կապված բոլոր քաշքշուկներից, 
+ինչպիսիք են նամակները, ֆաքսերը, օրակարգերը, արձանագրությունները կամ իրականացնել ավելի բարդ խնդիրներ, 
+ինչպիսիք փոստի միաձուլումն է: Իհարկե, դուք նաև ազատ եք ստեղծել ձեր սեփական ձևանմուշները, կամ
+[ներբեռնեք ձևանմուշները][1] Ձևանմուշների մեր պահոցից:
 
-*Styles and Formatting* puts the power of style sheets into the hands of every
-user.
+*Ոճերն ու ձևաչափումը* ոճաթերթիկների ուժը տրամադրում է յուրաքանչյուր
+օգտագործողի։
 
-*AutoCorrect dictionary* can trap typing mistakes on the fly, 
-checking your spelling as you type. Writer can handle the use of different languages in your
-document too.
+*Ինքնաշտկվող բառարան*-ը կարող է մուտքագրելիս որսալ սխալները,
+տպելու ընթացքում ստուգելով ուղղագրությունը: Writer-ը կարող է նաև կարգավորել տարբեր լեզուների օգտագործումը
+ձեր փաստաթղթում:
 
-*AutoComplete* reduces typing effort, it will suggest common words and
-phrases to complete what you are typing.
+*Ինքնալրացումը*-ը նվազեցնում է մուտքագրման ջանքերը, այն կառաջարկի ընդհանուր բառեր և
+արտահայտություններ՝ ձեր մուտքագրածը լրացնելու համար:
 
-*Text frames* and *linking* give you the power to tackle desktop publishing
-tasks for newsletters, flyers, etc. laid out exactly the way you want them to
-be.
+*Տեքստի շրջանակները* և *հղումները* ձեզ հնարավորություն են տալիս լուծելու սեղանադիր հրատարակչական
+առաջադրանքները տեղեկագրերի, թռուցիկների և այլնի համար, ներկայացված ճիշտ այնպես, ինչպես դուք եք ցանկանում
+որ լինեն.
 
-*Table of Contents &amp; References* - Increase the usefulness of your long, complex documents 
-by generating a table of contents or indexing terms, bibliographical references, illustrations, 
-tables, and other objects.
+*Բովանդակության աղյուսակ &amp; Հղումներ* - Բարձրացրեք ձեր երկար, բարդ փաստաթղթերի օգտակարությունը
+ստեղծելով բովանդակության աղյուսակ կամ ինդեքսավորման տերմիններ, մատենագիտական հղումներ, նկարազարդումներ,
+աղյուսակներ և այլ առարկաներ:
 
-*Multi-page display* - Writer can also display multiple pages while you edit - ideal for complex
-documents. Works well with large and multiple monitors.
+*Բազմաէջ ցուցադրություն* - Writer-ը խմբագրման ընթացքում կարող է նաև արտածել բազմաթիվ էջեր՝ 
+երազանք բարդ փաստաթղթերի դեպքում։ Լավ է աշխատում լայն և բազմակի մոնիտորների հետ:
 
-*Notes* - The notes feature displays notes and comments on the side of the document. This
-makes notes a lot easier to read. In addition, notes from different users are
-displayed in different colors together with the editing date and time.
+*Նշումներ* - Նշումների հատկությունը ցուցադրում է գրառումներ և մեկնաբանություններ փաստաթղթի կողմում: Սրա
+շնորհիվ նշումները շատ ավելի հեշտ ընթեռնելի են դադռնում: Բացի այդ, տարբեր օգտվողների գրառումներն 
+արտածվում են տարբեր գույներով` խմբագրման ամսաթվի և ժամի հետ միասին:
+ 
+*HTML, PDF, MediaWiki ձևաչափեր* - Ձեր փաստաթղթերը ազատորեն մատչելի դարձրեք Writer-ի HTML արտահանում ոստայն միջոցով,
+կամ արտահանեք MediaWiki ձևաչափով՝ վիքիում հրապարակելու համար: Հրապարակեք Portable
+Document Format (.pdf)` երաշխավորելու համար, որ այն ինչ գրում եք նույնն է, ինչ ձեր ընթերցողն է
+տեսնում։ Apache OpenOffice-ում PDF արտահանման առանձնահատկությունն ապահովում է ձևավորման հսկայական բազմություն
+և անվտանգության տարբերակներ; այնպես, որ PDF նիշքերը կարող են հարմարեցվել շատ տարբեր
+սցենարների, ներառյալ ISO ստանդարտի PDF/A նիշքերը:
 
-*HTML, PDF, MediaWiki formats* - Make your documents freely available with Writer's HTML export to the web,
-or export in MediaWiki format for publishing to wikis. Publish in Portable
-Document Format (.pdf) to guarantee that what you write is what your reader
-sees. The PDF export feature in Apache OpenOffice provides a huge set of formatting
-and security options; so that PDF files can be customized for many different
-scenarios, including ISO standard PDF/A files.
+*.odt ստանդարտ* - Պահեք ձեր փաստաթղթերը OpenDocument ձևաչափով` միջազգային նոր ստանդարտ
+գրասենյակային փաստաթղթերի համար: Այս XML ձևաչափը նշանակում է, որ կապված չեք Writer-ի հետ:
+Ձեր փաստաթղթերին կարող եք մուտք գործել ցանկացած OpenDocument համատեղելի ծրագրակազմից:
 
-*.odt Standard* - Save your documents in OpenDocument format, the new international standard for
-office documents. This XML based format means you're not tied in to Writer.
-You can access your documents from any OpenDocument compliant software.
+*.docx &amp; .doc աջակցություն* - Writer-ը իհարկե կարող է կարդալ ձեր Microsoft Word-ի բոլոր հին փաստաթղթերը կամ պահպանել
+ձեր աշխատանքը Microsoft Word ձևաչափով, ուղարկելու համար այն մարդկանց, ովքեր դեռ օգտագործում են
+Microsoft-ի արտադրանքները: Writer-ը կարող է նաև բացել .docx նիշքեըր, որոնք ստեղծվել են Microsoft Office 2007-ի կամ Microsoft Office 2008-ի հետ Mac OS X-ի համար:
 
-*.docx &amp; .doc support* - Writer can of course read all your older Microsoft Word documents, or save
-your work in Microsoft Word format for sending to people who are still using
-Microsoft products. Writer can also open .docx files created with Microsoft Office 2007 or Microsoft Office 2008 for Mac OS X.
-
-[1]: http://templates.openoffice.org "Download Apache OpenOffice Templates"
+[1]: https://templates.openoffice.org "Ներբեռնեք Apache OpenOffice ձևանմուշները"
