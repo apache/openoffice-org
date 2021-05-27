@@ -1,7 +1,7 @@
 type=navigator
 divid=leftnav
 ~~~~~~
-# Products
+# Արտադրանք
 
   - [Writer](/hy/product/writer.html)
   - [Calc](/hy/product/calc.html)
