@@ -2,41 +2,40 @@ type=page
 title=The Suite Advantage
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-Apache OpenOffice is more than a collection of six superb tools.
+Apache OpenOffice- ը ավելին է, քան վեց հոյակապ գործիքների հավաքածու:
 
-Unlike some competitors, this suite was not created from a collection of
-separate pieces of software. From the start, it was designed as one complete
-office package.
+Ի տարբերություն որոշ մրցակիցների, այս փաթեթը չի ստեղծվել ծրագրի առանձին կտորների հավաքածուից: 
+Ի սկզբանե այն նախատեսված էր որպես ամբողջական գրասենյակային փաթեթ։
 
-- All the packages have a similar "look and feel" making them very easy to use,
-  with common "learn once use everywhere" tools like the Styles and Formatting.
-  Apache OpenOffice takes its "look and feel" from your computer - if you change
-  your desktop, Apache OpenOffice will change to match.
+- Բոլոր փաթեթներն ունեն նման «տեսք և զգացողություն», ինչը նրանց շատ դյուրին է դարձնում օգտագործման համար,
+   «Սովորեք մեկ անգամ օգտագործեք ամեն տեղ» գործիքների հետ, ինչպիսիք են Ոճերը և Ձևաչափումը:
+   Apache OpenOffice-ն իր «տեսքն ու զգացողությունը» ստանում է ձեր համակարգչից, եթե փոխեք
+   ձեր աշխատասեղանը, Apache OpenOffice-ը կփոխվի՝ համապատասխանելու համար:
 
-- The same tools are used consistently across the suite - for example, the tools
-  you use to work with graphics within Writer are also found in Impress and Draw.
+- Նույն գործիքները հետևողականորեն օգտագործվում են հավաքակազմի ողջ տարածքում, օրինակ` գործիքները
+   որոնք օգտագործում եք Writer-ի գրաֆիկայի հետ աշխատելու համար, առկա են նաև Impress-ում և Draw-ում:
 
-- You don't need to know which application was used to create a particular
-  file - you can "File Open" any Apache OpenOffice file from anywhere and the
-  correct application will be launched.
+- Ձեզ հարկավոր չէ իմանալ, թե որ ծրագիրն է օգտագործվել ստեղծելու համար որոշակի նիշքը՝ 
+  Դուք կարող եք «Նիշքը բացել» ցանկացած Apache OpenOffice նիշք ցանկացած տեղից և
+   կբեռնվի ճիշտ կիրառությունը:
 
-- All the packages share a common spell-checker, etc.; and if you change an
-  "Option" in one package, it's changed in them all.
+- Բոլոր փաթեթները կիսում են ընդհանուր ուղղագրիչը և այլն: Իսկ եթե փոխես
+   «Ընտրանքը» մեկ փաթեթում, այն կփոխվի բոլորում:
 
-- Information can be transferred easily between all the packages.
+- Տեղեկատվությունը կարող է հեշտությամբ փոխանցվել բոլոր փաթեթների միջև:
 
-- All the components save in OpenDocument format, the new international standard
-  for office documents. This XML based format offers substantial disk savings
-  compared to common competitors' formats. It also means you can access your
-  data from any OpenDocument compliant software.
+- Բոլոր բաղադրիչները պահպանվում են OpenDocument ձևաչափով՝ միջազգային նոր ստանդարտ
+   գրասենյակային փաստաթղթերի համար: Այս XML-ի վրա հիմնված ձևաչափն առաջարկում է սկավառակի զգալի խնայողություն
+   համեմատած մրցակիցների սովորական ձևաչափերի հետ: Դա նաև նշանակում է, որ դուք կարող եք մուտք գործել ձեր
+   տվյալներին ցանկացած OpenDocument համապատասխանող ծրագրից:
 
-- All the packages are installed in one single operation, using the installation
-  process you are used to on your computer.
+- Բոլոր փաթեթները տեղադրվում են մեկ գործողությամբ՝ օգտագործելով տեղադրման
+   գործընթաց, որին սովոր եք ձեր համակարգչում:
 
-- All the packages are released under the same open licensing model - there are
-  no hidden charges now or in the future.
+- Բոլոր փաթեթները թողարկվում են նույն բաց լիցենզավորման մոդելի ներքո. Չկան
+   թաքնված ծախսեր այժմ կամ ապագայում:
 
-Everything you need in an office productivity suite - 
-[get it today][1]!
+Այն ամենը, ինչ ձեզ հարկավոր է գրասենյակային արտադրողականության հավաքածուում -
+[ձեռք բերեք այսօր][1]։
 
-[1]: /download/ "Download Apache OpenOffice"
+[1]: /download/ "Ներբեռնեք Apache OpenOffice"
