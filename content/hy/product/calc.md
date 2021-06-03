@@ -54,4 +54,4 @@ Microsoft Office 2008 Mac OS X-ի համար:
 Եթե ցանկանում եք ձեր արդյունքները ուղարկել մեկին, ով չունի փռված աղյուսակի ծրագիրը տեղադրված,
 ապա օգտագործեք Դյուրակիր փաստաթղթի ձևաչափը (.pdf) - կարիք չկա գնել կամ տեղադրել որևէ լրացուցիչ ծրագիր:
 
-[1]: https://extensions.openoffice.org/templates "Ներբեռնեք Apache OpenOffice ձևաչափերը"
+[1]: https://templates.openoffice.org "Ներբեռնեք Apache OpenOffice ձևաչափերը"
