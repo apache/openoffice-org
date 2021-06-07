@@ -67,7 +67,8 @@ l10n.index_redirect_text			= [ /* hy */	"soft", "This site is also available in 
 										/* nl */	"none", "This site is also available in <b>Nederlands (nl)</b>. Just click this text to get redirected.",
 										/* en-GB */	"none", "This site is also available in <b>English (en-GB)</b>. Just click this text to get redirected.",
 										/* en-US */	"none", "This site is also available in <b>English (en-US)</b>. Just click this text to get redirected.",
-										/* et 	"soft", "See lehekülg on saadaval ka <b>eesti keeles (et)</b>. Lihtsalt kliki sellel tekstil ja sind suunatakse ümber.", */
+										/* eo */	"none", "This site is also available in <b>Esperanto (eo)</b>. Just click this text to get redirected.",
+										/* et */	"soft", "See lehekülg on saadaval ka <b>eesti keeles (et)</b>. Lihtsalt kliki sellel tekstil ja sind suunatakse ümber.",
 										/* fi */	"soft", "Sivusto on saatavilla myös <b>suomeksi (fi)</b>. Napauta tästä suomenkieliseen versioon.",
 										/* fr */	"none", "This site is also available in <b>Français (fr)</b>. Just click this text to get redirected.",
 										/* gl */	"none", "This site is also available in <b>Galego (gl)</b>. Just click this text to get redirected.",
@@ -85,6 +86,7 @@ l10n.index_redirect_text			= [ /* hy */	"soft", "This site is also available in 
 										/* pl */	"soft", "Ta strona jest dostępna po <b>Polsku (pl)</b>. Po prostu kliknij ten tekst aby tam przejść.",
 										/* pt-BR */	"none", "Este site também está disponível em <b>Português [do Brasil] (pt-BR)</b>. Clique neste texto para ser redirecionado.",
 										/* pt */	"soft", "Este site também está disponível em <b>Português [Europeu] (pt)</b>. Clique neste texto para ser redirecionado.",
+										/* ro */	"none", "This site is also available in <b>Română (ro)</b>. Just click this text to get redirected.",
 										/* ru */	"none", "This site is also available in <b>Русский (ru)</b>. Just click this text to get redirected.",
 										/* gd */	"none", "This site is also available in <b>Gàidhlig (gd)</b>. Just click this text to get redirected.",
 										/* sr */	"none", "This site is also available in <b>Cрпски [ћирилицом] (sr)</b>. Just click this text to get redirected.",
