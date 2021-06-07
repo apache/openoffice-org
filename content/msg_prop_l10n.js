@@ -53,7 +53,7 @@ l10n.index_alert_box_text_title			= "Mouse over title text for the text.";
 // Flag how to redirect and if text should be displayed.
 // This list must match DL.SEL_LANG in /assets/download/globalvars.js
 // "none" = no redirect, no text shown - "soft" = redirect, text shown - "hard" = redirect, no text shown.
-l10n.index_redirect_text			= [ /* hy */	"soft", "This site is also available in <b>Հայերեն (hy)</b>. Just click this text to get redirected.",
+l10n.index_redirect_text			= [ /* hy */	"soft", "Այս կայքը հասանելի է նաև <b> Հայերեն (hy) </b> - ով. Ուղղակի կտտացրեք այս տեքստին ՝ վերահղման համար.",
 										/* ast */	"none", "This site is also available in <b>Asturianu (ast)</b>. Just click this text to get redirected.",
 										/* eu */	"none", "This site is also available in <b>Euskara (eu)</b>. Just click this text to get redirected.",
 										/* bg */	"none", "This site is also available in <b>български език (bg)</b>. Just click this text to get redirected.",
