@@ -14,6 +14,7 @@
   	<!-- French --><option value="fr">Français (fr)</option>
   	<!-- Scottish --><option value="gd">Gàidhlig (gd)</option>
   	<!-- Galician --><option value="gl">Galego (gl)</option>
+  	<!-- Armenian --><option value="hy">Armenian (hy)</option>
   	<!-- Italian --><option value="it">Italiano (it)</option>
   	<!-- Lithuanian --><option value="lt">Lietuvių (lt)</option>
   	<!-- Hungarian --><option value="hu">Magyar (hu)</option>
