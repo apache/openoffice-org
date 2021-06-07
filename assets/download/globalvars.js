@@ -41,7 +41,8 @@ DL.SEL_OS			= [ "win32",	"Windows 32-bit (x86) (EXE)",	    	".exe",
 
 // Data for the <select> element "lang".
 //				    Value	Visible text				Tool tip
-DL.SEL_LANG			= [ "ast",	"Asturian",				"Asturianu",
+DL.SEL_LANG			= [ "hy",	"Armenian",				"Հայերեն",
+				    "ast",	"Asturian",				"Asturianu",
 				    "eu",	"Basque",				"Euskara",
 				    "bg",	"Bulgarian",				"български език",
 				    "ca",	"Catalan",				"Català",
