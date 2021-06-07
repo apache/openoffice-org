@@ -9,7 +9,9 @@
   	<!-- German --><option value="de">Deutsch (de)</option>
   	<!-- English [British]<option value="en-gb">English [British] (en-gb)</option> -->
   	<!-- English [US] --><option value="?redirect=soft" selected="selected">English (en)</option>
+  	<!-- Esperanto --><option value="eo">Esperanto (eo)</option>
   	<!-- Spanish --><option value="es">Español (es)</option>
+  	<!-- Estonian --><option value="et">Estonian (et)</option>
   	<!-- Basque --><option value="eu">Euskara (eu)</option>
   	<!-- French --><option value="fr">Français (fr)</option>
   	<!-- Scottish --><option value="gd">Gàidhlig (gd)</option>
@@ -23,6 +25,7 @@
 	<!-- Polish --><option value="pl">Polski (pl)</option>
   	<!-- Portuguese [Brazilian] --><option value="pt-br">Português [do Brasil] (pt-br)</option>
   	<!-- Portuguese [European] --><option value="pt">Português [Europeu] (pt)</option>
+  	<!-- Romanian --><option value="ro">Romanian (ro)</option>
   	<!-- Slovak --><option value="sk">Slovenčina (sk)</option>
   	<!-- Slovenian --><option value="sl">Slovenščina (sl)</option>
   	<!-- Finnish --><option value="fi">Suomi (fi)</option>
