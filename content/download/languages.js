@@ -36,6 +36,7 @@ DL.language_matrix = {
 "he":  { "-" : [ 'he',    'Hebrew',			'עברית' ] },
 "hi":  { "-" : [ 'hi',    'Hindi',			'हिन्दी' ] },
 "hu":  { "-" : [ 'hu',    'Hungarian',			'Magyar' ] },
+"hy":  { "-" : [ 'hy',    'Armenian',			'Հայերեն' ] },
 "it":  { "-" : [ 'it',    'Italian',			'Italiano' ] },
 "ja":  { "-" : [ 'ja',    'Japanese',			'日本語' ] },
 "km":  { "-" : [ 'km',    'Khmer',			'ភាសាខ្មែរ' ] },
