@@ -51,9 +51,11 @@ l10n.index_alert_box_text_text			= "Text with max. 630 characters. <br /><br /> 
 l10n.index_alert_box_text_title			= "Mouse over title text for the text.";
 
 // Flag how to redirect and if text should be displayed.
-// This list must match DL.SEL_LANG in /assets/download/globalvars.js
-// "none" = no redirect, no text shown - "soft" = redirect, text shown - "hard" = redirect, no text shown.
-l10n.index_redirect_text			= [ /* ast */	"none", "This site is also available in <b>Asturianu (ast)</b>. Just click this text to get redirected.",
+// Entries for new languages have to be done in /assets/msg_prop_l10n.js + /assets/download/globalvars.js + /assets/download/languages.js
+// Usage: "none" = no text shown, no redirect - "soft" = text shown, redirect by click on text - "hard" = no text shown, immediate redirect.
+// All data is used in /content/index.html (see function "setRedirect()")
+l10n.index_redirect_text			= [ /* hy */	"soft", "Այս կայքը հասանելի է նաև <b> Հայերեն (hy) </b> - ով. Ուղղակի կտտացրեք այս տեքստին ՝ վերահղման համար.",
+										/* ast */	"none", "This site is also available in <b>Asturianu (ast)</b>. Just click this text to get redirected.",
 										/* eu */	"none", "This site is also available in <b>Euskara (eu)</b>. Just click this text to get redirected.",
 										/* bg */	"none", "This site is also available in <b>български език (bg)</b>. Just click this text to get redirected.",
 										/* ca */	"none", "This site is also available in <b>Català (ca)</b>. Just click this text to get redirected.",
@@ -66,7 +68,8 @@ l10n.index_redirect_text			= [ /* ast */	"none", "This site is also available in
 										/* nl */	"none", "This site is also available in <b>Nederlands (nl)</b>. Just click this text to get redirected.",
 										/* en-GB */	"none", "This site is also available in <b>English (en-GB)</b>. Just click this text to get redirected.",
 										/* en-US */	"none", "This site is also available in <b>English (en-US)</b>. Just click this text to get redirected.",
-										/* et 	"soft", "See lehekülg on saadaval ka <b>eesti keeles (et)</b>. Lihtsalt kliki sellel tekstil ja sind suunatakse ümber.", */
+										/* eo */	"soft", "Ĉi tiu retejo ankaŭ haveblas en <b> Esperanto (eo) </b>. Simple alklaku ĉi tiun tekston por esti redirektita.",
+										/* et */	"soft", "See lehekülg on saadaval ka <b>eesti keeles (et)</b>. Lihtsalt kliki sellel tekstil ja sind suunatakse ümber.",
 										/* fi */	"soft", "Sivusto on saatavilla myös <b>suomeksi (fi)</b>. Napauta tästä suomenkieliseen versioon.",
 										/* fr */	"none", "This site is also available in <b>Français (fr)</b>. Just click this text to get redirected.",
 										/* gl */	"none", "This site is also available in <b>Galego (gl)</b>. Just click this text to get redirected.",
@@ -79,11 +82,12 @@ l10n.index_redirect_text			= [ /* ast */	"none", "This site is also available in
 										/* ja */	"none", "This site is also available in <b>日本語 (ja)</b>. Just click this text to get redirected.",
 										/* km */	"none", "This site is also available in <b>ភាសាខ្មែរ (km)</b>. Just click this text to get redirected.",
 										/* ko */	"soft", "이 웹사이트는 <b>한국어(ko)</b>로도 이용할 수 있습니다. 여기를 클릭하면 한국어 웹사이트로 이동합니다.",
-										/* lt */	"hard", "Spustelėjus laukelį, tinklalapį galima skaityti <b>lietuviškai</b>.",
+										/* lt */	"hard", "Spustelėjus laukelį, tinklalapį galima skaityti <b>lietuviškai (lt)</b>.",
 										/* no */	"soft", "Dette nettstedet er også tilgjengelig på <b>norsk (no)</b>. Klikk denne teksten for å bli videresendt.",
 										/* pl */	"soft", "Ta strona jest dostępna po <b>Polsku (pl)</b>. Po prostu kliknij ten tekst aby tam przejść.",
 										/* pt-BR */	"none", "Este site também está disponível em <b>Português [do Brasil] (pt-BR)</b>. Clique neste texto para ser redirecionado.",
 										/* pt */	"soft", "Este site também está disponível em <b>Português [Europeu] (pt)</b>. Clique neste texto para ser redirecionado.",
+										/* ro */	"soft", "Acest site este disponibil și în <b> Română (ro) </b>. Doar faceți clic pe acest text pentru a fi redirecționat.",
 										/* ru */	"none", "This site is also available in <b>Русский (ru)</b>. Just click this text to get redirected.",
 										/* gd */	"none", "This site is also available in <b>Gàidhlig (gd)</b>. Just click this text to get redirected.",
 										/* sr */	"none", "This site is also available in <b>Cрпски [ћирилицом] (sr)</b>. Just click this text to get redirected.",
