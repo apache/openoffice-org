@@ -51,8 +51,9 @@ l10n.index_alert_box_text_text			= "Text with max. 630 characters. <br /><br /> 
 l10n.index_alert_box_text_title			= "Mouse over title text for the text.";
 
 // Flag how to redirect and if text should be displayed.
-// This list must match DL.SEL_LANG in /assets/download/globalvars.js
-// "none" = no redirect, no text shown - "soft" = redirect, text shown - "hard" = redirect, no text shown.
+// Entries for new languages have to be done in /assets/msg_prop_l10n.js + /assets/download/globalvars.js + /assets/download/languages.js
+// Usage: "none" = no text shown, no redirect - "soft" = text shown, redirect by click on text - "hard" = no text shown, immediate redirect.
+// All data is used in /content/index.html (see function "setRedirect()")
 l10n.index_redirect_text			= [ /* hy */	"soft", "Այս կայքը հասանելի է նաև <b> Հայերեն (hy) </b> - ով. Ուղղակի կտտացրեք այս տեքստին ՝ վերահղման համար.",
 										/* ast */	"none", "This site is also available in <b>Asturianu (ast)</b>. Just click this text to get redirected.",
 										/* eu */	"none", "This site is also available in <b>Euskara (eu)</b>. Just click this text to get redirected.",
