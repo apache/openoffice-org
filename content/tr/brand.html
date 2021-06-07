@@ -11,7 +11,7 @@
 	<!-- English [US] --><option value="?redirect=soft" selected="selected">English [US] (en-US)</option>
 	<!-- Spanish --><option value="es">Español (es)</option>
 	<!-- Esperanto --><option value="eo">Esperanto (eo)</option>
-	<!-- Estonian --><option value="et">Eesti (et)</option>
+	<!-- Estonian --><option value="et">Eesti keel (et)</option>
 	<!-- Basque --><option value="eu">Euskara (eu)</option>
 	<!-- French --><option value="fr">Français (fr)</option>
 	<!-- Scottish --><option value="gd">Gàidhlig (gd)</option>
