@@ -3,7 +3,7 @@ image_css=rfloatimg
 title=Apache OpenOffice Impress
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Impress](/product/pix/impress.png)](/product/pix/impress-big.png "Click for bigger version")
+[![Screendump of Apache OpenOffice Impress](/product/pix/impress.png)](/product/pix/impress-big.png "Սեղմեք ավելի մեծ տարբերակի համար")
 
 *Տպավորեք ձեր լսարանին ձեր շնորհանդեսներով:*
 
@@ -30,7 +30,7 @@ notice=https://www.apache.org/licenses/LICENSE-2.0
 ապահովում է ցնցող 2D և 3D պատկերներ տեքստից: Ստեղծեք իրական 3D պատկերներ
 ապշեցուցիչ արագությամբ և արձագանքեք:
 
-*.odp Standard* - Պահպանեք ձեր շնորահնդեսները OpenDocument ձևաչափով` գրասենյակային փաստաթղթերի
+*.odp ստանդարտ* - Պահպանեք ձեր շնորահնդեսները OpenDocument ձևաչափով` գրասենյակային փաստաթղթերի
 միջազգային նոր ստանդարտով: Այս XML ձևաչափը նշանակում է, որ դուք կապված չեք Impress-ի օգտագործման հետ։
 Դուք կարող եք մուտք գործել ձեր շնորհանդեսներ ցանկացած OpenDocument-ի համատեղելի
 ծրագրակազմից։
