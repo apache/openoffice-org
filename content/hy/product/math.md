@@ -3,7 +3,7 @@ image_css=rfloatimg
 title=Apache OpenOffice Math
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Click for bigger version")
+[![Screendump of Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Սեղմեք ավելի մեծ տարբերակի համար")
 
 *Հեշտ է Ձեր փաստաթղթերի համար հավասարումներ և բանաձևեր ստեղծելը:*
 
@@ -14,7 +14,7 @@ Math-ը Apache OpenOffice-ի մաթեմատիկական հավասարումնե
 դրանք նաև տեղադրել Apache OpenOffice-ի այլ ծրագրերի մեջ, ինչպիսիք են [Calc][1] և
 [Impress][2]:
 
-Math-ը գտագործելով՝ բանաձև մուտքագրելու երեք հիմնական եղանակ կա.
+Math-ը oգտագործելով՝ բանաձև մուտքագրելու երեք հիմնական եղանակ կա.
 
 - Հավասարումների խմբագրիչում մուտքագրեք նշագրումը:
 - Աջ կտտացրեք հավասարության խմբագրիչին և համատեքստի ընտրացանկից ընտրեք նիշը:
