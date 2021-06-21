@@ -10,6 +10,6 @@ divid=leftnav
   - [Base](/hy/product/base.html)
   - [Math](/hy/product/math.html)
 
-# More
+# Ավելին
 
   - [Suite](/hy/product/suite.html)
