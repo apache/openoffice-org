@@ -70,4 +70,4 @@ Apache OpenOffice-ը **ստանդարտներին համապատասխանող �
 [4]: /projects/native-lang.html
 [6]: https://www.oasis-open.org/
 [7]: https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=office
-[8]: /ինչու/
+[8]: /why/
