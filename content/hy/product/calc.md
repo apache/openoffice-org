@@ -3,7 +3,7 @@ image_css=rfloatimg
 title=Apache OpenOffice Calc
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Calc](/product/pix/calc.png)](/product/pix/calc-big.png "Click for bigger version")
+[![Պաստառի դամփը Apache OpenOffice Calc -ի համար](/product/pix/calc.png)](/product/pix/calc-big.png "Սեղմեք ավելի մեծ տարբերակի համար")
 
 *Ձեր բոլոր թվերը և ցուցակները պահելու լուծումը:*
 
@@ -15,7 +15,7 @@ notice=https://www.apache.org/licenses/LICENSE-2.0
 խաչաձև աղյուսակների ստեղծումը, ամփոփումը և փոխակերպումը իմաստալից տեղեկատվության: 
 
 *Բնական լեզվի բանաձևերը* ձեզ թույլ են տալիս ստեղծել բանաձևեր, օգտագործելով 
-բառերը (ասենք, "sales - costs")։
+բառերը (ասենք, "վաճառքներ - ծախսեր")։
 
 *Խելացի գումարի կոճակը* ինքնաշխատ կերպով տեղադրում է գումարի գործառույթ կամ ենթագումարը 
 կախված համատեքստից:
