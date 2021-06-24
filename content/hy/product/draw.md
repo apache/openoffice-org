@@ -3,7 +3,7 @@ image_css=rfloatimg
 title=Apache OpenOffice Draw
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Draw](/product/pix/draw.png)](/product/pix/draw-big.png "Սեղմեք ավելի մեծ տարբերակի համար")
+[![Պաստառի դամփը Apache OpenOffice Draw -ի համար](/product/pix/draw.png)](/product/pix/draw-big.png "Սեղմեք ավելի մեծ տարբերակի համար")
 
 *Բիզնես գործընթացների ու գծապատկերների ստեղծումը դարձնումէ պարզ:*
 
