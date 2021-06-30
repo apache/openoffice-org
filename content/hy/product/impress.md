@@ -3,7 +3,7 @@ image_css=rfloatimg
 title=Apache OpenOffice Impress
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Impress](/product/pix/impress.png)](/product/pix/impress-big.png "Սեղմեք ավելի մեծ տարբերակի համար")
+[![Պաստառի դամփը Apache OpenOffice Impress -ի համար](/product/pix/impress.png)](/product/pix/impress-big.png "Սեղմեք ավելի մեծ տարբերակի համար")
 
 *Տպավորեք ձեր լսարանին ձեր շնորհանդեսներով:*
 
