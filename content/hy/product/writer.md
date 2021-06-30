@@ -3,7 +3,7 @@ image_css=rfloatimg
 title=Apache OpenOffice Writer
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Writer](/product/pix/writer.png)](/product/pix/writer-big.png "Click for bigger version")
+[![Պաստառի դամփը Apache OpenOffice Writer -ի համար](/product/pix/writer.png)](/product/pix/writer-big.png "Սեղմեք ավելի մեծ տարբերակի համար")
 
 *Թույլ տալ ձեզ կենտրոնանալ ձեր գաղափարները գրելու վրա*
 
