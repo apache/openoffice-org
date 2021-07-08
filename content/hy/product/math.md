@@ -3,7 +3,7 @@ image_css=rfloatimg
 title=Apache OpenOffice Math
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Սեղմեք ավելի մեծ տարբերակի համար")
+[![Պաստառի դամփը Apache OpenOffice Math -ի համար](/product/pix/math.png)](/product/pix/math-big.png "Սեղմեք ավելի մեծ տարբերակի համար")
 
 *Հեշտ է Ձեր փաստաթղթերի համար հավասարումներ և բանաձևեր ստեղծելը:*
 
