@@ -12,8 +12,8 @@ Sommige gebruikers zijn in het begin bezorgd door dit argument.  Hoe kan gratis 
 
 OpenOffice, door zijn bestaan van meer dan enkele tientallen jaren, heeft en blijft profiteren van bijdragen van vele professionals.  Sommigen worden door hun werkgevers gesponsord om vrijwilligerswerk
 te doen binnen het project.  Op enig moment hebben Sun, Oracle, Novell, Redhat, IBM en anderen hun werknemers gesponsord om aan OpenOffice te werken.  Sommige professionals zijn recent gepensioneerd en
-worken aan het project om hun vaardigheden op peil te houden of om "terug te geven" aan de gemeenschap van open bron.  Anderen hebben een bedrijf dat is gebaseerd op het consulteren in OpenOffice, en zijn vrijwilliger
-in het project om dicht bij potentiële klanten te zijn.   Anderen zijn studenten, die studeren in het gebied van software-ontwikkeling of gerelateerd veld, en nemen in ons project deel in een vorm van electronische 
+werken aan het project om hun vaardigheden op peil te houden of om "terug te geven" aan de gemeenschap van open bron.  Anderen hebben een bedrijf dat is gebaseerd op het consulteren in OpenOffice, en zijn vrijwilliger
+in het project om dicht bij potentiële klanten te zijn.  Anderen zijn studenten, die studeren in het gebied van software-ontwikkeling of gerelateerd veld, en nemen in ons project deel in een vorm van electronische 
 stages.  Naast onze vrijwilligers zijn er verschillende programmeurs met meer dan tientallen jaren expertise die werken aan OpenOffice.  We hebben geluk dat zo veel talent aan dit project werkt
 dat het veel bedrijven jaloers zou maken.
 
