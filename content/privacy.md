@@ -25,3 +25,6 @@ data with any personally identifying information from other sources.
 
 By using this website, you consent to the collection of this data in the
 manner and for the purpose described above.
+
+The Apache OpenOffice application itself does not collect or distribute any
+of your personal information.
