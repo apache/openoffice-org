@@ -1,0 +1,32 @@
+--- /projects/sise/openoffice/devel/workpits/OO641C/source/sysui/unix/office/scripts/soffice.sh	2001/09/19 11:24:33	1.5
++++ sysui/unix/office/scripts/soffice.sh	2002/01/15 20:30:14
+@@ -157,6 +157,11 @@
+     export LD_LIBRARYN32_PATH
+     ;;
+ 
++  IRIX64)
++    LD_LIBRARYN32_PATH=:"$sd_progsub":"$sd_prog":$LD_LIBRARYN32_PATH
++    export LD_LIBRARYN32_PATH
++    ;;
++
+   Linux)
+     LD_LIBRARY_PATH="$sd_progsub":"$sd_prog":$LD_LIBRARY_PATH
+     export LD_LIBRARY_PATH
+@@ -171,7 +176,16 @@
+ # extend the ld_library_path for java: javaldx checks the sofficerc for us
+ java_ld_library_path=`"$sd_prog/javaldx" "$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"`
+ if [ "$java_ld_library_path" != "" ] ; then
+-	LD_LIBRARY_PATH=${java_ld_library_path}:${LD_LIBRARY_PATH}
++	case $sd_platform in
++		IRIX)
++			LD_LIBRARYN32_PATH=${java_ld_library_path}:${LD_LIBRARYN32_PATH}
++			;;
++		IRIX64)
++			LD_LIBRARYN32_PATH=${java_ld_library_path}:${LD_LIBRARYN32_PATH}
++			;;
++		*)
++			LD_LIBRARY_PATH=${java_ld_library_path}:${LD_LIBRARY_PATH}
++	esac
+ fi
+ 
+ # set java environment variables

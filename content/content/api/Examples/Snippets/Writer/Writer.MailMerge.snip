@@ -1,0 +1,612 @@
+<!--
+$RCSfile: Writer.MailMerge.snip,v $
+
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2004/09/30 06:31:59 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="Java" application="Writer">
+
+<keywords>
+	<keyword>mailmerge</keyword>
+</keywords>
+
+<authors>
+	<author id="toconnor" initial="true" email="toconnor@openoffice.org" copyright="Sun Microsystems Inc">Tomas O Connor</author>
+</authors>
+
+<question heading="Mail Merger">
+How do I execute a MailMerge using the OpenOffice.org API
+</question>
+
+<answer>
+<p>Compiling the sample program</p>
+<p>============================</p>
+<p>Set up your CLASSPATH environment variable as follows (substitute the path</p>
+<p>to your OpenOffice.org installation for /export/home/staroffice below):</p>
+<p>% setenv CLASSPATH ${CLASSPATH}:/export/home/staroffice/program/classes/jurt.jar:/export/home/staroffice/program/classes/ridl.jar:/export/home/staroffice/program/classes/sandbox.jar:/export/home/staroffice/program/classes/unoil.jar:/export/home/staroffice/program/classes/juh.jar:.</p>
+<p>Now compile the sample program:</p>
+<p>% javac MailMerger.java</p>
+<p>Running the sample program</p>
+<p>==========================</p>
+<p>First start OpenOffice.org from the command line with the -accept flag:</p>
+<p>% /export/home/staroffice/soffice &quot;-accept=socket,host=localhost,port=8100;urp;StarOffice.ServiceManager&quot;</p>
+<p>Note: If you use a different port than 8100, you will need to change the</p>
+<p>DEFAULT_CONNECTION_STRING variable in MailMerger.java and recompile.</p>
+<p>Copy the values.csv file into a directory on your machine eg. /export/home/csv</p>
+<p>The MailMerger program takes two possible flags:</p>
+<p>% java MailMerger -create &gt;URL of Data Source directory&amp; &gt;URL to save template file&amp; &gt;Data Source name&amp; &gt;Table name&amp;</p>
+<p>The Data Source directory paramter is a file URL and should point to</p>
+<p>the directory where your .csv files are stored eg. ///export/home/csv</p>
+<p>The template file URL should have the extension .stw to specify that it</p>
+<p>is a OpenOffice.org template you want stored eg. ///export/home/mytemplate.stw</p>
+<p>The Table name parameter should be the name of one of the tables stored in</p>
+<p>your Data Source directory (each .csv file in the directory is treated as</p>
+<p>a table, it&apos;s name is the filename with the .csv extension removed).</p>
+<p>So the command will look something like:</p>
+<p>% java MailMerger -create ///export/home/csv ///export/home/mytemplate.stw mydatasource values</p>
+<p>This command will:</p>
+<p>fields in the Writer document</p>
+<p>name provided</p>
+<p>You can then run a MailMerge as follows:</p>
+<p>% java MailMerger -merge &gt;URL of template file&amp; &gt;Data Source name&amp; &gt;Table name&amp;</p>
+<p>This will perform a MailMerge using the template file, data source and</p>
+<p>table names provided. These should be the same names that you used in</p>
+<p>the -create command</p>
+<p>So the corresponding command for the -create example above would be:</p>
+<p>% java MailMerger -merge ///export/home/mytemplate.stw mydatasource values</p>
+<p>Further Information</p>
+<p>===================</p>
+<p>http://api.openoffice.org/DevelopersGuide/DevelopersGuide.html</p>
+<p>The First Steps chapter gives a good understanding of the basic concepts</p>
+<p>behind the OpenOffice.org API.</p>
+<p>references to the sections of the Developer Guide which cover the APIs</p>
+<p>used in the program.</p>
+<p>http://api.openoffice.org/common/ref/com/sun/star/module-ix.html</p>
+<p>http://www.openoffice.org/dev_docs/source/sdk/index.html</p>
+<p>This SDK will be the basis of the OpenOffice.org SDK. It contains examples</p>
+<p>which help you to get started with writing Java programs for the OpenOffice.org</p>
+<p>API.</p>
+<p>Example contents of values.csv file</p>
+<p>=========================</p>
+<p>Name,Address,Telephone</p>
+<p>Joe,Kerry,9933339</p>
+<p>Tom,Dublin,9988888</p>
+<listing>
+/*
+Before writing any software using the OpenOffice.org SDK it is important
+to understand how OpenOffice.org uses services and interfaces to access
+objects and how to set object properties.
+
+The following sections in the Developers Guide give a good introduction
+to these topics:
+
+&quot;Services&quot;, Section 2.5.1, p34
+&quot;Using Interfaces&quot;, Section 2.5.1, p36
+&quot;Using Properties&quot;, Section 2.5.1, p38
+*/
+
+// Classes for bootstrapping connection to OpenOffice.org
+import com.sun.star.comp.helper.Bootstrap;
+import com.sun.star.uno.XNamingService;
+import com.sun.star.bridge.XUnoUrlResolver;
+
+// Classes for accessing interfaces of the OpenOffice.org API
+import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lang.XComponent;
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.uno.UnoRuntime;
+
+// Classes for loading and storing documents
+import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.XStorable;
+
+// Classes for property access
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.NamedValue;
+&quot;MailMerger.java&quot; 469 lines, 18299 characters
+icarus% !c
+cat MailMerger.java
+/*
+Before writing any software using the OpenOffice.org SDK it is important
+to understand how OpenOffice.org uses services and interfaces to access
+objects and how to set object properties.
+
+The following sections in the Developers Guide give a good introduction
+to these topics:
+
+&quot;Services&quot;, Section 2.5.1, p34
+&quot;Using Interfaces&quot;, Section 2.5.1, p36
+&quot;Using Properties&quot;, Section 2.5.1, p38
+*/
+
+// Classes for bootstrapping connection to OpenOffice.org
+import com.sun.star.comp.helper.Bootstrap;
+import com.sun.star.uno.XNamingService;
+import com.sun.star.bridge.XUnoUrlResolver;
+
+// Classes for accessing interfaces of the OpenOffice.org API
+import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lang.XComponent;
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.uno.UnoRuntime;
+
+// Classes for loading and storing documents
+import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.XStorable;
+
+// Classes for property access
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.NamedValue;
+
+// Classes used for manipulation of text documents
+import com.sun.star.text.XTextDocument;
+import com.sun.star.text.XText;
+import com.sun.star.text.XDependentTextField;
+
+// MailMerge Classes
+import com.sun.star.text.XMailMergeBroadcaster;
+import com.sun.star.text.XMailMergeListener;
+import com.sun.star.text.MailMergeEvent;
+import com.sun.star.task.XJob;
+
+// Database access Classes
+import com.sun.star.sdbc.XRowSet;
+import com.sun.star.sdbc.XResultSet;
+import com.sun.star.sdbc.XResultSetMetaDataSupplier;
+import com.sun.star.sdbc.XResultSetMetaData;
+
+public class MailMerger {
+
+    // These objects are used for creating and accessing OpenOffice.org API objects
+    private XMultiComponentFactory mxMCF;
+    private XMultiServiceFactory mxMSF;
+    private XComponentContext mxComponentContext;
+    private XComponentLoader mxComponentLoader;
+
+    // The default connection string used to connect to running OpenOffice.org
+    public static final String DEFAULT_CONNECTION_STRING =
+        &quot;uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager&quot;;
+
+    // The URL of the directory with the Data Source tables
+    private String mDataSourceDir;
+
+    // The name of the Data Source to be used for the mail merge
+    private String mDataSourceName;
+
+    // The name of the Table in that Data Source to used for the mail merge
+    private String mTableName;
+
+    // The URL to which the generated template should be saved
+    private String mFileURL;
+
+    public MailMerger(String dsdir, String file, String db, String table) {
+        mDataSourceDir = dsdir;
+        mFileURL = file;
+        mDataSourceName = db;
+        mTableName = table;
+    }
+
+    public MailMerger(String file, String db, String table) {
+        mFileURL = file;
+        mDataSourceName = db;
+        mTableName = table;
+    }
+
+    public static void main(String args[]) {
+
+        if (args.length &lt; 4) {
+            printUsage();
+            System.exit(1);
+        }
+
+        if (args[0].equals(&quot;-create&quot;) &amp;&amp; args.length == 5) {
+            MailMerger mm = new MailMerger(args[1], args[2], args[3], args[4]);
+            mm.setupConnection();
+
+            XTextDocument myDoc = mm.openWriter();
+            mm.createNewDataSource();
+            mm.insertFields(myDoc);
+            mm.saveAsTemplate(myDoc);
+        }
+        else if (args[0].equals(&quot;-merge&quot;) &amp;&amp; args.length == 4) {
+            MailMerger mm = new MailMerger(args[1], args[2], args[3]);
+            mm.setupConnection();
+            mm.doMerge();
+        }
+        else {
+            printUsage();
+            System.exit(1);
+        }
+    }
+
+    public static void printUsage() {
+        System.err.println(
+            &quot;Usage: java MailMerger -create &lt;URL of Data Source directory&gt; &quot; +
+            &quot;&lt;URL to save template file&gt; &quot; +
+            &quot;&lt;Data Source name&gt; &lt;Table name&gt;&quot;);
+
+        System.err.println(
+            &quot;Usage: java MailMerger -merge &quot; + &quot;&lt;URL of template file&gt; &quot; +
+            &quot;&lt;Data Source name&gt; &lt;Table name&gt;&quot;);
+
+        System.err.println(&quot;\ne.g.:&quot;);
+
+        System.err.println(&quot;java MailMerger -create file://&quot; +
+            System.getProperty(&quot;user.home&quot;) +
+            &quot;/mydatasourcedir file://&quot; +
+            System.getProperty(&quot;user.home&quot;) +
+            &quot;/mytemplate.stw mydatasource mytable&quot;);
+
+        System.err.println(&quot;java MailMerger -merge file://&quot; +
+            System.getProperty(&quot;user.home&quot;) +
+            &quot;/mytemplate.stw mydatasource mytable&quot;);
+    }
+
+    // Refer to DevelopersGuide.pdf, p30-33, &quot;2.3.4 First Connection&quot;.
+    public void setupConnection() {
+        try {
+            /* Bootstraps a component context with the jurt base components
+               registered. Component context to be granted to a component for
+               running. Arbitrary values can be retrieved from the context. */
+            mxComponentContext =
+                Bootstrap.createInitialComponentContext(null);
+
+            /* Gets the service manager instance to be used (or null).
+               This method has been added for convenience, because the
+               service manager is a often used object. */
+            mxMCF = mxComponentContext.getServiceManager();
+
+            /* Creates an instance of the component UnoUrlResolver which
+               supports the services specified by the factory. */
+            Object objectUrlResolver =
+                mxMCF.createInstanceWithContext(
+                    &quot;com.sun.star.bridge.UnoUrlResolver&quot;, mxComponentContext);
+
+            // Create a new url resolver
+            XUnoUrlResolver xurlresolver = (XUnoUrlResolver)
+                UnoRuntime.queryInterface(XUnoUrlResolver.class,
+                    objectUrlResolver);
+
+            // Resolves an object that is specified as follow:
+            // uno:&lt;connection description&gt;;&lt;protocol description&gt;;&lt;initial
+            // object name&gt;
+            Object objectInitial = xurlresolver.resolve(
+                DEFAULT_CONNECTION_STRING);
+
+            // Create a service manager from the initial object
+            mxMCF = (XMultiComponentFactory)
+                UnoRuntime.queryInterface(XMultiComponentFactory.class,
+                    objectInitial);
+
+            // Query for the XPropertySet interface.
+            XPropertySet xpropertysetMultiComponentFactory = (XPropertySet)
+                UnoRuntime.queryInterface(XPropertySet.class, mxMCF);
+
+            // Get the default context from the office server.
+            Object objectDefaultContext =
+                xpropertysetMultiComponentFactory.getPropertyValue(
+                    &quot;DefaultContext&quot;);
+
+            // Query for the interface XComponentContext.
+            mxComponentContext = (XComponentContext) UnoRuntime.queryInterface(
+                XComponentContext.class, objectDefaultContext);
+
+            /* A desktop environment contains tasks with one or more
+               frames in which components can be loaded. Desktop is the
+               environment for components which can instanciate within
+               frames. */
+            mxComponentLoader = (XComponentLoader)
+                UnoRuntime.queryInterface(XComponentLoader.class,
+                    mxMCF.createInstanceWithContext(
+                        &quot;com.sun.star.frame.Desktop&quot;, mxComponentContext));
+
+            // Query for an XMultiServiceFactory instance from the global
+            // service manager
+            if (mxMSF == null) {
+                mxMSF = (XMultiServiceFactory)UnoRuntime.queryInterface(
+                    XMultiServiceFactory.class,
+                    mxComponentContext.getServiceManager());
+            }
+        }
+        catch(Exception exception) {
+            System.err.println(exception);
+        }
+    }
+
+    // Refer to DevelopersGuide.pdf, p371, Section 7.2.1
+    // &quot;Creating and Loading Text Documents&quot;
+    public XTextDocument openWriter() {
+
+        XTextDocument oDoc = null;
+        XComponent aDoc = null;
+
+        try {
+            PropertyValue[] loadProps = new PropertyValue[0];
+
+            aDoc = mxComponentLoader.loadComponentFromURL(
+                &quot;private:factory/swriter&quot;, &quot;_blank&quot;, 0, loadProps);
+
+            oDoc = (XTextDocument) UnoRuntime.queryInterface(
+                XTextDocument.class, aDoc);
+        }
+        catch(Exception e){
+            System.err.println(&quot;Error opening new document&quot; + e);
+        }
+        return oDoc;
+    }
+
+    // Refer to DevelopersGuide.pdf, p665, Section 12.2.2
+    // &quot;Adding and Editing Datasources&quot;.
+    public void createNewDataSource() {
+
+        try{
+
+            // Retrieve the database context at the global service manager
+            Object dbContext = mxMSF.createInstance(
+                &quot;com.sun.star.sdb.DatabaseContext&quot;);
+
+            // Get its XSingleServiceFactory interface
+            XSingleServiceFactory factory =
+                (XSingleServiceFactory)UnoRuntime.queryInterface(
+                    XSingleServiceFactory.class, dbContext);
+
+            // Use the XSingleServiceFactory interface to instantiate an
+            // empty data source
+            Object dataSource = factory.createInstance();
+
+            // Register it with the database context
+            XNamingService xServ = (XNamingService)UnoRuntime.queryInterface(
+                XNamingService.class, factory);
+            xServ.registerObject(mDataSourceName, dataSource);
+
+            // Set the necessary data source properties
+            XPropertySet props = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet.class, dataSource);
+
+            props.setPropertyValue(&quot;URL&quot;, &quot;sdbc:flat:&quot; + mDataSourceDir);
+
+            PropertyValue[] cProps = new PropertyValue[3];
+            cProps[0] = new PropertyValue();
+            cProps[0].Name = &quot;Extension&quot;;
+            cProps[0].Value = &quot;csv&quot;;
+            cProps[1] = new PropertyValue();
+            cProps[1].Name = &quot;ThousandsDelimiter&quot;;
+            cProps[1].Value = &quot;&quot;;
+            cProps[2] = new PropertyValue();
+            cProps[2].Name = &quot;FieldDelimiter&quot;;
+            cProps[2].Value = &quot;,&quot;;
+            props.setPropertyValue(&quot;Info&quot;, cProps);
+        }
+        catch(Exception e) {
+            System.err.println (&quot;Error creating data source: &quot; + e);
+        }
+    }
+
+    /* This method querys the Data Source for a rowset. Using the metadata
+       of the resulting XResultSet we get the title of each column. We
+       insert the title of each column as a field in the text document
+     */
+    public void insertFields(XTextDocument myDoc) {
+
+        try {
+            XText xText = myDoc.getText();
+
+            // Refer to DevelopersGuide.pdf, p688-691, Section 12.3.1
+            // &quot;The RowSet Service&quot;. The code is based on the example on p690.
+            XMultiServiceFactory docFactory = (XMultiServiceFactory)
+                UnoRuntime.queryInterface (XMultiServiceFactory.class, myDoc);
+
+            // Get an instance of the XRowSet interface, set up the properties
+            // for the Data Source we want and execute the query
+            XRowSet xRowSet = (XRowSet)UnoRuntime.queryInterface(
+                XRowSet.class, mxMSF.createInstance(&quot;com.sun.star.sdb.RowSet&quot;));
+            XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet.class, xRowSet);
+            xProp.setPropertyValue(&quot;DataSourceName&quot;, mDataSourceName);
+            xProp.setPropertyValue(&quot;CommandType&quot;,
+                new Integer(com.sun.star.sdb.CommandType.TABLE));
+            xProp.setPropertyValue(&quot;Command&quot;, mTableName);
+
+            xRowSet.execute();
+
+            // Get the XResultSet interface from xRowSet
+            XResultSet xResultSet = (XResultSet)UnoRuntime.queryInterface(
+                XResultSet.class, xRowSet);
+
+            // Refer to DevelopersGuide.pdf p711, Section 12.3.4
+            // &quot;ResultSetMetaData&quot;
+            XResultSetMetaDataSupplier xRsMetaSup =
+                (XResultSetMetaDataSupplier)UnoRuntime.queryInterface(
+                    XResultSetMetaDataSupplier.class, xResultSet);
+            XResultSetMetaData xRsMetaData =  xRsMetaSup.getMetaData();
+
+            int columnCount =  xRsMetaData.getColumnCount();
+
+            for (int i=1 ;i &lt;= columnCount; ++i) {
+
+                String columnTitle = xRsMetaData.getColumnName(i);
+
+                /* Refer to DevelopersGuide.pdf, p405-411, Section 7.3.5
+                   &quot;Text Fields&quot;. NB: A database field must be linked
+                   to a FieldMaster field.  p411 contains an example
+                   with a Datefield. The same principles apply here as in
+                   Datefield example
+                 */
+
+                Object dbobj = docFactory.createInstance(
+                    &quot;com.sun.star.text.TextField.Database&quot;);
+
+                XDependentTextField xUserField =
+                    (XDependentTextField) UnoRuntime.queryInterface (
+                        XDependentTextField.class, dbobj);
+
+                // Set the Content property on the XDependentTextField
+                // Otherwise that text field will appear without any text in
+                // the document
+                XPropertySet props =
+                    (XPropertySet) UnoRuntime.queryInterface(
+                        XPropertySet.class, xUserField);
+                props.setPropertyValue(&quot;Content&quot;, &quot;&lt;&quot; + columnTitle + &quot;&gt;&quot;);
+
+                // Set up a FieldMaster.Database instance
+                Object fmobj = docFactory.createInstance(
+                    &quot;com.sun.star.text.FieldMaster.Database&quot;);
+
+                XPropertySet mprops =
+                    (XPropertySet) UnoRuntime.queryInterface(
+                        XPropertySet.class, fmobj);
+                mprops.setPropertyValue (&quot;DataBaseName&quot;, mDataSourceName);
+                mprops.setPropertyValue (&quot;CommandType&quot;, new Integer(0));
+                mprops.setPropertyValue (&quot;DataColumnName&quot;, columnTitle);
+                mprops.setPropertyValue (&quot;DataTableName&quot;, mTableName);
+
+                // Attach the field master to the user field
+                xUserField.attachTextFieldMaster (mprops);
+
+                xText.insertTextContent(xText.getEnd(), xUserField, false);
+                xText.insertString(xText.getEnd(), &quot;\n some text &quot;, false);
+            }
+        }
+        catch (Exception e) {
+            System.err.println(&quot;Error inserting fields: &quot; + e);
+        }
+    }
+
+    // Refer to DevelopersGuide.pdf, p372, Section 7.2.2 &quot;Exporting&quot;.
+    public void saveAsTemplate(XTextDocument doc) {
+
+        try {
+            // Query for XStorable interface of object
+            XStorable xStorable = (XStorable) UnoRuntime.queryInterface(
+                XStorable.class, doc);
+
+            // Set up the Overwrite and FilterName properties
+            PropertyValue[] propertyvalue = new PropertyValue[2];;
+            propertyvalue[0] = new PropertyValue();
+            propertyvalue[0].Name = &quot;Overwrite&quot;;
+            propertyvalue[0].Value = new Boolean(true);
+            propertyvalue[1] = new PropertyValue();
+            propertyvalue[1].Name = &quot;FilterName&quot;;
+            propertyvalue[1].Value = &quot;swriter: StarOffice XML (Writer)&quot;;
+
+            // Store the document
+            xStorable.storeAsURL(mFileURL, propertyvalue);
+        }
+        catch (Exception e) {
+            System.err.println(&quot;Error while saving: &quot; + e);
+        }
+    }
+
+    /*
+       The com.sun.star.text.MailMerge service is a new API introduced in
+       OpenOffice.org 1.1. It provides programmatic access to the Tools/Mail Merge
+       feature available via the OpenOffice.org 1.1 UI.
+
+       As the feature is new to OpenOffice.org 1.1, it is not documented in the
+       Developers Guide or in the API reference. It should be available once
+       the OpenOffice.org 1.1 SDK is released
+
+       We were able to find out how to use the API by reading the source code
+       of the idl files for the MailMerge service:
+
+
+http://api.openoffice.org/source/browse/api/offapi/com/sun/star/text/MailMerge.idl
+
+       and also by looking at the tests that had been written for the
+       service by the QA project:
+
+
+http://qa.openoffice.org/source/browse/qa/qadevOOo/tests/java/mod/_sw/SwXMailMerge.java
+
+       If all else fails then you can probably get some help on the
+       dev@api.openoffice.org mailing list
+    */
+    public void doMerge() {
+
+        Object mmservice = null;
+
+        try {
+            // Create an instance of the MailMerge service
+            mmservice = mxMCF.createInstanceWithContext(
+                &quot;com.sun.star.text.MailMerge&quot;, mxComponentContext);
+        }
+        catch (Exception e) {
+            System.err.println(&quot;Error getting MailMerge service: &quot; + e);
+            return;
+        }
+
+        // Get the XPropertySet interface of the mmservice object
+        XPropertySet oObjProps = (XPropertySet)
+            UnoRuntime.queryInterface(XPropertySet.class, mmservice);
+
+        try {
+
+            // Set up the properties for the MailMerge command
+            oObjProps.setPropertyValue(&quot;DataSourceName&quot;, mDataSourceName);
+
+            oObjProps.setPropertyValue(&quot;Command&quot;, mTableName);
+
+            oObjProps.setPropertyValue(&quot;CommandType&quot;,
+                new Integer(com.sun.star.sdb.CommandType.TABLE));
+
+            oObjProps.setPropertyValue(&quot;OutputType&quot;,
+                new Short(com.sun.star.text.MailMergeType.PRINTER));
+
+            oObjProps.setPropertyValue(&quot;DocumentURL&quot;, mFileURL);
+
+        } catch (Exception e) {
+            System.err.println(&quot;Error setting MailMerge properties&quot; + e);
+            return;
+        }
+
+        // Get XJob interface from MailMerge service and call execute on it
+        XJob job = (XJob) UnoRuntime.queryInterface(XJob.class, mmservice);
+
+        try {
+            job.execute(new NamedValue[0]);
+        }
+        catch (com.sun.star.lang.IllegalArgumentException iae) {
+            System.err.println(&quot;Caught IllegalArgumentException: &quot; + iae);
+        }
+        catch (com.sun.star.uno.Exception e) {
+            System.err.println(&quot;Caught UNO Exception: &quot; + e);
+        }
+    }
+} 
+</listing>
+</answer>
+
+<changelog>
+	<change author-id="toconnor" date="2004-09-30">Initial version</change>
+</changelog>
+
+</snippet>

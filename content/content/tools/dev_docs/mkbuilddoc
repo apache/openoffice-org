@@ -1,0 +1,112 @@
+#!/usr/bin/perl
+
+# perl script 'mkbuilddoc'
+# Aug 24 2001 / Armin.Theissen@sun.com
+# Mar 25 2005 / Volker Quetschke (vq@openoffice.org)
+#
+# creates the build documentation webpages for platforms
+# linux, solaris and windows out of the template file.
+#
+# The optional -OOo1.1.x parameter creates OOo 1.1.x build
+# instructions, i.e. the filename with "_1.1.x".
+#
+# name of template: build_template[_1.1.x].html
+# name of resulting linux build doc. file: build_linux[_1.1.x].html
+#                   solaris                build_solaris[_1.1.x].html
+#                   windows with 4NT       build_windows[_1.1.x].html
+#                   windows with tcsh      build_windows_tcsh[_1.1.x].html
+# 
+# usage: ./mkbuildoc [-OOo1.1.x] linux
+#        ./mkbuildoc [-OOo1.1.x] solaris
+#        ./mkbuildoc [-OOo1.1.x] windows
+#        ./mkbuildoc [-OOo1.1.x] windows_tcsh
+
+#use strict;                        # pragma
+
+### global vars ###
+$platform = "";
+$doc_ver = "";
+
+### main ###
+
+# get the platform from the argument
+#
+get_options();
+
+if ( ! $platform ) {
+    usage();
+    print STDERR "\nNo or invalid platform given, please choose one.";
+    exit 1;
+}
+
+$platform =~ tr/A-Z/a-z/;
+$outfile = "build_".$platform.$doc_ver.".html";
+print "outfile will be $outfile\n";
+
+# read in template file as one long string
+#
+$infile = "build_template".$doc_ver.".html";
+open(IN, $infile) or die "Input file [$infile] missing!";
+undef $/;
+$text = <IN>;
+close(IN);
+$/ = "\n";
+
+#remove the tags for the specified platform out of the text:
+#
+if ($platform eq "linux") {
+	$text =~ s/<Linux>|<\/Linux>//g;
+	$text =~ s/<LinuxSolaris>|<\/LinuxSolaris>//g;
+	$text =~ s/<LinuxSolarisWin_tcsh>|<\/LinuxSolarisWin_tcsh>//g;
+} elsif ($platform eq "solaris") {
+	$text =~ s/<Solaris>|<\/Solaris>//g; 
+	$text =~ s/<LinuxSolaris>|<\/LinuxSolaris>//g;
+	$text =~ s/<LinuxSolarisWin_tcsh>|<\/LinuxSolarisWin_tcsh>//g;
+} elsif ($platform eq "windows_tcsh") {
+	$text =~ s/<Win_tcsh>|<\/Win_tcsh>//g;
+	$text =~ s/<LinuxSolarisWin_tcsh>|<\/LinuxSolarisWin_tcsh>//g;
+	$text =~ s/<WindowsWin_tcsh>|<\/WindowsWin_tcsh>//g;
+} elsif ($platform eq "windows") {
+	$text =~ s/<Windows>|<\/Windows>//g;
+	$text =~ s/<WindowsWin_tcsh>|<\/WindowsWin_tcsh>//g;
+}
+
+#remove all text between the remaining tags including the tags. 
+#
+$text =~ s/<Linux>[\d\D]*?<\/Linux>//g;
+$text =~ s/<Solaris>[\d\D]*?<\/Solaris>//g;
+$text =~ s/<Win_tcsh>[\d\D]*?<\/Win_tcsh>//g;
+$text =~ s/<LinuxSolaris>[\d\D]*?<\/LinuxSolaris>//g;
+$text =~ s/<LinuxSolarisWin_tcsh>[\d\D]*?<\/LinuxSolarisWin_tcsh>//g;
+$text =~ s/<Windows>[\d\D]*?<\/Windows>//g;
+$text =~ s/<WindowsWin_tcsh>[\d\D]*?<\/WindowsWin_tcsh>//g;
+
+# write out the result
+#
+open(OUT, ">$outfile");
+print OUT "$text";
+close(OUT);
+
+
+### Procedures ###
+
+#
+# Get all options passed
+#
+sub get_options {
+    my $arg;
+    while ($arg = shift @ARGV) {
+        $arg =~ /^-OOo1.1.x$/i and $doc_ver="_1.1.x" and next;
+        $arg =~ /^linux$|^solaris$|^windows$|^windows_tcsh$/i     and $platform=$arg and next;
+    };
+};
+
+sub usage {
+    print STDERR "\nmkbuilddoc\n\n";
+    print STDERR "Syntax:    mkbuilddoc [-OOo1.1.x] [linux|solaris|windows|windows_tcsh]\n";
+    print STDERR "Example:   mkbuilddoc linux\n";
+    print STDERR "           - creates build_linux.html from build_template.html\n\n";
+    print STDERR "Example:   mkbuilddoc -OOo1.1.x windows\n";
+    print STDERR "           - creates build_windows_1.1.x.html from build_template_1.1.x.html\n\n";
+    print STDERR "Default:   - None. Provide a target!\n";
+};
