@@ -1,0 +1,60 @@
+--- /projects/sise/openoffice/devel/workpits/source/OO641C/solenv/inc/unxirgm.mk	Wed Mar 13 16:39:42 2002
++++ solenv/inc/unxirgm.mk	Wed Mar 13 16:36:35 2002
+@@ -16,9 +16,9 @@
+ #CC=			CC -KPIC -c -n32 -ptused -OPT:Olimit=20523 
+ CC=			g++ -c
+ CFLAGS=		$(INCLUDE)
+-CDEFS+=	-DVCL -D_PTHREADS
+-CDEFS+=	-D_STD_NO_NAMESPACE -D_UNO_NO_NAMESPACE -DHAVE_UNISTD_H -DSTLPORT_VERSION=0x450
+-#CDEFS+=	-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE -DHAVE_UNISTD_H -DSTLPORT_VERSION=0x450
++CDEFS+=	-DVCL -D_PTHREADS -DFORCE_SYSALLOC
++#CDEFS+=	-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
++CDEFS+= -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=0x450
+ # CFLAGS+=	-D__STL_NATIVE_INCLUDE_PATH=/usr/include -D__STL_NATIVE_C_INCLUDE_PATH=/usr/include
+ # CFLAGS+=	-D_STL_NATIVE_INCLUDE_PATH=/usr/include -D_STL_NATIVE_C_INCLUDE_PATH=/usr/include
+ CFLAGSCC=	 -w -c -nostdinc
+@@ -45,14 +45,15 @@
+ # -update_registry <file> :	Is needed to link several shared libraries
+ #				**VALID MECHANISM SOMETIMES MISSING FOR LOCAL STANDS**
+ #
+ LINK=			g++
+ LINKFLAGS=	-L/usr/lib32 -Wl,-no_unresolved
++LINKVERSIONMAPFLAG= -Wl,-exports_file
+ 
+ .IF "$(TARGETTHREAD)"=="MT"
+-LINKFLAGSAPPGUI= $(THREADLIB) -Wl,-multigot -nodefaultlibs
+-LINKFLAGSAPPCUI= $(THREADLIB) -Wl,-multigot -nodefaultlibs
+-LINKFLAGSSHLGUI= $(THREADLIB) -shared -nodefaultlibs
+-LINKFLAGSSHLCUI= $(THREADLIB) -shared -nodefaultlibs
++LINKFLAGSAPPGUI= -Wl,-multigot -nodefaultlibs
++LINKFLAGSAPPCUI= -Wl,-multigot -nodefaultlibs
++LINKFLAGSSHLGUI= -shared -nodefaultlibs
++LINKFLAGSSHLCUI= -shared -nodefaultlibs
+ .ELSE
+ LINKFLAGSAPPGUI= -Wl,-multigot -nodefaultlibs
+ LINKFLAGSAPPCUI= -Wl,-multigot -nodefaultlibs
+@@ -65,8 +66,7 @@
+ LINKFLAGSDEBUG= -g
+ LINKFLAGSOPT=
+ 
+-#LINKFLAGSSHLGUI += -Wl,-Bsymbolic -Wl,-soname -Wl,$(DLLPRE)$(SHL$(TNR)TARGET)$(DLLPOST) $(DYNAMIC)
+-#LINKFLAGSSHLCUI += -Wl,-Bsymbolic -Wl,-soname -Wl,$(DLLPRE)$(SHL$(TNR)TARGET)$(DLLPOST) $(DYNAMIC)
++SONAME_SWITCH = -Wl,-soname -Wl,
+ 
+ APPLINKSTATIC=-Bstatic
+ APPLINKSHARED=-Bsymbolic
+@@ -76,11 +76,11 @@
+ STDSLOGUI=
+ STDOBJCUI=
+ STDSLOCUI=
+-STDLIBGUIST=	$(DYNAMIC) -lX11 -lc -lm
++STDLIBGUIST=	$(DYNAMIC) -lXt -lX11 -lc -lm
+ STDLIBCUIST=	$(DYNAMIC) -lgcc -lc
+-STDLIBGUIMT=	$(THREADLIB) $(DYNAMIC) -lX11 -lm -lgcc -lc
++STDLIBGUIMT=	$(THREADLIB) $(DYNAMIC) -lXt -lX11 -lm -lgcc -lc
+ STDLIBCUIMT=	$(THREADLIB) $(DYNAMIC) -lgcc -lc -lm
+-STDSHLGUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lX11 -lm -lgcc -lc
++STDSHLGUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lXt -lX11 -lm -lgcc -lc
+ STDSHLCUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lm -lgcc -lc
+ THREADLIB=		-lpthread
+ 

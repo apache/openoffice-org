@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Calc.InsertDataIntoCellsAndCreateChart.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2006/07/14 09:36:43 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Calc">
+
+<keywords>
+	<keyword>chart</keyword>
+	<keyword>cell</keyword>
+</keywords>
+
+<authors>
+	<author id="&#197;R" initial="false" email="realfsen@gmx.net" copyright="Licensed under the Apache License, Version 2.0">&#197;smund Realfsen</author>
+</authors>
+
+<question heading="Insert Data Into Cells And Create Chart">Who do I insert cells and chreate a chart ?
+</question>
+
+<answer>
+<listing>/* get the xComponentLoader interface */
+componentLoader = UNO.createDesktop()~{%see com.sun.star.frame.XDesktop%XDesktop}~{%see com.sun.star.frame.XComponentLoader%XComponentLoader}
+
+/* start OO-Calc with a blank document */
+calcComponent = componentLoader~loadComponentFromURL(&quot;private:factory/scalc&quot;, &quot;_blank&quot;, 0, .UNO~noProps)
+
+/* get the first sheet in calc */
+sheet = calcComponent~{%see com.sun.star.sheet.XSpreadsheetDocument%XSpreadSheetDocument}~getSheets~{%see com.sun.star.container.XIndexAccess%XIndexAccess}~getByIndex(0)~{%see com.sun.star.sheet.XSpreadsheet%XSpreadSheet}
+
+/* Use a procedure in uno.cls to write text into a cells */
+CALL UNO.setCell sheet, 0, 0, &quot;Number&quot;		-- this is the heading of col one
+CALL UNO.setCell sheet, 1, 0, &quot;SIN(A)&quot;		-- this is the heading of col two
+CALL UNO.setCell sheet, 2, 0, &quot;SIN(A*B)&quot;	-- this is the heading of col three
+
+/* select the range a1:c1, and apply formating */
+heading = sheet~getCellRangeByName(&quot;A1:C1&quot;)
+heading~{%see com.sun.star.beans.XPropertySet%XPropertySet}~setPropertyValue(&quot;CellBackColor&quot;, box(&quot;int&quot;, &quot;00 00 77&quot;x ~c2d))
+heading~{%see com.sun.star.beans.XPropertySet%XPropertySet}~setPropertyValue(&quot;CharHeight&quot;, box(&quot;float&quot;, &quot;14.0&quot;))
+
+last_value = -1
+do i=1 to 30 by 1
+	/* write content to a cell using a routine from UNO.CLS */
+	CALL UNO.setCell sheet, 0, i, i/5	
+
+	/* Write content to a cell without help from UNO.CLS, alternative mehtod */
+	sheet~getCellByPosition(1,i)~setFormula(&quot;=SIN(A&quot;i+1&quot;)&quot;)
+	sheet~getCellByPosition(2,i)~setFormula(&quot;=SIN(A&quot;i+30&quot;-B&quot;i+1&quot;)&quot;)
+end
+
+
+
+/* create dimensions for chart */
+chartRec = .bsf~new(&quot;{%see com.sun.star.awt.Rectangle}&quot;)
+chartRec~X = 7000
+chartRec~Y = 0
+chartRec~Width = 20000
+chartRec~Height = 10000
+
+/* select cell range for chart */
+chartCellRange = sheet~getCellRangeByName(&quot;A1:C31&quot;)~{%see com.sun.star.sheet.XCellRangeAddressable%xCellRangeAddressable}~getRangeAddress
+
+/* Create an array with data to insert into the chart */
+CALL UNO.loadClass &quot;{%see com.sun.star.table.CellRangeAddress}&quot;
+chartAddressArray = bsf.createArray(.UNO~CellRangeAddress, 1)
+chartAddressArray[1] = chartCellRange
+
+/* create and show chart */
+chart = sheet~{%see com.sun.star.table.XTableChartsSupplier%xTableChartsSupplier}~getCharts
+chart~addNewByName(&quot;myChart&quot;, chartRec, chartAddressArray, .true, .true)
+
+
+
+::requires UNO.CLS  -- load support for Open Office
+
+
+</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+	<version number="1.1.x" status="untested"/>
+	<version number="1.0.x" status="untested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="&#197;R" date="2006-07-08">Initial version</change>
+</changelog>
+
+</snippet>

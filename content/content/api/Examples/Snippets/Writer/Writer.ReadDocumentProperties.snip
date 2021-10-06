@@ -1,0 +1,81 @@
+<!-- ===============================================================
+$RCS index.html,v $
+
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2006/02/16 10:06:04 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCS in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+=============================================================== -->
+ 
+<snippet language="Java" application="Writer">
+
+<keywords>
+    <keyword>title</keyword>
+    <keyword>subject</keyword>
+    <keyword>keywords</keyword>
+    <keyword>comments</keyword>
+    <keyword>properties</keyword>
+    <keyword>writer</keyword>
+    <keyword>document</keyword>
+
+</keywords>
+
+<authors>
+	<author id="vgiuliano@sp-process.it" email="vgiuliano@sp-process.it">Vincenzo Giuliano</author>
+</authors>
+
+<question heading="Read Writer Document Properties:  Title, Subject, Keywords, Comments, etc.">
+<p>How can I read the writer document properties (File -> Properties ->) in Java code?</p>
+</question>
+
+<answer>
+<p>You have need to XPropertySet belong to XDocumentInfo interface</p>
+
+<listing>
+import {%see com.sun.star.text.XTextDocument};
+import {%see com.sun.star.document.XDocumentInfoSupplier};
+import {%see com.sun.star.document.XDocumentInfo};
+import {%see com.sun.star.beans.XPropertySet};
+import {%see com.sun.star.beans.XPropertySetInfo};
+import {%see com.sun.star.beans.Property};
+import {%see com.sun.star.lang.XComponent};
+
+public Property[] getDocumentProperties(XComponent xComponent) {
+	{%seeshort com.sun.star.text.XTextDocument} xtd = ({%seeshort com.sun.star.text.XTextDocument})UnoRuntime.queryInterface({%seeshort com.sun.star.text.XTextDocument}.class,xComponent);
+	{%seeshort com.sun.star.document.XDocumentInfoSupplier} xdis = ({%seeshort com.sun.star.document.XDocumentInfoSupplier})UnoRuntime.queryInterface({%seeshort com.sun.star.document.XDocumentInfoSupplier}.class,xtd);
+        {%seeshort com.sun.star.document.XDocumentInfo} xdi = xdis.getDocumentInfo();
+        {%seeshort com.sun.star.beans.XPropertySet} xps = ({%seeshort com.sun.star.beans.XPropertySet})UnoRuntime.queryInterface({%seeshort com.sun.star.beans.XPropertySet}.class,xdi);
+        {%seeshort com.sun.star.beans.XPropertySetInfo} xpsi = xps.getPropertySetInfo();
+        {%seeshort com.sun.star.beans.Property}[] props = xpsi.getProperties();
+
+	/*The properties are within props */
+        return props;
+}
+</listing>
+</answer>
+
+<changelog>
+  <change author-id="vgiuliano@sp-process.it" date="2006-02-15">Initial version</change>
+</changelog>
+
+</snippet>
