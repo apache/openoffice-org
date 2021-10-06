@@ -9,6 +9,6 @@ logo=AOO_logos/AOO4_website_logo.png
 domain=https://www.openoffice.org
 divid=bannera
 announce=Disponible: Apache OpenOffice
-announceurl=https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=181305702
+announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-17
 announcetip=Disponible: Apache OpenOffice
 ~~~~~~

@@ -9,6 +9,6 @@ logo=AOO_logos/100MillAOO100px.png
 domain=https://www.openoffice.org
 divid=bannera
 announce=Wydany: Apache OpenOffice
-announceurl=https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=181305462
+announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-17
 announcetip=Wydany: Apache OpenOffice
 ~~~~~~
