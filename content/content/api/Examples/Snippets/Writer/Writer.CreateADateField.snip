@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Writer.CreateADateField.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2008/10/20 11:29:28 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Writer">
+
+<keywords>
+	<keyword>create</keyword>
+	<keyword>date</keyword>
+	<keyword>field</keyword>
+</keywords>
+
+<authors>
+	<author id="1" initial="true" email="" copyright="Josef Frysak">Josef Frysak</author>
+</authors>
+
+<question heading="Create a Date field">How to create a Date field at the current cursor position?
+</question>
+
+<answer>
+<p>First get the current cursor position by the documents</p>
+<p>&quot;getCurrentController&quot; function. Next use the documents</p>
+<p>&quot;XMultiServiceFactory&quot; interface to create a new &quot;DateTime&quot; object.</p>
+<p>Configurate this object by setting its properties. To set the date,</p>
+<p>first a structure of type &quot;Locale&quot; must be created. This structure defines</p>
+<p>the language for the number format. Next create a string defining the</p>
+<p>format of the date and use it and the locale structure to search for an</p>
+<p>existing entry in the documents NumberFormats list. If no such</p>
+<p>number format exists, create a new one. In both cases an index number is</p>
+<p>returned, which is set as &quot;NumberFormat&quot; property of the date time object.</p>
+<p>As last step add the date object as text content to the Writer document.</p>
+<p>For further details see http://wi.wu-wien.ac.at/rgf/diplomarbeiten/BakkStuff/2008/200809_Frysak/200809_Frysak_Automating_OOo_ooRexx_Nutshells.pdf.</p>
+<listing>-- try to get a script context, will be .nil, if script was not invoked by OOo
+x_ScriptContext = uno.getScriptContext()
+if (x_ScriptContext &lt;&gt; .nil) then
+do
+   -- invoked by OOo as a macro
+
+   -- get context
+   x_ComponentContext = x_ScriptContext~getComponentContext
+   -- get desktop (an XDesktop)
+   x_Desktop  = x_ScriptContext~getDesktop
+   -- get current document
+   x_Document = x_ScriptContext~getDocument
+end
+else  
+do
+   -- called from outside of OOo, create a connection
+
+   -- connect to Open Office and get component context
+   x_ComponentContext = UNO.connect()
+   -- create a desktop service and its interface
+   service = &quot;{%see com.sun.star.frame.Desktop}&quot;
+   s_Desktop = x_ComponentContext~getServiceManager~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}~createInstance(service)
+   x_Desktop = s_Desktop~{%see com.sun.star.frame.XDesktop%XDesktop}
+   -- get the last active document
+   x_Document = x_Desktop~getCurrentComponent()  
+end
+
+
+
+
+-- create interface for text document
+x_TextDocument = x_Document~{%see com.sun.star.text.XTextDocument%XTextDocument}
+-- get a text object of text document
+x_Text = x_TextDocument~getText
+
+-- get the current cursor position
+s_CurrentController = x_TextDocument~getCurrentController()
+x_TextViewCursorSupplier = s_CurrentController~{%see com.sun.star.text.XTextViewCursorSupplier%XTextViewCursorSupplier}
+x_CurrentCursor = x_TextViewCursorSupplier~getViewCursor()
+
+-- create a textcursor of it
+x_TextCursor = x_Text~createTextCursorByRange(x_CurrentCursor~getStart())
+
+-- now create a factory that is able to add datetime objects to the document
+x_MultiServiceFactory = x_Document~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+s_DateTime = x_MultiServiceFactory~createInstance(&quot;{%see com.sun.star.text.TextField.DateTime}&quot;)
+
+-- next configure the new date time object
+x_DateTimeProperties = s_DateTime~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+x_DateTimeProperties~setPropertyValue(&quot;IsFixed&quot;, .bsf~new(&quot;java.lang.Boolean&quot;, .true))
+x_DateTimeProperties~setPropertyValue(&quot;IsDate&quot;, .bsf~new(&quot;java.lang.Boolean&quot;, .true))
+
+-- next create a number formats suppliere to get
+-- access to the various automatic number formats
+x_NumberFormatsSupplier = x_Document~{%see com.sun.star.util.XNumberFormatsSupplier%XNumberFormatsSupplier}
+x_NumberFormats = x_NumberFormatsSupplier~getNumberFormats()
+
+-- define the language settings to use to search for entries
+st_Locale = .bsf~new(&quot;{%see com.sun.star.lang.Locale}&quot;)
+st_Locale~bsf.setFieldValue(&quot;Language&quot;, &quot;en&quot;)
+st_Locale~bsf.setFieldValue(&quot;Country&quot;, &quot;USA&quot;)
+
+-- look out for the existance of our number format, if none exists, create one.
+format =&quot;DD.MM.YY&quot;
+formatindex = x_NumberFormats~queryKey(format, st_Locale, .true)
+If formatindex = -1 then formatindex = x_NumberFormats~addNew(format, st_Locale)
+
+
+-- now set the format of the date time object
+val = .bsf~new(&quot;java.lang.Integer&quot;, formatindex)
+
+x_DateTimeProperties~setPropertyValue(&quot;NumberFormat&quot;, val)
+
+-- finally add the date time object to the text
+x_TextContent = s_DateTime~{%see com.sun.star.text.XTextContent%XTextContent}
+x_Text~insertTextContent(x_TextCursor, x_TextContent, .true)
+
+::requires UNO.CLS</listing>
+</answer>
+
+<versions>
+	<version number="2.4.1" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="1" date="2008-10-14">Initial version</change>
+</changelog>
+
+</snippet>

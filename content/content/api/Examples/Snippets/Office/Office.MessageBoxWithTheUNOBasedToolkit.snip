@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.MessageBoxWithTheUNOBasedToolkit.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2006/07/06 11:41:16 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="Python" application="Office">
+
+<keywords>
+	<keyword>com.sun.star.awt.WindowDescriptor</keyword>
+	<keyword>WindowServiceName</keyword>
+	<keyword>messbox</keyword>
+	<keyword>infobox</keyword>
+	<keyword>querybox</keyword>
+	<keyword>warningbox</keyword>
+	<keyword>errorbox</keyword>
+</keywords>
+
+<authors>
+	<author id="paolomantovani" initial="true" email="paolomantovani@openoffice.org">Paolo Mantovani</author>
+</authors>
+
+<question heading="MessageBox with the UNO based toolkit">How do I display a message box from a PyUno component / script ?
+<p>I&apos;m wondering if it is possible to display message boxes (similar to those displayed by Basic&apos;s MsgBox function) using the OpenOffice.org API</p>
+</question>
+
+<answer>
+<p>You can use the following function as a replacement for the Msgbox StarBasic function:</p>
+<listing>from com.sun.star.awt import Rectangle
+from com.sun.star.awt import WindowDescriptor
+
+from com.sun.star.awt.WindowClass import MODALTOP
+from com.sun.star.awt.VclWindowPeerAttribute import OK, OK_CANCEL, YES_NO, YES_NO_CANCEL, RETRY_CANCEL, DEF_OK, DEF_CANCEL, DEF_RETRY, DEF_YES, DEF_NO
+
+
+
+def TestMessageBox():
+	doc = XSCRIPTCONTEXT.getDocument()
+	parentwin = doc.CurrentController.Frame.ContainerWindow
+	
+	s = &quot;This is a test&quot;
+	t = &quot;Test&quot;
+	res = MessageBox(parentwin, s, t, &quot;querybox&quot;, YES_NO_CANCEL + DEF_NO)
+	
+	s = res
+	MessageBox(parentwin, s, t, &quot;infobox&quot;)
+
+
+
+# Show a message box with the UNO based toolkit
+def MessageBox(ParentWin, MsgText, MsgTitle, MsgType=&quot;messbox&quot;, MsgButtons=OK):
+	
+	MsgType = MsgType.lower()
+	
+	#available msg types
+	MsgTypes = (&quot;messbox&quot;, &quot;infobox&quot;, &quot;errorbox&quot;, &quot;warningbox&quot;, &quot;querybox&quot;)
+	
+	if not ( MsgType in MsgTypes ):
+		MsgType = &quot;messbox&quot;
+	
+	#describe window properties.
+	aDescriptor = WindowDescriptor()
+	aDescriptor.Type = MODALTOP
+	aDescriptor.WindowServiceName = MsgType
+	aDescriptor.ParentIndex = -1
+	aDescriptor.Parent = ParentWin
+	#aDescriptor.Bounds = Rectangle()
+	aDescriptor.WindowAttributes = MsgButtons
+	
+	tk = ParentWin.getToolkit()
+	msgbox = tk.createWindow(aDescriptor)
+	
+	msgbox.setMessageText(MsgText)
+	if MsgTitle :
+		msgbox.setCaptionText(MsgTitle)
+		
+	return msgbox.execute()
+
+
+
+g_exportedScripts = TestMessageBox,
+
+
+
+
+
+
+</listing>
+</answer>
+
+<versions>
+	<version number="1.0.x" status="can not work"/>
+	<version number="1.1.x" status="may work"/>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="paolomantovani" date="2006-07-04">Initial version</change>
+</changelog>
+
+</snippet>
+
