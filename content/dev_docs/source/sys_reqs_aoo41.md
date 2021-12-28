@@ -4,7 +4,7 @@ notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 ## Microsoft Windows
 
-- Windows XP, Windows 2003, Windows 2012, Windows Vista, Windows 7, Windows 8, Windows 8.1, Windows 10
+- Windows XP, Windows 2003, Windows 2012, Windows Vista, Windows 7, Windows 8, Windows 8.1, Windows 10, Windows 11
 - Free memory of 256 MB RAM (512 MB RAM recommended)
 - At least 650 MB available disk space for a default install via download.
   After installation and deletion of temporary installation files, Apache OpenOffice
@@ -31,11 +31,10 @@ notice=https://www.apache.org/licenses/LICENSE-2.0
 
 ## Java
 
-- The Java Runtime Environment (JRE) 1.5.x, is the minimum version required to use
-the full functionality of Apache OpenOffice that need Java (see [Java and
-Apache OpenOffice][4]). However, we strongly recommend the last version of
-Oracle Java 1.6.x, patch level 45, or the latest Oracle Java 7, or - for Linux
-users - OpenJDK 6, build 27, or OpenJDK 7.
+- The Java Runtime Environment (JRE) 1.5.x is the minimum version required to use
+  the full functionality of Apache OpenOffice that need Java (see [Java and
+  Apache OpenOffice][4]). However, we strongly recommend the latest version of
+  Oracle Java 8, or - for Linux users - OpenJDK 8.
 
 ## For accessibility
 
@@ -54,4 +53,4 @@ Also see [Index of System Requirements for each version][3].
 [1]: http://www.microsoft.com/en-us/windows/compatibility/win8/CompatCenter/ProductDetailsViewer?Type=Software&Name=OpenOffice&Vendor=Apache&ModelOrVersion=3&Locale=1033&BreadcrumbPath=Openoffice&tempOsid=win8
 [2]: http://java.sun.com/products/accessbridge
 [3]: /dev_docs/source/sys_reqs.html
-[4]: http://www.openoffice.org/download/common/java.html
+[4]: https://www.openoffice.org/download/common/java.html

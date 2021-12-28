@@ -8,7 +8,7 @@ To create, as a community, the leading international office suite **that will ru
 
 The following platforms are supported for the most current release:
 
-- Windows (XP, 2003, Vista, 7, 8 and 10)
+- Windows (XP, 2003, Vista, 7, 8, 10 and 11)
 - GNU/Linux (x86 and x86-64, RPM and DEB based Linux distributions)
 - Mac OS X (x86-64 only)
 
