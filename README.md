@@ -70,7 +70,7 @@ To test the site locally, use
 This builds the site, serves it locally at  http://localhost:8820/ and rebuilds the content fairly
 quickly if any changes are made. Only the files that are not in `part2` are watched.
 
-Note that serving the site through JBake does not properly include the SSI which means that branding, navigation, and footers will be missing. If you wish to set up an HTTPS server on your local you can do that too.
+Note that serving the site through JBake does not properly include the SSI which means that branding, navigation, and footers will be missing. If you wish to set up an HTTPD server on your local you can do that too.
 
 Modify that script and call `bake.sh`  with any of the [arguments you would pass to jbake](https://jbake.org/docs/2.6.4/#bake_command).
 
