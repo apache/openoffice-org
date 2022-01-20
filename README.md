@@ -72,7 +72,7 @@ quickly if any changes are made. Only the files that are not in `part2` are watc
 
 Note that serving the site through JBake does not properly include the SSI which means that branding, navigation, and footers will be missing. If you wish to set up an HTTPD server on your local you can do that too.
 
-Modify that script andd call `bake.sh`  with any of the [arguments you would pass to jbake](https://jbake.org/docs/2.6.4/#bake_command).
+Modify that script and call `bake.sh`  with any of the [arguments you would pass to jbake](https://jbake.org/docs/2.6.4/#bake_command).
 
 ## Markdown and HTML
 
@@ -81,7 +81,7 @@ While it is a form of Markdown, JBake uses Flexmark/Java which implements Pegdow
 
 ## Groovy Templates
 
-The site templates are written in groovy scripts.
+The site templates are written in Groovy scripts.
 Even though the files end with `.gsp` they are not GSP files and do not have access to tag libraries.
 You can run custom code in them. See [Templates Read Me](templates/README.md) for details.
 
@@ -98,8 +98,8 @@ Due to exceeding the maximum number of files needing rendering the site is baked
 
 ### Branding and Navigation
 
-- The page header comes from `brand.md` files. The [`brand` template](https://github.com/apache/openoffice-org/blob/main/templates/brand.gsp) is html with markdown metadata insertions.
-- Navigators are `*nav.md` files. The [`navigator` template](https://github.com/apache/openoffice-org/blob/main/templates/navigator.gsp) is markdown with metadata selecting the css class.
+- The page header comes from `brand.md` files. The [`brand` template](https://github.com/apache/openoffice-org/blob/main/templates/brand.gsp) is HTML with markdown metadata insertions.
+- Navigators are `*nav.md` files. The [`navigator` template](https://github.com/apache/openoffice-org/blob/main/templates/navigator.gsp) is markdown with metadata selecting the CSS class.
 - All `brand.md`, `topnav.md`, `leftnav.md`, and `rightnav.md` files must be registered in
 [`templates/ssi_paths.gsp`](https://github.com/apache/openoffice-org/blob/main/templates/ssi_paths.gsp) in order to be included in that subtree of the site.
 
@@ -115,6 +115,6 @@ Every file in the assets tree is copied as is during baking.
 
 ### Footer
 
-The site footer is an html asset and is found here: [`footer.html`](https://github.com/apache/openoffice-org/blob/main/assets/footer.html).
+The site footer is an HTML asset and is found here: [`footer.html`](https://github.com/apache/openoffice-org/blob/main/assets/footer.html).
 
 
