@@ -21,15 +21,15 @@ DL.NL_LANG					= "fr";
 l10n.dl_headline_text				= "Apache OpenOffice Download";
 
 // Download: Strings in the green box (used in "index.html").
-l10n.dl_green_box_headline_text			= "Download Apache OpenOffice";
-l10n.dl_green_box_headline_title		= "Download Apache OpenOffice for your favorite operating system, language and version";
-l10n.dl_green_box_subtext1_text			= "Hosted by SourceForge.net - A trusted website";
-l10n.dl_green_box_subtext1_title		= "Apache OpenOffice binary files are hosted by SourceForge.net - A trusted website";
-l10n.dl_green_box_subtext2_text			= "Select your favorite operating system, language and version";
-l10n.dl_green_box_subtext2_title		= "Select your favorite operating system, language and version";
-l10n.dl_green_box_selectbox_os_title		= "Select your favorite operating system";
-l10n.dl_green_box_selectbox_lang_title		= "Select your favorite language";
-l10n.dl_green_box_selectbox_ver_title		= "Select your favorite release version";
+l10n.dl_green_box_headline_text			= "Télécharger Apache OpenOffice";
+l10n.dl_green_box_headline_title		= "Téléchargez Apache OpenOffice pour votre système d'exploitation, votre langue et votre version préférés";
+l10n.dl_green_box_subtext1_text			= "Hébergé par SourceForge.net - Un site de confiance";
+l10n.dl_green_box_subtext1_title		= "Les fichiers binaires Apache OpenOffice sont hébergés par SourceForge.net - Un site Web de confiance";
+l10n.dl_green_box_subtext2_text			= "Sélectionnez votre système d'exploitation, votre langue et votre version préférés";
+l10n.dl_green_box_subtext2_title		= "Sélectionnez votre système d\'exploitation, votre langue et votre version préférés";
+l10n.dl_green_box_selectbox_os_title		= "Sélectionnez votre système d exploitation préféré";
+l10n.dl_green_box_selectbox_lang_title		= "Sélectionnez votre langue préférée";
+l10n.dl_green_box_selectbox_ver_title		= "Sélectionnez votre version préférée";
 
 // The strings that will be shown in the OS, language and version drop-down select boxes.
 // You must leave at least one single empty string (see the comment lines below the 3 following variables)!
@@ -97,61 +97,61 @@ l10n.dl_green_box_select_box_version_older	= "Older releases";
 // Not defined for now.
 
 // Get developers: Strings in the orange box (used in "index.html").
-l10n.dl_getdev_orange_box_headline_text		= "Help Needed";
-l10n.dl_getdev_orange_box_headline_title	= "The Apache OpenOffice project seeks developers to take part in expanding its activities";
-l10n.dl_getdev_orange_box_text_text		= "Are you a software developer with C++ skills? Do you have expertise in building software? Are you an experienced lead technical writer? Are you proficient in English? Do you like contributing to open source projects? Come and join us in helping Apache OpenOffice to thrive.";
-l10n.dl_getdev_orange_box_text_title		= "The Apache OpenOffice project seeks developers to take part in expanding its activities";
+l10n.dl_getdev_orange_box_headline_text		= "Aide requise";
+l10n.dl_getdev_orange_box_headline_title	= "Le projet Apache OpenOffice recherche des développeurs pour participer à l'expansion de ses activités";
+l10n.dl_getdev_orange_box_text_text		= "Êtes-vous un développeur de logiciels avec des compétences en C++ ? Avez-vous une expertise dans la construction de logiciels ? Êtes-vous un rédacteur technique expérimenté ? Êtes-vous compétent en anglais ? Vous aimez contribuer à des projets open source ? Rejoignez-nous pour aider Apache OpenOffice à prospérer.";
+l10n.dl_getdev_orange_box_text_title		= "Le projet Apache OpenOffice recherche des développeurs pour participer à l'expansion de ses activités";
 l10n.dl_getdev_orange_box_text_href		= "https://openoffice.apache.org/get-involved.html";
 
 // Share: Strings in the light-blue box (used in "index.html").
-l10n.dl_share_light_blue_box_headline_text	= "Help Spread the Word";
-l10n.dl_share_light_blue_box_headline_title	= "Help spread the word and tell your friends about Apache OpenOffice";
-l10n.dl_share_light_blue_box_text_text		= "Please tell your friends about Apache OpenOffice:";
-l10n.dl_share_light_blue_box_text_title		= "Help spread the word and tell your friends about Apache OpenOffice";
-l10n.dl_share_light_blue_box_blog_text		= "Official Blog";
-l10n.dl_share_light_blue_box_blog_title		= "Weblog of OpenOffice";
+l10n.dl_share_light_blue_box_headline_text	= "Aidez à la diffusion";
+l10n.dl_share_light_blue_box_headline_title	= "Aidez à faire passer le mot et parlez à vos amis d Apache OpenOffice";
+l10n.dl_share_light_blue_box_text_text		= "Veuillez parler d'Apache OpenOffice à vos amis :";
+l10n.dl_share_light_blue_box_text_title		= "Aidez à faire passer le mot et parlez à vos amis d Apache OpenOffice";
+l10n.dl_share_light_blue_box_blog_text		= "Blog officiel";
+l10n.dl_share_light_blue_box_blog_title		= "Weblog de OpenOffice";
 l10n.dl_share_light_blue_box_blog_src		= "/images/logo-rss-32.png";
-l10n.dl_share_light_blue_box_blog_alt		= "Weblog of OpenOffice";
+l10n.dl_share_light_blue_box_blog_alt		= "Weblog de OpenOffice";
 l10n.dl_share_light_blue_box_facebook_text	= "Facebook";
-l10n.dl_share_light_blue_box_facebook_title	= "Please tell your friends about Apache OpenOffice via Facebook";
+l10n.dl_share_light_blue_box_facebook_title	= "Veuillez parler d Apache OpenOffice à vos amis via Facebook";
 l10n.dl_share_light_blue_box_facebook_src	= "/images/logo-facebook-32.png";
 l10n.dl_share_light_blue_box_facebook_alt	= "Share on Facebook";
 l10n.dl_share_light_blue_box_twitter_text	= "Twitter";
-l10n.dl_share_light_blue_box_twitter_title	= "Please tell your friends about Apache OpenOffice via Twitter";
+l10n.dl_share_light_blue_box_twitter_title	= "Veuillez parler d Apache OpenOffice à vos amis via Twitter";
 l10n.dl_share_light_blue_box_twitter_src	= "/images/logo-twitter-32.png";
-l10n.dl_share_light_blue_box_twitter_alt	= "Share on Twitter";
+l10n.dl_share_light_blue_box_twitter_alt	= "Partager sur Twitter";
 
 // Extensions: Strings in the blue box (top) (used in "index.html").
-l10n.dl_ext_blue_box_headline_text		= "Get Apache OpenOffice Extensions and Dictionaries";
-l10n.dl_ext_blue_box_headline_title		= "Choose from a wide range of additional and individual functionality";
-l10n.dl_ext_blue_box_text_text			= "Extend your Apache OpenOffice functionality with a large and growing library of extensions and dictionaries from other users.";
-l10n.dl_ext_blue_box_text_title			= "Choose from a wide range of additional and individual functionality";
+l10n.dl_ext_blue_box_headline_text		= "Obtenez les extensions et dictionnaires Apache OpenOffice";
+l10n.dl_ext_blue_box_headline_title		= "Choisissez parmi une large gamme de fonctionnalités supplémentaires et individuelles";
+l10n.dl_ext_blue_box_text_text			= "Étendez vos fonctionnalités Apache OpenOffice avec une bibliothèque importante et croissante d'extensions et de dictionnaires d'autres utilisateurs.";
+l10n.dl_ext_blue_box_text_title			= "Choisissez parmi une large gamme de fonctionnalités supplémentaires et individuelles";
 l10n.dl_ext_blue_box_text_href			= "https://extensions.openoffice.org/";
 
 // Templates: Strings in the blue box (bottom) (used in "index.html").
-l10n.dl_tlp_blue_box_headline_text		= "Get Apache OpenOffice Templates";
-l10n.dl_tlp_blue_box_headline_title		= "Choose from a wide range of additional and individual documents";
-l10n.dl_tlp_blue_box_text_text			= "Extend your Apache OpenOffice creativity with a large and growing library of templates from other users.";
-l10n.dl_tlp_blue_box_text_title			= "Choose from a wide range of additional and individual documents";
+l10n.dl_tlp_blue_box_headline_text		= "Obtenez des modèles Apache OpenOffice";
+l10n.dl_tlp_blue_box_headline_title		= "Choisissez parmi une large gamme de documents supplémentaires et individuels";
+l10n.dl_tlp_blue_box_text_text			= "Étendez votre créativité Apache OpenOffice avec une bibliothèque importante et croissante de modèles d'autres utilisateurs.";
+l10n.dl_tlp_blue_box_text_title			= "Choisissez parmi une large gamme de documents supplémentaires et individuels";
 l10n.dl_tlp_blue_box_text_href			= "https://templates.openoffice.org/";
 
 // Strings in the navigation bar (used in "index.html").
 // Release Information
-l10n.dl_nav_headline_1_text			= "Release Information";
-l10n.dl_nav_sysreq_text				= "System Requirements";
-l10n.dl_nav_sysreq_title			= "HDD: ~300MB free - Memory: &gt;128MB - Processor: &gt;500MHz - OS: Windows, macOS (OS&nbsp;X), Linux, Solaris, FreeBSD...";
+l10n.dl_nav_headline_1_text			= "Informations de version";
+l10n.dl_nav_sysreq_text				= "Configuration requise";
+l10n.dl_nav_sysreq_title			= "HDD: ~300MB free - Mémoire: &gt;128MB - Processeur: &gt;500MHz - OS: Windows, macOS (OS&nbsp;X), Linux, Solaris, FreeBSD...";
 l10n.dl_nav_sysreq_href				= "https://www.openoffice.org/dev_docs/source/sys_reqs_aoo41.html";
 l10n.dl_nav_license_text			= "License";
-l10n.dl_nav_license_title			= "Apache OpenOffice License";
+l10n.dl_nav_license_title			= "License Apache OpenOffice";
 l10n.dl_nav_license_href			= "https://www.openoffice.org/license.html";
 l10n.dl_nav_source_text				= "Source";
-l10n.dl_nav_source_title			= "For developers and power users: Get the source to build Apache OpenOffice from scratch";
+l10n.dl_nav_source_title			= "Pour les développeurs et les utilisateurs expérimentés : obtenez la source pour créer Apache OpenOffice à partir de zéro";
 l10n.dl_nav_source_href				= "https://openoffice.apache.org/downloads.html";
-l10n.dl_nav_build_text				= "Building Guide";
-l10n.dl_nav_build_title				= "For developers and power users: HowTo guide to build Apache OpenOffice from scratch";
+l10n.dl_nav_build_text				= "Guide de construction";
+l10n.dl_nav_build_title				= "Pour les développeurs et les utilisateurs expérimentés : guide pratique pour créer Apache OpenOffice à partir de zéro";
 l10n.dl_nav_build_href				= "https://wiki.openoffice.org/wiki/Documentation/Building_Guide_AOO";
-l10n.dl_nav_sdk_text				= "Software Development Kit (SDK)";
-l10n.dl_nav_sdk_title				= "For developers: Software Development Kit";
+l10n.dl_nav_sdk_text				= "Software Development Kit SDK)";
+l10n.dl_nav_sdk_title				= "Pour les développeurs : Kit de développement logiciel";
 l10n.dl_nav_sdk_href				= "https://openoffice.apache.org/downloads.html";
 l10n.dl_nav_devbuilds_text			= "Development Builds";
 l10n.dl_nav_devbuilds_title			= "For QA volunteers: Development Builds";
@@ -159,46 +159,46 @@ l10n.dl_nav_devbuilds_href			= "https://www.openoffice.org/download/devbuilds.ht
 
 // Documentation
 l10n.dl_nav_headline_2_text			= "Documentation";
-l10n.dl_nav_schedule_text			= "Release Schedules";
-l10n.dl_nav_schedule_title			= "When are new releases planned?";
+l10n.dl_nav_schedule_text			= "Calendriers de publication";
+l10n.dl_nav_schedule_title			= "Quand les nouvelles versions sont-elles prévues ?";
 l10n.dl_nav_schedule_href			= "https://cwiki.apache.org/confluence/display/OOOUSERS/Releases";
-l10n.dl_nav_hist_schedule_text			= "Historic Release Schedule";
-l10n.dl_nav_hist_schedule_title			= "When were old releases planned?";
+l10n.dl_nav_hist_schedule_text			= "Historique du calendrier de sortie";
+l10n.dl_nav_hist_schedule_title			= "Quand les anciennes versions étaient-elles prévues ?";
 l10n.dl_nav_hist_schedule_href			= "https://wiki.openoffice.org/wiki/Product_Release";
-l10n.dl_nav_inst_guide_text			= "Installation Guides";
-l10n.dl_nav_inst_guide_title			= "Instructions for installing Apache OpenOffice on Windows, macOS (OS&nbsp;X) and Linux";
+l10n.dl_nav_inst_guide_text			= "Guides d'Installation";
+l10n.dl_nav_inst_guide_title			= "Instructions d installation d Apache OpenOffice sur Windows, macOS (OS&nbsp;X) et Linux";
 l10n.dl_nav_inst_guide_href			= "https://www.openoffice.org/download/common/instructions.html";
-l10n.dl_nav_user_guide_text			= "User Guides";
-l10n.dl_nav_user_guide_title			= "Extensive user manuals for every day use";
+l10n.dl_nav_user_guide_text			= "Guides de l'utilisateur";
+l10n.dl_nav_user_guide_title			= "Manuels d'utilisation complets pour une utilisation quotidienne";
 l10n.dl_nav_user_guide_href			= "https://www.openoffice.org/documentation/index.html";
-l10n.dl_nav_why_java_text			= "Java and Apache OpenOffice";
-l10n.dl_nav_why_java_title			= "Explains why to use Java and what it is";
+l10n.dl_nav_why_java_text			= "Java et Apache OpenOffice";
+l10n.dl_nav_why_java_title			= "Explique ce qu'est Java et pourquoi l utiliser ";
 l10n.dl_nav_why_java_href			= "https://www.openoffice.org/download/common/java.html";
-l10n.dl_nav_eol_text				= "End-Of-Life Information";
-l10n.dl_nav_eol_title				= "Information about releases that have reached End-Of-Life status";
+l10n.dl_nav_eol_text				= "Informations de fin de vie";
+l10n.dl_nav_eol_title				= "Informations sur les versions qui ont atteint le statut de fin de vie";
 l10n.dl_nav_eol_href				= "https://www.openoffice.org/development/releases/eol.html";
 
 // Additional Resources
-l10n.dl_nav_headline_3_text			= "Additional Resources";
+l10n.dl_nav_headline_3_text			= "Ressources additionnelles";
 l10n.dl_nav_support_text			= "Support";
-l10n.dl_nav_support_title			= "If the information above did not answer your question: Free and paid support!";
+l10n.dl_nav_support_title			= "Si les informations ci-dessus ne répondent pas à votre question : Support gratuit et payant !";
 l10n.dl_nav_support_href			= "https://www.openoffice.org/support/index.html";
-l10n.dl_nav_local_text				= "Localizations";
-l10n.dl_nav_local_title				= "Information and support in your favorite language";
+l10n.dl_nav_local_text				= "Localisations (traductions)";
+l10n.dl_nav_local_title				= "Informations et assistance dans votre langue préférée";
 l10n.dl_nav_local_href				= "https://openoffice.apache.org/native-lang.html";
-l10n.dl_nav_stat_text				= "Download Statistics";
-l10n.dl_nav_stat_title				= "Download and other statistics";
+l10n.dl_nav_stat_text				= "Statistiques de téléchargements";
+l10n.dl_nav_stat_title				= "Téléchargement et autres statistiques";
 l10n.dl_nav_stat_href				= "https://www.openoffice.org/stats/index.html";
-l10n.dl_nav_mirrors1_text			= "Alternative download link #1";
-l10n.dl_nav_mirrors1_title			= "Use SourceForge mirrors to download Apache OpenOffice";
+l10n.dl_nav_mirrors1_text			= "Lien de téléchargement alternatif #1";
+l10n.dl_nav_mirrors1_title			= "Uutiliser les miroirs SourceForge pour télécharger Apache OpenOffice";
 l10n.dl_nav_mirrors1_href			= "https://sourceforge.net/projects/openofficeorg.mirror/files/";
-l10n.dl_nav_mirrors2_text			= "Alternative download link #2";
-l10n.dl_nav_mirrors2_title			= "Use Apache mirrors to download Apache OpenOffice";
+l10n.dl_nav_mirrors2_text			= "Lien de téléchargement alternatif #2";
+l10n.dl_nav_mirrors2_title			= "Utiliser les miroirs Apache pour télécharger Apache OpenOffice";
 l10n.dl_nav_mirrors2_href			= "https://downloads.apache.org/openoffice/" + DL.VERSION + "/binaries/";
-l10n.dl_nav_porting_text			= "3rd party ports and distributions";
-l10n.dl_nav_porting_title			= "Ports and distributions from 3rd party vendors";
+l10n.dl_nav_porting_text			= "Portagess et distributions tierce partie";
+l10n.dl_nav_porting_title			= "Portages et distributions de fournisseurs tierss";
 l10n.dl_nav_porting_href			= "https://www.openoffice.org/porting/index.html";
-l10n.dl_nav_archive_text			= "Archived and legacy releases";
+l10n.dl_nav_archive_text			= "Versions archivées et héritées";
 l10n.dl_nav_archive_title			= "Download legacy and archived releases";
 l10n.dl_nav_archive_href			= "https://www.openoffice.org/download/archive.html";
 
@@ -211,11 +211,11 @@ l10n.dl_nav_checksum_title			= "How to verify the downloaded file with signature
 l10n.dl_nav_checksum_href			= "https://www.openoffice.org/download/checksums.html";
 
 // Strings for the logo graphics.
-l10n.dl_img_sourceforge_title			= "SourceForge - Download, Develop and Publish Free Open Source Software";
+l10n.dl_img_sourceforge_title			= "SourceForge - Téléchargez, développez et publiez des logiciels open source gratuits";
 l10n.dl_img_sourceforge_href			= "https://www.sourceforge.net/";
 l10n.dl_img_sourceforge_src			= "/images/sourceforge.png";
 l10n.dl_img_sourceforge_alt			= "SourceForge";
-l10n.dl_img_w3c_title				= "W3C Markup Validation Service - Check the markup (HTML, XHTML, ...) of Web documents";
+l10n.dl_img_w3c_title				= "Service de validation de balisage W3C - Vérifie le balisage (HTML, XHTML, ...) des documents Web" ;
 l10n.dl_img_w3c_href				= "https://validator.w3.org/check?uri=referer";
 l10n.dl_img_w3c_src				= "/images/valid-xhtml10-blue.png";
 l10n.dl_img_w3c_alt				= "W3C Validator";
@@ -225,19 +225,19 @@ l10n.dl_img_w3c_alt				= "W3C Validator";
 // The following variables are used in the "download.js" file:
 
 // Download: Strings in the green box (used in "download.js").
-l10n.dl_full_link_text				= "Download full installation";
-l10n.dl_full_link_title				= "Click to download: ";
-l10n.dl_langpack_link_text			= "Download language pack";
-l10n.dl_langpack_link_title			= "Click to download: ";
+l10n.dl_full_link_text				= "Télécharger installation complète";
+l10n.dl_full_link_title				= "Cliquez pour télécharger : ";
+l10n.dl_langpack_link_text			= "Télécharger le pack de langue";
+l10n.dl_langpack_link_title			= "Cliquez pour télécharger : ";
 
-l10n.dl_platform_info_text			= "Important hints for ";
-l10n.dl_platform_info_title			= "Click here to get important hints for ";
-l10n.dl_platform_info_link			= "/download/platform_hints.html";
-l10n.dl_platform_info_headline			= "Apache OpenOffice - Important hints for the chosen platform";
+l10n.dl_platform_info_text			= "Conseils importants pour ";
+l10n.dl_platform_info_title			= "Cliquez ici pour obtenir des conseils importants pour ";
+l10n.dl_platform_info_link			= "download/platform_hints.html";
+l10n.dl_platform_info_headline			= "Apache OpenOffice - Conseils importants pour la plateforme choisie";
 l10n.dl_platform_info_win_headline		= "Windows";
-l10n.dl_platform_info_win_text			= "<h5> 32-bit, 64-bit and Java - What to choose? </h5> <p> At the moment we offer a 32-bit (x86) version for Windows. However, it installs and runs also on Windows 64-bit (x86-64). Please note that you may need Java in 32-bit for additional functionality which must then be selected only once (see menu 'Tools - Options - OpenOffice - Java'). <br /><br /> For more information about OpenOffice and Java please see: <a target='_blank' href=https://www.openoffice.org/download/common/java.html>https://www.openoffice.org/download/common/java.html</a>.</p>";
+l10n.dl_platform_info_win_text			= "<h5> 32-bit, 64-bit and Java - Que choisir? </h5> <p> Pour le moment, nous proposons une version 32 bits (x86) pour Windows. Cependant, il s'installe et s'exécute également sur Windows 64 bits (x86-64). Veuillez noter que vous pouvez avoir besoin de Java en 32 bits pour des fonctionnalités supplémentaires qui ne doivent alors être sélectionnées qu'une seule fois (voir menu 'Outils - Options - OpenOffice - Java'). <br /><br /> Pour plus d'informations sur OpenOffice et Java, veuillez consulter : <a target='_blank' href=https://www.openoffice.org/download/common/java.html>https://www.openoffice.org/download/common/java.html</a>.</p>";
 l10n.dl_platform_info_mac_headline		= "macOS";
-l10n.dl_platform_info_mac_text			= "<h5> Coming soon </h5>";
+l10n.dl_platform_info_mac_text			= "<h5> Bientôt disponible </h5>";
 l10n.dl_platform_info_linux_headline		= "Linux";
 l10n.dl_platform_info_linux_text		= "<h5> RPM vs. DEB - What to choose? </h5> <p> RPM is used in: <br/> CentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server <br /><br /> DEB is used in: <br/> Debian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu </p> <h5> Installation instructions </h5> <p>For installation instruction please see here: <a target='_blank' href=https://www.openoffice.org/download/common/instructions.html#linux>https://www.openoffice.org/download/common/instructions.html#linux</a>.</p>";
 
@@ -247,19 +247,19 @@ l10n.dl_full_link_archive_text			= "Archive: Click to choose from legacy release
 l10n.dl_full_link_archive_title			= "Click to browse to the archive and download legacy releases";
 
 // Download: Strings in the sub-green box (used in "download.js").
-l10n.dl_rel_info_headline_text			= "Release: ";
+l10n.dl_rel_info_headline_text			= "Version : ";
 l10n.dl_rel_info_milestone_text			= "Milestone ";
 l10n.dl_rel_info_buildid_text			= "Build ID ";
 l10n.dl_rel_info_svn_text			= "SVN "
-l10n.dl_rel_info_rel_date_text			= "Released ";
-l10n.dl_rel_notes_text				= "Release Notes";
-l10n.dl_rel_notes_title				= "Release Notes for Apache OpenOffice ";
+l10n.dl_rel_info_rel_date_text			= "Publié ";
+l10n.dl_rel_notes_text				= "Notes de version";
+l10n.dl_rel_notes_title				= "Notes de version pour Apache OpenOffice ";
 
-l10n.dl_headline_full_text			= "Full installation: ";
-l10n.dl_headline_langpack_text			= "Language pack: ";
-l10n.dl_filesize_text				= "File size ~ ";
+l10n.dl_headline_full_text			= "Installation complète: ";
+l10n.dl_headline_langpack_text			= "Pack de langue: ";
+l10n.dl_filesize_text				= "Taille fichier ~ ";
 l10n.dl_megabyte_text				= " MByte";
-l10n.dl_checksum_headline_text			= "Signatures and hashes: ";
+l10n.dl_checksum_headline_text			= "Signatures et hachages: ";
 l10n.dl_checksum_keys_text			= "KEYS";
 l10n.dl_checksum_keys_title			= "KEYS signature file";
 l10n.dl_checksum_asc_text			= "ASC";
@@ -271,21 +271,21 @@ l10n.dl_checksum_sha256_title			= "SHA256 hash for: ";
 l10n.dl_checksum_sha512_text			= "SHA512";
 l10n.dl_checksum_sha512_title			= "SHA512 hash for: ";
 
-l10n.dl_help_img_title				= "What is the difference between full installation and language pack?";
+l10n.dl_help_img_title				= "Quelle est la différence entre l'installation complète et le pack de langue?";
 l10n.dl_help_img_src				= "/download/cachedimages/help-information-icon.png";
-l10n.dl_help_img_alt				= "Install info";
-l10n.dl_help_text				= "What is a language pack?";
-l10n.dl_help_title				= "What is the difference between full installation and language pack?";
-l10n.dl_checksum_img_title			= "How to verify the downloaded file with checksums?";
+l10n.dl_help_img_alt				= "Informations sur l'installation";
+l10n.dl_help_text				= "Qu'est-ce qu'un pack de langue?";
+l10n.dl_help_title				= "Quelle est la différence entre l'installation complète et le pack de langue?";
+l10n.dl_checksum_img_title			= "Comment vérifier le fichier téléchargé avec des sommes de contrôle?";
 l10n.dl_checksum_img_src			= "/download/cachedimages/help-information-icon.png";
-l10n.dl_checksum_img_alt			= "Checksum verify";
-l10n.dl_checksum_text				= "How to verify the download?";
+l10n.dl_checksum_img_alt			= "Vérifier la somme de contrôle ";
+l10n.dl_checksum_text				= "Comment vérifier le téléchargement?";
 l10n.dl_checksum_title				= "How to verify the downloaded file with checksums?";
 l10n.dl_report_img_title			= "Broken download link? Click here to report.";
 l10n.dl_report_img_src				= "/download/cachedimages/help-report-broken-link-icon.png";
-l10n.dl_report_img_alt				= "Broken link";
-l10n.dl_report_text				= "Report broken link";
-l10n.dl_report_title				= "Broken download link? Click here to report.";
+l10n.dl_report_img_alt				= "Lien brisé";
+l10n.dl_report_text				= "Signaler un lien rompu";
+l10n.dl_report_title				= "Lien de téléchargement rompu ? Cliquez ici pour signaler.";
 
 // Download: Strings for error text in the sub-red box (used in "download.js").
 l10n.dl_full_link_error_text			= "No full installation available";
