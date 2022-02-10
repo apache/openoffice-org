@@ -190,7 +190,7 @@ l10n.dl_nav_stat_text				= "Statistiques de téléchargements";
 l10n.dl_nav_stat_title				= "Téléchargement et autres statistiques";
 l10n.dl_nav_stat_href				= "https://www.openoffice.org/stats/index.html";
 l10n.dl_nav_mirrors1_text			= "Lien de téléchargement alternatif #1";
-l10n.dl_nav_mirrors1_title			= "Uutiliser les miroirs SourceForge pour télécharger Apache OpenOffice";
+l10n.dl_nav_mirrors1_title			= "Utiliser les miroirs SourceForge pour télécharger Apache OpenOffice";
 l10n.dl_nav_mirrors1_href			= "https://sourceforge.net/projects/openofficeorg.mirror/files/";
 l10n.dl_nav_mirrors2_text			= "Lien de téléchargement alternatif #2";
 l10n.dl_nav_mirrors2_title			= "Utiliser les miroirs Apache pour télécharger Apache OpenOffice";
@@ -361,7 +361,7 @@ l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;functions/variables";
 // General: Links to webpage files that could be localized.
 l10n.dl_rel_notes_aoo4111_link			= "https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=191334515";
 l10n.dl_rel_notes_aoo4110_link			= "https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=181305702";
-l10n.dl_rel_notes_aoo419_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.9+Release+Notes";
+l10n.dl_rel_notes_aoo419_link			= "https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=173086426";
 l10n.dl_rel_notes_aoo418_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.8+Release+Notes";
 l10n.dl_rel_notes_aoo417_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.7+Release+Notes";
 l10n.dl_rel_notes_aoo416_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.6+Release+Notes";
