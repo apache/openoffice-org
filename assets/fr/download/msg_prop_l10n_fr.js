@@ -232,7 +232,7 @@ l10n.dl_langpack_link_title				= "Cliquez pour télécharger : ";
 
 l10n.dl_platform_info_text				= "Conseils importants pour ";
 l10n.dl_platform_info_title				= "Cliquez ici pour obtenir des conseils importants pour ";
-l10n.dl_platform_info_link				= "download/platform_hints.html";
+l10n.dl_platform_info_link				= "platform_hints.html";
 l10n.dl_platform_info_headline			= "Apache OpenOffice - Conseils importants pour la plateforme choisie";
 l10n.dl_platform_info_win_headline		= "Windows";
 l10n.dl_platform_info_win_text			= "<h5> 32-bit, 64-bit and Java - Que choisir? </h5> <p> Pour le moment, nous proposons une version 32 bits (x86) pour Windows. Cependant, il s'installe et s'exécute également sur Windows 64 bits (x86-64). Veuillez noter que vous pouvez avoir besoin de Java en 32 bits pour des fonctionnalités supplémentaires qui ne doivent alors être sélectionnées qu'une seule fois (voir menu 'Outils - Options - OpenOffice - Java'). <br /><br /> Pour plus d'informations sur OpenOffice et Java, veuillez consulter : <a target='_blank' href=https://www.openoffice.org/download/common/java.html>https://www.openoffice.org/download/common/java.html</a>.</p>";
@@ -362,7 +362,7 @@ l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;functions/variables";
 l10n.dl_rel_notes_aoo4111_link			= "https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=191334515";
 l10n.dl_rel_notes_aoo4110_link			= "https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=181305702";
 l10n.dl_rel_notes_aoo419_link			= "https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=173086426";
-l10n.dl_rel_notes_aoo418_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.8+Release+Notes";
+l10n.dl_rel_notes_aoo418_link			= "https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=165225735";
 l10n.dl_rel_notes_aoo417_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.7+Release+Notes";
 l10n.dl_rel_notes_aoo416_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.6+Release+Notes";
 l10n.dl_rel_notes_aoo415_link			= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1.5+Release+Notes";
