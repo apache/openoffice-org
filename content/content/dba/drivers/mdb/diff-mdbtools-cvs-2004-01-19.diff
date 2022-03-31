@@ -1,0 +1,244 @@
+Index: include/mdbsql.h
+===================================================================
+RCS file: /cvsroot/mdbtools/mdbtools/include/mdbsql.h,v
+retrieving revision 1.9
+diff -u -r1.9 mdbsql.h
+--- include/mdbsql.h	10 Jan 2004 01:52:56 -0000	1.9
++++ include/mdbsql.h	19 Jan 2004 07:50:51 -0000
+@@ -14,6 +14,7 @@
+ 	int num_tables;
+ 	GPtrArray *tables;
+ 	int num_sargs;
++	int max_rows;
+ 	GPtrArray *sargs;
+ 	MdbTableDef *cur_table;
+ 	MdbSargNode *sarg_tree;
+@@ -42,7 +43,7 @@
+ 	MdbSarg *sarg;
+ } MdbSQLSarg;
+ 
+-char *g_input_ptr;
++extern char *g_input_ptr;
+ 
+ #undef YY_INPUT
+ #define YY_INPUT(b, r, ms) (r = mdb_sql_yyinput(b, ms));
+@@ -70,5 +71,6 @@
+ extern void mdb_sql_listtables(MdbSQL *sql);
+ extern void mdb_sql_add_not(MdbSQL *sql);
+ extern void mdb_sql_describe_table(MdbSQL *sql);
+-
++int mdbsql_run_query(MdbSQL *sql, char *mybuf);
++void mdb_sql_set_maxrow(MdbSQL *sql,int aMaxrow);
+ #endif
+Index: include/mdbtools.h
+===================================================================
+RCS file: /cvsroot/mdbtools/mdbtools/include/mdbtools.h,v
+retrieving revision 1.27
+diff -u -r1.27 mdbtools.h
+--- include/mdbtools.h	10 Jan 2004 01:52:56 -0000	1.27
++++ include/mdbtools.h	19 Jan 2004 07:50:52 -0000
+@@ -132,7 +132,7 @@
+ #define IS_JET3(mdb) (mdb->f->jet_version==MDB_VER_JET3)
+ 
+ /* hash to store registered backends */
+-GHashTable	*mdb_backends;
++extern GHashTable	*mdb_backends;
+ 
+ /* forward declarations */
+ typedef struct mdbindex MdbIndex;
+Index: src/libmdb/backend.c
+===================================================================
+RCS file: /cvsroot/mdbtools/mdbtools/src/libmdb/backend.c,v
+retrieving revision 1.11
+diff -u -r1.11 backend.c
+--- src/libmdb/backend.c	10 Jan 2004 01:52:57 -0000	1.11
++++ src/libmdb/backend.c	19 Jan 2004 07:50:52 -0000
+@@ -27,6 +27,7 @@
+ #include "dmalloc.h"
+ #endif
+ 
++GHashTable       *mdb_backends;
+    /*    Access data types */
+ MdbBackendType mdb_access_types[] = {
+  */
+ 
+Index: src/sql/lexer.l
+===================================================================
+RCS file: /cvsroot/mdbtools/mdbtools/src/sql/lexer.l,v
+retrieving revision 1.6
+diff -u -r1.6 lexer.l
+--- src/sql/lexer.l	20 Jan 2003 16:04:31 -0000	1.6
++++ src/sql/lexer.l	19 Jan 2004 07:50:59 -0000
+@@ -40,13 +40,16 @@
+ (<=)		{ return LTEQ; }
+ (>=)		{ return GTEQ; }
+ like		{ return LIKE; }
++1[ ]=[ ]0   { return MAX0ROW; }
++0[ ]=[ ]1   { return MAX0ROW; }
++
+ [ \t\r]	;
+-\"[A-z][A-z0-9 _]*\"   {
++\"[a-zA-Z_][a-zA-Z0-9_ #@i ]*\"   {
+ 				yylval.name = strdup(&yytext[1]);
+ 				yylval.name[strlen(yylval.name)-1]='\0';
+ 				return IDENT;
+ 			}
+-[A-z][A-z0-9_]*		{ yylval.name = strdup(yytext); return NAME; }
++[a-zA-Z_][a-zA-Z0-9_#@]*		{ yylval.name = strdup(yytext); return NAME; }
+ 
+ '.*'			{ yylval.name = strdup(yytext); return STRING; }
+ ([0-9]+|([0-9]*\.[0-9+)([eE][-+]?[0-9]+)?) { 
+Index: src/sql/mdbsql.c
+===================================================================
+RCS file: /cvsroot/mdbtools/mdbtools/src/sql/mdbsql.c,v
+retrieving revision 1.14
+diff -u -r1.14 mdbsql.c
+--- src/sql/mdbsql.c	10 Jan 2004 01:52:57 -0000	1.14
++++ src/sql/mdbsql.c	19 Jan 2004 07:51:00 -0000
+@@ -31,6 +31,8 @@
+ #include <wordexp.h>
+ #endif
+ 
++char *g_input_ptr;
++
+ void
+ mdb_sql_error(char *fmt, ...)
+ {
+@@ -65,8 +67,38 @@
+ 	sql->sargs = g_ptr_array_new();
+ 	sql->sarg_tree = NULL;
+ 	sql->sarg_stack = NULL;
++ 	sql->max_rows = -1;
+ 
+ 	return sql;
++}
++
++ int _parse(MdbSQL *sql, char *buf)
++ {
++ 	g_input_ptr = buf;
++ 	/* begin unsafe */
++ 	_mdb_sql(sql);
++ 	if (yyparse()) {
++ 		/* end unsafe */
++ 		fprintf(stderr, "Couldn't parse SQL\n");
++ 		mdb_sql_reset(sql);
++ 		return 0;
++ 	} else {
++ 		return 1;
++ 	}
++ }
++int mdbsql_run_query(MdbSQL *sql, char *mybuf)
++{
++	if (_parse(sql, mybuf) && sql->cur_table) {
++		mdbsql_bind_all(sql);
++		return 1;
++	}
++	else
++		return 0;
++}
++ 
++void mdb_sql_set_maxrow(MdbSQL *sql,int aMaxrow)
++{
++	sql->max_rows = aMaxrow;
+ }
+ 
+ MdbSQLSarg *mdb_sql_alloc_sarg()
+Index: src/sql/parser.y
+===================================================================
+RCS file: /cvsroot/mdbtools/mdbtools/src/sql/parser.y,v
+retrieving revision 1.7
+diff -u -r1.7 parser.y
+--- src/sql/parser.y	20 Jan 2003 16:04:31 -0000	1.7
++++ src/sql/parser.y	19 Jan 2004 07:51:01 -0000
+@@ -40,7 +40,7 @@
+ 
+ 
+ 
+-%token <name> IDENT NAME PATH STRING NUMBER 
++%token <name> IDENT NAME PATH STRING NUMBER  MAX0ROW
+ %token SELECT FROM WHERE CONNECT DISCONNECT TO LIST TABLES WHERE AND OR NOT
+ %token DESCRIBE TABLE
+ %token LTEQ GTEQ LIKE
+@@ -48,6 +48,7 @@
+ %type <name> database
+ %type <name> constant
+ %type <ival> operator
++%type <name> identify
+ 
+ %%
+ 
+@@ -80,7 +81,11 @@
+ 	;
+ 
+ sarg_list:
+-	sarg 
++ 	MAX0ROW { 
++ 				mdb_sql_set_maxrow(_mdb_sql(NULL), 0);
++ 				}
++	| sarg 
++ 	| '('  sarg AND sarg_list  ')'
+ 	| '(' sarg_list ')'
+ 	| NOT sarg_list { mdb_sql_add_not(_mdb_sql(NULL)); }
+ 	| sarg_list OR sarg_list { mdb_sql_add_or(_mdb_sql(NULL)); }
+@@ -88,18 +93,33 @@
+ 	;
+ 
+ sarg:
+-	NAME operator constant	{ 
++ 	'(' sarg ')'
++ 	| identify operator constant	{ 
+ 				mdb_sql_add_sarg(_mdb_sql(NULL), $1, $2, $3);
+ 				free($1);
+ 				free($3);
+ 				}
+-	| constant operator NAME {
++ 	| constant operator identify {
++ 				mdb_sql_add_sarg(_mdb_sql(NULL), $3, $2, $1);
++ 				free($1);
++ 				free($3);
++ 				}
++ 	| identify operator identify {
++ 				mdb_sql_add_sarg(_mdb_sql(NULL), $3, $2, $1);
++ 				free($1);
++ 				free($3);
++ 				}
++ 	| constant operator constant {
+ 				mdb_sql_add_sarg(_mdb_sql(NULL), $3, $2, $1);
+ 				free($1);
+ 				free($3);
+ 				}
+ 	;
+ 
++identify:
++	IDENT
++ 	|	NAME 
++
+ operator:
+ 	'='	{ $$ = MDB_EQUAL; }
+ 	| '>'	{ $$ = MDB_GT; }
+@@ -115,12 +135,12 @@
+ 
+ database:
+ 	PATH
+-	|	NAME 
++ 	|	identify
+ 	;
+ 
+ table:
+-	NAME { mdb_sql_add_table(_mdb_sql(NULL), $1); free($1); }
+-	| IDENT { mdb_sql_add_table(_mdb_sql(NULL), $1); free($1); }
++ 	identify { mdb_sql_add_table(_mdb_sql(NULL), $1); free($1); }
++ 	| identify identify { mdb_sql_add_table(_mdb_sql(NULL), $1); free($1); }
+ 	;
+ 
+ column_list:
+@@ -130,8 +150,7 @@
+ 	;
+ 	 
+ column:
+-	NAME { mdb_sql_add_column(_mdb_sql(NULL), $1); free($1); }
+-	| IDENT { mdb_sql_add_column(_mdb_sql(NULL), $1); free($1); }
++ 	identify { mdb_sql_add_column(_mdb_sql(NULL), $1); free($1); }
+ 	;
+ 
+ %%

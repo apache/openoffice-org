@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:output method="text" encoding="UTF-8"/>
+  <xsl:variable name="delimiter" select="'&#9;'"/><!-- Tab -->
+
+  <xsl:template match="/">
+    <xsl:apply-templates select="sites"/>
+  </xsl:template>
+
+  <!--
+     sites version="0.3"
+     -->
+
+  <xsl:template match="sites[@version='0.3']">
+    <xsl:apply-templates select="//uri[string-length(.)!=0]" mode="version_0_3"/>
+  </xsl:template>
+
+  <xsl:template match="//uri" mode="version_0_3">
+    <xsl:value-of select="../@location"/> <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="../@code"/>     <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="../@type"/>     <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="../@name"/>     <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="@set"/>         <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="@scheme"/>      <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="@mode"/>        <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="."/>            <xsl:value-of select="$delimiter"/>
+    <xsl:apply-templates select="../contact" mode="version_0_3"/>
+    <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="../bandwidth"/> <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="../notes"/>
+    <xsl:text>&#xA;</xsl:text><!-- Line break -->
+  </xsl:template>
+
+  <xsl:template match="contact" mode="version_0_3">
+    <xsl:choose>
+      <xsl:when test="count(email)!=0">
+	<xsl:apply-templates select="email" mode="version_0_3"/>
+      </xsl:when>
+      <xsl:otherwise>
+	<xsl:if test="string-length(@name)!=0">
+	  <xsl:text>"</xsl:text>
+	  <xsl:value-of select="@name"/>
+	  <xsl:text>"</xsl:text>
+	</xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="position() != last()">
+      <xsl:text>, </xsl:text>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="email" mode="version_0_3">
+    <xsl:if test="string-length(../@name)!=0">
+      <xsl:text>"</xsl:text>
+      <xsl:value-of select="../@name"/>
+      <xsl:text>"</xsl:text>
+    </xsl:if>
+    <xsl:if test="string-length(.)!=0">
+      <xsl:choose>
+        <xsl:when test="string-length(../@name)!=0">
+          <xsl:text> &lt;</xsl:text>
+          <xsl:value-of select="."/>
+          <xsl:text>&gt;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="."/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+    <xsl:if test="position() != last()">
+      <xsl:text>, </xsl:text>
+    </xsl:if>
+  </xsl:template>
+
+  <!--
+     sites version="0.2"
+    -->
+
+  <xsl:template match="sites[@version='0.2']">
+    <xsl:apply-templates select="//uri[string-length(.)!=0]" mode="version_0_2"/>
+  </xsl:template>
+
+  <xsl:template match="//uri" mode="version_0_2">
+    <xsl:value-of select="../@location"/> <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="../@code"/>     <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="../@type"/>     <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="../name"/>      <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="@set"/>         <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="@scheme"/>      <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="@mode"/>        <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="."/>            <xsl:value-of select="$delimiter"/>
+    <xsl:apply-templates select="../contact" mode="version_0_2"/>
+    <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="../bandwidth"/> <xsl:value-of select="$delimiter"/>
+    <xsl:value-of select="../notes"/>
+    <xsl:text>&#xA;</xsl:text><!-- Line break -->
+  </xsl:template>
+
+  <xsl:template match="contact" mode="version_0_2">
+    <xsl:if test="string-length(name)!=0">
+      <xsl:text>"</xsl:text>
+      <xsl:value-of select="name"/>
+      <xsl:text>"</xsl:text>
+    </xsl:if>
+    <xsl:if test="string-length(email)!=0">
+      <xsl:choose>
+        <xsl:when test="string-length(name)!=0">
+          <xsl:text> &lt;</xsl:text>
+          <xsl:value-of select="email"/>
+          <xsl:text>&gt;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="email"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+    <xsl:if test="position() != last()">
+      <xsl:text>, </xsl:text>
+    </xsl:if>
+  </xsl:template>
+
+</xsl:stylesheet>
