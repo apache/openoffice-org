@@ -103,8 +103,8 @@ DL.initVariables = function( init_all ) {
 	DL.RELEASE_PLATFORM_POS_LP	= -1;	 // The position of the platform in the release matrix array (langpack).
 	DL.RELEASE_PLATFORM		= "";	 // The platform in the release matrix array.
 	DL.RELEASE_LANG			= "";	 // The language specific data depending on LANG_ISO.
-	DL.REL_TEXT			= "";	 // The release data (milestone, build ID, svn rev, release date).
-	DL.REL_NOTES			= "";	 // The complete URL for the release notes (depends on version).
+	DL.RELEASE_TEXT			= "";	 // The release data (milestone, build ID, svn rev, release date).
+	DL.RELEASE_NOTES		= "";	 // The complete URL for the release notes (depends on version).
 	DL.FILENAME_FULL		= "";	 // The complete filename of the download URL (full install).
 	DL.FILENAME_LP			= "";	 // The complete filename of the download URL (langpack).
 	DL.FILESIZE_FULL		= -1;	 // The filesize of the download file (full install).
@@ -713,7 +713,7 @@ DL.checkForLinkExceptions = function() {
 	}
 
 	// If version is '4.1.0' (or newer) and platform is 'Mac OS X <= 10.6', show the none-availability to the user.
-	if( ( DL.VERSION_SEL === "4.1.11" || DL.VERSION_SEL === "4.1.10" || DL.VERSION_SEL === "4.1.9" || DL.VERSION_SEL === "4.1.8" || DL.VERSION_SEL === "4.1.7" || DL.VERSION_SEL === "4.1.6" || DL.VERSION_SEL === "4.1.5" || DL.VERSION_SEL === "4.1.4" || DL.VERSION_SEL === "4.1.3" || DL.VERSION_SEL === "4.1.2" || DL.VERSION_SEL === "4.1.1" || DL.VERSION_SEL === "4.1.0" ) && DL.PLATFORM === "mac32" ) {
+	if( ( DL.VERSION_SEL === "4.1.12" || DL.VERSION_SEL === "4.1.11" || DL.VERSION_SEL === "4.1.10" || DL.VERSION_SEL === "4.1.9" || DL.VERSION_SEL === "4.1.8" || DL.VERSION_SEL === "4.1.7" || DL.VERSION_SEL === "4.1.6" || DL.VERSION_SEL === "4.1.5" || DL.VERSION_SEL === "4.1.4" || DL.VERSION_SEL === "4.1.3" || DL.VERSION_SEL === "4.1.2" || DL.VERSION_SEL === "4.1.1" || DL.VERSION_SEL === "4.1.0" ) && DL.PLATFORM === "mac32" ) {
 		// Show an error message that the chosen items do not lead to a download.
 
 		// If a customized string is not available in the "msg_prop_l10n_XX.js" file.
@@ -921,8 +921,8 @@ DL.getLinkSelection = function() {
 		// Set the values in the sub-box for the 4 text lines.
 		// #1 Release data and link to release notes.
 		document.getElementById( "dl_rel_info"      ).innerHTML	= "<b>" + l10n.dl_rel_info_headline_text
-									+ "</b> " + DL.REL_TEXT + " | ";
-		document.getElementById( "dl_rel_notes"	    ).href	= DL.REL_NOTES;
+									+ "</b> " + DL.RELEASE_TEXT + " | ";
+		document.getElementById( "dl_rel_notes"	    ).href	= DL.RELEASE_NOTES;
 		document.getElementById( "dl_rel_notes"	    ).innerHTML	= l10n.dl_rel_notes_text;
 		document.getElementById( "dl_rel_notes"	    ).title	= l10n.dl_rel_notes_title + DL.VERSION_SEL;
 
@@ -989,7 +989,7 @@ DL.getLinkSelection = function() {
 		document.getElementById( "dl_rpt"	    ).title	= l10n.dl_report_title;
 
 		// New Apache release policy since March 2018: Do not provide any MD5 checksums anymore as it is understood as too insecure.
-		if( ( DL.VERSION_SEL === "4.1.11" || DL.VERSION_SEL === "4.1.10" || DL.VERSION_SEL === "4.1.9" || DL.VERSION_SEL === "4.1.8" || DL.VERSION_SEL === "4.1.7" || DL.VERSION_SEL === "4.1.6" || DL.VERSION_SEL === "4.2.0" ) ) {
+		if( ( DL.VERSION_SEL === "4.1.12" || DL.VERSION_SEL === "4.1.11" || DL.VERSION_SEL === "4.1.10" || DL.VERSION_SEL === "4.1.9" || DL.VERSION_SEL === "4.1.8" || DL.VERSION_SEL === "4.1.7" || DL.VERSION_SEL === "4.1.6" || DL.VERSION_SEL === "4.2.0" ) ) {
 			// If version is '4.1.6' (or newer), do not show any MD5 checksum file links.
 			document.getElementById( "space4"	    ).innerHTML	= "";
 			document.getElementById( "dl_f_chk_md5"	    ).href	= "";
@@ -1366,20 +1366,20 @@ DL.getFileData = function() {
 
 	// TODO: Rewrite this part together with text items "l10n.dl_rel_info_svn_text" in "msg_prop_l10n_en.js" and all other languages to make it independent from SVN, Git or other systems.
 	/*
-	DL.REL_TEXT		= l10n.dl_rel_info_milestone_text	 + DL[ release_matrix_version ][ "src" ][ 1 ][ 0 ]
+	DL.RELEASE_TEXT		= l10n.dl_rel_info_milestone_text	 + DL[ release_matrix_version ][ "src" ][ 1 ][ 0 ]
 				+ " | " + l10n.dl_rel_info_buildid_text	 + DL[ release_matrix_version ][ "src" ][ 1 ][ 1 ]
 				+ " | " + l10n.dl_rel_info_svn_text	 + DL[ release_matrix_version ][ "src" ][ 1 ][ 2 ]
 				+ " | " + l10n.dl_rel_info_rel_date_text + DL[ release_matrix_version ][ "src" ][ 1 ][ 3 ];
 	*/
 
-	DL.REL_TEXT		= l10n.dl_rel_info_milestone_text	 + DL[ release_matrix_version ][ "src" ][ 1 ][ 0 ]
+	DL.RELEASE_TEXT		= l10n.dl_rel_info_milestone_text	 + DL[ release_matrix_version ][ "src" ][ 1 ][ 0 ]
 				+ " | " + l10n.dl_rel_info_buildid_text	 + DL[ release_matrix_version ][ "src" ][ 1 ][ 1 ]
 				+ " | "                                  + DL[ release_matrix_version ][ "src" ][ 1 ][ 2 ]
 				+ " | " + l10n.dl_rel_info_rel_date_text + DL[ release_matrix_version ][ "src" ][ 1 ][ 3 ];
 
 	// Assign the link for release notes, depending on the version.
 	// Generate variable name: string + version number without dots (e.g., "413" instead of "4.1.3").
-	DL.REL_NOTES = l10n[ "dl_rel_notes_aoo" + DL.VERSION_SEL_RAW + "_link" ];
+	DL.RELEASE_NOTES = l10n[ "dl_rel_notes_aoo" + DL.VERSION_SEL_RAW + "_link" ];
 
 	return;
 }
@@ -1427,8 +1427,8 @@ DL.debug = function( location ) {
 	+ "RELEASE_PLATFORM_POS_LP: "		+ "\t\t\t"		+ DL.RELEASE_PLATFORM_POS_LP	+ "\n"
 	+ "RELEASE_PLATFORM: "			+ "\t\t\t\t\t"		+ DL.RELEASE_PLATFORM		+ "\n"
 	+ "RELEASE_LANG: "			+ "\t\t\t\t\t\t"	+ DL.RELEASE_LANG		+ "\n"
-	+ "REL_TEXT: "				+ "\t\t\t\t\t\t\t"	+ DL.REL_TEXT			+ "\n"
-	+ "REL_NOTES: "				+ "\t\t\t\t\t\t"	+ DL.REL_NOTES			+ "\n"
+	+ "RELEASE_TEXT: "			+ "\t\t\t\t\t\t\t"	+ DL.RELEASE_TEXT		+ "\n"
+	+ "RELEASE_NOTES: "			+ "\t\t\t\t\t\t"	+ DL.RELEASE_NOTES		+ "\n"
 	+ "VERSION_SEL: "			+ "\t\t\t\t\t\t"	+ DL.VERSION_SEL		+ "\n"
 	+ "VERSION_SEL_RAW: "			+ "\t\t\t\t\t"		+ DL.VERSION_SEL_RAW		+ "\n"
 	+ "FILENAME_FULL: "			+ "\t\t\t\t\t"		+ DL.FILENAME_FULL		+ "\n"
