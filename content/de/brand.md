@@ -9,6 +9,6 @@ logo=AOO_logos/100MillAOO100px.png
 domain=https://www.openoffice.org
 divid=bannera
 announce=Verfügbar: Apache OpenOffice
-announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-17
+announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-18
 announcetip=Verfügbar: Apache OpenOffice
 ~~~~~~
