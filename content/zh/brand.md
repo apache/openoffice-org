@@ -7,7 +7,7 @@ logo=AOO_logos/AOO4_website_logo.png
 domain=https://www.openoffice.org
 divid=bannera
 announce=正式發表 Apache OpenOffice
-announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-16
+announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-18
 announcetip=正式發表 Apache OpenOffice
 ~~~~~~
 ~~~~~~
