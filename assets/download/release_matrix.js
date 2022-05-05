@@ -26,7 +26,7 @@
 DL.release_matrix_4112 = {
 "src": {
 	 "0": [ 'src', 'English (US)', 'English (US)', 'y', 'download/index.html' ],
-	 "1": [ 'AOO4112m1', '9809', 'Git hash 60e0a1c111', '2022-04-30' ],
+	 "1": [ 'AOO4112m1', '9809', 'Git hash 60e0a1c111', '2022-05-04' ],
 	 "2": [ 'tar_bz2', 'y', '209' ],
 	 "3": [ 'tar_gz',  'y', '276' ],
 	 "4": [ 'zip',	   'y', '323' ] },
