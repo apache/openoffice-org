@@ -55,7 +55,7 @@ l10n.dl_green_box_select_box_lang_values_custom = [ "ast",		"Asturian",					"Ast
 													"en-GB",	"English [British]",		"English [British]",
 													"en-US",	"English [US]",				"English [US]",
 													"fi",		"Finnish",					"Suomi",
-													"fr",		"French",					"Français",
+													"fr",		"Français",					"Français",
 													"gl",		"Galician",					"Galego",
 													"de",		"German",					"Deutsch",
 													"el",		"Greek",					"ελληνικά",
