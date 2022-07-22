@@ -1,0 +1,172 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Calc.Erase_create_range_name.snip,v $
+last change: $Revision: 1.2 $ $Author: tomsontom $ $Date: 2005/07/18 12:48:55 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="OOBasic" application="Calc">
+
+<keywords>
+	<keyword>macro</keyword>
+	<keyword>named range</keyword>
+	<keyword>delete/create named range</keyword>
+	<keyword>last used row</keyword>
+	<keyword>cell containing last balance</keyword>
+	<keyword>erase named range</keyword>
+	<keyword>create named range</keyword>
+</keywords>
+
+<authors>
+	<author id="ennio_sr" initial="true" email="nasr.laili@tin.it">Ennio-Sr</author>
+	<author id="" initial="false" email="andrew@pitonyak.org">Andrew Douglas Pitonyak</author>
+	<author id="" initial="false" email="M.Santhoff@t-online.de">Marc Santhoff</author>
+	<author id="" initial="false" email="scat@teol.net">Sasa Kelesevic</author>
+</authors>
+
+<question heading="erase-create_range_name">Reassign named range to a cell in last used row
+
+<p>How to determine last row used and set a named range for a cell in that row</p>
+<p>GregChi &lt;geardoc36@snet.net&gt;; asked a similar question on users@openoffice.org </p>
+<p>and received workarounds more than a direct answer. I had a similar problem and after</p>
+<p>reading Andrew Pitonyak&apos;s &quot;Useful Macro Information for OOo&quot; and asking a few questions</p>
+<p>on dev@api.openoffice.org, wrote a macro which does the job. It considers col. F as the one </p>
+<p>containing a formula to determine current account balance (i.e. previous balance , plus credit,</p>
+<p>minus debit). Col. headings (A to F) are: Date, Value_date, Description, Debit, Credit, Balance).</p>
+<p></p>
+<p>Once you have copy pasted the code in your Calc file, you can well assign the macro</p>
+<p>(_0_create_last_bal) to the Event/Opening of document so that it is run when the file</p>
+<p> is opened. A second macro (create_last_bal) mentioned in the dialog box, does the same</p>
+<p>as it just calls the previous one.</p>
+</question>
+
+<answer>
+<listing>sub _0_create_last_bal
+&apos; ----------------------------
+&apos;  On error exit
+On Error goto Label
+
+&apos; define variables
+Dim oDoc As Object    &apos; The spreadsheet we are working on
+Dim oSheet As Object  &apos; The sheet (usually first one)
+Dim oCell As Object   &apos; The particular cell we select
+Dim oRange            &apos; The created range
+Dim oRanges           &apos;  All named ranges
+Dim sName$            &apos; Name of the named range to create
+msg$ = &quot;I&apos; m ready to accept new records: for each new one copy formula &quot; +_
+    &quot;in last balance cell (or run macro &apos;create_new_rec&apos;).&quot;
+
+oDoc=ThisComponent
+ocell=ThisComponent.CurrentSelection
+oRanges = ThisComponent.NamedRanges
+sName$=&quot;last_bal&quot;
+
+&apos; Here we verify whether there is already a range with that name and,
+&apos; in the affirmative, erase it so that the new one can be created:
+If oRanges.hasByName(sName$) Then
+   oRanges.getByName(sName$)
+   oRanges.removeByName(sName$)
+End If
+
+&apos; We go to the last cell on the desired column
+odoc   = ThisComponent.CurrentController.Frame
+dispatcher = createUnoService(&quot;{@see com.sun.star.frame.DispatchHelper}&quot;)
+Dim args1(0) as new {@see com.sun.star.beans.PropertyValue}
+&apos; We save the file to make sure what is displayed is read correctly
+&apos; SEEMS NOT NECESSARY dispatcher.executeDispatch(oDoc, &quot;.uno:Save&quot;, &quot;&quot;, 0, array())
+args1(0).Name = &quot;ToPoint&quot;
+args1(0).Value = &quot;$F$6&quot;
+dispatcher.executeDispatch(oDoc, &quot;.uno:GoToCell&quot;, &quot;&quot;, 0, args1())
+dispatcher.executeDispatch(oDoc, &quot;.uno:GoDownToEndOfData&quot;, &quot;&quot;, 0, args1())
+
+&apos; and check whether its value is zero
+ocell=ThisComponent.CurrentSelection &apos; gets value of new current cell
+vlc = oCell.getValue()    &apos; get value of selected cell (last cell)
+if vlc = 0 then
+   dispatcher.executeDispatch(oDoc, &quot;.uno:Cut&quot;, &quot;&quot;, 0, args1())
+   dispatcher.executeDispatch(oDoc, &quot;.uno:GoUp&quot;, &quot;&quot;, 0, args1())
+   &apos; we determine the row number of the selected cell: 
+   &apos; numbering starts from 0, so we need add 1:
+   r$ = oCell.CellAddress.row+1
+   xcl$ = &quot;Sheet1.$F$&quot;+r$                            &apos; ref to col F may be changed
+else
+   &apos; This is a special case, so we need add 2
+   r$ = oCell.CellAddress.row+2
+   xcl$ = &quot;Sheet1.$F$&quot;+r$                            &apos; ref to col F may be changed
+End if
+
+&apos; we set our named range name:
+Dim oCellAddress As new {@see com.sun.star.table.CellAddress}
+oCellAddress.Sheet = 0       &apos; The first sheet
+oRanges.addNewByName(sName$,xcl$,oCellAddress,0)    
+
+&apos; We arrange for copying the formula from last used row to the next one
+dispatcher.executeDispatch(oDoc, &quot;.uno:Copy&quot;, &quot;&quot;, 0, Args1())
+Dim args2(1) as new {@see com.sun.star.beans.PropertyValue}
+args2(0).Name = &quot;By&quot;
+args2(0).Value = 1
+args2(1).Name = &quot;Sel&quot;
+args2(1).Value = false
+dispatcher.executeDispatch(oDoc, &quot;.uno:GoDown&quot;, &quot;&quot;, 0, args2())
+dispatcher.executeDispatch(oDoc, &quot;.uno:Paste&quot;, &quot;&quot;, 0, Args2())
+dispatcher.executeDispatch(oDoc, &quot;.uno:GoToStartOfRow&quot;, &quot;&quot;, 0, args2())
+Print msg$
+Exit sub
+
+Label:
+    print &quot;Error!&quot;
+Exit Sub
+
+End Sub
+
+Rem ###################################################################
+
+Sub create_new_rec
+&apos;  we call the previous macro:
+sub _0_create_last_bal
+End Sub   
+
+&apos; #####################################################################
+</listing>
+</answer>
+
+<versions>
+	<version number="1.1.4" status="tested"/>
+	<version number="1.9.82 beta" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="Linux"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="ennio_sr" date="2005-06-24">Version 2.0
+I discovered some flaws in the initial version (on some circumstances &quot;last_bal&quot; was created on the last but one row). So it was necessary to re-write the code. The file structure is very simple (as said above). You can put this formula in cell F6:
+=IF(ISBLANK(B6);0;F5-D6+E6).
+</change>
+</changelog>
+
+</snippet>
+

@@ -1,0 +1,226 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Impress.AddProgressShowingImagesToEachSlidePacman.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2007/08/13 13:05:15 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Impress">
+
+<keywords>
+	<keyword>progress</keyword>
+	<keyword>pacman</keyword>
+</keywords>
+
+<authors>
+	<author id="" initial="true" email="dominik.gundacker@gmail.com">Dominik Gundacker</author>
+</authors>
+
+<question heading="Add progress showing images on each slide">How to add progress showing images on each slide of a presentation
+
+<p>Pac-man shows the progress of the presentation. He will start on the left side of the presentation and will reach some cherries on the right side of the last slide.</p>
+</question>
+
+<answer>
+<listing>/* Macro, which generates pacman on his way to his cherries */
+/* 02_pacman.rex */
+xScriptContext=uno.getScriptContext()  -- get the xScriptContext object
+oDoc=xScriptContext~getDocument  -- get the document service (an XModel object)
+/* retrieving the important interfaces to get access to the drawpages */
+xDrawPagesSupplier=oDoc~{%see com.sun.star.drawing.XDrawPagesSupplier%XDrawPagesSupplier}
+xImpressFactory = oDoc~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+xDrawPages = xDrawPagesSupplier~getDrawPages
+/* global service manager for shape grouper */
+xContext = xScriptContext~getComponentContext
+XMcf = xContext~getServiceManager
+CALL removeSelection oDoc
+/* initialize all variables (height, width, etc.) */
+
+firstDrawPageProps = xDrawPages~getByIndex(0)~{%see com.sun.star.drawing.XDrawPage%XDrawPage}~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+width = firstDrawPageProps~getPropertyValue(&quot;Width&quot;)
+height = firstDrawPageProps~getPropertyValue(&quot;Height&quot;)
+shapeWidthBorder = width - 1400
+shapeHeight = 750
+shapeX = 500
+shapeY = height - 1500
+CALL getNumberOfVisibleSlides xDrawPages
+pagecount=result
+IF pagecount &lt;= 2 THEN
+DO
+  .bsf.dialog~messageBox(&quot;This presentation has less than three visible slide. &quot;-
+    &quot;There is no need for this macro to run!&quot;, &quot;ERROR&quot;, &quot;error&quot;)
+  EXIT 0
+END
+step = trunc( (width - 2500) / (pagecount - 2))
+pacmanPositionX = shapeX
+
+CALL GetPresentationDirectory oDoc~getURL
+directory = result
+separator = .uno~file.separator
+
+CALL getFirstVisibleSlide xDrawPages
+startIndex = result + 1
+pagecount=xDrawPages~{%see com.sun.star.container.XIndexAccess%XIndexAccess}~getCount 
+DO i = 1 TO pagecount - 1
+  xDrawPage = xDrawPages~getByIndex(i)~{%see com.sun.star.drawing.XDrawPage%XDrawPage}
+
+  /* remove existing pacmans, if necessary */
+  xShapes = xDrawPage~{%see com.sun.star.drawing.XShapes%XShapes}
+  DO j = 0 TO xShapes~getCount - 1
+     xShape = xShapes~getByIndex(j)
+     IF(xShape~{%see com.sun.star.container.XNamed%XNamed}~getName() == &quot;pacman_scene_group&quot;) THEN
+     DO
+        xShapeGroup = xShape~{%see com.sun.star.drawing.XShapeGroup%XShapeGroup}
+        xDrawPage~remove(xShapeGroup)
+     END
+  END
+  xProps = xDrawPage~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+  IF(xProps~getPropertyValue(&quot;Visible&quot;) == 0 | i &lt; startIndex) THEN
+    ITERATE
+  /* creating and positioning of pacman */
+  pacman = xImpressFactory~createInstance(-
+    &quot;{%see com.sun.star.drawing.GraphicObjectShape}&quot;) 
+  pacman = pacman~{%see com.sun.star.drawing.XShape%XShape}
+  CALL setSizeAndPosition pacman, 1000, 1000, pacmanPositionX, shapeY + 120
+  pacmanProps=pacman~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+  pacmanProps~setPropertyValue(&quot;GraphicURL&quot;,-
+    uno.convertToURL(directory||separator||&quot;pacman.gif&quot;))
+  xDrawPage~add(pacman)
+
+  /* creating and positioning of the cherry */
+  cherry = xImpressFactory~createInstance(-
+    &quot;{%see com.sun.star.drawing.GraphicObjectShape}&quot;) 
+  cherry = cherry~{%see com.sun.star.drawing.XShape%XShape}
+  CALL setSizeAndPosition cherry, 1200, 1200, shapeWidthBorder, shapeY
+  cherryProps=cherry~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+  cherryProps~setPropertyValue(&quot;GraphicURL&quot;,-
+    uno.convertToURL(directory||separator||&quot;cherry.gif&quot;))
+  xDrawPage~add(cherry)
+
+  /* create the group */
+  shapeGroup = xMcf~createInstanceWithContext(-
+    &quot;{%see com.sun.star.drawing.ShapeCollection}&quot;, xContext)
+  shapeGroup = shapeGroup~{%see com.sun.star.drawing.XShapes%XShapes}
+  shapeGroup~add(cherry)
+  shapeGroup~add(pacman)
+
+   /* creating and positioning of points */
+  IF (i &lt;&gt; pagecount -1) THEN
+    DO 
+      j = pacmanPositionX + 1200
+      DO WHILE j &lt; shapeWidthBorder - 300
+        point = xImpressFactory~createInstance(-
+          &quot;{%see com.sun.star.drawing.EllipseShape}&quot;) 
+        point = point~{%see com.sun.star.drawing.XShape%XShape}
+        CALL setSizeAndPosition point, 300, 300, j, shapeY + 500
+        j = j + 800
+        pointProps=point~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+        constant = bsf.getConstant(&quot;{%see com.sun.star.drawing.CircleKind}&quot;, &quot;FULL&quot;)
+        pointProps~setPropertyValue(&quot;CircleKind&quot;, constant)
+        pointProps~setPropertyValue(&quot;FillColor&quot;, box(&quot;int&quot;, &quot;FFFF00&quot;x ~c2d))
+        pointProps~setPropertyValue(&quot;LineStyle&quot;,-
+         bsf.getConstant(&quot;{%see com.sun.star.drawing.LineStyle}&quot;, &quot;NONE&quot;))
+        xDrawPage~add(point)
+        shapeGroup~add(point)
+      END
+    END
+  xShapeGrouper = xDrawPage~{%see com.sun.star.drawing.XShapeGrouper%XShapeGrouper}
+  xShapeGroup = xShapeGrouper~group(shapeGroup)
+  name = xShapeGroup~{%see com.sun.star.container.XNamed%XNamed} 
+  name~setName(&quot;pacman_scene_group&quot;) 
+
+  pacmanPositionX = pacmanPositionX + step
+END
+
+EXIT 0
+/* routine for getting the directory of the presentation */
+GetPresentationDirectory :
+  use arg  path
+
+  separator = .uno~file.separator
+  full = REVERSE(uno.convertFromURL(path))
+  parse var full &quot;pdo.&quot; filename (separator) directory
+  directory = REVERSE(directory)
+
+return directory
+
+
+/* Returns the number of visible slides */
+getNumberOfVisibleSlides :
+  USE ARG xDrawPages
+  count = 0
+  pagecount=xDrawPages~{%see com.sun.star.container.XIndexAccess%XIndexAccess}~getCount
+  DO i = 0 TO pagecount - 1
+    xDrawPage = xDrawPages~getByIndex(i)~{%see com.sun.star.drawing.XDrawPage%XDrawPage}
+    xProps = xDrawPage~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+    IF(xProps~getPropertyValue(&quot;Visible&quot;) == 1) THEN
+      count = count + 1
+  END
+return count
+
+/* Returns the index of the first visible slide */
+getFirstVisibleSlide :
+  USE ARG xDrawPages
+  index = -1
+  pagecount=xDrawPages~{%see com.sun.star.container.XIndexAccess%XIndexAccess}~getCount
+  DO i = 0 TO pagecount - 1
+    xDrawPage = xDrawPages~getByIndex(i)~{%see com.sun.star.drawing.XDrawPage%XDrawPage}
+    xProps = xDrawPage~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+    IF(xProps~getPropertyValue(&quot;Visible&quot;) == 1) THEN
+      return i
+  END
+return index
+
+::requires UNO.CLS   -- load UNO support for OpenOffice.org
+
+/* routine for positioning and resizing a shape */
+::routine  setSizeAndPosition
+  use arg shape, width, height, posX, posY
+
+  shape~setSize(-
+    .bsf~new(&quot;{%see com.sun.star.awt.Size}&quot;, width, height))
+  shape~setPosition(.bsf~new(&quot;{%see com.sun.star.awt.Point}&quot;, posX, posY))	
+
+/* routine for removing selection*/
+::routine  removeSelection
+  use arg oDoc
+
+  model= oDoc~{%see com.sun.star.frame.XModel%XModel}
+  controller = model~getCurrentController()
+  selectionController = controller~{%see com.sun.star.view.XSelectionSupplier%XSelectionSupplier}
+  selected = selectionController~getSelection()
+  selectionController~select(.nil)</listing>
+</answer>
+
+<versions>
+</versions>
+
+<operating-systems>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>
