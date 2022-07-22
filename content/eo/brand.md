@@ -9,6 +9,6 @@ logo=AOO_logos/100MillAOO100px.png
 domain=https://www.openoffice.org
 divid=bannera
 announce=Liberigita: Apache OpenOffice
-announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-18
+announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-19
 announcetip=Liberigita: Apache OpenOffice
 ~~~~~~
