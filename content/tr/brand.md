@@ -9,6 +9,6 @@ logo=AOO_logos/AOO4_website_logo.png
 domain=https://tr.openoffice.org
 divid=bannera
 announce=Yayımlandı: Apache OpenOffice
-announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-19
+announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-18
 announcetip=Yayımlandı: Apache OpenOffice
 ~~~~~~
