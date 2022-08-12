@@ -1,0 +1,269 @@
+Language agnostic scripting framework architecture
+==================================================
+
+Author: Laszlo Kovacs
+
+1. Project goals 
+----------------
+
+1. Provide a language agnostic scripting framework  specification
+and implementation that allows compiled and interpreted scripting
+engines to be plugged into StarOffice. This includes support  for
+plugging in various IDEs.
+
+2. Integrate in the framework described at (1) a scripting engine
+for  scripts  developed in JAVA and a scripting engine for a JAVA
+based scripting language.
+
+3. Select an IDE and integrate it into the framework described at
+(1).   Implement  command  line  tools  that  duplicate  the  IDE
+functionality (for script  developers  who  prefer  command  line
+environment).
+
+4.  Refactor  the  current   StarBasic   scripting   engine   and
+environment  so  that  it  is plugged into StarOffice through the
+framework described at (1). Decision has to be  made  about  what
+kind  of  IDE  to  provide (the old one or integrate with the new
+one).
+
+2.Language agnostic scripting framework
+---------------------------------------
+
+This section deals with the first item of the project goals.
+
+The main components of the language agnostic scripting  framework
+are described below.
+
+2.1 Runtime environment 
+-----------------------
+
+A language agnostic  runtime  environment  has  to  allow  script
+engine  developers  to plug in script engines (runtime instances)
+of compiled or interpreted languages.
+
+Runtime instances have to be managed by a runtime  manager.  They
+need  to implement interface(s) through  which the associated VM,
+interpreter can be started, stopped, identified, status  queried,
+configured.
+
+Runtime instances have to be easily deployable  into  StarOffice,
+implementation  as  UNO  components  or  using  UNO wrappers will
+achieve this.
+
+Because  of   the   specifics   of    individual   VM/interpreter
+configurations  the  runtime implementation will probably have to
+provide its own specific configuration tool.
+
+Runtime services that are common for every runtime and should  be
+part of the scripting framework implementation are:
+
+1. If compiled scripts are deployed by source then they will have
+to  be compiled before running. The location of related compilers
+have to be discovered for this, probably configured  through  the
+configuration tool.
+
+2. Executed scripts have to be provided with context. This can be
+obtained from the storage service or can be assigned dynamically.
+
+3. Lifecycle services: resources acquired by the script  have  to
+be tracked and cleaned up after execution.
+
+4. A sandbox could be provided for managing script resources  and
+access  permissions  to  the  file system and StarOffice services
+granting  various  rights  to  scripts.  However  this  might  be
+difficult  to  achieve  in  a  language  agnostic  way. A simpler
+approach  is  described  in  the  "Binding  to  events"   section
+(signatures).
+
+5. Defining a state persistence service is a  simple  matter.  In
+case  of  languages  that support persistence StarOffice specific
+persistence services can be hidden from developers.
+
+6. Single threaded scripts  have  to  be  safely  usable  in  the
+multithreaded  StarOffice  environment.  A simple approach of not
+running two scripts at the same time in the same context  (Single
+Threaded Apartment model) might be enough here.
+
+2.2 Binding to events ---------------------
+
+A binding UI (part of StarOffice) has to be  provided  for  users
+who  use  scripts  developed  by  script developers. This UI will
+allow binding of scripts and script methods to StarOffice events.
+The  binding  UI  should  navigate  scripts  developed in all the
+supported languages.  This can be achieved with a generic  naming
+scheme  that   easily  maps  to  the  supported  languages naming
+schemes. Deployment information is needed to describe the methods
+implemented  by  a  script  (depending  on  languages this may be
+automatically generated from the script). The binding UI also has
+to facilitate parameter passing to scripts.
+
+It  might  be  preferred   to   provide   very   simple   editing
+functionalities in the binding UI so that a script can be changed
+and saved by the user before it is run.
+
+Security related issues in this case are:
+
+1. If scripts are provided by source they  may  be  encrypted  so
+that  only  certain  users can run them. The binding UI has to be
+able to decrypt them based on passwords provided by the user.
+
+2. Scripts have to be prevented of harmful behavior. This may  be
+achieved  by  a  sandbox  type  of  approach  implemented  in the
+runtime. This however might be difficult  to  achieve  for  every
+language in a language agnostic way.
+
+An alternative approach is similar to the Java applet signatures.
+Scripts  can  contain  a  signature from a trusted source meaning
+that they can be trusted. It would be up to the  user  to  decide
+whether  scripts  are  run  or  not based on their signatures. If
+scripts are run they would have  full  access  to  resources  and
+StarOffice  services.  An extension to this where trusted scripts
+would be granted with more resources and possibilities  than  not
+trusted ones might be difficult to implement.
+
+2.3 IDE services 
+----------------
+
+Developers  need  an  IDE  or  simple  command  line  tools   for
+development.  The  development  tasks these tools have to support
+are accessing/editing/storing code,  compiling,  debugging,  code
+encryption/decryption (see "Binding to events").
+
+The  scripting  framework  has  to  include   specification   and
+implementation   of   services   that   will   support   the  IDE
+functionalities.  These  are  storage,  debugging  and  compiling
+services.  Encryption/decryption  services are simple and will be
+shared between the binding  UI,  the  IDE,  the  macro  recording
+component and possibly the runtime environment.
+
+The compiling service supports easy plug in of various  compilers
+for  compiled  languages. Apart from the IDE another higher level
+component  that  needs  the  compiler  service  is  the   runtime
+environment,  in  case scripts are deployed by source and need to
+be compiled before being run.
+
+Explicit   debugging   services   (breakpoint   setting/clearing,
+variable  evaluation  etc.)  need  to  be defined. Some debuggers
+(JVM) allow direct connection of the IDE to them,  with  no  need
+for a special debugging service.
+
+Access/edit/save of scripts,  their  deployment  information  and
+context  has  to  rely  on  the  script  navigation  and  storage
+services. No extra  services  have  to  be  defined  here.  These
+services (especially assigning context) have to be shared between
+the IDE and the binding UI.
+
+2.4 Script navigation and storage
+---------------------------------
+
+Script storage is a lower level service that most  of  the  other
+services  will  rely  on. IDEs and command line development tools
+will have to load, edit, save scripts. The binding UI  will  have
+to  be  able  to  navigate  through the scripts, their deployment
+information and context. Runtimes will need to  locate  and  load
+the scripts that are selected for execution.
+
+A storage service has to implement access, navigation and  saving
+of  scripts,  their  deployment  information  and context for all
+supported languages, interfaces will have to be defined for this.
+
+The approach of script storage in relation to documents  and  the
+application  has  to  be  defined. Scripts can be part of related
+documents or referenced  from  documents.  The  application  wide
+scripts  will  have  to  be  stored in an application rather than
+document specific area.
+
+2.5 Macro recording 
+-------------------
+
+Macro (script) recording has to be  supported  by  the  scripting
+framework.  The  sharing  of responsibilities between StarOffice,
+the scripting framework and  language  specific  macro  recording
+components has to be researched.
+
+3. IDE implementation and command line tools
+--------------------------------------------
+
+This section deals with the third item of the project goals.
+
+The main issue here is whether the preferred solution is  to  use
+an  IDE framework (such as NetBeans) to develop the IDE or an IDE
+is developed from scratch (for example using JBuilder).
+
+IDEs will use the compiler service and the debugging service  for
+development.  They  will  use the storage service to edit scripts
+and to deploy scripts in various contexts (assigned to  documents
+or  application wide). The part of the IDE that is implemented on
+top of the storage  service  has  to  be  more  complex  than  an
+ordinary file selection box as it has to access and store scripts
+in relation to various contexts.
+
+Close integration  between  the  binding  UI,  the  IDE  and  the
+debugging   services   is   needed   for  script  testing  during
+development. After a script  has  been  saved  (with  a  specific
+context),  developers have to be able to bind it to an event, run
+it in a debugger and set breakpoint or evaluate variables through
+the IDE.
+
+Editing command line tools will have to implement easy extraction
+and  saving  of  scripts  in  document  and application contexts.
+Command line compiling does not need extra support. Command  line
+debugging  needs  support  for  setting the script context before
+running and cooperation with the binding UI.
+
+An important feature of an IDE is a GUI  builder.  Modern  script
+environments  include  GUI  builders.  In  the  language agnostic
+context the main issues are whether a  language  independent  GUI
+building  framework is feasible, and what effort will this put on
+developers to learn yet another UI  API.  Alternatively  the  GUI
+builder   can   be  deferred  to  the  individual  script  engine
+implementations. The possibility to achieve similar look and feel
+to StarOffice is important in this case.
+
+
+4. Architecture diagram 
+------------------------
+
+This  diagram  tries  to  capture  both  the  language   agnostic
+scripting  framework and the integrated IDE. It contains only the
+components and their  relationships  (connecting  lines  describe
+relationships), not what services the components provide.
+
+It does not deal with  the  security  related  issues  of  script
+execution (the sandbox vs the signature approach).
+
+In case of the signature approach a signature service has  to  be
+provided  that  allows  scripts  to  be  signed whenever they are
+created (IDE, macro recording)  and  to  retrieve  the  signature
+before assigning to an event (binding UI).
+
+In case of the sandbox approach the common runtime services  have
+to  be  extended  with  the sandbox implementation and a security
+configuration UI provided that configures the sandbox. This could
+be built on top of the signature approach.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
