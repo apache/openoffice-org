@@ -10,7 +10,7 @@ divid=topnava
 
 
 [m0]: /fr/Produits							"Description de la gamme OpenOffice"
-[m1]: /fr/Telecharger						"Télécharger Apache OpenOffice"
+[m1]: /fr/Telecharger						"Télécharger OpenOffice"
 [m2]: /fr/Support							"Besoin d'aide sous OpenOffice ?"
 [m3]: https://templates.openoffice.org/fr	"Modèles pour OpenOffice"
 [m4]: https://extensions.openoffice.org/fr	"Extensions pour OpenOffice"
