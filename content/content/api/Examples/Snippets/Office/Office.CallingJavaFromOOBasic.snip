@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.CallingJavaFromOOBasic.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2005/07/18 12:48:56 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="Java" application="Office">
+
+<keywords>
+    <keyword>calling java class from basic</keyword>
+    <keyword>uno component</keyword>
+</keywords>
+
+<authors>
+    <author id="tomson" initial="true" email="tom.schindl@bestsolution.at">Tom Schindl</author>
+</authors>
+
+<question heading="Calling Java from OOBasic">How can I call a java class from OOBasic
+<p>I have written a java programm i want to run from OpenOffice using</p>
+<p>OOBasic.</p>
+</question>
+
+<answer>
+<p>You have to wrap your Java-Class/Java-Application in an UNO-Component.</p>
+<p>See the developer guide and the examples coming with it </p>
+<p>to see how this is done using the make utility.</p>
+
+<listing>package at.bestsolution.oeush;
+
+import com.sun.star.comp.loader.FactoryHelper;
+import {%see com.sun.star.lang.XMultiComponentFactory};
+import {%see com.sun.star.lang.XMultiServiceFactory};
+import {%see com.sun.star.lang.XServiceInfo};
+import {%see com.sun.star.lang.XSingleServiceFactory};
+import com.sun.star.lib.uno.helper.WeakBase;
+import {%see com.sun.star.registry.XRegistryKey};
+import {%see com.sun.star.task.XJobExecutor};
+import {%see com.sun.star.uno.XComponentContext};
+
+/* Usage in OOBasic:
+ * 
+ * Sub OracleReports
+ *   Dim Service As Object
+ *   Service = CreateUnoService(&quot;at.bestsolution.oeush.OracleReports&quot;)
+ *   Service.trigger(&quot;&quot;)
+ * End Sub
+ * 
+ * Registered using pkgchk
+ */
+public class OracleReports extends WeakBase implements {%see com.sun.star.lang.XServiceInfo|XServiceInfo}, {%see com.sun.star.task.XJobExecutor|XJobExecutor}
+{
+    static final String __serviceName = &quot;at.bestsolution.oeush.OracleReports&quot;;
+    
+    private {%see com.sun.star.uno.XComponentContext|XComponentContext} _xComponentContext;
+    
+    public OracleReports({%see com.sun.star.uno.XComponentContext|XComponentContext} xComponentContext){
+        _xComponentContext = xComponentContext;
+    }
+    
+    // static component operations
+    public static {%see com.sun.star.lang.XSingleServiceFactory|XSingleServiceFactory} __getServiceFactory( String implName, {%see com.sun.star.lang.XMultiServiceFactory|XMultiServiceFactory} multiFactory, {%see com.sun.star.registry.XRegistryKey|XRegistryKey} regKey ) {
+        {%see com.sun.star.lang.XSingleServiceFactory|XSingleServiceFactory} xSingleServiceFactory = null;
+
+        if ( implName.equals( OracleReports.class.getName() ) ) {
+            xSingleServiceFactory = FactoryHelper.getServiceFactory( OracleReports.class, OracleReports.__serviceName, multiFactory, regKey );
+        }        
+
+        return xSingleServiceFactory;
+    }
+
+    public static boolean __writeRegistryServiceInfo({%see com.sun.star.registry.XRegistryKey|XRegistryKey}  regKey ) {
+        return FactoryHelper.writeRegistryServiceInfo(
+        OracleReports.class.getName(), OracleReports.__serviceName, regKey );
+    }
+
+    
+    /* 
+     * {@see com.sun.star.lang.XServiceInfo:getImplementationName}
+     */
+    public String getImplementationName()
+    {
+        return getClass().getName();
+    }
+
+    /* 
+     * {@see com.sun.star.lang.XServiceInfo:getSupportedServiceNames}
+     */
+    public String[] getSupportedServiceNames()
+    {
+        String[] retValue= new String[0];
+        retValue[0] = __serviceName;
+        return retValue;
+    }
+
+    /* 
+     * {@see com.sun.star.lang.XServiceInfo:supportsService}
+     */
+    public boolean supportsService(String serviceName)
+    {
+        if ( serviceName.equals( __serviceName))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /* 
+     * {@see com.sun.star.task.XJobExecutor:trigger}
+     */
+    public void trigger(String event)
+    {
+        XMultiComponentFactory xMultiComponentFactory = _xComponentContext.getServiceManager();
+        // here you can call your java classes like you would without openoffice
+    }
+}
+</listing>
+</answer>
+
+<versions>
+    <version number="1.1.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+    <change author-id="tomson" date="2005-07-18">Initial version</change>
+</changelog>
+
+</snippet>

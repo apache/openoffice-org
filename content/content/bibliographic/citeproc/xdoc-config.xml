@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XSLTdocConfig>
+  <Title>CiteProc</Title>
+  <Introduction>
+    <div class="section">
+      <h2>Overview</h2>
+      <p>CiteProc is a comprehensive solution for bibliographic and citation
+        formatting. It consists of an easy-to-use XML citation style language
+        (CSL), and the XSLT code to format documents based on them. In essence,
+        it is designed to serve as an XML-based analog to BibTeX, but with
+        dramatic improvements in ease-of-use, metadata flexibility, and
+        international support.</p>
+      <p>CiteProc reads the source document for citation references and collects
+        the corresponding records from an external bibliographic data store, and
+        then formats the bibliography and citations according to specifications
+        in the CSL file.</p>
+      <div class="image" align="center">
+        <img src="images/citeproc-overview.png" width="320px"/>
+        <p>CiteProc Overview</p>
+      </div>
+      <p>The data store can either be a flat XML file, or a server that supports
+        HTTP-based XQuery or <a
+          href="http://www.loc.gov/z3950/agency/zing/srw/sru.html">SRU</a>
+        queries. SRU is a particularly promising new RESTful protocol that comes
+        out of the library world, and which can provide a nice—<a
+          href="http://sru.miketaylor.org.uk/">easily implemented</a>—standard
+        around which a diversity of bibliographic solutions can interoperate.</p>
+      <p>CiteProc is but one example of the possibilities opened up with SRU,
+        where a user in North America can format their documents using
+        bibliographic data stored on the other side of the world. Indeed,
+        CiteProc is bundled with just such an example! The <a
+          href="http://www.refbase.net">RefBase</a> project out of Germany
+        recently added SRU support. The sample XML and XSLT files included here
+        (samples/docbook-test-sru-refbase.xml and
+        xslt/document/refbase-xhtml.xsl respectively) demonstrate how easy it is
+        to add this support.</p>
+    </div>
+    <div class="section">
+      <h2>Design</h2>
+      <p>The core of the logic is embedded in the design of CSL, which has the
+        following features:</p>
+      <ul>
+        <li>a tree-based design that mimics bibliographic metadata</li>
+        <li>organized around references classes, rather than types</li>
+        <li>modularizes formatting concerns</li>
+      </ul>
+      <p>At the core, CSL and CiteProc are both organized around structural
+        classes (monograph, serial, etc.) rather than reference types or genres.
+        CSL thus does not have the “generic” reference type definitions one
+        finds in other style languages. Rather, CSL instead mandates definitions
+        for three of the most common “types”: article, book, and chapter. These
+        then serve as the class-specific fallback definitions. Indeed, most
+        formatting ends up being handled by these generic definitions.</p>
+      <p>This design decision addresses problems with type-based formatting
+        systems like BibTeX or those in commmerical applications like Endnote,
+        which tend to be fairly fragile and not very portable. In these systems,
+        if a social scientist who frequently cites archival documents uses a
+        style file created by a physical scientist, they will typically find
+        they need to heavily edit the file in order to format their references.
+        By moving to a class-based logic and modularizing formatting
+        configuration as much as possible, styles become more portable.
+        Likewise, retaining the familiar type-like interface is easier for users
+        creating style files.</p>
+    </div>
+    <div class="section">
+      <h2>Organization</h2>
+      <p>The CiteProc code consists of one main stylesheet—called
+        citeproc.xsl—which is imported into a standard document stylesheet.</p>
+      <div class="image" align="center">
+        <img src="images/citeproc-files.png" width="420px"/>
+        <p>CiteProc file structure</p>
+      </div>
+    </div>
+    <div class="section">
+      <h2>Requirements</h2>
+      <p>CiteProc is written in XSLT 2.0, and as such requires a compliant
+        processor. At this point, this means <a href="http://www.saxonica.com"
+          >Saxon 8</a>. In addition, it requires a data store for <a
+          href="http://www.loc.gov/standards/mods">MODS</a> bibliographic data.
+        CiteProc supports flatfile and server-based options, including both SRU
+        and XQuery. The <a href="http://exist-db.org">eXist XML DB</a> is a good
+        option. <a
+          href="http://www.scripps.edu/~cdputnam/software/bibutils/bibutils.html"
+          >Bibutils</a> is an excellent tool to convert from legacy formats like
+        Endnote, RIS and BibTeX to MODS, and back. </p>
+    </div>
+    <div class="section">
+      <h2>Useage</h2>
+      <p>There are a few example document stylesheets in the xsl/document
+        directory. For a basic local transformation using a flat file, use:</p>
+      <code>
+        <pre>java net.sf.saxon.Transform -o test.html samples/docbook-test.xml \
+          xsl/document/dbng-xhtml.xsl citation-style="author-year" bibdb="flatfile"</pre>
+      </code>
+      <p>To use the remote SRU web service options, try the RefBase example like
+        so:</p>
+      <code>
+        <pre>java net.sf.saxon.Transform -o test.html samples/docbook-test-sru-refbase.xml \
+          xsl/document/refbase-xhtml.xsl</pre>
+      </code>
+      <p>The latter stylesheet is just a wrapper that imports the dbng-xhtml.xsl file and sets a few parameters.</p>
+    </div>
+    <div class="license">
+      <p>CiteProc is free software, licensed under the <a
+          href="http://creativecommons.org/licenses/GPL/2.0/">CC-GNU GPL</a>.</p>
+      <div class="image">
+        <a href="http://creativecommons.org/licenses/GPL/2.0/">
+          <img alt="CC-GNU GPL" border="0" src="images/cc-GPL-a.png"/>
+        </a>
+      </div>
+    </div>
+  </Introduction>
+  <!-- 
+    The absolute or relative path to the target directory 
+    where the HTML files are created. If a relative path
+    is used it is always relative to the config file.
+   -->
+  <TargetDirectory path="./"/>
+  <!-- 
+    The absolute or relative path to the source directory.
+    This is where the XSLT source files can be found.
+    If a relative path is used it is always relative 
+    to the config file.
+   -->
+  <SourceDirectory path="../xsl/"/>
+  <!-- 
+    A list of source code files which shall be documented. 
+    Only stylesheets which are not included by another
+    have to be listed here. The included stylesheets
+    are found automatically by following the include or
+    the import statements in the including stylesheet.
+    Relative references are relative to the SourceDirectory
+    defined above.
+   -->
+  <RootStylesheets>
+    <File href="citeproc.xsl"/>
+    <File href="document/refbase-xhtml.xsl"/>
+    <File href="document/dbng-xhtml.xsl"/>
+    <File href="document/dbng-latex.xsl"/>
+  </RootStylesheets>
+</XSLTdocConfig>

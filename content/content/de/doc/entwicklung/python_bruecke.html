@@ -1,0 +1,1761 @@
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    
+<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=UTF-8"/>
+<title> Python-UNO-Br&uuml;cke</title>
+
+    
+    <script src="https://www.apachecon.com/event-images/snippet.js"></script>
+  </head>
+  <body>
+    <!--#include virtual="/de/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/de/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/de/">de</a>&nbsp;&raquo;&nbsp;<a href="/de/doc/">doc</a>&nbsp;&raquo;&nbsp;<a href="/de/doc/entwicklung/">entwicklung</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<h1>Die Python-UNO-Br&#252;cke von OpenOffice.org</h1>
+
+- <a href="#intro">Einf&#252;hrung</a><br/>
+<!-- - <a href="#download">Herunterladen</a><br/> -->
+- <a href="#state">Status</a><br/>
+- <a href="#tutorial">Tutorial</a><br/>
+-- <a href="#install">PyUNO-Installation</a><br/>
+-- <a href="#modes">PyUNO-Br&#252;cken-Modi</a><br/>
+-- <a href="#examples">Mehr Beispiele</a><br/>
+- <a href="#binding">UNO Sprachanbindung</a><br/>
+-- <a href="#mapping">UNO Typen-Mapping</a><br/>
+-- <a href="#objects">UNO-Objekte implementieren</a><br/>
+-- <a href="#components">UNO-Komponenten implementieren</a><br/>
+-- <a href="#outparas">Umgang mit Ausgabeparametern</a><br/>
+-- <a href="#exception">Umgang mit Exceptions</a><br/>
+-- <a href="#current_context">Aktuelle Kontext-Unterst&uuml;tzung (seit OOo 2.0.2)</a><br/>
+-- <a href="#helper">Das unohelper-Modul</a><br/>
+-- <a href="#logging">Logging (seit OOo 2.0.2)</a><br/>
+- <a href="#dependencies">Abh&#228;ngigkeiten</a><br/>
+- <a href="#bootstrap">Bootstrapping in Nicht-OOo-Umgebungen</a><br/>
+- <a href="#replacing">Ersetzen der Python-Laufzeitumgebung</a><br/>
+- <a href="#regressiontests">Regressiontests</a><br/>
+<!-- - <a href="#scripting-framework">Support for the new scripting framework </a><br/> -->
+- <a href="#references">Externe Verweise</a><br/>
+- <a href="#faq">H&#228;ufig gestellte Fragen (FAQ)</a> (Lesen Sie dies ZUERST, wenn Sie Probleme haben)<br/>
+- <a href="#known_pyuno_extensions">Bekannte PyUNO-Erweiterungen f&#252;r OOo</a><br/>
+- <a href="#pyuno_needs_you">PyUNO braucht Sie</a><br/>
+- <a href="#authors">Autoren</a><br/>
+- <a href="#license">Lizenz</a><br/>
+
+
+<h2 id="intro"> Einf&#252;hrung </h2>
+<p>Die Python-UNO-Br&#252;cke erlaubt
+
+<ul>
+<li> die Standard-OpenOffice.org-API von der sehr wohl-bekannten Python-Skriptsprache aus zu benutzen.</li>
+<li> UNO-Komponenten in Python zu entwickeln, so dass Python-UNO-Komponenten innerhalb des OpenOffice.org-Prozesses ablaufen k&#246;nnen und aus Java, C++ oder der in OpenOffice.org enthaltenen Skriptsprache StarBasic aufgerufen werden k&#246;nnen.</li>
+<li> <a href="scriptingframework/index.html">das Erstellen und Aufrufen von Skripten</a> mit dem Office-Skripting-Framework (OOo 2.0 und sp&#228;ter).</li>
+</ul>
+</p>
+
+<p> Sie k&#246;nnen die aktuellste Version dieses Dokuments unter
+<a href="http://udk.openoffice.org/python/python-bridge.html">
+http://udk.openoffice.org/python/python-bridge.html</a> finden (englische Sprache).
+
+<!--
+<h2 id="download"> Download </h2>
+<p>Sie k&#246;nnen diese Dokumentation (in englischer Sprache) zum Offlinearbeiten auch herunterladen.</p>
+
+<p><strong>Download  <a href="pyuno-doc.zip">pyuno-doc.zip</a> </strong>( weniger als 0.5 MB).
+-->
+
+<h2 id="state"> Status </h2>
+
+<p>Die Python-UNO-Br&#252;cke ist komplett funktionf&#228;hig, aber sie ist noch nicht extensiv genutzt worden, so dass sie eventuell noch einige Fehler enth&#228;lt. Sie ist nun in den OpenOffice.org-Quellcode-Baum integriert (OpenOffice.org 1.0.x wird nicht unterst&#252;tzt.).
+
+<p>Die Dokumentation zielt in ihrem aktuellen Status auf Entwickler, die bereits einige Erfahrungen mit dem OpenOffice.org-API und mit einigen anderen Programmiersprachen (Java/C++/StarBasic) haben. Es ist empohlen, dass Sie einige Hintergrundinformationen aus dem <a href="http://api.openoffice.org/DevelopersGuide/DevelopersGuide.html">Entwicklerhandbuch</a> lesen, bevor Sie auf Besonderheiten von Python schauen.
+
+<h2 id="tutorial"> PyUNO-Tuturial f&#252;r OpenOffice.org </h2>
+Dieses Tuturial zeigt, wie die PyUNO-Br&#252;cke benutzt werden kann, um OpenOffice.org zu automatisieren. Dies ist kein OpenOffice.org-Tuturial. Es sind eine Menge an Ressourcen in dem Office-Development-Kit und in dem <a href="http://api.openoffice.org/DevelopersGuide/DevelopersGuide.html">Entwicklerhandbuch</a> (in englischer Sprache) verf&#252;gbar.
+
+<h3 id="install"> PyUNO-Installation </h3>
+Seit OpenOffice 1.1 ist PyUNO in der Standardinstallation enthalten.
+
+<h3 id="modes"> PyUNO-Br&#252;cken-Modi </h3>
+
+<p>PyUNO kann in drei verschiedenen Modi benutzt werden:
+
+<ol>
+<li><a href="scriptingframework/index.html">Innerhalb des OpenOffice.org-Prozesses</a>
+     mit dem Scripting-Framework (nur OOo 2.0 und sp&#228;ter!!),
+     
+
+<li> Innerhalb einer ausf&#252;hrbaren Pythondatei (und au&#223;erhalb des OOo-Prozesses)
+
+<center><img src="pics/ipc_modus.png" alt="IPC-Modus von Python" /></center>
+
+<p><br />Benutzen Sie diesen Modus, wenn Sie
+  <ul>
+  <li> beginnen, PyUNO zu benutzen (da dies die unmittelbarere Herangehensweise ist).
+  <li> das Ausf&#252;hren eines Skriptes durch das Starten eines seperaten Prozesses ausl&#246;sen wollen (z.B. ein CGI-Skript innerhalb eines HTTP-Servers).
+  <li> die k&#252;rzesten Umlaufzeiten wollen (Programmieren - Ausf&#252;hren - Programmieren - Ausf&#252;hren ...)
+
+  </ul>
+
+<h4> Hallo Welt </h4>
+<p>Stellen Sie sicher, dass OpenOffice.org nicht l&#228;uft (beachten Sie, dass Sie auf Windows auch den Schnellstarter im Systemabschnitt am rechten unteren Rand des Desktops beenden m&#252;ssen).
+Starten Sie eine System-Shell ( cmd auf Win NT/2000/XP, command auf Win9x, tcsh or bash auf
+Unix). Wechseln Sie in das OpenOffice.org-Programmverzeichnis
+(z.B. C:\Programe\OpenOffice.org1.1\program ) und starten Sie das Office mit den folgenden Kommandozeilenparametern
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+
+c:\Programe\OpenOffice1.1\program&gt;  soffice "-accept=socket,host=localhost,port=2002;urp;"
+
+</pre></td></tr></table>
+<p>Falls OpenOffice.org nicht mit einem leeren Textdokument gestartet ist, w&#228;hlen Sie im Men&#252; <strong>Datei - Neu - Textdokument</strong> aus.</p>
+<p>
+
+Benutzen Sie nun Ihren Lieblingstexteditor, um das folgende Beispielprogramm hello_world.py zu erstellen:
+
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+import uno
+
+# Die UNO-Komponente Kontext (Context) von der PyUNO-Laufzeitumgebunt holen
+localContext = uno.getComponentContext()
+
+# Die UnoUrlResolver erstellen
+resolver = localContext.ServiceManager.createInstanceWithContext(
+				"com.sun.star.bridge.UnoUrlResolver", localContext )
+
+# Zum laufenden Office verbinden
+ctx = resolver.resolve( "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext" )
+smgr = ctx.ServiceManager
+
+# Das zentrale Desktop-Objekt holen
+desktop = smgr.createInstanceWithContext( "com.sun.star.frame.Desktop",ctx)
+
+# auf das aktuelle Writer-Dokument zugreifen
+model = desktop.getCurrentComponent()
+
+# auf die Eigenschaften des aktuellen Dokuments zugreifen
+text = model.Text
+
+# Schreibmarke (Cursor) erstellen
+cursor = text.createTextCursor()
+
+# Text in das Dokument einf&#252;gen
+text.insertString( cursor, "Hello World", 0 )
+
+# Tun Sie eine unangenehme Sache, bevor Sie den Python-Prozess verlassen. Falls der
+# letzte Aufruf ein einseitiger Aufruf ist (sehen sie z.B. die idl-spec von insertString),
+# muss es aus dem Cache der Remote-Br&#252;cke herausgepresst werden, bevor Pyhton
+# den Prozess beendet. Andernfalls wird der einseitige Aufruf das Zielobjekt erreichen oder auch nicht.
+# Ich erledige dies hier mit einem billigen gleichzeitigen Aufruf (getPropertyValue).
+ctx.ServiceManager
+</pre></td></tr></table>
+
+<p>
+Starten Sie nun das obige Skript mit dem Python-Skript, das sich im Programmverzeichnis (von OpenOffice.org) befindet
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+
+c:\Programme\OpenOffice1.1\program> .\python hello_world.py
+</pre></td></tr></table>
+
+<font size="-1"><strong>Note:</strong> Sie m&#252;ssen die Skript-/Batch(BAT)-Datei im Programmverzeichnis benutzen, um Python zu starten. Das einfache Starten der ausf&#252;hrbaren Python-Datei im Verzeichnis der Laufzeitumgebung (oder dasjenige aus der Python-Installation irgendwo auf Ihrer Maschine) funktioniert nicht.
+</font><br/>
+
+<p>Dieses Skript schreibt "Hello World" in das aktuelle Writer-Dokument.</p>
+
+<li><p>Innerhalb des OpenOffice.org-Prozesses</p>
+
+<center><img src="pics/componenten_modus.png" alt="Python-Komponenten-Modus"></img></center>
+<p><br />Benutzen Sie diesen Modus, wenn
+
+  <ul>
+  <li> Sie Ihren Programmcode leicht auf verschiedene andere Maschinen ausrollen wollen (unter Benutzen von UNO-Paketen)
+  <li> Ihre Skripte von UI-Ereignissen (UI=User Interface / Benutzerschnittstelle, Men&#252; oder Symbolleisten) ausgel&ouml;st werden sollen
+  <li> Sie etwas Erfahrung mit PyUNO gesammelt haben
+  <li> Sie Ihre Skripte mit der besten Performance laufen lassen wollen
+  </ul>
+
+<h4>Hallo Welt</h4>
+Das obige Hallo-Welt-Beispiel ist nun neu programmiert als UNO-Komponente, was bedeutet, dass der Programmcode, der das Einf&#252;gen erledigt, in eine Python-Klasse eingebettet werden muss. Zus&#228;tzlich muss der Programmcode f&#252;r das Verbinden zum Office-Programmcode ersetzt werden durch einen eindeutigen Einsprungpunkt, der vom Python-Ladeprogramm benutzt wird, um die Python-Klasse zu instanzieren.
+
+<p>
+<code>hello_world_comp.py:</code>
+<table width="100%" bgcolor="silver"><tr><td><pre>
+import uno
+import unohelper
+
+from com.sun.star.task import XJobExecutor
+
+# Implementieren einer UNO-Komponente mittels Ableitens aus der Standardklasse unohelper.Base
+# und von der(den) Schnittstelle(n), die Sie implementieren wollen.
+class HelloWorldJob( unohelper.Base, XJobExecutor ):
+    def __init__( self, ctx ):
+        # Den Komponentenkontext f&#252;r sp&#228;tere Benutzung speichern
+        self.ctx = ctx
+
+    def trigger( self, args ):
+        # Hinweis: args[0] == "HelloWorld", siehe unten die Konfigurationseinstellungen
+
+        # Abrufen des Desktop-Objekts
+        desktop = self.ctx.ServiceManager.createInstanceWithContext(
+            "com.sun.star.frame.Desktop", self.ctx )
+
+        # Das aktuelle Dokumentenmodell holen.
+        model = desktop.getCurrentComponent()
+
+        # auf die Eigenschaften des Textdokuments zugreifen
+        text = model.Text
+
+        # Schreibmarke (Cursor) erstellen.
+        cursor = text.createTextCursor()
+
+        # Den Text in das Dokument einf&#252;gen.
+        text.insertString( cursor, "Hello World", 0 )
+
+# pythonloader schaut nach einer statischen Variable g_ImplementationHelper
+g_ImplementationHelper = unohelper.ImplementationHelper()
+
+#
+g_ImplementationHelper.addImplementation( \
+        HelloWorldJob,                        # UNO-Objekt-Klasse
+        "org.openoffice.comp.pyuno.demo.HelloWorld", # implementationsname
+	                                      # &#196;ndern Sie diesen Namen f&#252;r Ihr eigenes
+					      # Skript
+        ("com.sun.star.task.Job",),)          # Liste von implementierten Diensten (services)
+	                                      # (der einzige Dienst)
+</pre></td></tr></table>
+
+<p> Der Programmcode muss mit einem Benutzerereignis verbunden werden. Dies kann kann z.B. mit den folgenden Konfigurationseinstellungen erledigt werden:
+
+
+<p> <code>Addons.xcu:</code>
+<table width="100%" bgcolor="silver"><tr><td><pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;oor:node xmlns:oor="http://openoffice.org/2001/registry"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	     oor:name="Addons" oor:package="org.openoffice.Office"&gt;
+&lt;node oor:name="AddonUI"&gt;
+ &lt;node oor:name="AddonMenu"&gt;
+  &lt;node oor:name="org.openoffice.comp.pyuno.demo.HelloWorld" oor:op="replace"&gt;
+   &lt;prop oor:name="URL" oor:type="xs:string"&gt;
+     &lt;value&gt;service:org.openoffice.comp.pyuno.demo.HelloWorld?insert&lt;/value&gt;
+   &lt;/prop&gt;
+   &lt;prop oor:name="ImageIdentifier" oor:type="xs:string"&gt;
+    &lt;value&gt;private:image/3216&lt;/value&gt;
+   &lt;/prop&gt;
+   &lt;prop oor:name="Title" oor:type="xs:string"&gt;
+    &lt;value xml:lang="en-US"&gt;Insert Hello World&lt;/value&gt;
+   &lt;/prop&gt;
+  &lt;/node&gt;
+ &lt;/node&gt;
+&lt;/node&gt;
+&lt;/oor:node&gt;
+</pre></td></tr></table>
+
+<p>Beide Dateien m&#252;ssen in ein einzelnes Zip-Archiv unter Verwenden Ihres Lieblings-Zip-Programmwerkzeuges, z.B. Infozip, gepackt werden.</p>
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+zip hello_world.zip Addons.xcu hello_world_comp.py
+  adding: Addons.xcu (deflated 55%)
+  adding: hello_world_comp.py (deflated 55%) </pre></td></tr></table>
+
+<p>Dieses Paket kann dann in einer OpenOffice.org-Installation unter Benutzen des Werkzeugs
+<code>pkgchk</code>, das sich im OOo-Programmverzeichnis befindet, eingesetzt werden. Beachten Sie, dass das Office gestoppt worden sein muss, bevor das Paket installiert wird.</p>
+<p>
+<font size="-1"><strong>Hinweis:</strong> Stellen Sie sicher, dass die Umgebungsvariable PYTHONPATH <strong>nicht</strong> gesetzt ist, wenn Sie pkgchk oder soffice starten
+(sehen Sie <a href="//issues/show_bug.cgi?id=17339">#i17339#</a>).
+Dies mag es erfordern, dass Sie eine Batch-Datei (BAT) f&#252;r soffice auf Windows erstellen, in der PYTHONPATH in der Systemkonfiguration auf Null gesetzt wird oder soffice immer aus einer Konsole mit dem Setzen von PYTHONPATH= (Windows) oder unsetenv PYTHONPATH (Unix tcsh shell) gestartet wird.
+
+</font>
+
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+c:\Program Files\OpenOffice.org1.1\program> pkgchk hello_world.zip
+c:\Program Files\OpenOffice.org1.1\program>
+</pre></td></tr></table>
+<p>Bei Erfolg erfolgt keine Ausgabe durch das Werkzeug. Wenn OpenOffice.org startet, gibt es einen neuen Eintrag im Men&#252; (sehen Sie
+<code>Tools/Additional Components/Insert Hello World</code>).</p>
+
+</ol>
+Wie Sie gesehen haben, sind die Haupt-Skript-Zeilen identisch, aber die Wege, den Kontext der Office-Komponente abzurufen, unterscheiden sich.
+
+<h3 id="examples">Mehr Beispiele</h3>
+
+<ul>
+<li><p><a href="http://udk.openoffice.org/python/samples/ooextract.py">ooextract.py</a> <br/>
+	 Ein Kommandozeilenwerkzeug, das den Text, HTML- oder PDF-Inhalte aus einem Writer-Dokument ausw&#228;hlt und dies in eine andere Datei oder (optional) auf der Standardausgabe (stdout) ausgibt (Durchsuchen / grepen sie Ihre Office-Dokumente).</p>
+
+ <li><p><a href="http://udk.openoffice.org/python/samples/oomerge.py">oomerge.py</a> <br/>
+	 Ein Kommandozeilenwerkzeug, das ein neues Dokument erstellt durch das Anh&#228;ngen von mehreren Einzeldokumenten.</p>
+
+<li><p><a href="http://udk.openoffice.org/python/samples/swriter.py">swriter.py</a><br/>
+     Ein Kommandozeilenprogramm, das ein Writer-Dokument mit etwas Text und Tabellen f&#252;llt.</p>
+<li> <a href="http://udk.openoffice.org/python/samples/swritercomp.py">swritercomp.py</a>,
+     <a href="http://udk.openoffice.org/python/samples/swritercompclient.py">swritercompclient.py</a> <br/>
+     Dasselbe wie oben, aber implementiert als Python-UNO-Komponente, so dass es innerhalb des Office-Prozesses l&#228;uft. Dies zeigt die Performance-Vorteile, Skripte zu haben, die innerhalb eines Prozesses laufen.
+
+     <p> Sie m&#252;ssen das Programm swritercomp.py mit dem Werkzeug pkgchk (siehe unten) zur Office-Installation hinzuf&#252;gen und k&#246;nnen dann das Programm swritercomp_client.py benutzen, um es auszuf&#252;hren.
+
+<li><p><a href="http://udk.openoffice.org/python/samples/biblioaccess.py">biblioaccess.py</a><br/>
+	 Ein Kommandozeilenprogramm, das den Inhalt der Bibliotheksbeispieldatenbank anzeigt, die mit OpenOffice.org mitgeliefert wird.</p>
+
+<li> Ihre Beispiele (Bitte senden Sie mehr Beispiele ein, so dass sie hier hinzugef&#252;gt werden k&#246;nnen).
+</ul>
+
+<h2 id="binding"> UNO-Sprach-Bindung </h2>
+Im Folgenden finden Sie eine komplette Beschreibung dazu, wie UNO-Funktionen auf die Python-Programmsprache abgebildet sind.
+
+<h3 id="mapping">UNO-Typen-Abbildung</h3>
+
+<table border>
+<tr>
+<th>IDL-Datentyp</th>
+<th>Darstellung in Python</th>
+</tr>
+<tr class="tableF0">
+<td valign="top"> integer types (byte, short, unsigned short,
+     long, unsigned long, hyper, unsigned hyper
+</td>
+<td>
+Python kennt intern nur die C-Datentypen long und long long als Integertypen.
+Auf den meisten Maschinen ist ein long ein 32-Bit-Wert w&#228;hrend long long ein 64-Bit-Wert ist.
+
+<ul>
+<li>Werte, die von UNO kommen (zum Beispiel der R&#252;ckgabewert einer UNO-Methode)
+<p>
+Werte, die den Typ byte, short, unsigned short, long oder unsigned long haben, werden zum Python-Wert long konvertiert. Werte, die den Typ hyper oder unsigned
+hyper haben, werden Python long long konvertiert.
+
+<li> Werte, die nach UNO gehen (zum Beispiel das Argument einer UNO-Methode)
+<p> Falls es einen konkreten Typen in der IDL-Methoden-Signatur gibt, wird der Wert in diesen konkreten Typ konvertiert (tats&#228;chlich leistet der Aufrufdienst diese Arbeit).
+
+Falls die Methoden-Signatur irgendeinen hat, wird jeder Integer-Wert zu dem kleinsten Datentypen konvertiert, in den der Wert hineinpa&#223;t, und danach an das UNO-Objekt geschickt (So wird 5 ein Byte, 150 wird ein Short, 0x1f023 wird ein Long und gr&#246;&#223;ere Werte als 0xffffffff werden ein Hyper).
+</ul>
+</td>
+</tr>
+<tr>
+<td valign="top">boolean</td>
+<td>Python hat intern einen Datentyp Boolean, der abgeleitet ist vom Integer-Typ (siehe 
+	<a href="http://python.org/peps/pep-0285.html">http://python.org/peps/pep-0285.html</a> ).
+	
+Es existieren die Singletons <code>True</code> und <code>False</code>,
+welche PyUNO benutzt, um zwischen Integern- und Bool-Werten zu
+unterscheiden.
+
+<p> Solange ein Bolean in der Schnittstellen-Methoden-Signatur
+spezifiziert ist, k&ouml;nnen Sie ebenso Integerwerte benutzen. In dem folgenden Beispiel sind alle Aufrufe g&#252;ltig:
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+#idl signature void takeBool( [in] boolean bool )
+
+unoObject.takeBool( 1 )       # valid, passing true (PyUNO runtime
+                              # does the conversion
+unoObject.takeBool( True) )   # valid, passing true
+unoObject.takeBool( False )   # valid, passing false
+</pre></td></tr></table>
+
+<p>Wenn Sie allerdings ausdr&#252;cklich ein Boolean durchlaufen lassen wollen, wo nur irgendeiner spezifiziert ist, <strong>m&#252;ssen</strong> Sie <code>True</code>
+oder <code>False</code> benutzen.</p>
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+# idl signature void foo( [in] any value )
+
+# implementation expects a boolean (which is separately documented
+# e.g. in the service specification.
+unoObject.foo( True ) # valid, pass a true
+unoObject.foo( 1 )    # bad, just passing a 1, implementation will
+                      # probably not be able to deal with it correctly.
+</pre></td></tr></table>
+
+
+
+<p>
+Hinweis: Es existiert au&#223;erdem die Klasse uno.Bool, die seit PyUNO 0.9.2 nicht ausgef&#252;hrt wurde, aber noch immer unterst&#252;tzt wird. Benutzen Sie diese nicht mehr.
+
+
+<tr>
+<td valign="top"> string</td>
+<td><p>Im allgemeinen wird der String in einem Python-Unicode-String
+	abgebildet. Allerdings k&ouml;nnen Sie auch dort einen 8-Bit-Python-String
+	benutzen, wo ein UNO-String erwartet wird. Die Br&#252;cke
+	konvertiert den 8-Bit-String in einen Unicode-String unter Anwendung
+	des System-Locale.</p>
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+# idl signature foo( [in] string value )
+# both lines are valid
+unoObject.foo( u'my foo string' )
+unoObject.foo( 'my foo string' )
+</pre></td></tr></table>
+</td>
+</tr>
+
+<tr>
+<td valign="top">char</td>
+<td>
+<p>Ein char wird in einem <code>uno.Char</code> abgebildet. Es hat ein &#246;ffentliches Unicode-String-Element <code>value</code>
+mit der L&#228;nge 1, das den Unicode-Char enth&#228;lt.</p>
+<table width="100%" bgcolor="silver"><tr><td><pre>
+# idl signature foo( [in] char c)
+unoObject.foo( uno.Char( u'h' ) )  #valid
+unoObject.foo( 'h' )               #wrong
+</pre></td></tr></table>
+</td>
+</tr>
+
+<tr>
+<td valign="top">enum</td>
+<td>Ein konkreter Enum-Wert wird durch eine Instanz der Klasse <code>uno.Enum</code> repr&#228;sentiert. Sie hat zwei Elemente: <code>typeName</code> ist ein String, der den Namen des Enum-Typs enth&#246;lt, und 
+<code>value</code>, das den Wert von Enum enth&#246;lt.
+
+<p>Sie k&#246;nnen Enum-Werte auf zwei Wegen erzeugen:
+<ol>
+<li> (empfohlen) durch Import<br/>
+
+     <code>from <i>enumname</i> import <i>enumvalue</i></code>.
+
+     <p>Zum Beispiel:</p>
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+from com.sun.star.uno.TypeClass import UNSIGNED_LONG
+.
+.
+.
+unoObject.setValue( UNSIGNED_LONG )
+if unoObject.getValue() == UNSIGNED_LONG:
+   .
+   .
+</pre></td></tr></table>
+
+<li> (in seltenen Situationen)<br/>
+<table width="100%" bgcolor="silver"><tr><td><pre>
+import uno
+
+unoObject.setValue( uno.Enum( "com.sun.star.uno.TypeClass", "UNSIGNED_LONG") )
+if unoObject.getValue() == uno.Enum( "com.sun.star.uno.TypeClass", "UNSIGNED_LONG"):
+   .
+   .
+   .
+</pre></td></tr></table>
+</ol>
+
+Die erste L&#246;sung hat den Vorteil, dass ein falsch geschriebener Enum-Name bereits zu einer 
+RuntimeException (Laufzeitfehler) f&#252;hrt, wenn die Python-Quelltextdatei importiert wird.
+</td>
+
+
+<tr>
+<td valign="top">type</td>
+<td>Ein Type wird in einen <code>uno.Type</code> abgebildet. Es hat &#246;ffentliche Elemente typeName (string) und
+typeClass (Enum-Wert von com.sun.star.uno.TypeClass).
+Es existiert eine Funktion uno.getTypeByName(), um einfach eine Type-Instanz zu erstellen. Die Funktion endet in einer RuntimeException (Laufzeitfehler), falls der Type unbekannt ist.
+
+
+<p>Sie k&#246;nnen konkrete Type-Werte auf zwei Wegen erzeugen:
+<ol>
+<li> (empfohlen) durch Import<br/>
+
+     <code>von dem <i>Modul-das-Type-enth&auml;t</i> importiere <i>typeOfTypeName</i></code>.
+
+     <p>Zum Beispiel, um einen XComponent-Type zu erstellen, benutzen Sie</p>
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+from com.sun.star.lang import typeOfXComponent
+.
+.
+.
+unoObject.setType( typeOfXComponent )
+if unoObject.getType() == typeOfXComponent:
+   .
+   .
+</pre></td></tr></table>
+
+<li><p>(in seltenen Situationen, z.B. f&#252;r Types von einfachen Werten)</p>
+<table width="100%" bgcolor="silver"><tr><td><pre>
+import uno
+
+unoObject.setType( uno.getTypeByName( "com.sun.star.uno.XComponent" ) )
+if unoObject.getType() == uno.getTypeByName( "com.sun.star.uno.XComponent"):
+   .
+   .
+   .
+</pre></td></tr></table>
+</ol>
+</td>
+</tr>
+
+<tr>
+<td valign="top">struct (und exception)</td>
+<td>
+F&#252;r jedes UNO-Struct (oder exception), wird w&#228;hrend der &#220;bertragung eine neue Python-Klasse erzeugt. Es ist garantiert, dass es nur eine Instanz des Struct-(oder exception)Klasse pro Python-Interpreter-Instanz gibt. Die erzeugte Klasse spiegelt die Vererbungshierarchie des konkreten UNO-Type wieder (zum Beispiel wichtig f&#252;r die Behandlung von exceptions/Ausnahmen; siehe unten).
+
+<p>
+Man kann eine Struct-Klasse unter Verwendung des Importmechanismus
+erzeugen. Eine Instanz eines Struct kann dann unter Verwendung des
+Python-Constructor instanziert werden. Der Constructor unterst&#252;tzt O-Argumente (zero arguments) (Elemente werden mit Standards konstruiert): 1 argument which the
+same type (copy constructor), and n arguments, where n is the number of
+elements of the concrete struct. The struct supports the equality operator,
+two structs are equal, if they are of the same type and each member is equal.
+
+<p>
+Beispiel:
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+from com.sun.star.beans import PropertyValue
+from com.sun.star.uno import Exception,RuntimeException
+
+propVal = PropertyValue()                 # Default constructor
+propVal.Name = "foo"
+propVal.Value = 2
+
+if propVal == PropertyValue( "foo", 2 ):  # Memberwise constructor
+   # true !
+   pass
+
+if propVal == PropertyValue( propVal ):   # Copy Constructor
+   # true
+
+
+</pre></td></tr></table>
+
+Eine Instanz von UNO-Struct kann zun&#228;chst konstruiert werden mit der Funktion <code>uno.createUnoStruct()</code> und der Name des Struct als erster Parameter und optional Konstruktionsargumente &#252;bergeben werden (sehen Sie oben nach einem Beispiel der m&#246;glichen ctors).
+
+<p>
+Achtung: In UNO haben Structs  structs have value semantic, allerdings spiegelt die Behandlung in Python dies nicht wieder. Wenn ein Struct an eine Funktion &#252;bergeben wird, wird der Wert an den Angerufenen &#252;bergeben. Sp&#228;tere Ver&#228;nderungen der Struct-Instanz beeinflussen den Angerufenen nicht mehr.
+
+Allerdings das einfache  Zuweisen eines Struct zu einer anderen lokalen Variable erzeugt keine Kopie, sondern erzeugt einfach eine Parallelbezeichnung (Alias) der urspr&#252;nglichen Instanz.
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+struct = uno.createUnoStruct( "com.sun.star.beans.PropertyValue" )
+
+struct.Name = "foo"
+struct2 = struct
+struct2.Name = "python"           # modifies also struct, probably not desired !
+unoObject.call( struct, struct2 ) # passes the same struct 2 times !
+
+struct.Name = "doobidooo"         # even worse style. If the UNO object is implemented
+                                  # in python, you possibly modify the callee's value.
+				  # Don't do this !
+</pre></td></tr></table>
+
+
+</td>
+</tr>
+
+<tr>
+<td valign="top">sequence</td>
+<td>Eine Sequence wird im allgemeinen in einem Python-Tuple abgebildet. Eine Python-List wird nicht (!) akzeptiert.
+
+
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+# idl signature XInterface createInstanceWithArguments(
+#                        [in] string servicename,  [in] sequence &lt;any&gt; )
+doc = smgr.createInstanceWithArguments( "foo.service", ("arg1",2))
+</pre></td></tr></table>
+
+<p><strong>Vorsicht (seit 0.9.2):</strong> Die IDL <code>
+sequence&lt;byte&gt;</code> wird auf die Klasse <code>uno.ByteSequence</code> abgebildet.
+Es hat ein String-Mitglied mit dem Namen <code>value</code>, das die Daten der Byte-Sequence enth&#228;lt.
+Da die Byte-Sequence sehr oft ein Container f&#252;r bin&#228;re Daten ist, erlaubt diese Klasse Bin&#228;rdaten effizient zu behandeln. 
+Dies bettet auch PyUNO nett in Python ein, da Python Bin&#228;rdaten in Strings h&#228;lt. Zum Beispiel:</p>
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+# idl signature writeBytes( [in] sequence%lt; byte &gt; data )
+#
+out.writeBytes( uno.ByteSequence( "abc" ) )
+
+# Sie k&#246;nnen auch das folgende schreiben
+begin = uno.ByteSequence( "ab" )
+out.writeBytes( begin + "c" )
+
+# allerdings funktioniert dies nicht!
+out.writeBytes( "abc" ) # ERROR, no implicit conversion supported by the runtime !
+
+
+# idl signature long readBytes( [out] sequence&lt;byte&gt; , [in] length )
+len,seq = in.readBytes( dummy, 3 )
+
+# die Statements machen dasselbe
+print seq == "abc":
+print seq == uno.ByteSequence( "abc" )
+</pre></td></tr></table>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top">constants</td>
+<td>Ein UNO-IDL constant kann auf den folgenden Wegen vorgegeben werden:
+
+<ol>
+<li>Benutzen Sie den in der IDL-Datei spezifizierten Concrete-Wert<br/>
+Ein constant ist sein Wert und nur sein Wert. Da Constant-Werte im
+Nachhinein nicht ver&auml;ndert werden k&ouml;nnen,
+kann man einfach auf die Werte vertrauen.
+<li>(empfohlen) Benutzen Sie den Importmechanismus, um Variablen mit dem Constant-Namen zu erstellen<br/>
+Diese L&#246;sung ist die am besten lesbare.
+<li>Benutzen Sie <code>uno.getConstantByName()</code><br/>
+Dies mag von Zeit zu Zeit n&#252;tzlich sein. Die Funktion bricht mit einer RuntimeException ab. falls die constant unbekannt ist.
+</ol>
+<table width="100%" bgcolor="silver"><tr><td><pre>
+from com.sun.star.beans.PropertyConcept import ATTRIBUTES
+.
+.
+.
+# Die folgenden 3 Zeilen sind entsprechend
+unoObject.setConcept( ATTRIBUTES )
+unoObject.setConcept( 4 )
+unoObject.setConcept( uno.getConstantByName( "com.sun.star.beans.PropertyConcept.ATTRIBUTES" ) )
+</pre></td></tr></table>
+
+</td>
+</tr>
+
+
+<tr>
+<td valign="top">any</td>
+<td>Im allgemeinen kommt der Python-Programmierer nicht in
+	Ber&#252;hrung mit Any-Typen. &#220;berall, 
+wo Any-Typen in der Methodensignatur erscheinen, kann der Python-Programmierer einfach einen 
+Concrete-Wert &#252;bergeben. Folglich enthalten R&#252;ckgabewerte oder
+Out-Parameter auch niemals ein konkretes Any.
+
+<p>
+Allerdings gibt es bestimmte F&#228;lle, in denen ein Python-Programmierer eventuell einen bestimmten Werttyp an einen Aufrufer &#252;bergeben will 
+(Hinweis: dies ist nur m&#246;glich f&#252;r 'bridged'-Aufrufe; sie
+k&#246;nnen ein typisiertes Any nicht an ein anderes
+Python-UNO-Object &#252;bergeben).
+
+<p>Sie k&#246;nnen ein <code>uno.Any()</code> erstellen durch das &#220;bergeben des Typs (als Typname oder als uno.Typ) und des Wertes.
+<table width="100%" bgcolor="silver"><tr><td><pre>
+# konstruiert ein uno.Any, das ein Byte enth&#228;lt
+byteAny = uno.Any( "byte" , 5 )
+
+# konstruiert eine sequences von shorts
+byteAny = uno.Any( "[]short", (4,5))
+</pre></td></tr></table>
+
+<p>Diese Anys k&#246;nnen nur in Verbindung mit dem <code>uno.invoke</code> benutzt werden, der es erlaubt, 
+eine Methode auf ein  beliebiges UNO-Objekt mit einem typisierten any aufzurufen.
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+# the normal call
+uno.setPropertyValue( "foo", (4,5))
+
+# the uno.invoke call
+uno.invoke( obj, "setPropertyValue" , ("foo",uno.Any( "[]short", (4,5))) )
+</pre></td></tr></table>
+
+Falls obj ein bridged Objekt ist, erh&#246;lt der Aufrufer die sequence als ein <code>sequence&lt;short&gt;</code>.
+Wenn obj ein lokales Python-Objekt ist, erh&#228;lt es einfach den <code>(4,5)</code>, wie es ihn mit einem normalen Aufruf
+bekommen h&#228;tte.
+<p>
+HINWEIS: Es gibt aktuell einen Fehler in PyUNO (sehen Sie <a href="//issues/show_bug.cgi?id=31159">#i31159#</a>), 
+der es nicht erm&#246;glicht, anys in structs einzuf&#252;llen (z.B. ein PropertyValue struct enth&#228;lt ein any). Sie k&#246;nnen eine
+provisorische L&#246;sung hierf&#252;r mit dem folgenden Programmierbeispiel erstellen:
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+import uno
+ctx = uno.getComponentContext()
+class MagicTransformer:
+    def __init__( self , ctx ):
+        self.inv = ctx.ServiceManager.createInstanceWithContext(
+            "com.sun.star.script.Invocation", ctx )
+        self.insp =  ctx.ServiceManager.createInstanceWithContext(
+            "com.sun.star.beans.Introspection", ctx )
+    def transform( self, struct , propName, value ):
+        myinv = self.inv.createInstanceWithArguments( (struct,) )
+        access = self.insp.inspect( myinv )
+        method = access.getMethod( "setValue" , -1 )
+        uno.invoke( method, "invoke", ( myinv, ( propName , value ) ))
+        method = access.getMethod( "getMaterial" , -1 )
+        ret,dummy = method.invoke(myinv,() )
+        return ret
+
+transformer = MagicTransformer( ctx )
+
+# by default, the 100 becomes a byte
+special = PropertyValue("TabStopPosition",0,100,DIRECT_VALUE)
+print "before" + str(special)
+
+# however, we want the 100 to be a int32 (which is a long in UNO idl)
+special = transformer.transform( special, "Value" , uno.Any( "long", 100 ) )
+print "after" + str(special)
+</pre></td></tr></table>
+
+Das Skript erzeugt die folgenden Ausgaben:<br/>
+before(com.sun.star.beans.PropertyValue){ Name = (string)"TabStopPosition", Handle = (long)0x0, Value = (any){ (<strong>byte</strong>)0x64 }, State = (com.sun.star.beans.PropertyState)DIRECT_VALUE }<br/>
+after(com.sun.star.beans.PropertyValue){ Name = (string)"TabStopPosition", Handle = (long)0x0, Value = (any){ (<strong>long</strong>)0x64 }, State = (com.sun.star.beans.PropertyState)DIRECT_VALUE }<br/>
+
+</td>
+</tr>
+
+</table>
+
+<h3 id="objects">Implementieren von UNO-Objekten</h3>
+
+Man kann Python-Klassen benutzen, um ein UNO-Objekt zu implementieren. Instanzen einer Python-Klasse k&#246;nnen dann als Argument an einen UNO-Aufruf &#252;bergeben werden, wo Any- oder Concrete-Schnittstellen vorgegeben werden.
+
+<p>
+Um ein UNO-Objekt zu sein, MUSS eine Python-Klasse die Schnittstelle com.sun.star.lang.XTypeProvider implementieren durch Implementieren der zwei Methoden getTypes() und getImplementationId(),
+die die Python-Br&#252;cke informieren,
+welche konkreten UNO-Schnittstellen die Python-Klasse implementiert. Die Funktion getTypes() definiert,
+welche Schnittstelle in der Klasse implementiert ist.
+
+<p>
+Um dies einfacher zu machen, gibt es eine Klasse <code>unohelper.Base</code>, wovon
+ein Python-UNO-Objekt abgeleitet sein sollte. Sie k&#246;nnen dann eine UNO-Schnittstelle einfach durch Ableiten von der gew&#252;nschten Schnittstelle ableiten. Das folgende Beispiel implementiert einen com.sun.star.io.XOutputStream, der alle in das Stream geschriebenen Daten in einer ByteSequence speichert. (Beachten Sie, dass dies eine schwache Implementation ist, die einfach f&#252;r Demonstrationszwecke erfolgt.).
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+import unohelper
+from com.sun.star.io import XOutputStream
+class SequenceOutputStream( unohelper.Base, XOutputStream ):
+      def __init__( self ):
+          self.s = uno.ByteSequence("")
+          self.closed = 0
+
+      def closeOutput(self):
+          self.closed = 1
+
+      def writeBytes( self, seq ):
+          self.s = self.s + seq
+
+      def flush( self ):
+          pass
+
+      def getSequence( self ):
+          return self.s
+
+</pre></td></tr></table>
+
+Von der Liste der vorgegebenen Basis-Klassen (hier nur XOutputStream) implementiert die unohelper.Base-Implementation korrekt die Schnittstelle XTypeProvider.
+
+
+<h3 id="components">Implementieren von Python-UNO-Komponenten</h3>
+
+<p>Es gibt ein Ladeprogramm f&#252;r Python-Komponenten. Es erlaubt, Instanzen von
+Python-Klassen nicht nur innerhalb des Python-Prozesses, sondern in jedem beliebigem UNO-Prozess einschlie&#223;lich OpenOffice.org zu erstellen. Das Python-Ladeprogramm l&#228;d die Python-Laufzeitumgebung auf Anforderung, falls sie nicht bereit geladen ist, f&#252;hrt Python-Programmcode innerhalb des Haupt-Python-Interpreters aus.
+
+<p>Falls der Leser mit dem Komponenten-Registrierungsprozess nicht
+vertraut ist, sollte er das OpenOffice.org-Entwickler-Handbuch f&#252;r
+eine umfassende Erl&#228;uterung konsultieren.
+
+<p>Das Python-Ladeprogramm unterst&#252;tzt aktuell die folgenden Protokolle f&#252;r eingehende URLs:
+
+<table border>
+<tr>
+<th>Protokollname</th>
+<th>Beschreibung</th>
+</tr>
+
+<tr>
+<td valign="top">vnd.openoffice.pymodule</td>
+<td>Der Protokoll abh&#228;ngige Teil wird interpretiert als ein Python-Modulname, 
+der unter Verwendung des gew&#246;hnlichen Python-Importmechanismus 
+(der die Umgebungsvariable PYTHONPATH benutzt) importiert worden ist.
+<p>
+Beispiel: <code>vnd.openoffice.pymodule:MeinePythonKomponente</code><br/>
+Verwenden von dieser URL, z.B. in XLoader.activate() wird versuchen eine Datei MeinePythonKomponente.py aus Verzeichnissen zu laden,
+die in der PYTHONPATH-Umgebungsvariable/Bootstrap-Variable aufgelistet sind.
+Beachten Sie, dass Sie das Datei-Nachsilbe .py hier nicht benutzen m&#252;ssen.
+
+<p>Das vorgegebene Modul wird zu der Hashmap <code>sys.modules</code> hinzugef&#252;gt.
+</td>
+</tr>
+<tr>
+<td valign="top"> file</td>
+<td>Eine <strong>zwingend absolute</strong> Datei-URL zu einer Python-Komponentendatei.
+Die Datei selbst muss nicht im PYTHONPATH enthalten sein, allerdings kann es nur Dateien importieren,
+die im PYTHONPATH enthalten sind. 
+
+Das Modul ist <strong>nicht hinzugef&#252;gt</strong> zu <code>sys.modules</code>.
+<p>
+Beispiel: <code>datei:///Pfad/zu/MyPythonComponent.py</code>
+</td>
+</tr>
+
+<tr>
+<td valign="top"> vnd.sun.star.expand</td>
+<td>Das Python-Ladeprogramm unterst&#252;tzt den gew&#246;hnlichen Makro-Expansionsmechanismus, wie die Java- oder C++-Ladeprogramme es tun.
+<p>
+Beispiel: <code>vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/MeinePythonKomponente.py</code>
+</td>
+</tr>
+
+</table>
+<p>
+Nachdem die Module importiert worden sind, schaut das Python-Ladeprogramm nach einer modul-globalen Variable mit dem Namen <code>g_ImplementationHelper</code> aus, die als Instanz von <code>unohelper.ImplementationHelper</code> erwartet wird.
+
+
+Der folgende Beispielcode erstellt eine UNO-Komponente aus dem obigen UNO-Objekt
+(beachten Sie, dass die Komponente nicht brauchbar ist, da es keine UNO-Methode gibt, um das Tuple abzurufen, und auch keine Dienstspezifikation von com.sun.star.io.OutputStream gibt. Es ist hier einfach ein Beispiel.)
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+import unohelper
+from com.sun.star.io import XOutputStream
+
+g_ImplementationHelper = unohelper.ImplementationHelper()
+
+class TupleOutputStream( unohelper.Base, XOutputStream ):
+      # The component must have a ctor with the component context as argument.
+      def __init__( self, ctx ):
+	  self.t = ()
+	  self.closed = 0
+
+      # idl void closeOutput();
+      def closeOutput(self):
+	  self.closed = 1
+
+      # idl void writeBytes( [in] sequence&lt;byte&gt;seq );
+      def writeBytes( self, seq ):
+	  self.t = self.t + seq      # simply add the incoming tuple to the member
+
+      # idl void flush();
+      def flush( self ):
+	  pass
+
+      # convenience function to retrieve the tuple later (no UNO function, may
+      # only be called from python )
+      def getTuple( self ):
+	  return self.t
+
+# add the TupleOutputStream class to the implementation container,
+# which the loader uses to register/instantiate the component.
+g_ImplementationHelper.addImplementation( \
+	TupleOutputStream,"org.openoffice.pyuno.PythonOutputStream",
+	                    ("com.sun.star.io.OutputStream",),)
+</pre></td></tr></table>
+
+Lassen Sie uns annehmen, dass dieser Code in einer Datei mit dem Namen tuplestrm.py gespeichert ist und die Datei irgendwo in der Variable PYTHONPATH existiert, 
+kann es f&#252;r ein OO1.1beta-Build mit dem folgenden Kommando registriert werden:
+
+<p>
+<code> regcomp -register -br types.rdb -br services.rdb -r services.rdb -c vnd.openoffice.pymodule:tuplestrm</code>
+
+<p>Sie k&#246;nnen nat&#252;rlich auch das Werkzeug <code>pkgchk</code> benutzen, wie dies in dem Tuturial-Abschnitt erkl&#228;rt ist, mit
+<p>
+<code> pkgchk tuplestrm.py </code>.
+<p>Beachten Sie allerdings, dass dieses Kommando eine Kopie der Datei erstellt (falls das Skript sich &#228;ndert, muss es unter Verwenden des obigen Kommandos neu eingesetzt werden).
+
+<p>Die Komponente kann auch von OpenOffice.org Basic mit</p>
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+tupleStrm = createUnoService( "com.sun.star.io.OutputStream" )
+tupleStrm.flush()
+</pre></td></tr></table>
+
+<p>instanziert werden.</p>
+
+
+<h3 id="outparas"> Out-Parameter-Behandlung</h3>
+
+<p>UNO-Out-Parameter werden durch das Python-Mehrfachr&#252;ckgabewertf&#228;higkeit behandelt. F&#252;r reine Out-Parameter sollte ein Dummy-Wert <code>None</code> 
+als Platzhalter benutzt werden. Dies ist am besten mit einem Beispiel erl&#228;utert.
+
+Lassen Sie uns annehmen, wir haben die folgende IDL-Methoden-Spezifizierung
+
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+long foo( [in] long first, [inout] long second, [out] third )
+</pre></td></tr></table>
+
+<p>Ein Python-UNO-Objekt implementiert solch eine Methode auf dem folgenden Weg:</p>
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+class Dummy( XFoo ):
+    def foo( self, first,second,third):
+        # Note: the value of third is always None, but it must be there
+	#       as a placeholder if more args would follow !
+        return first,2*second,second + first
+</pre></td></tr></table>
+
+Dann wird eine solche Methode von Python auf folgendem Weg aufgerufen:
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+ret,second,third = unoObject.foo( 2, 5 , None )
+print ret,second,third    # results into 2,10,7
+</pre></td></tr></table>
+
+<p>Dies unterstreicht auch, dass Out-Parameter ziemlich nahe an Mehrfachr&#252;ckgabewerten 
+(dabei geht die semantische Assoziierung eines Inout-Parameters verloren).</p>
+
+<p>Beachten Sie jedoch, dass</p>
+
+<ul>
+<li> Sie die korrekte Anzahl der R&#252;ckgabewerte sowohl im Aufruf wie im implementierenden 
+     Programmcode haben m&#252;ssen, andernfalls erhalten Sie eine 
+     <code>RuntimeException</code> w&#228;hrend des Aufrufs.
+<li> eine Void-Methode gibt immer ein <code>None</code> zur&#252;ck, gefolgt von 
+     m&#246;glichen Out-Parametern, weshalb Sie, wenn Sie eine Void-Methode mit einem 
+     Out-Parameter haben, die Ausgabe zwei Variablen zuweisen m&#252;ssen 
+     (dabei wird die erste immer None sein).
+<li> ein Python-Objekt, das eine Void-Methode mit Out-Parametern implementiert, MUSS immer
+     <code>None</code> als ersten Parameter zur&#252;ckgeben.
+
+</ul>
+
+<h3 id="exception">Ausnahmen-Behandlung</h3>
+Die Python-UNO-Br&#252;cke benutzt die gew&#228;hnlichen
+Python-Mechanismen f&#252;r die Ausnahmenbehandlung. F&#252;r jede
+UNO-Ausnahme wird eine konkrete Ausnahmen-Klasse w&#228;hrend der
+Ausf&#252;hrung erzeugt (siehe Tabelle oben zur Typ-Abbildung f&#252;r
+eine Erkl&#228;rung wie dies gemacht wird).
+
+<p>
+Beispiel f&#252;r das Abfangen
+<table width="100%" bgcolor="silver"><tr><td><pre>
+from com.sun.star.uno  import RuntimeException
+from com.sun.star.lang import IllegalArgumentException
+from com.sun.star.connection import NoConnectException
+try:
+    uuresoler.resolve( "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext" )
+except NoConnectException e:
+    print "The OpenOffice.org process is not started or does not listen on the resource ("+e.Message+")"
+except IllegalArgumentException e:
+    print "The url is invalid ( "+ e.Message+ ")"
+except RuntimeException e:
+    print "An unknown error occurred: " + e.Message
+</pre></td></tr></table>
+
+<p>Beispiel f&#252;r das Auswerfen</p>
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+from com.sun.star.io import IOException
+class TupleOutputStream(XOutputStream,unohelper.Base):
+      def writeBytes( self, seq ):
+          if self.closed:
+	     raise IOException( "Output stream already closed", self )
+          self.t = self.t + seq
+</pre></td></tr></table>
+
+<h3 id="current_context">Unterst&#252;tzung f&#252;r aktuellen Kontext</h3>
+NEU SEIT OOo 2.0.2
+<p>PyUNO unterst&#252;tzt das <a href="http://udk.openoffice.org/common/man/concept/uno_contexts.html">UNO-Aktueller-Kontext-Konzept</a>. Es existieren die Funktionen
+uno.getCurrentContext() und uno.setCurrentContext( newContext ).
+
+<p>Ferner gibt es eine Klasse unohelper.CurrentContext. Der Konstruktor akzeptiert eine Hashmap mit Namen-/Werte-Paaren und dem ersteren Kontext f&#252;r die &#220;bertragung
+
+Muster f&#252;r die Verwendung:
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+   oldContext = uno.getCurrentContext()
+   try:
+      uno.setCurrentContext(
+          unohelper.CurrentContext( oldContext,{"My42":42}) )
+
+      # ... do some uno calls, which may interpret the "My42"    
+   finally:
+      uno.setCurrentContext( oldContext )
+</pre></td></tr></table>
+(Hinweis: der oldContext kann auch keiner/none sein).
+
+<h3 id="helper">UNOHelper-Modul</h3>
+
+<p>Das Modul unohelper.py enth&#228;lt einige zus&#228;tzliche
+Funktionen/Klassen, die einfach mit PyUNO zu benutzen sind, jedoch nicht zwingend. Dieser Abschnitt listet einige der Funktionen von unohelper.py auf.
+<table border>
+<tr>
+<td>
+def <code>systemPathToFileUrl( systemPath )</code>
+</td>
+<td>
+Gibt eine Datei-URL f&#252;r einen gegebenen Systempfad zur&#252;ck. Die meisten der OOo-API-Funktionen erwarten eine Datei-URL, w&#228;hrend die Python-Laufzeitumgebungsfunktionen im allgemeinen nur mit Systempfaden arbeiten. Die Funktion wurde unter Verwendung der Kern-C-Funktion
+<code>osl_getFileUrlFromSystemPath()</code> implemeniert.
+</td>
+</tr>
+<tr>
+<td> def <code> fileUrlToSystemPath( url )</code></td>
+<td>Gibt einen Systempfad zur&#252;ck (bestimmt vom System, auf dem der Python-Interpreter l&#228;uft). Die meisten OOo-Funktionen geben eine Datei-URL zur&#252;ck, w&#228;hrend die meisten Python-Laufzeitumgebungs-Funktionen einen System-Pfad erwarten. Die Funktion ist unter Verwenden der Kernfunktion <code>osl_getSystemPathFromFileUrl()</code> implementiert worden.
+</td>
+</tr>
+<tr>
+<td>
+def <code> absolutize( path, relativeUrl )</code>
+</td>
+<td>
+Gibt eine absolute Datei-URL von einer gegebenen zwingend absoluten Verzeichnis-URL und einer relativen Datei-URL zur&#252;ck, die absolut oder relativ (was einschlie&#223;t z.B. <code>../</code> Teile). Die Funktion wurde unter Verwendung der Kernfunktion <code>osl_getAbsolutePathFromFileUrl()</code> implementiert.
+</td>
+</tr>
+
+<tr>
+<td>
+def addComponentsToContext(
+      toBeExtendedContext,
+      contextRuntime,
+      componentUrls,
+      loaderName )
+</td>
+<td>
+Diese Funktionen f&#252;gen ein Tuple von Komponenten-URLs zu dem <code>
+toBeExtendedContext</code> hinzu unter Verwenden des <code>contextRuntime</code>, um das Ladeprogramm loaderName und einige andere Dienste zu instanziieren, die f&#252;r diese Aufgabe ben&#246;tigt werden. Nach Vervollst&#228;ndigen der Funktion k&#246;nnen alle Dienste innerhalb diese Komponenten instanziiert werden, solange wie der <code>toBeExtendedContext</code> nicht bereit ist. Die &#196;nderungen sind nicht dauerhaft vorgenommen.
+</td>
+</tr>
+
+<tr>
+<td>
+def <code> inspect( unoobject, file )</code>
+</td>
+<td>
+Gibt die Typinformation zu einem gegebenes UNO-Objekt in eine Datei aus
+(tats&#228;chlich muss die Datei eine Instanz einer Klasse sein, die eine Schreib-Methode implementiert).
+
+Die Typinformation schlie&#223;t den Implementationsnamen, unterst&#252;tzte Dienste, unterst&#252;tzte Schnittstellen, unterst&#252;tzte Methoden und unterst&#252;tzte Eigenschaften ein.
+</td>
+</tr>
+
+
+</table>
+
+
+<h3 id="logging">Protokollierung</h3>
+NEU SEIT OOo 2.0.2
+
+<p>
+Die PyUNO-Br&#252;cke kann nun jeden Aufruf protokollieren, der &#252;ber die Br&#252;cke zwischen Python und UNO l&#228;uft. Dies kann eine n&#252;tzliche Hilfe sein, wenn Sie Ihren Programmcode debuggen oder profilieren m&#252;ssen. Es gibt zwei Umgebungsvariablen, die die Protokollierung aktivieren:
+
+<table border>
+
+<tr>
+<td> PYUNO_LOGLEVEL </td>
+<td>
+G&uuml;ltige Werte sind
+<ul>
+<li> NONE - nichts wird protokolliert
+<li> CALL - der Methodenname jedes Aufrufes wird protokolliert
+<li> ARGS - erg&#228;nzend werden die Argumente jedes Aufrufs protokolliert
+</ul>
+NONE ist die Standardeinstellung
+</td>
+</tr>
+
+<tr>
+<td> PYUNO_LOGTARGET </td>
+<td>
+<ul>
+<li> stdout - Schreibt das Protokoll auf stdout  (funktioniert nicht auf Windows innerhalb von OpenOffifce.org)
+<li> stderr - Schreibt das Protokoll auf stderr  (funktioniert nicht auf Windows innerhalb von OpenOffifce.org)
+<li> file-url-prefix(relative URLs sind erlaubt) - Schreibt das Protokoll in Dateien, die mit dieser Zeichenkette beginnen.
+     Die PID des Prozesses wird an die Zeichenkette angeh&#228;ngt (z.B. file:///c:/temp/bla wird in c:\temp\bla.235 schreiben, wenn 235 die PID des augenblicklichen Prozesses ist)
+</ul>
+</td>
+</tr>
+</table>
+
+
+<h2 id="dependencies">Abh&#228;ngigkeiten</h2>
+<p>Dieser Abschnitt ist interessant f&#252;r alle, die die PyUNO-Br&#252;cke unabh&#228;ngig von OpenOffice.org benutzen wollen.</p>
+
+<p>Im Unterschied zu der Java- oder C++-UNO-Bindung ist die
+Python-UNO-Bindung nicht vollst&#228;ndig. Sie ben&#246;tigt die
+C++-Bindung und erg&#228;nzende Skript-Komponenten. Diese
+erg&#228;nzenden Komponenten befinden sich aktuell in den gemeinsam benutzten Bibliotheken
+typeconverter.uno, invocation.uno, corereflection.uno, introspection.uno,
+invocadapt.uno, proxyfac.uno, pythonloader.uno (auf Windows
+typeconverter.uno.dll,...; unix typeconverter.uno.so,...).</p>
+
+<p>Oft werden auch die <strong>Komponenten f&#252;r das Herstellen einer Interprozessverbindung</strong> ben&#246;tigt.
+Dies sind die gemeinsam genutzten Bibliotheken uuresolver.uno, connector.uno, remotebridge.uno, bridgefac.uno.
+
+<p>
+Die Pfadumgebungsvariablen (LD_LIBRARY_PATH auf Unix, PATH auf Windows)
+m&uuml;ssen auf das Verzeichnis zeigen, wo die UNO-Kernbibliotheken, die oben aufgelisteten Komponenten und gemeinsam genutzten Bibliotheken von PyUNO gespeichert sind. (Auf Unix existieren zwei Dateien: libpyuno.so enth&#228;lt den Programmcode und eine pyuno.so, die f&#252;r den Import der systemeigenen Python-Module ben&#246;tigt wird).
+
+Zus&#228;tzlich m&#252;ssen die Python-Module uno.py, unohelper.py und pythonloader.py in einem Verzeichnis gespeichert sein, 
+das in der Umgebungsvariable PYTHONPATH aufgelistet ist.
+
+<h2 id="bootstrap">Bootstrappen von PyUNO von der ausf&#252;hrbaren Pythondatei</h2>
+<p>
+Wenn das UNO-Modul das erste Mal von einem beliebigen Python-Skript importiert wird, muss es einen richtig preparierten UNO-Komponenten-Kontext bootstappen. When the uno module gets first imported from an arbitrary python script, it must
+bootstrap a properly prepared UNO component context.
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+# bootstraps the uno component context
+import uno
+
+# retrieve the already bootstrapped component context
+unoContext = uno.getComponentContext()
+</pre></td></tr></table>
+
+
+<p>Da der Python-Programmierer nicht Parameter eingeben kann (und will), w&#228;hrend ein Modul importiert wird, 
+benutzt die Python-UNO-Bindung die Datei pyuno[rc|.ini], gespeichert neben der von PyUNO gemeinsam genutzten Bibliothek, um den UNO-Kontext zu bootstrappen 
+(sehen Sie hierzu <a href="/common/man/concept/micro_deployment.html">UNO-Bootstrap-Variablen-Konzept</a>). Die Bootstrap-Variablen UNO_SERVICES muss auf eine Registry-Datei zeigen, in der die oben angegebenen Komponenten registriert wurden.
+
+<p>
+PYUNOLIBDIR ist eine besondere Bootstrap-Variable, die den Pfad zu den aktuell verwendeten gemeinsam genutzten Bibliotheken von PyUNO enth&#228;.
+
+Beispiel:
+<table width="100%" bgcolor="silver"><tr><td><pre>
+# The bootstrap variable PYUNOLIBDIR will be set by the pyuno runtime library
+UNO_TYPES=$PYUNOLIBDIR/types.rdb
+UNO_SERVICES=$PYUNOLIBDIR/pyuno_services.rdb
+</pre></td></tr></table>
+
+<p>Wenn die obigen Voraussetzungen erf&#252;llt sind, kann das Skript einfach gestartet werden mit</p>
+<code>$ python myscript.py</code>
+<p>
+Manchmal ist es vorzuziehen, die Bibliotheksnamen der verlangten Komponenten direkt in dem Skript aufzuf&#252;hren, anstatt eine Registry zu pr&#228;parieren 
+(beachten Sie jedoch, dass die oben erw&#228;hnten Bootstrap-Komponenten immer in der Registry registriert werden m&#252;ssen).
+Dies kann erreicht werden durch das Verwenden der Funktion
+<code>unohelper.addComponentsToContext(
+       toBeExtendedContext, contextRuntime, componentUrls, loaderName )</code>
+
+<p> Beispiel:
+<table width="100%" bgcolor="silver"><tr><td><pre>
+import uno
+import unohelper
+
+localContext = uno.getComponentContext()
+
+unohelper.addComponentsToContext(
+       localContext, localContext, ("streams.uno",),
+       "com.sun.star.loader.SharedLibrary")
+
+pipe = localContext.ServiceManager.createInstanceWithContext(
+              "com.sun.star.io.Pipe", localContext )
+
+pipe.writeBytes( uno.ByteSequence( "abc" ) )
+ret,seq = pipe.readBytes( None, 3 )
+</pre></td></tr></table>
+
+
+
+<h2 id="replacing">Ersetzen der Python-Laufzeitumgebung durch diejenige Ihrer systemeigenen Pythoninstallation</h2>
+OOo bringt standardm&#228;&#223;ig die Python-2.2.2-Kernlaufzeitumgebung mit. Dies ist fein f&#252;r die meisten Benutzer, aber einige Hacker (oder Linux-Distributoren) wollen eventuell die Laufzeitumgebung durch diejenige der systemeigenen Pythoninstallation ersetzen, welche eventuell mehr optionale Pakete enth&#246;lt, die sie in Python benutzen wollen.
+
+<p>Das Ersetzen ist ein wenig kompliziert, allerdings ben&#246;tigen sie nur ein installiertes Python und Office.
+
+<h4>Windows</h4>
+<p>Auf Windows k&#246;nnen Sie nur Python-2.2 benutzen. Falls Sie Python-2.3 verwenden wollen, m&#252;ssen Sie das PyUNO-Modul mit Python-2.3 neu kompilieren (sehen Sie unten).</p>
+
+<ul>
+<li>Installieren Sie  OpenOffice.org</li>
+<li>Installieren Sie Python-2.2</li>
+<li>Benutzen Sie Ihren Lieblingstexteditor (z.B. Notepad), um die Datei
+OpenOffice.org/program/pythonloader.uno.ini zu &#246;ffenen und ver&#228;ndern Sie die Zeilen dort zu etwas wie
+
+<pre>
+[Bootstrap]
+PYTHONHOME=file:///c:/python-2.3.4
+PYTHONPATH=$PYTHONHOME/lib $ORIGIN
+</pre>
+Die Pfadelemente m&#252;ssen als absolute Datei-URLs eingegeben werden (Beachten Sie, dass Sie URL-Escape-Sequenzen benutzen m&#252;ssen, z.B. ersetzen Sie Leerfelder mit einem %20). PYTHONPATH muss auf die Wurzel des Speicherplatzes der Python-Bibliothek und auf das OOo-Programm-Verzeichnis zeigen. F&#252;gen Sie andere Bibliotheken, falls Sie diese ben&#246;tigen, hinzu (getrennt durch ein Leerfeld).
+<li>Benennen Sie die folgenden Dateien und Verzeichnisse im Verzeichnis OpenOffice.org/program directory
+     irgendwie um (z.B. f&#252;gen Sie eine Nachsilbe .orig an)
+
+     <ul>
+     <li> python.bat
+     <li> python22.dll
+     <li> python-core-2.2.2
+     </ul>
+</li>
+<li>Starten Sie eine Konsole cmd und f&#252;gen Sie der Pfad-Variablen beides hinzu, zum Python-Heimatverzeichnis und zum Verzeichnis von
+     OpenOffice.org/program.</li>
+<li>F&#252;gen Sie der Umgebungsvariablen PYTHONPATH das Verzeichnis OpenOffice.org/program hinzu.</li>
+</ul>
+
+<h4>Linux</h4>
+<p>Auf Linux k&#246;nnen Sie beides benutzen, Python-2.2 oder Python-2.3, aber falls Sie das letztere benutzen, 
+erhalten Sie eine Warnung auf stderr (die Sie &#252;ber die Versionsunvertr&#228;glichkeit informiert),
+wenn Sie Python oder das Office starten. Um die Warnung zu vermeiden, m&#252;ssen Sie PyUNO mit Python-2.3 neu erstellen (sehen Sie unten).  
+Allerdings habe ich wegen der Versionsunvertr&#228;glichkeit einige Schwierigkeiten festgestellt.</p>
+
+<ul>
+<li>Sie brauchen ein mit der Option --enable-shared konfiguriertes Python. Falls OOo und Python nicht mit demselben gcc-Kompiler erstellt worden sind, m&#252;ssen Sie au&#223;erdem Python neu erstellen, da das Standard-Python einige ung&#252;nstige Schalter w&#228;hrend des Verlinkens benutzt.
+
+<p>Um es neu zu erstellen tun Sie
+<pre>
+LINKCC=gcc
+export LINKCC
+./configure --enable-shared
+make
+su -c "make install"
+</pre>
+
+</li>
+<li>Wechseln Sie in das OpenOffice.org-Verzeichnis und verschieben Sie die Python-Laufzeitumgebung, die mit OOo ausgeliefert wird.
+<pre>
+cd /path/to/openoffice.org/program
+mv libpython.so.2 libpython.so.2.orig
+mv python-core python-core.orig
+cp pythonloader.unorc pythonloader.unorc.orig
+ln -s /usr/local/lib/libpython2.3.so.1.0 libpython.so.2
+</pre>
+</li>
+<li>F&#252;gen Sie das Verzeichnis office/program zu den Variablen LD_LIBRARY_PATH und PYTHONPATH hinzu.
+<li>
+Erstellen Sie die Datei pythonloader.unorc in dem Verzeichnis office/program.
+<pre>
+[Bootstrap]
+PYTHONHOME=file:///usr/local
+PYTHONPATH=$PYTHONHOME/lib/python2.3 $ORIGIN
+</pre>
+Die Pfadelemente m&#252;ssen als absolute Datei-URLs eingegeben werden (Beachten Sie, dass Sie URL-Escape-Sequenzen benutzen m&#252;ssen, z.B. ersetzen Sie Leerfelder mit einem %20). PYTHONPATH muss auf die Wurzel des Speicherplatzes der Python-Bibliothek und auf das OOo-Programm-Verzeichnis zeigen. F&#252;gen Sie andere Bibliotheken, falls Sie diese ben&#246;tigen, hinzu (getrennt durch ein Leerfeld).
+</li>
+</ul>
+
+<h4> Testen</h4>
+Sie sollten nun in der Lage sein, das Python des Systems zu starten und 'import uno' einzutippen. Falls dies sch&#246;n funktioniert, benutzen Sie pkgchk, um Ihr Skript anzuwenden, z.B. das obige swritercomp.py in
+OpenOffice.org (Tipp: F&#252;gen Sie ein print sys.version
+hinzu). Falls die sch&#246;n funktioniert, sollte Python auch in OpenOffice.org selbt gut funktionieren.
+
+<p>Ich habe nur einige elementare Test durchgef&#252;hrt, jedoch habe ich keine erheblichen Probleme feststellen k&#246;nnen. <a href="www.openoffice.org/isses">Lassen Sie uns wissen</a>,
+falls Sie einige haben.
+
+<p>
+Beachten Sie, dass das <a href="http://bibus-biblio.sourceforge.net"> Bibus</a>-Project ein erweitertes Python 2.2.2 mit einer wxPyton-/wx-Windows-Erweiterung f&#252;r die grafische Benutzerschnittstelle (GUI) benutzt.
+
+<h4>Neubauen von PyUNO</h4>
+Sie m&#252;ssen die OOo-Buildumgebung installieren, um dies zu tun. Ersetzen Sie in der Shell die Variable PYTHONPATH
+richtig, z.B.
+<pre>
+setenv PYTHONPATH /usr/local/lib/python2.3:.:/usr/local/lib/python2.3/lib-dynload
+</pre>
+Stellen Sie sicher, dass das systemeigene Python in der Pfadvariable ist. Erstellen Sie das Office (oder zumindest alle Komponenten, von denen PyUNO abh&#228;ngt), aber lassen Sie die Python-Module weg. In den Python-Modulen selbst sollten Sie nur pyuno/source/module, pyuno/source/loader und pyuno/test erstellen. Lassen das Verzeichnis zipcore weg.
+
+Sie m&#252;ssen die Dateien pyuno/source/module/makefile.mk und pyuno/source/loader/makefile.mk ver&#228;ndern.
+Ersetzen Sie die Zeile CFLAGS+= mit CFLAGS+=-I/usr/local/include/python2.3 und alle Vorkommen von -lpython mit -lpython2.3.
+<p>
+Falls der Test fein l&#228;uft, k&#246;nnen Sie nun pyuno.so, libpyuno.so und pythonloader.uno.so in dem Office durch Ihre neu erstellten Version ersetzen.
+
+
+<!--
+<h2 id="scripting-framework"> Support for the new scripting framework </h2>
+There is now a uno-package available, which allows the support of the new scripting
+framework for OpenOffice.org 2.0. It is included in the <a href="#download">above download</a>
+. It allows to execute python scripts in the new framework.
+This paragraph shall just explain how to install and use the python part of the new
+framework, it shall not explain the framework itself.
+
+<h3> Installation</h3>
+<ol>
+<li> Install an OpenOffice.org 1.1rc or newer with PyUNO activated
+     ( see <a href="#install">above</a> ).
+
+<li> Install the <a href="http://framework.openoffice.org/scripting">scripting framework</a>
+(tested with version 0.3)
+
+<li> Copy the file scriptrt4python-0.1.0.zip into
+ &lt;office-install&gt;/user/uno_packages
+
+<li> run pkgchk in &lt;office-install&gt;/program
+
+<li> Deploy the sample script stored in the
+  samples/hello-framework-python.sxp parcel into the office
+  (e.g. with the scripting-framework CommandLineTools, for example
+<p>
+<pre>
+  java CommandLineTools -d hello-framework-python.sxp  \
+           /usr/local/joerg/OpenOffice.org1.1/user/Scripts
+</pre>
+  ).
+</ol>
+
+
+<h3> Deinstallation </h3>
+
+<ol>
+<li> Uninstall the hello-framework-python.sxp
+<li> delete the file &lt;office-install&gt;/user/uno_packages/scriptrt4python-0.1.0.zip
+<li> run pkchk
+</ol>
+
+<h3> Writing your own scripts</h3>
+You can write scripts simply by defining python functions. You can
+have multiple functions within one file, but the file must be selfcontained
+meaning that it may only reference the core python library but not any self written
+scripting files (may be a future extension).
+
+<p>
+Below you can find the sample script, which just pastes a
+'Hello Scriptingframework' into the current document. The following
+script is stored as <code>HelloFramework.py</code>.
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+# Sample python script for the scripting framework
+
+# scriptCtx supports getDocument(), getComponentContext(), getDesktop()
+def Hello( scriptCtx ):
+    print "entering HelloFramework.Hello"
+
+    model = scriptCtx.getDocument()
+
+    # access the document's text property
+    text = model.Text
+
+    # create a cursor
+    cursor = text.createTextCursor()
+
+    # insert the text into the document
+    text.insertString( cursor, "Hello Scriptingframework", 0 )
+
+    return None
+</pre></td></tr></table>
+
+Beside the script file you must provide a <code>parcel-descriptor.xml</code>
+file which describes all functions, that shall be callable fromt the office.
+Here is the sample file for the above script.
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;parcel language="Python" xmlns:parcel="scripting.dtd"&gt;
+    &lt;script language="Python"&gt;
+        &lt;locale lang="en"&gt;
+            &lt;displayname value="HelloFramework.Hello"/&gt;
+            &lt;description&gt;
+                Prints a 'Hello Framework' into the current document
+            &lt;/description&gt;
+        &lt;/locale&gt;
+        &lt;functionname value="HelloFramework.Hello"/&gt;
+        &lt;logicalname value="HelloFramework.Hello"/&gt;
+    &lt;/script&gt;
+&lt;/parcel&gt;
+</pre></td></tr></table>
+
+Note, that the each reference to the script must be written as
+<code>&lt;source-file-name-without-.py&gt;.&lt;function-name&gt;</code>.
+
+<p>
+The function gets called with a XScriptContext implementation as the first parameter.
+It provides the UNO component context (getComponentContext()), the desktop
+(getDesktop()) and the current document model (getDocument()) (if any).
+
+<p>
+Zip these two files as a .sxp file and deploy it into the office using
+the scripting frameworks commandlinetool. When you restart the office, you
+should be able to select the new script in the scriptinframework's dialogs.
+
+<p>
+Things to keep in mind:
+<ul>
+<li> each function must leave with <code>return None</code></a>
+<li> live editing while the office is running is possible (when you edit
+     the file at the place, where the CommandLineTool deploys it)
+<li> performance is poor (script is recompiled for every execution), no caching </li>
+<li> interface to the script may change in future releases
+(e.g. the first parameter of the function)
+<li> error messages are currently printed to stderr (only readable
+on unix systems)
+
+</ul>
+
+-->
+<h2 id="regressiontests">Regressionstests</h2>
+Sofern Sie Python oder PyUNO ver&#228;ndert haben, sollten Sie wenigstens den folgenden Regressiostest laufen lassen.
+
+<ul>
+<li> Testtool-Module bilden und laufen lassen
+
+<pre>
+cd testtools/source/bridgetest/pyuno && dmake runtest
+</pre>
+</li>
+<li> Installationssets bilden und OpenOffice.org installieren.
+<li> Starten Sie program/python und schreiben Sie
+<pre>
+import uno
+</pre>
+(sollte ohne irgendwelche Fehler funktionieren).
+<li> Starten Sie das Office und f&#252;gen Sie das pyuno_hello_world.zip von dem obigen pyuno-doc.zip unter Benutzen von Extras - Extension Manager hinzu.
+<li> Starten Sie Extras - Makros - Makro ausf&#252;hren - OpenOffice.org Macros - pythonSamples - TableSample - createTable
+</ul>
+
+<h2 id="references">Externe Verweise</h2>
+
+<table>
+
+<tr>
+<td>Python-Homepage</td>
+<td><a href="http://www.python.org">http://www.python.org</a></td>
+</tr>
+
+<tr>
+<td>Das OpenOffice.org-Komponentemodell</td>
+<td><a href="http://udk.openoffice.org">http://udk.openoffice.org</a></td>
+</tr>
+
+<tr>
+<td>OpenOffice.org-Entwickler-Handbuch</td>
+<td><a href="http://api.openoffice.org/DevelopersGuide/DevelopersGuide.html">http://api.openoffice.org/DevelopersGuide/DevelopersGuide.html</a></td>
+</tr>
+
+</table>
+
+
+<h2 id="faq">H&#228;ufig gestellte Fragen (FAQ)</h2>
+
+<ol>
+
+<li> <h4>Warum bekomme ich den Fehler 'bus error', wenn ich das Skript hello-world auf Solaris starte?</h4>
+Es scheint eine verf&#228;lschte Version von libpyuno.so in dem Installationsset von OpenOffice.org1.1.0 zu sein. Der Grund ist noch nicht klar, es mag entweder ein Fehler im PyUNO-Code oder ein Fehler beim Bauen sein. Bitte laden Sie <a href="libpyuno.so.gz">libpyuno.so.gz</a> herunter, um die OOo-1.1.0-Version damit zu patchen (wenden Sie diesen Patch nicht auf irgendeine andere Version als OOo 1.1.0 f&#252;r Solaris Sparc an!).
+
+
+
+<li> <h4>Warum bekomme ich einen Fehler 'SystemError: pyuno runtime is not initialized, ...', wenn ich das Skript starte?</h4>
+<ul>
+
+<li>PyUNO wurde nicht korrekt installiert (OO1.1RC2 und fr&#252;her, repariert mit RC3). Bitte pr&#252;fen Sie
+<p>
+<code>&lt;openoffice-install&gt;/program $ ls -c1d py*</code>
+<pre>
+    pyunorc
+    pythonloader.py
+    pythonloader.unorc
+    python
+    python.sh
+    python-core
+    python-core-2.2.2
+    pythonloader.uno.so
+    pyuno.so
+</pre>
+
+    Unter bestimmten Umst&#228;nden k&#246;nnte es passieren, dass die folgenden ini-Dateien fehlen:
+
+    <p>
+pyunorc (or pyuno.ini on windows):
+<table width="100%" bgcolor="silver"><tr><td><pre>
+[Bootstrap]
+UNO_TYPES=$ORIGIN/types.rdb
+UNO_SERVICES=$ORIGIN/services.rdb
+</pre></td></tr></table>
+
+<p>
+pythonloader.unorc (oder pythonloader.unorc auf Windows):
+<table width="100%" bgcolor="silver"><tr><td><pre>
+[Bootstrap]
+PYTHONHOME=$ORIGIN/python-core
+PYTHONPATH=$ORIGIN/python-core/lib $ORIGIN/python-core/lib/lib-dynload $ORIGIN
+</pre></td></tr></table>
+<p>Schneiden Sie diese einfach aus und f&#252;gen Sie sie in einen Texteditor ein, um sie zu erstellen.</p>
+
+<li>Es wurden einige Fehler mit der obigen Fehlermeldung berichtet, die bisher noch nicht aufgel&#246;st worden sind. Sie wollen eventuell dem
+    <a href="//issues/show_bug.cgi?id=17339">#i17339#</a> folgen.
+</ul>
+
+<li> <h4>Warum bekommen ich einen Fehler 'SystemError: _PyImport_FixupExtension: module pyuno not loaded', wenn ich das Skript starte? </h4>
+
+Dies passiert haupts&#228;chlich, wenn Sie immer noch die System-Python-Installation starten.
+OpenOffice.org bringt eine Python-Installation mit (da Python und das Office mit der identischen Compiler-Version erstellt sein m&#252;ssen).
+Bitte pr&#252;fen Sie dies mit 'which python'. Benutzen Sie einfach OpenOffice.org's Python mit dem absoluten Pfadnamen, zum Beispiel
+/usr/local/OpenOffice.org1.1/program/python meinskript.py.
+
+<li> <h4>Warum bekomme ich einen Fehler "error: python-loader:'No module named pythonloader'", wenn ich pkgchk mit einer Python-Komponente laufen lasse?</h4>
+     Stellen Sie sicher, dass die Umgebungsvariablen PYTHONPATH und PYTHONHOME (die Sie eventuell gesetzt haben, da Sie eine anderes Python auf Ihrem System installiert haben) geleert worden sind, bevor soffice UND pkgchk gestartet werden. Dies ist eine provisorische L&#228;sung. Wir denken gerade &#252;ber eine bessere L&#246;sung nach.
+
+<li> <h4>Warum bekomme ich eine Fehlermeldung 'msvcr70.dll or python22.dll not found', wenn ich Python starte?<br/>
+ (oder: Warum erhalte ich einen Fehler 'error while loading shared libraries: libstdc++.so.x' ? )
+</h4>
+Sie versuchen wahrscheinlich Python aus der exe und nicht mit der BAT-Stapeldatei zu starten, zum Beispiel:<br /> 
+c:\Programme\OpenOffice.org1.1\program\python-runtime\bin\python.exe.<br />
+Allerdings m&#252;ssen Sie benutzen: c:\Programme\OpenOffice.org1.1\program\python.bat.
+
+
+<li> <h4>Warum erhalte ich 'PYTHONPATH=... is not an identifier', wenn ich Python starte?</h4>
+	  <p>Dies ist ein Fehler im dem Python-Skript, der mit &#228;lteren Bash-Shells auftritt. Benutzen Sie einfach den Texteditor, um die folgenden Zeilen in dem Skript OOo-Installation/program/python.sh zu &#228;ndern</p>
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+export PYTHONPATH="$sd_prog":"$sd_prog/python-core/lib":"$sd_prog/python-core/lib/lib-dynload":"$PYTHONPATH"
+export PYTHONHOME="$sd_prog"/python-core
+</pre></td></tr></table>
+
+<p>zu</p>
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+PYTHONPATH="$sd_prog":"$sd_prog/python-core/lib":"$sd_prog/python-core/lib/lib-dynload":"$PYTHONPATH"
+export PYTHONPATH
+PYTHONHOME="$sd_prog"/python-core
+export PYTHONHOME
+</pre></td></tr></table>
+
+<p>Dieser Fehler ist beseitigt mit OOo 1.1.1.</p>
+
+
+<li> <h4>Ich habe auf meinem System bereits Python installiert. Warum bringt das Office ein anderes Python mit? </h4>
+     <p>Python selbst wird von OpenOffice.org mitgeliefert, da</p>
+     <ul>
+     <li>Python mit demselben C++-Kompiler wie das Office selbst auf allen Plattformen, die den gcc-Kompiler verwenden (z.B. Linux, BSD etc.) kompiliert worden sein muss.
+     <li>auf den meisten Unix-Plattformen keine gemeinsam genutzten (shared) Bibliotheken f&#252;r Python standardm&#228;&#223;ig verf&#252;gbar sind (obwohl einige Distributionen dies machen). Dies w&#252;rde bedeuten, das Python-UNO-Komponenten nicht innerhalb des Office-Prozesses ausgef&#252;hrt werden k&#246;nnten.
+	 <li>Python-Komponenten-Entwickler eine garantierte Mindestplattform ben&#246;tigen, auf die sie sich verlassen k&#246;nnen.
+     <li> Wiedererkennen einer Python-Laufzeitumgebung am Installationssystem eine extrem schwierige und zeitaufw&#228;ndige Aufgabe w&#228;re, wegen der existierenden vielen unterschiedlichen Python-Installationsschemen.
+	  <li>Packetierer von OpenOffice.org werden Ihre eigenen Pakete erstellen, zum Beispiel f&#252;r Redhat oder Debian ohne Python. Die Standarddistribution muss auf Systemen aus dem unteren Bereich laufen.
+     </ul>
+
+<li> <h4>Kann ich die System-Python-Installation benutzen? </h4>
+     Sehen Sie <a href="#replacing">hier.</a>
+
+<li> <h4>Warum l&#228;sst meine UNO-Komponente OpenOffice.org abst&#252;rzen, w&#228;hrend die Beispiel-UNO-Komponente ausgezeichnet startet?</h4>
+
+     Es gibt einen bekannten Fehler im Office. Sehen Sie sich
+     <a href="//issues/show_bug.cgi?id=13377">
+     #i13377#</a> an, der f&#252;r OpenOffice.org 1.1 nicht behoben worden ist.
+	 Das Office st&#252;rzt gew&#246;hnlich ab, wenn ein Python-Skript zu einer unbehandelten Ausnahme (zum Beispiel einem Attribut-Fehler) f&#252;hrt.
+
+     <p>
+     Sie k&#246;nnen versuchen eine provisorische L&#246;sung f&#252;r diesen Fehler zu finden, indem Sie ein <code>try: except:</code> Level in Ihrer Umsetzung von trigger() hinzuf&#252;gen, das eine Fehlermeldung an stdout/stderr ausgibt. Allerdings hilft dies leider nicht in allen F&#246;llen (zum Beispiel Fehler beim Kompilieren aus manchen Gr&#252;nden; bitte folgen Sie dem Issue f&#252;r weitere Informationen).
+
+     <p>Es mag andere Gr&#252;nde f&#252;r einen Absturz geben, die Sie nur erkennen werden, wenn Sie versuchen, einen systemeigenen Callstack abzurufen (zum Beispiel unter Verwenden des gdb).
+
+<li><h4>Warum funktionieren bei mir der Python-XML-Parser (expat) oder das Zip-Modul nicht?</h4>
+     Diese Bibliotheken sind noch nicht in OOo 1.1 eingebaut. Dies wird sich mit OOo 2.0 &#228;dern. Alternativ k&#246;nnen Sie den XML-Parser-Dienst von OpenOffice.org (sehen Sie sich service com.sun.star.xml.sax.Parser an)
+     oder den Zip-Kontent-Provider
+     (sehen Sie sich <a href="http://ucb.openoffice.org"> http://ucb.openoffice.org</a> an) benutzen.
+
+<li><h4>Warum funktionieren Socket und Sre-Module nicht in der Python-Distribution von OOo1.1. auf Windows?</h4>
+     Dies ist ein bekannter Fehler auf Windows in dem OOo-1.1-Build. Dieser sollte in OOo1.1.1 beseitigt sein 
+     (sehen Sie sich den Issue <a href="//issues/show_bug.cgi?id=21281">21281</a> an ).
+     Es sollte auf den anderen Plattformen funktionieren. Sie k&#246;nnen eine provisorische L&#246;sung erreichen, indem Sie die offizielle Windows-Python-Distribution (schauen Sie auf <a href="http://www.python.org">http://www.python.org</a>) herunter laden und die *.pyd-Dateien der OOo-Python-Installation durch die entsprechenden aus dem heruntergeladenen Paket ersetzen.
+
+<li> <h4>Die Beispiele laufen ausgezeichnet, aber wie bekomme ich weitere Informationen &#252;ber die API?</h4>
+
+     Die Semantik der OpenOffice.org-API ist ein sehr kompliziertes Thema, die nicht in diesem Python-Dokument behandelt werden kann. Versuchen Sie sich Informationen aus anderen Quellen zu beschaffen, insbesondere aus dem Entwicklerhandbuch (schauen Sie <a href="#references">unten</a>).
+<li> <h4>Die meisten Beispiele im Developerguide sind in Java. Wie &#252;bersetze ich diese in Python-Programmcode?</h4>
+     Der meiste Beispiel-Programmcode, den Sie dort finden k&#246;nnen, ist in Java geschrieben. Es ist einfach Java-Programmcode in Python zu &#252;bersetzen, wenn Sie die folgenden Unterschiede kennen:
+     <p>
+
+     In Python brauchen Sie nicht <code>queryInterface</code>. Folgendes im Java-Programmcode zum Beispiel
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+            oInterface = (XInterface) oMSF.createInstance(
+	                         "com.sun.star.frame.Desktop" );
+            oCLoader = ( XComponentLoader ) UnoRuntime.queryInterface(
+	                         XComponentLoader.class, oInterface );
+	    PropertyValue [] szEmptyArgs = new PropertyValue [0];
+	    aDoc = oCLoader.loadComponentFromURL(
+                     "private:factory/swriter" , "_blank", 0, szEmptyArgs );
+</pre></td></tr></table>
+
+<p>wird in Python einfach zu</p>
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+            oCLoader = oMSF.createInstance( "com.sun.star.frame.Desktop" )
+	    aDoc = oCLoader.loadComponentFromURL(
+	                 "private:factory/swriter", "_blank", 0, () )
+</pre></td></tr></table>
+<p>Sie brauchen diese Zwischenvariable oInterface nicht mehr.
+   Daher vereinfacht der Python-Programmcode das Beispiel sehr. Mit ein wenig Fachausbildung sollten Sie nicht allzu viele Probleme mit dem &#220;bersetzen von Java- in Python-Programmcode haben.</p>
+
+<li> <h4>Warum kann ich nicht die Methode print aufrufen?</h4>
+In Python ist 'print' ein
+<a href="http://docs.python.org/ref/print.html">statement / Anweisung</a>. Dies bedeutet einfach, es gibt dort keinen Weg, eine Variable, Methode oder sonst etwas mit diesem Namen. So funktioniert beispielsweise der Programmcode unten nicht:
+
+<pre>
+     doc = desktop.loadComponentFromURL(infileurl, "_blank", 0, ())
+     doc.storeAsURL(outfileurl, ())
+     doc.print(())
+</pre>
+     Sie k&#246;nnen eine Hilfl&#246;sung f&#252;r dieses Problem erhalten, indem Sie die Funktion <code>uno.invoke()</code>
+     wie unten benutzen:
+<pre>
+     uno.invoke(doc, "print", ((), ))
+</pre>
+
+
+<li> <h4>Warum kann ich nicht ein Ersetzen auf dem Objekt 'NumberingRules' durchf&#252;hren? </h4>
+
+	 <p>Es gibt einige Pl&#228;tze, an denen der Verlust in Typsicherheit zu Problemen f&#252;hrt, wie dieser Issue zeigt:
+     <a href="//issues/show_bug.cgi?id=12504">
+ //issues/show_bug.cgi?id=12504</a>. Das Problem hier ist, dass die C++-Implementation in dem Office eine 
+     <code>sequence&lt; PropertyValue &gt;</code> erwartet, w&#228;hrend die PyUNO-Laufzeitumgebung es zu einer <code>sequence&lt; any&gt;</code> konvertiert, wo jedes <code>any</code>
+     eine <code>PropertyValue</code> enth&#228;lt. In meinen Augen ist dies ein Fehler in dem C++-Programmcode. Allerdings gibt es hier eine provisorische L&#246;sung f&#252;r PyUNO, die der Python-Skripter benutzen kann. Sehen hierzu das Beispiel unten:
+
+<table width="100%" bgcolor="silver"><tr><td><pre>
+import uno
+import unohelper
+
+localContext = uno.getComponentContext()
+
+resolver = localContext.ServiceManager.createInstanceWithContext(
+    "com.sun.star.bridge.UnoUrlResolver", localContext)
+ctx = resolver.resolve(
+    "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext")
+smgr= ctx.ServiceManager
+desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop",ctx)
+doc = desktop.loadComponentFromURL("private:factory/swriter", "_blank", 0, ())
+
+style = doc.createInstance("com.sun.star.style.NumberingStyle")
+family = doc.getStyleFamilies().getByName('NumberingStyles')
+family.insertByName('List test', style)
+
+rule = style.getPropertyValue('NumberingRules')
+level = rule.getByIndex(0)
+
+# the normal call would have been:
+# rule.replaceByIndex( 0, level )
+# but this will end up in a exception
+# magic to pass the exact type to the callee
+uno.invoke( rule , "replaceByIndex", (0, uno.Any("[]com.sun.star.beans.PropertyValue",level)) )
+</pre></td></tr></table>
+
+<p>Dies ist der einzige Platz, wo die uno.Any benutzt wird. Das Verwenden der uno.Any in normalen Aufrufen wird zu RuntimeExceptions f&#252;hren. Eine Python-UNO-Objekt-Implementation wird niemals eine Instanz von uno.Any() als eingehenden Parameter empfangen, stattdessen wird immer den Wert des &#252;bergeben.
+
+<p>Diese L&#246;sung sieht wirklich h&#228;&#223;lich aus, aber es erlaubt Ihnen fortzufahren, wo Sie andererseits nur aufgeben oder eine andere Implementation der Sprache benutzen k&#246;nnten.
+
+<li> <h4>Wie kann ich Codierung iso8859-1 f&#252;r die Python-Installation von OpenOffice.org aktivieren?</h4>
+Legen Sie eine Datei mit dem Namen sitecustomize.py irgendwo in Ihren PYTHONPATH, die folgendes enth&#228;lt:
+
+<pre>
+import sys
+sys.setdefaultencoding('iso8859-1')
+</pre>
+
+(oder irgendeine andere Codierung, die Sie w&#252;nschen). Beachten Sie allerdings, dass dies &#252;berlicherweise keine so gute Idee ist. Es w&#228;re viel sauberer, die notwendigen Umschl&#252;sselungen ausdr&#252;cklich im Programmcode vorzunehmen, zum Beispiel durch Verwenden von Unicode(x, 'iso8859-1').
+</ol>
+
+<h2 id="known_pyuno_extensions">Bekannte PyUNO-Erweiterungen f&#252;r OpenOffice.org </h2>
+
+<p>Die hier gelisteten Pakete k&#246;nnen als Demonstration daf&#252;r dienen, was mit PyUNO m&#246;glich ist.
+Lassen Sie mich wissen, falls Sie Kenntnis von anderen Erweiterungen erhalten, die PyUNO benutzen.
+
+<table border>
+<col width=50% /> <col width=50% />
+<tr>
+<th>Title</th>
+<th>Link</th>
+</tr>
+
+<tr>
+<td>PyOOoBib - Das wird Bibliothekskataloge &#252;ber das Internet nach bibliographischem Unterlagen durchsuchen. Sie k&#246;nnen Unterlagen ausw&#228;hlen und sie zu Ihrer Literaturdatenbank hinzuf&#252;gen.</td>
+<td><a href="http://bibliographic.openoffice.org/servlets/NewsItemView?newsItemID=168">
+http://bibliographic.openoffice.org/servlets/NewsItemView?newsItemID=168</a>
+</tr>
+
+<tr>
+<td>Thessalonica - Ein Werkzeug, um die Unterst&#252;tzung f&#252;r mehrere Sprachen in OOo zu verbessern</td>
+<td><a href="http://www.thessalonica.org.ru/en">http://www.thessalonica.org.ru/en</a></td>
+</tr>
+
+<tr>
+<td>Bibus bibliographische Software </td>
+<td><a href="http://bibus-biblio.sourceforge.net">http://bibus-biblio.sourceforge.net/</a></td>
+</tr>
+
+<tr>
+<td> oood.py - Ein Dienstprogramm im Hintergrund (daemon) f&#252;r OpenOffice.org </td>
+<td> <a href="oood/index.html">http://udk.openoffice.org/python/oood/index.html</a></td>
+</tr>
+
+<tr>
+<td>pyXray - Debugging-Werkzeug, um UNO-Objekte mit Hilfe der Office-Werkzeuge darzustellen</td>
+<td><a href="http://www.indesko.org/en/downloads/">http://www.indesko.org/en/downloads</a></td>
+</tr>
+
+<tr>
+<td>Ponto - Eine Wrapper-Schicht um ein Writer-Dokument herum </td>
+<td><a href="http://www.ham.nw.schule.de/pub/bscw.cgi/0/73468">http://www.ham.nw.schule.de/pub/bscw.cgi/0/73468</a><br/>
+    <a href="http://ddi.cs.uni-dortmund.de/projekte/ponto">http://ddi.cs.uni-dortmund.de/projekte/ponto</a></td>
+</tr>
+
+</table>
+
+
+
+<h2 id="pyuno_needs_you">PyUNO braucht Sie! </h2>
+
+<p>PyUNO wird zur Zeit (und wird dies auch in Zukunft) von mir in meiner Freizeit gepflegt.
+
+<p>Mein Hauptziel f&#252;r PyUNO besteht darin, eine gute Integration des OpenOffice.org-Komponenten-Modells in Python bereit zu. Einige Mitstreiter auf <a href="mailto:dev@udk.openoffice.org">dev@udk.openoffice.org</a> erwarten, eine noch <strong>funktionsreichere Python-Laufzeit in OpenOffice.org</strong> und eine Integration mit der Pythoninstallation des Systems zu haben. Obwohl dies eine verst&#228;ndliche Forderung ist, ist es nicht einer meiner bevorzugten Arbeitsthemen und es bringt auch eine Menge Arbeit mit sich. Da ich au&#223;erdem Zeit f&#252;r das Erstellen eines <a href="http://dba.openoffice.org/drivers/postgresql/index.html">Postgresql-Treibers f&#252;r OpenOffice.org</a> aufwende, bleibt einfach keine Zeit mehr &#252;ber f&#252;r diese Aufgabe.
+
+<p> Deshalb suche ich nach anderen Freiwilligen wie zum Beispiel <strong>Sie</strong>, um diese L&#252;cke zu f&#252;llen. F&#252;r den Fall, dass Sie interessiert sind, lassen Sie mich dies &#252;ber die Mailingliste dev@udk.openoffice.org wissen oder schicken Sie mir privat eine E-Mail.
+
+<p>Ich sehe zur Zeit die folgenden Hauptaufgaben:
+
+<table border>
+<tr>
+<th>Aufgabe</th>
+<th>Beschreibung</th>
+<th>"Haupt-Herausforderungen"</th>
+</tr>
+
+<tr>
+<td>Anheben der OOo-Python-Version auf das aktuelle Python-Release</td>
+<td>
+<p>OOo nutzt aktuell Python 2.2.2 mit OOo 1.1.x und Python 2.3.4, das bereits ziemlich alt ist.
+Jemand, der dies tut, wird haupts&#228;chlich Zeit f&#252;r den OpenOffice.org-Build-Baum aufbringen m&#252;ssen, wo die Python-Tar-Archive entpackt, gepatcht und gebaut werden. Dies ist eine sehr plattform-abh&#228;ngige Aufgabe, typischer Weise f&#252;r Mac OS X werden Sie eine Menge von Patches anwenden m&#252;ssen.
+
+</p>
+</td>
+<td>Kenntnisse &#252;ber das Erstellen von OOo, aktuelle OOo-Python-Patche auf die aktuelle Python-Version portieren,
+das Erstellte f&#252;r sowohl Windows- als auch Unix-Plattformen pflegen</td>
+<td> </td>
+</tr>
+
+<tr>
+<td>Hinzuf&#252;gen der Unterst&#252;tzung f&#252;r die Zlib-Bibliothek (und mehr ...) </td>
+<td>Aktuell wird das Python von OOo ohne diese Bibliotheken ausgeliefert, die von Python-Benutzern stark vermisst werden. Idealerweise sollten sie die Version von zlib wieder verwenden, die sich bereits im OOo-Quelltext-Baum befindet.
+</td>
+<td>Kenntnisse &#252;ber das Erstellen von OOo, das Erstellte f&#252;r sowohl Windows- als auch Unix-Plattformen weiterhin pflegen</td>
+</tr>
+
+<tr>
+<td>Reintegrieren Sie Patches von OOo f&#252;r Python in den Python-Quelltext-Baum (falls sinnvoll)</td>
+<td>Eine Menge von Patchen werden auf das Python-Quelltext-Tar-Archiv angewendet, bevor OpenOffice.org erstellt wird. Sie werden die Patche &#252;berpr&#252;fen m&#252;ssen und versuchen m&#252;ssen, die Python-Programmcode-Maintainer von der Integration dieser Patche (falls sinnvoll) in deren Quelltext-Baum zu &#252;berzeugen. Dies wird das Leben einfacher gestalten, wenn auf eine k&#252;nftige Python-Version hochger&#252;stet wird.</td>
+<td>Kenntnisse &#252;ber das Erstellen von OOo, Verstehen der Patche und Diskussion mit der Python-Community.</td>
+</tr>
+
+<tr>
+<td>Ver&#228;nderungen in Python selbst
+</td>
+<td> Wirkliche Integration mit der Pythoninstallation auf dem System wird nur m&#246;glich sein, wenn Python selbst modifiziert wird.
+
+<ul>
+<li>Unix: Ist es wirklich n&#246;tig, dass die ausf&#252;hrbare Python-Datei zu der Bibliothek libstdc++ verlinkt ist?
+<li>Gemeinsam benutzte Programmbibliothek: Python sollte standardm&#228;&#223;ig als gemeinsam benutzte Programmbibliothek erstellt werden
+(auf allen plattformen, wo dies m&#246;glich ist).
+<li> Versionierung: Python setzt zur Zeit voraus, dass systemeigene Module mit identischen Python-Versionen erstellt und ausgef&#252;hrt werden (andernfalls werden Warnungen ausgegeben).
+Neuere Python-Versionen sollten eine bin&#228;re R&#252;ckw&#228;rtskompatibilit&#228;t von systemeigenen Modulen erstellt mit &#228;lteren Python-Versionen garantieren.
+</ul>
+</td>
+<td>
+Diskutieren Sie mit der Python-Community.
+</td>
+</tr>
+
+
+<tr>
+<td>PyUNO-FAQ-Maintainer</td>
+<td>Eine Menge gute Fragen zu PyUNO sind bereits und werden in der Zukunft auf der Mailingliste <a
+href="mailto:dev@udk.openoffice.org">dev@udk.openoffice.org</a> (oder anderen) beantwortet werden.
+Jemand sollte dies zu einer FAQ auf dieser Seite hinzuf&#252;gen.
+</td>
+<td>Folge den OpenOffice.org-Mailinglisten und pflege diese Seite im
+	CVS.<br/>
+Kenntnisse von einfachem HTML.</td>
+</tr>
+
+</table>
+
+
+
+<h2 id="authors">Autoren</h2>
+
+<p>Die UNO-Python-Br&#252;cke wurde anf&#228;nglich erstellt von <a href="mailto:ralpht@sgi.com">Ralph Thomas</a>
+und wird nun gepflegt von <a href="mailto:JoergBudi@gmx.de">Joerg Budischewski</a>.
+Christian Zagrodnick sandte einige sehr n&#252;tzliche Patches ein. Viele unerw&#228;hnte Portierer machten es m&#246;glich, PyUNO auf alllen von OOo unterst&#252;tzen Plattformen verf&#252;gbar zu haben. Zuletzt &#252;berarbeitet $Date: 2009/12/13 08:14:29 $
+
+<p>Bitte benutzen Sie die <a href="dev@udk.openoffice.org">dev@udk.openoffice.org</a>
+Mailingliste f&#252;r weitere Fragen.</p>
+
+<h2 id="license">Lizenz</h2>
+Dieses Dokument ist verf&#252;gbar unter der <a href="//licenses/PDL.html">PDL</a> (Public Documentation License). Es ist eine &Uuml;bersetzung des englischen Originals: http://udk.openoffice.org/python/python-bridge.html.
+Die &Uuml;bersetzung wurde erstellt von Andreas Mantke (andreasma &#091;at&#093; openoffice.org).
+
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>
