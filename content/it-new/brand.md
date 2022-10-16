@@ -1,14 +1,14 @@
 type=brand
 home=home
-search=search
-selectedlang=en
-language=Language
+search=cerca
+selectedlang=it
+language=Lingua
 name=Apache OpenOffice
-tagline=The Free and Open Productivity Suite
-logo=AOO_logos/100MillAOO100px.png
+tagline=La suite libera e completa per l'ufficio
+logo=AOO_logos/AOO4_website_logo.png
 domain=https://www.openoffice.org
 divid=bannera
-announce=Released: Apache OpenOffice
+announce=Disponibile: Apache OpenOffice
 announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-19
-announcetip=Released: Apache OpenOffice
+announcetip=Disponibile: Apache OpenOffice
 ~~~~~~
