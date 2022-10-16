@@ -5,7 +5,7 @@ divid=topnava
 - [Download][m1]
 - [Support][m2]
 - [Blog][m3]
-- [Extentions & Templates][m4]
+- [Extensions & Templates][m4]
 - [Get Involved][m5]
 - [Focus Areas][m6]
 - [Native Languages][m7]
