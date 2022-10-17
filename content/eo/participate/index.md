@@ -13,7 +13,7 @@ OpenOffice is currently looking for people with the following:
   - Do you like contributing to open source projects?
 
 Come and join us in helping OpenOffice to thrive. Subscribe to the
-[recruitment mailing list](http://openoffice.apache.org/mailing-lists.html#recruitment-mailing-list-public)
+[volunteer mailing list](http://openoffice.apache.org/mailing-lists.html#volunteer-mailing-list-public)
 and introduce yourself. We'll help you get started.
 
 
