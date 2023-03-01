@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+<style type="text/css">
+/* <![CDATA[ */ @import "/branding/css/tigris.css"; /* ]]> */
+</style>
+  <script src="/branding/scripts/sc.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="/branding/css/print.css" media="print" />
+
+  <title>Contributing source code changes</title>
+ </head>
+
+ <body class="docs" onload="self.focus()">
+  <div class="docs" id="ddcvscvscontributing">
+   <h2>Contributing source code changes with command-line CVS</h2>
+
+   <div id="toc">
+    <ul>
+     <li><strong><a href="/nonav/servlets/HelpTOC">Help index</a></strong></li>
+    </ul>
+
+    <ul>
+     <li>
+      <a href="/nonav/docs/ddCVS.html">About source code version control with CVS</a> 
+
+      <ul>
+       <li><a href="/nonav/docs/ddCVS_cvsglossary.html">A version control glossary</a></li>
+
+       <li><a href="/nonav/docs/ddUsingCVS_command-line.html">Using command-line CVS to access project source files</a></li>
+
+       <li>
+        Contributing source code changes with CVS 
+
+        <ul>
+         <li><a href="#cvscommit">Committing files and directories</a></li>
+
+         <li><a href="#cvsadd">Adding new files and directories</a></li>
+
+         <li><a href="#work">Working with files</a></li>
+
+         <li><a href="#filetypes">About file types</a></li>
+
+         <li><a href="#cvsupdate">Keeping your working copy up to date (cvs update)</a></li>
+
+         <li><a href="#cvstatus">Comparing your working files to the CVS repository</a></li>
+
+         <li><a href="#otherdiff">Comparing files before you commit</a></li>
+
+         <li><a href="#cvsmerging">Merging your changes</a></li>
+
+         <li><a href="#cvsresolving">Resolving merge conflicts</a></li>
+
+         <li><a href="#reverting">Revision history and reverting</a></li>
+        </ul>
+       </li>
+
+       <li><a href="/nonav/docs/ddCVS_cvsmanaging.html">Managing project files and directories with CVS</a></li>
+      </ul>
+     </li>
+    </ul>
+   </div>
+
+   <h3><a id="contributing" name="contributing">Contributing your changes into CVS</a></h3>
+
+   <p><a id="cvscommit" name="cvscommit"></a>To <i>commit</i> your changes to a file into the shared repository, type:</p>
+
+   <p><code>cvs commit -m "Type your changes message here" filename</code></p>
+
+   <p>If you do not include a description of your change to the file, you will be prompted to add it by invoking your file editor before CVS can complete the commit action.</p>
+
+   <p>To commit your changes to all files in a directory and any subdirectories:</p>
+<pre>
+<code>cd top_directory_to_commit
+cvs commit -m "Type your change message here"
+</code>
+</pre>
+
+   <p>All commits are logged automatically and posted to the project's cvs mailing list.</p>
+
+   <h3><a id="cvsadd" name="cvsadd">Adding files/directories</a></h3>
+
+   <p>To <i>add</i> a new file to the CVS repository after you have first created and edited it in your working directory, type:</p>
+
+   <p><code>cvs add filename</code></p>
+
+   <p>Then follow up with the "cvs commit filename" command. If you do not first add the file, CVS does not recognize it.</p>
+
+   
+  <p>If you have cvs write permissions, you can add subdirectories to your project's 
+    source tree using the "<b>cvs add</b>" command. To move existing files into 
+    a new subdirectory you must first copy or move the files to the new location, 
+    use the &quot;<b>cvs add</b>&quot; command to add to the repository in the 
+    new location and then commit the files using the &quot;<b>cvs commit</b>&quot; 
+    command. To remove the files from their previous location, make sure the files 
+    are no longer physically in that directory on your local drive, then use the 
+    &quot;<b>cvs remove</b>&quot; command and commit using the &quot;<b>cvs commit</b>&quot; 
+    command to remove them from the repository.</p>
+
+   <p>NOTE: Naming directories for CVS should be done with caution. The CVS repository is accessible by users on varying operating systems, some of which cannot read certain characters in directory names. While .,~, /, \ and other characters may be legal characters for directory names in your operating system, someone else who needs to access your directory may not be able to use your file organization schema. To avoid conflict with other users, you should use only the following characters in your directory names:</p>
+
+   <blockquote>
+    <p>a-z, A-Z 0-9 and _(underscore)</p>
+   </blockquote>
+
+   <p>Adding other characters will render your directory names unreadable by users on other operating systems.</p>
+
+   <ul>
+    <li><a href="http://cvsbook.red-bean.com/cvsbook.html#Committing">More about committing changes</a></li>
+
+    <li><a href="http://cvshome.org/docs/manual/cvs_7.html#SEC66">More about adding files and directories</a></li>
+   </ul>
+
+   <h3><a id="work" name="work">Working with files</a></h3>
+
+   <p>Between checking files out of the project repository and checking them back in, CVS has virtually nothing to do with how files are used in the project environment or build process. That is governed by the project owner and other external factors unique to the project.</p>
+
+   <p>When you make changes to existing files, you must edit your working copies of these files in a file editor on your local machine using your file editor of choice. None of the changes you make to your working files has any effect on the project's source repository or on other developers' work until you check in (that is, do a <i>cvs commit</i>) your modified versions of files.</p>
+
+   <p>More about "<a href="http://www.cvshome.org/docs/manual/cvs_1.html#SEC1">What CVS is not</a>."</p>
+
+   <h3><a id="filetypes" name="filetypes">About file types</a></h3>
+
+   <p>The information provided in this document about CVS commands and actions assumes that the project files you are working with are text files. It is possible to include binary files in version control with CVS, although there are some special issues.</p>
+
+   <p>More about <a href="http://cvshome.org/docs/manual/cvs_9.html#SEC80">Handling binary files</a> in CVS.</p>
+
+   <h3><a id="cvsupdate" name="cvsupdate">Keeping your working files up to date with the repository</a></h3>
+
+   <p>If you want to look before you leap, you can get a list of all files in your local directory not up to date with the project repository by using the following command:</p>
+
+   <p><code>cvs -qn update</code></p>
+
+   <p>Files in the affected directory or directories are listed with their current status indicated as follows:</p>
+
+   <ul>
+    <li>? = File is unrecognized by CVS (needs to be added and committed).</li>
+
+    <li>A = File is added; file is recognized by CVS but still needs to be committed to the repository.</li>
+
+    <li>M = File has been modified by another developer since you checked out your working copy. This means that you need to update.</li>
+
+    <li>U = File is updated.</li>
+
+    <li>C = File has merge conflicts that must be resolved by hand.</li>
+   </ul>
+
+   <p>To go ahead and actually perform an update to make your working directory up to sync with the repository, the command is:</p>
+
+   <p><code>cvs update</code></p>
+
+   <p>You can also update individual files by adding the filename to the command.</p>
+
+   <p>Or, to include any new directories when updating, do:</p>
+
+   <p><code>cvs update -d</code></p>
+
+   <ul>
+    <li><a href="http://www.gnu.org/manual/cvs/html_chapter/cvs_20.html#SEC132">More about the cvs update command</a></li>
+
+    <li><a href="http://www.gnu.org/manual/cvs/html_chapter/cvs_20.html#SEC134">More about CVS update output</a></li>
+   </ul>
+
+   <h3><a id="cvstatus" name="cvstatus">Comparing your working files to the repository</a></h3>
+
+   <p>Another way to determine whether all of your working files are in sync with the latest versions in the repository is with the command:</p>
+
+   <p><code>cvstatus</code></p>
+
+   <p>or for status on individual files:</p>
+
+   <p><code>cvs status filename</code></p>
+
+   <p>This comparison may return one of the following messages:</p>
+
+   <dl>
+    <dt>Locally modified</dt>
+
+    <dd>You have edited the file, and not yet committed your changes.</dd>
+
+    <dt>Locally Added</dt>
+
+    <dd>You have added the file with `add', and not yet committed your changes.</dd>
+
+    <dt>Locally Removed</dt>
+
+    <dd>You have removed the file with `remove', and not yet committed your changes.</dd>
+
+    <dt>Needs Checkout</dt>
+
+    <dd>Someone else has committed a newer revision to the repository. The name is slightly misleading; you will ordinarily use `update' rather than `checkout' to get that newer revision.</dd>
+
+    <dt>Needs Patch</dt>
+
+    <dd>Like Needs Checkout, but the CVS server will send a patch rather than the entire file. Sending a patch or sending an entire file accomplishes the same thing.</dd>
+
+    <dt>Needs Merge</dt>
+
+    <dd>Someone else has committed a newer revision to the repository, and you have also made modifications to the file.</dd>
+
+    <dt>File had conflicts on merge</dt>
+
+    <dd>This is like Locally Modified, except that a previous `update' command gave a conflict and CVS could not resolve the changes made. If you have not already done so, you need to <a href="#cvsresolving">resolve the conflict</a>.</dd>
+
+    <dt>Unknown</dt>
+
+    <dd>CVS doesn't know anything about this file. For example, you have created a new file and have not run `cvs add'.</dd>
+   </dl>
+
+   <p>In general, a good rule of thumb is to make sure your working files are up to date with the repository <i>just before you commit your changes to a file</i>. The reason for this is that sometimes your commit may be unsuccessful, for example, you may be trying to commit from the wrong directory or perhaps another developer has committed changes to that same file after you checked it out of the repository or last updated it. Trying to commit your changes to an older version of the same file often causes conflicts when CVS tries to merge these. The result of your commit attempt under such circumstances is a somewhat daunting failure message about "dying gasps" from CVS. (Unfortunately, you don't find this out until <i>after</i> you've gone through the process of mentally composing and entering a pithy change log message.)</p>
+
+   <p>To see the differences between your copy of a file and the latest version in the repository:</p>
+
+   <p><code>cvs diff filename</code></p>
+
+   <p><a href="http://cvsbook.red-bean.com/cvsbook.html#Finding_Out_What_You__And_Others__Did_--_update_And_diff">More about comparing your work with the project repository</a></p>
+
+   <h3><a id="otherdiff" name="otherdiff">Comparing versions of files <i>before</i> you commit (diff)</a></h3>
+
+   <p>Perhaps you want to see the changes another developer has made to the same file <i>before</i> you commit your own changes. For example, suppose you are committing some very complex changes which you anticipate may conflict with another developer's work.</p>
+
+   <p>In this case, a workable solution is to save off your working file under a different name (something like: "filename-new"). Then you can run the "<b>cvs update</b>" command and compare the latest version from the repository with your file before committing your changes. You can even compare the two files side-by-side using the following diff command:</p>
+
+   <p><code>diff -y filename filename-new</code></p>
+
+   <h3><a id="cvsmerging" name="cvsmerging">Merging your changes with other developers' changes</a></h3>
+
+   <p>By giving the "<b>cvs update</b>" command, you are essentially telling CVS to merge the latest versions of files from the repository into your working copies.</p>
+
+   <p>Sometimes, however, other modifications made to a file since you last updated do not mesh well with your version. Or, you've made changes that conflict with the repository version. CVS makes every attempt to resolve such conflicts automatically when you update and commit, but sometimes it cannot resolve everything. Conflicts within the file must be resolved by hand.</p>
+
+   <h3><a id="cvsresolving" name="cvsresolving">Resolving merge conflicts</a></h3>
+
+   <p>To resolve merge conflicts, open the file in your file editor. Look for lines or sections marked by <b>&gt;&gt;&gt;&gt;&gt;&gt;</b> and <b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/B&gt;. When CVS cannot resolve a conflict, it includes both verions of the affected line or sections inthe file, with the latest version usually first. Your task is to delete the unwanted lines, along with the lines containing the conflict symbols and revisions numbers. Then you can save the file and commit again.</b></p>
+
+   <ul>
+    <li><a href="http://www.gnu.org/manual/cvs/html_chapter/cvs_7.html#SEC40">An example of a conflict</a></li>
+
+    <li><a href="http://cvsbook.red-bean.com/cvsbook.html#Detecting_And_Resolving_Conflicts">More about resolving conflicts</a></li>
+   </ul>
+
+   <h3><a id="reverting" name="reverting">Revision history and reverting</a></h3>
+
+   <p>Beyond the usefulness of being able to review a file's modification history using the "<b>cvs log</b>" command, those earlier file revisions can actually be restored as the most current revision (that is, restored to the "repository head") by the process of <i>reverting</i>. This becomes a particularly useful option if you need to return to an earlier point in a file's evolution for whatever reason, somewhat like being able to turn back the clock. When development projects experience broken builds or other problems, this becomes one of the most useful and powerful features of version control.</p>
+
+   <p>A word of caution: it's easy to get confused by the terminology of "revisions" versus "versions." <i>Revisions</i> are specific updates to individual files, such 1.1, 1.2, 1.3. When you run the "cvs log filename" command, the results are all of that particular file's revision numbers. By contrast, <i>versions</i> are <b><i>sets</i></b> of file revisions that are tagged and named at a certain point in time. The confusion occurs because versions are sometimes named similarly to file revisions (1.0, 1.1, 1.2 etc.). But versions do not have to be named this way; they can be any set of characters the Project Owner designates, and probably should use a different numbering scheme.</p>
+
+   <p>First, before you attempting to do any reverting, it's recommended that you examine the differences between the file version currently at the head of the repository and the version you want to revert to. The command to do this is:</p>
+
+   <p><code>cvs diff -c -r version# -r version# filename</code></p>
+
+   <p>This enables you to compare the two files before attempting to revert. The order for the file versions in this command is not critical, as long as you know can distinguish between the two versions.</p>
+
+   <p>The command to revert requires strict observance in ordering the version numbers, however. Assuming you want to revert from a later version to an earlier version, the command is:</p>
+
+   <p><code>cvs update -j later_version# -j earlier_version# filename</code></p>
+
+   <p>Because there is more than one method for reverting, see also:<br />
+    <a href="http://cvsbook.red-bean.com/cvsbook.html#Examining_And_Reverting_Changes">More about reverting</a><br />
+    <a href="http://www.gnu.org/manual/cvs/html_chapter/cvs_16.html#SEC72">More about revision history</a></p>
+
+   <p>You should also know that reverting may result in "sticky tag" errors. These can be resolved using the following update command with a special switch:</p>
+
+   <p><code>cvs update -dAP</code></p>
+
+   <p>(<a href="http://cvsbook.red-bean.com/cvsbook.html#Getting_Snapshots__Dates_And_Tagging_">What are sticky tag errors?</a>)</p>
+   <!--
+
+          <h3><a name="cvstips">Feedback on this document</a></h3>
+        <p>
+          The author of this help document has made every attempt to compile accurate, helpful information about using CVS for projects hosted on this site. If you think any content in the above document is wrong, inadequate, or something is just plain missing ... that's good. This is open source, so step up to the plate and contribute your suggestions for additions and improvements.
+          </p> -->
+
+   <p>More CVS help: <a href="/nonav/docs/ddCVS_cvsmanaging.html">Managing project files and directories with command line CVS</a></p>
+
+   <div class="courtesylinks">
+    <p><a href="#toc">Top</a> | <a href="/nonav/servlets/HelpTOC">Help index</a></p>
+   </div>
+  </div>
+ </body>
+</html>
+
+
