@@ -8,7 +8,7 @@ tagline=Laisvųjų ir atvirųjų raštinės programų rinkinys
 logo=/AOO_logos/AOO4_website_logo.png
 domain=https://www.openoffice.org
 divid=bannera
-announce=Išleistas: Apache OpenOffice
-announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-19
-announcetip=Išleistas: Apache OpenOffice
+announce=Išleista: Apache OpenOffice
+announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-110
+announcetip=Išleista: Apache OpenOffice
 ~~~~~~
