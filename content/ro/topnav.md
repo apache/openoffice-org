@@ -13,7 +13,7 @@ divid=topnava
 [m0]:	/product/                  		"Apache OpenOffice descrierea produsului"
 [m1]:	/ro/download/                 		"Descarca Apache OpenOffice"
 [m2]:	/support/                  		"Găsiți asistență pentru OpenOffice"
-[m3]:	https://blogs.apache.org/ooo/ 		"Apache OpenOffice Blog"
+[m3]:	https://blogs.apache.org/OOo/ 		"Apache OpenOffice Blog"
 [m4]:	/extensions/               		"Extensii și șabloane pentru OpenOffice"
 [m5]:	/participate/              		"Implică-te în Apache OpenOffice"
 [m6]:	/projects/accepted.html			"Apache OpenOffice domenii de concentrare asupra dezvoltării "

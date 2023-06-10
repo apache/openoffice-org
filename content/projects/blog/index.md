@@ -4,4 +4,4 @@ notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 - [Apache OpenOffice Blog][1]
 
-  [1]: https://blogs.apache.org/ooo/
+  [1]: https://blogs.apache.org/OOo/

@@ -13,7 +13,7 @@ divid=topnava
 [m0]:	/xx/product/                  		"Apache OpenOffice product description"
 [m1]:	/xx/download/                 		"Download Apache OpenOffice"
 [m2]:	/xx/support/                  		"Find Support for OpenOffice"
-[m3]:	https://blogs.apache.org/ooo/ 		"Apache OpenOffice Blog"
+[m3]:	https://blogs.apache.org/OOo/ 		"Apache OpenOffice Blog"
 [m4]:	/xx/extensions/               		"Extensions and Templates for OpenOffice"
 [m5]:	/xx/participate/              		"Get involved in Apache OpenOffice"
 [m6]:	/projects/accepted.html			"Apache OpenOffice development focus areas"

@@ -14,7 +14,7 @@ divid=topnava
 [m0]:	  /da/product/index.html				"Apache OpenOffice produkt beskrivelse"
 [m1]: 	  /da/download/index.html				"Hent OpenOffice"
 [m2]: 	  /support/index.html 				       	"Få hjælp til OpenOffice"
-[m3]:	  https://blogs.apache.org/ooo/				"Apache OpenOffice blog"
+[m3]:	  https://blogs.apache.org/OOo/				"Apache OpenOffice blog"
 [m4]: 	  /extensions/index.html				"Udvidelser og skabeloner for OpenOffice"
 [m5]: 	  https://openoffice.apache.org/get-involved.html	"Bliv involveret i Apache OpenOffice"
 [m6]:	  /projects/accepted.html				"Apache OpenOffice udviklings fokus område"

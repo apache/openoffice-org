@@ -14,7 +14,7 @@ divid=topnava
 [m0]:	/product/index.html								"Apache OpenOffice tuotekuvaus"
 [m1]:	/fi/download/index.html							"Lataa OpenOffice"
 [m2]:	/support/index.html								"Etsi tukea OpenOfficen toiminnoille"
-[m3]:	https://blogs.apache.org/ooo/					"Apache OpenOffice Blogi"
+[m3]:	https://blogs.apache.org/OOo/					"Apache OpenOffice Blogi"
 [m4]:	/extensions/index.html							"Laajennukset ja mallipohjat OpenOfficen ohjelmistoille"
 [m5]:	https://openoffice.apache.org/get-involved.html	"Osallistu Apache OpenOfficen kehittämiseen"
 [m6]:	/projects/accepted.html							"Apache OpenOfficen kehitysalueet"

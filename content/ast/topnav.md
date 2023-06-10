@@ -14,7 +14,7 @@ divid=topnava
 [m0]:	  /product/index.html						"Descripción productu Apache OpenOffice"
 [m1]: 	  /ast/download/						"Descargar OpenOffice"
 [m2]: 	  /support/index.html 				     	     	"Buscar sofitu pa OpenOffice"
-[m3]:	  https://blogs.apache.org/ooo/					"Blogue de Apache OpenOffice"
+[m3]:	  https://blogs.apache.org/OOo/					"Blogue de Apache OpenOffice"
 [m4]: 	  /extensions/index.html					"Complementos y plantílles pa OpenOffice"
 [m5]: 	  https://openoffice.apache.org/get-involved.html		"Involúcrate n'Apache OpenOffice"
 [m6]:	  /projects/accepted.html					"Areas focalizaes del desarrollu d'Apache OpenOffice"

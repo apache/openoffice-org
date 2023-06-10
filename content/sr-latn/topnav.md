@@ -12,6 +12,6 @@ divid=topnava
 [m0]:   /sr-latn/product/                  "Apache OpenOffice - opis proizvoda"
 [m1]:   /sr-latn/download/                 "Preuzmite Apache OpenOffice"
 [m2]:   /sr-latn/support/                  "Pronađite podršku za OpenOffice"
-[m3]:   http://blogs.apache.org/ooo/       "Blog Apache OpenOffice-a"
+[m3]:   http://blogs.apache.org/OOo/       "Blog Apache OpenOffice-a"
 [m4]:   /sr-latn/extensions/               "Proširenja i šabloni za OpenOffice"
 [m5]:   /sr-latn/participate/              "Priključite se u Apache OpenOffice"
