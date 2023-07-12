@@ -114,8 +114,6 @@ See lib/path.pm
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 {% if headers.css %}<link href="{{ headers.css }}" rel="stylesheet" type="text/css">{% endif %}
 {% endif %}
-<!--#include virtual="/scripts/google-analytics.js" --> 
-<!--#include virtual="/scripts/entourage.js" -->
 </head>
 <body{% if bodytag %} {{ bodytag|safe }}{% endif %}>
 <!--#include virtual="{{ ssi.headers.brand }}" -->
@@ -197,15 +195,10 @@ h2:hover > .headerlink, h3:hover > .headerlink, h1:hover > .headerlink, h6:hover
 
 /scripts/
 api.simile-widgets.org - used for stats time plots.
-entourage.js - ssi included tracking downloads somehow.
-google-analytics.js - ssi included
 jquery-1.11.2.min.js - upgrade?
 ooo.js
 sorttable.js - other copies used
 tableDecorate.js - other copies used
 
 scripts are not optimized and not really normalized.
-ssi including entourage.js on all pages is a little silly. It only makes sense on download pages.
-
-We need to determine google-analytics vs. ASF foundation policy.
 
