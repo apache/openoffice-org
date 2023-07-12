@@ -44,8 +44,6 @@ This describes the Simple Groovy templates (GSP) that are used to build the site
 
    The following SSI files may be used.
    - `/doctype.html`
-   - `/scripts/google-analytics.js`
-   - `/scripts/entourage.js`
    - content.brand
    - content.topnav
    - content.leftnav (optional)
