@@ -1,6 +1,7 @@
 type=page
 image_css=rfloatimg
 title=Why Apache OpenOffice: Public administrations
+notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 ![Why Apache OpenOffice: Public administrations](/why/images/why_gov.png)
 
