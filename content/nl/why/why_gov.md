@@ -17,6 +17,6 @@ Reeds beschikbaar in een **groot bereik aan talen**, mag OpenOffice vrijelijk wo
 
     De Wet Openbaarheid van Bestuur vereist dat de documenten die u vandaag maakt ook toegankelijk zijn in de toekomst. Apache OpenOffice is de eerste software in de wereld die ISO-goedgekeurde bestandsindelingen als zijn standaard gebruikt. Het heeft ook de mogelijkheid om PDF-bestanden te maken indien u informatie dient te publiceren in een standaard 'alleen lezen'-indeling. Indien u reeds kantoorsoftware bezit (mogelijk zonder licentie), zou Apache OpenOffice in staat moeten zijn uw oude bestanden te lezen.
 
-  - ** Open voor iedereen**
+  - **Open voor iedereen**
 
     Er bestaan geen geheimen in Apache OpenOffice - onze open-bron policy betekent dat iedereen de code mag inspecteren en ons zelfs kan helpen de software te ontwikkelen. We moedigen actief lokale teams aan om versies te produceren voor talen die weinig voorkomen. OpenOffice is een leidende internationale kracht in de beweging voor de digitale bewustwording - door software van de hoogste kwaliteit te maken die beschikbaar is voor iedereen, ongeacht hun inkomen.
