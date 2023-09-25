@@ -1,7 +1,7 @@
 type=page
 image_css=rfloatimg
 title=Why Apache OpenOffice: Public administrations
-.~~~~~~
+~~~~~~
 ![Why Apache OpenOffice: Public administrations](/why/images/why_gov.png)
 
 Public administrations and people working at **all levels of government** (local / federal / regional / national etc) find Apache OpenOffice is their ideal software solution. The combination of a **flexible word processor**, a **powerful spreadsheet**, **dynamic graphics**, **database access** and more meets all the everyday needs of a typical busy office worker.
