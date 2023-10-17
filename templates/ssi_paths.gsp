@@ -72,7 +72,7 @@
 //	brand["/th/"] = "/th/brand.html"
 	brand["/th/"] = "/brand.html"
 	brand["/tr/"] = "/tr/brand.html"
-//	brand["/uk/"] = "/uk/brand.html"
+	brand["/uk/"] = "/uk/brand.html"
 	brand["/uk/"] = "/brand.html"
 //	brand["/vi/"] = "/vi/brand.html"
 	brand["/vi/"] = "/brand.html"
@@ -82,7 +82,7 @@
 	brand["/zh/"] = "/zh/brand.html"
 
 // As long as we have no translation for a specific language, we will use the general English text to keep the website updates as low as possible for new releases.
-// Therefore some of the following languages are commented out and in the next line the general "brand.html" will be used.
+// Therefore some of the following languages are commented out and in the next line the general "topnav.html" will be used.
 
   def topnav = [:]
 	topnav["/"] = "/topnav.html"
@@ -150,7 +150,6 @@
 	topnav["/th/"] = "/topnav.html"
 	topnav["/tr/"] = "/tr/topnav.html"
 	topnav["/uk/"] = "/uk/topnav.html"
-	topnav["/uk/"] = "/topnav.html"
 	topnav["/vi/"] = "/vi/topnav.html"
 	topnav["/xx/"] = "/xx/topnav.html"
 	topnav["/zh-cn/"] = "/zh-cn/topnav.html"
