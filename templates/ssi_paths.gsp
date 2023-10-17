@@ -73,7 +73,6 @@
 	brand["/th/"] = "/brand.html"
 	brand["/tr/"] = "/tr/brand.html"
 	brand["/uk/"] = "/uk/brand.html"
-	brand["/uk/"] = "/brand.html"
 //	brand["/vi/"] = "/vi/brand.html"
 	brand["/vi/"] = "/brand.html"
 	brand["/xx/"] = "/xx/brand.html"
