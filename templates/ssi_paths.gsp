@@ -149,7 +149,7 @@
 //	topnav["/th/"] = "/th/topnav.html"
 	topnav["/th/"] = "/topnav.html"
 	topnav["/tr/"] = "/tr/topnav.html"
-//	topnav["/uk/"] = "/uk/topnav.html"
+	topnav["/uk/"] = "/uk/topnav.html"
 	topnav["/uk/"] = "/topnav.html"
 	topnav["/vi/"] = "/vi/topnav.html"
 	topnav["/xx/"] = "/xx/topnav.html"
