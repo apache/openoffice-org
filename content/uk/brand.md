@@ -4,11 +4,11 @@ search=search
 selectedlang=en
 language=Українська
 name=Apache OpenOffice
-tagline=Вільний і відкритий пакет продуктивності
+tagline=Вільний і відкритий офісний пакет
 logo=AOO_logos/100MillAOO100px.png
 domain=https://www.openoffice.org
 divid=bannera
-announce=Released: Apache OpenOffice
+announce=Випущено: Apache OpenOffice
 announceurl=https://blogs.apache.org/OOo/entry/announcing-apache-openoffice-4-110
-announcetip=Released: Apache OpenOffice
+announcetip=Випущено: Apache OpenOffice
 ~~~~~~
