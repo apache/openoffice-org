@@ -85,7 +85,7 @@ DL.SEL_LANG			= [ "hy",		"Armenian",					"Հայերեն",
 						"ta",		"Tamil",					"தமிழ்",
 						"th",		"Thai",						"ภาษาไทย",
 						"tr",		"Turkish",					"Türkçe",
-						"uk",		"Ukrainian",				"Yкраї́нська",
+						"uk",		"Ukrainian",				"Yкраїнська",
 						"vi",		"Vietnamese",				"Tiếng Việt" ];
 
 // Data for the <select> element "ver".
