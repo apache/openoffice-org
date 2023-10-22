@@ -29,6 +29,7 @@
 	<!-- Slovenian --><option value="sl">Slovenščina (sl)</option>
 	<!-- Finnish --><option value="fi">Suomi (fi)</option>
 	<!-- Swedish --><option value="sv">Svenska (sv)</option>
+	<!-- Ukrainian --><option value="uk">Yкраїнська (uk)</option>
 	<!-- Vietnamese --><option value="vi">Tiếng Việt (vi)</option>
 	<!-- Turkish  --><option value="tr">Türkçe (tr)</option>
 	<!-- Armenian --><option value="hy">Հայերեն (hy)</option>
