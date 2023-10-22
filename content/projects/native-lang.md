@@ -28,18 +28,18 @@ Language								| Website		| OpenOffice availability
 [Afrikaans (af)](/af/)					| help wanted	| outdated
 [Amharic (am)](/am/)					| help wanted	| outdated
 [Arabic (ar)](/ar/)						| help wanted	| outdated
-[Armenian (hy)](/hy/)					| maintained	| outdated
+[Armenian (hy)](/hy/)					| maintained	| planned for 4.2.x
 [Asturian (ast)](/ast/)					| help wanted	| current 4.1.x
 [Basque (eu)](/eu/)						| help wanted	| current 4.1.x
 [Bulgarian (bg)](/bg/)					| help wanted	| current 4.1.x
 [Catalan (ca)](/ca/)					| help wanted	| current 4.1.x
-[正體中文 Chinese trad. (tw)](/zh-tw/)	| maintained	| current 4.1.x
-[简体中文 Chinese sim. (cn)](/zh-cn/)	| maintained	| current 4.1.x
+[Chinese traditional (zh-tw)](/zh-tw/)	| maintained	| current 4.1.x
+[Chinese simplified (zh-cn)](/zh-cn/)	| maintained	| current 4.1.x
 [Czech (cs)](/cs/)						| maintained	| current 4.1.x
 [Danish (da)](/da/)						| maintained	| current 4.1.x
 [Dutch (nl)](/nl/)						| maintained	| current 4.1.x
 [Esperanto (eo)](/eo/)					| help wanted	| outdated
-[Estonian (et)](/et/)					| help wanted	| outdated
+[Estonian (et)](/et/)					| help wanted	| planned for 4.2.x
 [Finnish (fi)](/fi/)					| maintained	| current 4.1.x
 [French (fr)](/fr/)						| maintained	| current 4.1.x
 [Galician (gl)](/gl/)					| help wanted	| current 4.1.x
@@ -53,19 +53,19 @@ Language								| Website		| OpenOffice availability
 [Indonesian (id)](/id/)					| help wanted	| outdated
 [Italiano (it)](/it/)					| maintained	| current 4.1.x
 [Japanese (ja)](/ja/)					| maintained	| current 4.1.x
-[Kabyle (kab)](/kab/)					| help wanted	| outdated
+[Kabyle (kab)](/kab/)					| help wanted	| planned for 4.2.x
 [Khmer (km)](/km/)						| help wanted	| current 4.1.x
 [Korean (ko)](/ko/)						| help wanted	| current 4.1.x
 [Lithuanian (lt)](/lt/)					| maintained	| current 4.1.x
 [Norwegian (no)](/no/)					| maintained	| current 4.1.x
-[Oromo (om)](/om/)						| help wanted	| outdated
+[Oromo (om)](/om/)						| help wanted	| planned for 4.2.x
 [Polish (pl)](/pl/)						| maintained	| current 4.1.x
 [Portuguese Europeu (pt)](/pt/)			| maintained	| current 4.1.x
 [Portuguese of Brasil (pt-br)](/pt-br/)	| help wanted	| current 4.1.x
 [Romanian (ro)](/ro/)					| help wanted	| outdated
 [Russian (ru)](/ru/)					| maintained	| current 4.1.x
 [Serbian - Cyrillic (sr)](/sr/)			| help wanted	| current 4.1.x
-[Serbian - Latin (sr-Latn)](/sr-latn/)	| maintained	| current 4.1.x
+[Serbian - Latin (sr-Latn)](/sr-latn/)	| help wanted	| outdated
 [Slovenian (sl)](/sl/)					| help wanted	| current 4.1.x
 [Slovakian (sk)](/sk/)					| maintained	| current 4.1.x
 [Spanish (es)](/es/)					| maintained	| current 4.1.x
@@ -73,7 +73,7 @@ Language								| Website		| OpenOffice availability
 [Tamil (ta)](/ta/)						| help wanted	| current 4.1.x
 [Thai (th)](/th/)						| help wanted	| current 4.1.x
 [Turkish (tr)](/tr/)					| maintained	| current 4.1.x
-[Ukrainian (uk)](/uk/)					| help wanted	| outdated
+[Ukrainian (uk)](/uk/)					| maintained	| planned for 4.2.x
 Valencian AVL (ca-XV)					| help wanted	| current 4.1.x
 Valencian RACV (ca-XR)					| help wanted	| current 4.1.x
 [Vietnamese (vi)](/vi/)					| help wanted	| current 4.1.x
