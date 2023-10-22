@@ -17,7 +17,7 @@ Please see:
 In the following table, the status definitions for the Website column are:
 
 Status		| Explanation
-----------------|---------------------------------------------------------
+------------|-------------------------------------------------------------
 maintained	| This web site is localized and current, and the download links are localized and working.
 help wanted	| This website needs help and may be incomplete, outdated or unmaintained. If you can help, please e-mail the [localization mailing list][9] saying that you can volunteer for updating a specific website translation.
 
@@ -51,7 +51,7 @@ Language								| Website		| OpenOffice availability
 [Hungarian (hu)](/hu/)					| help wanted	| current 4.1.x
 [Icelandic (is)](/is/)					| help wanted	| outdated
 [Indonesian (id)](/id/)					| help wanted	| outdated
-[Italiano (it)](/it/)					| maintained	| current 4.1.x
+[Italian (it)](/it/)					| maintained	| current 4.1.x
 [Japanese (ja)](/ja/)					| maintained	| current 4.1.x
 [Kabyle (kab)](/kab/)					| help wanted	| planned for 4.2.x
 [Khmer (km)](/km/)						| help wanted	| current 4.1.x
