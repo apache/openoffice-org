@@ -59,6 +59,7 @@ DL.language_matrix = {
 "ta":  { "-" : [ 'ta',    'Tamil',			'தமிழ்' ] },
 "th":  { "-" : [ 'th',    'Thai',			'ภาษาไทย' ] },
 "tr":  { "-" : [ 'tr',    'Turkish',			'T&uuml;rk&ccedil;e' ] },
+"uk":  { "-" : [ 'uk',    'Ukrainian',			'Yкраї́нська' ] },
 "vi":  { "-" : [ 'vi',    'Vietnamese',			'Tiếng Việt' ] },
 "zh":  { "-" : [ 'zh',    'Chinese',			'Chinese' ],
          "cn": [ 'zh-CN', 'Chinese (simplified)',	'简体中文' ],
@@ -99,7 +100,6 @@ DL.language_matrix = {
 "sh":  { "-" : [ 'sh',    'Serbian (Latin)',		'Srpski (latinicom)' ] },
 "si":  { "-" : [ 'si',    'Sinhala',			'සිංහල' ] },
 "te":  { "-" : [ 'te',    'Telugu',			'తెలుగు' ] },
-"uk":  { "-" : [ 'uk',    'Ukrainian',			'Yкраї́нська мо́ва' ] },
 "ug":  { "-" : [ 'ug',    'Uyghur',			'ئۇيغۇرچە‎' ] },
 "uz":  { "-" : [ 'uz',    'Uzbek',			'Ўзбек' ] },
 "cy":  { "-" : [ 'cy',    'Welsh',			'Cymraeg' ] }
