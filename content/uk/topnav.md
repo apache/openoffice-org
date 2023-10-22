@@ -11,7 +11,7 @@ divid=topnava
 - [Рідні мови][m7]
 
 
-[m0]:	/product/index.html								"Опис програмного продукту Apache OpenOffice"
+[m0]:	/uk/product/index.html							"Опис програмного продукту Apache OpenOffice"
 [m1]:	/uk/download/index.html							"Завантаження Apache OpenOffice"
 [m2]:	/support/index.html								"Знайти підтримку стосовно OpenOffice"
 [m3]:	https://blogs.apache.org/OOo/					"Блог Apache OpenOffice"
