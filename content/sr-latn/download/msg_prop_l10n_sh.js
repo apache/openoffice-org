@@ -3,8 +3,8 @@
  *
  * Instead of hard coded text in the green box please use these variables and translate it to your favorite language.
  *
- * Wrong:   "Download Apache OpenOffice"
- * Correct: l10n.dl_green_box_headline_text
+ * Wrong:	"Download Apache OpenOffice"
+ * Correct:	l10n.dl_green_box_headline_text
  */
 
 
@@ -15,10 +15,10 @@ var l10n = new Object();
 // The following variables are used in the "index.html" file:
 
 // Set a specific language ISO code to force to assemble a download link with a certain language.
-DL.NL_LANG					= "sr";
+DL.NL_LANG	= "en";
 
 // General:
-l10n.dl_headline_text				= "Preuzmite Apache OpenOffice";
+l10n.dl_headline_text					= "Preuzmite Apache OpenOffice";
 
 // Download: Strings in the green box (used in "index.html").
 l10n.dl_green_box_headline_text			= "Preuzmite Apache OpenOffice";
@@ -27,9 +27,9 @@ l10n.dl_green_box_subtext1_text			= "Hostovano od strane Sourceforge.net - web l
 l10n.dl_green_box_subtext1_title		= "Binarne datoteke Apache OpenOffice-a su hostovane od strane Sourceforge.net - web lokacija od poverenja";
 l10n.dl_green_box_subtext2_text			= "Izaberite željeni operativni sistem, jezik i verziju";
 l10n.dl_green_box_subtext2_title		= "Izaberite željeni operativni sistem, jezik i verziju";
-l10n.dl_green_box_selectbox_os_title		= "Izaberite željeni operativni sistem";
-l10n.dl_green_box_selectbox_lang_title		= "Izaberite željeni jezik";
-l10n.dl_green_box_selectbox_ver_title		= "Izaberite željenu verziju izdanja";
+l10n.dl_green_box_selectbox_os_title	= "Izaberite željeni operativni sistem";
+l10n.dl_green_box_selectbox_lang_title	= "Izaberite željeni jezik";
+l10n.dl_green_box_selectbox_ver_title	= "Izaberite željenu verziju izdanja";
 
 // The strings that will be shown in the OS, language and version drop-down select boxes.
 // You must leave at least one single empty string (see the comment lines below the 3 following variables)!
@@ -90,15 +90,25 @@ l10n.dl_green_box_select_box_language_values	= [ "Asturian (Asturianu)",
 l10n.dl_green_box_select_box_lang_values_custom	= [ "" ];
 
 /* l10n.dl_green_box_select_box_version_values	= [ "" ]; */
-l10n.dl_green_box_select_box_version_values	= [ "4.1.4",
-						    "4.1.3",
-						    "4.1.2",
-						    "4.1.1",
-						    "4.1.0",
-						    "4.0.1",
-						    "4.0.0",
-						    "3.4.1",
-						    "Starija izdanja" ];
+l10n.dl_green_box_select_box_version_values	= [ "4.1.14",
+												"4.1.13",
+												"4.1.12"
+												"4.1.11",
+												"4.1.10",
+												"4.1.9",
+												"4.1.8",
+												"4.1.7",
+												"4.1.6",
+												"4.1.5",
+												"4.1.4",
+												"4.1.3",
+												"4.1.2",
+												"4.1.1",
+												"4.1.0",
+												"4.0.1",
+												"4.0.0",
+												"3.4.1",
+												"Starija izdanja" ];
 
 // Download: Strings in the sub-green box (used in "index.html").
 // Not defined for now.
@@ -359,4 +369,3 @@ l10n.dl_report_link				= "http://www.openoffice.org/download/analyze.html";
 l10n.dl_porting_link				= "http://www.openoffice.org/porting/index.html";
 l10n.dl_archive_link				= "http://www.openoffice.org/download/archive.html";
 l10n.dl_aoo341_link				= "http://www.openoffice.org/download/other-341.html";
-
