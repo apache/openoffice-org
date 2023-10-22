@@ -3,8 +3,8 @@
  *
  * Instead of hard coded text in the green box please use these variables and translate it to your favorite language.
  *
- * Wrong:   "Download Apache OpenOffice"
- * Correct: l10n.index_redirect_text
+ * Wrong:	"Download Apache OpenOffice"
+ * Correct:	l10n.index_redirect_text
  */
 
 
@@ -15,39 +15,39 @@ var l10n = new Object();
 // The following variables are used in the "index.html" file:
 
 // Graphic, text and links to show inside the event box.
-									// "true" = Show the box, "false" = Do not show.
-l10n.index_event_box_show			= false;
-									// Logo graphic.
+										// "true" = Show the box, "false" = Do not show.
+l10n.index_event_box_show				= false;
+										// Logo graphic.
 l10n.index_event_box_graphic_src		= "https://blogs.apache.org/foundation/mediaresource/81eec8fa-2848-4405-9ce2-40c16a9f7170";
-									// Alternative text for the graphic.
+										// Alternative text for the graphic.
 l10n.index_event_box_graphic_alt		= "The Apache® Software Foundation Celebrates 20 Years of Community-led Development 'The Apache Way'";
-									// Make the graphic clickable with a link.
+										// Make the graphic clickable with a link.
 l10n.index_event_box_graphic_href		= "https://blogs.apache.org/foundation/entry/the-apache-software-foundation-celebrates1";
-									// The height in pixel of the graphic. Leave empty to use the height of the original graphic.
+										// The height in pixel of the graphic. Leave empty to use the height of the original graphic.
 l10n.index_event_box_graphic_height		= "175";
-									// The width in pixel of the graphic. Leave empty to use the width of the original graphic.
+										// The width in pixel of the graphic. Leave empty to use the width of the original graphic.
 l10n.index_event_box_graphic_width		= "375";
-									// Mouse over text for the graphic.
+										// Mouse over text for the graphic.
 l10n.index_event_box_graphic_title		= "";
-									// Make the whole box clickable with a link.
+										// Make the whole box clickable with a link.
 l10n.index_event_box_text_href			= "https://blogs.apache.org/foundation/entry/the-apache-software-foundation-celebrates1";
-									// Maximum 630 characters.
+										// Maximum 630 characters.
 l10n.index_event_box_text_text			= "<b>The Apache® Software Foundation Celebrates 20 Years of Community-led Development 'The Apache Way'</b><br /><br />World's largest Open Source foundation provides $20B+ worth of software for the public good at 100% no cost; Apache software used in every Internet-connected country on the planet.<br /><br /><b>Wakefield, MA —26 March 2019— </b> The Apache Software Foundation (ASF), the all-volunteer developers, stewards, and incubators of more than 350 Open Source projects and initiatives, announced today its 20th Anniversary, celebrating 'The Apache Way' of community-driven development as the key to its success.<br /><b><i> Click here for details ...</i></b>";
-									// Mouse over text for the text.
+										// Mouse over text for the text.
 l10n.index_event_box_text_title			= "The Apache® Software Foundation Celebrates 20 Years of Community-led Development 'The Apache Way'";
 
 // Text and link to show inside the alert box.
-									// "true" = Show the box, "false" = Do not show.
-l10n.index_alert_box_show			= false;
-									// Make the whole box clickable with a link.
-l10n.index_alert_box_href			= "https://www.google.com";
-									// Maximum 49 characters.
+										// "true" = Show the box, "false" = Do not show.
+l10n.index_alert_box_show				= false;
+										// Make the whole box clickable with a link.
+l10n.index_alert_box_href				= "https://www.google.com";
+										// Maximum 49 characters.
 l10n.index_alert_box_headline_text		= "Headline text with max. 49 characters";
-									// Mover over text for the headline.
+										// Mover over text for the headline.
 l10n.index_alert_box_headline_title		= "Mover over title text for the headline.";
-									// Maximum 630 characters.
+										// Maximum 630 characters.
 l10n.index_alert_box_text_text			= "Text with max. 630 characters. <br /><br /> Use this alert box to announce any important messages or problems. <br /><br /> This whole alert box can be linked with an URL to point the user to more information or to a solution. But the link can also be left out. Then the box is not clickable.";
-									// Mouse over text for the text.
+										// Mouse over text for the text.
 l10n.index_alert_box_text_title			= "Mouse over title text for the text.";
 
 // Flag how to redirect and if text should be displayed.
@@ -98,5 +98,6 @@ l10n.index_redirect_text			= [ /* hy */	"soft", "Այս կայքը հասանե�
 										/* ta */	"none", "This site is also available in <b>தமிழ் (ta)</b>. Just click this text to get redirected.",
 										/* th */	"none", "This site is also available in <b>ภาษาไทย (th)</b>. Just click this text to get redirected.",
 										/* tr */	"soft", "Bu site ayrıca <b>Türkçe (tr)</b> olarak mevcuttur. Yeniden yönlendirilmek için sadece bu metine tıklayın.",
+										/* uk */	"soft", "This site is also available in <b>Ukrainian (uk)</b>. Just click this text to get redirected.",
 										/* vi */	"none", "This site is also available in <b>Tiếng Việt (vi)</b>. Just click this text to get redirected." ];
 
