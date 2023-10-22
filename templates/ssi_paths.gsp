@@ -194,6 +194,7 @@
 	leftnav["/sv/product/"] = "/sv/product/leftnav.html"
 	leftnav["/tr/product/"] = "/tr/product/leftnav.html"
 	leftnav["/tr/why/"] = "/tr/why/leftnav.html"
+	leftnav["/uk/product/"] = "/uk/product/leftnav.html"
 	leftnav["/why/"] = "/why/leftnav.html"
 	leftnav["/xx/product/"] = "/xx/product/leftnav.html"
 	leftnav["/xx/why/"] = "/xx/why/leftnav.html"
