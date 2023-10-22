@@ -81,7 +81,6 @@ l10n.dl_green_box_select_box_lang_values_custom = [ "ast",	"Asturian",				"Astur
 						    "ta",	"Tamil",				"தமிழ்",
 						    "th",	"Thai",					"ภาษาไทย",
 						    "tr",	"Turkish",				"Türkçe",
-							"uk",	"Ukrainian",				"Yкраїнська",
 						    "vi",	"Vietnamese",				"Tiếng Việt" ];
 
 l10n.dl_green_box_select_box_version_values	= [ "" ];
