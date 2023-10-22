@@ -98,6 +98,6 @@ l10n.index_redirect_text			= [ /* hy */	"soft", "Այս կայքը հասանե�
 										/* ta */	"none", "This site is also available in <b>தமிழ் (ta)</b>. Just click this text to get redirected.",
 										/* th */	"none", "This site is also available in <b>ภาษาไทย (th)</b>. Just click this text to get redirected.",
 										/* tr */	"soft", "Bu site ayrıca <b>Türkçe (tr)</b> olarak mevcuttur. Yeniden yönlendirilmek için sadece bu metine tıklayın.",
-										/* uk */	"soft", "This site is also available in <b>Ukrainian (uk)</b>. Just click this text to get redirected.",
+										/* uk */	"soft", "Сайт також доступний <b>Українською (uk)</b>. Натисніть, щоб перейти.",
 										/* vi */	"none", "This site is also available in <b>Tiếng Việt (vi)</b>. Just click this text to get redirected." ];
 
