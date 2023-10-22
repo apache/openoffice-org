@@ -40,9 +40,9 @@ l10n.dl_green_box_subtext1_text			= "Розміщено на Sourceforge.net - �
 l10n.dl_green_box_subtext1_title		= "Двійкові файли Apache OpenOffice розміщено на SourceForge.net - надійному веб сайті";
 l10n.dl_green_box_subtext2_text			= "Виберіть бажані операційну систему, мову і версію";
 l10n.dl_green_box_subtext2_title		= "Виберіть бажані операційну систему, мову і версію";
-l10n.dl_green_box_selectbox_os_title		= "Виберіть бажану операційну систему";
-l10n.dl_green_box_selectbox_lang_title		= "Виберіть бажану мову";
-l10n.dl_green_box_selectbox_ver_title		= "Виберіть бажану версію";
+l10n.dl_green_box_selectbox_os_title	= "Виберіть бажану операційну систему";
+l10n.dl_green_box_selectbox_lang_title	= "Виберіть бажану мову";
+l10n.dl_green_box_selectbox_ver_title	= "Виберіть бажану версію";
 
 // The strings that will be shown in the OS, language and version drop-down select boxes.
 // You must leave at least one single empty string (see the comment lines below the 3 following variables)!
@@ -63,50 +63,49 @@ l10n.dl_green_box_select_box_os_values		= [ "Windows (EXE)",
 l10n.dl_green_box_select_box_language_values	= [ "" ];
 
 // l10n.dl_green_box_select_box_lang_values_custom = [ "" ];
-//						    							Value		Visible text				Tool tip
-// 													Значення	Текст відображення			Спливна підказка
-l10n.dl_green_box_select_box_lang_values_custom	= [							"ast",		"Asturian",				"Asturianu",
-													"eu",		"Basque",				"Euskara",
-													"bg",		"Bulgarian",				"български език",
-													"ca",		"Catalan",				"Català",
-													"ca-XV",	"Catalan [Valencia AVL]",		"València (AVL)",
-													"ca-XR",	"Catalan [Valencia RACV]",		"València (RACV)",
-													"zh-CN",	"Chinese [simplified]",			"简体中文",
-													"zh-TW",	"Chinese [traditional]",		"正體中文",
-													"cs",		"Czech",				"Čeština",
-													"da",		"Danish",				"Dansk",
-													"nl",		"Dutch",				"Nederlands",
-													"en-GB",	"English [British]",			"English [British]",
-													"en-US",	"English [US]",				"English [US]",
-													"fi",		"Finnish",				"Suomi",
-													"fr",		"French",				"Français",
-													"gl",		"Galician",				"Galego",
-													"de",		"German",				"Deutsch",
-													"el",		"Greek",				"ελληνικά",
-													"he",		"Hebrew",				"עברית",
-													"hi",		"Hindi",				"हिन्दी",
-													"hu",		"Hungarian",				"Magyar",
-													"it",		"Italian",				"Italiano",
-													"ja",		"Japanese",				"日本語",
-													"km",		"Khmer",				"ភាសាខ្មែរ",
-													"ko",		"Korean",				"한국어",
-													"lt",		"Lithuanian",				"Lietuvių",
-													"nb",		"Norwegian [Bokmal]",			"Norsk [Bokmål]",
-													"pl",		"Polish",				"Polski",
-													"pt-BR",	"Portuguese [Brazilian]",		"Português [do Brasil]",
-													"pt",		"Portuguese [European]",		"Português [Europeu]",
-													"ru",		"Russian",				"Русский",
-													"gd",		"Scottish [Gaelic]",			"Gàidhlig",
-													"sr",		"Serbian [Cyrillic]",			"Cрпски [ћирилицом]",
-													"sk",		"Slovak",				"Slovenský jazyk [slovenčina]",
-													"sl",		"Slovenian",				"Slovenski jezik [slovenščina]",
-													"es",		"Spanish",				"Español",
-													"sv",		"Swedish",				"Svenska",
-													"ta",		"Tamil",				"தமிழ்",
-													"th",		"Thai",					"ภาษาไทย",
-													"tr",		"Turkish",				"Türkçe",
-						   							"uk",		"Ukrainian",				"Українська",
-													"vi",		"Vietnamese",				"Tiếng Việt" ];
+//														Value		Visible text				Tool tip
+// 														Значення	Текст відображення			Спливна підказка
+l10n.dl_green_box_select_box_lang_values_custom	= [		"ast",		"Asturian",					"Asturianu",
+														"eu",		"Basque",					"Euskara",
+														"bg",		"Bulgarian",				"български език",
+														"ca",		"Catalan",					"Català",
+														"ca-XV",	"Catalan [Valencia AVL]",	"València (AVL)",
+														"ca-XR",	"Catalan [Valencia RACV]",	"València (RACV)",
+														"zh-CN",	"Chinese [simplified]",		"简体中文",
+														"zh-TW",	"Chinese [traditional]",	"正體中文",
+														"cs",		"Czech",					"Čeština",
+														"da",		"Danish",					"Dansk",
+														"nl",		"Dutch",					"Nederlands",
+														"en-GB",	"English [British]",		"English [British]",
+														"en-US",	"English [US]",				"English [US]",
+														"fi",		"Finnish",					"Suomi",
+														"fr",		"French",					"Français",
+														"gl",		"Galician",					"Galego",
+														"de",		"German",					"Deutsch",
+														"el",		"Greek",					"ελληνικά",
+														"he",		"Hebrew",					"עברית",
+														"hi",		"Hindi",					"हिन्दी",
+														"hu",		"Hungarian",				"Magyar",
+														"it",		"Italian",					"Italiano",
+														"ja",		"Japanese",					"日本語",
+														"km",		"Khmer",					"ភាសាខ្មែរ",
+														"ko",		"Korean",					"한국어",
+														"lt",		"Lithuanian",				"Lietuvių",
+														"nb",		"Norwegian [Bokmal]",		"Norsk [Bokmål]",
+														"pl",		"Polish",					"Polski",
+														"pt-BR",	"Portuguese [Brazilian]",	"Português [do Brasil]",
+														"pt",		"Portuguese [European]",	"Português [Europeu]",
+														"ru",		"Russian",					"Русский",
+														"gd",		"Scottish [Gaelic]",		"Gàidhlig",
+														"sr",		"Serbian [Cyrillic]",		"Cрпски [ћирилицом]",
+														"sk",		"Slovak",					"Slovenský jazyk [slovenčina]",
+														"sl",		"Slovenian",				"Slovenski jezik [slovenščina]",
+														"es",		"Spanish",					"Español",
+														"sv",		"Swedish",					"Svenska",
+														"ta",		"Tamil",					"தமிழ்",
+														"th",		"Thai",						"ภาษาไทย",
+														"tr",		"Turkish",					"Türkçe",
+														"vi",		"Vietnamese",				"Tiếng Việt" ];
 
 // l10n.dl_green_box_select_box_version_values	= [ "" ]; 
 l10n.dl_green_box_select_box_version_values	= [ "" ];
@@ -131,9 +130,9 @@ l10n.dl_green_box_select_box_version_older	= "Попередні випуски"
 // Share: Strings in the light-blue box (used in "index.html").
 // Поділитися: Рядки в світло-блакитному полі (використовується в "index.html").
 l10n.dl_share_light_blue_box_headline_text	= "Допоможіть поширенню";
-l10n.dl_share_light_blue_box_headline_title	= "Допоможіть поширенню і розкажіть своїм друзям про  Apache OpenOffice";
+l10n.dl_share_light_blue_box_headline_title	= "Допоможіть поширенню і розкажіть своїм друзям про Apache OpenOffice";
 l10n.dl_share_light_blue_box_text_text		= "Будь ласка, розкажіть своїм друзям про Apache OpenOffice:";
-l10n.dl_share_light_blue_box_text_title		= "Допоможіть поширенню і розкажіть своїм друзям про  Apache OpenOffice";
+l10n.dl_share_light_blue_box_text_title		= "Допоможіть поширенню і розкажіть своїм друзям про Apache OpenOffice";
 l10n.dl_share_light_blue_box_blog_text		= "Офіційний блог";
 l10n.dl_share_light_blue_box_blog_title		= "Блог OpenOffice";
 l10n.dl_share_light_blue_box_blog_src		= "/images/logo-rss-32.png";
@@ -193,14 +192,14 @@ l10n.dl_nav_headline_2_text			= "Документація";
 l10n.dl_nav_schedule_text			= "Розклад випусків";
 l10n.dl_nav_schedule_title			= "Коли планується новий випуск?";
 l10n.dl_nav_schedule_href			= "https://cwiki.apache.org/confluence/display/OOOUSERS/Releases";
-l10n.dl_nav_hist_schedule_text			= "Історичний розклад випусків";
-l10n.dl_nav_hist_schedule_title			= "Коли планувались попередні випуски?";
-l10n.dl_nav_hist_schedule_href			= "https://wiki.openoffice.org/wiki/Product_Release";
+l10n.dl_nav_hist_schedule_text		= "Історичний розклад випусків";
+l10n.dl_nav_hist_schedule_title		= "Коли планувались попередні випуски?";
+l10n.dl_nav_hist_schedule_href		= "https://wiki.openoffice.org/wiki/Product_Release";
 l10n.dl_nav_inst_guide_text			= "Посібники із встановлення";
-l10n.dl_nav_inst_guide_title			= "Інструкції щодо встановлення Apache OpenOffice на комп’ютерах Windows, macOS (OS&nbsp;X) і Linux";
+l10n.dl_nav_inst_guide_title		= "Інструкції щодо встановлення Apache OpenOffice на комп’ютерах Windows, macOS (OS&nbsp;X) і Linux";
 l10n.dl_nav_inst_guide_href			= "https://www.openoffice.org/download/common/instructions.html";
 l10n.dl_nav_user_guide_text			= "Посібник користувача";
-l10n.dl_nav_user_guide_title			= "Розшрені посібники користувача для щоденного використання";
+l10n.dl_nav_user_guide_title		= "Розшрені посібники користувача для щоденного використання";
 l10n.dl_nav_user_guide_href			= "https://www.openoffice.org/documentation/index.html";
 l10n.dl_nav_why_java_text			= "Java і Apache OpenOffice";
 l10n.dl_nav_why_java_title			= "Пояснення причин використання Java і що це таке";
@@ -239,20 +238,20 @@ l10n.dl_nav_archive_href			= "https://www.openoffice.org/download/archive.html";
 l10n.dl_nav_release_notes_text		= "Примітки до випусків";
 l10n.dl_nav_release_notes_title		= "Що нового, що було покращено у Apache OpenOffice?";
 l10n.dl_nav_release_notes_href		= "https://www.openoffice.org/development/releases/index.html";
-l10n.dl_nav_checksum_text		= "Перевірте завантажений файл";
-l10n.dl_nav_checksum_title		= "Як перевірити завантажений файл підписами та хешами?";
-l10n.dl_nav_checksum_href		= "https://www.openoffice.org/download/checksums.html";
+l10n.dl_nav_checksum_text			= "Перевірте завантажений файл";
+l10n.dl_nav_checksum_title			= "Як перевірити завантажений файл підписами та хешами?";
+l10n.dl_nav_checksum_href			= "https://www.openoffice.org/download/checksums.html";
 
 // Strings for the logo graphics.
 // Рядки для графіки логотипу.
 l10n.dl_img_sourceforge_title		= "Sourceforge - завантажуйте, розробляйте та публікуйте безкоштовне програмне забезпечення з відкритим кодом";
 l10n.dl_img_sourceforge_href		= "https://www.sourceforge.net/";
-l10n.dl_img_sourceforge_src		= "/images/sourceforge.png";
-l10n.dl_img_sourceforge_alt		= "Sourceforge";
-l10n.dl_img_w3c_title			= "Служба перевірки розмітки W3C - Перевірте розмітку (HTML, XHTML, ...) веб-документів";
-l10n.dl_img_w3c_href			= "https://validator.w3.org/check?uri=referer";
-l10n.dl_img_w3c_src			= "/images/valid-xhtml10-blue.png";
-l10n.dl_img_w3c_alt			= "Валідатор W3C";
+l10n.dl_img_sourceforge_src			= "/images/sourceforge.png";
+l10n.dl_img_sourceforge_alt			= "Sourceforge";
+l10n.dl_img_w3c_title				= "Служба перевірки розмітки W3C - Перевірте розмітку (HTML, XHTML, ...) веб-документів";
+l10n.dl_img_w3c_href				= "https://validator.w3.org/check?uri=referer";
+l10n.dl_img_w3c_src					= "/images/valid-xhtml10-blue.png";
+l10n.dl_img_w3c_alt					= "Валідатор W3C";
 
 
 // The following variables are used in the "download.js" file:
@@ -266,9 +265,9 @@ l10n.dl_full_link_title				= "Натисніть, щоб завантажити:
 l10n.dl_langpack_link_text			= "Завантажити мовний пакет";
 l10n.dl_langpack_link_title			= "Натисніть, щоб завантажити: ";
 
-l10n.dl_platform_info_text			= "Важливі поради для ";
-l10n.dl_platform_info_title			= "Натисніть тут, щоб отримати важливі поради для ";
-l10n.dl_platform_info_link			= "platform_hints.html";
+l10n.dl_platform_info_text				= "Важливі поради для ";
+l10n.dl_platform_info_title				= "Натисніть тут, щоб отримати важливі поради для ";
+l10n.dl_platform_info_link				= "platform_hints.html";
 l10n.dl_platform_info_headline			= "Apache OpenOffice - Важливі поради для вибраної платформи";
 l10n.dl_platform_info_win_headline		= "Windows";
 l10n.dl_platform_info_win_text			= "<h5> 32-біт, 64-біт і Java - що вибрати? </h5> <p> Наразі ми пропонуємо 32-бітну (x86) версію для Windows. Проте, вона встановлюється і працює також на Windows 64-біт (x86-64). Будь ласка, зверніть увагу, що вам може знадобитись 32-бітна Java для додаткової функціональності, яку потім слід одноразово вибрати (див. меню 'Засоби - Параметри - OpenOffice - Java'). <br /><br /> Для отримання додаткової інформації про OpenOffice і Java див.: <a target='_blank' href=https://www.openoffice.org/download/common/java.html>https://www.openoffice.org/download/common/java.html</a>.</p>";
@@ -287,22 +286,22 @@ l10n.dl_full_link_archive_title		= "Натисність, щоб перейти 
 l10n.dl_rel_info_headline_text		= "Випуск: ";
 l10n.dl_rel_info_milestone_text		= "Milestone ";
 l10n.dl_rel_info_buildid_text		= "ID збірки ";
-l10n.dl_rel_info_svn_text		= "SVN "
+l10n.dl_rel_info_svn_text			= "SVN "
 l10n.dl_rel_info_rel_date_text		= "Випущено ";
-l10n.dl_rel_notes_text			= "Примітки до випуску";
-l10n.dl_rel_notes_title			= "Примітки до випуску Apache OpenOffice ";
+l10n.dl_rel_notes_text				= "Примітки до випуску";
+l10n.dl_rel_notes_title				= "Примітки до випуску Apache OpenOffice ";
 
-l10n.dl_headline_full_text		= "Повна інсталяція: ";
+l10n.dl_headline_full_text			= "Повна інсталяція: ";
 l10n.dl_headline_langpack_text		= "Мовний пакет: ";
-l10n.dl_filesize_text			= "Розмір файлу ~ ";
-l10n.dl_megabyte_text			= " MБайтів";
+l10n.dl_filesize_text				= "Розмір файлу ~ ";
+l10n.dl_megabyte_text				= " MБайтів";
 l10n.dl_checksum_headline_text		= "Підписи і хеші: ";
-l10n.dl_checksum_keys_text		= "KEYS";
-l10n.dl_checksum_keys_title		= "Файл підпису KEYS";
-l10n.dl_checksum_asc_text		= "ASC";
-l10n.dl_checksum_asc_title		= "ASC підпис для: ";
-l10n.dl_checksum_md5_text		= "MD5";
-l10n.dl_checksum_md5_title		= "MD5 хеш для: ";
+l10n.dl_checksum_keys_text			= "KEYS";
+l10n.dl_checksum_keys_title			= "Файл підпису KEYS";
+l10n.dl_checksum_asc_text			= "ASC";
+l10n.dl_checksum_asc_title			= "ASC підпис для: ";
+l10n.dl_checksum_md5_text			= "MD5";
+l10n.dl_checksum_md5_title			= "MD5 хеш для: ";
 l10n.dl_checksum_sha256_text		= "SHA256";
 l10n.dl_checksum_sha256_title		= "SHA256 хеш для: ";
 l10n.dl_checksum_sha512_text		= "SHA512";
@@ -311,8 +310,8 @@ l10n.dl_checksum_sha512_title		= "SHA512 хеш для: ";
 l10n.dl_help_img_title			= "В чому різниця між повною інсталяцією і мовним пакунком?";
 l10n.dl_help_img_src			= "/download/cachedimages/help-information-icon.png";
 l10n.dl_help_img_alt			= "Інформація про інсталяцію";
-l10n.dl_help_text			= "Що таке мовний пакунок?";
-l10n.dl_help_title			= "В чому різниця між повною інсталяцією і мовним пакунком?";
+l10n.dl_help_text				= "Що таке мовний пакунок?";
+l10n.dl_help_title				= "В чому різниця між повною інсталяцією і мовним пакунком?";
 l10n.dl_checksum_img_title		= "Як перевірити завантажений файл за допомогою контрольних сум?";
 l10n.dl_checksum_img_src		= "/download/cachedimages/help-information-icon.png";
 l10n.dl_checksum_img_alt		= "Перевірка контрольної суми";
@@ -321,7 +320,7 @@ l10n.dl_checksum_title			= "Як перевірити завантажений �
 l10n.dl_report_img_title		= "Ушкоджене посилання на завантаження? Натисніть тут щоб повідомити.";
 l10n.dl_report_img_src			= "/download/cachedimages/help-report-broken-link-icon.png";
 l10n.dl_report_img_alt			= "Ушкоджене посилання";
-l10n.dl_report_text			= "Повідомити про ушкоджене посилання";
+l10n.dl_report_text				= "Повідомити про ушкоджене посилання";
 l10n.dl_report_title			= "Ушкоджене посилання на завантаження? Натисніть тут щоб повідомити.";
 
 // Download: Strings for error text in the sub-red box (used in "download.js").
@@ -334,10 +333,10 @@ l10n.dl_langpack_link_error_title		= "Будь ласка, виберіть ін
 l10n.dl_error_problem_img_title			= "Вибраний для завантаження файл не доступнийThe selected download file is not available";
 l10n.dl_error_problem_img_src			= "/download/cachedimages/exclamation-icon.png";
 l10n.dl_error_problem_img_alt			= "Текст помилки";
-l10n.dl_error_problem_text			= "Проблема: ";
-l10n.dl_error_solution_text			= "Рішення: ";
-l10n.dl_error_aoo_text				= "Apache OpenOffice ";
-l10n.dl_error_not_available_for_text		= " недоступний для ";
+l10n.dl_error_problem_text				= "Проблема: ";
+l10n.dl_error_solution_text				= "Рішення: ";
+l10n.dl_error_aoo_text					= "Apache OpenOffice ";
+l10n.dl_error_not_available_for_text	= " недоступний для ";
 l10n.dl_error_please_select_1_text		= "Будь ласка, виберіть версію 4.0.1.";
 l10n.dl_error_please_select_2_text		= "Будь ласка, виберіть версію 4.1.0 або новішу.";
 l10n.dl_error_please_select_3_text		= "Будь ласка, виберіть завантаження для Windows, macOS (OS&nbsp;X) або Linux.";
@@ -360,7 +359,7 @@ l10n.dl_error_custom_4_text			= "";
 
 // Analyze: Strings for the instruction text (used in "analyze.html").
 // Аналіз: рядки для тексту інструкції (використовується в "analyze.html").
-l10n.dl_analyze_headline_text				= "Як повідомити про ушкоджене посилання на завантаження?";
+l10n.dl_analyze_headline_text					= "Як повідомити про ушкоджене посилання на завантаження?";
 l10n.dl_analyze_instruction_select_text			= "<b>Виберіть</b>: операційну систему, мову і версію у зеленому полі нижче.";
 l10n.dl_analyze_instruction_verify_text			= "Переконайтесь, що ці параметри <b>досі не ведуть</b> до дійсного посилання на завантаження.";
 l10n.dl_analyze_instruction_click_text			= "Натисніть на кнопку під зеленим полем: ";
@@ -369,13 +368,13 @@ l10n.dl_analyze_instruction_new_mail_text		= "Створіть новий лис
 l10n.dl_analyze_instruction_problem_text		= "<b>Опішіть проблему</b> (що не працює і що ви очікуєте).";
 l10n.dl_analyze_instruction_details_text		= "Додайте також <b>подробиці про вашу операційну систему</b>.";
 l10n.dl_analyze_instruction_paste_text			= "Вставте скопійовані дані наприкінці листа.";
-l10n.dl_analyze_instruction_only_download_text		= "Будь ласка, <b>надсилайте листа лише у випадках проблем із завантаженням</b> а не за неможливості встановлення.";
+l10n.dl_analyze_instruction_only_download_text	= "Будь ласка, <b>надсилайте листа лише у випадках проблем із завантаженням</b> а не за неможливості встановлення.";
 l10n.dl_analyze_instruction_no_install_text		= "Ця сторінка не допоможе вирішити жодну з проблем із встановленням.";
 l10n.dl_analyze_instruction_send_mail_text		= "Нарешті, <b>надішліть листа</b> до: ";
-l10n.dl_analyze_instruction_mailing_list_text		= "Список розсилки розробки Apache OpenOffice";
-l10n.dl_analyze_instruction_mailing_list_title		= "Надішліть звіт до списку розсилки розробників Apache OpenOffice";
+l10n.dl_analyze_instruction_mailing_list_text	= "Список розсилки розробки Apache OpenOffice";
+l10n.dl_analyze_instruction_mailing_list_title	= "Надішліть звіт до списку розсилки розробників Apache OpenOffice";
 l10n.dl_analyze_instruction_learn_more_text		= "Натисніть тут, щоб дізнатись що таке список розсилки";
-l10n.dl_analyze_instruction_learn_more_title		= "Дізнайтесь більше за список розсилки";
+l10n.dl_analyze_instruction_learn_more_title	= "Дізнайтесь більше за список розсилки";
 l10n.dl_analyze_instruction_answer_text			= "Ми спробуємо відповісти якнайшвидше після отримання листа і вивчення проблеми.";
 l10n.dl_analyze_instruction_thanks_text			= "Ми вдячні вам за повідомлення.";
 
@@ -390,10 +389,10 @@ l10n.dl_analyze_copy_button_title		= "Скопіюйте вибрані дані
 
 // Analyze: Strings for the table (used in "analyze.html").
 // Аналіз: рядки для таблиці (використовується в "analyze.html").
-l10n.dl_analyze_table_browser_text		= "Змінні браузера";
-l10n.dl_analyze_table_values_text		= "Значення";
-l10n.dl_analyze_table_yes_text			= "Так";
-l10n.dl_analyze_table_no_text			= "Ні";
+l10n.dl_analyze_table_browser_text			= "Змінні браузера";
+l10n.dl_analyze_table_values_text			= "Значення";
+l10n.dl_analyze_table_yes_text				= "Так";
+l10n.dl_analyze_table_no_text				= "Ні";
 l10n.dl_analyze_table_stable_release_text	= "Стабільний випуск";
 l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;функції/змінні";
 
@@ -413,9 +412,9 @@ l10n.dl_rel_notes_aoo411_link		= "https://cwiki.apache.org/confluence/display/OO
 l10n.dl_rel_notes_aoo410_link		= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1+Release+Notes";
 l10n.dl_rel_notes_aoo401_link		= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0.1+Release+Notes";
 l10n.dl_rel_notes_aoo400_link		= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0+Release+Notes";
-l10n.dl_help_link			= "https://www.openoffice.org/download/full_vs_lp.html";
-l10n.dl_checksum_link			= "https://www.openoffice.org/download/checksums.html";
-l10n.dl_report_link			= "https://www.openoffice.org/download/analyze.html";
-l10n.dl_porting_link			= "https://www.openoffice.org/porting/index.html";
-l10n.dl_archive_link			= "https://www.openoffice.org/download/archive.html";
-l10n.dl_aoo341_link			= "https://www.openoffice.org/download/other-341.html";
+l10n.dl_help_link					= "https://www.openoffice.org/download/full_vs_lp.html";
+l10n.dl_checksum_link				= "https://www.openoffice.org/download/checksums.html";
+l10n.dl_report_link					= "https://www.openoffice.org/download/analyze.html";
+l10n.dl_porting_link				= "https://www.openoffice.org/porting/index.html";
+l10n.dl_archive_link				= "https://www.openoffice.org/download/archive.html";
+l10n.dl_aoo341_link					= "https://www.openoffice.org/download/other-341.html";
