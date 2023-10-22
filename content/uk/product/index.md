@@ -66,7 +66,7 @@ Apache OpenOffice is **standards compliant**:
 
 [1]: /uk/download "Download Apache OpenOffice"
 [2]: /about_us/milestones.html
-[3]: /reviews.html
+[3]: /product/reviews.html
 [4]: /projects/native-lang.html
 [6]: https://www.oasis-open.org/
 [7]: https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=office
