@@ -12,7 +12,7 @@ a	 b	 0	  1				2
 */
 
 DL.language_matrix = {
-// All listed languages below *are* supported and *are* available as full installation and language pack.
+// All listed languages below *are* supported and *are* available as full installation and language pack. (Some languages are not released but already added for AOO 4.2.0)
 
 "ast": { "-" : [ 'ast',   'Asturian',			'Asturianu' ] },
 "bg":  { "-" : [ 'bg',    'Bulgarian',			'български език' ] },
@@ -59,7 +59,7 @@ DL.language_matrix = {
 "ta":  { "-" : [ 'ta',    'Tamil',			'தமிழ்' ] },
 "th":  { "-" : [ 'th',    'Thai',			'ภาษาไทย' ] },
 "tr":  { "-" : [ 'tr',    'Turkish',			'T&uuml;rk&ccedil;e' ] },
-"uk":  { "-" : [ 'uk',    'Ukrainian',			'Yкраї́нська' ] },
+"uk":  { "-" : [ 'uk',    'Ukrainian',			'Yкраїнська' ] },
 "vi":  { "-" : [ 'vi',    'Vietnamese',			'Tiếng Việt' ] },
 "zh":  { "-" : [ 'zh',    'Chinese',			'Chinese' ],
          "cn": [ 'zh-CN', 'Chinese (simplified)',	'简体中文' ],
@@ -104,4 +104,3 @@ DL.language_matrix = {
 "uz":  { "-" : [ 'uz',    'Uzbek',			'Ўзбек' ] },
 "cy":  { "-" : [ 'cy',    'Welsh',			'Cymraeg' ] }
 };
-
