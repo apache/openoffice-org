@@ -38,7 +38,7 @@ Language								| Website		| OpenOffice availability
 [Czech (cs)](/cs/)						| maintained	| current 4.1.x
 [Danish (da)](/da/)						| maintained	| current 4.1.x
 [Dutch (nl)](/nl/)						| maintained	| current 4.1.x
-[English - British (en-GB)](/)			| maintained	| current 4.1.x
+[English - GB (en-GB)](/)				| maintained	| current 4.1.x
 [English - US (en-US)](/)				| maintained	| current 4.1.x
 [Esperanto (eo)](/eo/)					| help wanted	| outdated
 [Estonian (et)](/et/)					| help wanted	| planned for 4.2.x
