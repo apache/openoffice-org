@@ -3,8 +3,8 @@
  *
  * Instead of hard coded text in the green box please use these variables and translate it to your favorite language.
  *
- * Wrong:	"Download Apache OpenOffice"
- * Correct:	l10n.dl_green_box_headline_text
+ * Wrong:   "Download Apache OpenOffice"
+ * Correct: l10n.dl_green_box_headline_text
  */
 
 
@@ -15,10 +15,10 @@ var l10n = new Object();
 // The following variables are used in the "index.html" file:
 
 // Set a specific language ISO code to force to assemble a download link with a certain language.
-DL.NL_LANG	= "en";
+DL.NL_LANG					= "sr";
 
 // General:
-l10n.dl_headline_text					= "Preuzmite Apache OpenOffice";
+l10n.dl_headline_text				= "Preuzmite Apache OpenOffice";
 
 // Download: Strings in the green box (used in "index.html").
 l10n.dl_green_box_headline_text			= "Preuzmite Apache OpenOffice";
@@ -27,9 +27,9 @@ l10n.dl_green_box_subtext1_text			= "Hostovano od strane Sourceforge.net - web l
 l10n.dl_green_box_subtext1_title		= "Binarne datoteke Apache OpenOffice-a su hostovane od strane Sourceforge.net - web lokacija od poverenja";
 l10n.dl_green_box_subtext2_text			= "Izaberite željeni operativni sistem, jezik i verziju";
 l10n.dl_green_box_subtext2_title		= "Izaberite željeni operativni sistem, jezik i verziju";
-l10n.dl_green_box_selectbox_os_title	= "Izaberite željeni operativni sistem";
-l10n.dl_green_box_selectbox_lang_title	= "Izaberite željeni jezik";
-l10n.dl_green_box_selectbox_ver_title	= "Izaberite željenu verziju izdanja";
+l10n.dl_green_box_selectbox_os_title		= "Izaberite željeni operativni sistem";
+l10n.dl_green_box_selectbox_lang_title		= "Izaberite željeni jezik";
+l10n.dl_green_box_selectbox_ver_title		= "Izaberite željenu verziju izdanja";
 
 // The strings that will be shown in the OS, language and version drop-down select boxes.
 // You must leave at least one single empty string (see the comment lines below the 3 following variables)!
@@ -90,25 +90,15 @@ l10n.dl_green_box_select_box_language_values	= [ "Asturian (Asturianu)",
 l10n.dl_green_box_select_box_lang_values_custom	= [ "" ];
 
 /* l10n.dl_green_box_select_box_version_values	= [ "" ]; */
-l10n.dl_green_box_select_box_version_values	= [ "4.1.14",
-												"4.1.13",
-												"4.1.12",
-												"4.1.11",
-												"4.1.10",
-												"4.1.9",
-												"4.1.8",
-												"4.1.7",
-												"4.1.6",
-												"4.1.5",
-												"4.1.4",
-												"4.1.3",
-												"4.1.2",
-												"4.1.1",
-												"4.1.0",
-												"4.0.1",
-												"4.0.0",
-												"3.4.1",
-												"Starija izdanja" ];
+l10n.dl_green_box_select_box_version_values	= [ "4.1.4",
+						    "4.1.3",
+						    "4.1.2",
+						    "4.1.1",
+						    "4.1.0",
+						    "4.0.1",
+						    "4.0.0",
+						    "3.4.1",
+						    "Starija izdanja" ];
 
 // Download: Strings in the sub-green box (used in "index.html").
 // Not defined for now.
@@ -126,15 +116,15 @@ l10n.dl_share_light_blue_box_text_text		= "Recite vašim prijateljima za Apache 
 l10n.dl_share_light_blue_box_text_title		= "Pomozite širenju priče i recite vašim prijateljima za Apache OpenOffice";
 l10n.dl_share_light_blue_box_blog_text		= "Zvanični blog";
 l10n.dl_share_light_blue_box_blog_title		= "OpenOffice-ov dnevnik na Webu.";
-l10n.dl_share_light_blue_box_blog_src		= "https://www.openoffice.org/images/logo-rss-32.png";
+l10n.dl_share_light_blue_box_blog_src		= "http://www.openoffice.org/images/logo-rss-32.png";
 l10n.dl_share_light_blue_box_blog_alt		= "OpenOffice-ov dnevnik na Webu";
 l10n.dl_share_light_blue_box_facebook_text	= "Facebook";
 l10n.dl_share_light_blue_box_facebook_title	= "Recite vašim prijateljima za Apache OpenOffice preko Facebook-a";
-l10n.dl_share_light_blue_box_facebook_src	= "https://www.openoffice.org/images/logo-facebook-32.png";
+l10n.dl_share_light_blue_box_facebook_src	= "http://www.openoffice.org/images/logo-facebook-32.png";
 l10n.dl_share_light_blue_box_facebook_alt	= "Delite preko Facebook-a";
 l10n.dl_share_light_blue_box_twitter_text	= "Twitter";
 l10n.dl_share_light_blue_box_twitter_title	= "Recite vašim prijateljima za Apache OpenOffice preko Twitter-a";
-l10n.dl_share_light_blue_box_twitter_src	= "https://www.openoffice.org/images/logo-twitter-32.png";
+l10n.dl_share_light_blue_box_twitter_src	= "http://www.openoffice.org/images/logo-twitter-32.png";
 l10n.dl_share_light_blue_box_twitter_alt	= "Delite preko Twitter-a";
 
 // Extensions: Strings in the blue box (top) (used in "index.html").
@@ -142,98 +132,98 @@ l10n.dl_ext_blue_box_headline_text		= "Nabavite proširenja i rečnike za Apache
 l10n.dl_ext_blue_box_headline_title		= "Izaberite iz širokog spektra dodatnih i individualnih funkcionalnosti";
 l10n.dl_ext_blue_box_text_text			= "Proširite funkcionalnost Apache OpenOffice-a sa velikom i rastućom bibliotekom proširenja i rečnicima od drugih korisnika.";
 l10n.dl_ext_blue_box_text_title			= "Izaberite iz širokog spektra dodatnih i individualnih funkcionalnosti";
-l10n.dl_ext_blue_box_text_href			= "https://extensions.openoffice.org/";
+l10n.dl_ext_blue_box_text_href			= "http://extensions.openoffice.org/";
 
 // Templates: Strings in the blue box (bottom) (used in "index.html").
 l10n.dl_tlp_blue_box_headline_text		= "Nabavite šablone za Apache OpenOffice";
 l10n.dl_tlp_blue_box_headline_title		= "Izaberite iz širokog spektra dodatnih i individualnih dokumenata";
 l10n.dl_tlp_blue_box_text_text			= "Proširite kreativnost Apache OpenOffice-a sa velikom i rastućom bibliotekom šablona od drugih korisnika.";
 l10n.dl_tlp_blue_box_text_title			= "Izaberite iz širokog spektra dodatnih i individualnih dokumenata";
-l10n.dl_tlp_blue_box_text_href			= "https://templates.openoffice.org/";
+l10n.dl_tlp_blue_box_text_href			= "http://templates.openoffice.org/";
 
 // Strings in the navigation bar (used in "index.html").
 // Release Information
 l10n.dl_nav_headline_1_text			= "Napomena uz izdanje";
 l10n.dl_nav_sysreq_text				= "Sistemski zahtevi";
 l10n.dl_nav_sysreq_title			= "HDD: ~300MB slobodna memorija: &gt;128MB - Procesor: &gt;500MHz - OS: Win, Linux, Mac OS, Solaris, FreeBSD...";
-l10n.dl_nav_sysreq_href				= "https://www.openoffice.org/dev_docs/source/sys_reqs_aoo41.html";
+l10n.dl_nav_sysreq_href				= "http://www.openoffice.org/dev_docs/source/sys_reqs_aoo41.html";
 l10n.dl_nav_license_text			= "Licenca";
 l10n.dl_nav_license_title			= "Apache OpenOffice licenca";
-l10n.dl_nav_license_href			= "https://www.openoffice.org/license.html";
+l10n.dl_nav_license_href			= "http://www.openoffice.org/license.html";
 l10n.dl_nav_source_text				= "Izvor";
 l10n.dl_nav_source_title			= "Za programere i napredne korisnike: Preuzmite izvorni kod da gradite Apache OpenOffice od nule.";
-l10n.dl_nav_source_href				= "https://openoffice.apache.org/downloads.html";
+l10n.dl_nav_source_href				= "http://openoffice.apache.org/downloads.html";
 l10n.dl_nav_build_text				= "Uputstvo za izgradnju aplikacije";
 l10n.dl_nav_build_title				= "Za programere i napredne korisnike: Uputstvo kako da gradite Apache OpenOffice od nule.";
-l10n.dl_nav_build_href				= "https://wiki.openoffice.org/wiki/Documentation/Building_Guide_AOO";
+l10n.dl_nav_build_href				= "http://wiki.openoffice.org/wiki/Documentation/Building_Guide_AOO";
 l10n.dl_nav_sdk_text				= "Alati za razvoj softvera (SDK)";
 l10n.dl_nav_sdk_title				= "Za programere: Alati za razvoj softvera.";
-l10n.dl_nav_sdk_href				= "https://openoffice.apache.org/downloads.html";
+l10n.dl_nav_sdk_href				= "http://openoffice.apache.org/downloads.html";
 l10n.dl_nav_devbuilds_text			= "Razvojna izgradnja";
 l10n.dl_nav_devbuilds_title			= "Za QA volontere: Razvojna izgradnja";
-l10n.dl_nav_devbuilds_href			= "https://www.openoffice.org/download/devbuilds.html";
+l10n.dl_nav_devbuilds_href			= "http://www.openoffice.org/download/devbuilds.html";
 
 // Documentation
 l10n.dl_nav_headline_2_text			= "Dikumentacija";
 l10n.dl_nav_schedule_text			= "Trenutni raspored objavljivanja";
 l10n.dl_nav_schedule_title			= "Kada se planira novo izdanje?";
-l10n.dl_nav_schedule_href			= "https://cwiki.apache.org/confluence/display/OOOUSERS/Releases";
-l10n.dl_nav_hist_schedule_text		= "Hronološki raspored objavljivanja";
-l10n.dl_nav_hist_schedule_title		= "Kada su starija izdanja planirana?";
-l10n.dl_nav_hist_schedule_href		= "https://wiki.openoffice.org/wiki/Product_Release";
+l10n.dl_nav_schedule_href			= "http://cwiki.apache.org/confluence/display/OOOUSERS/Releases";
+l10n.dl_nav_hist_schedule_text			= "Hronološki raspored objavljivanja";
+l10n.dl_nav_hist_schedule_title			= "Kada su starija izdanja planirana?";
+l10n.dl_nav_hist_schedule_href			= "http://wiki.services.openoffice.org/wiki/Product_Release";
 l10n.dl_nav_inst_guide_text			= "Uputstva za instalaciju";
-l10n.dl_nav_inst_guide_title		= "Instrukcije za instaliranje Apache OpenOffice-a na Windows-u, Linux-u i Mac OS mašinama";
-l10n.dl_nav_inst_guide_href			= "https://www.openoffice.org/download/common/instructions.html";
+l10n.dl_nav_inst_guide_title			= "Instrukcije za instaliranje Apache OpenOffice-a na Windows-u, Linux-u i Mac OS mašinama";
+l10n.dl_nav_inst_guide_href			= "http://www.openoffice.org/download/common/instructions.html";
 l10n.dl_nav_user_guide_text			= "Uputstva za upotrebu";
-l10n.dl_nav_user_guide_title		= "Sveobuhvatno uputstvo za korišćenje za svakodnevnu upotrebu";
-l10n.dl_nav_user_guide_href			= "https://www.openoffice.org/documentation/index.html";
+l10n.dl_nav_user_guide_title			= "Sveobuhvatno uputstvo za korišćenje za svakodnevnu upotrebu";
+l10n.dl_nav_user_guide_href			= "http://www.openoffice.org/documentation/index.html";
 l10n.dl_nav_why_java_text			= "Java i Apache OpenOffice";
 l10n.dl_nav_why_java_title			= "Objašnjenja zašto da se koristi Java i šta je to";
-l10n.dl_nav_why_java_href			= "https://www.openoffice.org/download/common/java.html";
+l10n.dl_nav_why_java_href			= "http://www.openoffice.org/download/common/java.html";
 l10n.dl_nav_eol_text				= "Informacija o zastarelosti proizvoda";
 l10n.dl_nav_eol_title				= "Informacije u vezi izdanja koja su dostigla status zastarelosti";
-l10n.dl_nav_eol_href				= "https://www.openoffice.org/development/releases/eol.html";
+l10n.dl_nav_eol_href				= "http://www.openoffice.org/development/releases/eol.html";
 
 // Additional Resources
 l10n.dl_nav_headline_3_text			= "Dodatni izvori informacija";
 l10n.dl_nav_support_text			= "Podrška";
 l10n.dl_nav_support_title			= "Ako prethodne informacije nisu dale odgovor na vaše pitanje: Besplatna i plaćena podrška!";
-l10n.dl_nav_support_href			= "https://www.openoffice.org/support/index.html";
+l10n.dl_nav_support_href			= "http://www.openoffice.org/support/index.html";
 l10n.dl_nav_local_text				= "Lokalizacije";
 l10n.dl_nav_local_title				= "Informacije i podrška za vaš preferirani jezik";
-l10n.dl_nav_local_href				= "https://openoffice.apache.org/native-lang.html";
+l10n.dl_nav_local_href				= "http://openoffice.apache.org/native-lang.html";
 l10n.dl_nav_stat_text				= "Statistika preuzimanja";
 l10n.dl_nav_stat_title				= "Statistika preuzimanja i ostala statistika";
-l10n.dl_nav_stat_href				= "https://www.openoffice.org/stats/index.html";
+l10n.dl_nav_stat_href				= "http://www.openoffice.org/stats/index.html";
 l10n.dl_nav_mirrors1_text			= "Alternativni odrazi za preuzimanje #1";
 l10n.dl_nav_mirrors1_title			= "Koritite Sourceforge-ove odraze za preuzimanje Apache OpenOffice";
-l10n.dl_nav_mirrors1_href			= "https://sourceforge.net/projects/openofficeorg.mirror/files/";
+l10n.dl_nav_mirrors1_href			= "http://sourceforge.net/projects/openofficeorg.mirror/files/";
 l10n.dl_nav_mirrors2_text			= "Alternativni odrazi za preuzimanje #2";
 l10n.dl_nav_mirrors2_title			= "Koritite Apache-ove odraze za preuzimanje Apache OpenOffice";
-l10n.dl_nav_mirrors2_href			= "https://www.apache.org/dyn/aoo-closer.cgi/openoffice/";
+l10n.dl_nav_mirrors2_href			= "http://www.apache.org/dyn/aoo-closer.cgi/openoffice/";
 l10n.dl_nav_porting_text			= "Portovi i distribucije samostalnih proizvođača (3rd party)";
 l10n.dl_nav_porting_title			= "Portovi i distribucije od strane samostalnih (3rd party) dobavljača";
-l10n.dl_nav_porting_href			= "https://www.openoffice.org/porting/index.html";
+l10n.dl_nav_porting_href			= "http://www.openoffice.org/porting/index.html";
 l10n.dl_nav_archive_text			= "Arhivirana i stara izdanja";
 l10n.dl_nav_archive_title			= "Preuzmite arhivirana i stara izdanja";
-l10n.dl_nav_archive_href			= "https://www.openoffice.org/download/archive.html";
+l10n.dl_nav_archive_href			= "http://www.openoffice.org/download/archive.html";
 
 // List items in the navigation bar that are not used for now.
 l10n.dl_nav_release_notes_text			= "Napomene uz izdanje";
 l10n.dl_nav_release_notes_title			= "Šta je novo, šta šta je poboljšano u Apache OpenOffice-u?";
-l10n.dl_nav_release_notes_href			= "https://www.openoffice.org/development/releases/index.html";
+l10n.dl_nav_release_notes_href			= "http://www.openoffice.org/development/releases/index.html";
 l10n.dl_nav_checksum_text			= "Verifikujte preuzetu datoteku";
 l10n.dl_nav_checksum_title			= "Kako da verifikujete preuzetu datoteku sa potpisom i hešom?";
-l10n.dl_nav_checksum_href			= "https://www.openoffice.org/download/checksums.html";
+l10n.dl_nav_checksum_href			= "http://www.openoffice.org/download/checksums.html";
 
 // Strings for the logo graphics.
 l10n.dl_img_sourceforge_title			= "Sourceforge - Preuzimanje, razvoj i objavljivanje besplatnog softvera otvorenog koda";
-l10n.dl_img_sourceforge_href			= "https://www.sourceforge.net/";
-l10n.dl_img_sourceforge_src			= "https://www.openoffice.org/images/sourceforge.png";
+l10n.dl_img_sourceforge_href			= "http://www.sourceforge.net/";
+l10n.dl_img_sourceforge_src			= "http://www.openoffice.org/images/sourceforge.png";
 l10n.dl_img_sourceforge_alt			= "Sourceforge";
 l10n.dl_img_w3c_title				= "W3C Markup Validation Service - Check the markup (HTML, XHTML, ...) of Web documents";
-l10n.dl_img_w3c_href				= "https://validator.w3.org/check?uri=referer";
-l10n.dl_img_w3c_src				= "https://www.openoffice.org/images/valid-xhtml10-blue.png";
+l10n.dl_img_w3c_href				= "http://validator.w3.org/check?uri=referer";
+l10n.dl_img_w3c_src				= "http://www.openoffice.org/images/valid-xhtml10-blue.png";
 l10n.dl_img_w3c_alt				= "W3C Validator";
 
 
@@ -275,17 +265,17 @@ l10n.dl_checksum_sha256_text			= "SHA256";
 l10n.dl_checksum_sha256_title			= "SHA256 heš za: ";
 
 l10n.dl_help_img_title				= "Koja je razlika između pune instalacije i jezičkog paketa?";
-l10n.dl_help_img_src				= "https://www.openoffice.org/download/cachedimages/help-information-icon.png";
+l10n.dl_help_img_src				= "http://www.openoffice.org/download/cachedimages/help-information-icon.png";
 l10n.dl_help_img_alt				= "Info u vezi instaliranja";
 l10n.dl_help_text				= "Šta je jezički paket?";
 l10n.dl_help_title				= "Koja je razlika između pune instalacije i jezičkog paketa?";
 l10n.dl_checksum_img_title			= "Kako da verifikujem preuzetu datoteku sa kontrolnim zbirom?";
-l10n.dl_checksum_img_src			= "https://www.openoffice.org/download/cachedimages/help-information-icon.png";
+l10n.dl_checksum_img_src			= "http://www.openoffice.org/download/cachedimages/help-information-icon.png";
 l10n.dl_checksum_img_alt			= "Provera kontrolnog zbira";
 l10n.dl_checksum_text				= "Kako da verifikujem ovo preuzimanje?";
 l10n.dl_checksum_title				= "Kako da verifikujem preuzetu datoteku sa kontrolnim zbirom?";
 l10n.dl_report_img_title			= "Link za preuzimanje je neispravan? Kliknite ovde da prijavite.";
-l10n.dl_report_img_src				= "https://www.openoffice.org/download/cachedimages/help-report-broken-link-icon.png";
+l10n.dl_report_img_src				= "http://www.openoffice.org/download/cachedimages/help-report-broken-link-icon.png";
 l10n.dl_report_img_alt				= "Neispravan link";
 l10n.dl_report_text				= "Prijavite neispravan link";
 l10n.dl_report_title				= "Link za preuzimanje je neispravan? Kliknite ovde da prijavite.";
@@ -297,7 +287,7 @@ l10n.dl_langpack_link_error_text		= "Nije dostupan jezički paket";
 l10n.dl_langpack_link_error_title		= "Izaberite drugi jezik, platformu ili verziju.";
 
 l10n.dl_error_problem_img_title			= "Izabrana datoteka za preuzimanje nije dostupna";
-l10n.dl_error_problem_img_src			= "https://www.openoffice.org/download/cachedimages/exclamation-icon.png";
+l10n.dl_error_problem_img_src			= "http://www.openoffice.org/download/cachedimages/exclamation-icon.png";
 l10n.dl_error_problem_img_alt			= "Tekst greške";
 l10n.dl_error_problem_text			= "Problem: ";
 l10n.dl_error_solution_text			= "Rešenje: ";
@@ -360,12 +350,14 @@ l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;functions/variables";
 
 
 // General: Links to webpage files that could be localized.
-l10n.dl_rel_notes_aoo410_link	= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1+Release+Notes";
-l10n.dl_rel_notes_aoo401_link	= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0.1+Release+Notes";
-l10n.dl_rel_notes_aoo400_link	= "https://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0+Release+Notes";
-l10n.dl_help_link				= "https://www.openoffice.org/download/full_vs_lp.html";
-l10n.dl_checksum_link			= "https://www.openoffice.org/download/checksums.html";
-l10n.dl_report_link				= "https://www.openoffice.org/download/analyze.html";
-l10n.dl_porting_link			= "https://www.openoffice.org/porting/index.html";
-l10n.dl_archive_link			= "https://www.openoffice.org/download/archive.html";
-l10n.dl_aoo341_link				= "https://www.openoffice.org/download/other-341.html";
+l10n.dl_rel_notes_aoo410_link			= "http://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.1+Release+Notes";
+l10n.dl_rel_notes_aoo401_link			= "http://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0.1+Release+Notes";
+l10n.dl_rel_notes_aoo400_link			= "http://cwiki.apache.org/confluence/display/OOOUSERS/AOO+4.0+Release+Notes";
+l10n.dl_help_link				= "http://www.openoffice.org/download/full_vs_lp.html";
+l10n.dl_checksum_link				= "http://www.openoffice.org/download/checksums.html";
+l10n.dl_report_link				= "http://www.openoffice.org/download/analyze.html";
+l10n.dl_porting_link				= "http://www.openoffice.org/porting/index.html";
+l10n.dl_archive_link				= "http://www.openoffice.org/download/archive.html";
+l10n.dl_aoo341_link				= "http://www.openoffice.org/download/other-341.html";
+
+
