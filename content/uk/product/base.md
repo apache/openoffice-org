@@ -3,40 +3,42 @@ image_css=rfloatimg
 title=Apache OpenOffice Base
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Base](/product/pix/base.png)](/product/pix/base-big.png "Click for bigger version")
+[![Зняток екрану Apache OpenOffice Base](/product/pix/base.png)](/product/pix/base-big.png "Натисніть, щоб збільшити")
 
-**Base** is a fully featured desktop database management system, designed to
-meet the needs of a broad array of users, from tracking a personal CD collections, 
-to producing a corporate monthly departmental sales reports.
+**Base** - це повнофункціональна десктопна система керування базою даних, 
+розроблена, щоб задовольнити потреби широкого кола користувачів, від обліку
+колекції персональних дисків, до створення щомісячних корпоративних відомчих
+звітів про продажі.
 
-Base offers wizards to help users new to database design (or Base) 
-to create Tables, Queries, Forms and Reports, along with a set of
-predefined table definitions for tracking Assets, Customers, Sales Orders,
-Invoices and much more.
+Base пропонує майстри, щоб допомогти користувачам, новачкам у роботі
+із базами даних (або Base), створювати таблиці, запити, форми і звіти
+наряду із набором попередньо визначених таблиць для відстеження активів, 
+клієнтів, замовлень на продаж, рахунків тощо.
 
-When a personal use database is all you need, Base offers the full HSQL
-relational database engine, configured for single user, with the data stored
-right in the Base file, as well as native support for dBase flat files.
+Коли персональне використання бази даних - це все що вам треба, Base пропонує
+повний рушій реляційної бази даних HSQL, налаштований для окремого користувача, 
+з даними, що зберігаються в одному Base файлі, так само як і вбудовану підтримку
+файлів dBase.
 
-For power users in the enterprise, Base delivers native support drivers for
-a variety of multi-user database engines: MySQL, Adabas D, MS Access and
-PostgreSQL. In addition, support for JDBC and ODBC standard drivers allows you
-to connect to virtually any database.
+Для обізнаних у предметній області користувачів, Base постачає власні драйвери підтримки
+різноманітних багато-користувацьких рушіїв баз даних: MySQL, Adabas D, MS Access і
+PostgreSQL. На доданок, підтримка стандартних драйверів JDBC і ODBC дозволяє вам
+віртуально приєднатись до будь-якої бази даних.
 
-Base integrates seamlessly into the rest of the Apache OpenOffice suite
-applications, for example:
+Base без проблем інтегрується у решту застосунків пакету Apache OpenOffice, 
+наприклад:
 
-  - Supplying address book data for mail merge in Writer using the industry
-    standard LDAP protocol, or common address book formats such as Microsoft
-    Outlook, Microsoft Windows and Mozilla; 
-  - Creating linked data ranges in Calc files for data pilot analysis or as the 
-    basis for charts.
+  - Підтримка даних адресної книги для поштової розсилки у Writer за допомогою
+    індустріального стандартного протоколу LDAP, або звичайних форматів адресних
+    книг, таких як Microsoft Outlook, Microsoft Windows і Mozilla;
+  - Створення пов'язаних діапазонів даних у Calc для пілотного аналізу даних, або
+    як основа для діаграм. 
+  
+Щоб дізнатись більше про роботу із Base, будь ласка, відвідайте сторінки
+[Apache OpenOffice Wiki Database][1].
 
-For more information on working with Base, please see the 
-[Apache OpenOffice Wiki Database][1] pages.
-
-For technical information, or to help make Base even better, stop by the 
-[Base project page][2].
+Для технічної інформації, або для того, щоб допомогти зробити Base краще, зупиніться на
+[Сторінці проєкту Base][2].
 
 [1]: https://wiki.openoffice.org/wiki/database
 [2]: https://dba.openoffice.org/
