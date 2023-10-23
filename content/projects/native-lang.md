@@ -33,11 +33,13 @@ Language								| Website		| OpenOffice availability
 [Basque (eu)](/eu/)						| help wanted	| current 4.1.x
 [Bulgarian (bg)](/bg/)					| help wanted	| current 4.1.x
 [Catalan (ca)](/ca/)					| help wanted	| current 4.1.x
-[Chinese traditional (zh-tw)](/zh-tw/)	| maintained	| current 4.1.x
 [Chinese simplified (zh-cn)](/zh-cn/)	| maintained	| current 4.1.x
+[Chinese traditional (zh-tw)](/zh-tw/)	| maintained	| current 4.1.x
 [Czech (cs)](/cs/)						| maintained	| current 4.1.x
 [Danish (da)](/da/)						| maintained	| current 4.1.x
 [Dutch (nl)](/nl/)						| maintained	| current 4.1.x
+[English - British (en-GB)](/)			| maintained	| current 4.1.x
+[English - US (en-US)](/)				| maintained	| current 4.1.x
 [Esperanto (eo)](/eo/)					| help wanted	| outdated
 [Estonian (et)](/et/)					| help wanted	| planned for 4.2.x
 [Finnish (fi)](/fi/)					| maintained	| current 4.1.x
@@ -60,8 +62,8 @@ Language								| Website		| OpenOffice availability
 [Norwegian (no)](/no/)					| maintained	| current 4.1.x
 [Oromo (om)](/om/)						| help wanted	| planned for 4.2.x
 [Polish (pl)](/pl/)						| maintained	| current 4.1.x
-[Portuguese Europeu (pt)](/pt/)			| maintained	| current 4.1.x
-[Portuguese of Brasil (pt-br)](/pt-br/)	| help wanted	| current 4.1.x
+[Portuguese - EU (pt)](/pt/)			| maintained	| current 4.1.x
+[Portuguese - BR (pt-br)](/pt-br/)		| help wanted	| current 4.1.x
 [Romanian (ro)](/ro/)					| help wanted	| outdated
 [Russian (ru)](/ru/)					| maintained	| current 4.1.x
 [Serbian - Cyrillic (sr)](/sr/)			| help wanted	| current 4.1.x
