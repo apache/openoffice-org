@@ -18,7 +18,8 @@ In the following table, the status definitions for the Website column are:
 
 Status		| Explanation
 ------------|-------------------------------------------------------------
-maintained	| This web site is localized and current, and the download links are localized and working.
+-			| No website available
+maintained	| This website is localized and current, and the download links are localized and working.
 help wanted	| This website needs help and may be incomplete, outdated or unmaintained. If you can help, please e-mail the [localization mailing list][9] saying that you can volunteer for updating a specific website translation.
 
 <br />
@@ -33,12 +34,12 @@ Language								| Website		| OpenOffice availability
 [Basque (eu)](/eu/)						| help wanted	| current 4.1.x
 [Bulgarian (bg)](/bg/)					| help wanted	| current 4.1.x
 [Catalan (ca)](/ca/)					| help wanted	| current 4.1.x
-[Chinese simplified (zh-cn)](/zh-cn/)	| maintained	| current 4.1.x
-[Chinese traditional (zh-tw)](/zh-tw/)	| maintained	| current 4.1.x
+[Chinese simplified (zh-cn)](/zh-CN/)	| maintained	| current 4.1.x
+[Chinese traditional (zh-tw)](/zh-TW/)	| maintained	| current 4.1.x
 [Czech (cs)](/cs/)						| maintained	| current 4.1.x
 [Danish (da)](/da/)						| maintained	| current 4.1.x
 [Dutch (nl)](/nl/)						| maintained	| current 4.1.x
-[English - GB (en-GB)](/)				| maintained	| current 4.1.x
+English - GB (en-GB)					| -				| current 4.1.x
 [English - US (en-US)](/)				| maintained	| current 4.1.x
 [Esperanto (eo)](/eo/)					| help wanted	| outdated
 [Estonian (et)](/et/)					| help wanted	| planned for 4.2.x
@@ -63,7 +64,7 @@ Language								| Website		| OpenOffice availability
 [Oromo (om)](/om/)						| help wanted	| planned for 4.2.x
 [Polish (pl)](/pl/)						| maintained	| current 4.1.x
 [Portuguese - EU (pt)](/pt/)			| maintained	| current 4.1.x
-[Portuguese - BR (pt-br)](/pt-br/)		| help wanted	| current 4.1.x
+[Portuguese - BR (pt-br)](/pt-BR/)		| help wanted	| current 4.1.x
 [Romanian (ro)](/ro/)					| help wanted	| outdated
 [Russian (ru)](/ru/)					| maintained	| current 4.1.x
 [Serbian - Cyrillic (sr)](/sr/)			| help wanted	| current 4.1.x
@@ -76,8 +77,8 @@ Language								| Website		| OpenOffice availability
 [Thai (th)](/th/)						| help wanted	| current 4.1.x
 [Turkish (tr)](/tr/)					| maintained	| current 4.1.x
 [Ukrainian (uk)](/uk/)					| maintained	| planned for 4.2.x
-Valencian AVL (ca-XV)					| help wanted	| current 4.1.x
-Valencian RACV (ca-XR)					| help wanted	| current 4.1.x
+Valencian AVL (ca-XV)					| -				| current 4.1.x
+Valencian RACV (ca-XR)					| -				| current 4.1.x
 [Vietnamese (vi)](/vi/)					| help wanted	| current 4.1.x
 
 ([Legacy information for the Native Language Confederation][4], not accurate for Apache OpenOffice.)
