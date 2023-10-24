@@ -12,5 +12,5 @@ divid=leftnav
 
 # More
 
-  - [Suite](/uk/product/suite.html)
-  - [Reviews](/product/reviews.html)
+  - [Пакет](/uk/product/suite.html)
+  - [Відгуки](/product/reviews.html)
