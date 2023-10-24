@@ -71,6 +71,7 @@ DL.SEL_LANG			= [ "hy",		"Armenian",					"Հայերեն",
 						"ko",		"Korean",					"한국어",
 						"lt",		"Lithuanian",				"Lietuvių",
 						"nb",		"Norwegian [Bokmal]",		"Norsk [Bokmål]",
+						"om",		"Oromo",					"Oromo",
 						"pl",		"Polish",					"Polski",
 						"pt-BR",	"Portuguese [Brazilian]",	"Português [do Brasil]",
 						"pt",		"Portuguese [European]",	"Português [Europeu]",
@@ -117,15 +118,15 @@ DL.ASF_ARC			= "https://archive.apache.org/dist/openoffice/";
 
 // Only used in "download_other.js".
 DL.REL_PLATFORM			= [ "Win_x86", "Linux_x86_rpm", "Linux_x86_deb", "Linux_x86-64_rpm", "Linux_x86-64_deb",
-				    "MacOS_x86-64" ];
+							"MacOS_x86-64" ];
 DL.REL_FULL_LANG		= [ "ast", "bg", "ca", "ca-XV", "ca-XR", "cs", "da", "de", "el", "en-GB", "en-US", "es",
-				    "eu", "fi", "fr", "gd", "gl", "he", "hi", "hu", "it", "ja", "km", "ko", "lt", "nb",
-				    "nl", "pl", "pt", "pt-BR", "ru", "sk", "sl", "sr", "sv", "ta", "th", "tr", "vi",
-				    "zh-CN", "zh-TW" ];
+							"eu", "fi", "fr", "gd", "gl", "he", "hi", "hu", "it", "ja", "km", "ko", "lt", "nb",
+							"nl", "pl", "pt", "pt-BR", "ru", "sk", "sl", "sr", "sv", "ta", "th", "tr", "vi",
+							"zh-CN", "zh-TW" ];
 DL.REL_LP_LANG			= [ "ast", "bg", "ca", "ca-XV", "ca-XR", "cs", "da", "de", "el", "en-GB", "en-US", "es",
-				    "eu", "fi", "fr", "gd", "gl", "he", "hi", "hu", "it", "ja", "km", "ko", "lt", "nb",
-				    "nl", "pl", "pt", "pt-BR", "ru", "sk", "sl", "sr", "sv", "ta", "th", "tr", "vi",
-				    "zh-CN", "zh-TW" ];
+							"eu", "fi", "fr", "gd", "gl", "he", "hi", "hu", "it", "ja", "km", "ko", "lt", "nb",
+							"nl", "pl", "pt", "pt-BR", "ru", "sk", "sl", "sr", "sv", "ta", "th", "tr", "vi",
+							"zh-CN", "zh-TW" ];
 DL.REL_SDK_LANG			= [ "en-US" ]
 
 // The maximal number of available languages in "download_other.js".
@@ -145,21 +146,21 @@ DL_BETA.ACTIVE			= -1;		// 1 = activate download, 0 = display "coming soon", -1 
 
 // Only used in "all_beta.html".
 DL_BETA.PLATFORM		= [ "Win_x86", "Linux_x86_rpm", "Linux_x86_deb", "Linux_x86-64_rpm", "Linux_x86-64_deb",
-				    "MacOS_x86-64" ];
+							"MacOS_x86-64" ];
 DL_BETA.FULL_LANG		= [ "ast", "bg", "ca", "ca-XV", "ca-XR", "cs", "da", "de", "el", "en-GB", "en-US", "es",
-				    "eu", "fi", "fr", "gd", "gl", "he", "hi", "hu", "it", "ja", "km", "ko", "lt", "nb",
-				    "nl", "pl", "pt", "pt-BR", "ru", "sk", "sl", "sr", "sv", "ta", "th", "tr", "vi",
-				    "zh-CN", "zh-TW" ];
+							"eu", "fi", "fr", "gd", "gl", "he", "hi", "hu", "it", "ja", "km", "ko", "lt", "nb",
+							"nl", "pl", "pt", "pt-BR", "ru", "sk", "sl", "sr", "sv", "ta", "th", "tr", "vi",
+							"zh-CN", "zh-TW" ];
 DL_BETA.LP_LANG			= [ "ast", "bg", "ca", "ca-XV", "ca-XR", "cs", "da", "de", "el", "en-GB", "en-US", "es",
-				    "eu", "fi", "fr", "gd", "gl", "he", "hi", "hu", "it", "ja", "km", "ko", "lt", "nb",
-				    "nl", "pl", "pt", "pt-BR", "ru", "sk", "sl", "sr", "sv", "ta", "th", "tr", "vi",
-				    "zh-CN", "zh-TW" ];
+							"eu", "fi", "fr", "gd", "gl", "he", "hi", "hu", "it", "ja", "km", "ko", "lt", "nb",
+							"nl", "pl", "pt", "pt-BR", "ru", "sk", "sl", "sr", "sv", "ta", "th", "tr", "vi",
+							"zh-CN", "zh-TW" ];
 DL_BETA.SDK_LANG		= [ "en-US" ];
 
 // Base URLs to the Sourceforge and Apache mirror server.
 DL_BETA.SOURCEFORGE		= "https://sourceforge.net/projects/openofficeorg.mirror/files/milestones/" + DL_BETA.VERSION;
 DL_BETA.SOURCEFORGE		= DL_BETA.SOURCEFORGE + "/binaries/";
-DL_BETA.ASF			= "https://www.apache.org/dyn/aoo-closer.cgi/openoffice/"		   + DL_BETA.VERSION;
+DL_BETA.ASF				= "https://www.apache.org/dyn/aoo-closer.cgi/openoffice/"		   + DL_BETA.VERSION;
 DL_BETA.ASF_DIST		= "https://downloads.apache.org/openoffice/"				   + DL_BETA.VERSION;
 DL_BETA.ASF_ARC			= "https://archive.apache.org/dist/openoffice/"				   + DL_BETA.VERSION;
 
@@ -173,12 +174,12 @@ DL.PLATFORM_FULL, DL.PLATFORM_LP, DL.RELEASE_PLATFORM, DL.RELEASE_LANG, DL.REL_T
 DL.FILENAME_LP, DL.EXTENSION, DL.SOURCEFORGE_BASE_URL, DL.SOURCEFORGE_PREV_URL, DL.ASF_ARC_BASE_URL, DL.ASF_ARC_PREV_URL,
 DL.ASF_WIKI_URL, DL.LINK_FULL, DL.LINK_LP, DL.LINK_CHK_KEYS, DL.LINK_CHK_ASC_FULL, DL.LINK_CHK_MD5_FULL,
 DL.LINK_CHK_SHA256_FULL, DL.LINK_CHK_ASC_LP, DL.LINK_CHK_MD5_LP,
-DL.LINK_CHK_SHA256_LP		= "";
+DL.LINK_CHK_SHA256_LP	= "";
 
 DL.RELEASE_PLATFORM_POS_FULL, DL.RELEASE_PLATFORM_POS_LP, DL.FILESIZE_FULL,
 DL.FILESIZE_LP			= -1;
 
 DL.SHOW_SUB_BOX			= true;
-DL.ERROR			= false;
+DL.ERROR				= false;
 DL.ID_SUB_BOX			= "";
-DL.ID_LINKS			= "";
+DL.ID_LINKS				= "";

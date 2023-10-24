@@ -84,6 +84,7 @@ l10n.index_redirect_text			= [ /* hy */	"soft", "Այս կայքը հասանե�
 										/* ko */	"soft", "이 웹사이트는 <b>한국어(ko)</b>로도 이용할 수 있습니다. 여기를 클릭하면 한국어 웹사이트로 이동합니다.",
 										/* lt */	"hard", "Spustelėjus laukelį, tinklalapį galima skaityti <b>lietuviškai (lt)</b>.",
 										/* no */	"soft", "Dette nettstedet er også tilgjengelig på <b>norsk (no)</b>. Klikk denne teksten for å bli videresendt.",
+										/* om */	"none", "This site is also available in <b>Oromo (om)</b>. Just click this text to get redirected.",
 										/* pl */	"soft", "Ta strona jest dostępna po <b>Polsku (pl)</b>. Po prostu kliknij ten tekst aby tam przejść.",
 										/* pt-BR */	"none", "Este site também está disponível em <b>Português [do Brasil] (pt-BR)</b>. Clique neste texto para ser redirecionado.",
 										/* pt */	"soft", "Este site também está disponível em <b>Português [Europeu] (pt)</b>. Clique neste texto para ser redirecionado.",
