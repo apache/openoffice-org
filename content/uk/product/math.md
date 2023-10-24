@@ -3,22 +3,23 @@ image_css=rfloatimg
 title=Apache OpenOffice Math
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Click for bigger version")
+[![Зняток екрану Apache OpenOffice Math](/product/pix/math.png)](/product/pix/math-big.png "Натисніть, щоб збільшити")
 
-*Simple to create equations and formulae for your documents!*
+*Просте створення рівнянь і формул для ваших документів!*
 
-Math is Apache OpenOffice's component for mathematical equations. It is most
-commonly used as an equation editor for text documents, but it can also be used
-with other types of documents or stand-alone. When used inside Writer, the
-equation is treated as an object inside the text document. Similarly, one can
-also insert these into other Apache OpenOffice programs like [Calc][1] and
+Math - це компонент Apache OpenOffice для математичних рівнянь. Він зазвичай
+використовується як редактор рівнянь в текстових документах, але він також
+може бути використаний в документах інших типів або самостійно. Під час використання
+у Writer, рівняння розглядаються як об'єкти всередині текстового документа.
+Аналогічно їх можна вставити до інших програм Apache OpenOffice на кшталт [Calc][1] і
 [Impress][2].
 
-Using Math, there are three main ways of entering a formula:
+Є три основні шляхи введення формул за допомогою Math:
 
-- Type markup in the equation editor.
-- Right-click on the equation editor and select the symbol from the context menu.
-- Select a symbol from the *Elements* toolbox.
+- Друкувати розмітку у редакторі рівнянь.
+- Клік правою кнопкою у редакторі рівнянь і вибір символу з контекстного меню.
+- Вибрати символ з панелі інструментів *Елементи*.
+
 
 [1]: calc.html "Apache OpenOffice Calc"
 [2]: impress.html "Apache OpenOffice Impress"
