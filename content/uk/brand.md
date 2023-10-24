@@ -1,7 +1,7 @@
 type=brand
 home=home
-search=search
-selectedlang=en
+search=Шукати
+selectedlang=uk
 language=Українська
 name=Apache OpenOffice
 tagline=Вільний і відкритий офісний пакет

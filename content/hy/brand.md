@@ -1,7 +1,7 @@
 type=brand
 home=home
 search=փնտրել
-selectedlang=en
+selectedlang=hy
 language=Լեզու
 name=Apache OpenOffice
 tagline=Անվճար և բաց արտադրողականության հավաքակազմ

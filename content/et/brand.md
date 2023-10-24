@@ -1,7 +1,7 @@
 type=brand
 home=home
 search=otsi
-selectedlang=en
+selectedlang=et
 language=Keel
 name=Apache OpenOffice
 tagline=Vaba ja avatud koodiga kontoritarkvara pakett
