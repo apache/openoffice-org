@@ -3,41 +3,41 @@ image_css=rfloatimg
 title=Apache OpenOffice Impress
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Impress](/product/pix/impress.png)](/product/pix/impress-big.png "Click for bigger version")
+[![Зняток екрану Apache OpenOffice Impress](/product/pix/impress.png)](/product/pix/impress-big.png "Натисніть, щоб збільшити")
 
-*Impress your audience with your presentations!*
+*Вразіть авдиторію своїми презентаціями!*
 
-**Impress** is a truly outstanding tool for creating effective multimedia
-presentations. Your presentations will stand out with 2D and 3D clip art,
-special effects, animation, and high-impact drawing tools.
+**Impress** - це справді видатний інструмент для створення ефективних
+мультимедійних презентацій. Ваші презентації виокремлюватимуться завдяки
+2D i 3D малюнками, спеціальним ефектам, анімації і потужних інструментів
+малювання.
 
-*Master Pages* simplify the task of preparing your materials. Save even more
-time by [downloading templates][1] from our Templates repository.
+*Майстер сторінки* спрощують завдання підготовки ваших матеріалів. Збережіть
+ще більше часу із [завантаженням шаблонів][1] з нашого сховища.
 
-*Complete range of Views* are supported: Slides / Outline / Notes / Handouts
-to meet all the needs of presenters and audiences, plus an optional
-multi-pane view to put all the tools at your fingertips.
+Підтримується *Повний спектр презентацій*: Слайди / Схема / Нотатки / Роздаткові
+матеріали, щоб задовольнити всі вимоги доповідачів і авдиторії, а також додатковий
+багато-панельний перегляд, щоб мати всі інструменти під рукою.
 
-*Multiple monitors support* so that presenters can have additional materials or notes while presenting their slides on a projector. 
-Make the most of this with the integrated [Presenter Screen][2], which lets you see your next slides
-as well as the time and the speaker notes.
+*Підтримка кількох моніторів*, щоб доповідачі мали додаткові матеріали або нотатки під час презентації слайдів на проекторі.
+Використовуйте це якнайкраще з інтегрованим [Екраном доповідача][2], який дозволяє вам бачити наступні слайди так само, як час
+і нотатки.
 
-*Easy-to-use drawing and diagramming tools* - a complete range to spice up your presentation. 'Park' your most commonly used drawing
-tools around your screen ready for single-click access.
+*Прості у використанні інструменти малювання і діаграм* - повний спектр, щоб оживити вашу презентацію. 'Припаркуйте' найвживаніші
+інструменти на екрані, щоб мати доступ в один клік.
 
-*Slide show Animation and Effects* bring your presentation to life. Fontworks
-provides stunning 2D and 3D images from text. Create lifelike 3D images with
-astounding speed and response.
+*Анімація та ефекти слайд-шоу* оживлять вашу презентацію. Ефекти шрифтів
+забезпечують приголомшливі 2D i 3D ефекти з тексту. Швидко і без проблем 
+створюйте реалістичні 3D зображення.
 
-*.odp Standard* - Save your presentations in OpenDocument format, the new international standard
-for office documents. This XML based format means you're not tied up with using
-Impress. You can access your presentations from any OpenDocument compliant
-software.
+*.odp стандарт* - зберігайте свої презентації у форматі OpenDocument, новому міжнародному
+стандарті офісних документів. Цей, заснований на XML, формат не прив'язує вас до Impress. 
+Ви можете відкрити презентацій у будь-якому застосунку, який підтримує OpenDocument.
 
-*.ppt &amp; .pptx support* - Of course, you are free to import your old Microsoft PowerPoint presentations, or
-save your work in PowerPoint format for sending to people who are still using Microsoft products. 
+*Підтримка .ppt &amp; .pptx* - звісно ви можете вільно імпортувати ваші старі презентації у форматі PowerPoint, 
+або зберегти вашу роботу у форматі PowerPoint, щоб надіслати їх людям, які все ще користуються продуктами Microsoft.
 
-*Flash .swf support* - Alternatively, use Impress's built-in ability to create Flash versions of your presentations.
+*Підтримка flash .swf* - альтернативно, користуйтесь вбудованою можливістю Impress створювати Flash версії ваших презентацій.
 
-[1]: https://extensions.openoffice.org/templates "Download Apache OpenOffice Templates"
-[2]: https://wiki.openoffice.org/wiki/Presenter_Screen "Read about the Presenter Screen"
+[1]: https://extensions.openoffice.org/templates "Завантажити шаблони Apache OpenOffice"
+[2]: https://wiki.openoffice.org/wiki/Presenter_Screen "Почитайте про екран доповідача"
