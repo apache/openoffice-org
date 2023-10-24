@@ -34,8 +34,8 @@ Language								| Website		| OpenOffice availability
 [Basque (eu)](/eu/)						| help wanted	| current 4.1.x
 [Bulgarian (bg)](/bg/)					| help wanted	| current 4.1.x
 [Catalan (ca)](/ca/)					| help wanted	| current 4.1.x
-[Chinese simplified (zh-cn)](/zh-CN/)	| maintained	| current 4.1.x
-[Chinese traditional (zh-tw)](/zh-TW/)	| maintained	| current 4.1.x
+[Chinese simplified (zh-CN)](/zh-cn/)	| maintained	| current 4.1.x
+[Chinese traditional (zh-TW)](/zh-tw/)	| maintained	| current 4.1.x
 [Czech (cs)](/cs/)						| maintained	| current 4.1.x
 [Danish (da)](/da/)						| maintained	| current 4.1.x
 [Dutch (nl)](/nl/)						| maintained	| current 4.1.x
@@ -64,7 +64,7 @@ English - GB (en-GB)					| -				| current 4.1.x
 [Oromo (om)](/om/)						| help wanted	| planned for 4.2.x
 [Polish (pl)](/pl/)						| maintained	| current 4.1.x
 [Portuguese - EU (pt)](/pt/)			| maintained	| current 4.1.x
-[Portuguese - BR (pt-br)](/pt-BR/)		| help wanted	| current 4.1.x
+[Portuguese - BR (pt-BR)](/pt-br/)		| help wanted	| current 4.1.x
 [Romanian (ro)](/ro/)					| help wanted	| outdated
 [Russian (ru)](/ru/)					| maintained	| current 4.1.x
 [Serbian - Cyrillic (sr)](/sr/)			| help wanted	| current 4.1.x
