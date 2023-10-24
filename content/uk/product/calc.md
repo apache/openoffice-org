@@ -3,55 +3,55 @@ image_css=rfloatimg
 title=Apache OpenOffice Calc
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Calc](/product/pix/calc.png)](/product/pix/calc-big.png "Click for bigger version")
+[![Зняток екрану Apache OpenOffice Calc](/product/pix/calc.png)](/product/pix/calc-big.png "Натисніть, щоб збільшити")
 
-*The solution to storing all your numbers and lists!*
+*Рішення для зберігання всіх ваших числових записів і списків!*
 
-**Calc** is the spreadsheet application you've always wanted. Newcomers find it
-intuitive and easy to learn; professional data miners and number crunchers will
-appreciate the comprehensive range of advanced functions.
+**Calc** - це застосунок електронних таблиць, який завжди стане вам у пригоді. Новачки
+знаходять його інтуїтивним і легким для вивчення; професіональні дата майнери і 
+обробники числових даних оцінять повний набір просунутих функцій.
 
-*DataPilot* is an advanced technology that makes it easy to pull in raw data from corporate
-databases; cross-tabulate, summarize, and convert it into meaningful information.
+*DataPilot* - це передова технологія, яка полегшує отримання необроблених даних з корпоративних
+баз даних; перехресні таблиці, узагальнення і перетворення їх у значущу інформацію.
 
-*Natural language formulas* let you create formulas using words (e.g. "sales -
-costs").
+*Формули природною мовою* дозволять вам створювати формули за допомогою англійських
+слів (наприклад "sales - costs").
 
-*Intelligent Sum Button* inserts a sum function or a subtotal automatically,
-depending on context.
+*Розумна кнопка суми* автоматично вставляє функцію суми або проміжний підсумок, 
+залежно від контексту.
 
-*Wizards* guides you through choosing and using a comprehensive range of
-advanced spreadsheet functions, or [download templates][1] from our Templates
-repository for ready-made spreadsheet solutions.
+*Майстри* проведуть вас через вибір і використання повного асортименту 
+розширених функцій електронних таблиць, або [завантажити шаблони][1] з
+нашого сховища шаблонів готових табличних рішень.
 
-*Styles and Formatting* makes it easy to apply flexible cell formatting options,
-including freely rotating contents, templates, backgrounds, borders, and many
-more. You can be your own spreadsheet expert thanks to *templates* with built-in
-functions, allowing you to concentrate on your real work.
+*Стилі і форматування*  дозволяють легко застосувати гнучкі параметри форматування комірок,
+включаючи вміст, що вільно обертається, шаблони, тло, межі і багато іншого.
+Ви можете бути власним експертом електронних таблиць завдяки *шаблонам*
+із вбудованими функціями, що дозволяє вам зосередитись на справжній роботі.
 
-*Scenario Manager* allows "what if ..." analysis at the touch of a button - e.g.
-compare profitability for high / medium / low sales forecasts.
+*Менеджер сценаріїв* дозволяє виконати аналіз "що якщо..." одним натисканням кнопки -
+наприклад порівняти прибутковість для високих/середніх/низьких прогнозів продаж.
 
-Calc's *solver* component allows solving optimization problems where the
-optimum value of a particular spreadsheet cell has to be calculated based on
-constraints provided in other cells.
+Компонент Calc *розв'язувач* дозволяє розв'язати проблеми оптимізації, де
+оптимальне значення певної комірки таблиці має бути обчисленою ґрунтуючись
+на обмеженнях, наданих в інших комірках.
 
-*Multiple users support* - Encourage collaborative work on spreadsheets. 
-By sharing a spreadsheet, other users can easily add their data to the
-spreadsheet. The spreadsheet owner can then easily integrate the new data with a
-few clicks. This collaboration feature helps avoid editing conflicts.
+*Підтримка багатьох користувачів* - заохочує спільну роботу над таблицями.
+Поширення електронної таблиці, робить можливим іншим користувачам з легкістю додавати свої дані
+до неї. Власник таблиці може потім легко інтегрувати нові дані, за кілька
+кліків. Ця функція співпраці дозволяє уникати конфліктів редагування.
 
-Save your spreadsheets in OpenDocument format, the new international standard
-for office documents. This XML based format means you're not tied in to
-Calc. You can access your spreadsheets from any OpenDocument compliant
-software.
+Зберігайте ваші таблиці у форматі OpenDocument, новому міжнародному стандарті
+офісних документів. Цей, заснований на XML, формат не прив'язує вас до Calc.
+Ви можете отримати доступ до ваших електронних таблиць з будь-якого програмного
+забезпечення, що підтримує формат OpenDocument.
 
-You are free to import your old Microsoft Excel spreadsheets, or save
-your work in Excel format for sending to people who are using Microsoft products.
-Calc is able to read .xlsx files created with Microsoft Office 2007 or
-Microsoft Office 2008 for Mac OS X.
+Імпортуйте ваші старі таблиці Microsoft Excel, або зберігайте вашу
+роботу до формату Excel для надсилання іншим людям, хто користується 
+продуктами Microsoft. Calc спроможний читати файли .xlsx, створені у 
+Microsoft Office 2007 або Microsoft Office 2008 для Mac OS X.
 
-If you want to send your results to someone who doesn't have a spreadsheet application installed, 
-then use Portable Document Format (.pdf) - no need to buy or install any extra software. 
+Якщо ви хочете надіслати результати комусь, хто не має встановленого застосунку електронних
+таблиць, використайте формат .pdf - без потреби придбати або встановлювати додаткові застосунки.
 
-[1]: https://extensions.openoffice.org/templates "Download Apache OpenOffice Templates"
+[1]: https://extensions.openoffice.org/templates "Завантажити шаблони Apache OpenOffice"
