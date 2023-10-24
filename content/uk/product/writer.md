@@ -3,60 +3,59 @@ image_css=rfloatimg
 title=Apache OpenOffice Writer
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Writer](/product/pix/writer.png)](/product/pix/writer-big.png "Click for bigger version")
+[![Зняток екрану Apache OpenOffice Writer](/product/pix/writer.png)](/product/pix/writer-big.png "Натисніть, щоб збільшити")
 
-*Letting you concentrate on writing your ideas*
+*Дозволяє вам зосередитись на написанні своїх ідей*
 
-**Writer** has everything you would expect from a modern, fully equipped word
-processor.
+**Writer** має все, що ви очікуєте від сучасного, повнофункціонального текстового
+процесора.
 
-It is simple enough for a quick memo, yet powerful enough to create complete books
-with contents, diagrams, indexes, etc. You're free to concentrate on your
-ideas while Writer makes them look great.
+Він досить простий для швидкого створення нагадувань, але досить потужний для створення цілих книжок
+зі змістом, діаграмами, покажчиками тощо. Ви можете зосередитися на своїх
+ідеях, тоді як Writer робить їх чудовими.
 
-*Wizards* take all the hassle out of producing standard documents such as
-letters, faxes, agendas, minutes, or carrying out more complex tasks such as
-mail merges. Of course, you are also free to create your own templates, or
-[download templates][1] from our Templates repository.
+*Майстри* знімуть усі клопоти, пов'язані зі створенням стандартних документів, наприклад
+листів, факсів, порядку денного, протоколів або виконання більш складних завдань, таких як
+розсилки. Звичайно, ви також можете створювати власні шаблони або
+[завантажити шаблони][1] з нашого репозиторію.
 
-*Styles and Formatting* puts the power of style sheets into the hands of every
-user.
+*Стилі та форматування* дають можливість використовувати таблиці стилів кожному
+користувачу.
 
-*AutoCorrect dictionary* can trap typing mistakes on the fly, 
-checking your spelling as you type. Writer can handle the use of different languages in your
-document too.
+*Словник автовиправлення* може миттєво вловлювати помилки при наборі, здійснюючи
+перевірку орфографії під час введення. Writer також може працювати з використанням різних мов у вашому
+документі.
 
-*AutoComplete* reduces typing effort, it will suggest common words and
-phrases to complete what you are typing.
+*Автозаповнення* зменшує зусилля при введенні, пропонує загальні слова та
+фрази, щоб завершити те, що ви вводите.
 
-*Text frames* and *linking* give you the power to tackle desktop publishing
-tasks for newsletters, flyers, etc. laid out exactly the way you want them to
-be.
+*Текстові фрейми* та *посилання* дають вам можливість працювати з настільною публікацією
+завдання для інформаційних бюлетенів, листівок тощо, викладених саме так, як вам треба.
 
-*Table of Contents &amp; References* - Increase the usefulness of your long, complex documents 
-by generating a table of contents or indexing terms, bibliographical references, illustrations, 
-tables, and other objects.
+*Зміст і посилання* - Збільште корисність ваших довгих складних документів
+шляхом створення змісту або індексування термінів, бібліографічних посилань, ілюстрацій,
+таблиць та інших об'єктів.
 
-*Multi-page display* - Writer can also display multiple pages while you edit - ideal for complex
-documents. Works well with large and multiple monitors.
+*Багатосторінкове відображення* - Writer також може відображати кілька сторінок під час редагування - ідеально для складних
+документів. Добре працює з великими та кількома моніторами.
 
-*Notes* - The notes feature displays notes and comments on the side of the document. This
-makes notes a lot easier to read. In addition, notes from different users are
-displayed in different colors together with the editing date and time.
+*Примітки*. Функція приміток відображає примітки та коментарі збоку документа. Це
+робить нотатки набагато легшими для читання. Крім того, замітки від різних користувачів
+відображаються різними кольорами разом із датою й часом редагування.
 
-*HTML, PDF, MediaWiki formats* - Make your documents freely available with Writer's HTML export to the web,
-or export in MediaWiki format for publishing to wikis. Publish in Portable
-Document Format (.pdf) to guarantee that what you write is what your reader
-sees. The PDF export feature in Apache OpenOffice provides a huge set of formatting
-and security options; so that PDF files can be customized for many different
-scenarios, including ISO standard PDF/A files.
+*Формати HTML, PDF, MediaWiki* - Надайте вільний доступ до ваших документів за допомогою експорту HTML Writer до Інтернету,
+або експортуйте у форматі MediaWiki для публікації у вікі. Опублікуйте в форматі .pdf, 
+щоб гарантувати, що те, що ви пишете, відповідатиме тому, що бачить ваш читач. 
+Функція експорту до PDF в Apache OpenOffice надає величезний набір форматування
+і параметрів безпеки; таким чином файли PDF можна налаштувати для багатьох різних
+сценаріїв, включаючи файли PDF/A стандарту ISO.
 
-*.odt Standard* - Save your documents in OpenDocument format, the new international standard for
-office documents. This XML based format means you're not tied in to Writer.
-You can access your documents from any OpenDocument compliant software.
+*.odt стандарт* - Зберігайте документи у форматі OpenDocument, новому міжнародному стандарті для
+офісних документів. Цей формат на основі XML означає, що ви не прив'язані до Writer.
+Ви можете отримати доступ до своїх документів із будь-якого програмного забезпечення, сумісного з OpenDocument.
 
-*.docx &amp; .doc support* - Writer can of course read all your older Microsoft Word documents, or save
-your work in Microsoft Word format for sending to people who are still using
-Microsoft products. Writer can also open .docx files created with Microsoft Office 2007 or Microsoft Office 2008 for Mac OS X.
+*Підтримка .docx і .doc* - Writer, звичайно, може читати всі ваші старі документи Microsoft Word або зберігати
+свою роботу у форматі Microsoft Word для надсилання людям, які все ще використовують
+продукти Microsoft. Writer також може відкривати файли .docx, створені за допомогою Microsoft Office 2007 або Microsoft Office 2008 для Mac OS X.
 
-[1]: https://templates.openoffice.org "Download Apache OpenOffice Templates"
+[1]: https://templates.openoffice.org "Завантажити шаблони Apache OpenOffice"
