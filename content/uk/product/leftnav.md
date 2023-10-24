@@ -1,7 +1,7 @@
 type=navigator
 divid=leftnav
 ~~~~~~
-# Products
+# Застосунки
 
   - [Writer](/uk/product/writer.html)
   - [Calc](/uk/product/calc.html)
@@ -10,7 +10,7 @@ divid=leftnav
   - [Base](/uk/product/base.html)
   - [Math](/uk/product/math.html)
 
-# More
+# Додатково
 
   - [Пакет](/uk/product/suite.html)
   - [Відгуки](/product/reviews.html)

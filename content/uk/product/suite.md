@@ -1,5 +1,5 @@
 type=page
-title=The Suite Advantage
+title=Переваги пакету
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
 
