@@ -3,40 +3,44 @@ image_css=rfloatimg
 title=Apache OpenOffice Draw
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-[![Screendump of Apache OpenOffice Draw](/product/pix/draw.png)](/product/pix/draw-big.png "Click for bigger version")
+[![Зняток екрану Apache OpenOffice Draw](/product/pix/draw.png)](/product/pix/draw-big.png "Натисніть, щоб збільшити")
 
-*The powerful graphics package*
+*Потужний графічний пакет*
 
-**Draw** - from a quick sketch to a complex plan, **Draw** gives you the tools
-to communicate with graphics and diagrams. With a maximum page size of 300cm by
-300cm, **Draw** is powerful tool for technical or general posters, etc.
+**Draw** - від швидкого ескізу до складного плану, **Draw** пропонує інструменти
+для роботи із графікою і діаграмами. З максимальним розміром сторінки
+300 см х 300 см, **Draw** є потужним інструментом для створення технічних креслень, 
+плакатів загального призначення тощо. 
 
-'Park' your most commonly used drawing tools around your screen ready for
-single-click access.
+'Припаркуйте' найвживаніші інструменти малювання на екрані для доступу
+в один клік.
 
-Use *Styles and Formatting* to put all your graphics styles at your finger tips.
+Використовуйте *Стилі і форматування*, щоб усі ваші графічні стилі були під рукою. 
 
-Manipulate objects, rotate in two or three dimensions; the *3D controller* puts
-spheres, rings, cubes, etc. at your disposal.
+Маніпулюйте об'єктами, обертайте в двох або трьох вимірах; *3D контролер*
+розташує сфери, куби тощо так, як вам потрібно.
 
-*Arrange objects*: group, ungroup, regroup, and edit objects while grouped.
-Sophisticated *rendering* let you create photorealistic images with your own
-texture, lighting effects, transparency, perspective, and so on.
+*Упорядкуйте об'єкти*: групуйте, розгруповуйте і редагуйте згруповані об'єкти.
+Витончений *рендерінг* дозволить вам створити фотореалістичні зображення із
+власною текстурою, ефектами світла, прозорістю, перспективою тощо.
 
-*Smart connectors* make short work of flowcharts, organization charts, network
-diagrams, etc. Define your own 'glue points' for connectors to 'stick' to.
+*Розумні з'єднувачі* спрощують роботу із блок-схемами, організаційними діаграмами,
+мережевими діаграмами тощо. Визначте власні 'точки зчеплення' для з'єднувачів, 
+до яких слід 'прилипати'.
 
-*Dimension lines* automatically calculate and display linear dimensions as you
-draw.
+*Розмірні лінії* автоматично обчислюють і відображають лінійні розміри вашого
+креслення.
 
-Use the picture *Gallery* for clipart; create your own art and add it to the
-Gallery.
+Використовуйте *Галерею* малюнків для ілюстрацій; створюйте власні малюнки і
+додавайте їх до Галереї.
 
-Save your graphics in OpenDocument format, the new international standard for
-office documents. This XML based format means you're not tied in to **Draw**.
-You can access your graphics from any OpenDocument compliant software.
+Зберігайте вашу графіку у форматі OpenDocument, новому міжнародному 
+стандарті офісних документів. Цей, заснований на XML, формат не прив'язує вас
+до **Draw**. Ви можете відкрити свою графіку з будь якого застосунку, який
+сумісний із OpenDocument.
 
-*Import graphics* from all common formats (including BMP, GIF, JPEG, PNG, TIFF,
-and WMF).
+*Імпорт графіки* з усіх поширений форматів (включно із BMP, GIF, JPEG, PNG, TIFF,
+і WMF).
 
-Use **Draw**'s free ability to create Flash (.swf) versions of your work.
+Використовуйте безкоштовну можливість **Draw** створювати Flash (.swf)
+версію своєї роботи.
