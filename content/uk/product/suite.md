@@ -2,41 +2,43 @@ type=page
 title=The Suite Advantage
 notice=https://www.apache.org/licenses/LICENSE-2.0
 ~~~~~~
-Apache OpenOffice is more than a collection of six superb tools.
 
-Unlike some competitors, this suite was not created from a collection of
-separate pieces of software. From the start, it was designed as one complete
-office package.
+Apache OpenOffice - це більше ніж набір із шести чудових інструментів.
 
-- All the packages have a similar "look and feel" making them very easy to use,
-  with common "learn once use everywhere" tools like the Styles and Formatting.
-  Apache OpenOffice takes its "look and feel" from your computer - if you change
-  your desktop, Apache OpenOffice will change to match.
+На відміну від деяких конкурентів, цей пакет не створений з набору 
+відокремлених частин програмного забезпечення. Від початку, він розробляється
+як єдиний офісний пакет.
 
-- The same tools are used consistently across the suite - for example, the tools
-  you use to work with graphics within Writer are also found in Impress and Draw.
+- Усі пакети мають схожий "вигляд і відчуття", що робить їх дуже простими у використанні,
+  за допомогою поширених інструментів "навчись один раз і використовуй всюди", таких як
+  Стилі і форматування. Apache OpenOffice переймає свій "вигляд і відчуття" від вашого 
+  комп'ютера - якщо ви змінили ваш робочий стіл, Apache OpenOffice зміниться відповідно.
 
-- You don't need to know which application was used to create a particular
-  file - you can "File Open" any Apache OpenOffice file from anywhere and the
-  correct application will be launched.
+- Одні й ті самі інструменти використовуються послідовно в усьому пакеті - наприклад, 
+  інструменти, які ви використовуєте для роботи із графікою всередині Writer, також 
+  можна знайти в Impress i Draw.
 
-- All the packages share a common spell-checker, etc.; and if you change an
-  "Option" in one package, it's changed in them all.
+- Вам не потрібно знати, в якому застосунку створений той чи інший файл - 
+  ви можете вибрати "Відкрити файл" в будь-якому Apache OpenOffice з
+  будь-якого місця і буде запущений потрібний застосунок.
 
-- Information can be transferred easily between all the packages.
+- Усі застосунки мають загальні налаштування, наприклад перевірки орфографії;
+  і якщо ви зміните "Параметри" в одному - вони зміняться у всіх.
 
-- All the components save in OpenDocument format, the new international standard
-  for office documents. This XML based format offers substantial disk savings
-  compared to common competitors' formats. It also means you can access your
-  data from any OpenDocument compliant software.
+- Інформація може бути легко передана між усіма застосунками.
 
-- All the packages are installed in one single operation, using the installation
-  process you are used to on your computer.
+- Всі компоненти зберігають у форматі OpenDocument, новому міжнародному стандарті
+  офісних документів. Цей, оснований на XML, формат забезпечує значну економію дискового
+  простору у порівнянні із поширеними форматами документів. Це також означає, що ви можете отримати
+  доступ до свого документа з будь-якого програмного забезпечення, сумісного із OpenDocument.
 
-- All the packages are released under the same open licensing model - there are
-  no hidden charges now or in the future.
+- Усі застосунки встановлюються однією операцією за допомогою процесу інсталяції, який
+  ви зазвичай використовуєте на своєму комп'ютері.
 
-Everything you need in an office productivity suite - 
-[get it today][1]!
+- Всі застосунки випущені із тією самою відкритою моделлю ліцензування - немає
+  жодних прихованих платежів зараз, чи в майбутньому.
 
-[1]: /uk/download/ "Download Apache OpenOffice"
+Все, що вам потрібно в офісному пакеті - 
+[отримайте сьогодні][1]!
+
+[1]: /uk/download/ "Завантажити Apache OpenOffice"
