@@ -1,70 +1,69 @@
 type=page
 image_css=rfloatimg
 list_css=product
-title=Apache OpenOffice Product Description
+title=Опис продукту Apache OpenOffice
 notice=https://www.apache.org/licenses/LICENSE-2.0
 css=/product/styles.css
 ~~~~~~
-Compatible with other major office suites, Apache OpenOffice is free to
-download, use, and distribute. [Download it now][1], and get:
+Сумісний із іншими основними офісними пакетами, Apache OpenOffice вільний
+для завантаження, використання і розповсюдження. [Завантажте його зараз ][1], і отримайте:
 
 ![Apache OpenOffice?](/images/AOO_logos/orb.jpg)
 
-  - [Writer](writer.html "Wordprocessor") a word processor you can use for
-    anything from writing a quick letter to producing an entire book.
-  - [Calc](calc.html "Spreadsheet") a powerful spreadsheet with all the tools
-    you need to calculate, analyze, and present your data in numerical reports
-    or sizzling graphics.
-  - [Impress](impress.html "Presentation program") the fastest, most powerful
-    way to create effective multimedia presentations.
-  - [Draw](draw.html "Vector drawing tool") lets you produce everything from
-    simple diagrams to dynamic 3D illustrations.
-  - [Base](base.html "Database") lets you manipulate databases seamlessly.
-    Create and modify tables, forms, queries, and reports, all from within
+  - [Writer](writer.html "Текстовий процесор") текстовий процесор, який ви можете використовувати
+    як для написання стислого листа так і всієї книжки.
+  - [Calc](calc.html "Електронна таблиця") потужна електронна таблиця з усіма засобами,
+    які потрібні для обчислення, аналізу і представлення ваших даних у числовому або
+    графічному вигляді.
+  - [Impress](impress.html "Програма презентації") найшвидший і найпотужніший
+    шлях створення ефективних мультимедійних презентацій.
+  - [Draw](draw.html "Засіб векторного малювання") дозволить вам створити все, від
+    простих діаграм до димамічних 3D ілюстрацій.
+  - [Base](base.html "База даних") дозволяє вам легко маніпулювати базами даних.
+    Створюйте та змінюйте таблиці, форми, запити і звіти цілком з 
     Apache OpenOffice.
-  - [Math](math.html "Mathematical function creator") lets you create
-    mathematical equations with a graphic user interface or by directly typing
-    your formulas into the equation editor.
+  - [Math](math.html "Творець математичної функції") дозволяє вам створювати 
+    математичні рівняння за допомогою графічного інтерфейсу або прямим вводом
+    формули до редактора рівнянь.
 
-## Why Apache OpenOffice?
+## Чому Apache OpenOffice?
 
-Apache OpenOffice is synonymous with **quality**:
+Apache OpenOffice є синонімом до **якість**:
 
-- The [roots of Apache OpenOffice][2] go back twenty years, creating a mature
-  and powerful product
-- Many millions of users
-- [Independent reviewers][3] around the world have recommended the product
-- With a fully open development process, Apache OpenOffice has nothing to
-  hide - the product stands or falls on its reputation
+- [Історія Apache OpenOffice][2] сягає двадцяти років, створюючи зрілий
+  і потужний продукт
+- Багато мільйонів користувачів
+- [Незалежні рецензенти][3] по всьому світу рекомендували цей продукт
+- Із повністю відкритим процесом розробки, Apache OpenOffice немає що приховувати
+  - продукт живе лише своєю репутацією
 
-Apache OpenOffice is **easy to use**:
+Apache OpenOffice **простий у використанні**:
 
-- The software looks and feels familiar and is instantly usable by anyone who
-  has used a competitive product
-- It's easy to change to Apache OpenOffice - the software reads most file types
-  of major competitors
-- Few [language barriers][4] - if it's not yet available in your language,
-  the chances are it will be soon
-- Apache OpenOffice is supported by a global community of friendly volunteers, 
-happy to provide assistance to newcomers and advanced users alike
+- Програмне забезпечення має вигляд і відчувається знайомим і миттєво може використовуватись усіма,
+  хто вже використовував конкурентний продукт
+- Легко перейти до Apache OpenOffice - програмне забезпечення читає більшість типів файлів
+  основних конкурентів
+- Мало [мовних бар'єрів][4] - якщо він ще не доступний вашою мовою,
+  швидше за все - скоро буде
+- Apache OpenOffice підтримується глобальною спільнотою дружніх волонтерів, 
+які раді надати допомогу новачкам і досвідченим користувачам
 
-Apache OpenOffice is **free software**:
+Apache OpenOffice є **вільним програмним забезпеченням**:
 
-- You may download Apache OpenOffice completely free of any license fees
-- Install it on as many PCs as you like
-- Use it for any purpose - private, educational, government and public
-  administration, commercial...
-- Pass on copies free of charge to family, friends, students, employees, etc.
+- Ви можете цілком безкоштовно завантажити Apache OpenOffice
+- Встановити його на скільки завгодно ПК
+- Використовувати його з будь-якою метою - приватно, для освіти, урядових і державних
+  адміністрацій, комерційно...
+- Безкоштовно передавати примірники родині, друзям, студентам, співробітникам тощо.
 
-Apache OpenOffice is **standards compliant**:
+Apache OpenOffice є **сумісний зі стандартами**:
 
-- The first software package in the world to use [OASIS][6] [OpenDocument Format][7] (ISO/IEC 26300)
-  as its native file format.
+- Перший програмний пакет у світі, що використовує [Формат OpenDocument][7] [OASIS][6] (ISO/IEC 26300)
+  в якості рідного формату.
 
-### [Find out more][8] or [try it today][1]!
+### [Дізнайтесь більше][8] або [спробуйте сьогодні][1]!
 
-
-[1]: /uk/download "Download Apache OpenOffice"
+[1]: /uk/download "Завантажити Apache OpenOffice"
 [2]: /about_us/milestones.html
 [3]: /product/reviews.html
 [4]: /projects/native-lang.html
