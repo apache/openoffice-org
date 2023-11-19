@@ -77,7 +77,7 @@ else
     echo "============ '$webproject' is installed ..."
     echo "Need to change urls - possibly with sed."
     find ${webproject} -name "*.html" -exec grep -o "http://.*openoffice.org/" {} \;
-    echo "suggest local build until satisified."
+    echo "suggest local build until satisfied."
     echo "remove unneeded files before svn add ${webproject}"
 fi
 echo " "
