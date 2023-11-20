@@ -99,7 +99,7 @@ See lib/path.pm
   - extends skeleton.html
   - replaces block content with content extracted from html
 - single_narrative.html
-  - *.mdtext thats not already covered by above.
+  - *.mdtext that's not already covered by above.
   - extends skeleton.html
   
 - skeleton.html

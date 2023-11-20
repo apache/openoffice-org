@@ -7,7 +7,7 @@ ME=`basename $0`
 rm -rf $WORKDIR
 mkdir -p $WORKDIR
 
-# we twice bake because we have more files to precess than 16384
+# we twice bake because we have more files to process than 16384
 # bake part2 content first.
 cd part2
 ../bake.sh -b . $WORKDIR
