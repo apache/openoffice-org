@@ -50,7 +50,7 @@ This describes the Simple Groovy templates (GSP) that are used to build the site
    - content.rightnav (optional)
    - `/footer.html`
 
-   The CSS file that is used for these pages is `/css/ooo.css`. If provided then `content.css` and `content.css2` are included afterwards allowing for classes to be overriden.
+   The CSS file that is used for these pages is `/css/ooo.css`. If provided then `content.css` and `content.css2` are included afterwards allowing for classes to be overridden.
    
 1. `brand.gsp`
    This template is used to generate the top / branding portion of each page, and is included with SSI.
@@ -154,7 +154,7 @@ divid=topnava
 
 1. `breadcrumbs.gsp`
    This template processes the content's uri to create breadcrumbs and a set of paths.
-   * `content.breadcrumbs` is html for the page's breaqdcrumbs.
+   * `content.breadcrumbs` is html for the page's breadcrumbs.
    * `content.ssi` is an array of paths for the breadcrumbs and ssi includes.
 
 ```
