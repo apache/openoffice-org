@@ -19,18 +19,18 @@
 DL.NL_LANG					= "bg";
 
 // General:
-l10n.dl_headline_text				= "Изтегли на Apache OpenOffice";
+l10n.dl_headline_text				= "РР·С‚РµРіР»Рё РЅР° Apache OpenOffice";
 
 // Download: Strings in the green box (used in "index.html").
-l10n.dl_green_box_headline_text			= "Изтегли Apache OpenOffice";
-l10n.dl_green_box_headline_title		= "Изтегли Apache OpenOffice за твоята любима операционна система, език и версия";
-l10n.dl_green_box_subtext1_text			= "Хостван от SourceForge.net – доверен уебсайт";
-l10n.dl_green_box_subtext1_title		= "Apache OpenOffice двоични файлове са хоствани от SourceForge.net – Доверен уебсайт";
-l10n.dl_green_box_subtext2_text			= "Избери твоята любима операционна система, език и версия";
-l10n.dl_green_box_subtext2_title		= "Избери твоята любима операционна система, език и версия";
-l10n.dl_green_box_selectbox_os_title		= "Избери твоята любима операционна система";
-l10n.dl_green_box_selectbox_lang_title		= "Избери твоят любим език";
-l10n.dl_green_box_selectbox_ver_title		= "Избери твооята любима версия на издаване";
+l10n.dl_green_box_headline_text			= "РР·С‚РµРіР»Рё Apache OpenOffice";
+l10n.dl_green_box_headline_title		= "РР·С‚РµРіР»Рё Apache OpenOffice Р·Р° С‚РІРѕСЏС‚Р° Р»СЋР±РёРјР° РѕРїРµСЂР°С†РёРѕРЅРЅР° СЃРёСЃС‚РµРјР°, РµР·РёРє Рё РІРµСЂСЃРёСЏ";
+l10n.dl_green_box_subtext1_text			= "РҐРѕСЃС‚РІР°РЅ РѕС‚ SourceForge.net вЂ“ РґРѕРІРµСЂРµРЅ СѓРµР±СЃР°Р№С‚";
+l10n.dl_green_box_subtext1_title		= "Apache OpenOffice РґРІРѕРёС‡РЅРё С„Р°Р№Р»РѕРІРµ СЃР° С…РѕСЃС‚РІР°РЅРё РѕС‚ SourceForge.net вЂ“ Р”РѕРІРµСЂРµРЅ СѓРµР±СЃР°Р№С‚";
+l10n.dl_green_box_subtext2_text			= "РР·Р±РµСЂРё С‚РІРѕСЏС‚Р° Р»СЋР±РёРјР° РѕРїРµСЂР°С†РёРѕРЅРЅР° СЃРёСЃС‚РµРјР°, РµР·РёРє Рё РІРµСЂСЃРёСЏ";
+l10n.dl_green_box_subtext2_title		= "РР·Р±РµСЂРё С‚РІРѕСЏС‚Р° Р»СЋР±РёРјР° РѕРїРµСЂР°С†РёРѕРЅРЅР° СЃРёСЃС‚РµРјР°, РµР·РёРє Рё РІРµСЂСЃРёСЏ";
+l10n.dl_green_box_selectbox_os_title		= "РР·Р±РµСЂРё С‚РІРѕСЏС‚Р° Р»СЋР±РёРјР° РѕРїРµСЂР°С†РёРѕРЅРЅР° СЃРёСЃС‚РµРјР°";
+l10n.dl_green_box_selectbox_lang_title		= "РР·Р±РµСЂРё С‚РІРѕСЏС‚ Р»СЋР±РёРј РµР·РёРє";
+l10n.dl_green_box_selectbox_ver_title		= "РР·Р±РµСЂРё С‚РІРѕРѕСЏС‚Р° Р»СЋР±РёРјР° РІРµСЂСЃРёСЏ РЅР° РёР·РґР°РІР°РЅРµ";
 
 // The strings that will be shown in the OS, language and version drop-down select boxes.
 // You must leave at least one single empty string (see the comment lines above the 3 following variables)!
@@ -46,58 +46,58 @@ l10n.dl_green_box_select_box_os_values		= [ "Windows (EXE)",
 						    "Linux 32-bit (x86) (RPM)",
 						    "OS X (version >= 10.7) (DMG)",
 						    "OS X (version <= 10.6) (DMG)",
-						    "Повече платформи / Операционни системи" ];
+						    "РџРѕРІРµС‡Рµ РїР»Р°С‚С„РѕСЂРјРё / РћРїРµСЂР°С†РёРѕРЅРЅРё СЃРёСЃС‚РµРјРё" ];
 
 // l10n.dl_green_box_select_box_language_values	= [ "" ];
 l10n.dl_green_box_select_box_language_values	= [ "" ];
 
 // l10n.dl_green_box_select_box_lang_values_custom = [ "" ];
 //						    Value	Visible text				Tool tip
-l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",	"Астурийски",				"Астуриану",
-						    "eu",	"Баски",				"Еускара",
-						    "bg",	"Български",				"Р±СЉР»РіР°СЂСЃРєРё РµР·РёРє",
-						    "ca",	"Каталoнски",				"CatalГ ",
-						    "ca-XV",	"Каталонски [Valencia AVL]",		"ValГЁncia (AVL)",
-						    "ca-XR",	"Каталонски [Valencia RACV]",		"ValГЁncia (RACV)",
-						    "zh-CN",	"Китайски [опростен]",			"з®ЂдЅ“дёж–‡",
-						    "zh-TW",	"Китайски [традиционен]",		"жЈй«”дёж–‡",
-						    "cs",	"Чешки",				"ДЊeЕЎtina",
-						    "da",	"Датски",				"Dansk",
-						    "nl",	"Холандски",				"Нидерландия",
-						    "en-GB",	"Английски [Британски]",		"Английски [Британски]",
-						    "en-US",	"Английски [Американски]",		"Английски [Американски]",
-						    "fi",	"Филнандски",				"Суоми",
-						    "fr",	"Френски",				"FranГ§ais",
-						    "gl",	"Галисийски",				"Галего",
-						    "de",	"Немски",				"Немски",
-						    "el",	"Гръцки",				"ОµО»О»О·ОЅО№ОєО¬",
-						    "he",	"Иврит",				"ЧўЧ‘ЧЁЧ™ЧЄ",
-						    "hi",	"Хинди",				"а¤№а¤їа¤ЁаҐЌа¤¦аҐЂ",
-						    "hu",	"Унгарски",				"Magyar",
-						    "it",	"Италиански",				"Italiano",
-						    "ja",	"Японски",				"ж—Ґжњ¬иЄћ",
-						    "km",	"Кхмерски",				"бћ—бћ¶бћџбћ¶бћЃбџ’бћ?бџ‚бћљ",
-						    "ko",	"Корейски",				"н•њкµм–ґ",
-						    "lt",	"Литовски",				"LietuviЕі",
-						    "nb",	"Норвежки [Bokmal]",			"Norsk [BokmГҐl]",
-						    "pl",	"Полски",				"Polski",
-						    "pt-BR",	"Португалски [Бразилски]",		"PortuguГЄs [do Brasil]",
-						    "pt",	"Португалски [Европейски]",		"PortuguГЄs [Europeu]",
-						    "ru",	"Руски",				"Р СѓСЃСЃРєРёР№",
-						    "gd",	"Шотландски [Галийски]",		"GГ idhlig",
-						    "sr",	"Сръбски [Кирилица]",			"CСЂРїСЃРєРё [С›РёСЂРёР»РёС†РѕРј]",
-						    "sk",	"Словашки",				"SlovenskГЅ jazyk [slovenДЌina]",
-						    "sl",	"Словенски",				"Slovenski jezik [slovenЕЎДЌina]",
-						    "es",	"Испански",				"EspaГ±ol",
-						    "sv",	"Шведски",				"Svenska",
-						    "ta",	"Тамилски",				"а®¤а®®а®їа®ґаЇЌ",
-						    "th",	"Таитски",				"аё аёІаё©аёІа№„аё—аёў",
-						    "tr",	"Турски",				"TГјrkГ§e",
-						    "vi",	"Виетнамски",				"Tiбєїng Viб»‡t" ];
+l10n.dl_green_box_select_box_lang_values_custom	= [ "ast",	"РђСЃС‚СѓСЂРёР№СЃРєРё",				"РђСЃС‚СѓСЂРёР°РЅСѓ",
+						    "eu",	"Р‘Р°СЃРєРё",				"Р•СѓСЃРєР°СЂР°",
+						    "bg",	"Р‘СЉР»РіР°СЂСЃРєРё",				"Р В±РЎР‰Р В»Р С–Р В°РЎР‚РЎРѓР С”Р С‘ Р ВµР В·Р С‘Р С”",
+						    "ca",	"РљР°С‚Р°Р»oРЅСЃРєРё",				"CatalР“В ",
+						    "ca-XV",	"РљР°С‚Р°Р»РѕРЅСЃРєРё [Valencia AVL]",		"ValР“РЃncia (AVL)",
+						    "ca-XR",	"РљР°С‚Р°Р»РѕРЅСЃРєРё [Valencia RACV]",		"ValР“РЃncia (RACV)",
+						    "zh-CN",	"РљРёС‚Р°Р№СЃРєРё [РѕРїСЂРѕСЃС‚РµРЅ]",			"Р·В®Р‚РґР…вЂњРґС‘Р¶вЂ“вЂЎ",
+						    "zh-TW",	"РљРёС‚Р°Р№СЃРєРё [С‚СЂР°РґРёС†РёРѕРЅРµРЅ]",		"Р¶Р€Р№В«вЂќРґС‘Р¶вЂ“вЂЎ",
+						    "cs",	"Р§РµС€РєРё",				"Р”РЉeР•РЋtina",
+						    "da",	"Р”Р°С‚СЃРєРё",				"Dansk",
+						    "nl",	"РҐРѕР»Р°РЅРґСЃРєРё",				"РќРёРґРµСЂР»Р°РЅРґРёСЏ",
+						    "en-GB",	"РђРЅРіР»РёР№СЃРєРё [Р‘СЂРёС‚Р°РЅСЃРєРё]",		"РђРЅРіР»РёР№СЃРєРё [Р‘СЂРёС‚Р°РЅСЃРєРё]",
+						    "en-US",	"РђРЅРіР»РёР№СЃРєРё [РђРјРµСЂРёРєР°РЅСЃРєРё]",		"РђРЅРіР»РёР№СЃРєРё [РђРјРµСЂРёРєР°РЅСЃРєРё]",
+						    "fi",	"Р¤РёР»РЅР°РЅРґСЃРєРё",				"РЎСѓРѕРјРё",
+						    "fr",	"Р¤СЂРµРЅСЃРєРё",				"FranР“В§ais",
+						    "gl",	"Р“Р°Р»РёСЃРёР№СЃРєРё",				"Р“Р°Р»РµРіРѕ",
+						    "de",	"РќРµРјСЃРєРё",				"РќРµРјСЃРєРё",
+						    "el",	"Р“СЂСЉС†РєРё",				"РћВµРћВ»РћВ»РћВ·РћР…Рћв„–РћС”РћВ¬",
+						    "he",	"РРІСЂРёС‚",				"Р§СћР§вЂР§РЃР§в„ўР§Р„",
+						    "hi",	"РҐРёРЅРґРё",				"Р°В¤в„–Р°В¤С—Р°В¤РЃР°ТђРЊР°В¤В¦Р°ТђР‚",
+						    "hu",	"РЈРЅРіР°СЂСЃРєРё",				"Magyar",
+						    "it",	"РС‚Р°Р»РёР°РЅСЃРєРё",				"Italiano",
+						    "ja",	"РЇРїРѕРЅСЃРєРё",				"Р¶вЂ”ТђР¶СљВ¬РёР„С›",
+						    "km",	"РљС…РјРµСЂСЃРєРё",				"Р±С›вЂ”Р±С›В¶Р±С›СџР±С›В¶Р±С›РѓР±СџвЂ™Р±С›?Р±СџвЂљР±С›С™",
+						    "ko",	"РљРѕСЂРµР№СЃРєРё",				"РЅвЂўСљРєВµРјвЂ“Т‘",
+						    "lt",	"Р›РёС‚РѕРІСЃРєРё",				"LietuviР•С–",
+						    "nb",	"РќРѕСЂРІРµР¶РєРё [Bokmal]",			"Norsk [BokmР“Тђl]",
+						    "pl",	"РџРѕР»СЃРєРё",				"Polski",
+						    "pt-BR",	"РџРѕСЂС‚СѓРіР°Р»СЃРєРё [Р‘СЂР°Р·РёР»СЃРєРё]",		"PortuguР“Р„s [do Brasil]",
+						    "pt",	"РџРѕСЂС‚СѓРіР°Р»СЃРєРё [Р•РІСЂРѕРїРµР№СЃРєРё]",		"PortuguР“Р„s [Europeu]",
+						    "ru",	"Р СѓСЃРєРё",				"Р В РЎС“РЎРѓРЎРѓР С”Р С‘Р в„–",
+						    "gd",	"РЁРѕС‚Р»Р°РЅРґСЃРєРё [Р“Р°Р»РёР№СЃРєРё]",		"GР“В idhlig",
+						    "sr",	"РЎСЂСЉР±СЃРєРё [РљРёСЂРёР»РёС†Р°]",			"CРЎР‚Р С—РЎРѓР С”Р С‘ [РЎвЂєР С‘РЎР‚Р С‘Р В»Р С‘РЎвЂ Р С•Р С]",
+						    "sk",	"РЎР»РѕРІР°С€РєРё",				"SlovenskР“Р… jazyk [slovenР”РЊina]",
+						    "sl",	"РЎР»РѕРІРµРЅСЃРєРё",				"Slovenski jezik [slovenР•РЋР”РЊina]",
+						    "es",	"РСЃРїР°РЅСЃРєРё",				"EspaР“В±ol",
+						    "sv",	"РЁРІРµРґСЃРєРё",				"Svenska",
+						    "ta",	"РўР°РјРёР»СЃРєРё",				"Р°В®В¤Р°В®В®Р°В®С—Р°В®Т‘Р°Р‡РЊ",
+						    "th",	"РўР°РёС‚СЃРєРё",				"Р°С‘В Р°С‘Р†Р°С‘В©Р°С‘Р†Р°в„–вЂћР°С‘вЂ”Р°С‘Сћ",
+						    "tr",	"РўСѓСЂСЃРєРё",				"TР“СrkР“В§e",
+						    "vi",	"Р’РёРµС‚РЅР°РјСЃРєРё",				"TiР±С”С—ng ViР±В»вЂЎt" ];
 
 l10n.dl_green_box_select_box_version_values	= [ "" ];
 
-l10n.dl_green_box_select_box_version_older	= "По – стари издания";
+l10n.dl_green_box_select_box_version_older	= "РџРѕ вЂ“ СЃС‚Р°СЂРё РёР·РґР°РЅРёСЏ";
 
 // Download: Strings in the sub-green box (used in "index.html").
 // Not defined for now.
@@ -109,118 +109,118 @@ l10n.dl_green_box_select_box_version_older	= "По – стари издания";
 // Not defined for now.
 
 // Share: Strings in the light-blue box (used in "index.html").
-l10n.dl_share_light_blue_box_headline_text	= "Помогнете за разпространението на думата";
-l10n.dl_share_light_blue_box_headline_title	= "Помогнете за разпространението на думата и разкажете на своите приятели за Apache OpenOffice";
-l10n.dl_share_light_blue_box_text_text		= "Моля, разкажете на вашите приятели за Apache OpenOffice:";
-l10n.dl_share_light_blue_box_text_title		= " Помогнете за разпространението на думата и разкажете на своите приятели за Apache OpenOffice";
-l10n.dl_share_light_blue_box_blog_text		= "Официален блог";
-l10n.dl_share_light_blue_box_blog_title		= "Уеб лог на  OpenOffice";
+l10n.dl_share_light_blue_box_headline_text	= "РџРѕРјРѕРіРЅРµС‚Рµ Р·Р° СЂР°Р·РїСЂРѕСЃС‚СЂР°РЅРµРЅРёРµС‚Рѕ РЅР° РґСѓРјР°С‚Р°";
+l10n.dl_share_light_blue_box_headline_title	= "РџРѕРјРѕРіРЅРµС‚Рµ Р·Р° СЂР°Р·РїСЂРѕСЃС‚СЂР°РЅРµРЅРёРµС‚Рѕ РЅР° РґСѓРјР°С‚Р° Рё СЂР°Р·РєР°Р¶РµС‚Рµ РЅР° СЃРІРѕРёС‚Рµ РїСЂРёСЏС‚РµР»Рё Р·Р° Apache OpenOffice";
+l10n.dl_share_light_blue_box_text_text		= "РњРѕР»СЏ, СЂР°Р·РєР°Р¶РµС‚Рµ РЅР° РІР°С€РёС‚Рµ РїСЂРёСЏС‚РµР»Рё Р·Р° Apache OpenOffice:";
+l10n.dl_share_light_blue_box_text_title		= " РџРѕРјРѕРіРЅРµС‚Рµ Р·Р° СЂР°Р·РїСЂРѕСЃС‚СЂР°РЅРµРЅРёРµС‚Рѕ РЅР° РґСѓРјР°С‚Р° Рё СЂР°Р·РєР°Р¶РµС‚Рµ РЅР° СЃРІРѕРёС‚Рµ РїСЂРёСЏС‚РµР»Рё Р·Р° Apache OpenOffice";
+l10n.dl_share_light_blue_box_blog_text		= "РћС„РёС†РёР°Р»РµРЅ Р±Р»РѕРі";
+l10n.dl_share_light_blue_box_blog_title		= "РЈРµР± Р»РѕРі РЅР°  OpenOffice";
 l10n.dl_share_light_blue_box_blog_src		= "/images/logo-rss-32.png";
-l10n.dl_share_light_blue_box_blog_alt		= "Уеб лог на OpenOffice";
-l10n.dl_share_light_blue_box_facebook_text	= "Фейсбук";
-l10n.dl_share_light_blue_box_facebook_title	= "Моля разкажете на вашите приятели за Apache OpenOffice през Facebook";
+l10n.dl_share_light_blue_box_blog_alt		= "РЈРµР± Р»РѕРі РЅР° OpenOffice";
+l10n.dl_share_light_blue_box_facebook_text	= "Р¤РµР№СЃР±СѓРє";
+l10n.dl_share_light_blue_box_facebook_title	= "РњРѕР»СЏ СЂР°Р·РєР°Р¶РµС‚Рµ РЅР° РІР°С€РёС‚Рµ РїСЂРёСЏС‚РµР»Рё Р·Р° Apache OpenOffice РїСЂРµР· Facebook";
 l10n.dl_share_light_blue_box_facebook_src	= "/images/logo-facebook-32.png";
-l10n.dl_share_light_blue_box_facebook_alt	= "Сподели във Facebook";
+l10n.dl_share_light_blue_box_facebook_alt	= "РЎРїРѕРґРµР»Рё РІСЉРІ Facebook";
 l10n.dl_share_light_blue_box_twitter_text	= "Twitter";
-l10n.dl_share_light_blue_box_twitter_title	= "Моля разкажете на вашите приятели за Apache OpenOffice през Twitter";
+l10n.dl_share_light_blue_box_twitter_title	= "РњРѕР»СЏ СЂР°Р·РєР°Р¶РµС‚Рµ РЅР° РІР°С€РёС‚Рµ РїСЂРёСЏС‚РµР»Рё Р·Р° Apache OpenOffice РїСЂРµР· Twitter";
 l10n.dl_share_light_blue_box_twitter_src	= "/images/logo-twitter-32.png";
-l10n.dl_share_light_blue_box_twitter_alt	= "Сподели в Twitter";
+l10n.dl_share_light_blue_box_twitter_alt	= "РЎРїРѕРґРµР»Рё РІ Twitter";
 
 // Extensions: Strings in the blue box (top) (used in "index.html").
-l10n.dl_ext_blue_box_headline_text		= "Вземи Apache OpenOffice разширения и Речници";
-l10n.dl_ext_blue_box_headline_title		= "Избери от множество допълнителни и индивидуално изготвени функционалности";
-l10n.dl_ext_blue_box_text_text			= "Подобри функционалността на твоя Apache OpenOffice с богата и постоянно обогатяваща се библиотека от добавки и речници от други потребители.";
-l10n.dl_ext_blue_box_text_title			= "Избери от широк обхват от допълнителни и индивидуални функционалности";
+l10n.dl_ext_blue_box_headline_text		= "Р’Р·РµРјРё Apache OpenOffice СЂР°Р·С€РёСЂРµРЅРёСЏ Рё Р РµС‡РЅРёС†Рё";
+l10n.dl_ext_blue_box_headline_title		= "РР·Р±РµСЂРё РѕС‚ РјРЅРѕР¶РµСЃС‚РІРѕ РґРѕРїСЉР»РЅРёС‚РµР»РЅРё Рё РёРЅРґРёРІРёРґСѓР°Р»РЅРѕ РёР·РіРѕС‚РІРµРЅРё С„СѓРЅРєС†РёРѕРЅР°Р»РЅРѕСЃС‚Рё";
+l10n.dl_ext_blue_box_text_text			= "РџРѕРґРѕР±СЂРё С„СѓРЅРєС†РёРѕРЅР°Р»РЅРѕСЃС‚С‚Р° РЅР° С‚РІРѕСЏ Apache OpenOffice СЃ Р±РѕРіР°С‚Р° Рё РїРѕСЃС‚РѕСЏРЅРЅРѕ РѕР±РѕРіР°С‚СЏРІР°С‰Р° СЃРµ Р±РёР±Р»РёРѕС‚РµРєР° РѕС‚ РґРѕР±Р°РІРєРё Рё СЂРµС‡РЅРёС†Рё РѕС‚ РґСЂСѓРіРё РїРѕС‚СЂРµР±РёС‚РµР»Рё.";
+l10n.dl_ext_blue_box_text_title			= "РР·Р±РµСЂРё РѕС‚ С€РёСЂРѕРє РѕР±С…РІР°С‚ РѕС‚ РґРѕРїСЉР»РЅРёС‚РµР»РЅРё Рё РёРЅРґРёРІРёРґСѓР°Р»РЅРё С„СѓРЅРєС†РёРѕРЅР°Р»РЅРѕСЃС‚Рё";
 l10n.dl_ext_blue_box_text_href			= "https://extensions.openoffice.org/";
 
 // Templates: Strings in the blue box (bottom) (used in "index.html").
-l10n.dl_tlp_blue_box_headline_text		= "Вземи Apache OpenOffice шаблони";
-l10n.dl_tlp_blue_box_headline_title		= "Избери от широк обхват от допълнителни и индивидуално изготвени документи";
-l10n.dl_tlp_blue_box_text_text			= "Подобри креативността на твоя Apache OpenOffice с обемна и постоянно растяща библиотека с шаблони от други потребители.";
-l10n.dl_tlp_blue_box_text_title			= "Избери от широк обхват от допълнителни и индивидуално изготвени документи";
+l10n.dl_tlp_blue_box_headline_text		= "Р’Р·РµРјРё Apache OpenOffice С€Р°Р±Р»РѕРЅРё";
+l10n.dl_tlp_blue_box_headline_title		= "РР·Р±РµСЂРё РѕС‚ С€РёСЂРѕРє РѕР±С…РІР°С‚ РѕС‚ РґРѕРїСЉР»РЅРёС‚РµР»РЅРё Рё РёРЅРґРёРІРёРґСѓР°Р»РЅРѕ РёР·РіРѕС‚РІРµРЅРё РґРѕРєСѓРјРµРЅС‚Рё";
+l10n.dl_tlp_blue_box_text_text			= "РџРѕРґРѕР±СЂРё РєСЂРµР°С‚РёРІРЅРѕСЃС‚С‚Р° РЅР° С‚РІРѕСЏ Apache OpenOffice СЃ РѕР±РµРјРЅР° Рё РїРѕСЃС‚РѕСЏРЅРЅРѕ СЂР°СЃС‚СЏС‰Р° Р±РёР±Р»РёРѕС‚РµРєР° СЃ С€Р°Р±Р»РѕРЅРё РѕС‚ РґСЂСѓРіРё РїРѕС‚СЂРµР±РёС‚РµР»Рё.";
+l10n.dl_tlp_blue_box_text_title			= "РР·Р±РµСЂРё РѕС‚ С€РёСЂРѕРє РѕР±С…РІР°С‚ РѕС‚ РґРѕРїСЉР»РЅРёС‚РµР»РЅРё Рё РёРЅРґРёРІРёРґСѓР°Р»РЅРѕ РёР·РіРѕС‚РІРµРЅРё РґРѕРєСѓРјРµРЅС‚Рё";
 l10n.dl_tlp_blue_box_text_href			= "https://templates.openoffice.org/";
 
 // Strings in the navigation bar (used in "index.html").
 // Release Information
-l10n.dl_nav_headline_1_text			= "Информация за релийза";
-l10n.dl_nav_sysreq_text				= "Системни изисквания";
-l10n.dl_nav_sysreq_title			= "Твърд диск: ~300MB свободна памет: &gt;128MB - Процесор: &gt;500MHz - OS: Windows, macOS (OS&nbsp;X), Linux, Solaris, FreeBSD...";
+l10n.dl_nav_headline_1_text			= "РРЅС„РѕСЂРјР°С†РёСЏ Р·Р° СЂРµР»РёР№Р·Р°";
+l10n.dl_nav_sysreq_text				= "РЎРёСЃС‚РµРјРЅРё РёР·РёСЃРєРІР°РЅРёСЏ";
+l10n.dl_nav_sysreq_title			= "РўРІСЉСЂРґ РґРёСЃРє: ~300MB СЃРІРѕР±РѕРґРЅР° РїР°РјРµС‚: &gt;128MB - РџСЂРѕС†РµСЃРѕСЂ: &gt;500MHz - OS: Windows, macOS (OS&nbsp;X), Linux, Solaris, FreeBSD...";
 l10n.dl_nav_sysreq_href				= "https://www.openoffice.org/dev_docs/source/sys_reqs_aoo41.html";
-l10n.dl_nav_license_text			= "Лиценз";
-l10n.dl_nav_license_title			= "Лиценз на Apache OpenOffice";
+l10n.dl_nav_license_text			= "Р›РёС†РµРЅР·";
+l10n.dl_nav_license_title			= "Р›РёС†РµРЅР· РЅР° Apache OpenOffice";
 l10n.dl_nav_license_href			= "https://www.openoffice.org/license.html";
-l10n.dl_nav_source_text				= "Източник";
-l10n.dl_nav_source_title			= "За разработчици и за напреднали потребители: Вземете източника, за да построите Apache OpenOffice от нулата";
+l10n.dl_nav_source_text				= "РР·С‚РѕС‡РЅРёРє";
+l10n.dl_nav_source_title			= "Р—Р° СЂР°Р·СЂР°Р±РѕС‚С‡РёС†Рё Рё Р·Р° РЅР°РїСЂРµРґРЅР°Р»Рё РїРѕС‚СЂРµР±РёС‚РµР»Рё: Р’Р·РµРјРµС‚Рµ РёР·С‚РѕС‡РЅРёРєР°, Р·Р° РґР° РїРѕСЃС‚СЂРѕРёС‚Рµ Apache OpenOffice РѕС‚ РЅСѓР»Р°С‚Р°";
 l10n.dl_nav_source_href				= "https://openoffice.apache.org/downloads.html";
-l10n.dl_nav_build_text				= "Ръководство за изграждане";
-l10n.dl_nav_build_title				= "За разработчици и напреднали потребители: Как Да  - ръководство, за да се изгради Apache OpenOffice от нулата";
+l10n.dl_nav_build_text				= "Р СЉРєРѕРІРѕРґСЃС‚РІРѕ Р·Р° РёР·РіСЂР°Р¶РґР°РЅРµ";
+l10n.dl_nav_build_title				= "Р—Р° СЂР°Р·СЂР°Р±РѕС‚С‡РёС†Рё Рё РЅР°РїСЂРµРґРЅР°Р»Рё РїРѕС‚СЂРµР±РёС‚РµР»Рё: РљР°Рє Р”Р°  - СЂСЉРєРѕРІРѕРґСЃС‚РІРѕ, Р·Р° РґР° СЃРµ РёР·РіСЂР°РґРё Apache OpenOffice РѕС‚ РЅСѓР»Р°С‚Р°";
 l10n.dl_nav_build_href				= "https://wiki.openoffice.org/wiki/Documentation/Building_Guide_AOO";
-l10n.dl_nav_sdk_text				= "Пакет за разработка на софтуер - Software Development Kit (SDK)";
-l10n.dl_nav_sdk_title				= "За разработчици: Пакет за разработка на софтуер Software Development Kit";
+l10n.dl_nav_sdk_text				= "РџР°РєРµС‚ Р·Р° СЂР°Р·СЂР°Р±РѕС‚РєР° РЅР° СЃРѕС„С‚СѓРµСЂ - Software Development Kit (SDK)";
+l10n.dl_nav_sdk_title				= "Р—Р° СЂР°Р·СЂР°Р±РѕС‚С‡РёС†Рё: РџР°РєРµС‚ Р·Р° СЂР°Р·СЂР°Р±РѕС‚РєР° РЅР° СЃРѕС„С‚СѓРµСЂ Software Development Kit";
 l10n.dl_nav_sdk_href				= "https://openoffice.apache.org/downloads.html";
-l10n.dl_nav_devbuilds_text			= "Изграждане и развитие;
-l10n.dl_nav_devbuilds_title			= "За доброволци - въпроси и отговори: Изграждане и развитие";
+l10n.dl_nav_devbuilds_text			= "РР·РіСЂР°Р¶РґР°РЅРµ Рё СЂР°Р·РІРёС‚РёРµ;
+l10n.dl_nav_devbuilds_title			= "Р—Р° РґРѕР±СЂРѕРІРѕР»С†Рё - РІСЉРїСЂРѕСЃРё Рё РѕС‚РіРѕРІРѕСЂРё: РР·РіСЂР°Р¶РґР°РЅРµ Рё СЂР°Р·РІРёС‚РёРµ";
 l10n.dl_nav_devbuilds_href			= "https://www.openoffice.org/download/devbuilds.html";
 
 // Documentation
-l10n.dl_nav_headline_2_text			= "Документация";
-l10n.dl_nav_schedule_text			= "График на релийзи";
-l10n.dl_nav_schedule_title			= "Кога са планувани нови релийзи?";
+l10n.dl_nav_headline_2_text			= "Р”РѕРєСѓРјРµРЅС‚Р°С†РёСЏ";
+l10n.dl_nav_schedule_text			= "Р“СЂР°С„РёРє РЅР° СЂРµР»РёР№Р·Рё";
+l10n.dl_nav_schedule_title			= "РљРѕРіР° СЃР° РїР»Р°РЅСѓРІР°РЅРё РЅРѕРІРё СЂРµР»РёР№Р·Рё?";
 l10n.dl_nav_schedule_href			= "https://cwiki.apache.org/confluence/display/OOOUSERS/Releases";
-l10n.dl_nav_hist_schedule_text			= "Изторически график на релийзи";
-l10n.dl_nav_hist_schedule_title			= "Кога бяха планувани старите релийзи?";
+l10n.dl_nav_hist_schedule_text			= "РР·С‚РѕСЂРёС‡РµСЃРєРё РіСЂР°С„РёРє РЅР° СЂРµР»РёР№Р·Рё";
+l10n.dl_nav_hist_schedule_title			= "РљРѕРіР° Р±СЏС…Р° РїР»Р°РЅСѓРІР°РЅРё СЃС‚Р°СЂРёС‚Рµ СЂРµР»РёР№Р·Рё?";
 l10n.dl_nav_hist_schedule_href			= "https://wiki.openoffice.org/wiki/Product_Release";
-l10n.dl_nav_inst_guide_text			= "Ръководства за инсталация";
-l10n.dl_nav_inst_guide_title			= "инструкции за инсталиране на Apache OpenOffice на Windows, macOS (OS&nbsp;X) и Linux машини";
+l10n.dl_nav_inst_guide_text			= "Р СЉРєРѕРІРѕРґСЃС‚РІР° Р·Р° РёРЅСЃС‚Р°Р»Р°С†РёСЏ";
+l10n.dl_nav_inst_guide_title			= "РёРЅСЃС‚СЂСѓРєС†РёРё Р·Р° РёРЅСЃС‚Р°Р»РёСЂР°РЅРµ РЅР° Apache OpenOffice РЅР° Windows, macOS (OS&nbsp;X) Рё Linux РјР°С€РёРЅРё";
 l10n.dl_nav_inst_guide_href			= "https://www.openoffice.org/download/common/instructions.html";
-l10n.dl_nav_user_guide_text			= "Ръководства на потребителите";
-l10n.dl_nav_user_guide_title			= "Обширни ръководства на потребителя за ежедневна употреба";
+l10n.dl_nav_user_guide_text			= "Р СЉРєРѕРІРѕРґСЃС‚РІР° РЅР° РїРѕС‚СЂРµР±РёС‚РµР»РёС‚Рµ";
+l10n.dl_nav_user_guide_title			= "РћР±С€РёСЂРЅРё СЂСЉРєРѕРІРѕРґСЃС‚РІР° РЅР° РїРѕС‚СЂРµР±РёС‚РµР»СЏ Р·Р° РµР¶РµРґРЅРµРІРЅР° СѓРїРѕС‚СЂРµР±Р°";
 l10n.dl_nav_user_guide_href			= "https://www.openoffice.org/documentation/index.html";
-l10n.dl_nav_why_java_text			= "Java и Apache OpenOffice";
+l10n.dl_nav_why_java_text			= "Java Рё Apache OpenOffice";
 l10n.dl_nav_why_java_title			= "Explains why to use Java and what it is";
 l10n.dl_nav_why_java_href			= "https://www.openoffice.org/download/common/java.html";
-l10n.dl_nav_eol_text				= "Информация за край на поддръжката";
-l10n.dl_nav_eol_title				= "Информация за релийзи, които са стигнали крайна фаза.";
+l10n.dl_nav_eol_text				= "РРЅС„РѕСЂРјР°С†РёСЏ Р·Р° РєСЂР°Р№ РЅР° РїРѕРґРґСЂСЉР¶РєР°С‚Р°";
+l10n.dl_nav_eol_title				= "РРЅС„РѕСЂРјР°С†РёСЏ Р·Р° СЂРµР»РёР№Р·Рё, РєРѕРёС‚Рѕ СЃР° СЃС‚РёРіРЅР°Р»Рё РєСЂР°Р№РЅР° С„Р°Р·Р°.";
 l10n.dl_nav_eol_href				= "https://www.openoffice.org/development/releases/eol.html";
 
 // Additional Resources
-l10n.dl_nav_headline_3_text			= "Допълнителни ресурси";
-l10n.dl_nav_support_text			= "Поддръжка";
-l10n.dl_nav_support_title			= "Ако информацията по – горе не е отговорила на твоите въпроси: безплатна и заплатена поддръжка!";
+l10n.dl_nav_headline_3_text			= "Р”РѕРїСЉР»РЅРёС‚РµР»РЅРё СЂРµСЃСѓСЂСЃРё";
+l10n.dl_nav_support_text			= "РџРѕРґРґСЂСЉР¶РєР°";
+l10n.dl_nav_support_title			= "РђРєРѕ РёРЅС„РѕСЂРјР°С†РёСЏС‚Р° РїРѕ вЂ“ РіРѕСЂРµ РЅРµ Рµ РѕС‚РіРѕРІРѕСЂРёР»Р° РЅР° С‚РІРѕРёС‚Рµ РІСЉРїСЂРѕСЃРё: Р±РµР·РїР»Р°С‚РЅР° Рё Р·Р°РїР»Р°С‚РµРЅР° РїРѕРґРґСЂСЉР¶РєР°!";
 l10n.dl_nav_support_href			= "https://www.openoffice.org/support/index.html";
-l10n.dl_nav_local_text				= "Локализации";
-l10n.dl_nav_local_title				= "Информация и поддръжка предоставена на твоя език";
+l10n.dl_nav_local_text				= "Р›РѕРєР°Р»РёР·Р°С†РёРё";
+l10n.dl_nav_local_title				= "РРЅС„РѕСЂРјР°С†РёСЏ Рё РїРѕРґРґСЂСЉР¶РєР° РїСЂРµРґРѕСЃС‚Р°РІРµРЅР° РЅР° С‚РІРѕСЏ РµР·РёРє";
 l10n.dl_nav_local_href				= "https://openoffice.apache.org/native-lang.html";
-l10n.dl_nav_stat_text				= "Статистика на изтеглянията";
-l10n.dl_nav_stat_title				= "Статистиак за изтеглянията и друга статистика";
+l10n.dl_nav_stat_text				= "РЎС‚Р°С‚РёСЃС‚РёРєР° РЅР° РёР·С‚РµРіР»СЏРЅРёСЏС‚Р°";
+l10n.dl_nav_stat_title				= "РЎС‚Р°С‚РёСЃС‚РёР°Рє Р·Р° РёР·С‚РµРіР»СЏРЅРёСЏС‚Р° Рё РґСЂСѓРіР° СЃС‚Р°С‚РёСЃС‚РёРєР°";
 l10n.dl_nav_stat_href				= "https://www.openoffice.org/stats/index.html";
-l10n.dl_nav_mirrors1_text			= "Алтернативна връзка за сваляне #1";
-l10n.dl_nav_mirrors1_title			= "Използвай огледала на SourceForge за да изтеглиш Apache OpenOffice";
+l10n.dl_nav_mirrors1_text			= "РђР»С‚РµСЂРЅР°С‚РёРІРЅР° РІСЂСЉР·РєР° Р·Р° СЃРІР°Р»СЏРЅРµ #1";
+l10n.dl_nav_mirrors1_title			= "РР·РїРѕР»Р·РІР°Р№ РѕРіР»РµРґР°Р»Р° РЅР° SourceForge Р·Р° РґР° РёР·С‚РµРіР»РёС€ Apache OpenOffice";
 l10n.dl_nav_mirrors1_href			= "https://sourceforge.net/projects/openofficeorg.mirror/files/";
-l10n.dl_nav_mirrors2_text			= "Алтернативен линк за изтегляне #2";
-l10n.dl_nav_mirrors2_title			= "Използвай Apache огледала, за да изтеглиш Apache OpenOffice";
+l10n.dl_nav_mirrors2_text			= "РђР»С‚РµСЂРЅР°С‚РёРІРµРЅ Р»РёРЅРє Р·Р° РёР·С‚РµРіР»СЏРЅРµ #2";
+l10n.dl_nav_mirrors2_title			= "РР·РїРѕР»Р·РІР°Р№ Apache РѕРіР»РµРґР°Р»Р°, Р·Р° РґР° РёР·С‚РµРіР»РёС€ Apache OpenOffice";
 l10n.dl_nav_mirrors2_href			= "https://downloads.apache.org/openoffice/" + DL.VERSION + "/binaries/";
-l10n.dl_nav_porting_text			= "Портове на трети страни и разпространители";
-l10n.dl_nav_porting_title			= "Портонве и разпространения от трети страни - доставчици";
+l10n.dl_nav_porting_text			= "РџРѕСЂС‚РѕРІРµ РЅР° С‚СЂРµС‚Рё СЃС‚СЂР°РЅРё Рё СЂР°Р·РїСЂРѕСЃС‚СЂР°РЅРёС‚РµР»Рё";
+l10n.dl_nav_porting_title			= "РџРѕСЂС‚РѕРЅРІРµ Рё СЂР°Р·РїСЂРѕСЃС‚СЂР°РЅРµРЅРёСЏ РѕС‚ С‚СЂРµС‚Рё СЃС‚СЂР°РЅРё - РґРѕСЃС‚Р°РІС‡РёС†Рё";
 l10n.dl_nav_porting_href			= "https://www.openoffice.org/porting/index.html";
-l10n.dl_nav_archive_text			= "Архивирани и стари релийзи";
-l10n.dl_nav_archive_title			= "Изтегли стари и архивирани релийзи";
+l10n.dl_nav_archive_text			= "РђСЂС…РёРІРёСЂР°РЅРё Рё СЃС‚Р°СЂРё СЂРµР»РёР№Р·Рё";
+l10n.dl_nav_archive_title			= "РР·С‚РµРіР»Рё СЃС‚Р°СЂРё Рё Р°СЂС…РёРІРёСЂР°РЅРё СЂРµР»РёР№Р·Рё";
 l10n.dl_nav_archive_href			= "https://www.openoffice.org/download/archive.html";
 
 // List items in the navigation bar that are not used for now.
-l10n.dl_nav_release_notes_text			= "Бележки по релийза";
-l10n.dl_nav_release_notes_title			= "Какво е новото, какво беше подобрено в Apache OpenOffice?";
+l10n.dl_nav_release_notes_text			= "Р‘РµР»РµР¶РєРё РїРѕ СЂРµР»РёР№Р·Р°";
+l10n.dl_nav_release_notes_title			= "РљР°РєРІРѕ Рµ РЅРѕРІРѕС‚Рѕ, РєР°РєРІРѕ Р±РµС€Рµ РїРѕРґРѕР±СЂРµРЅРѕ РІ Apache OpenOffice?";
 l10n.dl_nav_release_notes_href			= "https://www.openoffice.org/development/releases/index.html";
-l10n.dl_nav_checksum_text			= "Провери изтегления файл";
-l10n.dl_nav_checksum_title			= "Как да проверите изтегления файл с подписи и хешове?";
+l10n.dl_nav_checksum_text			= "РџСЂРѕРІРµСЂРё РёР·С‚РµРіР»РµРЅРёСЏ С„Р°Р№Р»";
+l10n.dl_nav_checksum_title			= "РљР°Рє РґР° РїСЂРѕРІРµСЂРёС‚Рµ РёР·С‚РµРіР»РµРЅРёСЏ С„Р°Р№Р» СЃ РїРѕРґРїРёСЃРё Рё С…РµС€РѕРІРµ?";
 l10n.dl_nav_checksum_href			= "https://www.openoffice.org/download/checksums.html";
 
 // Strings for the logo graphics.
-l10n.dl_img_sourceforge_title			= "SourceForge - Изтегли, Разработи и Публикувай Безплатен Софтуер с отворен код";
+l10n.dl_img_sourceforge_title			= "SourceForge - РР·С‚РµРіР»Рё, Р Р°Р·СЂР°Р±РѕС‚Рё Рё РџСѓР±Р»РёРєСѓРІР°Р№ Р‘РµР·РїР»Р°С‚РµРЅ РЎРѕС„С‚СѓРµСЂ СЃ РѕС‚РІРѕСЂРµРЅ РєРѕРґ";
 l10n.dl_img_sourceforge_href			= "https://www.sourceforge.net/";
 l10n.dl_img_sourceforge_src			= "/images/sourceforge.png";
 l10n.dl_img_sourceforge_alt			= "SourceForge";
-l10n.dl_img_w3c_title				= "W3C Markup Validation Service – Проверете маркирането  (HTML, XHTML, ...) на Web документите";
+l10n.dl_img_w3c_title				= "W3C Markup Validation Service вЂ“ РџСЂРѕРІРµСЂРµС‚Рµ РјР°СЂРєРёСЂР°РЅРµС‚Рѕ  (HTML, XHTML, ...) РЅР° Web РґРѕРєСѓРјРµРЅС‚РёС‚Рµ";
 l10n.dl_img_w3c_href				= "https://validator.w3.org/check?uri=referer";
 l10n.dl_img_w3c_src				= "/images/valid-xhtml10-blue.png";
 l10n.dl_img_w3c_alt				= "W3C Validator";
@@ -230,87 +230,87 @@ l10n.dl_img_w3c_alt				= "W3C Validator";
 // The following variables are used in the "download.js" file:
 
 // Download: Strings in the green box (used in "download.js").
-l10n.dl_full_link_text				= "Изтегли пълна инсталация";
-l10n.dl_full_link_title				= "Натисни за изтегляне: ";
-l10n.dl_langpack_link_text			= "Изтегли езиков пакет";
-l10n.dl_langpack_link_title			= "Натисни за изтегляне: ";
+l10n.dl_full_link_text				= "РР·С‚РµРіР»Рё РїСЉР»РЅР° РёРЅСЃС‚Р°Р»Р°С†РёСЏ";
+l10n.dl_full_link_title				= "РќР°С‚РёСЃРЅРё Р·Р° РёР·С‚РµРіР»СЏРЅРµ: ";
+l10n.dl_langpack_link_text			= "РР·С‚РµРіР»Рё РµР·РёРєРѕРІ РїР°РєРµС‚";
+l10n.dl_langpack_link_title			= "РќР°С‚РёСЃРЅРё Р·Р° РёР·С‚РµРіР»СЏРЅРµ: ";
 
-l10n.dl_platform_info_text			= "Важни кратки съвети за ";
-l10n.dl_platform_info_title			= "Натисни тук, за да получиш важни кратки съвети за ";
+l10n.dl_platform_info_text			= "Р’Р°Р¶РЅРё РєСЂР°С‚РєРё СЃСЉРІРµС‚Рё Р·Р° ";
+l10n.dl_platform_info_title			= "РќР°С‚РёСЃРЅРё С‚СѓРє, Р·Р° РґР° РїРѕР»СѓС‡РёС€ РІР°Р¶РЅРё РєСЂР°С‚РєРё СЃСЉРІРµС‚Рё Р·Р° ";
 l10n.dl_platform_info_link			= "platform_hints.html";
-l10n.dl_platform_info_headline			= "Apache OpenOffice – Важни кратки съвети за избраната платформа";
+l10n.dl_platform_info_headline			= "Apache OpenOffice вЂ“ Р’Р°Р¶РЅРё РєСЂР°С‚РєРё СЃСЉРІРµС‚Рё Р·Р° РёР·Р±СЂР°РЅР°С‚Р° РїР»Р°С‚С„РѕСЂРјР°";
 l10n.dl_platform_info_win_headline		= "Windows";
-l10n.dl_platform_info_win_text			= "<h5> 32-bit, 64-bit и Java – Кое да избера? </h5> <p> Към момента ние предлагаме  32-bit битова (x86) версия за Windows. Обаче, приложението се инсталира и работи също на  64 - битов Windows 64-bit (x86-64). Моля обърнете внимание, че може да се нуждаете от 32 – битова Java  за допълнителна функционалност, която може да бъде избирана само веджъж.  (Виж меню 'Tools – Options (интрументи - Опции - OpenOffice - Java'). <br /><br /> За повече информация относно OpenOffice и Java, моля виж : <a target='_blank' href=https://www.openoffice.org/download/common/java.html>https://www.openoffice.org/download/common/java.html</a>.</p>";
+l10n.dl_platform_info_win_text			= "<h5> 32-bit, 64-bit Рё Java вЂ“ РљРѕРµ РґР° РёР·Р±РµСЂР°? </h5> <p> РљСЉРј РјРѕРјРµРЅС‚Р° РЅРёРµ РїСЂРµРґР»Р°РіР°РјРµ  32-bit Р±РёС‚РѕРІР° (x86) РІРµСЂСЃРёСЏ Р·Р° Windows. РћР±Р°С‡Рµ, РїСЂРёР»РѕР¶РµРЅРёРµС‚Рѕ СЃРµ РёРЅСЃС‚Р°Р»РёСЂР° Рё СЂР°Р±РѕС‚Рё СЃСЉС‰Рѕ РЅР°  64 - Р±РёС‚РѕРІ Windows 64-bit (x86-64). РњРѕР»СЏ РѕР±СЉСЂРЅРµС‚Рµ РІРЅРёРјР°РЅРёРµ, С‡Рµ РјРѕР¶Рµ РґР° СЃРµ РЅСѓР¶РґР°РµС‚Рµ РѕС‚ 32 вЂ“ Р±РёС‚РѕРІР° Java  Р·Р° РґРѕРїСЉР»РЅРёС‚РµР»РЅР° С„СѓРЅРєС†РёРѕРЅР°Р»РЅРѕСЃС‚, РєРѕСЏС‚Рѕ РјРѕР¶Рµ РґР° Р±СЉРґРµ РёР·Р±РёСЂР°РЅР° СЃР°РјРѕ РІРµРґР¶СЉР¶.  (Р’РёР¶ РјРµРЅСЋ 'Tools вЂ“ Options (РёРЅС‚СЂСѓРјРµРЅС‚Рё - РћРїС†РёРё - OpenOffice - Java'). <br /><br /> Р—Р° РїРѕРІРµС‡Рµ РёРЅС„РѕСЂРјР°С†РёСЏ РѕС‚РЅРѕСЃРЅРѕ OpenOffice Рё Java, РјРѕР»СЏ РІРёР¶ : <a target='_blank' href=https://www.openoffice.org/download/common/java.html>https://www.openoffice.org/download/common/java.html</a>.</p>";
 l10n.dl_platform_info_mac_headline		= "macOS";
-l10n.dl_platform_info_mac_text			= "<h5> Очаквайте скоро </h5>";
+l10n.dl_platform_info_mac_text			= "<h5> РћС‡Р°РєРІР°Р№С‚Рµ СЃРєРѕСЂРѕ </h5>";
 l10n.dl_platform_info_linux_headline		= "Linux";
-l10n.dl_platform_info_linux_text		= "<h5> RPM vs. DEB – Какво да изберем? </h5> <p> RPM е използван в: <br/> CentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server <br /><br /> DEB е използван в: <br/> Debian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu </p> <h5> Инструкции за инсталация </h5> <p>За инструкции за инсталация моля вижте тук: <a target='_blank' href=https://www.openoffice.org/download/common/instructions.html#linux>https://www.openoffice.org/download/common/instructions.html#linux</a>.</p>";
+l10n.dl_platform_info_linux_text		= "<h5> RPM vs. DEB вЂ“ РљР°РєРІРѕ РґР° РёР·Р±РµСЂРµРј? </h5> <p> RPM Рµ РёР·РїРѕР»Р·РІР°РЅ РІ: <br/> CentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server <br /><br /> DEB Рµ РёР·РїРѕР»Р·РІР°РЅ РІ: <br/> Debian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu </p> <h5> РРЅСЃС‚СЂСѓРєС†РёРё Р·Р° РёРЅСЃС‚Р°Р»Р°С†РёСЏ </h5> <p>Р—Р° РёРЅСЃС‚СЂСѓРєС†РёРё Р·Р° РёРЅСЃС‚Р°Р»Р°С†РёСЏ РјРѕР»СЏ РІРёР¶С‚Рµ С‚СѓРє: <a target='_blank' href=https://www.openoffice.org/download/common/instructions.html#linux>https://www.openoffice.org/download/common/instructions.html#linux</a>.</p>";
 
-l10n.dl_full_link_porting_text			= "Пренасочване: Натиснете тук, за да изберете от трети – страни - доставчици";
-l10n.dl_full_link_porting_title			= "Натиснете тук за пренасочваща уеб страница и за да изтеглите от трета – страна доставчици";
-l10n.dl_full_link_archive_text			= "Архив: Натисни, за да избереш по – стари версии";
-l10n.dl_full_link_archive_title			= "Натисни тук, за да сърфираш в архива и за да изтеглиш по – стара архивна версия. ";
+l10n.dl_full_link_porting_text			= "РџСЂРµРЅР°СЃРѕС‡РІР°РЅРµ: РќР°С‚РёСЃРЅРµС‚Рµ С‚СѓРє, Р·Р° РґР° РёР·Р±РµСЂРµС‚Рµ РѕС‚ С‚СЂРµС‚Рё вЂ“ СЃС‚СЂР°РЅРё - РґРѕСЃС‚Р°РІС‡РёС†Рё";
+l10n.dl_full_link_porting_title			= "РќР°С‚РёСЃРЅРµС‚Рµ С‚СѓРє Р·Р° РїСЂРµРЅР°СЃРѕС‡РІР°С‰Р° СѓРµР± СЃС‚СЂР°РЅРёС†Р° Рё Р·Р° РґР° РёР·С‚РµРіР»РёС‚Рµ РѕС‚ С‚СЂРµС‚Р° вЂ“ СЃС‚СЂР°РЅР° РґРѕСЃС‚Р°РІС‡РёС†Рё";
+l10n.dl_full_link_archive_text			= "РђСЂС…РёРІ: РќР°С‚РёСЃРЅРё, Р·Р° РґР° РёР·Р±РµСЂРµС€ РїРѕ вЂ“ СЃС‚Р°СЂРё РІРµСЂСЃРёРё";
+l10n.dl_full_link_archive_title			= "РќР°С‚РёСЃРЅРё С‚СѓРє, Р·Р° РґР° СЃСЉСЂС„РёСЂР°С€ РІ Р°СЂС…РёРІР° Рё Р·Р° РґР° РёР·С‚РµРіР»РёС€ РїРѕ вЂ“ СЃС‚Р°СЂР° Р°СЂС…РёРІРЅР° РІРµСЂСЃРёСЏ. ";
 
 // Download: Strings in the sub-green box (used in "download.js").
-l10n.dl_rel_info_headline_text			= "Рилийз: ";
-l10n.dl_rel_info_milestone_text			= "Важно събитие ";
-l10n.dl_rel_info_buildid_text			= "Построи ID ";
+l10n.dl_rel_info_headline_text			= "Р РёР»РёР№Р·: ";
+l10n.dl_rel_info_milestone_text			= "Р’Р°Р¶РЅРѕ СЃСЉР±РёС‚РёРµ ";
+l10n.dl_rel_info_buildid_text			= "РџРѕСЃС‚СЂРѕРё ID ";
 l10n.dl_rel_info_svn_text			= "SVN "
-l10n.dl_rel_info_rel_date_text			= "Издания ";
-l10n.dl_rel_notes_text				= "Бележки по рилийза";
-l10n.dl_rel_notes_title				= "Важни бележки за Apache OpenOffice ";
+l10n.dl_rel_info_rel_date_text			= "РР·РґР°РЅРёСЏ ";
+l10n.dl_rel_notes_text				= "Р‘РµР»РµР¶РєРё РїРѕ СЂРёР»РёР№Р·Р°";
+l10n.dl_rel_notes_title				= "Р’Р°Р¶РЅРё Р±РµР»РµР¶РєРё Р·Р° Apache OpenOffice ";
 
-l10n.dl_headline_full_text			= "Пълна инсталация: ";
-l10n.dl_headline_langpack_text			= "Езиков пакет: ";
-l10n.dl_filesize_text				= "размер на файла ~ ";
+l10n.dl_headline_full_text			= "РџСЉР»РЅР° РёРЅСЃС‚Р°Р»Р°С†РёСЏ: ";
+l10n.dl_headline_langpack_text			= "Р•Р·РёРєРѕРІ РїР°РєРµС‚: ";
+l10n.dl_filesize_text				= "СЂР°Р·РјРµСЂ РЅР° С„Р°Р№Р»Р° ~ ";
 l10n.dl_megabyte_text				= " MByte";
-l10n.dl_checksum_headline_text			= "Подписи и хашове: ";
+l10n.dl_checksum_headline_text			= "РџРѕРґРїРёСЃРё Рё С…Р°С€РѕРІРµ: ";
 l10n.dl_checksum_keys_text			= "KEYS";
-l10n.dl_checksum_keys_title			= "KEYS подписан файл";
+l10n.dl_checksum_keys_title			= "KEYS РїРѕРґРїРёСЃР°РЅ С„Р°Р№Р»";
 l10n.dl_checksum_asc_text			= "ASC";
-l10n.dl_checksum_asc_title			= "ASC подпис за: ";
+l10n.dl_checksum_asc_title			= "ASC РїРѕРґРїРёСЃ Р·Р°: ";
 l10n.dl_checksum_md5_text			= "MD5";
-l10n.dl_checksum_md5_title			= "MD5 хеш за: ";
+l10n.dl_checksum_md5_title			= "MD5 С…РµС€ Р·Р°: ";
 l10n.dl_checksum_sha256_text			= "SHA256";
-l10n.dl_checksum_sha256_title			= "SHA256 хеш за: ";
+l10n.dl_checksum_sha256_title			= "SHA256 С…РµС€ Р·Р°: ";
 l10n.dl_checksum_sha512_text			= "SHA512";
-l10n.dl_checksum_sha512_title			= "SHA512 хеш за: ";
+l10n.dl_checksum_sha512_title			= "SHA512 С…РµС€ Р·Р°: ";
 
-l10n.dl_help_img_title				= "Каква е разликата между пълна инсталация и езиков пакет?";
+l10n.dl_help_img_title				= "РљР°РєРІР° Рµ СЂР°Р·Р»РёРєР°С‚Р° РјРµР¶РґСѓ РїСЉР»РЅР° РёРЅСЃС‚Р°Р»Р°С†РёСЏ Рё РµР·РёРєРѕРІ РїР°РєРµС‚?";
 l10n.dl_help_img_src				= "/download/cachedimages/help-information-icon.png";
-l10n.dl_help_img_alt				= "Информация за инсталирането";
-l10n.dl_help_text				= "Какво е езиков пакет?";
-l10n.dl_help_title				= "Каква е разликата между пълна инсталация и езиков пакет?";
-l10n.dl_checksum_img_title			= "Как да проверим изтегления файл с контролни суми?";
+l10n.dl_help_img_alt				= "РРЅС„РѕСЂРјР°С†РёСЏ Р·Р° РёРЅСЃС‚Р°Р»РёСЂР°РЅРµС‚Рѕ";
+l10n.dl_help_text				= "РљР°РєРІРѕ Рµ РµР·РёРєРѕРІ РїР°РєРµС‚?";
+l10n.dl_help_title				= "РљР°РєРІР° Рµ СЂР°Р·Р»РёРєР°С‚Р° РјРµР¶РґСѓ РїСЉР»РЅР° РёРЅСЃС‚Р°Р»Р°С†РёСЏ Рё РµР·РёРєРѕРІ РїР°РєРµС‚?";
+l10n.dl_checksum_img_title			= "РљР°Рє РґР° РїСЂРѕРІРµСЂРёРј РёР·С‚РµРіР»РµРЅРёСЏ С„Р°Р№Р» СЃ РєРѕРЅС‚СЂРѕР»РЅРё СЃСѓРјРё?";
 l10n.dl_checksum_img_src			= "/download/cachedimages/help-information-icon.png";
-l10n.dl_checksum_img_alt			= "Проверка на контролните суми";
-l10n.dl_checksum_text				= "Как да проверим изтеглянето?";
-l10n.dl_checksum_title				= "Как да проверим изтегления файл с контролни суми?";
-l10n.dl_report_img_title			= "Счупен линк за сваляне? Натисни тук, за да докладваш.";
+l10n.dl_checksum_img_alt			= "РџСЂРѕРІРµСЂРєР° РЅР° РєРѕРЅС‚СЂРѕР»РЅРёС‚Рµ СЃСѓРјРё";
+l10n.dl_checksum_text				= "РљР°Рє РґР° РїСЂРѕРІРµСЂРёРј РёР·С‚РµРіР»СЏРЅРµС‚Рѕ?";
+l10n.dl_checksum_title				= "РљР°Рє РґР° РїСЂРѕРІРµСЂРёРј РёР·С‚РµРіР»РµРЅРёСЏ С„Р°Р№Р» СЃ РєРѕРЅС‚СЂРѕР»РЅРё СЃСѓРјРё?";
+l10n.dl_report_img_title			= "РЎС‡СѓРїРµРЅ Р»РёРЅРє Р·Р° СЃРІР°Р»СЏРЅРµ? РќР°С‚РёСЃРЅРё С‚СѓРє, Р·Р° РґР° РґРѕРєР»Р°РґРІР°С€.";
 l10n.dl_report_img_src				= "/download/cachedimages/help-report-broken-link-icon.png";
-l10n.dl_report_img_alt				= "Счупен линк";
-l10n.dl_report_text				= "Докладвай счупен линк";
-l10n.dl_report_title				= "Счупен/Грешен линк за изтегляне? Натисни тук, за да докладваш.";
+l10n.dl_report_img_alt				= "РЎС‡СѓРїРµРЅ Р»РёРЅРє";
+l10n.dl_report_text				= "Р”РѕРєР»Р°РґРІР°Р№ СЃС‡СѓРїРµРЅ Р»РёРЅРє";
+l10n.dl_report_title				= "РЎС‡СѓРїРµРЅ/Р“СЂРµС€РµРЅ Р»РёРЅРє Р·Р° РёР·С‚РµРіР»СЏРЅРµ? РќР°С‚РёСЃРЅРё С‚СѓРє, Р·Р° РґР° РґРѕРєР»Р°РґРІР°С€.";
 
 // Download: Strings for error text in the sub-red box (used in "download.js").
-l10n.dl_full_link_error_text			= "Не е налична пълна инсталация";
-l10n.dl_full_link_error_title			= "Моля изберете друг език, платформа или версия.";
-l10n.dl_langpack_link_error_text		= "Не е наличен езиков пакет";
-l10n.dl_langpack_link_error_title		= "Моля изберете друг език, платформа или версия .";
+l10n.dl_full_link_error_text			= "РќРµ Рµ РЅР°Р»РёС‡РЅР° РїСЉР»РЅР° РёРЅСЃС‚Р°Р»Р°С†РёСЏ";
+l10n.dl_full_link_error_title			= "РњРѕР»СЏ РёР·Р±РµСЂРµС‚Рµ РґСЂСѓРі РµР·РёРє, РїР»Р°С‚С„РѕСЂРјР° РёР»Рё РІРµСЂСЃРёСЏ.";
+l10n.dl_langpack_link_error_text		= "РќРµ Рµ РЅР°Р»РёС‡РµРЅ РµР·РёРєРѕРІ РїР°РєРµС‚";
+l10n.dl_langpack_link_error_title		= "РњРѕР»СЏ РёР·Р±РµСЂРµС‚Рµ РґСЂСѓРі РµР·РёРє, РїР»Р°С‚С„РѕСЂРјР° РёР»Рё РІРµСЂСЃРёСЏ .";
 
-l10n.dl_error_problem_img_title			= "Избраният файл за изтегляне не е наличен";
+l10n.dl_error_problem_img_title			= "РР·Р±СЂР°РЅРёСЏС‚ С„Р°Р№Р» Р·Р° РёР·С‚РµРіР»СЏРЅРµ РЅРµ Рµ РЅР°Р»РёС‡РµРЅ";
 l10n.dl_error_problem_img_src			= "/download/cachedimages/exclamation-icon.png";
-l10n.dl_error_problem_img_alt			= "Текст за грешка";
-l10n.dl_error_problem_text			= "Проблем: ";
-l10n.dl_error_solution_text			= "Решение: ";
+l10n.dl_error_problem_img_alt			= "РўРµРєСЃС‚ Р·Р° РіСЂРµС€РєР°";
+l10n.dl_error_problem_text			= "РџСЂРѕР±Р»РµРј: ";
+l10n.dl_error_solution_text			= "Р РµС€РµРЅРёРµ: ";
 l10n.dl_error_aoo_text				= "Apache OpenOffice ";
-l10n.dl_error_not_available_for_text		= " Не е наличен за ";
-l10n.dl_error_please_select_1_text		= "Моля изберете версия 4.0.1.";
-l10n.dl_error_please_select_2_text		= "Моля изберете версия  4.1.0 или по - нова.";
-l10n.dl_error_please_select_3_text		= "Моля изберете изтегляне за Windows, macOS (OS&nbsp;X) или Linux.";
-l10n.dl_error_please_select_4_text		= "Моля изберете друг език или версия.";
+l10n.dl_error_not_available_for_text		= " РќРµ Рµ РЅР°Р»РёС‡РµРЅ Р·Р° ";
+l10n.dl_error_please_select_1_text		= "РњРѕР»СЏ РёР·Р±РµСЂРµС‚Рµ РІРµСЂСЃРёСЏ 4.0.1.";
+l10n.dl_error_please_select_2_text		= "РњРѕР»СЏ РёР·Р±РµСЂРµС‚Рµ РІРµСЂСЃРёСЏ  4.1.0 РёР»Рё РїРѕ - РЅРѕРІР°.";
+l10n.dl_error_please_select_3_text		= "РњРѕР»СЏ РёР·Р±РµСЂРµС‚Рµ РёР·С‚РµРіР»СЏРЅРµ Р·Р° Windows, macOS (OS&nbsp;X) РёР»Рё Linux.";
+l10n.dl_error_please_select_4_text		= "РњРѕР»СЏ РёР·Р±РµСЂРµС‚Рµ РґСЂСѓРі РµР·РёРє РёР»Рё РІРµСЂСЃРёСЏ.";
 
-l10n.dl_unknown_platform_text			= "Неразпозната операционна система / платформа";
+l10n.dl_unknown_platform_text			= "РќРµСЂР°Р·РїРѕР·РЅР°С‚Р° РѕРїРµСЂР°С†РёРѕРЅРЅР° СЃРёСЃС‚РµРјР° / РїР»Р°С‚С„РѕСЂРјР°";
 
 // Download: Strings with customized error text in the sub-red box (used in "download.js").
 // Can be used when the default text in the variables above cannot be translated correctly.
@@ -324,32 +324,32 @@ l10n.dl_error_custom_4_text			= "";
 // The following variables are used in the "analyze.html" file:
 
 // Analyze: Strings for the instruction text (used in "analyze.html").
-l10n.dl_analyze_headline_text			= "Как да докладваме неработещ линк за изтегляне?";
-l10n.dl_analyze_instruction_select_text		= "<b>Изберете своите предпочитания</b>: Операционна система, Еик и версия в зеленото квадратче отдолу.";
-l10n.dl_analyze_instruction_verify_text		= "Провери, че тези опции <b>still do not все още не</b> водят до валидни линкове за изтегляне.";
-l10n.dl_analyze_instruction_click_text		= "Натисни бутона под зеленото квадратче: ";
-l10n.dl_analyze_instruction_copy_text		= "Копирай избраните таблични данни в клипборда: ";
-l10n.dl_analyze_instruction_new_mail_text	= "Създай нов мейл.";
-l10n.dl_analyze_instruction_problem_text	= "<b>Напиши описание на проблема</b> (Какво не работи и какви са твоите очаквания).";
-l10n.dl_analyze_instruction_details_text	= "Моля също добави <b>детайли относно използваната операционна система</b>.";
-l10n.dl_analyze_instruction_paste_text		= "Постави копираните данни в края на мейла.";
-l10n.dl_analyze_instruction_only_download_text	= "Моля <b> изпрати мейла само в случай на проблеми с изтеглянето </b>, а не ако не можеш да инсталираш.";
-l10n.dl_analyze_instruction_no_install_text	= "Тази уеб страница не може да помогне в случай на проблеми с инсталирането.";
-l10n.dl_analyze_instruction_send_mail_text	= "Най - накрая, <b>изпрати мейл</b> към: ";
-l10n.dl_analyze_instruction_mailing_list_text	= "Apache OpenOffice мейл лист с разработчици";
-l10n.dl_analyze_instruction_mailing_list_title	= "Изпрати отчет към  мейл листа с разработчици на Apache OpenOffice";
-l10n.dl_analyze_instruction_learn_more_text	= "Натисни тук, за да научиш повече какво представляват мейлинг листите";
-l10n.dl_analyze_instruction_learn_more_title	= "Научи повече за това, какво е мейл лист";
-l10n.dl_analyze_instruction_answer_text		= "Ние ще се опитаме да отговорим възможно най – скоро, след като получим мейла и проблемът бъде анализиран. ";
-l10n.dl_analyze_instruction_thanks_text		= "Благодарим за твоя доклад.";
+l10n.dl_analyze_headline_text			= "РљР°Рє РґР° РґРѕРєР»Р°РґРІР°РјРµ РЅРµСЂР°Р±РѕС‚РµС‰ Р»РёРЅРє Р·Р° РёР·С‚РµРіР»СЏРЅРµ?";
+l10n.dl_analyze_instruction_select_text		= "<b>РР·Р±РµСЂРµС‚Рµ СЃРІРѕРёС‚Рµ РїСЂРµРґРїРѕС‡РёС‚Р°РЅРёСЏ</b>: РћРїРµСЂР°С†РёРѕРЅРЅР° СЃРёСЃС‚РµРјР°, Р•РёРє Рё РІРµСЂСЃРёСЏ РІ Р·РµР»РµРЅРѕС‚Рѕ РєРІР°РґСЂР°С‚С‡Рµ РѕС‚РґРѕР»Сѓ.";
+l10n.dl_analyze_instruction_verify_text		= "РџСЂРѕРІРµСЂРё, С‡Рµ С‚РµР·Рё РѕРїС†РёРё <b>still do not РІСЃРµ РѕС‰Рµ РЅРµ</b> РІРѕРґСЏС‚ РґРѕ РІР°Р»РёРґРЅРё Р»РёРЅРєРѕРІРµ Р·Р° РёР·С‚РµРіР»СЏРЅРµ.";
+l10n.dl_analyze_instruction_click_text		= "РќР°С‚РёСЃРЅРё Р±СѓС‚РѕРЅР° РїРѕРґ Р·РµР»РµРЅРѕС‚Рѕ РєРІР°РґСЂР°С‚С‡Рµ: ";
+l10n.dl_analyze_instruction_copy_text		= "РљРѕРїРёСЂР°Р№ РёР·Р±СЂР°РЅРёС‚Рµ С‚Р°Р±Р»РёС‡РЅРё РґР°РЅРЅРё РІ РєР»РёРїР±РѕСЂРґР°: ";
+l10n.dl_analyze_instruction_new_mail_text	= "РЎСЉР·РґР°Р№ РЅРѕРІ РјРµР№Р».";
+l10n.dl_analyze_instruction_problem_text	= "<b>РќР°РїРёС€Рё РѕРїРёСЃР°РЅРёРµ РЅР° РїСЂРѕР±Р»РµРјР°</b> (РљР°РєРІРѕ РЅРµ СЂР°Р±РѕС‚Рё Рё РєР°РєРІРё СЃР° С‚РІРѕРёС‚Рµ РѕС‡Р°РєРІР°РЅРёСЏ).";
+l10n.dl_analyze_instruction_details_text	= "РњРѕР»СЏ СЃСЉС‰Рѕ РґРѕР±Р°РІРё <b>РґРµС‚Р°Р№Р»Рё РѕС‚РЅРѕСЃРЅРѕ РёР·РїРѕР»Р·РІР°РЅР°С‚Р° РѕРїРµСЂР°С†РёРѕРЅРЅР° СЃРёСЃС‚РµРјР°</b>.";
+l10n.dl_analyze_instruction_paste_text		= "РџРѕСЃС‚Р°РІРё РєРѕРїРёСЂР°РЅРёС‚Рµ РґР°РЅРЅРё РІ РєСЂР°СЏ РЅР° РјРµР№Р»Р°.";
+l10n.dl_analyze_instruction_only_download_text	= "РњРѕР»СЏ <b> РёР·РїСЂР°С‚Рё РјРµР№Р»Р° СЃР°РјРѕ РІ СЃР»СѓС‡Р°Р№ РЅР° РїСЂРѕР±Р»РµРјРё СЃ РёР·С‚РµРіР»СЏРЅРµС‚Рѕ </b>, Р° РЅРµ Р°РєРѕ РЅРµ РјРѕР¶РµС€ РґР° РёРЅСЃС‚Р°Р»РёСЂР°С€.";
+l10n.dl_analyze_instruction_no_install_text	= "РўР°Р·Рё СѓРµР± СЃС‚СЂР°РЅРёС†Р° РЅРµ РјРѕР¶Рµ РґР° РїРѕРјРѕРіРЅРµ РІ СЃР»СѓС‡Р°Р№ РЅР° РїСЂРѕР±Р»РµРјРё СЃ РёРЅСЃС‚Р°Р»РёСЂР°РЅРµС‚Рѕ.";
+l10n.dl_analyze_instruction_send_mail_text	= "РќР°Р№ - РЅР°РєСЂР°СЏ, <b>РёР·РїСЂР°С‚Рё РјРµР№Р»</b> РєСЉРј: ";
+l10n.dl_analyze_instruction_mailing_list_text	= "Apache OpenOffice РјРµР№Р» Р»РёСЃС‚ СЃ СЂР°Р·СЂР°Р±РѕС‚С‡РёС†Рё";
+l10n.dl_analyze_instruction_mailing_list_title	= "РР·РїСЂР°С‚Рё РѕС‚С‡РµС‚ РєСЉРј  РјРµР№Р» Р»РёСЃС‚Р° СЃ СЂР°Р·СЂР°Р±РѕС‚С‡РёС†Рё РЅР° Apache OpenOffice";
+l10n.dl_analyze_instruction_learn_more_text	= "РќР°С‚РёСЃРЅРё С‚СѓРє, Р·Р° РґР° РЅР°СѓС‡РёС€ РїРѕРІРµС‡Рµ РєР°РєРІРѕ РїСЂРµРґСЃС‚Р°РІР»СЏРІР°С‚ РјРµР№Р»РёРЅРі Р»РёСЃС‚РёС‚Рµ";
+l10n.dl_analyze_instruction_learn_more_title	= "РќР°СѓС‡Рё РїРѕРІРµС‡Рµ Р·Р° С‚РѕРІР°, РєР°РєРІРѕ Рµ РјРµР№Р» Р»РёСЃС‚";
+l10n.dl_analyze_instruction_answer_text		= "РќРёРµ С‰Рµ СЃРµ РѕРїРёС‚Р°РјРµ РґР° РѕС‚РіРѕРІРѕСЂРёРј РІСЉР·РјРѕР¶РЅРѕ РЅР°Р№ вЂ“ СЃРєРѕСЂРѕ, СЃР»РµРґ РєР°С‚Рѕ РїРѕР»СѓС‡РёРј РјРµР№Р»Р° Рё РїСЂРѕР±Р»РµРјСЉС‚ Р±СЉРґРµ Р°РЅР°Р»РёР·РёСЂР°РЅ. ";
+l10n.dl_analyze_instruction_thanks_text		= "Р‘Р»Р°РіРѕРґР°СЂРёРј Р·Р° С‚РІРѕСЏ РґРѕРєР»Р°Рґ.";
 
 // Analyze: Strings for the 3 buttons (used in "analyze.html").
-l10n.dl_analyze_update_button_text		= "Натисни за да актуализираш таблицата";
-l10n.dl_analyze_update_button_title		= "Постави избраните опции като променливи стойности в таблицата по - долу";
-l10n.dl_analyze_select_button_text		= "Натисни, за да избереш таблица";
-l10n.dl_analyze_select_button_title		= "Избери всички данни в таблицата по - долу";
-l10n.dl_analyze_copy_button_text		= "Копирай с [Ctrl]+[C] / [&#8984;]+[C]";
-l10n.dl_analyze_copy_button_title		= "Копирай избраните данни от таблицата чрез [ Ctrl ] + [ C ] или [ &#8984; ] + [ C ] в клипборда";
+l10n.dl_analyze_update_button_text		= "РќР°С‚РёСЃРЅРё Р·Р° РґР° Р°РєС‚СѓР°Р»РёР·РёСЂР°С€ С‚Р°Р±Р»РёС†Р°С‚Р°";
+l10n.dl_analyze_update_button_title		= "РџРѕСЃС‚Р°РІРё РёР·Р±СЂР°РЅРёС‚Рµ РѕРїС†РёРё РєР°С‚Рѕ РїСЂРѕРјРµРЅР»РёРІРё СЃС‚РѕР№РЅРѕСЃС‚Рё РІ С‚Р°Р±Р»РёС†Р°С‚Р° РїРѕ - РґРѕР»Сѓ";
+l10n.dl_analyze_select_button_text		= "РќР°С‚РёСЃРЅРё, Р·Р° РґР° РёР·Р±РµСЂРµС€ С‚Р°Р±Р»РёС†Р°";
+l10n.dl_analyze_select_button_title		= "РР·Р±РµСЂРё РІСЃРёС‡РєРё РґР°РЅРЅРё РІ С‚Р°Р±Р»РёС†Р°С‚Р° РїРѕ - РґРѕР»Сѓ";
+l10n.dl_analyze_copy_button_text		= "РљРѕРїРёСЂР°Р№ СЃ [Ctrl]+[C] / [&#8984;]+[C]";
+l10n.dl_analyze_copy_button_title		= "РљРѕРїРёСЂР°Р№ РёР·Р±СЂР°РЅРёС‚Рµ РґР°РЅРЅРё РѕС‚ С‚Р°Р±Р»РёС†Р°С‚Р° С‡СЂРµР· [ Ctrl ] + [ C ] РёР»Рё [ &#8984; ] + [ C ] РІ РєР»РёРїР±РѕСЂРґР°";
 
 // Analyze: Strings for the table (used in "analyze.html").
 l10n.dl_analyze_table_problem_text1		= "Problem description";
