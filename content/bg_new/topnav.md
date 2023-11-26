@@ -1,20 +1,20 @@
 type=navigator
 divid=topnava
 ~~~~~~
-- [Product][m0]
-- [Download][m1]
-- [Support][m2]
-- [Blog][m3]
-- [Extensions & Templates][m4]
-- [Get Involved][m5]
-- [Focus Areas][m6]
-- [Native Languages][m7]
+- [Продукт][m0]
+- [Изтегли][m1]
+- [Поддръжка][m2]
+- [Блог][m3]
+- [Допълнения & Шаблони][m4]
+- [Включи се][m5]
+- [Фокусирани зони][m6]
+- [Родни езици][m7]
 
-[m0]:	/xx/product/                  		"Apache OpenOffice product description"
-[m1]:	/xx/download/                 		"Download Apache OpenOffice"
-[m2]:	/xx/support/                  		"Find Support for OpenOffice"
-[m3]:	https://blogs.apache.org/OOo/ 		"Apache OpenOffice Blog"
-[m4]:	/xx/extensions/               		"Extensions and Templates for OpenOffice"
-[m5]:	/xx/participate/              		"Get involved in Apache OpenOffice"
-[m6]:	/projects/accepted.html			"Apache OpenOffice development focus areas"
-[m7]:	/projects/native-lang.html		"Apache OpenOffice in your Native Language"
+[m0]:	  /product/index.html						"Apache OpenOffice – описание на продукта"
+[m1]: 	  /bg/download/index.html					"Изтегли Apache OpenOffice"
+[m2]: 	  /support/index.html 						"Намери поддръжка за OpenOffice"
+[m3]:	  https://blogs.apache.org/OOo/					"Блог на Apache OpenOffice"
+[m4]: 	  /extensions/index.html					"Разширения и Шаблони за OpenOffice"
+[m5]: 	  https://openoffice.apache.org/get-involved.html		"Участвай – присъедини се към Apache OpenOffice"
+[m6]:	  /projects/accepted.html					"Apache OpenOffice фокусирани области на развитие"
+[m7]: 	  /projects/native-lang.html			 		"Apache OpenOffice на твоя Роден език"
