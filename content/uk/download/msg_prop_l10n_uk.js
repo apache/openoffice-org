@@ -36,7 +36,7 @@ l10n.dl_headline_text = "Завантаження Apache OpenOffice";
 // Завантаження: рядки в зеленому полі (викоритовується у "index.html").
 l10n.dl_green_box_headline_text			= "Завантаження Apache OpenOffice";
 l10n.dl_green_box_headline_title		= "Завантаження Apache OpenOffice для певних операційної системи, мови і версії";
-l10n.dl_green_box_subtext1_text			= "Розміщено на Sourceforge.net - надійному веб-сайті";
+l10n.dl_green_box_subtext1_text			= "Розміщено на SourceForge.net - надійному веб-сайті";
 l10n.dl_green_box_subtext1_title		= "Двійкові файли Apache OpenOffice розміщено на SourceForge.net - надійному веб сайті";
 l10n.dl_green_box_subtext2_text			= "Виберіть бажані операційну систему, мову і версію";
 l10n.dl_green_box_subtext2_title		= "Виберіть бажані операційну систему, мову і версію";
@@ -49,7 +49,7 @@ l10n.dl_green_box_selectbox_ver_title	= "Виберіть бажану верс�
 /* l10n.dl_green_box_select_box_os_values	= [ "" ]; */
 // Рядки, які відображатимуться в розкривних полях вибору ОС, мови та версії.
 // Ви повинні залишити принаймні один порожній рядок (дивіться рядки коментарів над 3 наступними змінними)!
-// l10n.dl_green_box_select_box_os_values	= [ "" ]; 
+// l10n.dl_green_box_select_box_os_values	= [ "" ];
 l10n.dl_green_box_select_box_os_values		= [ "Windows (EXE)",
 												"Linux 64-bit (x86-64) (DEB)",
 												"Linux 64-bit (x86-64) (RPM)",
@@ -58,8 +58,8 @@ l10n.dl_green_box_select_box_os_values		= [ "Windows (EXE)",
 												"OS X (version >= 10.7) (DMG)",
 												"OS X (version <= 10.6) (DMG)",
 												"Інші платформи / операційні системи" ];
- 
-// l10n.dl_green_box_select_box_language_values	= [ "" ]; 
+
+// l10n.dl_green_box_select_box_language_values	= [ "" ];
 l10n.dl_green_box_select_box_language_values	= [ "" ];
 
 // l10n.dl_green_box_select_box_lang_values_custom = [ "" ];
@@ -107,7 +107,7 @@ l10n.dl_green_box_select_box_lang_values_custom	= [		"ast",		"Asturian",					"As
 														"tr",		"Turkish",					"Türkçe",
 														"vi",		"Vietnamese",				"Tiếng Việt" ];
 
-// l10n.dl_green_box_select_box_version_values	= [ "" ]; 
+// l10n.dl_green_box_select_box_version_values	= [ "" ];
 l10n.dl_green_box_select_box_version_values	= [ "" ];
 
 l10n.dl_green_box_select_box_version_older	= "Попередні випуски";
@@ -221,10 +221,10 @@ l10n.dl_nav_stat_text				= "Статистика завантажень";
 l10n.dl_nav_stat_title				= "Завантаження і інша статистика";
 l10n.dl_nav_stat_href				= "https://www.openoffice.org/stats/index.html";
 l10n.dl_nav_mirrors1_text			= "Альтернативне посилання на завантаження #1";
-l10n.dl_nav_mirrors1_title			= "Використовуйте дзеркала Sourceforge, щоб завантажити Apache OpenOffice";
+l10n.dl_nav_mirrors1_title			= "Використовуйте дзеркала SourceForge, щоб завантажити Apache OpenOffice";
 l10n.dl_nav_mirrors1_href			= "https://sourceforge.net/projects/openofficeorg.mirror/files/";
 l10n.dl_nav_mirrors2_text			= "Альтернативне посилання на завантаження #2";
-l10n.dl_nav_mirrors2_title			= "Використовуйте дзеркала Sourceforge, щоб завантажити Apache OpenOffice";
+l10n.dl_nav_mirrors2_title			= "Використовуйте дзеркала SourceForge, щоб завантажити Apache OpenOffice";
 l10n.dl_nav_mirrors2_href			= "https://downloads.apache.org/openoffice/" + DL.VERSION + "/binaries/";
 l10n.dl_nav_porting_text			= "Порти та дистрибутиви сторонніх розробників";
 l10n.dl_nav_porting_title			= "Порти та дистрибутиви від сторонніх постачальників";
@@ -244,10 +244,10 @@ l10n.dl_nav_checksum_href			= "https://www.openoffice.org/download/checksums.htm
 
 // Strings for the logo graphics.
 // Рядки для графіки логотипу.
-l10n.dl_img_sourceforge_title		= "Sourceforge - завантажуйте, розробляйте та публікуйте безкоштовне програмне забезпечення з відкритим кодом";
+l10n.dl_img_sourceforge_title		= "SourceForge - завантажуйте, розробляйте та публікуйте безкоштовне програмне забезпечення з відкритим кодом";
 l10n.dl_img_sourceforge_href		= "https://www.sourceforge.net/";
 l10n.dl_img_sourceforge_src			= "/images/sourceforge.png";
-l10n.dl_img_sourceforge_alt			= "Sourceforge";
+l10n.dl_img_sourceforge_alt			= "SourceForge";
 l10n.dl_img_w3c_title				= "Служба перевірки розмітки W3C - Перевірте розмітку (HTML, XHTML, ...) веб-документів";
 l10n.dl_img_w3c_href				= "https://validator.w3.org/check?uri=referer";
 l10n.dl_img_w3c_src					= "/images/valid-xhtml10-blue.png";
