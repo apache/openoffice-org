@@ -713,7 +713,7 @@ DL.checkForLinkExceptions = function() {
 	}
 
 	// If version is '4.1.0' (or newer) and platform is 'Mac OS X <= 10.6', show the none-availability to the user.
-	if( ( DL.VERSION_SEL === "4.1.14" || DL.VERSION_SEL === "4.1.13" || DL.VERSION_SEL === "4.1.12" || DL.VERSION_SEL === "4.1.11" || DL.VERSION_SEL === "4.1.10" || DL.VERSION_SEL === "4.1.9" || DL.VERSION_SEL === "4.1.8" || DL.VERSION_SEL === "4.1.7" || DL.VERSION_SEL === "4.1.6" || DL.VERSION_SEL === "4.1.5" || DL.VERSION_SEL === "4.1.4" || DL.VERSION_SEL === "4.1.3" || DL.VERSION_SEL === "4.1.2" || DL.VERSION_SEL === "4.1.1" || DL.VERSION_SEL === "4.1.0" ) && DL.PLATFORM === "mac32" ) {
+	if( ( DL.VERSION_SEL === "4.1.15" || DL.VERSION_SEL === "4.1.14" || DL.VERSION_SEL === "4.1.13" || DL.VERSION_SEL === "4.1.12" || DL.VERSION_SEL === "4.1.11" || DL.VERSION_SEL === "4.1.10" || DL.VERSION_SEL === "4.1.9" || DL.VERSION_SEL === "4.1.8" || DL.VERSION_SEL === "4.1.7" || DL.VERSION_SEL === "4.1.6" || DL.VERSION_SEL === "4.1.5" || DL.VERSION_SEL === "4.1.4" || DL.VERSION_SEL === "4.1.3" || DL.VERSION_SEL === "4.1.2" || DL.VERSION_SEL === "4.1.1" || DL.VERSION_SEL === "4.1.0" ) && DL.PLATFORM === "mac32" ) {
 		// Show an error message that the chosen items do not lead to a download.
 
 		// If a customized string is not available in the "msg_prop_l10n_XX.js" file.
