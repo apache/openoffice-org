@@ -233,7 +233,7 @@ l10n.dl_langpack_link_title			= "Klik hier om te downloaden: ";
 
 l10n.dl_platform_info_text       		= "Belangrijke hints voor ";
 l10n.dl_platform_info_title           		= "Klik hier voor belangrijke hints voor ";
-l10n.dl_platform_info_link           		= "/download/platform_hints.html";
+l10n.dl_platform_info_link           		= "platform_hints.html";
 l10n.dl_platform_info_headline           	= "Apache OpenOffice - Belangrijke hints voor het gekozen platform";
 l10n.dl_platform_info_win_headline       	= "Windows";
 l10n.dl_platform_info_win_text           	= "<h5> 32-bit, 64-bit en Java - Wat te kiezen? </h5><p> Momenteel bieden we een 32-bit (x86) versie voor Windows aan. Die installeert echter en kan ook worden uitgevoerd op Windows 64-bit (x86-64). Onthoud dat u Java nodig hebt in 32-bit voor aanvullende functionaliteit die dan slechts eenmaal hoeft te worden geselecteerd (zie menu 'Extra - Opties - OpenOffice - Java'). <br/><br/> Voor meer informatie over OpenOffice en Java bekijk: <a target='_blank' href=https://www.openoffice.org/download/common/java.html>https://www.openoffice.org/download/common/java.html</a>.</p>";
