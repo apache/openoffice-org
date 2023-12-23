@@ -230,10 +230,22 @@ l10n.dl_full_link_text				= "Download volledige installatie";
 l10n.dl_full_link_title				= "Klik hier om te downloaden: ";
 l10n.dl_langpack_link_text			= "Download taalpakket";
 l10n.dl_langpack_link_title			= "Klik hier om te downloaden: ";
-l10n.dl_win_info_text				= "Belangrijke hint: 32-bit, 64-bit en Java - Wat te kiezen?";
-l10n.dl_win_info_title				= "Momenteel bieden we een 32-bit (x86) versie aan voor Windows. Die kan echter ook worden geïnstalleerd en uitgevoerd op Windows 64-bit (x86-64).\nOnthoud dat u misschien Java in 32-bit nodig hebt voor aanvullende functionaliteiten die dan slechts eenmalig gekozen moet worden (in menu 'Extra - Opties - OpenOffice - Java').\n\nBekijk voor meer informatie over OpenOffice en Java de link aan de rechterkant 'Java en Apache OpenOffice'.";
-l10n.dl_linux_info_text				= "Belangrijke hint: RPM vs. DEB - Wat te kiezen?";
-l10n.dl_linux_info_title			= "RPM wordt gebruikt in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB wordt gebruikt in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
+
+l10n.dl_platform_info_text       		= "Belangrijke hints voor ";
+l10n.dl_platform_info_title           		= "Klik hier voor belangrijke hints voor ";
+l10n.dl_platform_info_link           		= "/download/platform_hints.html";
+l10n.dl_platform_info_headline           	= "Apache OpenOffice - Belangrijke hints voor het gekozen platform";
+l10n.dl_platform_info_win_headline       	= "Windows";
+l10n.dl_platform_info_win_text           	= "<h5> 32-bit, 64-bit en Java - Wat te kiezen? </h5><p> Momenteel bieden we een 32-bit (x86) versie voor Windows aan. Die installeert echter en kan ook worden uitgevoerd op Windows 64-bit (x86-64). Onthoud dat u Java nodig hebt in 32-bit voor aanvullende functionaliteit die dan slechts eenmaal hoeft te worden geselecteerd (zie menu 'Extra - Opties - OpenOffice - Java'). <br/><br/> Voor meer informatie over OpenOffice en Java bekijk: <a target='_blank' href=https://www.openoffice.org/download/common/java.html>https://www.openoffice.org/download/common/java.html</a>.</p>";
+l10n.dl_platform_info_mac_headline     		= " macOS";
+l10n.dl_platform_info_mac_text			= "<h5> Binnenkort </h5>" ;
+l10n.dl_platform_info_linux_headline		= "Linux" ;
+l10n.dl_platform_info_linux_text		= "<h5> RPM vs. DEB - Wat te kiezen? </h5> <p> RPM wordt gebruikt in: <br/> CentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server <br /><br /> DEB wordt gebruikt in: <br/> Debian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu </p> <h5> Installatie-instructies </h5> <p>Kijk hier voor de installatie-instructies: <a target='_blank' href=https://www.openoffice.org/download/common/instructions.html#linux>https://www.openoffice.org/download/common/instructions.html#linux</a>.</p>" ;
+
+//l10n.dl_win_info_text				= "Belangrijke hint: 32-bit, 64-bit en Java - Wat te kiezen?";
+//l10n.dl_win_info_title			= "Momenteel bieden we een 32-bit (x86) versie aan voor Windows. Die kan echter ook worden geïnstalleerd en uitgevoerd op Windows 64-bit (x86-64).\nOnthoud dat u misschien Java in 32-bit nodig hebt voor aanvullende functionaliteiten die dan slechts eenmalig gekozen moet worden (in menu 'Extra - Opties - OpenOffice - Java').\n\nBekijk voor meer informatie over OpenOffice en Java de link aan de rechterkant 'Java en Apache OpenOffice'.";
+//l10n.dl_linux_info_text			= "Belangrijke hint: RPM vs. DEB - Wat te kiezen?";
+//l10n.dl_linux_info_title			= "RPM wordt gebruikt in:\nCentOS, Fedora, Mageia, Mandriva, MeeGo, openSUSE, Oracle Linux, PCLinuxOS, Red Hat Enterprise Linux, Sailfish OS, Scientific Linux, SUSE Linux Enterprise Server\n\nDEB wordt gebruikt in:\nDebian, Kanotix, Knoppix, Kubuntu, Linux Mint, Lubuntu, Ubuntu, Xubuntu";
 //l10n.dl_mac_info_text				= "macOS : Text";
 //l10n.dl_mac_info_title			= "macOS : Title";
 
