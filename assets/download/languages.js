@@ -27,9 +27,7 @@ DL.language_matrix = {
          "en": [ 'en-EN', 'English',			'English' ],
          "gb": [ 'en-GB', 'English (British)',		'English (British)' ],
          "us": [ 'en-US', 'English (US)',		'English (US)' ] },
-/* "eo":  { "-" : [ 'eo',    'Esperanto',			'Esperanto' ] },  */
 "es":  { "-" : [ 'es',    'Spanish',			'Espa&ntilde;ol' ] },
-/* "et":  { "-" : [ 'et',    'Estonian',			'Eesti keel' ] }, */
 "eu":  { "-" : [ 'eu',    'Basque',			'Euskara' ] },
 "fi":  { "-" : [ 'fi',    'Finnish',			'Suomi' ] },
 "fr":  { "-" : [ 'fr',    'French',			'Fran&ccedil;ais' ] },
@@ -38,7 +36,6 @@ DL.language_matrix = {
 "he":  { "-" : [ 'he',    'Hebrew',			'עברית' ] },
 "hi":  { "-" : [ 'hi',    'Hindi',			'हिन्दी' ] },
 "hu":  { "-" : [ 'hu',    'Hungarian',			'Magyar' ] },
-/* "hy":  { "-" : [ 'hy',    'Armenian',			'Հայերեն' ] }, */
 "it":  { "-" : [ 'it',    'Italian',			'Italiano' ] },
 "ja":  { "-" : [ 'ja',    'Japanese',			'日本語' ] },
 "km":  { "-" : [ 'km',    'Khmer',			'ភាសាខ្មែរ' ] },
@@ -46,12 +43,10 @@ DL.language_matrix = {
 "lt":  { "-" : [ 'lt',    'Lithuanian',			'Lietuvių' ] },
 "nb":  { "-" : [ 'nb',    'Norwegian (Bokmal)',		'Norsk (Bokmål)' ] },
 "nl":  { "-" : [ 'nl',    'Dutch',			'Nederlands' ] },
-/* "om":  { "-" : [ 'om',    'Oromo',			'ኦሮሚኛ' ] }, */
 "pl":  { "-" : [ 'pl',    'Polish',			'Polski' ] },
 "pt":  { "-" : [ 'pt',    'Portuguese (European)',	'Portugu&ecirc;s (Europeu)' ],
          "br": [ 'pt-BR', 'Portuguese (Brazilian)',	'Portugu&ecirc;s (do Brasil)' ],
          "pt": [ 'pt',    'Portuguese (European)',	'Portugu&ecirc;s (Europeu)' ] },
-/* "ro":  { "-" : [ 'ro',    'Romanian',			'Română' ] }, */
 "ru":  { "-" : [ 'ru',    'Russian',			'Русский' ] },
 "sk":  { "-" : [ 'sk',    'Slovak',			'Slovenský jazyk (slovenčina)' ] },
 "sr":  { "-" : [ 'sr',    'Serbian (Cyrillic)',		'Cрпски (ћирилицом)' ] },
@@ -60,11 +55,19 @@ DL.language_matrix = {
 "ta":  { "-" : [ 'ta',    'Tamil',			'தமிழ்' ] },
 "th":  { "-" : [ 'th',    'Thai',			'ภาษาไทย' ] },
 "tr":  { "-" : [ 'tr',    'Turkish',			'T&uuml;rk&ccedil;e' ] },
-/* "uk":  { "-" : [ 'uk',    'Ukrainian',			'Yкраїнська' ] }, */
 "vi":  { "-" : [ 'vi',    'Vietnamese',			'Tiếng Việt' ] },
 "zh":  { "-" : [ 'zh',    'Chinese',			'Chinese' ],
          "cn": [ 'zh-CN', 'Chinese (simplified)',	'简体中文' ],
          "tw": [ 'zh-TW', 'Chinese (traditional)',	'正體中文' ] },
+
+// The following languages are not useful for 4.1.x releases but needed for the soft redirect on the main homepage (see msg_prop_l10n.js for details).
+"eo":  { "-" : [ 'eo',    'Esperanto',			'Esperanto' ] },
+"et":  { "-" : [ 'et',    'Estonian',			'Eesti keel' ] },
+"hy":  { "-" : [ 'hy',    'Armenian',			'Հայերեն' ] },
+"om":  { "-" : [ 'om',    'Oromo',			'ኦሮሚኛ' ] },
+"ro":  { "-" : [ 'ro',    'Romanian',			'Română' ] },
+"uk":  { "-" : [ 'uk',    'Ukrainian',			'Yкраїнська' ] },
+
 
 // All listed languages below *are not supported* and *not* available as full installation and language pack.
 "ar":  { "-" : [ 'ar',    'Arabic',			'عربي' ] },
