@@ -40,8 +40,9 @@ DL.SEL_OS			= [	"win32",	"Windows 32-bit (x86) (EXE)",	    	".exe",
 					"other",	"More platforms / operating systems",	"" ];
 
 // Data for the <select> element "lang".
+// The following languages are also needed for the soft redirect on the main homepage (see msg_prop_l10n.js for details).
 //					Value		Visible text			Tool tip
-DL.SEL_LANG			= [/*	"hy",		"Armenian",			"Հայերեն",		*/
+DL.SEL_LANG			= [	"hy",		"Armenian",			"Հայերեն",
 					"ast",		"Asturian",			"Asturianu",
 					"eu",		"Basque",			"Euskara",
 					"bg",		"Bulgarian",			"български език",
@@ -55,8 +56,8 @@ DL.SEL_LANG			= [/*	"hy",		"Armenian",			"Հայերեն",		*/
 					"nl",		"Dutch",			"Nederlands",
 					"en-GB",	"English [British]",		"English [British]",
 					"en-US",	"English [US]",			"English [US]",
-/*					"eo",		"Esperanto",			"Esperanto",		*/
-/*					"et",		"Estonian",			"Eesti keeles",		*/
+					"eo",		"Esperanto",			"Esperanto",
+					"et",		"Estonian",			"Eesti keeles",
 					"fi",		"Finnish",			"Suomi",
 					"fr",		"French",			"Français",
 					"gl",		"Galician",			"Galego",
@@ -71,11 +72,11 @@ DL.SEL_LANG			= [/*	"hy",		"Armenian",			"Հայերեն",		*/
 					"ko",		"Korean",			"한국어",
 					"lt",		"Lithuanian",			"Lietuvių",
 					"nb",		"Norwegian [Bokmal]",		"Norsk [Bokmål]",
-/*					"om",		"Oromo",			"Oromo",		*/
+					"om",		"Oromo",			"Oromo",
 					"pl",		"Polish",			"Polski",
 					"pt-BR",	"Portuguese [Brazilian]",	"Português [do Brasil]",
 					"pt",		"Portuguese [European]",	"Português [Europeu]",
-/*					"ro",		"Romanian",			"Română",		*/
+					"ro",		"Romanian",			"Română",
 					"ru",		"Russian",			"Русский",
 					"gd",		"Scottish [Gaelic]",		"Gàidhlig",
 					"sr",		"Serbian [Cyrillic]",		"Cрпски [ћирилицом]",
@@ -86,9 +87,9 @@ DL.SEL_LANG			= [/*	"hy",		"Armenian",			"Հայերեն",		*/
 					"ta",		"Tamil",			"தமிழ்",
 					"th",		"Thai",				"ภาษาไทย",
 					"tr",		"Turkish",			"Türkçe",
-/*					"uk",		"Ukrainian",			"Yкраїнська",		*/
+					"uk",		"Ukrainian",			"Yкраїнська",
 					"vi",		"Vietnamese",			"Tiếng Việt" ];
-
+				
 // Data for the <select> element "ver".
 //					Value		Visible text
 DL.SEL_VER			= [	"4.1.15",	"4.1.15",
