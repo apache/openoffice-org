@@ -60,7 +60,7 @@ DL.language_matrix = {
          "cn": [ 'zh-CN', 'Chinese (simplified)',	'简体中文' ],
          "tw": [ 'zh-TW', 'Chinese (traditional)',	'正體中文' ] },
 
-// The following languages are not useful for 4.1.x releases but needed for the soft redirect on the main homepage (see msg_prop_l10n.js for details).
+// The following languages are not used for downloads but needed for the soft redirect on the main homepage (see msg_prop_l10n.js for details).
 "eo":  { "-" : [ 'eo',    'Esperanto',			'Esperanto' ] },
 "et":  { "-" : [ 'et',    'Estonian',			'Eesti keel' ] },
 "hy":  { "-" : [ 'hy',    'Armenian',			'Հայերեն' ] },
