@@ -53,13 +53,6 @@
             @import "<xsl:value-of select="$host" />/branding/css/inst.css";
             @import "/css/codesnippet.css";
         </style>
-<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
-</script>
-<script type="text/javascript">
-_uacct = "UA-30193653-1";
-urchinTracker();
-</script>
-
         <link rel="stylesheet" type="text/css" href="{$host}/branding/css/print.css" media="print" />
         <title>Sitemap</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
