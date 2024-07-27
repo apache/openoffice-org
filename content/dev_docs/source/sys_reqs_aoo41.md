@@ -9,8 +9,7 @@ notice=https://www.apache.org/licenses/LICENSE-2.0
 - At least 650 MB available disk space for a default install via download.
   After installation and deletion of temporary installation files, Apache OpenOffice
   will use approximately 440 MB disk space.
-- 1024 x 768 pixel or higher resolution with at least 256 colors (16.7 million
-  colors recommended)
+- 1024 x 768 pixel or higher resolution with at least 256 colors (16.7 million colors recommended)
 
 
 ## GNU/Linux ("Linux")
@@ -21,10 +20,10 @@ notice=https://www.apache.org/licenses/LICENSE-2.0
 - X-Server with 1024 x 768 pixel or higher resolution with at least 256 colors
   (16.7 million colors recommended)
 
-## OS X
+## macOS
 
-- OS X 10.7 (Lion) or higher
-- Intel Processor
+- macOS 10.7 (Lion) or higher
+- Intel Processor (on ARM Processor OpenOffice will be emulated via [Rosetta 2][5])
 - Free memory of 512 MB RAM
 - 400 MB available disk space
 - 1024 x 768 pixel or higher resolution with 16.7 million colors
@@ -54,3 +53,4 @@ Also see [Index of System Requirements for each version][3].
 [2]: http://java.sun.com/products/accessbridge
 [3]: /dev_docs/source/sys_reqs.html
 [4]: https://www.openoffice.org/download/common/java.html
+[5]: https://en.wikipedia.org/wiki/Rosetta_(software)#Rosetta_2
