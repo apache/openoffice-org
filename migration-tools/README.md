@@ -1,8 +1,8 @@
-# Migration from CMS to Github/JBake
+# Migration from CMS to GitHub/JBake
 
 > **NOTE** This folder contains historical scripts from migrations of the OpenOffice.org website.
 > This is both the migration described in this README and the original migration from Oracle's Kenai
-> to the deprecated and decommisioned [Apache CMS](README-TO-CMS.txt)
+> to the deprecated and decommissioned [Apache CMS](README-TO-CMS.txt)
 
 ## Clone the Git Repository
 
