@@ -17,3 +17,4 @@ Jenkins job. This job will need to be started manually.
 
 Any build failures are reported to [commits@openoffice.a.o](https://lists.apache.org/list.html?commits@openoffice.apache.org)
 mailing list.
+
