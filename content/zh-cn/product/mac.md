@@ -31,6 +31,6 @@ Apache OpenOffice has the following special features on MacOS:
 ## Additional Resources
 
    - Apache OpenOffice [download page](http://www.openoffice.org/download/)
-   - [Install intructions for OpenOffice on MacOS](http://www.openoffice.org/download/common/instructions.html#apple)
+   - [Install instructions for OpenOffice on MacOS](http://www.openoffice.org/download/common/instructions.html#apple)
    - OpenOffice [Community Support Forums](http://forum.openoffice.org/)
    

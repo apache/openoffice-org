@@ -299,7 +299,7 @@ then that's their genuine, unbiased, uninfluenced opinion.
 
 ## OOo 3.0 Reviews
 
-  - [OpenOffice 3.0 a fresh blow for Microsft][3.0.a]
+  - [OpenOffice 3.0 a fresh blow for Microsoft][3.0.a]
     By Adam Turner November 25, 2008, **The Sydney Morning Herald**:
 
     *If you're spending a fortune on MS Office licenses, you should at least be
