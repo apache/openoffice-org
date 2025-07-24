@@ -102,7 +102,7 @@ notice=https://www.apache.org/licenses/LICENSE-2.0
 
 ## OOo 3.0 Reviews
 
-  - [OpenOffice 3.0 a fresh blow for Microsft][3.0.a]
+  - [OpenOffice 3.0 a fresh blow for Microsoft][3.0.a]
     By Adam Turner November 25, 2008, **The Sydney Morning Herald**:
 
     *If you're spending a fortune on MS Office licenses, you should at least be
