@@ -38,5 +38,5 @@ Apache OpenOffice has the following special features on Windows:
 ## Additional Resources
 
   - Click here to [download](http://www.openoffice.org/tr/download/)
-  - Click here to get [Install intructions for OpenOffice on Windows](http://www.openoffice.org/download/common/instructions.html#win)
+  - Click here to get [Install instructions for OpenOffice on Windows](http://www.openoffice.org/download/common/instructions.html#win)
   - Click here to get help and support in the [Community Support Forums](http://forum.openoffice.org/)

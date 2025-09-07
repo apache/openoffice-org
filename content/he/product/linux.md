@@ -35,5 +35,5 @@ Apache OpenOffice has the following special features on Linux:
 ## Additional Resources
 
   - Click here to [download](http://www.openoffice.org/download/)
-  - Click here to get [install intructions for OpenOffice on Linux](http://www.openoffice.org/download/common/instructions.html#linux)
+  - Click here to get [install instructions for OpenOffice on Linux](http://www.openoffice.org/download/common/instructions.html#linux)
   - Click here to get help and support in the [Community Support Forums](http://forum.openoffice.org/)
