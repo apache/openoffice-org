@@ -12,13 +12,13 @@
 var DL = new Object();
 
 // Stable release: General properties.
-DL.VERSION				= "4.1.15";		// Release version in full format "x.y.z".
+DL.VERSION				= "4.1.16";		// Release version in full format "x.y.z".
 DL.VERSION_SHORT			= DL.VERSION;		// Release version in short format "x.y".
-DL.MILESTONE				= "AOO4115m2";		// Milestone ID (from AOO build system).
-DL.BUILD				= "9813";		// Build ID (from AOO build system).
-DL.SVN_REV				= "5f13fa0070";		// Git revision.
-DL.REL_DATE				= "2023-December-22";	// Date of the public announced release.
-DL.PREV_VERSION				= "4.1.14";		// Release of the previous version.
+DL.MILESTONE				= "AOO4116m1";		// Milestone ID (from AOO build system).
+DL.BUILD				= "9816";		// Build ID (from AOO build system).
+DL.SVN_REV				= "277251aa7e";		// Git revision.
+DL.REL_DATE				= "2025-November-XX";	// Date of the public announced release.
+DL.PREV_VERSION				= "4.1.15";		// Release of the previous version.
 DL.OLDVERSION				= "3.4.1";		// Old version (last stable release of 3.x series).
 DL.LEGACYVERSION			= "3.3.0";		// Old legacy version (last stable none-Apache release).
 
@@ -92,7 +92,8 @@ DL.SEL_LANG			= [	"hy",		"Armenian",			"Հայերեն",
 				
 // Data for the <select> element "ver".
 //					Value		Visible text
-DL.SEL_VER			= [	"4.1.15",	"4.1.15",
+DL.SEL_VER			= [	"4.1.16",	"4.1.16",
+					"4.1.15",	"4.1.15",
 					"4.1.14",	"4.1.14",
 					"4.1.13",	"4.1.13",
 					"4.1.12",	"4.1.12",
