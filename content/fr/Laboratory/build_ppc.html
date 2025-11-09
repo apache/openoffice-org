@@ -1,0 +1,286 @@
+
+
+<!--#include virtual="/doctype.html" -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <link href="/css/ooo.css" rel="stylesheet" type="text/css">
+    
+  <title>Labo</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    
+    <script src="https://www.apachecon.com/event-images/snippet.js"></script>
+  </head>
+  <body>
+    <!--#include virtual="/fr/brand.html" -->
+    <div id="topbara">
+      <!--#include virtual="/fr/topnav.html" -->
+      <div id="breadcrumbsa"><a href="/">home</a>&nbsp;&raquo;&nbsp;<a href="/fr/">fr</a>&nbsp;&raquo;&nbsp;<a href="/fr/Laboratory/">Laboratory</a></div>
+    </div>
+    <div id="clear"></div>
+      
+      
+    <div id="content">
+      
+      
+<table border="0" cellpadding="4" width="100%">
+  <tbody>
+    <tr>
+      <td align="left" valign="top" width="100%"><!-- Content --> <span
+ style="font-family: helvetica,arial,sans-serif;"></span>
+      <h3><font style="font-size: 20pt;" size="5">Compilation
+d'OpenOffice.org1.1.x description complète pour la version
+Linux PowerPC</font></h3>
+      <p style="margin-bottom: 0cm;">[Document réalisé par
+eric bachard pour le labo du projet francophone d'OpenOffice.org, et
+sous la même licence que la documentation habituelle de ce
+projet ]</p>
+      <pre><font face="Verdana">A) <b><u>Récupération des sources</u></b></font><br><br><font
+ face="Verdana">Il faut avoir un client cvs d'installé sur sa machine. Sinon, installez-en un ;-))</font><br><br><font
+ face="Verdana">Ensuite, créer le répertoire qui contiendra toutes les sources. Il sera appelé $SRC_DIR dans la suite. </font><br><br><font
+ face="Verdana">Chez moi, c'est par exemple /home/eric/OpenOffice.org1.1.4 pour la 1.1.x.</font><br><br><font
+ face="Verdana">IMPORTANT : il faut se placer *dans $SRC_DIR* pour exécuter les commandes qui suivent, car sinon, les sources (~800Mo) vont arriver à l'endroit où vous vous trouvez, avec les conséquences que cela entraîne...</font><br><font
+ face="Verdana"><b>Ensuite, on suppose que le shell est bash </b>:</font><br><br><font
+ face="Verdana"><span style="font-weight: bold;">1) </span><u
+ style="font-weight: bold;"><i>Création du répertoire contenant les sources du logiciel</i></u></font><br><br><font
+ face="Verdana">mkdir ~/OpenOffice.org1.1.4 #(la 1ère fois, seulement)</font><br><br><font
+ face="Verdana">cd OpenOffice.org</font><br><br><br><font face="Verdana"><span
+ style="font-weight: bold;">2) </span><u style="font-weight: bold;"><i>Déclaration du serveur CVS :</i></u></font><br><br><font
+ face="Verdana">$ export CVSROOT=":pserver:anoncvs@anoncvs.services.openoffice.org:/cvs"</font><br><br><br><font
+ style="font-weight: bold;" face="Verdana">3) <u><i>Login :</i></u></font><br><br><font
+ face="Verdana">$ cvs login</font><br><br><br><font
+ style="font-weight: bold;" face="Verdana">4) <u><i>Mot de passe :</i></u></font><br><br><font
+ face="Verdana">Logging in to :pserver:anoncvs@anoncvs.services.openoffice.org:2401/cvs</font><br><font
+ face="Verdana">CVS password:</font><br><br><font face="Verdana">"anoncvs" est le mot de passe </font><br><br><br><font
+ style="font-weight: bold;" face="Verdana">5)<u><i> Retrait des sources :</i></u></font><br><br><font
+ face="Verdana">$ <span style="font-weight: bold;">cvs -z4 co -r SRX645_mXX OpenOffice</span></font><br><br><font
+ face="Verdana">Remarques :  -z4 pour que le serveur compresse les sources, XX=48 actuellement. Pour les mises à jour, cvs update suffit (après s'être logué, bien entendu...)</font><br><br><br><font
+ style="font-weight: bold;" face="Verdana">6) <u><i>On se déconnecte</i></u></font><br><br><font
+ face="Verdana">cvs logout</font><br><br><font face="Verdana">À ce jour, le c'est 645m48 le "milestone" le plus avancé. Pour trouver les noms des "milestones" : </font><br><br><font
+ face="Verdana">&lt;<a
+ href="http://eis.services.openoffice.org/EIS2/servlet/GuestLogon">http://eis.services.openoffice.org/EIS2/servlet/GuestLogon</a>&gt;</font><br><br><br><font
+ face="Verdana">B) <b><u><span style="font-style: normal;">Il faut autre chose que les sources...</span></u></b></font><br><br><br><font
+ style="font-weight: bold;" face="Verdana">1) <u><i>Création du répertoire solver/645/unxlngppc.pro/pck</i></u> </font><br><br><font
+ face="Verdana">[cette partie 1) est facultative pour la compilation (binaires non stripés]</font><br><br><font
+ face="Verdana">N.B. : unxlngppc.pro sur linux PPC, sinon, c'est unxmacxp.pro sur Mac OS X.</font><br><br><font
+ face="Verdana">Ensuite récupération du fichier contenant les archives prêtes à être utilisées.</font><br><br><font
+ face="Verdana">L'adresse : &lt;<a
+ href="ftp://ftp.stardiv.de/pub/OpenOffice.org/contrib/helpcontent">ftp.stardiv.de/pub/OpenOffice.org/contrib/helpcontent</a>&gt;</font><br><br><font
+ face="Verdana">Le fichier qui nous intéresse est helpcontent_33_unix.tgz</font><br><br><font
+ face="Verdana">Ensuite, décompresser cette archive quelque part, et placer le contenu dans </font><br><br><font
+ face="Verdana">le répertoire $SRC_DIR/solver/645/unxlngppc.pro/pck précédemment créé.</font><br><br><br><font
+ face="Verdana">Remarque : 01 = anglais_US , 33 = français , 31 = néérlandais ; 49 = allemand...à vous de voir la localisation que vous souhaitez ajouter pour l'aide, sachant que par défaut, c'est en_US ou allemand.</font><br><br><font
+ face="Verdana">Ce n'est pas obligatoire de faire ça avant la compilation, mais comme ça, on n'oublie pas, et on n'aura pas l'aide en anglais une fois la nouvelle build installée ;-)</font><br><br><br><font
+ style="font-weight: bold;" face="Verdana">2) <u><i>Installation de Java</i></u></font><br><br><font
+ face="Verdana">-&gt; pour Linux PowerPC seulement. Pas d'inquiétude : pour Linux x86, c'est presque pareil ;-) :</font><br><br><font
+ face="Verdana">JRE signifie Java Runtime Environnement et SDK Software Developpement Kit. C'est donc le second type d'archive dont nous avons besoin ici.</font><br><br><font
+ face="Verdana">On trouvera l'archive qui convient ici : &lt;<a
+ href="ftp://ftp.stardiv.de/pub/OpenOffice.org/contrib/linuxppc">ftp://ftp.stardiv.de/pub/OpenOffice.org/contrib/linuxppc</a>&gt;</font><br><br><font
+ face="Verdana">Son nom est <b><i>j2sdk-1.3.1-02d-FCS-linuxppc.bin</i></b></font><br><br><font
+ face="Verdana">Pour l'installer, il faut rendre le fichier exécutable, le placer dans /usr/local, et lancer l'installation en tapant le nom de l'archive + entrée ...si on répond bien aux questions, c'est tout bon.</font><br><br><br><font
+ face="Verdana">NB : ne pas oublier d'ajouter la ligne <span
+ style="font-weight: bold;">export JAVA_HOME=/usr/local/j2re1.3.1</span>  dans le fichier <span
+ style="font-style: italic;">/etc/profile</span>, se déloguer et se reloguer ensuite. La commande <span
+ style="font-weight: bold;">set | grep JAVA</span> vous dira si c'est bon ;-)</font><br><br><br><font
+ style="font-weight: bold;" face="Verdana">3)<span
+ style="font-style: italic;"> </span><span
+ style="text-decoration: underline; font-style: italic;">Archives complémentaires Java</span></font><br><br><font
+ face="Verdana">Il faudra ensuite placer les fichiers crimson.jar, xalan.jar et xml-apis.jar suivants dans le répertoire <span
+ style="font-weight: bold;">$SRC_DIR/external/common/</span></font><br><br><font
+ face="Verdana">Pour récupérer ces fichiers, il faut les télécharger sur les sites suivants :</font><br><br><font
+ face="Verdana">&lt;<a href="http://xml.apache.org/dist/crimson">http://xml.apache.org/dist/crimson</a>&gt; </font><br><br><font
+ face="Verdana">-&gt; prendre crimson-1.1.1-bin.zip et le dézipper pour obtenir crimson.jar</font><br><br><br><font
+ face="Verdana">&lt;<a
+ href="http://xml.apache.org/xalan-j/downloads.html">http://xml.apache.org/xalan-j/downloads.html</a>&gt; </font><br><br><font
+ face="Verdana">-&gt; prendre xalan-j_2_5_0-bin.zip pour obtenir xalan.jar après l'avoir dézippé.</font><br><br><br><font
+ face="Verdana">&lt;<a href="http://www.apache.org/dist/xml/xerces-j">http://www.apache.org/dist/xml/xerces-j</a>/</font><br><br><font
+ face="Verdana">-&gt; prendre Xerces-J-tools.2.6.2.zip pour obtenir xml-api.jar </font><br><br><font
+ face="Verdana">Chez moi, cela donne :</font><br><br><font
+ face="Verdana">eric@alube:~/OpenOffice$ ls -l ./external/common/</font><br><font
+ face="Verdana">total 2248</font><br><font face="Verdana">-rw-r--r--    1 eric     eric       205045 2001-11-01 07:26 crimson.jar</font><br><font
+ face="Verdana">drwxr-xr-x    2 eric     eric         4096 2004-10-06 12:03 CVS</font><br><font
+ face="Verdana">-rw-r--r--    1 eric     eric         5618 2000-10-10 14:28 jaxp.jar</font><br><font
+ face="Verdana">-rw-r--r--    1 eric     eric       136133 2000-10-10 14:28 parser.jar</font><br><font
+ face="Verdana">-rw-r--r--    1 eric     eric           94 2003-10-27 16:51 README.jaxp</font><br><font
+ face="Verdana">-rw-r--r--    1 eric     eric           94 2003-10-27 16:51 README.xt</font><br><font
+ face="Verdana">-rw-r--r--    1 eric     eric       997276 2004-03-21 14:37 xalan.jar</font><br><font
+ face="Verdana">-rw-r--r--    1 eric     eric       124724 2004-03-21 14:37 xml-apis.jar</font><br><font
+ face="Verdana">-rw-r--r--    1 eric     eric       352905 2000-10-10 14:28 xt19991105.jar</font><br><font
+ face="Verdana">-rw-r--r--    1 eric     eric       423047 2001-01-23 12:33 xt.jar</font><br><br><br><font
+ face="Verdana"><span style="font-weight: bold;">IMPORTANT</span> :</font><br><br><font
+ face="Verdana">Si (et seulement si) cela ne fonctionne pas, alors placer ces mêmes fichiers dans <span
+ style="font-weight: bold;">$JAVA_HOME/jre/lib/ext</span>, et cela s'arrangera. <br><br>À titre d'exemple, chez moi, j'ai, avec, <span
+ style="font-weight: bold;">$JAVA_HOME=/usr/local/j2sdk1.3.1</span> :</font><br><br><font
+ face="Verdana">eric@alube:~$ <span style="font-weight: bold;">ls -l /usr/local/j2sdk1.3.1/jre/lib/ext</span></font><br><font
+ face="Verdana">total 1316</font><br><font face="Verdana">-rw-r--r--    1 root     root       205045 2001-11-01 07:26 crimson.jar</font><br><font
+ face="Verdana">-rw-r--r--    1 root     root       997276 2004-02-20 19:47 xalan.jar</font><br><font
+ face="Verdana">-rw-r--r--    1 root     root       124724 2004-02-20 19:57 xml-apis.jar</font><br><font
+ face="Verdana">eric@alube:~$ </font><br><br><font face="Verdana">Mais cette seconde installation ne devrait pas avoir lieu.</font><br><br><br><br><font
+ style="font-weight: bold;" face="Verdana">4) <span
+ style="font-style: italic; text-decoration: underline;">Generic Polygon Clipper : applelé aussi gpc</span></font><br><br><font
+ face="Verdana">Ensuite, sauf si vous utilisez libart, il faut télécharger les sources de gpc à l'adresse suivante :</font><br><br><font
+ face="Verdana">&lt;<a href="ftp://ftp.cs.man.ac.uk/pub/toby/gpc/">ftp://ftp.cs.man.ac.uk/pub/toby/gpc/</a>&gt;</font><br><br><font
+ face="Verdana">Exactement ici : &lt;<a
+ href="ftp://ftp.cs.man.ac.uk/pub/toby/gpc/gpc231.tar.Z">ftp://ftp.cs.man.ac.uk/pub/toby/gpc/gpc231.tar.Z</a>&gt;</font><br><br><font
+ face="Verdana">et les placer dans external gpc. De toutes façons, si vous ne les placez pas au bon endroit, le configure plantera...:-)</font><br><br><font
+ face="Verdana">lacer alors le patch external_jars.patch dans $SRC_DIR/external/ et appliquer celui-ci, comme décrit ci-dessous :</font><br><br><font
+ face="Verdana">N.B. : "eric@alube:~/OpenOffice.1.1.4/external$"  est l'invite du prompt,"~/OpenOffice.1.1.4" désigne ce que j'ai appelé $SRC_DIR et la commande<br>utile se limite à :</font><br><br><font
+ style="font-weight: bold;" face="Verdana">patch -p0 &lt; external_jars.patch</font><br><br><br><font
+ face="Verdana">eric@alube:~/OpenOffice.1.1.4/external$ <span
+ style="font-weight: bold;">patch -p0 &lt; external_jars.patch </span></font><br><font
+ face="Verdana">patching file prj/d.lst</font><br><font face="Verdana">eric@alube:~/OpenOffice.1.1.4/external$</font><br><br><font
+ face="Verdana">Important : Le répertoire <span
+ style="font-weight: bold;">$SRC_DIR/external/</span> est particulièrement adapté pour placer des sources externes d'autres paquetages comme libart ou d'autres encore...</font><br><br><br><br><font
+ face="Verdana"><span style="font-weight: bold;">5) </span><span
+ style="text-decoration: underline; font-style: italic; font-weight: bold;">Patch pour noyau 2.6 </span>(sinon, ça ne compilera pas !! )</font><br><br><br><font
+ face="Verdana">Ce patch porte le nom de tools_kernel_26.patch, et doit être placé dans le répertoire $SRC_DIR/tools</font><br><br><font
+ face="Verdana">L'application de ce patch :</font><br> <br><font
+ face="Verdana">eric@alube:~/OpenOffice.1.1.4/tools$ <span
+ style="font-weight: bold;">patch -p0 &lt; tools_kernel_26.patch </span></font><br><font
+ face="Verdana">patching file source/solar/makefile.mk</font><br><font
+ face="Verdana">eric@alube:~/OpenOffice.1.1.4/tools$ </font><br><br><br><font
+ face="Verdana">IMPORTANT : Dans ce qui suit, les patches sont réservés aux versions Linux PPC et Mac OS X :</font><br><br><font
+ style="font-weight: bold;" face="Verdana">6)<span
+ style="font-style: italic;"> I</span><span
+ style="text-decoration: underline; font-style: italic;">nstallation de apache-ant</span></font><br><br><font
+ face="Verdana">Pour cela, il faut récupérer apache-ant (version 1.6.1 pour OOo1.1.x et 1.6.1 ou 1.6.2 pour 2.x )</font><br><br><font
+ face="Verdana">Le site : &lt;<a href="http://ant.apache.org/">http://ant.apache.org</a>&gt;</font><br><br><font
+ face="Verdana">Exemple : &lt;<a
+ href="http://apache.crihan.fr/dist/ant/binaries/apache-ant-1.6.2-bin.tar.gz">http://apache.crihan.fr/dist/ant/binaries/apache-ant-1.6.2-bin.tar.gz</a>&gt;</font><br><br><font
+ face="Verdana">Ensuite, installer le contenu de l'archive décompressée, soit dans /usr/local, soit dans $SRC_DIR/external, mais il faudra se souvenir de l'endroit <br>lors du ./configure, car sinon, rien ne sera possible : ant-apache est obligatoire pour la compilation.</font><br><br><br><font
+ style="font-weight: bold;" face="Verdana">7)  <span
+ style="text-decoration: underline; font-style: italic;">Fichiers d'en-têtes de Mozilla</span></font><br><br><font
+ face="Verdana">Par défaut, les versions Windows, Solaris, Linux Intel sont déjà incluses. Inutile de le chercher...</font><br><br><font
+ face="Verdana">Pour la versin PowerPc, ils sont identiques pour Linux PPC et pour Mac OS X.À placer dans <span
+ style="font-weight: bold;">$SRC_DIR/moz/zipped</span>, les fichiers : </font><br><br><font
+ face="Verdana">LINUXGCCPinc.zip  </font><br><font face="Verdana">LINUXGCCPlib.zip</font><br><font
+ face="Verdana">LINUXGCCPruntime.zip</font><br><br><font face="Verdana">Que l'on trouvera à l'adresse suivante :</font><br><br><font
+ face="Verdana">&lt;<a
+ href="ftp://ftp.linux.cz/pub/localization/OpenOffice.org/devel/build/Sources/LinuxPPC/moz/zipped/">ftp://ftp.linux.cz/pub/localization/OpenOffice.org/devel/build/Sources/LinuxPPC/moz/zipped/</a>&gt;</font><br><br><br><br><font
+ style="font-weight: bold;" face="Verdana">8) <span
+ style="text-decoration: underline; font-style: italic;">Immortalisez votre "build"</span>   :-))</font><br><br><font
+ face="Verdana">Sous réserves de dire une grosse bétise, celui qui fait la compilation peut s'il le désire mettre son nom. Cela se passe dans le fichier <br>$SRC_DIR/offmgr/source/offap/intro/ooo.src dans lequel il suffit de commenter le nom "OOO_VENDOR" dans la macro #ifdef BUILD_SPECIAL <br>et de mettre le sien dans le else qui suit. </font><font
+ face="Verdana">Exemple :</font><br><br><font face="Verdana">Attention : ça commence à la ligne 75 (les numéros sont là pour comprendre) :</font><br><br>    <font
+ face="Verdana">75  #endif</font><br>    <font face="Verdana">76  #include "app.hrc"</font><br>    <font
+ face="Verdana">77  #include "intro.hrc"</font><br>    <font
+ face="Verdana">78  </font><br>    <font face="Verdana">79  #ifdef BUILD_SPECIAL</font><br>    <font
+ face="Verdana">80  //#define OOO_VENDOR "Sun Microsystems Inc."</font><br>    <font
+ face="Verdana">81  //#define OOO_LICENSE "LGPL"</font><br>    <font
+ face="Verdana">82  #define OOO_INTRO "openintro_sun.bmp"</font><br>    <font
+ face="Verdana">83  #else</font><br>    <font face="Verdana">84  #define OOO_VENDOR "Eric Bachard (ericb)"</font><br>    <font
+ face="Verdana">85  #define OOO_LICENSE "LGPL"</font><br>    <font
+ face="Verdana">86  #define OOO_INTRO "openintro.bmp"</font><br>    <font
+ face="Verdana">87  #endif</font><br>    <font face="Verdana">88  </font><br>    <font
+ face="Verdana">89  Bitmap RID_DEFAULT_ABOUT_BMP_LOGO</font><br>    <font
+ face="Verdana">90  {</font><br><br>        <font face="Verdana">...etc</font><br><br><br><br><font
+ style="font-weight: bold;" face="Verdana">8)<span
+ style="text-decoration: underline; font-style: italic;"> Patches pour le media audio de Kevin Hendricks </span></font><br><br><font
+ face="Verdana">Pour cela, il faut récupérer les fichiers donnés en attachement sur l'issue 32737 :</font><br><br><font
+ face="Verdana">&lt;<a
+ href="http://www.openoffice.org/issues/show_bug.cgi?id=32737">http://www.openoffice.org/issues/show_bug.cgi?id=32737</a>&gt;</font><br><br><font
+ face="Verdana">Le fichier &lt;<a
+ href="http://www.openoffice.org/nonav/issues/showattachment.cgi/17012/patches_20040809.tar.gz">http://www.openoffice.org/nonav/issues/showattachment.cgi/17012/patches_20040809.tar.gz</a>&gt;</font><br><br><font
+ face="Verdana">contient tout ce qu'il faut. Utilisation :</font><br><br><font
+ face="Verdana"><span style="font-weight: bold;">8.1)</span> décompresser ce fichier dans le répertoire $SRC_DIR</font><br><br><font
+ face="Verdana">tar zxvf patches_20040809.tar.gz</font><br><br><font
+ face="Verdana"><span style="font-weight: bold;">8.2</span>) décompresser les différentes archives contenues dans ce répertoire patches et copier<span
+ style="font-weight: bold;"> pasfsound.cxx</span> dans le répertoire <span
+ style="font-weight: bold;">vcl/unx/source/app/</span></font><br><br><font
+ style="font-weight: bold;" face="Verdana">tar -zxvf patches/sndfile.tar.gz</font><br><font
+ style="font-weight: bold;" face="Verdana">tar -zxvf patches/portaudio.tar.gz</font><br><font
+ style="font-weight: bold;" face="Verdana">tar -zxvf patches/audioplugin.tar.gz</font><br><font
+ style="font-weight: bold;" face="Verdana">cp patches/pasfsound.cxx vcl/unx/source/app/</font><br><br><font
+ face="Verdana"><span style="font-weight: bold;">8.3) </span>Appliquer les patches pour le support du son</font><br><br><font
+ style="font-weight: bold;" face="Verdana">cd vcl </font><br><font
+ style="font-weight: bold;" face="Verdana">patch -p0 &lt; ../patches/vcl_sound.patch</font><br><font
+ style="font-weight: bold;" face="Verdana">cd ..</font><br><font
+ style="font-weight: bold;" face="Verdana">cd scp</font><br><font
+ style="font-weight: bold;" face="Verdana">patch -p0 &lt; ../patches/scp_sound.patch</font><br><font
+ style="font-weight: bold;" face="Verdana">cd ..</font><br><br><br><font
+ face="Verdana"><span style="font-weight: bold;">8.4)</span> Appliquer les patches pour le support du plugin audio</font><br><br><font
+ style="font-weight: bold;" face="Verdana">cd instsetoo</font><br><font
+ style="font-weight: bold;" face="Verdana">patch -p0 &lt; ../patches/instsetoo_audioplugin.patch</font><br><font
+ style="font-weight: bold;" face="Verdana">cd ..</font><br><font
+ style="font-weight: bold;" face="Verdana">cd scp</font><br><font
+ style="font-weight: bold;" face="Verdana">patch -p0 &lt; ../scp_audioplugin.patch</font><br><font
+ style="font-weight: bold;" face="Verdana">cd ..</font><br><br><br><font
+ face="Verdana">C) <span
+ style="font-weight: bold; text-decoration: underline; font-style: italic;">Compilation</span></font><br><br><font
+ face="Verdana">Enfin...</font><br><br><br><font face="Verdana">Tout d'abord il faut configurer correctement les fichiers makefiles utilisés par dmake (ce n'est pas make, mais dmake qui est utilisé).</font><br><br><font
+ face="Verdana">Tout d'abord, il faut aller où ça se passe : </font><br><br><font
+ face="Verdana"><span style="font-weight: bold;">cd config_office</span> </font><br><br><font
+ face="Verdana">puis lancer le script d'autoconfiguration avec les bonnes options. Par exemple, pour Linux PowerPC, j'utilise </font><br><br><br><font
+ style="font-weight: bold;" face="Verdana">./configure --with-lang=FREN,ENUS,DTCH --with-ant-home=/usr/local/apache-ant-1.6.1/</font><br><br><font
+ face="Verdana">Pour les options supplémentaires, <span
+ style="font-weight: bold;">./configure --help | less</span> donne les détails.</font><br><br><br><font
+ face="Verdana">Ensuite, si tout va bien, un fichier de bootstrap, ainsi qu'un fichier contenant tout l'environnement necéssaires sont créés dans $SRC_DIR</font><br><br><font
+ face="Verdana"><span style="font-weight: bold;">cd ..</span> # pour retourner dans $SRC_DIR</font><br><br><font
+ face="Verdana"><span style="font-weight: bold;">./bootstrap  </span># dmake est construit la 1ère fois</font><br><br><font
+ face="Verdana"><span style="font-weight: bold;">tsch</span> # il faut utiliser le shell tcsh pour la compilation</font><br><br><font
+ face="Verdana"><span style="font-weight: bold;">source ./LinuxPPCEnv.Set</span>  # le nom est différent selon l'architecture et l'OS</font><br><br><font
+ face="Verdana">Enfin, la commande qui lance la compilation :</font><br><br><font
+ style="font-weight: bold;" face="Verdana">dmake</font><br><br><br><font
+ face="Verdana">Maintenant, il y en a pour </font><br><br><br><font
+ face="Verdana">~4 à 5 heures sur une machine puissante ( f&gt; 2GHz + plein de RAM)  </font><br><br><font
+ face="Verdana">~10 heures sur une machine f~1GHz</font><br><br><font
+ face="Verdana">Pour les machines moins puissantes, cela peut être beaucoup plus long.</font><br><br><br><font
+ face="Verdana">Si jamais quelque chose se passe mal, une adresse très sympa :</font><br><br><font
+ face="Verdana">&lt;<a
+ href="http://qa.openoffice.org/issue_handling/project_issues.html">http://qa.openoffice.org/issue_handling/project_issues.html</a>&gt;</font><br><br><font
+ face="Verdana">Mais il y a les listes de diffusion, l'irc...là, c'est lexpérience qui aidera.</font><br><br><br><font
+ face="Verdana">Enfin...si jamais vous avez un message donnant une erreur parlant de gtk, avec une durée indiquée et l'invite correctement rendue (sans message d'erreur), bienvenue dans le club de ceux ayant terminé une "build". Félicitations ! </font><br><br><font
+ face="Verdana">Mais où est ma build ?</font><br><br><font
+ face="Verdana">En fait, c'est la version non strippée, c'est à dire comportant des instructions utiles au déboguage, qui se trouve dans instsetoo, unxlngppc.pro (sur powerpc, sinon le nom est légèrement différent).</font><br><br><font
+ face="Verdana">Comment avoir une version finale ?</font><br><br><font
+ style="font-weight: bold;" face="Verdana">cd instsetoo</font><br><br><font
+ style="font-weight: bold;" face="Verdana">rm -rf  ./unxlngppc.pro</font><br><br><font
+ style="font-weight: bold;" face="Verdana">cd util</font><br><br><font
+ style="font-weight: bold;" face="Verdana">dmake strip=TRUE</font><br><br><font
+ face="Verdana">Et alors, si tout se passe bien, vous avez votre nouvelle build dans le répertoire $SRC_DIR/instsetoo/unxlngppc.pro/33</font><br><br><font
+ face="Verdana">tout est dans "normal". Notez la présence de fichers de log, permettant de savoir si la version s'est contruite sans erreur.</font><br><br><font
+ face="Verdana">Il reste à fabriquer l'arcive finale :</font><br><br><font
+ style="font-weight: bold;" face="Verdana">tar cvzf OOo_SRX645_m48_LinuxPPC.tar.gz ./normal/*</font><br><br><font
+ face="Verdana">et de faire le md5sum de l'archive correspondant :</font><br><br><font
+ style="font-weight: bold;" face="Verdana">md5sum OOo_SRX645_m48_LinuxPPC.tar.gz &gt; OOo_SRX645_m48_LinuxPPC.md5</font><br><br><font
+ face="Verdana">Après, vous faites ce que vous voulez de ces fichiers, mais le mieux, c'est de les utiliser comme une archive que vous venez de télécharger ;-))</font><br><br><br><font
+ face="Verdana"><b>Voila, c'est fini !!!</b></font><br><br><font
+ style="font-weight: bold;" face="Verdana">Et surtout, si ce didacticiel vous a plu, n'hésitez surtout pas à me le faire savoir !!</font><br><br><br><br><font
+ face="Verdana">--&nbsp;<br>eric bachard  <a
+ href="mailto:ericb@openoffice.org">&lt;ericb@openoffice.org&gt;</a> <br>French OpenOffice.org Community contributor (build of french releases for Linux PPC and Mac OS X / X11) <br>See : <a
+ href="http://fr.openoffice.org/">&lt;http://fr.openoffice.org&gt;</a> </font></pre>
+      <br>
+      <br>
+      <span
+ style="font-weight: bold; font-family: helvetica,arial,sans-serif; color: rgb(255, 255, 255);"></span><br>
+      <p style="margin-bottom: 0.5cm;"><font
+ face="Helvetica, Arial, sans-serif"><a href="indexlabo.html">Retour à
+l'index Labo</a><a href="../site_fr/fr/www/faq-fr.html"><br>
+      </a></font></p>
+<!-- /Table Navigation Bar --> <br>
+      </td>
+    </tr>
+    <tr>
+      <td align="right" valign="bottom">
+      <p>&nbsp;</p>
+<!-- Copyrights -->
+      <p><small>OpenOffice.org native tongue concept and francophone
+project are built for you with pride by Guy Capra (Alomphega).<br>
+This fr project is also led and maintained by Sophie Gautier.</small></p>
+<!-- /Copyrights --> </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+      
+    </div>
+    <!--#include virtual="/footer.html" -->
+  </body>
+</html>

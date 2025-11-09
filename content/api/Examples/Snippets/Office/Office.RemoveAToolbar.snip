@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.RemoveAToolbar.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2008/10/20 11:29:27 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Office">
+
+<keywords>
+	<keyword>remove</keyword>
+	<keyword>tool</keyword>
+	<keyword>bar</keyword>
+</keywords>
+
+<authors>
+	<author id="1" initial="true" email="" copyright="Josef Frysak">Josef Frysak</author>
+</authors>
+
+<question heading="Remove a toolbar">How to remove the toolbar again?
+</question>
+
+<answer>
+<p>Use the &quot;ModuleUIConfigurationManagerSupplier&quot; service to get the</p>
+<p>document type specific user interface manager (for Writer, for Calc, ...)</p>
+<p>again. Next check if the toolbar, defined by the ToolbarURL, is present.</p>
+<p>If that is the case, execute the &quot;removeSettings&quot; function to remove it.</p>
+<p>For further details see http://wi.wu-wien.ac.at/rgf/diplomarbeiten/BakkStuff/2008/200809_Frysak/200809_Frysak_Automating_OOo_ooRexx_Nutshells.pdf.</p>
+<listing>-- try to get a script context, will be .nil, if script was not invoked by OOo
+x_ScriptContext = uno.getScriptContext()
+if (x_ScriptContext &lt;&gt; .nil) then
+do
+   -- invoked by OOo as a macro
+
+   -- get context
+   x_ComponentContext = x_ScriptContext~getComponentContext
+   -- get desktop (an XDesktop)
+   x_Desktop  = x_ScriptContext~getDesktop
+   -- get current document
+   x_Document = x_ScriptContext~getDocument
+end
+else  
+do
+   -- called from outside of OOo, create a connection
+
+   -- connect to Open Office and get component context
+   x_ComponentContext = UNO.connect()
+   -- create a desktop service and its interface
+   service = &quot;{%see com.sun.star.frame.Desktop}&quot;
+   s_Desktop = x_ComponentContext~getServiceManager~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}~createInstance(service)
+   x_Desktop = s_Desktop~{%see com.sun.star.frame.XDesktop%XDesktop}
+   -- get the last active document
+   x_Document = x_Desktop~getCurrentComponent()  
+end
+
+
+
+
+-- define toolbar storage position
+ToolbarURL = &quot;private:resource/toolbar/custom_exampletoolbar&quot;
+
+-- create the user interface supplier
+x_MultiServiceFactory = x_ComponentContext~getServiceManager()~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+configsupplier = &quot;{%see com.sun.star.ui.ModuleUIConfigurationManagerSupplier}&quot;
+s_Supplier = x_MultiServiceFactory~createInstance(configsupplier)
+x_Supplier = s_Supplier~{%see com.sun.star.ui.XModuleUIConfigurationManagerSupplier%XModuleUIConfigurationManagerSupplier}
+
+-- Specify the document type (writer)
+DocumentType = &quot;{%see com.sun.star.text.TextDocument}&quot;
+
+-- next get the manager
+x_UIConfigurationManager = x_Supplier~getUIConfigurationManager(DocumentType)
+  
+-- check if such a toolbar exists
+If x_UIConfigurationManager~hasSettings(ToolbarURL) then
+do
+   -- if it exists remove it
+   x_UIConfigurationManager~removeSettings(ToolbarURL)
+   .bsf.dialog~messageBox(&quot;Toolbar removed&quot;, &quot;RemoveToolbar.rex&quot;, &quot;information&quot;)
+end
+else
+do
+   -- outherwise just send error message
+   .bsf.dialog~messageBox(&quot;Toolbar not installed&quot;, &quot;RemoveToolbar.rex&quot;, &quot;error&quot;) 
+end
+
+::requires UNO.CLS</listing>
+</answer>
+
+<versions>
+	<version number="2.4.1" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="1" date="2008-10-13">Initial version</change>
+</changelog>
+
+</snippet>

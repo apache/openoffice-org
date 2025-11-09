@@ -1,0 +1,79 @@
+<!--
+$RCSfile: Database.SetFilter.snip,v $
+
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2004/12/14 09:44:46 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="OOBasic" application="Database">
+
+<keywords>
+	<keyword>filter</keyword>
+	<keyword>database</keyword>
+	<keyword>database forms</keyword>
+</keywords>
+
+<authors>
+	<author id="tomsontom" initial="true" email="tom.schindl@bestsolution.at">Tom Schindl</author>
+</authors>
+
+<question heading="setting an filter using a macro">
+How do I access a SubSubForm and set an filter
+<p>I have a form document to view a datasource. The document has a form, a subform, and a sub-subform, all of them linked with one-to-many relationship. I need to filter the last subform on the fly, pushing a button. I need to write a StarBasic macro that can do that on the fly, without switching to design mode. Is this possible?</p>
+</question>
+
+<answer>
+<p>Yes given the sturcture looks like the following</p>
+<p>+ Form1</p>
+<p>  + Form1_1</p>
+<p>    + Form1_1_1</p>
+<p></p>
+<listing>
+Sub setFilter
+
+&apos; reserve some variables
+Dim TopForm As Object
+Dim SubForm As Object
+Dim SubSubForm As Object
+
+&apos; Fetch the appropiate form
+TopForm = ThisComponent.DrawPage.Forms.GetByName(&quot;Form1&quot;)
+SubForm = TopForm.GetByName(&quot;Form1_1&quot;)
+SubSubForm = SubForm.GetByName(&quot;Form1_1_1&quot;)
+
+&apos; Now we set the filter attribute
+SubSubForm.Filter = &quot;p_surname LIKE &apos;Sch%&apos;&quot;
+&apos; and don&apos;t forget to reload
+SubSubForm.reload()
+
+End Sub
+</listing>
+</answer>
+
+<changelog>
+	<change author-id="tomsontom" date="2004-12-14">Initial version</change>
+</changelog>
+
+</snippet>

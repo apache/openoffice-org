@@ -1,0 +1,297 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Database.CreateAForm.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2007/03/12 08:42:46 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Database">
+
+<keywords>
+	<keyword>data aware form</keyword>
+	<keyword>master form</keyword>
+	<keyword>sub form</keyword>
+</keywords>
+
+<authors>
+</authors>
+
+<question heading="create a form">How can a complex form be created?
+</question>
+
+<answer>
+<listing>/* get the service manager */
+xContext = UNO.connect() --connect to server and retrieve the XContext object
+xMcf = xContext~getServiceManager -- retrieve XMultiComponentFactory
+
+oDesktop = UNO.createDesktop() -- get the UNO Desktop service object
+
+/* get componentLoader interface */
+xComponentLoader = oDesktop~{%see com.sun.star.frame.XDesktop%XDesktop}~{%see com.sun.star.frame.XComponentLoader%XComponentLoader} 
+
+/* create a new Writer file */
+url = &quot;private:factory/swriter&quot;
+xComponent = xComponentLoader~loadComponentFromURL(-
+	url, &quot;_blank&quot;, 0, .UNO~noProps)
+
+/* Save some objects which are often used in the following routines into the 
+directory object &apos;.local&apos;. So they can be accessed from the whole Rexx program 
+like global variables */
+.local~xMcf = xMcf
+.local~xContext = xContext
+.local~{%see com.sun.star.lang.XComponent%xComponent} = xComponent
+
+
+/************************** create form components **************************/
+
+label1 = createControlAndShape(&quot;FixedText&quot;, 25, 6, 5, 5)
+label1~setPropertyValue(&quot;Label&quot;, &quot;Customer ID:&quot;) --assign the display-text
+	
+textfield1 = createControlAndShape(&quot;TextField&quot;, 25, 6, 35, 5)
+textfield1~setPropertyValue(&quot;DataField&quot;, &quot;cid&quot;) --assign to a field in the db
+textfield1~setPropertyValue(&quot;Name&quot;, &quot;cid_textfield&quot;) --assign a name
+	
+label2 = createControlAndShape(&quot;FixedText&quot;, 25, 6, 5, 20)
+label2~setPropertyValue(&quot;Label&quot;, &quot;Customer Name:&quot;) --assign the display-text
+	
+textfield21 = createControlAndShape(&quot;TextField&quot;, 25, 6, 35, 20)
+textfield21~setPropertyValue(&quot;DataField&quot;, &quot;firstname&quot;)
+textfield21~setPropertyValue(&quot;Name&quot;, &quot;firstname_textfield&quot;) --assign a name
+	
+textfield22 = createControlAndShape(&quot;TextField&quot;, 25, 6, 70, 20)
+textfield22~setPropertyValue(&quot;DataField&quot;, &quot;lastname&quot;)
+textfield22~setPropertyValue(&quot;Name&quot;, &quot;lastname_textfield&quot;) --assign a name
+
+label3 = createControlAndShape(&quot;FixedText&quot;, 25, 6, 5, 35)
+label3~setPropertyValue(&quot;Label&quot;, &quot;Date of Birth:&quot;) --assign the display-text
+	
+textfield3 = createControlAndShape(&quot;TextField&quot;, 25, 6, 35, 35)
+textfield3~setPropertyValue(&quot;DataField&quot;, &quot;birthdate&quot;)
+textfield3~setPropertyValue(&quot;Name&quot;, &quot;birthdate_textfield&quot;) --assign a name
+
+/************************** bind MasterForm to the database *****************/
+
+/* get the parent of any control model inserted previously to obtain the 
+   control model of the form, this form was automaticaly created while inserting
+   the first control model of a form component.
+   The masterForm is like every form component a &apos;XPropertySet&apos;
+*/
+
+masterForm = label1~{%see com.sun.star.container.XChild%XChild}~getParent~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+
+masterForm~setPropertyValue(&quot;DataSourceName&quot;, &quot;mysql-test&quot;)
+masterForm~setPropertyValue(&quot;CommandType&quot;,  box(-
+	&quot;int&quot;,bsf.getStaticValue(&quot;{%see com.sun.star.sdb.CommandType}&quot;, &quot;COMMAND&quot;)))
+masterForm~setPropertyValue(&quot;Command&quot;, &quot;select * from test.customer&quot;)
+masterForm~setPropertyValue(&quot;Name&quot;, &quot;customers_form&quot;)
+
+/************************** create sub form (sales) *************************/
+
+/* masterContainer is an XIndexContainer */
+masterContainer = masterForm~{%see com.sun.star.container.XIndexContainer%XIndexContainer}
+/* create a new form */
+salesForm = .xMcf~createInstanceWithContext(-
+	&quot;{%see com.sun.star.form.component.DataForm}&quot;, xContext)
+/* insert it into the parentContainer */
+masterContainer~insertByIndex(masterContainer~getCount, salesForm )
+salesForm~{%see com.sun.star.beans.XPropertySet%XPropertySet}~setPropertyValue(&quot;Name&quot;, &quot;sales_form&quot;)
+
+/************************** bind SubForm to the database ********************/
+
+/* salesFormProps is a XPropertySet */
+salesFormProps = salesForm~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+
+salesFormProps~setPropertyValue(&quot;DataSourceName&quot;, &quot;mysql-test&quot;)
+salesFormProps~setPropertyValue(&quot;CommandType&quot;, box(&quot;int&quot;,bsf.getStaticValue(-
+	&quot;{%see com.sun.star.sdb.CommandType}&quot;, &quot;COMMAND&quot;)))
+
+command = &quot;select * from test.sales where cid = :c&quot;
+salesFormProps~setPropertyValue(&quot;Command&quot;,command)
+
+
+/************************** establish masterForm-SubForm connection**********/
+strArray = bsf.createArray(&quot;String.class&quot;, 1)
+strArray[1] = &quot;cid&quot;
+salesFormProps~setPropertyValue(&quot;MasterFields&quot;, strArray)
+strArray[1] = &quot;c&quot;
+salesFormProps~setPropertyValue(&quot;DetailFields&quot;, strArray)
+
+
+/* now create the grid model and insert it into the salesContainer*/
+/* get the XIndexContainer interface of the salesForm 
+   salesContainer is a XIndexContainer */
+salesContainer = salesForm~{%see com.sun.star.container.XIndexContainer%XIndexContainer}
+call createControlAndShape &quot;GridControl&quot;, 162, 40, 5, 50, salesContainer
+gridControl = result  
+	
+gridControl~setPropertyValue(&quot;Name&quot;, &quot;sales_table&quot;)
+
+call newGridColumn gridControl, &quot;TextField&quot;, &quot;sid&quot;, &quot;invoice number&quot;
+
+call newGridColumn gridControl, &quot;ListBox&quot;, &quot;name&quot;, &quot;product name&quot;
+productName = result --save the &apos;product name&apos; column to set some more props
+
+/* initialize the &apos;product name&apos; ListBox to provide a choice of product names*/
+productName~setPropertyValue( &quot;ListSourceType&quot;, bsf.getConstant(-
+	&quot;{%see com.sun.star.form.ListSourceType}&quot;,&quot;SQL&quot;))
+productName~setPropertyValue(&quot;BoundColumn&quot;, box(&quot;sh&quot;,&quot;1&quot;))
+
+sListSource = &quot;SELECT product.name, product.name FROM test.product&quot;
+strArray[1] = sListSource
+productName~setPropertyValue( &quot;ListSource&quot;, strArray)
+
+call newGridColumn gridControl, &quot;TextField&quot;, &quot;quantity&quot;, &quot;quantity&quot;
+
+/* switch to live mode */
+call toggleFormDesignMode 
+
+say &quot;Form Document created!&quot;
+
+/* save form and close document*/
+xComponent~{%see com.sun.star.frame.XStorable%XStorable}~storeAsURL(-
+	uno.ConvertToURL(&quot;c:/odbfiles/shop_form.odt&quot;), .UNO~noProps)
+xComponent~{%see com.sun.star.sdbc.XCloseable%XCloseable}~close(.true)
+
+::requires UNO.cls -- get UNO support	
+
+---------------------------------ROUTINEs------------------------------------
+-----------------------------------------------------------------------------
+
+/* routine switches between the life-mode and the design mode */
+::routine toggleFormDesignMode
+
+URL = bsf.import(&apos;{%see com.sun.star.util.URL}&apos;)
+
+aToggleURL = bsf.createArray(URL, 1)
+aToggleURL[1] = URL~new
+aToggleURL[1]~Complete = &quot;.uno:SwitchControlDesignMode&quot;
+
+--need an URLTransformer
+frameDesktop = .xMcf~createInstanceWithContext(-
+	&quot;{%see com.sun.star.util.URLTransformer}&quot;,.xContext)
+frameDesktop~{%see com.sun.star.util.XURLTransformer%XURLTransformer}~parseStrict(aToggleURL)
+
+/* get the XController interface of the controller service */
+xController = .xComponent~{%see com.sun.star.xforms.XModel%XModel}~getCurrentController~{%see com.sun.star.frame.XController%XController}
+--go get the dispatch provider of it&apos;s frame
+xDispatchProvider = xController~getFrame~{%see com.sun.star.frame.XDispatchProvider%XDispatchProvider}
+
+xDispatch = xDispatchProvider~queryDispatch( aToggleURL[1],&quot;&quot;, 0 )
+xDispatch~dispatch( aToggleURL[1], .UNO~noProps )
+
+-----------------------------------------------------------------------------
+
+/* creates a control shape, together with a control model, and inserts them
+   into the document model */
+/*	ARG(1) - name: String sQualifiedComponentName (f.e. TextField)
+	ARG(2) - width: int Size
+	ARG(3) - height: int Size 
+	ARG(4) - x: int Position - X-axis
+	ARG(5) - y: int Position - Y-axis
+	ARG(6) - parent: XIndexContainer xParentForm OPTIONAL
+*/
+::routine createControlAndShape
+use arg arg_name, arg_width, arg_height, arg_x, arg_y, arg_parent
+/********** create and initialize the shape **********/
+/* let the document create a shape */
+xDocAsMultiServiceFactory = .xComponent~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+xControlShape = xDocAsMultiServiceFactory~createInstance(-
+	&quot;{%see com.sun.star.drawing.ControlShape}&quot;)~{%see com.sun.star.drawing.XControlShape%XControlShape}
+
+/* set position and size of the shape */
+xControlShape~setSize(.bsf~new(-
+	&quot;{%see com.sun.star.awt.Size}&quot;, arg_width*100, arg_height*100)) --in 100th/mm
+xControlShape~setPosition(.bsf~new(-
+	&quot;{%see com.sun.star.awt.Point}&quot;, arg_x*100, arg_y*100))
+
+/* adjust the anchor so that the control is tied to the page */
+xPropertySet = xControlShape~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+xPropertySet~setPropertyValue(&quot;AnchorType&quot;, bsf.getConstant(-
+	&quot;{%see com.sun.star.text.TextContentAnchorType}&quot;, &quot;AT_PARAGRAPH&quot;))
+
+/********** create a control model **********/
+/* create the form component (the model of a form control) */
+sQualifiedComponentName = &quot;{%see com.sun.star.form.component.}&quot;arg_name
+xControlModel = .xMcf~createInstanceWithContext(-
+	sQualifiedComponentName,.xContext)~{%see com.sun.star.awt.XControlModel%XControlModel}
+
+/* if &quot;ARG(6):xParentForm&quot; is given insert the form component into the 
+   appropriate location of the form hierarchy
+   if the argument is not given the form component is automatically inserted
+   into the root form */
+IF arg_parent &lt;&gt; &quot;ARG_PARENT&quot; THEN DO
+	arg_parent~insertByIndex( arg_parent~getCount, xControlModel )
+END
+
+/********** announce the control model to the shape **********/
+
+/* knitt them */
+xControlShape~setControl(xControlModel)
+
+/******* insert the shape into the shapes collection of a draw page ********/
+
+/* add the shape to the shapes collection of the document */
+xDrawPageSupplier = .xComponent~{%see com.sun.star.drawing.XDrawPageSupplier%XDrawPageSupplier}
+xDrawPageSupplier~getDrawPage~{%see com.sun.star.drawing.XShapes%XShapes}~add(xControlShape)
+
+/* return the XPropertySet interface of the ControlModel.
+   With it it&apos;s possible to make several adjustments at the ControlModel */
+return xControlModel~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+
+-----------------------------------------------------------------------------
+
+/* creates a new Column inside a &apos;GridControl&apos; */
+/*	ARG(1) - container: grid control
+	ARG(2) - name: String componentName
+	ARG(3) - field: String dataField
+	ARG(4) - label: String label
+*/
+::routine newGridColumn
+use arg arg_container, arg_factory, arg_name, arg_field, arg_label
+/* query for the container to insert columns into */
+xIndexContainer = arg_container~{%see com.sun.star.container.XIndexContainer%XIndexContainer}
+/* query for the factory for creating the column models */
+xGridColumnFactory = arg_container~{%see com.sun.star.form.XGridColumnFactory%XGridColumnFactory}
+
+/* create a new column */
+newColumn = xGridColumnFactory~createColumn(arg_factory)
+xPropertySet= newColumn~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+xPropertySet~setPropertyValue(&quot;DataField&quot;, arg_name)
+xPropertySet~setPropertyValue(&quot;Label&quot;, arg_field)
+/* insert the column */
+xIndexContainer~insertByIndex(xIndexContainer~getCount, newColumn)
+return xPropertySet --return the created column </listing>
+</answer>
+
+<versions>
+</versions>
+
+<operating-systems>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

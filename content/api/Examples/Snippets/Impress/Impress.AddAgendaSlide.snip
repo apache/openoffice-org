@@ -1,0 +1,211 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Impress.AddAgendaSlide.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2007/08/13 13:05:15 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Impress">
+
+<keywords>
+	<keyword>agenda</keyword>
+	<keyword>heading</keyword>
+</keywords>
+
+<authors>
+	<author id="" initial="true" email="dominik.gundacker@gmail.com">Dominik Gundacker</author>
+</authors>
+
+<question heading="Add agenda slide to a presentation">How to automatically create an agenda using the textfields with style &quot;Heading&quot; 
+</question>
+
+<answer>
+<listing>/* This macro creates automatically an agenda of the presentation
+   using the heading1 textfields */
+/* 09_agenda.rex */
+
+xScriptContext=uno.getScriptContext()  -- get the xScriptContext object
+oDoc=xScriptContext~getDocument  -- get the document service (an XModel object)
+/* retrieving the important interfaces to get access to the drawpages */
+xDrawPagesSupplier=oDoc~{%see com.sun.star.drawing.XDrawPagesSupplier%XDrawPagesSupplier}
+xImpressFactory = oDoc~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+xDrawPages = xDrawPagesSupplier~getDrawPages
+
+/* check pagecount */
+CALL getNumberOfVisibleSlides xDrawPages
+pagecount = result
+IF pagecount == 1 THEN
+DO
+  .bsf.dialog~messageBox(&quot;This presentation has only one slide. &quot;-
+    &quot;There is no need for running this macro!&quot;, &quot;ERROR&quot;, &quot;error&quot;)
+  EXIT 0
+END
+headlineName = getHeadlineDisplayName(oDoc)
+/* create array with index and title of each heading-slide */
+headingIndex = .array ~new
+counter = 0
+startIndex = 0
+pagecount=xDrawPages~{%see com.sun.star.container.XIndexAccess%XIndexAccess}~getCount 
+DO i = 0 TO pagecount - 1
+  xDrawPage = xDrawPages~getByIndex(i)~{%see com.sun.star.drawing.XDrawPage%XDrawPage}
+  xProps = xDrawPage~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+  IF(xProps~getPropertyValue(&quot;Visible&quot;) == 0) THEN
+    ITERATE
+  xShapes = xDrawPage~{%see com.sun.star.drawing.XShapes%XShapes}
+  DO j = 0 TO xShapes~getCount - 1
+     xShape = xShapes~getByIndex(j)
+     xShapeProps = xShape~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+     style = xShapeProps~getPropertyValue(&quot;Style&quot;)
+     styleProps = style~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+     nameStyle = styleProps~getPropertyValue(&quot;DisplayName&quot;)
+     IF(xShape~{%see com.sun.star.text.XText%XText} == .nil) THEN
+       ITERATE
+     text = xShape~{%see com.sun.star.text.XText%XText}~getString()
+     /* if the style is heading */
+     IF (nameStyle == headlineName) THEN
+     DO
+        IF (startIndex == 0) THEN
+           startIndex = i
+        headingIndex~put(i||&quot;:&quot;||text, counter+1)
+        counter = counter + 1
+     END
+  END
+END
+
+/* there are no heading slides */
+IF counter == 0 THEN
+DO
+  .bsf.dialog~messageBox(&quot;This presentation has no heading textfields. &quot;-
+    &quot;There is no need for running this macro!&quot;, &quot;ERROR&quot;, &quot;error&quot;)
+  EXIT 0
+END
+
+/* if there is no existing agenda insert a new drawpage */
+secondSlide = xDrawPages~getByIndex(1)~{%see com.sun.star.drawing.XDrawPage%XDrawPage}
+nameSecondSlide = secondSlide~{%see com.sun.star.container.XNamed%XNamed} 
+IF (nameSecondSlide~getName() &lt;&gt; &quot;agenda&quot;) THEN
+DO
+  xDrawPages~insertNewByIndex(0)
+END
+
+/* format the agenda slide */
+agendaPage = xDrawPages~getByIndex(1)~{%see com.sun.star.drawing.XDrawPage%XDrawPage}
+CALL prepareAgendaSlide agendaPage
+
+/* positioning of the text cursor */
+headingListShape = agendaPage~{%see com.sun.star.drawing.XShapes%XShapes}
+headingListShape = headingListShape~getByIndex(1)
+xText = headingListShape~{%see com.sun.star.text.XText%XText}
+xText~setString(&quot;&quot;)
+xTextCursor = xText~createTextCursor
+xTextCursor~gotoEnd(.false)
+xTextRange = xTextCursor~{%see com.sun.star.text.XTextRange%XTextRange}
+
+linebreak = &quot;0d0a&quot;x
+start = 0
+
+DO item OVER headingIndex
+  PARSE VAR item id&quot;:&quot;text 
+  /* adding the headings to the listing */
+  IF (start == 1) THEN
+    xTextRange~setString(linebreak||text)
+  ELSE
+  DO
+    xTextRange~setString(text)
+    start = 1
+  END  
+  xTextCursor~gotoEnd(.false)
+  xTextRange = xTextCursor~{%see com.sun.star.text.XTextRange%XTextRange}
+END
+
+/* format the listing */
+CALL formatAgenda headingListShape
+EXIT 0
+
+/* Returns the number of visible slides */
+getNumberOfVisibleSlides :
+  USE ARG xDrawPages
+  count = 0
+  pagecount=xDrawPages~{%see com.sun.star.container.XIndexAccess%XIndexAccess}~getCount
+  DO i = 0 TO pagecount - 1
+    xDrawPage = xDrawPages~getByIndex(i)~{%see com.sun.star.drawing.XDrawPage%XDrawPage}
+    xProps = xDrawPage~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+    IF(xProps~getPropertyValue(&quot;Visible&quot;) == 1) THEN
+      count = count + 1
+  END
+return count
+
+getHeadlineDisplayName :
+  oDoc = ARG(1)  
+  model= oDoc~{%see com.sun.star.frame.XModel%XModel}
+  famSupplier = model~{%see com.sun.star.style.XStyleFamiliesSupplier%XStyleFamiliesSupplier}
+  families = famSupplier~getStyleFamilies()
+  graphs = families~getByName(&quot;graphics&quot;)
+  styles = graphs~{%see com.sun.star.container.XNameAccess%XNameAccess}
+  titelStyle = styles~getByName(&quot;headline&quot;)
+  styleProps = titelStyle~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+  RETURN styleProps~getPropertyValue(&quot;DisplayName&quot;)
+  
+::requires UNO.CLS   -- load UNO support for OpenOffice.org
+
+/* procedure for formating the agenda slide */
+/* assigning of layout and heading */
+::routine  prepareAgendaSlide
+  use arg agendaPage
+
+  xPageName = agendaPage~{%see com.sun.star.container.XNamed%XNamed} 
+  xPageName~setName(&quot;agenda&quot;)
+  agendaPageProps = agendaPage~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+  agendaPageProps~setPropertyValue(&quot;Layout&quot;, box(&quot;short&quot;, 1))
+
+  xShapes = agendaPage~{%see com.sun.star.drawing.XShapes%XShapes}
+  agendaHeadingShape = xShapes~getByIndex(0)
+  xText = agendaHeadingShape~{%see com.sun.star.text.XText%XText}
+  xText~setString(&quot;Agenda&quot;)
+
+/* procedure for formating the listing */
+/* increasing of line spacing and fontsize */
+::routine formatAgenda
+  use arg agendaShape
+
+  headingListShapeProsp = agendaShape~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+  lineSpacing = headingListShapeProsp~getPropertyValue(&quot;ParaLineSpacing&quot;)
+  lineSpacing~Height=500
+  lineSpacing~Mode=2
+  headingListShapeProsp~setPropertyValue(&quot;ParaLineSpacing&quot;, lineSpacing)
+  headingListShapeProsp~setPropertyValue(&quot;CharHeight&quot;, box(&quot;float&quot;, 40))
+</listing>
+</answer>
+
+<versions>
+</versions>
+
+<operating-systems>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>
