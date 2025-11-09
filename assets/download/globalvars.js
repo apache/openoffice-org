@@ -14,7 +14,7 @@ var DL = new Object();
 // Stable release: General properties.
 DL.VERSION				= "4.1.16";		// Release version in full format "x.y.z".
 DL.VERSION_SHORT			= DL.VERSION;		// Release version in short format "x.y".
-DL.MILESTONE				= "AOO4116m1";		// Milestone ID (from AOO build system).
+DL.MILESTONE				= "AOO4116m3";		// Milestone ID (from AOO build system).
 DL.BUILD				= "9816";		// Build ID (from AOO build system).
 DL.SVN_REV				= "277251aa7e";		// Git revision.
 DL.REL_DATE				= "2025-November-09";	// Date of the public announced release.
