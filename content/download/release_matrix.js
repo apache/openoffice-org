@@ -26,7 +26,7 @@
 DL.release_matrix_4116 = {
 "src": {
 	 "0": [ 'src', 'English (US)', 'English (US)', 'y', 'download/index.html' ],
-	 "1": [ 'AOO4116m3', '9816', 'Git hash 277251aa7e', '2025-11-09' ],
+	 "1": [ 'AOO4116m3', '9816', 'Git hash 277251aa7e', '2025-11-10' ],
 	 "2": [ 'tar_bz2', 'y', '209' ],
 	 "3": [ 'tar_gz',  'y', '276' ],
 	 "4": [ 'zip',	   'y', '323' ] },
