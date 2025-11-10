@@ -989,7 +989,7 @@ DL.getLinkSelection = function() {
 		document.getElementById( "dl_rpt"	    ).title	= l10n.dl_report_title;
 
 		// New Apache release policy since March 2018: Do not provide any MD5 checksums anymore as it is understood as too insecure.
-		if( ( DL.VERSION_SEL === "4.1.15" || DL.VERSION_SEL === "4.1.14" || DL.VERSION_SEL === "4.1.13" || DL.VERSION_SEL === "4.1.12" || DL.VERSION_SEL === "4.1.11" || DL.VERSION_SEL === "4.1.10" || DL.VERSION_SEL === "4.1.9" || DL.VERSION_SEL === "4.1.8" || DL.VERSION_SEL === "4.1.7" || DL.VERSION_SEL === "4.1.6" || DL.VERSION_SEL === "4.2.0" ) ) {
+		if( ( DL.VERSION_SEL === "4.1.16" || DL.VERSION_SEL === "4.1.15" || DL.VERSION_SEL === "4.1.14" || DL.VERSION_SEL === "4.1.13" || DL.VERSION_SEL === "4.1.12" || DL.VERSION_SEL === "4.1.11" || DL.VERSION_SEL === "4.1.10" || DL.VERSION_SEL === "4.1.9" || DL.VERSION_SEL === "4.1.8" || DL.VERSION_SEL === "4.1.7" || DL.VERSION_SEL === "4.1.6" || DL.VERSION_SEL === "4.2.0" ) ) {
 			// If version is '4.1.6' (or newer), do not show any MD5 checksum file links.
 			document.getElementById( "space4"	    ).innerHTML	= "";
 			document.getElementById( "dl_f_chk_md5"	    ).href	= "";
