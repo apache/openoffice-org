@@ -359,6 +359,7 @@ l10n.dl_analyze_table_javascript_text		= "JavaScript&nbsp;functions/variables";
 
 
 // General: Links to webpage files that could be localized.
+l10n.dl_rel_notes_aoo4116_link			= "https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=399278454";
 l10n.dl_rel_notes_aoo4115_link			= "https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=284789877";
 l10n.dl_rel_notes_aoo4114_link			= "https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=247827079";
 l10n.dl_rel_notes_aoo4113_link			= "https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=217393127";
