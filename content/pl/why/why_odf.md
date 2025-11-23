@@ -27,7 +27,7 @@ OpenOffice uses ODF format as its default document format. Most other word proce
 
 ##Apache OpenOffice
 
-Apache OpenOffice is the leading open-source office software suite for word processing, spreadsheets, presentations, graphics, databases and more. It is 
+Apache OpenOffice is a leading open-source office software suite for word processing, spreadsheets, presentations, graphics, databases and more. It is 
 published by the non-profit Apache Software Foundation.  OpenOffice is available in many languages and works on all common computers. OpenOffice can work with 
 ODF documents as well as documents from other common office software packages. It can be downloaded and used completely free of charge for any purpose.
 
