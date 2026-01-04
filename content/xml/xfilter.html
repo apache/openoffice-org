@@ -47,10 +47,9 @@ tool.</p>
 <h2>Use</h2>
 
 <ol>
-
  <li>You need:
   <ul>
-   <li>an installed OOo</li>
+   <li>an installed AOO</li>
    <li>xfilter binaries for that build</li>
    <li>the regcomp binary from the ODK</li>
   </ul>
@@ -61,7 +60,6 @@ tool.</p>
  <li>Call the starter script with parameters for the component name
  and input file. The starter script will register the libraries and
  then call the actual xfilter program.</li>
-
 </ol>
 
 <p>Example:</p>
@@ -69,41 +67,40 @@ tool.</p>
 <ul>
  <li>Windows:
 <pre>
-&gt; copy xfilter.exe xfiltermi.dll xfilter.bat <i>&lt;OOo directory&gt;</i>\program
-&gt; cd <i>&lt;OOo directory&gt;</i>\program
+&gt; copy xfilter.exe xfiltermi.dll xfilter.bat <i>&lt;AOO directory&gt;</i>\program
+&gt; cd <i>&lt;AOO directory&gt;</i>\program
 &gt; xfilter.bat com.sun.comp.hwpimport.HwpImportFilter input.hwp
   </pre>
  </li>
  <li>*nix:
   <pre>
-&gt; cp xfilter libxfilter??.so xfilter.sh <i>&lt;OOo directory&gt;</i>/program
-&gt; cd <i>&lt;OOo directory&gt;</i>/program
+&gt; cp xfilter libxfilter??.so xfilter.sh <i>&lt;AOO directory&gt;</i>/program
+&gt; cd <i>&lt;AOO directory&gt;</i>/program
 &gt; xfilter.sh  com.sun.comp.hwpimport.HwpImportFilter input.hwp
   </pre>
  </li>
 </ul>
 
-
 <h2>Implementation Detail</h2>
 
 <p>The program consists of a starter application, which initializes
-the <a href="http://udk.openoffice.org/">UNO runtime</a> and the <a
-href="http://ucb.openoffice.org/">UCB</a> to provide for UNO component
+the <a href="https://www.openoffice.org/udk/">UNO runtime</a> and the <a
+href="https://www.openoffice.org/ucb/">UCB</a> to provide for UNO component
 instantiation and input/output functionality, respectively. Then, the
 starter program instantiates the filter component (as given on the
 command line), and imitates the use of the component through the <a
-href="http://api.openoffice.org/common/ref/com/sun/star/document/XImporter.html">XImporter</a>
+href="https://www.openoffice.org/api/docs/common/ref/com/sun/star/document/XImporter.html">XImporter</a>
 and <a
-href="http://api.openoffice.org/common/ref/com/sun/star/document/XFilter.html">XFilter</a>
+href="https://www.openoffice.org/api/docs/common/ref/com/sun/star/document/XFilter.html">XFilter</a>
 interfaces.</p>
 
-<p>Limitations in the emulation of the OOo filter invocation are:
+<p>Limitations in the emulation of the AOO filter invocation are:
  <ul>
   <li>The <code>XImporter::setTargetDocument()</code> call received an
   empty reference where the document model is expected</li>
 
   <li>The <code>XFilter::filter()</code> call receives a
-  <a href="http://api.openoffice.org/common/ref/com/sun/star/document/MediaDescriptor.html">MediaDescriptor</a>,
+  <a href="https://www.openoffice.org/api/docs/common/ref/com/sun/star/document/MediaDescriptor.html">MediaDescriptor</a>,
   which contains only an URL and an opened
   XInputStream for the input file.</li>
   <li>Additional services or components usually provided for and
@@ -120,7 +117,6 @@ interfaces.</p>
   <li><code>com.sun.comp.jsimport.IchitaroImportFilter</code></li>
  </ul>
 </p>
-
 
 <h2>Source code</h2>
 
@@ -142,7 +138,7 @@ href="http://xml.openoffice.org/source/browse/xml/filtertools/source/">online</a
 
 <p>
  <small>
-  Please direct comments and suggestions to the <a href="mailto:dev@xml.openoffice.org">xml-dev</a> mailing list (<a href="http://xml.openoffice.org/servlets/SummarizeList?listName=dev">archive</a>) or to <a href="mailto:dvo@openoffice.org">dvo</a>.
+  Please direct comments and suggestions to the <a href="mailto:dev@openoffice.apache.org">xml-dev</a> mailing list (<a href="http://xml.openoffice.org/servlets/SummarizeList?listName=dev">archive</a>) or to <a href="mailto:dev@openoffice.apache.org">dev mailing list</a>.
  </small>
 </p>
       
