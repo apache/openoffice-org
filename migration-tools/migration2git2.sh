@@ -36,7 +36,7 @@ find ${1} -type d ! -empty -exec mkdir -p ${GITPATH}/part2/assets/{} \; -exec mk
 echo
 # 2 - Large Assets
 echo 'copy assets larger than 3M as separate commits'
-find ${1} -type f -size +3M -exec cp {} ${GITPATH}/part2/assets/{} \; -exec ${GITPATH}/tools/commit2git.sh assets {} 'large asset' \; 	
+find ${1} -type f -size +3M -exec cp {} ${GITPATH}/part2/assets/{} \; -exec ${GITPATH}/tools/commit2git.sh assets {} 'large asset' \;
 echo
 # 3 - Assets
 echo 'copy assets not (html and mdtext) to assets tree'

@@ -5,7 +5,7 @@ gnome-session &
 sleep 30
 cd /work/ooo/1.1.5/
 rm -rf *.core
-rm -rf ~/.sversionrc ~/OpenOffice.org1.1.5/ qa/qatesttool/errorlog/maho* 
+rm -rf ~/.sversionrc ~/OpenOffice.org1.1.5/ qa/qatesttool/errorlog/maho*
 #create response file
 TMPBASE=`basename $0`
 TMPFILE=`mktemp /tmp/${TMPBASE}.XXXXXX`
