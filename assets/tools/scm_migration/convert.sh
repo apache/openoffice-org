@@ -11,7 +11,7 @@ then
     mkdir $SUBVERSION_REPOSITORIES
 fi
 
-# The following directories had no CVS archive files. Check this is still the 
+# The following directories had no CVS archive files. Check this is still the
 # case and skip them. Otherwise complain
 
 for i in council distribution fr lang lockdir stats
@@ -22,7 +22,7 @@ do
     fi
 done
 
-# The to be converted directories. 
+# The to be converted directories.
 for i in about api ar az bg bibliographic bizdev bn bo bre br-pt ca contributing cs cvsroot cy da dba de development documentation download dz education el eo es et eu extensions external fa fi framework fur ga gd gl graphics groupware gsl gu he hi hr hu hy id incubator installation it ja ka kde km ko ku l10n lingucomponent list.txt lo look lt lv marketing mg mk ml mlmtest mr ms native-lang ne newlist.txt nl no odftoolkit oi oopm pa pap pl porting printing projects pt qa ro ru sc script scripting secondaryprojects sg si sk sl specs sq sr support sv sw ta te test testprojects tet tg th ti timtest tools tr tt-crh ua ucb udk ui urd user-faq util ux vba vi website webworks whiteboard why wp www xml zh
 do
     echo "Converting project ***** $i *****"

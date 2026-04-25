@@ -51,7 +51,7 @@ wgetFaqWiki "http://wiki.services.openoffice.org/wiki/Fr.openoffice.org/FAQ" "Xm
 
 cd /tmp/FaqWiki/wiki.services.openoffice.org/wiki/Fr.openoffice.org/
 zip -r FAQ.zip FAQ
- 
+
 # # ** Envoie sur le serveur CVS **********************************************
 cp FAQ.zip /CVS/fr/www/Documentation/zip/faq.zip/faqooohtml.zip
 cd /CVS/fr/www/Documentation/zip/faq.zip
