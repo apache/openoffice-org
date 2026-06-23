@@ -37,7 +37,7 @@ write_html_head()
 <meta http-equiv="Content-Style-Type" content="text/css" />
 </head>
 <body>
-<p>Zadnjič posodobljeno: 
+<p>Zadnjič posodobljeno:
 EOF
 
 date +%e.%m.%Y >> whead.tmp
@@ -96,7 +96,7 @@ for i in `find . -name "*.po"`;
 cat >> $i~ << "EOF"
 	msgid "foobar1"
 	msgstr ""
-	
+
 	msgid "foobar2"
 	msgstr "foobar2"
 

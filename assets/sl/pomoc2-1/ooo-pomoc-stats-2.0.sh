@@ -56,7 +56,7 @@ write_html_head()
 </head>
 <body>
 <h4>Različica <a href="ftp://ftp.linux.cz/pub/localization/OpenOffice.org/devel/680/OOF680_m4/">OOF680_m4</a> - za OOo 2.2</h4>
-<p>Zadnjič posodobljeno: 
+<p>Zadnjič posodobljeno:
 EOF
 
 date +%e.%m.%Y >> whead.tmp
@@ -95,7 +95,7 @@ write_html_tail()
 <p>
 <a name="ff"></a>
 <b>Podrobnosti o pomoči Filozofske fakultete</b><br/>
-<a href="http://lojze.lugos.si/~spela/lokalizacija/">Spletna stran projekta</a> in 
+<a href="http://lojze.lugos.si/~spela/lokalizacija/">Spletna stran projekta</a> in
 <a href="http://prevajalci.ataco.si">oddelka za prevajalstvo</a>.<br/>
 Seznam prevajalcev/prevajalk pod vodtsvom Špele Vintar, ki sodelujejo pri prevajanju:
 </p>
@@ -191,7 +191,7 @@ for i in `find . -name "*.po"`;
                 ;;
 	esac
 
-	# another case - for use of the state of the file (Stanje, 2nd column). 
+	# another case - for use of the state of the file (Stanje, 2nd column).
 	case "$i" in
 		"./sbasic/guide.po" | "./sbasic/shared/01.po" | "./sbasic/shared/02.po" | "./scalc/00.po" | "./scalc/02.po" | "./scalc/04.po" | "./scalc/05.po" | "./scalc.po" | "./schart/00.po" | "./schart/01.po" | "./schart/02.po" | "./schart/04.po" | "./schart.po" | "./sdraw/00.po" | "./sdraw/01.po" | "./sdraw/04.po" | "./sdraw/guide.po" | "./sdraw.po" | "./shared/04.po" | "./shared/05.po" | "./shared/07.po" | "./shared/autokorr.po" | "./shared.po" | "./simpress/00.po" | "./simpress/01.po" | "./simpress/02.po" | "./simpress/04.po" | "./simpress/guide.po" | "./simpress.po" | "./smath/00.po" | "./smath/01.po" | "./smath/02.po" | "./smath/04.po" | "./smath/guide.po" | "./smath.po" | "./swriter/00.po" | "./swriter/02.po" | "./swriter/04.po" | "./swriter/guide.po" | "./swriter.po")
 		STANJE="<img src=\"/pics/lektoriranje.png\" alt=\"Na poti v lektoriranje\"/>"
@@ -208,7 +208,7 @@ for i in `find . -name "*.po"`;
 cat >> $i~ << "EOF"
 	msgid "foobar1"
 	msgstr ""
-	
+
 	msgid "foobar2"
 	msgstr "foobar2"
 
@@ -231,8 +231,8 @@ EOF
 	rm $i~
 
 	# write a row
-	# if a file has untranslated strings ($UT > 0) then add red point pic (rdeca-pika.png) 
-	
+	# if a file has untranslated strings ($UT > 0) then add red point pic (rdeca-pika.png)
+
 	SLIKCE="$STANJE"
 	if [ $UT -gt 0 ]
 	then

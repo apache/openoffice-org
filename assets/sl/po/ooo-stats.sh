@@ -148,7 +148,7 @@ for i in `find . -name "*.po"`;
 cat >> $i~ << "EOF"
 	msgid "foobar1"
 	msgstr ""
-	
+
 	msgid "foobar2"
 	msgstr "foobar2"
 
@@ -171,7 +171,7 @@ EOF
 	rm $i~
 
 	# write a row
-	# if a file has untranslated strings ($UT > 0) then add red point pic (rdeca-pika.png) 
+	# if a file has untranslated strings ($UT > 0) then add red point pic (rdeca-pika.png)
 
 	SLIKCE="$STANJE"
 	if [ $UT -gt 0 ]
