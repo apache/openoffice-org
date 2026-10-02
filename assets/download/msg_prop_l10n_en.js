@@ -97,11 +97,11 @@ l10n.dl_green_box_select_box_version_older	= "Older releases";
 // Not defined for now.
 
 // Get developers: Strings in the orange box (used in "index.html").
-l10n.dl_getdev_orange_box_headline_text		= "Help Needed";
-l10n.dl_getdev_orange_box_headline_title	= "The Apache OpenOffice project seeks developers to take part in expanding its activities";
-l10n.dl_getdev_orange_box_text_text		= "Are you a software developer with C++ skills? Do you have expertise in building software? Are you an experienced lead technical writer? Are you proficient in English? Do you like contributing to open source projects? Come and join us in helping Apache OpenOffice to thrive.";
-l10n.dl_getdev_orange_box_text_title		= "The Apache OpenOffice project seeks developers to take part in expanding its activities";
-l10n.dl_getdev_orange_box_text_href		= "https://openoffice.apache.org/get-involved.html";
+l10n.dl_getdev_orange_box_headline_text		= "<b>Apache OpenOffice warns about serious unpatched vulnerability</b>";
+l10n.dl_getdev_orange_box_headline_title	= "Apache OpenOffice warns about serious unpatched vulnerability";
+l10n.dl_getdev_orange_box_text_text		= "<b>A serious security issue was found in Apache OpenOffice that allows system takeover when an attacker-crafted document is opened. The issue was given CVE-2026-59265 by OpenOffice. The team of volunteers maintaining the project is working hard to create a release that fixes the issue, which is expected within 15 days from now. Until then, we recommend disabling Java integration in preferences or opening documents from untrusted sources using Apache OpenOffice. We will update this page when the release with the fix is available.</b>";
+l10n.dl_getdev_orange_box_text_title		= "Apache OpenOffice warns about serious unpatched vulnerability";
+l10n.dl_getdev_orange_box_text_href		= "https://www.openoffice.org/security/cves/CVE-2026-59265.html";
 
 // Share: Strings in the light-blue box (used in "index.html").
 l10n.dl_share_light_blue_box_headline_text	= "Help Spread the Word";
