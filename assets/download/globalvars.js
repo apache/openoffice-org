@@ -36,6 +36,7 @@ DL.SEL_OS			= [	"win32",	"Windows 32-bit (x86) (EXE)",	    	".exe",
 					"lnx32d",	"Linux 32-bit (x86) (DEB)",	    	".tar.gz",
 					"lnx32r",	"Linux 32-bit (x86) (RPM)",	    	".tar.gz",
 					"mac64",	"OS X (version >= 10.7) (DMG)",	    	".dmg",
+					"mac32",	"OS X (version <= 10.6) (DMG)",	    	".dmg",
 					"other",	"More platforms / operating systems",	"" ];
 
 // Data for the <select> element "lang".
