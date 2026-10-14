@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.HowToCallJavaProgramUsingScriptingFramework.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2006/07/06 11:41:16 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="Java" application="Office">
+
+<keywords>
+	<keyword>Scripting</keyword>
+	<keyword>Framework</keyword>
+</keywords>
+
+<authors>
+</authors>
+
+<question heading="How to call Java Program Using Scripting Framework">
+</question>
+
+<answer>
+<listing>XMultiComponentFactory xMultiComponentFactory = connection.getComponentContext() .getServiceManager();
+
+Object oMSPFac =xMultiComponentFactory.createInstanceWithContext(&quot;com.sun.star.script.provider.MasterScriptProviderFactory&quot;,connection.getComponentContext() );
+XScriptProviderFactory xScriptProviderFactory = (XScriptProviderFactory ) UnoRuntime.queryInterface(
+XScriptProviderFactory.class, oMSPFac );
+
+Object oMSP = xScriptProviderFactory.createScriptProvider(document  );
+XScriptProvider xScriptProvider = ( XScriptProvider ) UnoRuntime.queryInterface( XScriptProvider.class, oMSP);
+
+XScript myScript = xScriptProvider.getScript(&quot;vnd.sun.star.script:HelloWorld.HelloWorld.printHW?language=Java&amp;location=share&quot;);
+
+// building all parameters : objects arrays, etc
+String a;
+a = &quot;** Hi ***&quot;; //$NON-NLS-1$
+Object[] objectArray = { a };
+short[][] s = { { 0, 0 }, { 0, 0 } };
+Object nullObject;
+nullObject = null;
+Object[][] object0 = { { nullObject, nullObject }, {nullObject, nullObject } };
+
+Object result = myScript.invoke( objectArray, s,object0 );</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

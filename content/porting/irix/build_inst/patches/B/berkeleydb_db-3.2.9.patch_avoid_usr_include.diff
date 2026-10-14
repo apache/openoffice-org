@@ -1,0 +1,29 @@
+--- /projects/sise/openoffice/devel/workpits/641-irix-gcc-STLP/source/berkeleydb/db-3.2.9.patch	Tue Jun 12 00:09:22 2001
++++ berkeleydb/db-3.2.9.patch	Thu Nov 22 10:34:23 2001
+@@ -30,16 +30,23 @@
+ *** 8,14 ****
+   ##################################################
+   CPPFLAGS=	-I$(builddir) -I$(srcdir)/include @CPPFLAGS@
+-  CFLAGS=	 	-c $(CPPFLAGS) @CFLAGS@
++! CFLAGS=	 	-c $(CPPFLAGS) @CFLAGS@
+ ! CXXFLAGS=	-c $(CPPFLAGS) @CXXFLAGS@
+   
+   CC=		@MAKEFILE_CC@
+   CCLINK=		@MAKEFILE_CCLINK@
+---- 8,14 ----
++--- 8,20 ----
+   ##################################################
+   CPPFLAGS=	-I$(builddir) -I$(srcdir)/include @CPPFLAGS@
+-  CFLAGS=	 	-c $(CPPFLAGS) @CFLAGS@
++! ifeq ($(OS), IRIX)
++! INC=		$(filter-out -I/usr/include, $(SOLARINC))
++! CFLAGS=	 -c $(INC) $(CPPFLAGS) @CFLAGS@
++! CXXFLAGS=      -c $(INC) $(CPPFLAGS) @CXXFLAGS@
++! else
++! CFLAGS=	 	-c $(CPPFLAGS) @CFLAGS@
+ ! CXXFLAGS=	-c $(SOLARINC) $(CPPFLAGS) @CXXFLAGS@
++! endif
++
+   
+   CC=		@MAKEFILE_CC@
+   CCLINK=		@MAKEFILE_CCLINK@

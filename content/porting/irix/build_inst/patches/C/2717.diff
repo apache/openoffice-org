@@ -1,0 +1,35 @@
+--- /projects/sise/openoffice/devel/workpits/OOo641C/workarea/product/util/makefile.mk	2001/12/17 17:15:54	1.55.2.3
++++ product/util/makefile.mk	2002/01/07 04:37:33
+@@ -107,6 +107,13 @@
+ 	$(DESTDIRDLL)$/libstdc++.so.3 		\
+ 	$(DESTDIRDLL)$/libstdc++.so.3.0.1
+ .ENDIF
++.ELIF "$(OS)"=="IRIX"
++###############
++# IRIX
++DESTDIRBIN=$(DESTDIR)$/irix$/bin
++DESTDIRLIB=$(DESTDIR)$/irix$/lib
++DESTDIRDLL=$(DESTDIRLIB)
++STLPORTLIBNAME=libstlport_gcc.so
+ .ELIF "$(OS)"=="WNT"
+ ###############
+ # WINDOWS
+@@ -243,13 +250,17 @@
+ 	$(DESTDIRDLL)$/$(MY_DLLPREFIX)salhelper$(UDK_MAJOR)$(COMID)$(MY_DLLPOSTFIX)	\
+ 	$(DESTDIRDLL)$/$(MY_DLLPREFIX)javaloader$(MY_DLLPOSTFIX)          		\
+ 	$(DESTDIRDLL)$/$(MY_DLLPREFIX)juh$(MY_DLLPOSTFIX)                   		\
+-	$(DESTDIRDLL)$/$(MY_DLLPREFIX)$(BINDINGDLL)$(MY_DLLPOSTFIX)           		\
+ 	$(DESTDIRDLL)$/$(MY_DLLPREFIX)java_uno$(MY_DLLPOSTFIX)            		\
+ 	$(DESTDIRDLL)$/$(MY_DLLPREFIX)prot_uno_uno$(MY_DLLPOSTFIX)            		\
+ 	$(DESTDIRDLL)$/$(MY_DLLPREFIX)iiop_uno$(MY_DLLPOSTFIX)                		\
+ 	$(DESTDIRDLL)$/$(MY_DLLPREFIX)urp_uno$(MY_DLLPOSTFIX)                 		\
+ 	$(STLPORTDEST) 									\
+ 	$(ADDITIONAL_DLLS)
++
++.IF "$(BINDINGDLL)"!=""
++DLLLIST+= \
++	$(DESTDIRDLL)$/$(MY_DLLPREFIX)$(BINDINGDLL)$(MY_DLLPOSTFIX) 
++.ENDIF
+ 
+ DLLLIST+= \
+ 	$(foreach,c,$(COMPONENTLIST) $(DESTDIRDLL)$/$(MY_DLLPREFIX)$c$(MY_DLLPOSTFIX))

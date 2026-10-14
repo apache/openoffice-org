@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+<style type="text/css">
+/* <![CDATA[ */ @import "/branding/css/tigris.css"; /* ]]> */
+</style>
+  <script src="/branding/scripts/sc.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="/branding/css/print.css" media="print" />
+
+  <title>課題のライフサイクル</title>
+ </head>
+
+ <body class="docs" onload="self.focus()">
+  <div class="docs" id="issuelifecycle">
+   <!--
+                The contents of this file are subject to the Mozilla Public
+                License Version 1.1 (the "License"); you may not use this file
+                except in compliance with the License. You may obtain a copy of
+                the License at http://www.mozilla.org/MPL/
+               
+                Software distributed under the License is distributed on an "AS
+                IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+                implied. See the License for the specific language governing
+                rights and limitations under the License.
+               
+                The Original Code is the Issuezilla Issue Tracking System.
+               
+                The Initial Developer of the Original Code is Netscape Communications
+                Corporation. Portions created by Netscape are
+                Copyright (C) 1998 Netscape Communications Corporation. All
+                Rights Reserved.
+               
+                Contributor(s): 
+                Contributor(s): Terry Weissman <terry@mozilla.org>
+           -->
+
+   <h2>課題のライフサイクルについて</h2>
+
+   <div id="toc">
+    <ul>
+     <li><strong><a href="/nonav/servlets/HelpTOC">ヘルプ索引</a></strong></li>
+    </ul>
+
+    <ul>
+     <li>
+      <a href="/nonav/docs/ProjectIssues.html">プロジェクト課題のヘルプ</a> 
+
+      <ul>
+       <li>課題のライフサイクル</li>
+
+       <li><a href="/nonav/docs/issuewritinghelp.html">課題の記入ガイドライン</a></li>
+
+       <li><a href="/nonav/docs/issuezilla_tipsandtricks.html">IssueZilla のヒントとコツ</a></li>
+
+       <li><a href="/nonav/docs/contributing_patches.html">パッチの寄稿</a></li>
+      </ul>
+     </li>
+    </ul>
+   </div>
+
+   <h3><a id="lifecycle_table" name="lifecycle_table">ステータス</a></h3>[<b>ステータス</b>]フィールドは、課題の一般的な状況を示します。 特定のステータス間の移行のみが許可されます。[<b>処理方法</b>] フィールドには、この課題に対して行われた作業が示されます。 
+
+   <p><b>オープン・ステータス課題</b>: 次のステータス値は「オープン」ステータスで、処理方法はありません。</p>
+
+   <ul>
+    <li><a href="/nonav/docs/issues_unconfirmedhelp.html">UNCONFIRMED（未確認）</a>: この課題は、データベースに最近追加された課題です。 この課題の真偽については、誰も確認していません。「canconfirm」権限を持つユーザは、この課題を確認し、ステータスを <b>NEW（新規）</b>に変更できます。  または、直接課題を解決してステータスを<b>RESOLVED（解決済み）</b>にすることができます。 </li>
+
+    <li>NEW（新規）: この課題は課題の担当者リストに新しく追加された課題で、処理を必要としています。このステータスを持つ課題は承認されて担当者に渡されると<b>STARTED（開始済み）</b>になります。または、そのまま<b>NEW（新規）</b>で残ることも、解決されて<b>RESOLVED（解決済み）</b>になることもあります。 </li>
+
+    <li>STARTED（開始済み）: この課題はまだ解決されていませんが、担当者が決定されています。ここから、課題がほかの担当者に渡されて<b>NEW（新規）</b>になるか、解決された<b>RESOLVED（解決済み）</b>になります。 </li>
+
+    <li>REOPENED（再開）: この課題は一度解決されましたが、処理方法が不正であると判断されました。 たとえば、<b>WORKSFORME（作業継続）</b> 課題は、詳しい情報が判明し、再現可能になった場合は<b>REOPENED（再開）</b>になります。ここから、課題は<b>STARTED（開始済み）</b>または<b>RESOLVED（解決済み）</b>になります。 </li>
+   </ul>
+
+   <p><b>RESOLVED（解決済み）ステータス課題</b>: 次のステータス値は「RESOLVED（解決済み）」ステータスで、処理方法はありません。</p>
+
+   <ul>
+    <li>RESOLVED（解決済み）: 処理方法が実行され、品質管理担当者による確認を待っている課題です。ここから、課題はREOPENED（再開）されて<b>REOPENED（再開）</b>になるか、<b>VERIFIED（検証済み）</b>になります。または、永久に閉じられて<b>CLOSED（処理済み）</b>となります。 </li>
+
+    <li>VERIFIED（検証済み）: 品質管理担当者が課題と処理方法を確認し、適切な処理方法が実行されたことに同意した課題です。課題は、製品が実際にリリースされたと報告されるまでこのステータスのまま残ります。製品がリリースされた時点で課題は<b>CLOSED（処理済み）</b>になります。</li>
+
+    <li>CLOSED（処理済み）: 課題が必要ないまたは処理方法が正しいとされた課題です。不必要な課題を再度処理するためには、<b>REOPENED（再開）</b>ステータスにしなければなりません。 </li>
+   </ul>
+
+   <p>注意: RESOLVED（解決済み）ステータスの課題は、次の解決値を持つことができます。</p>
+
+   <ul>
+    <li>FIXED（修正済み）: この課題の修正がソースコード・リポジトリにチェックインされテストされました。</li>
+
+    <li>INVALID（無効）: 説明されている問題は課題ではありません。</li>
+
+    <li>WONTFIX（修正しない）: 説明されている問題は修正されません。</li>
+
+    <li>LATER（今後対応）: 説明されている問題は、製品のこのバージョンでは修正されません。</li>
+
+    <li>REMIND（後で催促）: 説明されている問題は、製品のこのバージョンでは修正される予定はありませんが、修正される可能性もあります。 </li>
+
+    <li>DUPLICATE（複製）: 問題は既存の課題の複製です。 課題の複製には、複製する課題の課題番号が必要です。さらに、[説明]フィールドに課題番号を入力しなければなりません。</li>
+
+    <li>WORKSFORME（原因不明）: この課題を再現するための方法を見つける作業を行いましたが失敗しました。コードを見てもその原因が分からない課題です。後でより詳しい情報が判明した場合は、課題を再度割り当てます。それまではこのまま放置します。 </li>
+   </ul>
+
+   <h3><a id="issuesequence" name="issuesequence">課題のステータス・シーケンスに関する詳しい情報</a></h3>
+
+   <p>課題がREOPENED（再開）されたときに行われる処理は、誰がREOPENED（再開）したかによって異なります。 既定では、IssueZilla に報告された課題 (入力された課題) は<code>UNCONFIRMED（未確認）</code>ステータスになります。 
+これは、品質管理担当者またはプロジェクトの適切な権限を持つ誰かによって、この課題を<code>NEW（新規）</code>ステータスに変更する前に課題が正しいものであるかを確認する必要があることを意味します。 <!-- is
+                    this the right alias?
+                    -->issues-subscribe@&lt;projectname&gt;.domain.com に E-Mail を送信して、課題への全変更を通知できます。 それから、課題に対する作業を閲覧するために課題追跡機能を使用します。</p>
+
+   <p>プロジェクトの開発者/ユーザ/テスト担当者である場合は、<code>NEW（新規）</code>ステータスの課題を作成して、ほかの開発者に割り当てることができます。課題のステータスが<code>NEW（新規）</code>になると、課題に割り当てられた開発者が課題を受け入れるか、ほかの開発者に再度割り当てます。課題がNEW（新規）で放置され、1 週間経っても何も行われなかった場合は、IssueZilla が課題のオーナに何らかの行動を起こすように E-Mail を送信します。 課題が再度割り当てられたり、そのコンポーネントが変更されると、ステータスが<code>NEW（新規）</code>に戻されます。<code>NEW（新規）</code>ステータスとは、課題が新しく報告されたのではなく、特定の開発者の担当として新しく追加されたことを意味します。<code>NEW（新規）</code>ステータスの課題は、返信を必要とする重要な E-Mail であると考えてください。ただし、返信は IssueZilla を通して行います。このツールを使って課題の進行状況を E-Mail を使用するよりも効果的に追跡することができます。</p>
+
+   <p>より高い権限を持つプロジェクトのメンバーは、課題の全フィールドを変更することができます。 (既定の権限は、限られたフィールドのみを変更できます。 (<a href="/nonav/docs/ProjectIssues.html#permissions">詳しくは、IssueZilla 
+の権限を参照してください</a>。) 課題のフィールドを変更する場合は、変更内容とその理由についての説明を追加することをお勧めします。次のことを行う場合には、[コメント] フィールドにメモを入力します。</p>
+
+   <ul>
+    <li>コンポーネントの変更</li>
+
+    <li>課題の再割り当て</li>
+
+    <li>添付ファイルの作成</li>
+
+    <li>依存性の追加 または</li>
+
+    <li>CC リストへのユーザの追加</li>
+   </ul>
+
+   <p>課題への変更、コメントの追加が行われると、そのユーザが CC リストに追加され、オーナ、報告者、CC リストにあるユーザが課題の変更を通知する E-Mail を受信します。 この E-Mail は、課題が変更された場所および新しいコメントを示す「diff」形式を使って変更を報告します。</p>
+
+   <h3><a id="verifyissues" name="verifyissues">課題の検証</a></h3>
+
+   <p>課題が 
+RESOLVED（解決済み）としてマークされた場合は、プロジェクト/コンポ-ネントのオーナはこの課題を見て、適切な動作が行われたかどうかを確認します。適切な動作が行われたと認められた場合は、<code>VERIFIED（検証済み）</code>課題をとしてマークします。課題は製品またはバージョンがリリースされて課題が<code>CLOSED（処理済み）</code>とマークされるまでこのステータスのまま残ります。課題は<code>REOPENED（再開）</code>されて再度操作の対象となることがあります。</p>
+
+   <p>自分の課題ではない課題のステータスを変更する場合は注意してください。この場合は、ステータスを変更する代わりに、<i>まず</i>コメントとして提案のメモを作成し、課題のオーナに提案を提出してオーナにステータスを変更してもらうように依頼することをお勧めします。たとえば、課題がほかの課題の重複であると思われる場合は、この課題の 「追加コメント」セクションにメモを入力します。</p>
+
+   <p>ほかの課題に対して多くの有益なコメントを入力すると、ほかのユーザからの信頼を得ることができ、変更を加える権限が与えられることとなります。このような変更権限が与えられるまでは、追加コメントセクションへのコメント入力を賢く活用してください。</p>
+
+   <div class="courtesylinks">
+    <p><a href="#toc">トップ</a> | <a href="/nonav/servlets/HelpTOC">ヘルプ索引</a></p>
+   </div>
+  </div>
+ </body>
+</html>
+
+

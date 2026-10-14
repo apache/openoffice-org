@@ -1,0 +1,150 @@
+*** misc/epm-3.7/epm.c	Tue Oct 28 15:48:30 2003
+--- misc/build/epm-3.7/epm.c	Tue Jun  8 11:02:35 2004
+***************
+*** 547,552 ****
+--- 547,553 ----
+  {
+    puts(EPM_VERSION);
+    puts("Copyright 1999-2003 by Easy Software Products.");
++   puts("Patched for OpenOffice.org");
+    puts("");
+    puts("EPM is free software and comes with ABSOLUTELY NO WARRANTY; for details");
+    puts("see the GNU General Public License in the file COPYING or at");
+*** misc/epm-3.7/pkg.c	Tue Dec 17 19:57:56 2002
+--- misc/build/epm-3.7/pkg.c	Mon May  3 19:33:04 2004
+***************
+*** 429,503 ****
+  
+    fclose(fp);
+  
+-  /*
+-   * Build the distribution from the prototype file...
+-   */
+- 
+-   if (Verbosity)
+-     puts("Building PKG binary distribution...");
+- 
+-   if (run_command(NULL, "pkgmk -o -f %s/%s.prototype -d %s/%s",
+-                   directory, prodname, current, directory))
+-     return (1);
+- 
+-  /*
+-   * Tar and compress the distribution...
+-   */
+- 
+-   if (Verbosity)
+-     puts("Creating tar.gz file for distribution...");
+- 
+-   snprintf(filename, sizeof(filename), "%s/%s.tar.gz", directory, name);
+- 
+-   if ((tarfile = tar_open(filename, 1)) == NULL)
+-     return (1);
+- 
+-   snprintf(filename, sizeof(filename), "%s/%s", directory, prodname);
+- 
+-   if (tar_directory(tarfile, filename, prodname))
+-   {
+-     tar_close(tarfile);
+-     return (1);
+-   }
+- 
+-   tar_close(tarfile);
+- 
+-  /*
+-   * Make a package stream file...
+-   */
+- 
+-   if (Verbosity)
+-     puts("Copying into package stream file...");
+- 
+-   if (run_command(directory, "pkgtrans -s %s/%s %s.pkg %s",
+-                   current, directory, name, prodname))
+-     return (1);
+- 
+-  /*
+-   * Remove temporary files...
+-   */
+- 
+-   if (!KeepFiles)
+-   {
+-     if (Verbosity)
+-       puts("Removing temporary distribution files...");
+- 
+-     snprintf(filename, sizeof(filename), "%s/%s.pkginfo", directory, prodname);
+-     unlink(filename);
+-     snprintf(filename, sizeof(filename), "%s/%s.depend", directory, prodname);
+-     unlink(filename);
+-     snprintf(filename, sizeof(filename), "%s/%s.prototype", directory, prodname);
+-     unlink(filename);
+-     if (preinstall[0])
+-       unlink(preinstall);
+-     if (postinstall[0])
+-       unlink(postinstall);
+-     if (preremove[0])
+-       unlink(preremove);
+-     if (postremove[0])
+-       unlink(postremove);
+-   }
+- 
+    return (0);
+  }
+  
+--- 429,434 ----
+*** misc/epm-3.7/rpm.c	Wed Oct  1 21:27:15 2003
+--- misc/build/epm-3.7/rpm.c	Mon May  3 19:33:04 2004
+***************
+*** 415,467 ****
+      }
+    }
+  
+-  /*
+-   * Build the distribution from the spec file...
+-   */
+- 
+-   if (Verbosity)
+-     puts("Building RPM binary distribution...");
+- 
+-   if (strcmp(platform->machine, "intel") == 0)
+-   {
+-     if (run_command(NULL, EPM_RPMBUILD " %s -bb " EPM_RPMARCH "i386 %s",
+-                     Verbosity == 0 ? "--quiet" : "", specname))
+-       return (1);
+-   }
+-   else if (run_command(NULL, EPM_RPMBUILD " %s -bb " EPM_RPMARCH "%s %s",
+-                        Verbosity == 0 ? "--quiet" : "", platform->machine,
+- 		       specname))
+-     return (1);
+- 
+-  /*
+-   * Move the RPM to the local directory and rename the RPM using the
+-   * product name specified by the user...
+-   */
+- 
+-   if (strcmp(platform->machine, "intel") == 0)
+-     run_command(NULL, "/bin/mv %s/RPMS/i386/%s-%s-%d.i386.rpm %s/%s.rpm",
+-         	rpmdir, prodname, dist->version, dist->relnumber,
+- 		directory, name);
+-   else
+-     run_command(NULL, "/bin/mv %s/RPMS/%s/%s-%s-%d.%s.rpm %s/%s.rpm",
+-         	rpmdir, platform->machine, prodname, dist->version,
+- 		dist->relnumber, platform->machine, directory, name);
+- 
+-  /*
+-   * Remove temporary files...
+-   */
+- 
+-   if (!KeepFiles)
+-   {
+-     if (Verbosity)
+-       puts("Removing temporary distribution files...");
+- 
+-     run_command(NULL, "/bin/rm -rf %s/RPMS", directory);
+-     run_command(NULL, "/bin/rm -rf %s/buildroot", directory);
+- 
+-     unlink(specname);
+-   }
+- 
+    return (0);
+  }
+  
+--- 415,420 ----

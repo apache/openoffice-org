@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+<style type="text/css">
+/* <![CDATA[ */ @import "/branding/css/tigris.css"; /* ]]> */
+</style>
+  <script src="/branding/scripts/sc.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="/branding/css/print.css" media="print" />
+
+  <title>Version control glossary</title>
+ </head>
+
+ <body class="docs" onload="self.focus()">
+  <div class="docs" id="ddcvscvsglossary">
+   <h2>A version control glossary</h2>
+
+   <div id="toc">
+    <ul>
+     <li><strong><a href="/nonav/servlets/HelpTOC">Help index</a></strong></li>
+    </ul>
+
+    <ul>
+     <li>
+      <a href="/nonav/docs/ddCVS.html">About source code version control with CVS</a> 
+
+      <ul>
+       <li>
+        A version control glossary 
+
+        <ul>
+         <li><a href="#whatis">What is version control?</a></li>
+
+         <li><a href="#keyterms">Key terms in version control</a></li>
+
+         <li><a href="#devcycle">The copy-modify-merge development cycle</a></li>
+        </ul>
+       </li>
+
+       <li><a href="/nonav/docs/ddUsingCVS_command-line.html">Using command-line CVS to access project source files</a></li>
+
+       <li><a href="/nonav/docs/ddCVS_cvsmanaging.html">Managing project files and directories with CVS</a></li>
+      </ul>
+     </li>
+    </ul>
+   </div>
+
+   <h3><a id="whatis" name="whatis">What is version control?</a></h3>
+
+   <p>A version control system maintains an organized set of all the versions of files that are made over time. Version control systems allow people to go back to previous revisions of individual files, and to compare any two revisions to view the changes between them. In this way, version control keeps a historically accurate and retrievable log of a file's revisions. More importantly, version control systems help several people (even in geographically disparate locations) work together on a development project over the Internet or private network by merging their changes into the same source repository.</p>
+
+   <h3><a id="keyterms" name="keyterms">Key terms in version control</a></h3>
+
+   <dl>
+    <dt>Checking in a file or directory</dt>
+
+    <dd>This copies your working directory back into the repository as a new version.</dd>
+
+    <dt>Checking out files or directories</dt>
+
+    <dd>This copies the latest revision of a file from the repository to your workspace. When you check out a directory, you check out all files and subdirectories under it.</dd>
+
+    <dt>Committing a file or directory</dt>
+
+    <dd>This is the same as checking in a file or directory. Often version control users will say that they have "committed a change"; this means that they made changes to their working copies of files and committed these back to the repository.</dd>
+
+    <dt>Conflict</dt>
+
+    <dd>When two developers make changes to their working copies of the same file and commit them to the repository, their work may conflict. When this happens, CVS will detect the conflict and require someone to resolve resolve it before committing their changes.</dd>
+
+    <dt>Merging</dt>
+
+    <dd>Combining multiple changes made to different working copies of the same files in the source repository. Merging is a strategy for managing conflicts by letting multiple developers work at the same time (with no locks on files), and then incorporating their work into one combined version. Merging works well when two sets of changes are made to different lines in a files and can be easily combined. When changes to a file are made on the same line or lines, conflicts occur, requiring someone to edit the file manually before the changes can be committed to the source repository successfully.</dd>
+
+    <dt>Repository</dt>
+
+    <dd>A shared database with the complete revision history of all files under version control.</dd>
+
+    <dt>Resolving</dt>
+
+    <dd>Conflicts within a file created by two developers attempting to commit conflicting changes must be addressed by manually editing the file. Someone must go through the file line by line to accept one set of changes and delete the other set. Files with conflicts cannot be committed into the source repository successfully until they are resolved.</dd>
+
+    <dt>Revision</dt>
+
+    <dd>A numbered draft of specific updates to individual files. Each time you edit a file and commit it back to the repository, the file's revision number increases.</dd>
+
+    <dt>Version</dt>
+
+    <dd>The numbering scheme used to identify <i>sets of files</i> that are tagged and named at a certain point in time.</dd>
+
+    <dt>Workspace</dt>
+
+    <dd>Your copies of the files you want to edit on your local hard disk or Unix user account. When you edit files in your workspace, they will become out of sync with the repository. That's progress! Then you need to get your changes back into the repository so that everyone else can see them.</dd>
+   </dl>
+
+   <h3><a id="devcycle" name="devcycle">The copy-modify-merge development cycle</a></h3>
+
+   <p>Because CVS is a vastly powerful tool, the learning curve might seem formidable. Certainly there are plenty of books and web sites offering comprehensive CVS knowledge bases (many good sources are referenced at the bottom of this site's main CVS page). However, it is not necessary to digest an entire tome to be able to incorporate CVS into your software development practices immediately and effectively.</p>
+
+   <p>CVS allows you to work within your own development cycle while keeping track of the project's overall development cycle:</p>
+
+   <ol>
+    <li>You begin working on a project by obtaining your own working copy of files, known as <i>checking out</i> the project repository or modules, individual groups of project source files.</li>
+
+    <li>
+     You make your contributions to the project by modifying these files and creating new files. 
+
+     <p>This part of the cycle doesn't involve cvs directly. You modify your working copies of project files using a file editor on your local machine. You can save and compile your edited files to test how your changes affect the particular project module you are working in without affecting anyone else's work on those same project files. Nothing you do affects other project participants until you merge your changes into the project repository.</p>
+    </li>
+
+    <li>You test and tweak your latest changes in your own workspace to make sure these work without breaking or corrupting the overall project.</li>
+
+    <li>
+     Finally, you contribute back or <i>check in</i> your changes to the main or "top" body of project files, merging your work with the most recent working version known in CVS terminology as the <i>head</i>. 
+
+     <p>Committing your changes to merge with other developers' work is the most powerful aspect of CVS, but that power also makes it the most critical aspect. It's possible to get confused and accidentally overwrite someone else's changes or your own. Your contributed changes invariably will conflict with someone else's at some point. Understanding how and when to update your working copies and how to resolve merge conflicts are two particularly critical aspects of using CVS in collaborative development projects.</p>
+    </li>
+   </ol>
+
+   <p>This <i>copy-modify-merge cycle</i> is repeated throughout the life of the project by all contributing developers. CVS enables everyone to work on project files simultaneously, to stay up to date on the latest changes contributed by others, and to test how their own changes affect the overall project without interrupting other developers' cycles.</p>
+
+   <p>If you are new to CVS, learn more at:</p>
+
+   <ul>
+    <li><a href="http://www.cvshome.org/new_users.html">CVS for New Users</a> (an article)</li>
+
+    <li><a href="http://cvsbook.red-bean.com/cvsbook.html#An_Overview_of_CVS">An Overview of CVS</a> (from the online version of Karl Fogel's book <i>Open Source Development with CVS</i>)</li>
+   </ul>
+
+   <div class="courtesylinks">
+    <p><a href="#toc">Top</a> | <a href="/nonav/servlets/HelpTOC">Help index</a></p>
+   </div>
+  </div>
+ </body>
+</html>
+
+

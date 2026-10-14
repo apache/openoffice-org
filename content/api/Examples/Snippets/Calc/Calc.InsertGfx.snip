@@ -1,0 +1,86 @@
+<?xml version="1.0" ?>
+
+<!-- 
+$RCSfile: Calc.InsertGfx.snip,v $
+
+last change: $Revision: 1.3 $ $Author: tomsontom $ $Date: 2009/08/11 13:57:45 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+ -->
+
+<snippet language="OOBasic" application="Calc">
+
+<keywords>
+        <keyword>embed image</keyword>
+        <keyword>GraphicObjectShape</keyword>
+</keywords>
+
+<authors>
+    <author id="ni" email="niklas.nebel@sun.com" initial="true">Niklas Nebel</author>
+    <author id="tomsontom" email="tom.schindl@bestsolution.at">Tom Schindl</author>
+</authors>
+
+<question heading="Embedding image">
+How do I embed an image into StarCalc
+</question>
+
+<answer>
+<p>
+The GraphicObjectShape has a property GraphicObjectFillBitmap. 
+You can't (yet) create the bitmap directly from a file, but you can copy it 
+from a linked to a non-linked graphic object, and then remove the linked one. 
+</p>
+
+<listing>
+Sub InsertGraphic
+    oDoc = ThisComponent
+    oPage = oDoc.Sheets(0).DrawPage
+    oLinked = oDoc.createInstance("com.sun.star.drawing.GraphicObjectShape")
+    oLinked.GraphicURL = "file:///d:/dok/chart.gif"
+    oPage.add( oLinked )
+
+    Dim aPos As New com.sun.star.awt.Point
+    aPos.X = 3000
+    aPos.Y = 3000
+    Dim aSize As New com.sun.star.awt.Size
+    aSize.Width = 2000
+    aSize.Height = 2000
+    oSecond = oDoc.createInstance("com.sun.star.drawing.GraphicObjectShape")
+    oSecond.Position = aPos
+    oSecond.Size = aSize
+    oSecond.Name = "foo"
+    oSecond.Graphic = oLinked.Graphic
+    oPage.add( oSecond )
+
+    oPage.remove( oLinked )
+End Sub          
+</listing>
+</answer>
+
+<changelog>
+	<change author-id="tomsontom" date="2004-06-22">Modified to match new snippet-DTD</change>
+	<change author-id="ni" date="0000-00-00">initial release</change>
+</changelog>
+
+</snippet>

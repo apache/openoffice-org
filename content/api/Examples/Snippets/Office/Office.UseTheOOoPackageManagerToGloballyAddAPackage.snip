@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.UseTheOOoPackageManagerToGloballyAddAPackage.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2006/07/11 04:54:57 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Office">
+
+<keywords>
+	<keyword>Package Manager</keyword>
+	<keyword>ooRexx</keyword>
+	<keyword>Scripting Engine</keyword>
+	<keyword>Add Package</keyword>
+</keywords>
+
+<authors>
+	<author id="RGF" initial="true" email="Rony.Flatscher@wu-wien.ac.at" copyright="Rony G. Flatscher">Rony G. Flatscher</author>
+</authors>
+
+<question heading="Use the OOo package manager to add a package (the ooRexx scripting language ) globally to OpenOffice.">How can I add a (global) package programmatically?
+
+
+
+
+<p>For automatic installation of (global) packages one needs a </p>
+<p>means to install packages.</p>
+</question>
+
+<answer>
+<p>Use the built-in package manager singleton and related classes.</p>
+<listing>  /* initialize connection to server, get XContext */
+xContext    = UNO.connect()  -- connect to server and retrieve the XContext object
+XMcf        = xContext~getServiceManager   -- retrieve XMultiComponentFactory
+
+packageName = &quot;ScriptProviderForooRexx.jar&quot;
+mediaType   = &quot;application/vnd.sun.star.uno-component;type=Java&quot;
+
+tmpName     = stream(packageName, &apos;C&apos;, &quot;QUERY EXISTS&quot;)   -- get fully qualified filename
+if tmpName  = &quot;&quot; then
+do
+  .error~say(&quot;Cannot find&quot; pp(packageName)&quot;, aborting...&quot;)
+  exit -1
+end
+urlName     = ConvertToUrl(tmpName) -- turn into ucp compliant URL
+
+  -- get the pre-registered package manager factory singleton object
+pmName=&quot;/singletons/com.sun.star.deployment.thePackageManagerFactory&quot;
+xpmf=xContext~getValueByName(pmName)~{%see com.sun.star.deployment.XPackageManagerFactory%XPackageManagerFactory}
+
+  -- make sure package is removed from &quot;user&quot; context
+call removePackage xpmf~getPackageManager(&quot;user&quot;), packageName
+
+  -- work on &quot;shared&quot; (global) package context
+xpmShared=xpmf~getPackageManager(&quot;shared&quot;)   -- get &quot;shared&quot; package manager
+call removePackage xpmShared, packageName             -- remove old package
+xpmShared~addPackage(urlName, mediaType, .nil, .nil)  -- add package
+
+dp=getDeployedPackage(xpmShared, packageName)         -- query package
+if .nil&lt;&gt;dp then  -- package object available?
+  say &quot;Is [&quot;packageName&quot;] registered?&quot; &quot;[&quot;dp~isRegistered(.nil,.nil)~value~value&quot;]&quot;
+else
+  say &quot;[&quot;packageName&quot;] could not be added!&quot;
+
+
+
+::requires UNO.CLS    -- get UNO support for ooRexx
+
+::routine removePackage       -- remove a given package
+ use arg xpmf, packageName
+
+ signal on any      -- activate execption handling
+ xpmf~removePackage(packageName, .nil, .nil)
+
+ any: return        -- just return
+
+::routine getDeployedPackage  -- get and return the deployed package object
+ use arg xpm, packageName
+
+ signal on any      -- activate exception handling
+ return xpm~getDeployedPackage(packageName, .nil)
+
+ any: return .nil   -- exception occurred return .nil </listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="RGF" date="2006-07-04">Initial version</change>
+	<change author-id="RGF" date="2006-07-08">Version with embedded link to IDL docu.</change>
+</changelog>
+
+</snippet>

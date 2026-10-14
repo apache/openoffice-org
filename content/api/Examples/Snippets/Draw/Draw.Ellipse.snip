@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Draw.Ellipse.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2007/08/13 13:03:24 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Draw">
+
+<keywords>
+	<keyword>ellipse</keyword>
+	<keyword>circle</keyword>
+	<keyword>cirlce kind</keyword>
+</keywords>
+
+<authors>
+	<author id="" initial="false" email="">Nicole Scholz</author>
+</authors>
+
+<question heading="ellipse">How can I change the shape of an ellipse?
+<p>How can I only draw an arc or only a section of an ellipse?</p>
+</question>
+
+<answer>
+<p>In this example three ellipses are painted. </p>
+<p>With the method CircleKind the shape of an ellipse can be changed.</p>
+<listing>/* Retrieve the Desktop object, we need its XComponentLoader interface to load  a new documentv*/
+oDesktop         = UNO.createDesktop()    -- get the UNO Desktop service object
+xComponentLoader = oDesktop~{%see com.sun.star.frame.XDesktop%XDesktop}~{%see com.sun.star.frame.XComponentLoader%XComponentLoader}  -- get componentLoader interface
+
+/* open the blank file */
+url = &quot;private:factory/sdraw&quot;
+xDrawComponent = xComponentLoader~loadComponentFromURL(url, &quot;_blank&quot;, 0, -
+                                                       .UNO~noProps)
+/* need document&apos;s factory to be able to insert created objects */
+xDocumentFactory = xDrawComponent~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+
+/* get draw page by index */
+xDrawPage = xDrawComponent~{%see com.sun.star.drawing.XDrawPagesSupplier%XDrawPagesSupplier}~getDrawPages~getByIndex(0)~{%see com.sun.star.drawing.XDrawPage%XDrawPage}
+
+/* create a circle and add it to the shape */
+xCircle = xDocumentFactory~createInstance(&quot;{%see com.sun.star.drawing.EllipseShape}&quot;)~{%see com.sun.star.drawing.XShape%xShape}
+xCircle~setPosition(.bsf~new(&quot;{%see com.sun.star.awt.Point}&quot;, 2000, 2000))
+xCircle~setSize(.bsf~new(&quot;{%see com.sun.star.awt.Size}&quot;, 5000, 5000))
+xDrawPage~add(xCircle)
+
+/* create a circle and add it to the shape */
+xCircle1 = xDocumentFactory~createInstance(&quot;{%see com.sun.star.drawing.EllipseShape}&quot;)~{%see com.sun.star.drawing.XShape%xShape}
+xCircle1~setPosition(.bsf~new(&quot;{%see com.sun.star.awt.Point}&quot;, 2000, 8000))
+xCircle1~setSize(.bsf~new(&quot;{%see com.sun.star.awt.Size}&quot;, 8000, 5000))
+xDrawPage~add(xCircle1)
+
+/* create a circle and add it to the shape */
+xCircle2 = xDocumentFactory~createInstance(&quot;{%see com.sun.star.drawing.EllipseShape}&quot;)~{%see com.sun.star.drawing.XShape%xShape}
+xCircle2~setPosition(.bsf~new(&quot;{%see com.sun.star.awt.Point}&quot;, 2000, 15000))
+xCircle2~setSize(.bsf~new(&quot;{%see com.sun.star.awt.Size}&quot;, 5000, 7000))
+xDrawPage~add(xCircle2)
+
+/* set the colours of the circles */
+xShapeProps1 = xCircle1~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+xShapeProps1~setPropertyValue(&quot;FillColor&quot;, box(&quot;int&quot;, &quot;FF7F24&quot;x ~c2d)) -- colour the 1st circle orange
+xShapeProps = xCircle~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+xShapeProps~setPropertyValue(&quot;FillColor&quot;, box(&quot;int&quot;, &quot;8B2323&quot;x ~c2d)) -- colour the 2nd circle dark red
+xShapeProps2 = xCircle2~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+xShapeProps2~setPropertyValue(&quot;LineColor&quot;, box(&quot;int&quot;, &quot;8B4513&quot;x ~c2d)) -- colour the 3rd circle line brown
+
+/* change the shape of the circles */
+call syssleep 1
+/* 1st circle: show the cut circle connected by 2 lines */
+xShapeProps~setPropertyValue(&quot;CircleStartAngle&quot;, box(&quot;int&quot;, &quot;2000&quot;)) -- start angle 20 degrees
+xShapeProps~setPropertyValue(&quot;CircleEndAngle&quot;, box(&quot;int&quot;, &quot;9000&quot;)) -- end angle 90 degrees
+xShapeProps~setPropertyValue(&quot;CircleKind&quot;, -
+	bsf.getConstant(&quot;{%see com.sun.star.drawing.CircleKind}&quot;, &quot;SECTION&quot;)) 
+
+call syssleep 1
+/* 2nd circle: show the cut circle connectet by 1 line */
+xShapeProps1~setPropertyValue(&quot;CircleStartAngle&quot;, box(&quot;int&quot;, &quot;10000&quot;)) -- start angle 100 degrees
+xShapeProps1~setPropertyValue(&quot;CircleEndAngle&quot;, box(&quot;int&quot;, &quot;18000&quot;)) -- end angle 180 degrees
+xShapeProps1~setPropertyValue(&quot;CircleKind&quot;, -
+	bsf.getConstant(&quot;{%see com.sun.star.drawing.CircleKind}&quot;, &quot;CUT&quot;)) 
+
+call syssleep 1
+/* 3rd circle: show the circle with an open cut */
+xShapeProps2~setPropertyValue(&quot;CircleStartAngle&quot;, box(&quot;int&quot;, &quot;1000&quot;)) -- start angle 10 degrees
+xShapeProps2~setPropertyValue(&quot;CircleEndAngle&quot;, box(&quot;int&quot;, &quot;18000&quot;)) -- end angle 180 degrees
+xShapeProps2~setPropertyValue(&quot;CircleKind&quot;, -
+	bsf.getConstant(&quot;com.sun.star.drawing.CircleKind&quot;, &quot;ARC&quot;)) 
+
+::requires UNO.cls    -- get UNO support</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Writer.AddDateToFooter.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2008/10/20 11:29:27 $
+
+(c)2008 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Writer">
+
+<keywords>
+	<keyword>footer</keyword>
+	<keyword>date</keyword>
+	<keyword>time</keyword>
+	<keyword>add date to footer</keyword>
+	<keyword>add time to footer</keyword>
+</keywords>
+
+<authors>
+	<author id="" initial="false" email="">Nicole Scholz</author>
+</authors>
+
+<question heading="add date to footer">How can I add the date and time to the footer?
+</question>
+
+<answer>
+<p>In this example the creation date and time are added to the footer. </p>
+<p>They are set constant so they do not change when the document is opend again.</p>
+<p>Also a line is added to the footer.</p>
+<listing>/* insert the date into the footer*/
+
+/* Retrieve the Desktop object, we need its XComponentLoader interface to load a new document*/
+oDesktop         = UNO.createDesktop()    -- get the UNO Desktop service object
+xComponentLoader = oDesktop~{%see com.sun.star.frame.XDesktop%XDesktop}~{%see com.sun.star.frame.XComponentLoader%XComponentLoader}  -- get componentLoader interface
+/* open the blank file */
+url = &quot;private:factory/swriter&quot;
+xWriterComponent = xComponentLoader~loadComponentFromURL(url, &quot;_blank&quot;, 0, .UNO~noProps)
+
+xDocumentFactory = xWriterComponent~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+xWriterDocument = xWriterComponent~{%see com.sun.star.text.XTextDocument%XTextDocument}
+xText = xWriterDocument~getText()
+xTextCursor = xText~createTextCursor()
+xPropertySet = xTextCursor~{%see com.sun.star.beans.XPropertySet%xPropertySet}
+xDMsf = xWriterDocument~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+
+  -- create the footer
+xPageStyle = xDMsf~createInstance(&quot;{%see com.sun.star.style.PageStyle}&quot;)
+xFamiliesSupplier = xWriterDocument~{%see com.sun.star.style.XStyleFamiliesSupplier%XStyleFamiliesSupplier}
+xStyle = xFamiliesSupplier~getStyleFamilies~getByName(&quot;PageStyles&quot;)~{%see com.sun.star.container.XNameContainer%XNameContainer}
+xFooter = xStyle~getByName(&quot;Standard&quot;)
+FooterProperty = xFooter~{%see com.sun.star.beans.XPropertySet%xPropertySet}
+FooterProperty~setPropertyValue(&quot;FooterIsOn&quot;, box(&quot;boolean&quot;, .true))
+footerText = FooterProperty~getPropertyValue(&quot;FooterText&quot;)~{%see com.sun.star.text.XText%xText}
+
+  -- Create the current date
+datetime = xDMsf~createInstance(&quot;{%see com.sun.star.text.TextField.DateTime}&quot;)
+datetimeProps = datetime ~{%see com.sun.star.beans.XPropertySet%XPropertySet}()
+datetimeProps~setPropertyValue(&quot;IsDate&quot;, box(&quot;boolean&quot;,.true))
+  -- set the date constant so it does not change when the document is opend
+datetimeProps~setPropertyValue(&quot;IsFixed&quot;, box(&quot;boolean&quot;,.true))
+datetimeTC = datetime~{%see com.sun.star.text.XTextContent%XTextContent}()
+  -- Create the current time
+datetime1 = xDMsf~createInstance(&quot;{%see com.sun.star.text.TextField.DateTime}&quot;)
+datetimeProps1 = datetime1 ~{%see com.sun.star.beans.XPropertySet%XPropertySet}()
+datetimeProps1~setPropertyValue(&quot;IsDate&quot;, box(&quot;boolean&quot;,.false))
+  -- set the time constant so it does not change when the document is opend
+datetimeProps1~setPropertyValue(&quot;IsFixed&quot;, box(&quot;boolean&quot;,.true))
+datetimeTC1 = datetime1~{%see com.sun.star.text.XTextContent%XTextContent}()
+
+  -- create a line
+xTextCursorFooter = footerText~createTextCursor
+Line = xDMsf~createInstance(&quot;{%see com.sun.star.drawing.LineShape}&quot;)~{%see com.sun.star.drawing.XShape%xShape}
+Line~setPosition(.bsf~new(&quot;{%see com.sun.star.awt.Point}&quot;, 1, 1))
+Line~setSize(.bsf~new(&quot;{%see com.sun.star.awt.Size}&quot;, 17000, 0))
+xTextContentShape = Line~{%see com.sun.star.text.XTextContent%xTextContent}
+  -- insert the line at the top of the footer
+footerText~insertTextContent(footerText, xTextContentShape, .false)
+
+  -- insert date and time to the footer
+footerText~getEnd~setString(&quot; date: &quot;)
+footerText~insertTextContent(footerText~getEnd, datetimeTC, .false)
+footerText~getEnd~setString(&quot; time: &quot;)
+footerText~insertTextContent(footerText~getEnd, datetimeTC1, .false)
+
+::requires UNO.cls</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

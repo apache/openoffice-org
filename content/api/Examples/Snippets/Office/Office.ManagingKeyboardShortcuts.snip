@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.ManagingKeyboardShortcuts.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2006/03/27 11:54:48 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="OOBasic" application="Office">
+
+<keywords>
+	<keyword>keybinding</keyword>
+	<keyword>keyboard shortcut</keyword>
+	<keyword>XAcceleratorConfiguration</keyword>
+	<keyword>UIConfigurationManager</keyword>
+</keywords>
+
+<authors>
+	<author id="paolomantovani" initial="true" email="paolomantovani@openoffice.org">Paolo Mantovani</author>
+</authors>
+
+<question heading="Managing keyboard shortcuts">How do I manage keyboard shortcuts for a given document type ?
+</question>
+
+<answer>
+<p>The example code is a subroutine that shows several techniques in order to manage keybindings.</p>
+<p>The purpose of the macro is to set a key binding (CTRL+T) in order to launch a macro (Standard.Module1.Main)</p>
+<p>The code checks initially if the keybinding is already used.</p>
+<p>In this case the code asks to the user if he wants to change the key and, if yes, the old keybinding is removed and replaced with the new one.</p>
+<p>Notice the syntax used for the macro URL:</p>
+<p>vnd.sun.star.script:Standard.Module1.Main?language=Basic&amp;location=application</p>
+<p>that follows the specificatios of the new OOo scripting framework (from OOo 2.0.x)</p>
+<listing>Sub SetUpKeyBinding
+
+Dim oModuleCfgMgrSupplier As Object
+Dim oModuleCfgMgr As Object
+Dim oWriterShortCutMgr As Object
+
+Dim sCommand As String
+Dim sLocCommand As String
+Dim sMsg As String
+Dim iMsgResult As Integer
+
+	 &apos; Initialize strings
+	 sCommand = &quot;vnd.sun.star.script:Standard.Module1.Main?language=Basic&amp;location=application&quot;
+ 
+	&apos; Retrieve the module configuration manager from central module configuration manager supplier
+	oModuleCfgMgrSupplier = createUnoService(&quot;{@see com.sun.star.ui.ModuleUIConfigurationManagerSupplier}&quot;)
+
+	&apos; Retrieve the module configuration manager with module identifier
+	oModuleCfgMgr = oModuleCfgMgrSupplier.getUIConfigurationManager(&quot;{@see com.sun.star.text.TextDocument}&quot;)
+	oWriterShortCutMgr = oModuleCfgMgr.getShortCutManager
+	
+	Dim aKeyEvent As New {@see com.sun.star.awt.KeyEvent}
+	With aKeyEvent
+		.Modifiers = {@see com.sun.star.awt.KeyModifier:MOD1} &apos;API const for the CTRL key = 2
+		.KeyCode = {@see com.sun.star.awt.Key:T} &apos;API const for the T key = 531
+	End With
+	
+	On Error Resume Next
+	sLocCommand = oWriterShortCutMgr.getCommandByKeyEvent(aKeyEvent)
+	On Error GoTo 0 &apos;restore the error handler
+
+	Select Case sLocCommand
+	
+		Case = &quot;&quot; &apos;no previous bindings
+			oWriterShortCutMgr.setKeyEvent( aKeyEvent, sCommand )
+			oWriterShortCutMgr.store
+			
+		Case = sCommand &apos;ok the key event is already used by our command
+			&apos;nothing to do
+			
+		Case Else &apos;the key event is already used by another command
+		
+			sMsg = &quot;La combinazione di tasti &quot;&quot;CTRL+T&quot;&quot; &#232; gi&#224; usata per il comando:&quot; &amp; Chr(10)
+			sMsg = sMsg &amp; sLocCommand &amp; &quot;&quot;&quot;.&quot; &amp; Chr(10) &amp; Chr(10)
+			sMsg = sMsg &amp; &quot;Si desidera ugualmente usare questa combinazione per lanciare Standard.Module1.Main?&quot;
+					   
+			iMsgResult = MsgBox( sMsg, 1)
+			If iMsgResult = 1 Then
+				oWriterShortCutMgr.removeKeyEvent( aKeyEvent)
+				oWriterShortCutMgr.setKeyEvent( aKeyEvent, sCommand )
+				oWriterShortCutMgr.store
+			End If
+			
+	End Select
+	
+End Sub</listing>
+</answer>
+
+<versions>
+	<version number="1.0.x" status="can not work"/>
+	<version number="1.1.x" status="can not work"/>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="paolomantovani" date="2006-03-23">Initial version</change>
+</changelog>
+
+</snippet>
+
+

@@ -1,0 +1,75 @@
+<!--
+$RCSfile: Office.OutputStream.snip,v $
+
+last change: $Revision: 1.2 $ $Author: tomsontom $ $Date: 2005/02/28 12:19:47 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="OOBasic" application="Office">
+
+<keywords>
+	<keyword>outputstream</keyword>
+</keywords>
+
+<authors>
+	<author id="tomsontom" initial="false" email="tom.schindl@bestsolution.at">Tom Schindl</author>
+	<author id="cj" initial="true" email="christianjunker@gmail.com">Christian Junker</author>
+</authors>
+
+<question heading="writing to outputstream">
+How can I write to outputstream
+</question>
+
+<answer>
+<listing>
+Dim content = &quot;Hello World!&quot;
+fileAccessService = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+textOutputStream = createUnoService(&quot;com.sun.star.io.TextOutputStream&quot;)
+
+ If fileAccessService.exists(SaveFileName) Then
+ 	If fileAccessService.isReadOnly(SaveFileName) Then
+        MsgBox &quot;Could not write to file: &quot; &amp; SaveFileName
+ 		Exit Function
+	End If
+ End If
+ &apos;now open the file..
+ outputStream = fileAccessService.openFileWrite(SaveFileName)		
+
+ outputStream.truncate()
+ textOutputStream.setOutputStream(outputStream)
+ textOutputStream.writeString(content)
+
+ &apos;Close the Xml File, no writing possible anymore
+ textOutputStream.closeOutput()
+
+&apos;msgbox &quot;xml saved under: &quot; &amp; SaveFilename
+</listing>
+</answer>
+
+<changelog>
+	<change author-id="tomsontom" date="2005-02-04">Initial version</change>
+</changelog>
+
+</snippet>

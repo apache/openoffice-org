@@ -1,0 +1,143 @@
+#ifndef __com_sun_star_scripting_storage_XScriptInfo_idl__
+#define __com_sun_star_scripting_storage_XScriptInfo_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+module drafts { module com { module sun { module star { module scripting { module storage {
+//==============================================================================
+/** This interface allows access to information of one script
+*/
+interface XScriptInfo : ::com::sun::star::uno::XInterface
+{
+//========================================================================
+/**
+  Interface to provide read-only access to information associated with a script
+*/
+
+  //-----------------------------------------------------------------------
+  /**
+    Get the logical name for the script
+
+    @return
+     <type>string</type> The string representing the logical name of the
+      script
+  */
+  string getLogicalName();
+
+  //-----------------------------------------------------------------------
+  /**
+    Set the logical name of the script
+
+    @param name The new logical name for the script
+  */
+  void setLogicalName( [in] string name );
+
+  //-----------------------------------------------------------------------
+  /**
+    Get a textual description of the script's function.
+
+    @returns
+      <type>string</type> A string containing the description
+      <NULL/> If there is no description, return an empty string
+  */
+  string getDescription();
+
+  //-----------------------------------------------------------------------
+  /**
+    Set the textual description of the script
+
+    @param desc
+      The description of the script
+  */
+  void setDescription( [in] string desc );
+
+//-------------------------------------------------------------------------------
+/** Returns the language the script is written in
+@returns 
+A string reresenting the language of the script.
+*/
+  string getLanguage(); 
+
+//-------------------------------------------------------------------------------
+/** Allows the language to be set.
+@param language
+  Language to be set.
+*/
+  void setLanguage([in] string language);
+
+//-------------------------------------------------------------------------------
+/** Is source provided for this script 
+@returns 
+<TRUE/> if source is provided, determined if location of source is provided, otherwise <FALSE/>
+*/
+  boolean hasSource();
+
+//-------------------------------------------------------------------------------
+/** Access a copy of the source for the script.
+@returns 
+A string containing the script source.
+/*
+  string getSourceAsText();
+
+//-------------------------------------------------------------------------------
+/** Access to the location of the script.
+@returns 
+A string containing a URL to the script.
+/*
+  string getScriptSourceLocation();
+
+//-------------------------------------------------------------------------------
+/** Set the location of the script source
+@param fileURL
+  Sets location of script source as a URL
+/*
+  void setScriptSourceLocation([in] string fileURL);
+
+//-------------------------------------------------------------------------------
+/** Access to the language specific name of a script.
+@returns 
+A string that contains the language specific name.
+*/
+  string getLanguageSpecificName();
+
+//-------------------------------------------------------------------------------
+/** Sets language specific name.
+@param langName
+Full name of language specific script e.g. com.sun.star.convertors.myconverters.myCustomConvert.method.
+*/
+  void setLanguageSpecificName([in] string langName); 
+
+//-------------------------------------------------------------------------------
+/** 
+@returns 
+Location of root of installation for script
+*/
+  string getRoot();
+
+//-------------------------------------------------------------------------------
+/** 
+@returns 
+Relative (to root from getRoot) location of the container (.class file, module file jar etc.) that the script resides in. 
+  string getTarget()
+
+//-------------------------------------------------------------------------------
+/** Retrieve list of dependencies, (maybe jar files in the case of java).
+@returns
+  A list of strings containing dependencies.
+*/
+  sequence <string> getDependencies(); 
+
+//-------------------------------------------------------------------------------
+/** Retrieve a list of other properties (as yet undefined) association with this script.
+*/
+  com::sun::star::beans::XPropertySet extraProperties();
+};
+
+};  };  };  };  };  };
+#endif

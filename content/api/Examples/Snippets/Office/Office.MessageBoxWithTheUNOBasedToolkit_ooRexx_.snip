@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.MessageBoxWithTheUNOBasedToolkit_ooRexx_.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2006/07/19 13:42:24 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Office">
+
+<keywords>
+	<keyword>MessageBox</keyword>
+</keywords>
+
+<authors>
+	<author id="RGF" initial="true" email="">Rony G. Flatscher</author>
+</authors>
+
+<question heading="MessageBox with the UNO based toolkit (ooRexx)">How do I display a message box from an ooRexx script ?
+<p>I&apos;m wondering if it is possible to display message boxes (similar to those displayed by Basic&apos;s MsgBox function) using the OpenOffice.org API.</p>
+<p>(Also you could use &quot;.bsf.dialog~messageBox()&quot;, &quot;.bsf.dialog~dialogBox()&quot; and/or</p>
+<p>&quot;bsf.dialog~inputBox()&quot;.)</p>
+</question>
+
+<answer>
+<p>You can use the following function as a replacement for the Msgbox StarBasic function:</p>
+<listing>/*
+   Modelled (transcribed from) the Python snippet at
+   {%internal ./Office.MessageBoxWithTheUNOBasedToolkit.snip}
+   for ooRexx ({%external http://www.ooRexx.org}).
+*/
+
+   -- needs to be run as a macro:
+xScriptContext=uno.getScriptContext()     -- get the xScriptContext object
+
+oDoc=xScriptContext~getDocument           -- get the document service (an XModel object)
+-- oDesktop=xScriptContext~getDesktop           -- get the desktop (an XDesktop object)
+-- oContext=xScriptContext~getComponentContext  -- get the context(an XComponentContext object)
+
+   -- store a directory proxy for the constants in the .local environment
+.local~vwpa=bsf.wrapStaticFields(&apos;{%see com.sun.star.awt.VclWindowPeerAttribute}&apos;)
+/* Defined constants, now retrievable by sending their name as a message to the directory proxy,
+   retrievable via the environment symbol &quot;.vwpa&quot;. Here is the list of available button keys:
+   OK, OK_CANCEL, YES_NO, YES_NO_CANCEL, RETRY_CANCEL,
+   DEF_OK, DEF_CANCEL, DEF_YES, DEF_NO, DEF_RETRY
+*/
+
+call testMessageBox oDoc      -- now test the message box, supply the document object which has the XModel interface
+
+::requires UNO.CLS   -- load UNO support for OpenOffice.org
+
+::routine TestMessageBox
+  use arg doc        -- retrieve document component
+  numeric digits 10  -- augment significant numbers in arithmetics from 9 to 10 digits
+
+     -- get the container window using the XModel interface to start out with
+  parentWin=doc~{%see com.sun.star.frame.XModel%XModel}~getCurrentController~getFrame~getContainerWindow
+
+  s = &quot;This is a test&quot;        -- message text
+  t = &quot;Test&quot;                  -- title for the message box
+  res = MessageBox(parentWin, s, t, &quot;querybox&quot;, .vwpa~YES_NO_CANCEL + .vwpa~DEF_NO)
+
+  call MessageBox parentWin, &quot;The previous querybox returned:&quot; res, t, &quot;infobox&quot;
+
+
+--# Show a message box with the UNO based toolkit
+::routine MessageBox
+  use arg ParentWin, MsgText, MsgTitle, MsgType, MsgButtons
+
+  if pos(msgType, &quot;messbox infobox errorbox warningbox querybox&quot;)=0 then
+     MsgType=&quot;messbox&quot;
+
+  if arg(5, &quot;Omitted&quot;) then   -- if fifth argument is omitted
+     MsgButtons=.vwpa~ok      -- use the &quot;OK&quot; button only
+
+  -- #describe window properties.
+  aDescriptor=.bsf~new(&quot;{%see com.sun.star.awt.WindowDescriptor}&quot;)
+  aDescriptor~Type = bsf.getConstant(&quot;{%see com.sun.star.awt.WindowClass}&quot;, &quot;MODALTOP&quot;)
+  aDescriptor~WindowServiceName = MsgType
+  aDescriptor~ParentIndex = -1
+  aDescriptor~Parent = ParentWin~{%see com.sun.star.awt.XWindowPeer%XWindowPeer}
+  -- #aDescriptor~Bounds = .bsf~new(&quot;{%see com.sun.star.awt.Rectangle}&quot;)
+  aDescriptor~WindowAttributes = MsgButtons
+
+  tk = ParentWin~{%see com.sun.star.awt.XWindowPeer%XWindowPeer}~getToolkit
+  msgbox = tk~createWindow(aDescriptor)~{%see com.sun.star.awt.XMessageBox%xMessageBox}
+  msgbox~setMessageText(MsgText)
+  if arg(3,&quot;exists&quot;) then     -- if third argument (title) exists, use it
+     msgbox~setCaptionText(MsgTitle)
+
+  return msgbox~execute       -- execute the message box and returned pressed key
+</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>
+

@@ -1,0 +1,109 @@
+<!--
+$RCS index.html,v $
+
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2004/08/16 10:17:58 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCS in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="OOBasic" application="Calc">
+
+<keywords>
+	<keyword>hide</keyword>
+	<keyword>show</keyword>
+	<keyword>showing</keyword>
+	<keyword>hiding</keyword>
+	<keyword>cell</keyword>
+	<keyword>cells</keyword>
+	<keyword>cell dependant</keyword>
+	<keyword>blank</keyword>
+	<keyword>empty</keyword>
+</keywords>
+
+<authors>
+	<author id="ial" initial="true" email="hillview@paradise.net.nz" copyright="Ian Laurenson">Ian Laurenson</author>
+	<author id="zimmer" initial="false" email="zimmer@ate.uni-duisburg.de" copyright="Ian Laurenson">Ren&#233; Zimmer</author>
+</authors>
+
+<question heading="Hide/Show Rows">
+How do I hide/show rows depending on cell content?
+<p>The problem was I wanted to hide rows if they are empty. I have a template</p>
+<p>spreadsheet and the number of filled rows varies in the final document. To have</p>
+<p>a nice printout and a nice screenview the empty rows should be hidden automa-</p>
+<p>tically. </p>
+</question>
+
+<answer>
+<p>The solution goes as follows: Name a column of cells by marking them and then </p>
+<p>&quot;Insert/Name/Define...&quot;. Those cells are tested on a criterium, e.g. if empty. Run</p>
+<p>the macro snippet on the spreadsheet. You may assign the macro to an event, </p>
+<p>e.g. &quot;Document saved&quot;, by &quot;Extras/Macros/Macro.../Assign...&quot;.</p>
+<listing>
+Sub HideBlankRows
+oDoc = thisComponent
+REM Define a range of cells to be tested
+oRangea = oDoc.namedRanges.getbyName(&quot;Ida&quot;).ReferredCells
+oRanges = oDoc.namedRanges.getbyName(&quot;Ids&quot;).ReferredCells
+REM Loop to test first range, ie. Ida
+for i = 0 to oRangea.rows.count -1
+oCell = oRangea.getCellByPosition(0, i)
+REM test criterium, here if empty
+if oCell.string = &quot;&quot; then
+REM Hide the row containing the tested cell if test condition is true
+oCell.rows.isVisible = false
+REM otherwise show the row containing the tested cell
+REM This is to avoid the ShowAllRows macro if already 
+REM hidden cells are filled
+else oCell.rows.isVisible = true
+end if
+next
+REM Loop to test second range of cells,ie. Ids 
+for i = 0 to oRanges.rows.count -1
+oCell = oRanges.getCellByPosition(0, i)
+if oCell.string = &quot;&quot; then
+oCell.rows.isVisible = false
+else oCell.rows.isVisible = true
+end if
+next
+REM End of Loop
+End Sub
+ 
+Sub ShowAllRows
+oDoc = thisComponent
+REM Define a range of cells and show them unconditionally
+oRangea = oDoc.namedRanges.getbyName(&quot;Ida&quot;).ReferredCells
+oRangea.rows.isVisible = true
+REM Define a second range ...
+oRanges = oDoc.namedRanges.getbyName(&quot;Ids&quot;).ReferredCells
+oRanges.rows.isVisible = true
+End Sub
+</listing>
+</answer>
+
+<changelog>
+	<change author-id="zimmer" date="2004-08-16">Summerized as codesnippet</change>
+</changelog>
+
+</snippet>
+

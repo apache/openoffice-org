@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Database.AddAFormToTheDatabaseDocument.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2007/03/12 08:42:46 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Database">
+
+<keywords>
+</keywords>
+
+<authors>
+</authors>
+
+<question heading="add a form to the database document">How can a previously created form be added to the database document?
+</question>
+
+<answer>
+<listing>oDesktop = UNO.createDesktop() -- get the UNO Desktop service object
+/* get the database document */
+xComponentLoader = oDesktop~XDesktop~XComponentLoader
+url = uno.ConvertToURL(&quot;c:\odbfiles\mysql1.odb&quot;)
+xComponent = xComponentLoader~loadComponentFromURL(-
+	url, &quot;_blank&quot;, 0, .UNO~noProps)
+
+/* get the form container */
+xFormDocumentsSupplier = xComponent~XModel~XFormDocumentsSupplier
+xHierarchicalNameAccess = xFormDocumentsSupplier~getFormDocuments
+
+/* create a new DocumentDefinition containing the form */
+props = bsf.createArray(.UNO~propertyValue,4)
+props[1] = .UNO~PropertyValue~new
+props[1]~Name = &quot;Name&quot;
+props[1]~Value = &quot;test&quot;
+props[2] = .UNO~PropertyValue~new
+props[2]~Name = &quot;Parent&quot;
+props[2]~Value = xHierarchicalNameAccess 
+props[3] = .UNO~PropertyValue~new
+props[3]~Name = &quot;URL&quot;
+props[3]~Value = uno.ConvertToURL(&quot;c:\odbfiles\shop_form.odt&quot;)
+props[4] = .UNO~PropertyValue~new
+props[4]~Name = &quot;DocumentTitle&quot;
+props[4]~Value = &quot;test&quot;
+
+xDocMSF = xHierarchicalNameAccess~XMultiServiceFactory
+oDBDocument = xDocMSF~createInstanceWithArguments(-
+	&quot;com.sun.star.sdb.DocumentDefinition&quot;, props)
+
+/* add the DocumentDefinition to the database document */
+xHierarchicalNameContainer = xHierarchicalNameAccess~XHierarchicalNameContainer
+xHierarchicalNameContainer~insertByHierarchicalName(&quot;shop_form&quot;,oDBDocument)
+
+::requires UNO.cls -- get UNO support
+</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

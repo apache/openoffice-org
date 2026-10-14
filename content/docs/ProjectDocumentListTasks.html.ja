@@ -1,0 +1,38 @@
+#if( $acl.hasPermission("Project Document - Suggest", $currentProject) )
+
+  <tr>
+   <th>Tasks : &nbsp;&nbsp;</th>
+   <td><div class="pipelinks">
+
+  #if ($rootFolder)
+    #set($rootFolderID = $rootFolder.getID())
+    #set($isApproved = $rootFolder.isApproved())
+  #else
+    #set($rootFolderID = $0)
+    #set($isApproved = true)
+  #end
+
+    #set($addFolderURL = $currentProject.getProjectPageURL("ProjectFolderAdd", "rootFolderID=$rootFolderID"))
+    #set($addDocURL = $currentProject.getProjectPageURL("ProjectDocumentAdd", "rootFolderID=$rootFolderID"))
+    #set( $editURL = $currentProject.getProjectPageURL("ProjectFolderEdit", "folderID=$rootFolderID"))
+    #set($deleteURL = $currentProject.getProjectPageURL("ProjectFolderDelete", "folderID=$rootFolderID"))
+
+    #if ( $acl.hasPermission("Project Document - Approve", $currentProject) && $isApproved )
+       <a href="$addFolderURL">フォルダーの追加</a> | <a href="$addDocURL">ファイルの追加</a>
+    #elseif ( $acl.hasPermission("Project Document - Suggest", $currentProject)  && $isApproved )
+       <a href="$addFolderURL">フォルダーの提案</a> | <a href="$addDocURL">ファイルの提案</a>
+    #end
+
+  #if ($rootFolder)
+      #if ($rootFolder.assertEditPermission($acl))
+  | <a href="$editURL">フォルダーの編集</a> 
+      #end
+      #if ($rootFolder.assertDeletePermission($acl))
+  | <a href="$deleteURL">フォルダーの削除</a> 
+      #end
+  #end
+   
+   </div></td>
+  </tr>
+
+#end

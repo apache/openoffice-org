@@ -1,0 +1,57 @@
+var tip = 'Click to expand or collapse detailed display';
+
+var ar_FAQ = new Array();
+	ar_FAQ[0] = new Object(); 
+		ar_FAQ[0].tip = "";
+		ar_FAQ[0].title = "General Questions" ; 
+		ar_FAQ[0].href = "http://wiki.services.openoffice.org/wiki/Documentation/FAQ/General";
+		ar_FAQ[0].cls = "wiki";
+	ar_FAQ[1] = new Object(); 
+		ar_FAQ[1].tip = "";
+		ar_FAQ[1].title = "Installing OpenOffice.org" ; 
+		ar_FAQ[1].href = "http://wiki.services.openoffice.org/wiki/Documentation/FAQ/Installation";
+		ar_FAQ[1].cls = "wiki";
+	ar_FAQ[2] = new Object(); 
+		ar_FAQ[2].tip = "";
+		ar_FAQ[2].title = "Working with Text Documents (Writer)" ; 
+		ar_FAQ[2].href = "http://wiki.services.openoffice.org/wiki/Documentation/FAQ/Writer";
+		ar_FAQ[2].cls = "wiki";
+	ar_FAQ[3] = new Object(); 
+		ar_FAQ[3].tip = "";
+		ar_FAQ[3].title = "Working with Spreadsheets (Calc)" ; 
+		ar_FAQ[3].href = "http://wiki.services.openoffice.org/wiki/Documentation/FAQ/Calc";
+		ar_FAQ[3].cls = "wiki";
+	ar_FAQ[4] = new Object(); 
+		ar_FAQ[4].tip = "";
+		ar_FAQ[4].title = "Working with Drawings (Draw)" ; 
+		ar_FAQ[4].href = "http://wiki.services.openoffice.org/wiki/Documentation/FAQ/Draw";
+		ar_FAQ[4].cls = "wiki";
+	ar_FAQ[5] = new Object(); 
+		ar_FAQ[5].tip = "";
+		ar_FAQ[5].title = "Working with Presentations (Impress)" ; 
+		ar_FAQ[5].href = "http://wiki.services.openoffice.org/wiki/Documentation/FAQ/Impress";
+		ar_FAQ[5].cls = "wiki";
+	ar_FAQ[6] = new Object(); 
+		ar_FAQ[6].tip = "";
+		ar_FAQ[6].title = "Working with Formulas (Math)" ; 
+		ar_FAQ[6].href = "http://wiki.services.openoffice.org/wiki/Documentation/FAQ/Formula";
+		ar_FAQ[6].cls = "wiki";
+	ar_FAQ[7] = new Object(); 
+		ar_FAQ[7].tip = "";
+		ar_FAQ[7].title = "Working with Databases (Base)" ; 
+		ar_FAQ[7].href = "http://wiki.services.openoffice.org/wiki/Documentation/FAQ/Databases";
+		ar_FAQ[7].cls = "wiki";
+		
+var ar_Man = new Array();
+	ar_Man[0] = new Object();
+		ar_Man[0].tip = '23rd draft - fixed pagination';
+		ar_Man[0].title = "User's Guide (23rd Draft)" ; 
+		ar_Man[0].href = "manuals/OOo2.x/user_guide2_draft.pdf";
+		ar_Man[0].cls = "pdf";
+	ar_Man[1] = new Object();
+		ar_Man[1].tip = 'Full Book (7.6MB, 3rd Edition)<br>Compiled on 5-June-2007<br>from oooauthors.org';
+		ar_Man[1].title = "Getting Started Guide (complete)" ; 
+		ar_Man[1].href = "manuals/oooauthors2/0100GS-GettingStarted.pdf";
+		ar_Man[1].cls = "pdf";
+		
+		

@@ -1,0 +1,169 @@
+Index: include/mdbsql.h
+===================================================================
+RCS file: /cvsroot/mdbtools/mdbtools/include/mdbsql.h,v
+retrieving revision 1.4
+diff -r1.4 mdbsql.h
+16a17
+> 	int max_rows;
+42c43
+< char *g_input_ptr;
+---
+> extern char *g_input_ptr;
+61c62,63
+< 
+---
+> int mdbsql_run_query(MdbSQL *sql, char *mybuf);
+> void mdb_sql_set_maxrow(MdbSQL *sql,int aMaxrow);
+Index: include/mdbtools.h
+===================================================================
+RCS file: /cvsroot/mdbtools/mdbtools/include/mdbtools.h,v
+retrieving revision 1.20
+diff -r1.20 mdbtools.h
+113c113
+< GHashTable	*mdb_backends;
+---
+> extern GHashTable	*mdb_backends;
+cvs server: Diffing src
+cvs server: Diffing src/extras
+cvs server: Diffing src/gmdb
+cvs server: Diffing src/gmdb2
+cvs server: Diffing src/gmdb2/gladefiles
+cvs server: Diffing src/gmdb2/help
+cvs server: Diffing src/gmdb2/help/C
+cvs server: Diffing src/gmdb2/help/C/figures
+cvs server: Diffing src/gmdb2/pixmaps
+cvs server: Diffing src/include
+cvs server: Diffing src/libmdb
+Index: src/libmdb/backend.c
+===================================================================
+RCS file: /cvsroot/mdbtools/mdbtools/src/libmdb/backend.c,v
+retrieving revision 1.7
+diff -r1.7 backend.c
+25c25
+< 
+---
+>  GHashTable       *mdb_backends;
+cvs server: Diffing src/odbc
+cvs server: Diffing src/sql
+Index: src/sql/lexer.l
+===================================================================
+RCS file: /cvsroot/mdbtools/mdbtools/src/sql/lexer.l,v
+retrieving revision 1.5
+diff -r1.5 lexer.l
+40a41,42
+> 1[ ]=[ ]0   { return MAX0ROW; }
+> 0[ ]=[ ]1   { return MAX0ROW; }
+42c44
+< \"[A-z][A-z0-9 ]*\"   {
+---
+> \"[a-zA-Z_][a-zA-Z0-9_ #@i ]*\"   {
+47c49
+< [A-z][A-z0-9]*		{ yylval.name = strdup(yytext); return NAME; }
+---
+> [a-zA-Z_][a-zA-Z0-9_#@]*	{ yylval.name = strdup(yytext); return NAME; }
+Index: src/sql/mdbsql.c
+===================================================================
+RCS file: /cvsroot/mdbtools/mdbtools/src/sql/mdbsql.c,v
+retrieving revision 1.8
+diff -r1.8 mdbsql.c
+22a23,24
+> char *g_input_ptr;
+> 
+61c63
+< 
+---
+> 	sql->max_rows = -1;
+553a556,585
+> int parse(MdbSQL *sql, char *buf)
+> {
+> 	g_input_ptr = buf;
+> 	/* begin unsafe */
+> 	_mdb_sql(sql);
+> 	if (yyparse()) {
+> 		/* end unsafe */
+> 		fprintf(stderr, "Couldn't parse SQL\n");
+> 		mdb_sql_reset(sql);
+> 		return 0;
+> 	} else {
+> 		return 1;
+> 	}
+> }
+> 
+> 
+> int mdbsql_run_query(MdbSQL *sql, char *mybuf)
+> {
+> 	if (parse(sql, mybuf) && sql->cur_table) {
+> 		mdbsql_bind_all(sql);
+> 		return 1;
+> 	}
+> 	else
+> 		return 0;
+> }
+> 
+> void mdb_sql_set_maxrow(MdbSQL *sql,int aMaxrow)
+> {
+> 	sql->max_rows = aMaxrow;
+> }
+\ No newline at end of file
+Index: src/sql/parser.y
+===================================================================
+RCS file: /cvsroot/mdbtools/mdbtools/src/sql/parser.y,v
+retrieving revision 1.6
+diff -r1.6 parser.y
+44c44
+< %token <name> IDENT NAME PATH STRING NUMBER 
+---
+> %token <name> IDENT NAME PATH STRING NUMBER MAX0ROW
+49a50
+> %type <name> identify
+79c80,83
+< 	sarg
+---
+> 	MAX0ROW { 
+> 				mdb_sql_set_maxrow(_mdb_sql(NULL), 0);
+> 				}
+> 	| sarg
+80a85
+> 	| '('  sarg AND sarg_list  ')'
+84c89,90
+< 	NAME operator constant	{ 
+---
+> 	'(' sarg ')'
+> 	| identify operator constant	{ 
+89c95,105
+< 	| constant operator NAME {
+---
+> 	| constant operator identify {
+> 				mdb_sql_add_sarg(_mdb_sql(NULL), $3, $2, $1);
+> 				free($1);
+> 				free($3);
+> 				}
+> 	| identify operator identify {
+> 				mdb_sql_add_sarg(_mdb_sql(NULL), $3, $2, $1);
+> 				free($1);
+> 				free($3);
+> 				}
+> 	| constant operator constant {
+95d110
+< 
+108a124,126
+> identify:
+> 	IDENT
+> 	|	NAME 
+111c129
+< 	|	NAME 
+---
+> 	|	identify 
+114,115c132,133
+< 	NAME { mdb_sql_add_table(_mdb_sql(NULL), $1); free($1); }
+< 	| IDENT { mdb_sql_add_table(_mdb_sql(NULL), $1); free($1); }
+---
+> 	identify { mdb_sql_add_table(_mdb_sql(NULL), $1); free($1); }
+> 	| identify identify { mdb_sql_add_table(_mdb_sql(NULL), $1); free($1); }
+125,127c143,144
+< 	NAME { mdb_sql_add_column(_mdb_sql(NULL), $1); free($1); }
+< 	| IDENT { mdb_sql_add_column(_mdb_sql(NULL), $1); free($1); }
+< 	;
+---
+> 	identify { mdb_sql_add_column(_mdb_sql(NULL), $1); free($1); }
+>         ;

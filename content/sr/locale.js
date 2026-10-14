@@ -1,0 +1,17 @@
+var showPositioner =    true;
+var logoLinkTitle =    "Повратак на почетну страницу";
+var logoLinkURL =    "http://sr.openoffice.org";
+var logoImageURL =    "/branding/images/bannerlogo.png";
+var positionerText =    "слободан канцеларијски пакет";
+var languageProjectsText =  "на другим језицима";
+var userNotLoggedInText =  "Нисте пријављени.";
+var userLoggedInText =    "Пријављени сте као";
+var registerText =    "Отворите налог";
+var orText =      "или се";
+var logInText =            "пријавите";
+var usernameText =    "корисничко име";
+var passwordText =    "лозинка";
+var rememberMeText =    "Запамти пријаву";
+var advancedSearchText =  "Напредна претрага";
+var searchLabel =    "Тражи";
+var searchText =    "Упит за претрагу";

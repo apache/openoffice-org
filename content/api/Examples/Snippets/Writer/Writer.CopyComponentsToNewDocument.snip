@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Writer.CopyComponentsToNewDocument.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2005/10/15 13:07:35 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="Python" application="Writer">
+
+<keywords>
+	<keyword>traverse document</keyword>
+</keywords>
+
+<authors>
+	<author id="" initial="true" email="Darragh.Sherwin@propylon.com">Darragh Sherwin</author>
+	<author id="tomsontom" initial="true" email="tom.schindl@bestsolution.at">Tom Schindl</author>
+</authors>
+
+<question heading="Copy components to new document">How can I copy things from on to another document
+</question>
+
+<answer>
+<listing>
+# Class to copy 30 lines of text
+# This will break table up, if there is a table
+# in the 30 lines selected by the viewCursor
+class Copier( unohelper.Base, XJobExecutor ):
+
+  def __init__( self, ctx ):
+
+        self.ctx = ctx
+	# For a desktop example see {%internal ../Office/Office.FetchingServicesFromDesktop.snip}
+        deskDict = getDesktopDict( ctx )
+        self.splitDocument( deskDict )
+
+  # Splits the document
+  def splitDocument( self, deskDict ):
+
+        viewCursor = deskDict[&apos;viewcursor&apos;]
+        text = deskDict[&apos;document&apos;].Text
+        controller = deskDict[&apos;controller&apos;]
+        textCursor = text.createTextCursor()
+        textCursor.gotoRange( text.getStart(), False )
+
+        viewCursor.gotoRange( deskDict[&apos;document&apos;].Text.getStart(), False )
+
+        deskDict[&apos;viewcursor&apos;] = viewCursor
+
+        endRange = text.getEnd()
+
+        viewCursor.gotoStart( False )
+        while ( text.compareRegionEnds( viewCursor, endRange ) &gt; 0 ):
+
+                # The viewCursor is selecting the 30 lines
+                viewCursor.goDown( 30, True )
+                controller.select( controller.getSelection() )
+
+                # This executes the copy function
+		# How to use dispatch see {%internal ../Office/Office.UsingDispatchAPI.snip}
+                executeSlot( self.ctx, controller,  &quot;.uno:Copy&quot;)
+
+		# How to create a document see {%internal ../Office/Office.UsingDispatchAPI.snip}
+                docDict = createNewDocument( deskDict )
+                self.pasteToNewDoc( docDict )
+                controller.getFrame().getComponentWindow().setFocus( )
+                textCursor.gotoRange( viewCursor.getEnd() , False)
+                viewCursor.gotoRange( textCursor, False )
+
+
+  # Pastes the system clipboard into the document
+  def pasteToNewDoc( self, deskDict ):
+
+        document = deskDict[&apos;document&apos;]
+	# How to use dispatch see {%internal ../Office/Office.UsingDispatchAPI.snip}
+        executeSlot( self.ctx, deskDict[&apos;controller&apos;], &quot;.uno:Paste&quot;)
+
+
+if __name__==&quot;__main__&quot;:
+
+	# For a connection example see {%internal ../Office/Office.ConnectViaPipe.snip}
+        remoteContext = connect()
+        try:
+                job = Copier( remoteContext )
+        except Exception, e:
+                print &quot;\n\n&quot;
+                import traceback
+                traceback.print_exc()</listing>
+</answer>
+
+<versions>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

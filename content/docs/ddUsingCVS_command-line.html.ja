@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+<style type="text/css">
+/* <![CDATA[ */ @import "/branding/css/tigris.css"; /* ]]> */
+</style>
+  <script src="/branding/scripts/sc.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="/branding/css/print.css" media="print" />
+
+  <title>Using command-line cvs</title>
+ </head>
+
+ <body class="docs" onload="self.focus()">
+  
+<div class="docs" id="ddusingcvscommandline">
+   
+  <h2>プロジェクトソースファイルにアクセスするために
+   CVS コマンドラインを使用</h2>
+
+   <div id="toc">
+    <ul>
+      <li><strong><a href="/nonav/servlets/HelpTOC">ヘルプ索引</a></strong></li>
+    </ul>
+
+    <ul>
+      <li>
+      <a href="/nonav/docs/ddCVS.html">CVS を使用したソースコードバージョン管理について</a> 
+
+        <ul>
+          <li><a href="/nonav/docs/ddCVS_cvsglossary.html">バージョン管理グロッサリ</a></li>
+          <li>
+        プロジェクトソースファイルに
+              アクセスするために CVS コマンドラインを使用 
+
+            <ul>
+              <li><a href="#cvsintro">CVS を使い始めよう</a></li>
+              <li><a href="#accesscvs">プロジェクトの CVS リポジトリへのアクセス</a></li>
+              <li><a href="#gettingsource">ソースコードの取得</a></li>
+              <li><a href="#cvslog">ファイル・リビジョンの履歴の表示</a></li>
+            </ul>
+          </li>
+          <li><a href="/nonav/docs/ddCVS_cvscontributing.html">CVS によるソースコード変更の寄稿</a></li>
+          <li><a href="/nonav/docs/ddCVS_cvsmanaging.html">CVS によるプロジェクト・ファイルおよびディレクトリ
+              の管理</a></li>
+        </ul>
+      </li>
+    </ul>
+   </div>
+
+   <h3><a id="cvsintro" name="cvsintro">CVS を使い始めよう</a></h3>
+
+   
+  <p>このサイトの開発プロジェクトに参加する場合は、プロジェクトのソース
+   ファイルのバージョン管理ツールとして CVS を使用しなければなりませ
+   ん。 CVS の使用に関する情報やコマンドについて説明するツール・ガイ
+   ドには 3 種類あり、このヘルプはその最初のガイドです</p>
+
+   <h3><a id="accesscvs" name="accesscvs">プロジェクトの CVS リポジトリへのアクセス</a></h3>
+
+   
+  <p>このサイトでホストされているプロジェクトの CVS ログイン・アクセス
+   権を持っている場合は、まず cvsroot をプロジェクトのソースコード・
+   リポジトリに設定してください。 シェルまたはターミナル・クライアン
+   トで、次のコマンドを入力します。</p>
+
+   <p><code>:pserver:yourlogin@cvs.projectname.domain.com:/home/main_cvs_dir</code></p>
+
+   
+  <p>入力するコマンドは、自分のログインおよびプロジェクト情報で置き換え
+   てください。</p>
+
+   
+  <p>一度に 1 つのプロジェクトで作業を行う場合は、CVS に最初にログイン
+   したときにだけ cvsroot を設定する必要があります。</p>
+
+   
+  <p>複数のプロジェクトに参加していて異なるサーバにある CVS リポジトリ
+   にアクセスする必要がある場合は、正しいプロジェクトのソース・リポジ
+   トリにアクセスできるように、各ログイン・セッションで cvsroot を設
+   定しなければなりません。</p>
+
+   
+  <p>特定の cvs ログインを持っていないがオープンソース・プロジェクトの
+   ソース・リポジトリを閲覧したい場合は、次のコマンドを入力して
+   「anonymous」ユーザとしてログインすることができます。</p>
+
+   <p><code>:pserver:anoncvs@cvs.projectname.domain.com:/home/main_cvs_dir</code></p>
+
+   <ul>
+    <li><a href="http://cvsbook.red-bean.com/cvsbook.html#Accessing_A_Repository">CVS リポジトリへのアクセスについての詳細</a></li>
+   </ul>
+
+   
+  <p>CVS にログインするには、次のコマンドを使用します。</p>
+
+   <p><code>cvs login</code></p>
+
+   
+  <p>要求されたら自分のユーザ・パスワードを入力します。 これは、このサ
+   イトのユーザ・アカウントに関連付けられているものと同じパスワードで
+   なければなりません。
+</p>
+
+   <h3><a id="gettingsource" name="gettingsource">ソースファイルの取得</a></h3>
+
+   
+  <p>最新のソースファイルの「作業用コピー」を取得するには、ソースファイ
+   ルをチェックアウトします。これは、ファイルを自分のシステムにコピー
+   することを意味します。 まず、次のコマンドを入力して自分のローカ
+   ル・マシンにディレクトリを作成します。</p>
+<pre>
+   <code>mkdir my_working_dir (選択したディレクトリの名前)
+   cd my_working_dir</code>
+ 
+</pre>
+
+   
+  <p>その後、リポジトリからソースファイルをチェックアウトまたは新しく作
+   成したローカル・ディレクトリにコピーします。次のコマンドを入力します。</p>
+
+   <p><code>cvs checkout project_name</code></p>
+
+   
+  <p>このトップレベルのモジュールには、プロジェクトの一部であるソースコ
+   ード・ツリー全体 (トップレベルのディレクトリおよびすべてのサブディ
+   レクトリ）が含まれます。プロジェクトの開始時にはプロジェクトの CVS
+   リポジトリは、非常に一般的なモジュール構成になっています。 プロジ
+   ェクトが進行するにつれて、サブディレクトリがさまざまなモジュールに
+   追加されていくためプロジェクトのソース「ツリー」も大きくなっていき
+   ます。</p>
+
+   
+  <p>「project_name」という名前のプロジェクト内にある「module-name」と
+   呼ばれる特定のモジュールのソースコードを取得するには、次のように指
+   定します。</p>
+
+   <p><code>cvs checkout module_name/project_name</code></p>
+
+   <p><a href="http://cvsbook.red-bean.com/cvsbook.html#Checking_Out_A_Working_Copy">プロジェクト・ファイルの作業用コピーのチェックアウトについての
+   詳細</a></p>
+
+   <h3><a id="cvslog" name="cvslog">ファイル・リビジョンの履歴の表示</a></h3>
+
+   
+  <p>cvs の読み取りを許可する権限を持っているユーザは、次のコマンドを入
+   力してリビジョン情報を確認するために個々のファイル履歴を表示するこ
+   とができます。</p>
+
+   <p><code>cvs log filename</code></p>
+
+   
+  <p>ファイルのリビジョン情報が、最新のリビジョンから表示されます。こ
+   の情報には、ログ・メッセージ、ステータス、ワーキング・リビジョン番
+   号、リポジトリのリビジョン番号などが含まれます。</p>
+
+   <ul>
+    <li><a href="http://cvsbook.red-bean.com/cvsbook.html#Revision_Numbers">ファイル・リビジョン番号についての詳細</a></li>
+   </ul>
+
+   
+  <p><a id="cvsdiff" name="cvsdiff"><span class="HelpTextHeader"><b>ファイル・リビジョンの比較</b></span></a></p>
+
+
+  <p>2 つのバージョン間でファイルに加えられた変更の詳細を見るには、「
+   cvs log」コマンドの出力からファイルのリビジョン番号情報を取得して
+   から次のコマンドを入力します。</p>
+
+  <p><code>cvs diff -r revision_# -r revision_#</code></p>
+
+  <p>2 つのバージョンからの行を並べてファイル全体の内容が表示されます。
+   バージョン間の差分は、リビジョン番号のマークが付いています。</p>
+
+  <ul>
+   <li><a href="http://cvsbook.red-bean.com/cvsbook.html#Finding_Out_What_You__And_Others__Did_--_update_And_diff">メンバーが行った作業を見る方法</a></li>
+
+   <li><a href="http://cvsbook.red-bean.com/cvsbook.html#diff">差分およびオプションについての詳細</a></li>
+
+   <li><a href="/nonav/docs/ddCVS_cvscontributing.html">詳細な CVS ヘルプ:変更の寄稿</a></li>
+  </ul>
+  </div>
+  <div class="courtesylinks">
+   
+  <p><a href="#toc">トップ</a> | <a href="/nonav/servlets/HelpTOC">ヘルプ索引</a></p>
+  </div>
+ </body>
+</html>
+
+

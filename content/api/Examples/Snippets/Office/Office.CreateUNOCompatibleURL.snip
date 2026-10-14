@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.CreateUNOCompatibleURL.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2006/03/27 11:54:48 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="Java" application="Office">
+
+<keywords>
+	<keyword>URL</keyword>
+	<keyword>UNO</keyword>
+	<keyword>File</keyword>
+	<keyword>file:///</keyword>
+</keywords>
+
+<authors>
+	<author id="tobiaskrais" initial="false" email="tuxmail-spam" copyright="Use it and copy it.">Tobias Krais</author>
+</authors>
+
+<question heading="Create UNO compatible URL">How to create a URL that is usable by UNO from a normal file location
+
+<p>Normal file locations are e.g.:</p>
+<p>for Linux/UNIX: &quot;/tmp/myDocument.odt&quot;</p>
+<p>for Windows: &quot;C:\myFolder\myDocument&quot;</p>
+<p>But UNO needs this (e.g. for Linux) &quot;file:///tmp/myDocument.odt&quot;.</p>
+<p>The code below explains how to solve this in Java</p>
+</question>
+
+<answer>
+<listing>    /**
+     * Creating a correct File URL that OpenOffice can handle. This is
+     * necessary to be platform independent.
+     * 
+     * @param filelocation
+     * @return
+     */
+    public String createUNOFileURL(String filelocation)
+    {
+        java.io.File newfile = new java.io.File(filelocation);
+        java.net.URL before = null;
+        try
+        {
+            before = newfile.toURL();
+        }
+        catch (MalformedURLException e) {
+            System.out.println(e);
+        }
+        // Create a URL, which can be used by UNO
+        String myUNOFileURL =  com.sun.star.uri.ExternalUriReferenceTranslator
+          .create(xRemoteContext).translateToInternal(before.toExternalForm());
+
+        if (myUNOFileURL.length() == 0 &amp;&amp; filelocation.length() &gt; 0)
+        {
+            System.out.println(&quot;File URL conversion faild. Filelocation &quot; +
+                    &quot;contains illegal characters: &quot; + filelocation);
+        }
+        return myUNOFileURL;
+    }
+</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+	<version number="1.1.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="tobiaskrais" date="2006-03-27">Initial version</change>
+</changelog>
+
+</snippet>
+

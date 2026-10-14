@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Database.ChangeListboxSource.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2007/09/24 08:04:49 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="OOBasic" application="Database">
+
+<keywords>
+	<keyword>listbox</keyword>
+	<keyword>form</keyword>
+	<keyword>sql</keyword>
+	<keyword>list source</keyword>
+</keywords>
+
+<authors>
+	<author id="ms2" initial="true" email="ms2@openoffice.org">Marc Santhoff</author>
+</authors>
+
+<question heading="change listbox source">How can I change the SQL list source of a ListBox?
+<p>A query (SQL) based listbox has a fixed SQL statement for it&apos;s source.</p>
+<p>Sometimes it is useful to change this statement by code, e.g. when using one form with different queries.</p>
+</question>
+
+<answer>
+<listing>Sub changeLBSource
+    ' caution: if you change like this and then save the form
+    ' the SQL statement filled in when designing the form is
+    ' overwritten with the new one, your code should hold both of them!
+    dim oDoc as object, oForm as object
+    dim oListboxModel as object
+    dim ssql(0) as string
+
+    oDoc = ThisComponent
+    oForm = oDoc.DrawPage.Forms(0)
+    oListboxModel = oForm.getByName(&quot;ListBox&quot;)
+    ssql(0) = &quot;select &quot;&quot;name&quot;&quot;, &quot;&quot;ID&quot;&quot; from &quot;&quot;color&quot;&quot;&quot;
+    oListboxModel.ListSource() = ssql()
+    oListboxModel.refresh()
+End Sub
+</listing>
+</answer>
+
+<versions>
+	<version number="1.1.x" status="tested"/>
+	<version number="2.2.0" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="ms2" date="2007-09-24">Initial version</change>
+</changelog>
+
+</snippet>

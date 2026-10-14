@@ -1,0 +1,185 @@
+<!-- ========================================================================
+$RCSfile: Office.NumberFormats.snip,v $
+
+last change: $Revision: 1.3 $ $Author: jsc $ $Date: 2004/06/24 11:54:31 $
+
+(c)2003 by the copyright holders listed with the author-tags. If no explicit copyright holder is mentioned with a certain author, the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the Public
+Documentation License Version 1.0 (the "License"); you may only use this
+Documentation if you comply with the terms of this License. A copy of
+the License is available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives of
+openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed with the
+author-tags below.
+
+The Contributor(s) are listed with the author-tags below without the
+marker for being an initial author.
+
+All Rights Reserved.
+======================================================================== -->
+
+<snippet language="OOBasic" application="Office">
+<keywords>
+    <keyword>Number</keyword>
+    <keyword>Format</keyword>
+    <keyword>Style</keyword>
+    <keyword>NumberFormat</keyword>
+    <keyword>GetNumberFormats</keyword>
+    <keyword>FormatString</keyword>
+    <keyword>QueryKey</keyword>
+    <keyword>QueryKeys</keyword>
+</keywords>
+
+<authors>
+
+	<author id="and" initial="true" email="andrew@pitonyak.org">
+		Andrew Pitonyak
+	</author>
+
+	<author id="god" initial="true" email="listes.godard@laposte.net">
+		Laurent Godard
+	</author>
+
+	<author id="mi" email="Michael.Hoennig@Sun.Com">
+	  Michael H&#366;nnig
+	</author>
+
+	<author id="tomsontom" initial="false" email="tom.schindl@bestsolution.at">Tom Schindl</author>
+
+</authors>
+
+<question heading="create number formats">
+How can I find and create number formats?
+</question>
+
+<answer>
+<p>
+If you want a particular number format, then you can see if you have it and create it if you do not. For more information on valid formats, see the help contents on topic "number formats; formats". They can be very complex. The following macro creates a number format if it does not exist. The appropriate number format is returned.
+</p>
+
+<listing>
+'******************************************************************
+'Author: Andrew Pitonyak
+'email:   andrew@pitonyak.org
+Function FindCreateNumberFormatStyle (_
+  sFormat As String, Optional doc, Optional locale)
+  Dim oDocument As Object
+  Dim aLocale as new com.sun.star.lang.Locale
+  Dim oFormats As Object
+  oDocument = IIf(IsMissing(doc), ThisComponent, doc)
+  oFormats = oDocument.getNumberFormats()
+  'If you choose to query on types, you need to use the type
+  'com.sun.star.util.NumberFormat.DATE
+  'I could set the locale from values stored at
+  'http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt
+  'http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html
+  'I use a NULL locale and let it use what ever it likes.
+  'First, see if the number format exists
+  If ( Not IsMissing(locale)) Then
+    aLocale = locale
+  End If
+  formatNum = oFormats.queryKey (sFormat, aLocale, TRUE)
+  MsgBox "Current Format number is" &amp; formatNum
+  'If the number format does not exist then add it
+  If (formatNum = -1) Then
+    formatNum = oFormats.addNew(sFormat, aLocale)
+    If (formatNum = -1) Then formatNum = 0
+    MsgBox "new Format number is " &amp; formatNum
+  End If
+  FindCreateNumberFormatStyle = formatNum
+End Function
+</listing>
+
+<p>If you want to see all of your existing number formats, try something like the following, which is a macro that I modified from Laurent Godard. 
+The following macro enumerates the current number format styles. 
+The style numbers (keys) and their text representation are inserted into the current document. 
+The disadvantage to this version is that it enumerates the styles based on the locale. 
+The original version enumerated the key from 0 to 1000, ignoring errors. 
+This will find all formats regardless of locale, but I consider this macro a slightly cleaner solution.</p>
+
+<listing>
+'******************************************************************
+'Author: Andrew Pitonyak
+'email:   andrew@pitonyak.org
+Function FindCreateNumberFormatStyle (_
+  sFormat As String, Optional doc, Optional locale)
+  Dim oDocument As Object
+  Dim aLocale as new com.sun.star.lang.Locale
+  Dim oFormats As Object
+  oDocument = IIf(IsMissing(doc), ThisComponent, doc)
+  oFormats = oDocument.getNumberFormats()
+  'If you choose to query on types, you need to use the type
+  'com.sun.star.util.NumberFormat.DATE
+  'I could set the locale from values stored at
+  'http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt
+  'http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html
+  'I use a NULL locale and let it use what ever it likes.
+  'First, see if the number format exists
+  If ( Not IsMissing(locale)) Then
+    aLocale = locale
+  End If
+  formatNum = oFormats.queryKey (sFormat, aLocale, TRUE)
+  MsgBox "Current Format number is" &amp; formatNum
+  'If the number format does not exist then add it
+  If (formatNum = -1) Then
+    formatNum = oFormats.addNew(sFormat, aLocale)
+    If (formatNum = -1) Then formatNum = 0
+    MsgBox "new Format number is " &amp; formatNum
+  End If
+  FindCreateNumberFormatStyle = formatNum
+End Function
+</listing>
+
+<p>If you want to see all of your existing number formats, try something like the following, which is a macro that I modified from Laurent Godard. 
+The following macro enumerates the current number format styles. 
+The style numbers (keys) and their text representation are inserted into the current document. 
+The disadvantage to this version is that it enumerates the styles based on the locale. 
+The original version enumerated the key from 0 to 1000, ignoring errors. 
+This will find all formats regardless of locale, but I consider this macro a slightly cleaner solution.
+</p>
+
+<listing>
+Sub enumFormats()
+  'Author : Laurent Godard
+  'e-mail : listes.godard@laposte.net
+  'Modified : Andrew Pitonyak
+  Dim vText
+  Dim vFormats, vFormat
+  Dim vTextCursor, vViewCursor
+  Dim iMax As Integer, i As Integer
+  Dim s$
+  Dim PrevChaine$, Chaine$
+  Dim aLocale as new com.sun.star.lang.Locale
+ 
+  vFormats = ThisComponent.getNumberFormats()
+  RunSimpleObjectBrowser(vFormats)
+  vText = ThisComponent.Text
+  vViewCursor = ThisComponent.CurrentController.getViewCursor()
+  vTextCursor = vText.createTextCursorByRange(vViewCursor.getStart())
+  Dim v
+  v = vFormats.queryKeys(com.sun.star.util.NumberFormat.ALL, aLocale, False)
+  For i = LBound(v) To UBound(v)
+    vFormat=vFormats.getbykey(v(i))
+    chaine=VFormat.FormatString
+    If Chaine&lt;&gt;Prevchaine Then
+      PrevChaine=Chaine
+      chaine=CStr(v(i)) &amp; CHR$(9) &amp; CHR$(9) &amp; chaine &amp; CHR$(10)
+      vText.insertString(vTextCursor, Chaine, FALSE)
+    End If
+  Next
+  MsgBox "Finished"
+End Sub
+</listing>
+</answer>
+
+<changelog>
+	<change author-id="tomsontom" date="2004-06-22">Modified to match new snippet-DTD</change>
+	<change author-id="and" date="0000-00-00"></change>
+</changelog>
+</snippet> 

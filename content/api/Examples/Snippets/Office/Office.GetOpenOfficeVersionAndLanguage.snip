@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.GetOpenOfficeVersionAndLanguage.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2008/10/20 11:29:27 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Office">
+
+<keywords>
+	<keyword>language</keyword>
+	<keyword>locale</keyword>
+	<keyword>version</keyword>
+	<keyword>open</keyword>
+	<keyword>office</keyword>
+</keywords>
+
+<authors>
+	<author id="1" initial="true" email="" copyright="Josef Frysak">Josef Frysak</author>
+</authors>
+
+<question heading="Get Open Office version and language">How to get the Version and the language of Open Office?
+</question>
+
+<answer>
+<p>Create a &quot;ConfigurationProvider&quot; service and get its &quot;XMultiServiceFactory&quot;</p>
+<p>interface. With this interface one is able to create &quot;ConfigurationAccess&quot;</p>
+<p>objects, which grant read access to the configuration of Open Office.</p>
+<p>Send the location of the configuration as a parameter when creating an</p>
+<p>&quot;ConfigurationAccess&quot; object in order to determine the information, which</p>
+<p>shall be accessed.</p>
+<p>For further details see http://wi.wu-wien.ac.at/rgf/diplomarbeiten/BakkStuff/2008/200809_Frysak/200809_Frysak_Automating_OOo_ooRexx_Nutshells.pdf.</p>
+<listing>-- try to get a script context, will be .nil, if script was not invoked by OOo
+x_ScriptContext = uno.getScriptContext()
+if (x_ScriptContext &lt;&gt; .nil) then
+do
+   -- invoked by OOo as a macro
+
+   -- get context
+   x_ComponentContext = x_ScriptContext~getComponentContext
+   -- get desktop (an XDesktop)
+   x_Desktop  = x_ScriptContext~getDesktop
+   -- get current document
+   x_Document = x_ScriptContext~getDocument
+end
+else  
+do
+   -- called from outside of OOo, create a connection
+
+   -- connect to Open Office and get component context
+   x_ComponentContext = UNO.connect()
+   -- create a desktop service and its interface
+   service = &quot;{%see com.sun.star.frame.Desktop}&quot;
+   s_Desktop = x_ComponentContext~getServiceManager~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}~createInstance(service)
+   x_Desktop = s_Desktop~{%see com.sun.star.frame.XDesktop%XDesktop}
+   -- get the last active document
+   x_Document = x_Desktop~getCurrentComponent()  
+end
+
+
+
+
+-- first we create an instance of the configurationprovider
+x_MultiServiceFactory = x_ComponentContext~getServiceManager()~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+configprovider = &quot;{%see com.sun.star.configuration.ConfigurationProvider}&quot;
+s_ConfigProvider = x_MultiServiceFactory~createInstance(configprovider)
+x_ConfigFactory = s_ConfigProvider~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+
+-- this strig tells the provider to give us reading access to the configuration
+conf = &quot;{%see com.sun.star.configuration.ConfigurationAccess}&quot;
+
+-- here we define the path to the language information
+args = uno.CreateArray(.UNO~PROPERTYVALUE, 1)
+
+args[1] = uno.createProperty(&quot;nodepath&quot;, &quot;/org.openoffice.Setup/L10N&quot;)
+
+-- finally we request configuration access to the predefined configurationpath
+s_ConfigurationAccess = x_ConfigFactory~createInstanceWithArguments(conf, args)
+x_NameAccess = s_ConfigurationAccess~{%see com.sun.star.container.XNameAccess%XNameAccess}
+
+-- and read one of its entries
+locale = x_NameAccess~getByName(&quot;ooLocale&quot;)
+
+-- next we try to read another configuration entry:
+
+args[1]~value = &quot;/org.openoffice.Setup/Product&quot;
+
+s_ConfigurationAccess = x_ConfigFactory~createInstanceWithArguments(conf, args)
+x_NameAccess = s_ConfigurationAccess~{%see com.sun.star.container.XNameAccess%XNameAccess}
+
+version = x_NameAccess~getByName(&quot;ooSetupVersion&quot;)
+
+-- this is a carriage return line feed string to jump into the next
+-- line when displaying our information
+crlf = &quot;13&quot;~d2c || &quot;10&quot;~d2c
+
+-- combine outputs
+output = &quot;Open Office: &quot; || crlf || &quot;Version: &quot; || version || crlf || &quot;Language: &quot; || locale
+
+-- show message
+.bsf.dialog~messageBox(output, &quot;About:&quot;, &quot;information&quot;)
+
+::requires UNO.CLS</listing>
+</answer>
+
+<versions>
+	<version number="2.4.1" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="1" date="2008-10-13">Initial version</change>
+</changelog>
+
+</snippet>

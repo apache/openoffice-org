@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.StartUNOAcceptorUsingAnOoRexxScript.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2008/10/20 11:29:27 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Office">
+
+<keywords>
+	<keyword>start</keyword>
+	<keyword>uno</keyword>
+	<keyword>acceptor</keyword>
+	<keyword>ooRexx</keyword>
+	<keyword>script</keyword>
+</keywords>
+
+<authors>
+	<author id="1" initial="true" email="" copyright="Josef Frysak">Josef Frysak</author>
+</authors>
+
+<question heading="Start UNO Acceptor using an ooRexx script">How to start an Acceptor of Open Office using an ooRexx script?
+</question>
+
+<answer>
+<p>First find out which operating system is used and where Open</p>
+<p>Office has been installed to. Then call soffice executable</p>
+<p>with &quot;-accept&quot; parameter to start an acceptor.</p>
+<p>For further details see http://wi.wu-wien.ac.at/rgf/diplomarbeiten/BakkStuff/2008/200809_Frysak/200809_Frysak_Automating_OOo_ooRexx_Nutshells.pdf.</p>
+<listing>-- using rexxj command use ADDRESS function otherwise you get an error
+-- find out which operating system is present and set up the shell execution
+/* Normally ooRexx is able to determine the operating system itself. But calling
+the macro with rexxj or inside Open Office disables this ability.*/
+if .uno~path.separator=&quot;;&quot; then
+do
+-- Windows
+-- the start command is necessary when using windows, otherwise an error occurs.
+-- also the location of the soffice program differs
+add = &apos;start C:\Programme\&quot;OpenOffice.org 2.4&quot;\program\&apos;
+ADDRESS CMD
+end
+else
+do
+-- Linux
+shell=value(&quot;SHELL&quot;,,&quot;ENVIRONMENT&quot;) -- get type of shell
+shell=substr(shell, shell~lastpos(&quot;/&quot;)+1) -- get shell name
+ADDRESS VALUE shell -- set shell as command shell
+add = &apos;&apos;
+end
+command = add || &apos;soffice &quot;-accept=socket,host=localhost,port=2002;urp;&quot; -quickstart&apos;
+-- execute command
+command
+-- by using SysSleep we wait 2 seconds
+call SysSleep 2;
+::requires UNO.CLS</listing>
+</answer>
+
+<versions>
+	<version number="2.4.1" status="may work"/>
+</versions>
+
+<operating-systems>
+<operating-system name="Linux"/>
+<operating-system name="Win32"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="1" date="2008-10-12">Initial version</change>
+</changelog>
+
+</snippet>

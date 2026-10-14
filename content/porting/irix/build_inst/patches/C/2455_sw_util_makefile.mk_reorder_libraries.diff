@@ -1,0 +1,33 @@
+--- /projects/sise/openoffice/devel/workpits/OOo641C/workarea/sw/util/makefile.mk	Fri Nov  2 23:33:43 2001
++++ sw/util/makefile.mk	Fri Feb 15 10:10:52 2002
+@@ -173,7 +173,15 @@
+ 	$(SLB)$/ui2.lib
+ 
+ 
+-SHL2STDLIBS= \
++.IF "$(GUI)" ==	"UNX"
++SHL2STDLIBS = \
++	$(SCHLIB) \
++	$(SMLIB)
++.ELSE
++SHL2STDLIBS=
++.ENDIF
++
++SHL2STDLIBS+= \
+ 	$(SALLIB) \
+ 	$(SFXLIB) \
+ 	$(OFALIB) \
+@@ -200,13 +208,6 @@
+ 	$(UCBHELPERLIB) \
+ 	$(XMLOFFLIB) \
+ 	$(COMPHELPERLIB)
+-
+-
+-.IF "$(GUI)" ==	"UNX"
+-SHL2STDLIBS += \
+-	$(SCHLIB) \
+-	$(SMLIB)
+-.ENDIF
+ 
+ .IF "$(SOLAR_JAVA)" != ""
+ SHL2STDLIBS+= \

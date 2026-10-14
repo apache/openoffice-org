@@ -1,0 +1,261 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.RemoveIterativeAndTransientMenubarItems.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2006/03/01 17:48:17 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="Java" application="Office">
+
+<keywords>
+	<keyword>menubar</keyword>
+	<keyword>transient</keyword>
+	<keyword>remove</keyword>
+	<keyword>search menubar</keyword>
+</keywords>
+
+<authors>
+	<author id="tobiaskrais" initial="false" email="tuxmail-spam@bats.ch" copyright="Copy it, use it, distribute it, but contribute to OpenOffice.org!">Tobias Krais</author>
+</authors>
+
+<question heading="Remove iterative and transient menubar items">
+
+</question>
+
+<answer>
+<p>This expample demonstrates how to remove menubar items transient,</p>
+<p>that means temporary. It searches the menus iterative to find all menu</p>
+<p>items that are same. The search criteria is a CommandURL of an item.</p>
+<listing>package de.twc.oocom;
+
+import java.util.Vector;
+
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.comp.helper.Bootstrap;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.container.XIndexContainer;
+import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.XLayoutManager;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.IndexOutOfBoundsException;
+import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.ui.XUIElementSettings;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
+
+public class TemporaryRemoveMenuEntry {
+
+    public TemporaryRemoveMenuEntry(){
+        //Empty Constructor for OOComNG
+    }
+    
+    // The file that should be processed, e.g. &quot;/tmp/hello_world.ods&quot;
+    private String source_File = &quot;/home/tobias/test.odt&quot;;
+    private String ooport = &quot;9000&quot;;
+
+    public static void main(String[] arg){
+        TemporaryRemoveMenuEntry myOOComNG = new TemporaryRemoveMenuEntry();
+        
+        try {
+            myOOComNG.openDocument();
+        }
+        catch(Exception e) {
+                System.out.println(e);
+        }
+    }
+
+    private void openDocument() throws java.lang.Exception {
+        XComponentContext xRemoteContext = Bootstrap.bootstrap();
+        System.out.println(&quot;Connected to a running OpenOffice ...&quot;);
+        // get OO desktop
+        XMultiComponentFactory xRemoteServiceManager 
+                = xRemoteContext.getServiceManager();
+        Object desktop = xRemoteServiceManager.createInstanceWithContext(
+                &quot;com.sun.star.frame.Desktop&quot;, xRemoteContext
+        );
+        // query the XComponentLoader interface from the desktop
+        XComponentLoader xComponentLoader =
+                (XComponentLoader)UnoRuntime.queryInterface(
+                XComponentLoader.class, desktop);
+
+        PropertyValue[] myProperties = new PropertyValue[1];
+        PropertyValue xProperty = new PropertyValue();
+            xProperty.Name = &quot;ReadOnly&quot;;
+            xProperty.Value = new Boolean(false);
+        myProperties[0] = xProperty;
+
+        // load document
+        XComponent openedDocument = xComponentLoader.loadComponentFromURL(
+                &quot;file://&quot; + source_File,
+                &quot;_blank&quot;,
+                Integer.parseInt(ooport),
+                myProperties);
+
+        com.sun.star.frame.XDesktop xDesktop = (com.sun.star.frame.XDesktop)
+                UnoRuntime.queryInterface(com.sun.star.frame.XDesktop.class, desktop);
+        com.sun.star.frame.XFrame xFrame = xDesktop.getCurrentFrame();
+        
+        XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface(
+                XPropertySet.class, xFrame);
+        XLayoutManager xLayoutManager = (XLayoutManager) UnoRuntime.queryInterface(
+                XLayoutManager.class,
+                xPropSet.getPropertyValue(&quot;LayoutManager&quot;));
+        
+        // Getting the menubar
+        com.sun.star.ui.XUIElement myMenubar 
+            = xLayoutManager.getElement(&quot;private:resource/menubar/menubar&quot;);
+        // Getting the menubar settings
+        XUIElementSettings myMenuBarSettings = (XUIElementSettings)
+                UnoRuntime.queryInterface(XUIElementSettings.class, myMenubar);
+        // Casting the settings into a container to be able to get the properties
+        XIndexContainer myMenuBarSettingsContainer = (XIndexContainer)
+                UnoRuntime.queryInterface(
+                XIndexContainer.class, myMenuBarSettings.getSettings(true));
+
+        // Creating a Vector containing all menus with a &quot;Save&quot; item
+        Vector foundSaveMenuItems = searchMenuForItem(&quot;.uno:Save&quot;,
+                myMenuBarSettingsContainer,
+                new Vector());
+        // Remove the menu items
+        removeMenuItems(foundSaveMenuItems);
+
+        // Make changes only transient (temporary).
+        com.sun.star.beans.XPropertySet xps = (XPropertySet)
+                UnoRuntime.queryInterface(XPropertySet.class, myMenubar);
+        xps.setPropertyValue(&quot;Persistent&quot;, new Boolean(false));
+
+        // Apply settings to the root container (includes all subcontainers)
+        myMenuBarSettings.setSettings(myMenuBarSettingsContainer);
+    }
+    
+    /**
+     * Method that removes the given menu items. The given Vector contains a
+     * XIndexContainer at first position (the menu containing the Item to remove)
+     * and an Integer at second position (the item number of the item to remove.
+     * The changes are transient (temporary).
+     * 
+     * @param itemsToRemove
+     * @throws IndexOutOfBoundsException
+     * @throws WrappedTargetException
+     */
+    public void removeMenuItems(Vector itemsToRemove) throws
+            IndexOutOfBoundsException,
+            WrappedTargetException
+    {
+        // Starting with the last Element, because removing changes item index
+        for (int i = itemsToRemove.size() -1; i &gt;= 0; i--)
+        {
+            Vector thisVectorItem = (Vector)itemsToRemove.elementAt(i);
+            XIndexContainer thisMenuContainer = (XIndexContainer)
+                thisVectorItem.elementAt(0);
+            Integer menuPosition = (Integer)thisVectorItem.elementAt(1);
+
+            // remove the item, but settings must be set to make it visible
+            thisMenuContainer.removeByIndex(menuPosition.intValue());
+        }
+    }
+    
+    /**
+     * Method that searches menus and its submenus for the &quot;CommandURL&quot;
+     * property. The returned Vector consists of Vectors. Each contained Vector
+     * has two values. The first gives the XIndexContainer where the searched
+     * menu item was found, the second is an Integer that tells the position
+     * where the menu item was found.   
+     * 
+     * @param myCommandURL
+     * @param myMenuContainer
+     * @param foundMenuItems
+     * @return
+     * @throws IllegalArgumentException
+     * @throws IndexOutOfBoundsException
+     * @throws WrappedTargetException
+     */
+    public Vector searchMenuForItem(String myCommandURL,
+            XIndexContainer myMenuContainer, Vector foundMenuItems)
+            throws IllegalArgumentException,
+                IndexOutOfBoundsException,
+                WrappedTargetException  {
+
+        if(myMenuContainer != null) {
+            for(int g = 0; g &lt; myMenuContainer.getCount(); g++) {
+                // Getting the properties of the given container
+                PropertyValue[] gMenuItem = (PropertyValue[])
+                        com.sun.star.uno.AnyConverter.toObject(
+                        PropertyValue[].class,
+                        myMenuContainer.getByIndex(g));
+                for(int h = 0; h &lt; gMenuItem.length; h++)
+                {
+                    if(gMenuItem[h].Name.equals(&quot;CommandURL&quot;))
+                    {
+                        if(gMenuItem[h].Value.equals(myCommandURL))
+                        {
+                            Vector thisMenuItem = new Vector();
+                                thisMenuItem.addElement(myMenuContainer);
+                                thisMenuItem.addElement(g);
+                            foundMenuItems.addElement(thisMenuItem);
+                            break;
+                        }
+                    }
+                    else if(gMenuItem[h].Name.equals(&quot;ItemDescriptorContainer&quot;))
+                    {
+                        XIndexAccess subMenuAccess = (XIndexAccess)
+                                com.sun.star.uno.AnyConverter.toObject(
+                                XIndexAccess.class,
+                                gMenuItem[h].Value);
+                        XIndexContainer subMenuContainer = (XIndexContainer)
+                                UnoRuntime.queryInterface(
+                                XIndexContainer.class, subMenuAccess);
+                        if(subMenuAccess != null)
+                        {
+                            searchMenuForItem(myCommandURL,
+                                    subMenuContainer,
+                                    foundMenuItems);
+                        }
+                    }
+                }
+            }
+        }
+        return foundMenuItems;
+    }
+}</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="tobiaskrais" date="2006-02-28">Initial version</change>
+</changelog>
+
+</snippet>
+

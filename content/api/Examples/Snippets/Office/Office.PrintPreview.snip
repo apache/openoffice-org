@@ -1,0 +1,86 @@
+<!--
+$RCSfile: Office.PrintPreview.snip,v $
+
+last change: $Revision: 1.3 $ $Author: tomsontom $ $Date: 2004/11/18 10:40:06 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="Java" application="Office">
+
+<keywords>
+	<keyword>print preview</keyword>
+</keywords>
+
+<authors>
+	<author id="tomsontom" initial="true" email="tom.schindl@bestsolution.at">Tom Schindl</author>
+	<author id="sw" initial="true" email="stephan.wunderlich@sun.com">Stephan Wunderlich</author>
+</authors>
+
+<question heading="print preview">
+How to get a print preview
+<p>I&apos;ve been looking at printing via the OpenOffice.org API. Is there a way to get a print preview? There doesn&apos;t seem to be anything about this in the Devlopers&apos; Guide.</p>
+</question>
+
+<answer>
+<p>supposing you have the XModel (xModel) of the document and the ServiceManager (xMSF) then the following should do what you want.</p>
+<listing>
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XModel;
+import com.sun.star.util.XURLTransformer;
+import com.sun.star.util.URL;
+import com.sun.star.lang.XMultiServiceFactory;
+
+XController xController = xModel.getCurrentController();
+
+//switch to &apos;Print Preview&apos; mode
+try {
+   XDispatchProvider xDispProv = (XDispatchProvider)
+       UnoRuntime.queryInterface(XDispatchProvider.class, xController);
+   XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
+       UnoRuntime.queryInterface(XURLTransformer.class,
+   xMSF.createInstance(&quot;com.sun.star.util.URLTransformer&quot;));
+   URL[] aParseURL = new URL[1];
+   aParseURL[0] = new URL();
+   aParseURL[0].Complete = &quot;.uno:PrintPreview&quot;;
+   xParser.parseStrict(aParseURL);
+   URL aURL = aParseURL[0];
+   XDispatch xDispatcher = xDispProv.queryDispatch(aURL, &quot;&quot;, 0);
+   if(xDispatcher != null) {
+       xDispatcher.dispatch( aURL, new PropertyValue[]{} );
+   }
+} catch (com.sun.star.uno.Exception e) {
+
+} 
+</listing>
+</answer>
+
+<changelog>
+	<change author-id="tomsontom" date="2004-11-18">Initial version, summed up from mailling list</change>
+	<change author-id="tomsontom" date="2004-11-18">Added missing imports</change>
+</changelog>
+
+</snippet>

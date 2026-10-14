@@ -1,0 +1,27 @@
+--- /projects/sise/openoffice/devel/workpits/641-gcc-debug/source/sc/util/makefile.mk	Tue Oct  2 22:52:08 2001
++++ sc/util/makefile.mk	Tue Nov 27 11:35:52 2001
+@@ -108,7 +108,13 @@
+ SHL1VERSIONMAP= sc.map
+ SHL1IMPLIB= sci
+ 
+-SHL1STDLIBS=        \
++.IF "$(GUI)"=="UNX"
++SHL1STDLIBS= $(SCHLIB)
++.ELSE
++SHLSTDLIBS=
++.ENDIF
++
++SHL1STDLIBS+=        \
+ 	$(BASICLIB)		\
+     $(SFXLIB)		\
+ 	$(SFXDEBUGLIB)	\
+@@ -144,9 +150,6 @@
+ SHL1OBJS=   $(SLO)$/scdll.obj
+ .ENDIF
+ 
+-.IF "$(GUI)"=="UNX"
+-SHL1STDLIBS+= $(SCHLIB)
+-.ENDIF
+ 
+ SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
+ 

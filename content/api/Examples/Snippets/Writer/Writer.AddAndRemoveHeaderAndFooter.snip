@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Writer.AddAndRemoveHeaderAndFooter.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2008/10/20 11:29:27 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Writer">
+
+<keywords>
+	<keyword>add</keyword>
+	<keyword>remove</keyword>
+	<keyword>header</keyword>
+	<keyword>footer</keyword>
+</keywords>
+
+<authors>
+	<author id="1" initial="true" email="" copyright="Josef Frysak">Josef Frysak</author>
+</authors>
+
+<question heading="Add and remove header and footer">How to toggle header and footer on and off?
+</question>
+
+<answer>
+<p>First get the style name of the current Page. Next get the StyleFamilies</p>
+<p>list of the document via the StyleFamiliesSupplier and retrieve the page</p>
+<p>style with the name recieved before. Now get the &quot;XPropertySet&quot; interface</p>
+<p>and retrieve the status of the header and footer. If they are true then</p>
+<p>set their properties to false, otherwhise set them to true.</p>
+<p>For further details see http://wi.wu-wien.ac.at/rgf/diplomarbeiten/BakkStuff/2008/200809_Frysak/200809_Frysak_Automating_OOo_ooRexx_Nutshells.pdf.</p>
+<listing>-- try to get a script context, will be .nil, if script was not invoked by OOo
+x_ScriptContext = uno.getScriptContext()
+if (x_ScriptContext &lt;&gt; .nil) then
+do
+   -- invoked by OOo as a macro
+
+   -- get context
+   x_ComponentContext = x_ScriptContext~getComponentContext
+   -- get desktop (an XDesktop)
+   x_Desktop  = x_ScriptContext~getDesktop
+   -- get current document
+   x_Document = x_ScriptContext~getDocument
+end
+else  
+do
+   -- called from outside of OOo, create a connection
+
+   -- connect to Open Office and get component context
+   x_ComponentContext = UNO.connect()
+   -- create a desktop service and its interface
+   service = &quot;{%see com.sun.star.frame.Desktop}&quot;
+   s_Desktop = x_ComponentContext~getServiceManager~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}~createInstance(service)
+   x_Desktop = s_Desktop~{%see com.sun.star.frame.XDesktop%XDesktop}
+   -- get the last active document
+   x_Document = x_Desktop~getCurrentComponent()  
+end
+
+
+
+
+-- first we get access to the textdocument and its text object
+x_TextDocument = x_Document~{%see com.sun.star.text.XTextDocument%XTextDocument}
+x_Text = x_TextDocument~getText
+
+-- get the current current cursor
+s_CurrentController = x_TextDocument~getCurrentController()
+x_TextViewCursorSupplier = s_CurrentController~{%see com.sun.star.text.XTextViewCursorSupplier%XTextViewCursorSupplier}
+x_CurrentCursor = x_TextViewCursorSupplier~getViewCursor()
+
+-- get access to the properties of the current cursor and retrieve
+-- name of the current pagestyle
+cursorproperties = x_CurrentCursor~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+pagestylename = cursorproperties~getPropertyValue(&quot;PageStyleName&quot;)
+
+-- next we search the StyleFamily entries for our current pagestyle
+x_StyleFamiliesSupplier = x_Document~{%see com.sun.star.style.XStyleFamiliesSupplier%XStyleFamiliesSupplier}
+x_StyleFamilies = x_StyleFamiliesSupplier~getStyleFamilies()
+s_StyleFamily = x_StyleFamilies~getByName(&quot;PageStyles&quot;)
+x_NameAccess = s_StyleFamily~{%see com.sun.star.container.XNameAccess%XNameAccess}
+s_PageProperties = x_NameAccess~getByName(pagestylename)
+
+-- get the properties of the current page
+pageproperties = s_PageProperties~{%see com.sun.star.beans.XPropertySet%XPropertySet}
+
+-- get the current status of header and footer of this page
+oldheader = pageproperties~getPropertyValue(&quot;HeaderIsOn&quot;)
+oldfooter = pageproperties~getPropertyValue(&quot;FooterIsOn&quot;)
+
+-- if header is on turn it of and vice versa
+-- i dont know why disabling needs a complet object as parameter, but
+-- enabling does not. (enabling wont work if using objects)
+
+if oldheader then pageproperties~setPropertyValue(&quot;HeaderIsOn&quot;, .bsf~new(&quot;java.lang.Boolean&quot;, 0))
+else pageproperties~setPropertyValue(&quot;HeaderIsOn&quot;, 1)
+
+if oldfooter then pageproperties~setPropertyValue(&quot;FooterIsOn&quot;, .bsf~new(&quot;java.lang.Boolean&quot;, 0))
+else pageproperties~setPropertyValue(&quot;FooterIsOn&quot;, 1)
+
+::requires UNO.CLS</listing>
+</answer>
+
+<versions>
+	<version number="2.4.1" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="1" date="2008-10-14">Initial version</change>
+</changelog>
+
+</snippet>

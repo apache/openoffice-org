@@ -1,0 +1,141 @@
+Converting Affix Files:  Understanding the Affix File Format
+------------------------------------------------------------
+
+An affix is either a  prefix or a suffix attached to root words to make 
+other words.  For example supply -> supplied by dropping the "y" and
+adding an "ied" (the suffix). 
+
+Here is an example of how to define one specific suffix borrowed 
+from the en_US.aff file used by the OpenOffice org spellchecker
+
+SFX D Y 4
+SFX D   0     d          e
+SFX D   y     ied        [^aeiou]y
+SFX D   0     ed         [^ey]
+SFX D   0     ed         [aeiou]y
+
+This file is space delimited and case sensitive.
+So this information can be interpreted as follows:
+
+The first line has 4 fields:
+
+Field
+-----
+1     SFX - indicates this is a suffix
+2     D   - is the name of the character which represents this suffix
+3     Y   - indicates it can be combined with prefixes (cross product)
+4     4   - indicates that sequence of 4 affix entries are needed to
+               properly store the affix information
+
+The remaining lines describe the unique information for the 4 affix
+entries that make up this affix.  Each line can be interpreted
+as follows: (note fields 1 and 2 are used as a check against line 1 info)
+
+Field
+-----
+1     SFX         - indicates this is a suffix
+2     D           - is the name of the character which represents this affix
+3     y           - the string of chars to strip off before adding affix
+                         (a 0 here indicates the NULL string)
+4     ied         - the string of affix characters to add
+                         (a 0 here indicates the NULL string)
+5     [^aeiou]y   - the conditions which must be met before the affix
+                    can be applied
+
+Field 5 is interesting.  Since this is a suffix, field 5 tells us that
+there are 2 conditions that must be met.  The first condition is that 
+the next to the last character in the word must *NOT* be any of the 
+following "a", "e", "i", "o" or "u".  The second condition is that
+the last character of the word must end in "y".
+
+Now for comparison purposes, here is the same information from the 
+Ispell english.aff compression file which was used as the basis
+for the OOo one.
+
+flag *D:
+    E		>	D		# As in create > created
+    [^AEIOU]Y	>	-Y,IED		# As in imply > implied
+    [^EY]	>	ED		# As in cross > crossed
+    [AEIOU]Y	>	ED		# As in convey > conveyed
+
+The Ispell information has exactly the same information but in a 
+slightly different (case-insensitive) format:
+
+Here are the ways to see the mapping from Ispell .aff format to our
+OOo format.
+
+1. The ispell english.aff has flag D under the "suffix" section so 
+you know it is a suffix.
+
+2.  The D is the character assigned to this suffix
+
+3. * indicates that it can be combined with prefixes
+
+4. Each line following the : describes the affix entries needed
+   to define this suffix
+
+   - The first field is the conditions that must be met.
+
+   - The second field is after the > if a "-" occurs is the
+         string to strip off (can be blank).
+
+   - The third field is the string to add (the affix)
+
+In addition all chars in ispell aff files are in UPPERCASE.
+
+So the easiest way to create an OOo .aff file is to start with
+an Ispell .aff file (make sure you get the wordlist author's 
+permission first).  Then literally one by one, use a text editor
+to convert the information for each prefix and suffix into the 
+OOo format (or write a perl script if need be).
+
+Note:  MySpell does *NOT* support multi-byte characters. It needs both
+the affix file and the wordlist to use just one 8-bit character set which
+is then specified in the affix file.
+
+If the Ispell affix file and wordlist uses multiple bytes to 
+indicate one character, a script or editor must be used to convert
+them to the proper single byte character encoding.  For example,
+the Ispell german affix file uses the byte sequence u" to actually
+indicate the a u-umlaut character. All occurences of these
+multi-byte characters must be converted to their single byte encoding
+using the ISO-8859-1 character set in the affix file and the
+wordlist. 
+
+FYI, the changes made to the format of the .aff file are necessary 
+to support on-the-fly parsing of both the affix .aff file and the
+munched wordlists so that all dictionaries are literally stored
+as ISO text files with associated .aff files and not endian 
+dependent binary hash tables dumped in some compile specific 
+format.  The code is then smart enough to build a hashtable on 
+the fly just from the munched wordlist and the .aff file as long
+as the text files end in either \r\n or simply \n.
+
+
+There are two other things you need to add to the MySpell affix file.
+
+The first line specifies the character set used for both the 
+wordlist and the affix file (should be all uppercase). 
+
+For example:
+
+SET ISO8859-1
+
+And the second line specifies the characters to be used in building
+suggestions for misspelled words.  The should be listed in order or
+character frequency (highest to lowest).  A good way to develop this
+string is to sort a simple character count of the wordlist.
+
+For example:
+
+TRY esianrtolcdugmphbyfvkw
+
+
+Converting an Ispell "munched" Wordlists
+----------------------------------------
+
+To convert an Ispell "munched" wordlist to the format needed
+by MySpell simply count the number of "root" words in the file and
+add that count to the first line of the file (this speeds loading
+the file since two passes are not needed).
+

@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Database.ManipulateAndQueryDataUsingTheStatementObject.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2007/03/12 08:42:47 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Database">
+
+<keywords>
+</keywords>
+
+<authors>
+</authors>
+
+<question heading="manipulate and query data using the statement object">
+
+</question>
+
+<answer>
+<p>One possibility is the usage of the statement object.</p>
+<listing>/* get the service manager */
+xContext = UNO.connect()
+XMcf = xContext~getServiceManager
+
+/* retrieve the DatabaseContext and get its XNameAccess interface */
+xNameAccess = xMcf~createInstanceWithContext(-
+	&quot;{%see com.sun.star.sdb.DatabaseContext}&quot;, xContext)~{%see com.sun.star.container.XNameAccess%XNameAccess}
+
+/* we use the &quot;mysql-test&quot; datasorce */
+dataSource = xNameAccess~getByName(&quot;mysql-test&quot;)
+
+/************ non-interactive login ************/
+/* query for the XDataSource interface of the data source */
+xDataSource = dataSource~{%see com.sun.star.sdbc.XDataSource%XDataSource}
+/* simple way to connect - hard code (usr,pw) */
+xConnection = xDataSource~getConnection(&quot;stefan&quot;,&quot;apple&quot;);
+
+/* the connection creates a statement */
+xStatement = xConnection~createStatement	
+
+
+/* execute Updates on the database - the basic way*/
+
+/* drop existing tables */
+xStatement~executeUpdate(&quot;drop table product&quot;)
+xStatement~executeUpdate(&quot;drop table customer&quot;)
+xStatement~executeUpdate(&quot;drop table sales&quot;)
+
+/* create the &apos;product&apos; table and fill it with data */
+xStatement~executeUpdate(-
+	&quot;create table product (name varchar(30) primary key, price float)&quot;)
+xStatement~executeUpdate(-
+	&quot;insert into product (name, price) values(&apos;Monitor 17inch&apos;, 214.90)&quot;)
+xStatement~executeUpdate(-
+	&quot;insert into product (name, price) values(&apos;Monitor 19inch&apos;, 419.50)&quot;)
+xStatement~executeUpdate(-
+	&quot;insert into product (name, price) values(&apos;Monitor 21inch&apos;, 759.90)&quot;)
+xStatement~executeUpdate(-
+	&quot;insert into product (name, price) values(&apos;Harddisc 160MB&apos;, 67.00)&quot;)
+xStatement~executeUpdate(-
+	&quot;insert into product (name, price) values(&apos;Sound Card&apos;, 43.90)&quot;)
+xStatement~executeUpdate(-
+	&quot;insert into product (name, price) values(&apos;SDRAM 1024MB&apos;, 156.90)&quot;)
+	
+say &quot;table &apos;product&apos; created&quot;
+
+/* create the &apos;customer&apos; table */
+xStatement~executeUpdate(-
+	&quot;create table customer (cid int primary key auto_increment, &quot;-
+	&quot;firstname varchar(30), lastname varchar(30), birthdate date)&quot;)
+
+
+/* execute Updates on the database - using a prepared statement */
+
+/* create a prepared statement for making inserts in the table customer */
+insertCustomerStatement = xConnection~prepareStatement(-
+	&quot;insert into customer (firstname, lastname, birthdate) values(?,?,?)&quot;)
+/* fill the &apos;customer&apos; table with data */
+call insertData insertCustomerStatement, &quot;Tyler&quot;, &quot;Durden&quot;, &quot;1973-7-2&quot;
+call insertData insertCustomerStatement, &quot;Jacob&quot;, &quot;Fuller&quot;, &quot;1946-9-3&quot;
+call insertData insertCustomerStatement, &quot;Mickey&quot;, &quot;Knox&quot;, &quot;1976-3-17&quot;
+call insertData insertCustomerStatement, &quot;Vincent&quot;, &quot;Vega&quot;, &quot;1963-12-1&quot;
+say &quot;table &apos;customers&apos; created&quot;
+
+/* create the &apos;sales&apos; table and fill it with data */
+xStatement~executeUpdate(-
+	&quot;create table sales(sid int primary key auto_increment, cid int,&quot;-
+	&quot;name varchar(30), quantity int)&quot;)
+insertSalesStatement = xConnection~prepareStatement(-
+	&quot;insert into sales (cid, name, quantity) values(?,?,?)&quot;)
+
+call insertData insertSalesStatement, &quot;1&quot;, &quot;Monitor 21inch&quot;, &quot;1&quot;
+call insertData insertSalesStatement, &quot;2&quot;, &quot;Sound Card&quot;, &quot;2&quot;
+call insertData insertSalesStatement, &quot;2&quot;, &quot;Monitor 17inch&quot;, &quot;1&quot;
+call insertData insertSalesStatement, &quot;3&quot;, &quot;Monitor 21inch&quot;, &quot;3&quot;
+call insertData insertSalesStatement, &quot;3&quot;, &quot;Monitor 21inch&quot;, &quot;1&quot;
+call insertData insertSalesStatement, &quot;4&quot;, &quot;Harddisc 160MB&quot;, &quot;1&quot;
+call insertData insertSalesStatement, &quot;3&quot;, &quot;Monitor 19inch&quot;, &quot;5&quot;
+say &quot;table &apos;sales&apos; created&quot;
+say
+
+
+/* execute Query and retrieve the ResultSet */
+xResultSet = xStatement~executeQuery(-
+	&quot;select cid, firstname, lastname, birthdate from customer&quot;)
+
+say &quot;customer Table: (id | firstname | lastname | date of birth)&quot;
+IF xResultSet~isBeforeFirst = 0 THEN 
+	say &quot;no results!&quot;
+ELSE DO 
+	/* process the ResultSet */
+	xRow = xResultSet~{%see com.sun.star.sdbc.XRow%XRow}
+	DO WHILE xResultSet~next &lt;&gt; .false
+		cid = xRow~getString(1)
+		firstname = xRow~getString(2)
+		lastname = xRow~getString(3)
+		birthdate = xRow~getString(4)
+		say cid &quot;|&quot; firstname &quot;|&quot; lastname &quot;|&quot; birthdate
+	END
+END
+
+::requires UNO.cls -- get UNO support
+
+/* insert data using a prepared statement */ 
+::ROUTINE insertData
+USE ARG preparedStatement, data1, data2, data3
+xParameters = preparedStatement~{%see com.sun.star.sdbc.XParameters%XParameters}
+xParameters~setString(1, data1)
+xParameters~setString(2, data2)
+xParameters~setString(3, data3)
+preparedStatement~executeUpdate</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

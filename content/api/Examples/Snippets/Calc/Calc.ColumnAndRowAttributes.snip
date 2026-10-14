@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Calc.ColumnAndRowAttributes.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2006/07/14 09:36:42 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Calc">
+
+<keywords>
+</keywords>
+
+<authors>
+	<author id="" initial="false" email="h0253952@wu-wien.ac.at">Michael Hinz</author>
+</authors>
+
+<question heading="ColumnAndRowAttributes">How can i change column and cell attributes(change color and make it invisible)
+</question>
+
+<answer>
+<listing>/* get the desktop  (an Xdesktop object) */
+oDesktop = UNO.createDesktop()   
+xComponentLoader = oDesktop~{%see com.sun.star.frame.XDesktop%XDesktop}~{%see com.sun.star.frame.XComponentLoader%XComponentLoader}      --get componentLoader interface
+                                                      
+/* open a blank calc file */
+url = &quot;private:factory/scalc&quot;
+xCalcComponent = xComponentLoader~loadComponentFromURL(url, &quot;_blank&quot;, 0, .UNO~noProps)
+
+
+/* get first sheet in spreadsheet */
+xDocument = xCalcComponent~{%see com.sun.star.sheet.XSpreadsheetDocument%XSpreadSheetDocument}
+xSheet = xDocument~getSheets~{%see com.sun.star.container.XIndexAccess%XIndexAccess}~getByIndex(0)~{%see com.sun.star.sheet.XSpreadsheet%XSpreadSheet}
+
+/* insert  value into cells */
+CALL UNO.setCell xSheet, 0, 4, &quot;This row will be deleted!&quot;
+
+/* get rows and columns */
+xColumnRowRange = xSheet~{%see com.sun.star.table.XColumnRowRange%xColumnRowRange}~getColumns()
+xColumn = xColumnRowRange~getByIndex(3)
+
+xColumnRowRange = xSheet~{%see com.sun.star.table.XColumnRowRange%xColumnRowRange}~getRows()
+xRow = xColumnRowRange~getByIndex(4)
+
+CALL syssleep 3
+
+/* set properties of columns and rows */
+xColumn~{%see com.sun.star.beans.XPropertySet%xPropertySet}~setPropertyValue(&quot;CellBackColor&quot;, box(&quot;int&quot;, &quot;006666&quot;x ~c2d))
+
+CALL syssleep 4
+
+xRow~{%see com.sun.star.beans.XPropertySet%xPropertySet}~setPropertyValue(&quot;IsVisible&quot;, Boolean (false))
+
+::requires UNO.cls       -- get UNO support
+
+</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="Win32"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

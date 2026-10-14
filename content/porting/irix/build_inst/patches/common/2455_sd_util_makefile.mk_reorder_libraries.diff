@@ -1,0 +1,44 @@
+--- /projects/sise/openoffice/devel/workpits/OO641B_STLP45/source/sd/util/makefile.mk	Wed Aug 29 00:48:41 2001
++++ sd/util/makefile.mk	Fri Dec  7 14:04:34 2001
+@@ -113,19 +113,24 @@
+ SHL1STDLIBS=        \
+ 	$(SCHLIB) \
+ 	$(BASICLIB) \
+-	$(SFXLIB) \
+ 	$(SFXDEBUGLIB) \
+ 	$(SO2LIB) \
+ 	$(VCLLIB) \
++	$(SCLIB) \
+ 	$(SVMEMLIB) \
+ 	$(SVTOOLLIB) \
+ 	$(SVLLIB)	\
+ 	$(SVTLIB)	\
+ 	$(SVXLIB) \
+ 	$(SETLIB) \
+-	$(GOODIESLIB) \
++	$(GOODIESLIB)
++
++.IF "$(GUI)" == "UNX"
++SHL1STDLIBS+= $(SMLIB)
++.ENDIF
++
++SHL1STDLIBS+=\
+ 	$(OFALIB) \
+-	$(SCLIB) \
+ 	$(TOOLSLIB) \
+ 	$(COMPHELPERLIB) \
+ 	$(ONELIB) \
+@@ -141,11 +146,8 @@
+ 	$(UNOTOOLSLIB) \
+ 	$(SOTLIB) \
+ 	$(COMPHELPERLIB)	\
+-	$(UCBHELPERLIB)
+-
+-.IF "$(GUI)" == "UNX"
+-SHL1STDLIBS+= $(SMLIB)
+-.ENDIF
++	$(UCBHELPERLIB)	\
++	$(SFXLIB)
+ 
+ .IF "$(GUI)" == "MAC"
+ SHL1STDLIBS += \

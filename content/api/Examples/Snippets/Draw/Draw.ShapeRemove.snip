@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Draw.ShapeRemove.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2007/08/13 13:03:24 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Draw">
+
+<keywords>
+	<keyword>remove shape</keyword>
+	<keyword>remove</keyword>
+</keywords>
+
+<authors>
+	<author id="" initial="false" email="">Nicole Scholz</author>
+</authors>
+
+<question heading="shape remove">How can I remove a shape?
+</question>
+
+<answer>
+<p>In this example an added shape is removed after 2 seconds.</p>
+<listing>/* Retrieve the Desktop object, we need its XComponentLoader interface to load  a new document */
+oDesktop         = UNO.createDesktop()    -- get the UNO Desktop service object
+xComponentLoader = oDesktop~{%see com.sun.star.frame.XDesktop%XDesktop}~{%see com.sun.star.frame.XComponentLoader%XComponentLoader}  -- get componentLoader 
+                                                       -- interface
+/* open the blank file */
+url = &quot;private:factory/sdraw&quot;
+xDrawComponent = xComponentLoader~loadComponentFromURL(url, &quot;_blank&quot;, 0, -
+                                                       .UNO~noProps)
+/* need document&apos;s factory to be able to insert created objects*/
+xDocumentFactory = xDrawComponent~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+
+/* get draw page by index */
+xDrawPage = xDrawComponent~{%see com.sun.star.drawing.XDrawPagesSupplier%XDrawPagesSupplier}~getDrawPages~getByIndex(0)~{%see com.sun.star.drawing.XDrawPage%XDrawPage}
+
+xrectangle = xDocumentFactory~createInstance(&quot;{%see com.sun.star.drawing.RectangleShape}&quot;)~{%see com.sun.star.drawing.XShape%xshape}
+xrectangle~setPosition(.bsf~new(&quot;{%see com.sun.star.awt.Point}&quot;, 1000, 1000))
+xrectangle~setSize(.bsf~new(&quot;{%see com.sun.star.awt.Size}&quot;, 5000, 5000))
+
+xDrawPage~add(xrectangle) -- add rectangle to the draw document
+
+call syssleep 2
+
+xDrawPage~remove(xrectangle) -- remove rectangle from the draw document
+
+::requires UNO.cls    -- get UNO support</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>

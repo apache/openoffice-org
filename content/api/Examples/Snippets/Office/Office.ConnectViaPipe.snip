@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Office.ConnectViaPipe.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2005/10/15 13:07:34 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="Python" application="Office">
+
+<keywords>
+</keywords>
+
+<authors>
+	<author id="" initial="true" email="Darragh.Sherwin@propylon.com">Darragh Sherwin</author>
+	<author id="tomsontom" initial="true" email="tom.schindl@bestsolution.at">Tom Schindl</author>
+</authors>
+
+<question heading="connect via pipe">How to connect to openoffice
+</question>
+
+<answer>
+	<p>
+                Code is taken from a mail from Darragh Sherwin on dev@api.openoffice.org
+        </p>
+<listing>
+# Connection Details to connect
+# over an InterProcess Communication (IPC)
+# pipe to the running OpenOffice process
+def connect():
+    import uno
+	localContext = uno.getComponentContext()
+	resolver = localContext.ServiceManager.createInstanceWithContext( &quot;com.sun.star.bridge.UnoUrlResolver&quot;,  localContext )
+	remoteContext = resolver.resolve( &quot;uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext&quot; )
+    return remoteContext
+
+if __name__=="__main__":
+
+        remoteContext = connect()
+</listing>
+</answer>
+
+<versions>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+	<change author-id="tomsontom" date="2005-10-15">Initial version</change>
+</changelog>
+
+</snippet>

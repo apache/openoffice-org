@@ -1,0 +1,128 @@
+<!-- ===============================================================
+$RCS index.html,v $
+
+last change: $Revision: 1.1 $ $Author: jsc $ $Date: 2004/06/09 08:41:13
+$
+
+(c)2004 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCS in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+=============================================================== -->
+
+<snippet language="OOBasic" application="Writer">
+
+<keywords>
+        <keyword>paragraph</keyword>
+        <keyword>enumeration</keyword>
+        <keyword>text</keyword>
+        <keyword>createEnumeration</keyword>
+        <keyword>createContentEnumeration</keyword>
+        <keyword>TextContent</keyword>
+        <keyword>TextGraphicObject</keyword>
+        <keyword>getAvailableServiceNames</keyword>
+</keywords>
+
+<authors>
+	<author id="and" initial="true" email="andrew@pitonyak.org">Andrew
+Pitonyak</author>
+</authors>
+
+<question heading="Enumerate content">
+How can I enumerate the content in a Writer document and identify the
+contained graphics images?
+</question>
+
+<answer>
+<p>
+The primary reason to enumerate text content is to export the document.
+I was recently asked how to recognize graphics objects embedded in the
+text. The FindGraphics macro finds graphics objects that are anchored to
+a paragraph, anchored to a character, and inserted as a character. This
+does not find images anchored to the page.
+</p>
+<listing>
+Sub FindGraphics
+  REM Author: Andrew Pitonyak
+  Dim oParEnum     'Enumerator used to enumerate the paragraphs
+  Dim oPar         'The enumerated paragraph
+  Dim oSectionEnum 'Enumerator used to enumerate the text sections
+  Dim oSection     'The enumerated text section
+  Dim oContentEnum 'Enum content, such as graphics objects
+  Dim oContent     'The numerated content
+
+  REM Enumerate the paragraphs.
+  REM Tables are enumerated along with paragraphs
+  oParEnum = ThisComponent.getText().createEnumeration()
+  Do While oParEnum.hasMoreElements()
+    oPar = oParEnum.nextElement()
+
+    REM This avoids the tables. Add an else statement if you want to
+    REM process the tables.
+    If oPar.supportsService("com.sun.star.text.Paragraph") Then
+
+      REM If you want to see the types that are available for enumeration as
+      REM content associated with this paragraph, then look at the
+      REM available service names.
+      REM MsgBox Join(oPar.getAvailableServiceNames(), CHR$(10)
+
+      REM Typically, I use an empty string to enumerate ALL content,
+      REM but this causes a runtime error here. If any graphics images are
+      REM present, then they are enumerated as TextContent.
+      oContentEnum = oPar.createContentEnumeration("com.sun.star.text.TextContent")
+      Do While oContentEnum.hasMoreElements()
+        oContent = oContentEnum.nextElement()
+        If oContent.supportsService("com.sun.star.text.TextGraphicObject") Then
+          Print "Found a graphic object anchored to a Paragraph"
+        End If
+      Loop
+
+      REM Now, enumerate the text sections and look for graphics that
+      REM are anchored to a character, or as a character.
+      oSectionEnum = oPar.createEnumeration()
+      Do While oSectionEnum.hasMoreElements()
+        oSection = oSectionEnum.nextElement()
+
+        If oSection.TextPortionType = "Text" Then
+          REM This is a simply text object!
+          REM MsgBox oSection.TextPortionType &amp; " : " &amp; CHR$(10) &amp; oSection.getString()
+        ElseIf oSection.TextPortionType = "Frame" Then
+
+          REM Use an empty string to enumerate ALL of the content
+          oContentEnum = oSection.createContentEnumeration("com.sun.star.text.TextGraphicObject")
+          Do While oContentEnum.hasMoreElements()
+            oContent = oContentEnum.nextElement()
+            If oContent.supportsService("com.sun.star.text.TextGraphicObject") Then
+              Print "Found a graphic object anchored to or as a character"
+            End If
+          Loop
+        End If
+      Loop
+    End If
+  Loop
+End Sub
+</listing>
+</answer>
+<changelog>
+     <change author-id="and" date="2004-06-24">Initial version</change>
+</changelog>
+
+</snippet>

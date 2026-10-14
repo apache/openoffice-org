@@ -1,0 +1,259 @@
+<?xml version="1.0"?>
+<!--
+$RCSfile: Draw.Organigram.snip,v $
+last change: $Revision: 1.1 $ $Author: tomsontom $ $Date: 2007/08/13 13:03:24 $
+
+(c)2003 by the copyright holders listed with the author-tags.
+If no explicit copyright holder is mentioned with a certain author,
+the author him-/herself is the copyright holder. All rights reserved.
+
+Public Documentation License Notice:
+
+The contents of this Documentation are subject to the
+Public Documentation License Version 1.0 (the "License");
+you may only use this Documentation if you comply with
+the terms of this License. A copy of the License is
+available at http://www.openoffice.org/licenses/PDL.html
+
+The Original Documentation can be found in the CVS archives
+of openoffice.org at the place specified by RCSfile: in this header.
+
+The Initial Writer(s) of the Original Documentation are listed
+with the author-tags below.
+
+The Contributor(s) are listed with the author-tags below
+without the marker for being an initial author.
+
+All Rights Reserved.
+-->
+
+<snippet language="ooRexx" application="Draw">
+
+<keywords>
+	<keyword>diagram</keyword>
+	<keyword>connect shapes</keyword>
+	<keyword>organigram</keyword>
+</keywords>
+
+<authors>
+	<author id="" initial="false" email="">Nicole Scholz</author>
+</authors>
+
+<question heading="organigram">How can I draw an organigram?
+<p>How can shapes be connected with other shapes? How can I create a customized organigram?</p>
+</question>
+
+<answer>
+<p>In this example an organigram is created. </p>
+<p>The user can choose the number of tree levels and the number of nodes in each level.</p>
+<p>In this example the number of tree levels is limited to 3, </p>
+<p>in the seond level the maximum nodes are four and</p>
+<p>for each node in the second level the user can create 2 nodes in the third level maximum.</p>
+<p>The user can choose a name for each node he creates. </p>
+<p>The text is coloured purple and the size of the text changes each level. </p>
+<p>The nodes of each level are connected automatically.</p>
+<listing>titleinput:
+say &quot;Please insert the title of the diagram: &quot;
+parse pull title
+orgtitle = title
+
+SELECT
+ when orgtitle == &quot;&quot; THEN do
+	say &quot;No title specified. Please insert the TITLE of the diagram: &quot;
+	CALL titleinput
+ END
+ OTHERWISE 
+END
+
+
+/* Retrieve the Desktop object, we need its XComponentLoader interface to load a new document */
+oDesktop         = UNO.createDesktop()    -- get the UNO Desktop service object
+xComponentLoader = oDesktop~{%see com.sun.star.frame.XDesktop%XDesktop}~{%see com.sun.star.frame.XComponentLoader%XComponentLoader}  -- get componentLoader interface */
+
+/* open the blank *.sxd - file */
+url = &quot;private:factory/sdraw&quot;
+xDrawComponent = xComponentLoader~loadComponentFromURL(url, &quot;_blank&quot;, 0, -
+                                                       .UNO~noProps)
+/* need document&apos;s factory to be able to insert created objects */
+xDocumentFactory = xDrawComponent~{%see com.sun.star.lang.XMultiServiceFactory%XMultiServiceFactory}
+
+
+/* get draw page by index */
+xDrawPage = xDrawComponent~{%see com.sun.star.drawing.XDrawPagesSupplier%XDrawPagesSupplier}~getDrawPages~getByIndex(0)~{%see com.sun.star.drawing.XDrawPage%XDrawPage}
+
+
+level2input:
+say &quot;*** Please insert the NUMBER of the SECOND organigram level nodes (max 4 nodes):&quot;
+parse pull number
+orgnumber2 = number
+
+SELECT
+ when orgnumber2 == 0 | orgnumber2 == 1 | orgnumber2 == 2 | orgnumber2 == 3 | orgnumber2 == 4 
+	THEN do 
+	orgname2 =.array~new(orgnumber2)
+	do i = 1 to orgnumber2 by 1
+	 say &quot;     &quot;
+	 say &quot; Please insert the NAME of the SECOND level node number&quot; i&quot;:&quot; 
+	
+	 parse pull name
+	 orgname2[i] = name
+	 -- Third Level
+			say &quot;*** Please insert the NUMBER of the THIRD organigram level nodes (max 2 nodes):&quot;
+			parse pull number3
+			orgnumber3 = number3
+
+			SELECT
+ 			 when orgnumber3 == 0 | orgnumber3 == 1 | orgnumber3 == 2	
+				THEN do
+				orgname3.i = .array~new(orgnumber3)
+				orgparents3.i = i
+				 do j = 1 to orgnumber3
+					say &quot;*** Please insert the NAME of the THIRD level node number&quot; j&quot;:&quot;
+					parse pull name3
+					orgname3.i[j] = name3
+				 end
+				END	
+ 			 OTHERWISE 
+				SAY &quot;Invalid input - ending program!&quot;
+				EXIT				
+			 END			
+			
+	end
+ END
+ OTHERWISE say &quot;No valid number. Please insert a number: &quot; 
+ CALL level2input
+END
+
+
+-- Create Title Node place it in middle of the document
+
+	titlenodelength=4000
+	titlenodewidth=2000
+	--Center over the width of the page, mid point of the sheet - length of rectangle +1000 left frame space 
+	titlenodex=((19000/2)-(titlenodelength/2))+1000
+	titlenodey=2000
+
+	xrectangletitle = xDocumentFactory~createInstance(&quot;{%see com.sun.star.drawing.RectangleShape}&quot;)
+	xxrectangletitle = xrectangletitle ~{%see com.sun.star.drawing.XShape%xshape}
+	xxrectangletitle ~setPosition(.bsf~new(&quot;{%see com.sun.star.awt.Point}&quot;, titlenodex, titlenodey))
+	xxrectangletitle ~setSize(.bsf~new(&quot;{%see com.sun.star.awt.Size}&quot;, titlenodelength, titlenodewidth))
+	xDrawPage~add(xxrectangletitle) -- adds the rectangle to the draw document
+
+	xText = xrectangletitle~{%see com.sun.star.text.XText%XText}
+	xTextCursor = xText~createTextCursor
+	xTextCursor~gotoEnd(.false)
+	xTextRange = xTextCursor~{%see com.sun.star.text.XTextRange%XTextRange}
+	xTextRange~setString(orgtitle)
+	cur = xTextCursor~{%see com.sun.star.beans.XPropertySet%xPropertySet}
+	cur~setPropertyValue(&quot;CharColor&quot;, box(&quot;int&quot;, &quot;483D8B&quot;x ~c2d)) --  set text colour blue
+	cur~setPropertyValue(&quot;CharHeight&quot;, box(&quot;float&quot;, &quot;25&quot;)) -- set font size 25
+	cur~setPropertyValue(&quot;CharWeight&quot;, -
+	 box(&quot;float&quot;, bsf.getConstant(&quot;{%see com.sun.star.awt.FontWeight}&quot;, &quot;BOLD&quot;))) -- set the font bold
+	--xrectangletitle ~{%see com.sun.star.text.XText%xText}~setString(orgtitle)
+
+	z=1
+
+-- Navigates through the lvl2 Node-Array and created the nodes, max 4
+DO k=1 to orgnumber2
+	lvl2nodelength=4000
+	lvl2nodewidth=2000
+	--create the rectancles depending on how many should be created
+	xfactorlvl2=(5)-k
+
+	lvl2nodex=19000+1250-(xfactorlvl2*4750)
+	lvl2nodey=8000
+
+	xrectanglelvl2.k = xDocumentFactory~createInstance(&quot;{%see com.sun.star.drawing.RectangleShape}&quot;)
+	xxrectanglelvl2.k = xrectanglelvl2.k~{%see com.sun.star.drawing.XShape%xshape}
+	xxrectanglelvl2.k~setPosition(.bsf~new(&quot;{%see com.sun.star.awt.Point}&quot;, lvl2nodex, lvl2nodey))
+	xxrectanglelvl2.k~setSize(.bsf~new(&quot;{%see com.sun.star.awt.Size}&quot;, lvl2nodelength, lvl2nodewidth))
+	xDrawPage~add(xxrectanglelvl2.k) -- adds the rectangle to the draw document
+	
+	xText = xrectanglelvl2.k~{%see com.sun.star.text.XText%XText}
+	xTextCursor1 = xText~createTextCursor
+	xTextCursor1~gotoEnd(.false)
+	xTextRange1 = xTextCursor1~{%see com.sun.star.text.XTextRange%XTextRange}
+	xTextRange1~setString(orgname2[k])
+	cur1 = xTextCursor1~{%see com.sun.star.beans.XPropertySet%xPropertySet}
+	cur1~setPropertyValue(&quot;CharColor&quot;, box(&quot;int&quot;, &quot;483D8B&quot;x ~c2d)) --  set text colour blue
+	cur1~setPropertyValue(&quot;CharHeight&quot;, box(&quot;float&quot;, &quot;20&quot;)) -- set font size 20
+
+	xrectanglelvl2.k = xDocumentFactory~createInstance(&quot;{%see com.sun.star.drawing.ConnectorShape}&quot;)~{%see com.sun.star.drawing.XShape%xshape}
+	xDrawpage~add(xrectanglelvl2.k)
+
+	xpropslvl2.k = xrectanglelvl2.k~{%see com.sun.star.beans.XPropertySet%xPropertySet}
+
+	xpropslvl2.k~setPropertyValue(&quot;StartShape&quot;, xrectangletitle)
+	xpropslvl2.k~setPropertyValue(&quot;StartGluePointIndex&quot;, box(&quot;int&quot;, 2))
+
+	xpropslvl2.k~setPropertyValue(&quot;EndShape&quot;, xxrectanglelvl2.k)
+	xpropslvl2.k~setPropertyValue(&quot;EndGluePointIndex&quot;, box(&quot;int&quot;, 4))
+
+	-- Navigates through the lvl3 Node-Array and created the nodes, max 2
+		
+
+		DO m=1 to orgname3.k~items
+
+		lvl3parentnode=orgparents3.k
+		lvl3suffix=xxrectanglelvl2.k 
+
+		lvl3nodelength=2000
+		lvl3nodewidth=2000
+
+		--create the rectancles depending on how many should be created
+		xfactorlvl3=(9)-z
+
+		lvl3nodex=19000+1000-(xfactorlvl3*2375)
+		lvl3nodey=14000
+
+		xrectanglelvl3.k.m = xDocumentFactory~createInstance(&quot;{%see com.sun.star.drawing.RectangleShape}&quot;)
+		xxrectanglelvl3.k.m = xrectanglelvl3.k.m~{%see com.sun.star.drawing.XShape%xshape}
+		xxrectanglelvl3.k.m~setPosition(.bsf~new(&quot;{%see com.sun.star.awt.Point}&quot;, lvl3nodex, lvl3nodey))
+		xxrectanglelvl3.k.m~setSize(.bsf~new(&quot;{%see com.sun.star.awt.Size}&quot;, lvl3nodelength, lvl3nodewidth))
+		xDrawPage~add(xxrectanglelvl3.k.m) -- adds the rectangle to the draw document
+
+		xText = xxrectanglelvl3.k.m~{%see com.sun.star.text.XText%XText}
+		xTextCursor3 = xText~createTextCursor
+		xTextCursor3~gotoEnd(.false)
+		xTextRange3 = xTextCursor3~{%see com.sun.star.text.XTextRange%XTextRange}
+		xTextRange3~setString(orgname3.k[m])
+		cur3 = xTextCursor3~{%see com.sun.star.beans.XPropertySet%xPropertySet}
+		cur3~setPropertyValue(&quot;CharColor&quot;, box(&quot;int&quot;, &quot;483D8B&quot;x ~c2d)) --  set text colour blue
+		cur3~setPropertyValue(&quot;CharHeight&quot;, box(&quot;float&quot;, &quot;14&quot;)) -- set font size 14
+
+
+		xrectanglelvl3.k.m = xDocumentFactory~createInstance(&quot;{%see com.sun.star.drawing.ConnectorShape}&quot;)~{%see com.sun.star.drawing.XShape%xshape}
+		xDrawpage~add(xrectanglelvl3.k.m)
+
+
+		xpropslvl3.k.m = xrectanglelvl3.k.m~{%see com.sun.star.beans.XPropertySet%xPropertySet}
+
+		xpropslvl3.k.m~setPropertyValue(&quot;StartShape&quot;, lvl3suffix)
+		xpropslvl3.k.m~setPropertyValue(&quot;StartGluePointIndex&quot;, box(&quot;int&quot;, 2))
+
+		xpropslvl3.k.m~setPropertyValue(&quot;EndShape&quot;, xxrectanglelvl3.k.m)
+		xpropslvl3.k.m~setPropertyValue(&quot;EndGluePointIndex&quot;, box(&quot;int&quot;, 4))
+		z=z+1
+
+	END
+END
+
+
+::requires UNO.cls    -- get UNO support
+
+
+</listing>
+</answer>
+
+<versions>
+	<version number="2.0.x" status="tested"/>
+</versions>
+
+<operating-systems>
+<operating-system name="All"/>
+</operating-systems>
+
+<changelog>
+</changelog>
+
+</snippet>
