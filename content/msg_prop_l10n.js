@@ -38,17 +38,17 @@ l10n.index_event_box_text_title			= "The Apache® Software Foundation Celebrates
 
 // Text and link to show inside the alert box.
 										// "true" = Show the box, "false" = Do not show.
-l10n.index_alert_box_show			= true;
+l10n.index_alert_box_show			= false;
 										// Make the whole box clickable with a link.
-l10n.index_alert_box_href			= "https://www.openoffice.org/security/cves/CVE-2026-59265.html";
+l10n.index_alert_box_href			= "https://www.google.com";
 										// Maximum 49 characters.
-l10n.index_alert_box_headline_text		= "<b>Apache OpenOffice warns about serious unpatched vulnerability</b>";
+l10n.index_alert_box_headline_text		= "Headline text with max. 49 characters";
 										// Mover over text for the headline.
-l10n.index_alert_box_headline_title		= "Mover over title text for the headline";
+l10n.index_alert_box_headline_title		= "Mover over title text for the headline.";
 										// Maximum 630 characters.
-l10n.index_alert_box_text_text			= "<b>A serious security issue was found in Apache OpenOffice that allows system takeover when an attacker-crafted document is opened. The issue was given CVE-2026-59265 by OpenOffice. The team of volunteers maintaining the project is working hard to create a release that fixes the issue, which is expected within 15 days from now. Until then, we recommend disabling Java integration in preferences or opening documents from untrusted sources using Apache OpenOffice. We will update this page when the release with the fix is available.</b>";
+l10n.index_alert_box_text_text			= "Text with max. 630 characters. <br /><br /> Use this alert box to announce any important messages or problems. <br /><br /> This whole alert box can be linked with an URL to point the user to more information or to a solution. But the link can also be left out. Then the box is not clickable.";
 										// Mouse over text for the text.
-l10n.index_alert_box_text_title			= "Mouse over title text for the text";
+l10n.index_alert_box_text_title			= "Mouse over title text for the text.";
 
 // Flag how to redirect and if text should be displayed.
 // Entries for new languages have to be done in /assets/msg_prop_l10n.js + /assets/download/globalvars.js + /assets/download/languages.js
