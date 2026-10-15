@@ -47,20 +47,20 @@
 <dd>Pointers to <code>rtl_ModuleCount</code> are passed as arguments to the default factory creator
 functions: <code>createSingleComponentFactory</code>, <code>createSingleFactory</code>,
 <code>createOneInstanceFactory</code>.
-The factory implementation is calling <code>rtl_ModuleCount.acquire</code> when it is being 
+The factory implementation is calling <code>rtl_ModuleCount.acquire</code> when it is being
 constructed and it is calling <code>rtl_ModuleCount.release</code>. The implementations of
 <code>acquire</code>
 and <code>release</code> should influence the return value of <code>component_canUnload</code>
 in a way that it
 returns <code>sal_False</code> after <code>acquire</code> has been called. That is the module will not be unloaded
-once a default factory has been created. A call to <code>release</code> may cause 
+once a default factory has been created. A call to <code>release</code> may cause
 <code>component_canUnload</code> to return <code>sal_False</code>, but only if there are
-no object alive which 
+no object alive which
 originated from the module. These objects are factory instances and the service instances
 which have been created by these factories.
 <p>
 It is not necessary to synchronize <code>acquire</code> and <code>release</code> as a whole.
-Simply sychronize the 
+Simply sychronize the
 access to a counter variable, e.g. the <code>rtl_moduleCount_release</code> implementation:
 <pre>
 extern "C" void rtl_moduleCount_acquire(rtl_ModuleCount * that )
@@ -69,7 +69,7 @@ extern "C" void rtl_moduleCount_acquire(rtl_ModuleCount * that )
     osl_incrementInterlockedCount( &pMod->counter);
 }
 </pre>
-The SAL library offers functions that can be used for <code>acquire</code> and <code>release</code>. See struct 
+The SAL library offers functions that can be used for <code>acquire</code> and <code>release</code>. See struct
 <code>_rtl_StandardModuleCount</code>.
 </dd>
 </dl>
